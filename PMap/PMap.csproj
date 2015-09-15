@@ -1,0 +1,687 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3E3FE032-B237-479B-938B-63F693265432}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PMap</RootNamespace>
+    <AssemblyName>PMap</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>map.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="DevExpress.Data.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v10.1.Compact, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\DevExpress DXperience v2010 vol 1\Components\Sources\DevExpress.DLL\DevExpress.Data.v10.1.Compact.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v10.1.Linq, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\DevExpress DXperience v2010 vol 1\Components\Sources\DevExpress.DLL\DevExpress.Data.v10.1.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v10.1.Printing, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Design">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Deployment">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\Base\bllBase.cs" />
+    <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
+    <Compile Include="BO\Base\boXBase.cs" />
+    <Compile Include="BLL\Base\WriteFieldAttribute.cs" />
+    <Compile Include="BLL\bllApp.cs" />
+    <Compile Include="BLL\bllCapacityProf.cs" />
+    <Compile Include="BLL\bllCargoType.cs" />
+    <Compile Include="BLL\bllCarrier.cs" />
+    <Compile Include="BLL\bllEtoll.cs" />
+    <Compile Include="BLL\bllOrder.cs" />
+    <Compile Include="BLL\bllOrderType.cs" />
+    <Compile Include="BLL\bllRouteVis.cs" />
+    <Compile Include="BLL\bllSpeedProf.cs" />
+    <Compile Include="BLL\bllTariffProf.cs" />
+    <Compile Include="BLL\bllZIP.cs" />
+    <Compile Include="BLL\bllDepot.cs" />
+    <Compile Include="BLL\bllOptimize.cs" />
+    <Compile Include="BLL\bllWarehouse.cs" />
+    <Compile Include="BLL\DataXChange\dtXOrder.cs" />
+    <Compile Include="BO\boCargoType.cs" />
+    <Compile Include="BO\boEtoll.cs" />
+    <Compile Include="BO\boNode.cs" />
+    <Compile Include="BO\boOrder.cs" />
+    <Compile Include="BO\boOrderType.cs" />
+    <Compile Include="BO\boTourOrder.cs" />
+    <Compile Include="BO\DataXChange\boXNewPlan.cs" />
+    <Compile Include="BO\DataXChange\boXOrder.cs" />
+    <Compile Include="BO\DataXChange\boXFullPlan.cs" />
+    <Compile Include="BO\DataXChange\boXPlan.cs" />
+    <Compile Include="BO\DataXChange\boXPlanOrder.cs" />
+    <Compile Include="BO\DataXChange\boXPlanTour.cs" />
+    <Compile Include="BO\DataXChange\boXRouteSection.cs" />
+    <Compile Include="BO\DataXChange\boXRouteSummary.cs" />
+    <Compile Include="BLL\DataXChange\dtXTruck.cs" />
+    <Compile Include="BO\boApp.cs" />
+    <Compile Include="BO\boCapacityProf.cs" />
+    <Compile Include="BO\boCarrier.cs" />
+    <Compile Include="BO\boSpeedProf.cs" />
+    <Compile Include="BO\boTariffProf.cs" />
+    <Compile Include="BO\DataXChange\boXTruck.cs" />
+    <Compile Include="BO\boZIP.cs" />
+    <Compile Include="BO\boActivePlanInfo.cs" />
+    <Compile Include="BO\boDepot.cs" />
+    <Compile Include="BO\boRoute.cs" />
+    <Compile Include="BO\boEdge.cs" />
+    <Compile Include="BO\boOptimize.cs" />
+    <Compile Include="BO\boPlan.cs" />
+    <Compile Include="BO\boSpeedProfValues.cs" />
+    <Compile Include="BO\boPlanTour.cs" />
+    <Compile Include="BO\boPlanTourPoint.cs" />
+    <Compile Include="BO\boTruck.cs" />
+    <Compile Include="BO\boPlanOrder.cs" />
+    <Compile Include="BO\boWarehouse.cs" />
+    <Compile Include="BO\DataXChange\boXDepot.cs" />
+    <Compile Include="Common\ApplicationInfo.cs" />
+    <Compile Include="Common\CSVParser.cs" />
+    <Compile Include="Common\CustomAttributes.cs" />
+    <Compile Include="Common\Exceptions.cs" />
+    <Compile Include="Common\JSONHelper.cs" />
+    <Compile Include="Common\LockHolder.cs" />
+    <Compile Include="Common\ObjectValidator.cs" />
+    <Compile Include="Common\Parse\ParseSynchLog.cs" />
+    <Compile Include="Common\Parse\PMapLog.cs" />
+    <Compile Include="Common\Parse\PMapCalls.cs" />
+    <Compile Include="Common\PPlan\PlanEditFuncs.cs" />
+    <Compile Include="Common\PPlan\PlanParams.cs" />
+    <Compile Include="Common\RouteVisEventArgs.cs" />
+    <Compile Include="Common\RouteVisCommonVars.cs" />
+    <Compile Include="Controls\ColorComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorComboBox.designer.cs">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyGridCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BLL\DataXChange\dtXResult.cs" />
+    <Compile Include="BLL\DataXChange\dtXDepot.cs" />
+    <Compile Include="DB\Base\DBAccess.cs" />
+    <Compile Include="DB\Base\DBConnect.cs" />
+    <Compile Include="DB\Base\SQLServerAccess.cs" />
+    <Compile Include="DB\Base\SQLServerConnect.cs" />
+    <Compile Include="DB\Base\TransactionBlock.cs" />
+    <Compile Include="BLL\bllHistory.cs" />
+    <Compile Include="BLL\bllMapFormPar.cs" />
+    <Compile Include="BLL\bllPlan.cs" />
+    <Compile Include="BLL\bllPlanCheck.cs" />
+    <Compile Include="BLL\bllPlanEdit.cs" />
+    <Compile Include="BLL\bllRoute.cs" />
+    <Compile Include="BLL\bllSemaphore.cs" />
+    <Compile Include="BLL\bllTruck.cs" />
+    <Compile Include="DB\DBLockHolder.cs" />
+    <Compile Include="Forms\Base\BaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Base\BaseDialog.designer.cs">
+      <DependentUpon>BaseDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Base\BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Base\BaseForm.Designer.cs">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Base\BasePanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Base\BasePanel.Designer.cs">
+      <DependentUpon>BasePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgFindORD_NUM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgFindORD_NUM.Designer.cs">
+      <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgNewPlan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgNewPlan.Designer.cs">
+      <DependentUpon>dlgNewPlan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgNewTour.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgNewTour.Designer.cs">
+      <DependentUpon>dlgNewTour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgRouteVisDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgRouteVisDetails.Designer.cs">
+      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgTourDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgTourDetails.Designer.cs">
+      <DependentUpon>dlgTourDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgTruckChg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgTruckChg.Designer.cs">
+      <DependentUpon>dlgTruckChg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgWait.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgWait.Designer.cs">
+      <DependentUpon>dlgWait.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgOptimize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgOptimize.Designer.cs">
+      <DependentUpon>dlgOptimize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRouteVisualization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmRouteVisualization.Designer.cs">
+      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgDepotList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgDepotList.Designer.cs">
+      <DependentUpon>dlgDepotList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.Designer.cs">
+      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.Designer.cs">
+      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalLocker.cs" />
+    <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
+    <Compile Include="Localize\Base\DXGridLocalizer.cs" />
+    <Compile Include="Localize\Base\DXPrintPreviewLocalizer.cs" />
+    <Compile Include="Localize\Base\Messages.cs" />
+    <Compile Include="Localize\DXMessages.cs" />
+    <Compile Include="LongProcess\Base\ProcessNotifyIcon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LongProcess\GetRoutePathProcess.cs" />
+    <Compile Include="LongProcess\GetTourDetailsProcess.cs" />
+    <Compile Include="LongProcess\CalcPMapRouteProcess.cs" />
+    <Compile Include="LongProcess\InitRouteDataProcess.cs" />
+    <Compile Include="LongProcess\StartPMapRoutesByOrders.cs" />
+    <Compile Include="LongProcess\TollExportProcess.cs" />
+    <Compile Include="LongProcess\TourOptimizerProcess.cs" />
+    <Compile Include="Markers\PMapMarker.cs" />
+    <Compile Include="LongProcess\RouteVisDataProcess.cs" />
+    <Compile Include="Localize\PMapMessages.cs" />
+    <Compile Include="Common\PMapCommonVars.cs" />
+    <Compile Include="ProcessUtils.cs" />
+    <Compile Include="Route\RouteData.cs" />
+    <Compile Include="Route\PMapRoutingProvider.cs" />
+    <Compile Include="Markers\PPlanMarkerUnPlanned.cs" />
+    <Compile Include="Route\BasicHeap.cs" />
+    <Compile Include="Route\RouteCalculator.cs" />
+    <Compile Include="Route\HeapNode.cs" />
+    <Compile Include="Common\PPlan\PlanEventArgs.cs" />
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanOrders.Designer.cs">
+      <DependentUpon>pnlPPlanOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\PPlan\PPlanCommonVars.cs" />
+    <Compile Include="Forms\frmPMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPMap.Designer.cs">
+      <DependentUpon>frmPMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPPlan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPPlan.Designer.cs">
+      <DependentUpon>frmPPlan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="Common\PMapIniParams.cs" />
+    <Compile Include="InitPMap.cs" />
+    <Compile Include="LongProcess\Base\BaseLongProcess.cs" />
+    <Compile Include="LongProcess\Base\BaseMultiProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LongProcess\Base\BaseMultiProgressDialog.Designer.cs">
+      <DependentUpon>BaseMultiProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LongProcess\Base\BaseProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LongProcess\Base\BaseProgressDialog.Designer.cs">
+      <DependentUpon>BaseProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LongProcess\Base\BaseSilngleProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LongProcess\Base\BaseSilngleProgressDialog.designer.cs">
+      <DependentUpon>BaseSilngleProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Route\PMRouteInterface.cs" />
+    <Compile Include="Common\INIFile.cs" />
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.Designer.cs">
+      <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanSettings.Designer.cs">
+      <DependentUpon>pnlPPlanSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.Designer.cs">
+      <DependentUpon>pnlPPlanTourPoints.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.Designer.cs">
+      <DependentUpon>pnlPPlanTours.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Markers\PPlanMarker.cs" />
+    <Compile Include="Markers\PPlanMarkerFlag.cs" />
+    <Compile Include="Printing\base\BaseGridPrinting.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Printing\base\PrintingCommon.cs" />
+    <Compile Include="Printing\PMapGridPrinting.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\ColorComboBox.resx">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Base\BaseDialog.resx">
+      <DependentUpon>BaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Base\BaseForm.resx">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Base\BasePanel.resx">
+      <DependentUpon>BasePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgFindORD_NUM.resx">
+      <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgNewPlan.resx">
+      <DependentUpon>dlgNewPlan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgNewTour.resx">
+      <DependentUpon>dlgNewTour.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgRouteVisDetails.resx">
+      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgTourDetails.resx">
+      <DependentUpon>dlgTourDetails.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgTruckChg.resx">
+      <DependentUpon>dlgTruckChg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgWait.resx">
+      <DependentUpon>dlgWait.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgOptimize.resx">
+      <DependentUpon>dlgOptimize.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPMap.resx">
+      <DependentUpon>frmPMap.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPPlan.resx">
+      <DependentUpon>frmPPlan.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmRouteVisualization.resx">
+      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgDepotList.resx">
+      <DependentUpon>dlgDepotList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.resx">
+      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.resx">
+      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LongProcess\Base\BaseMultiProgressDialog.resx">
+      <DependentUpon>BaseMultiProgressDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LongProcess\Base\BaseProgressDialog.resx">
+      <DependentUpon>BaseProgressDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LongProcess\Base\BaseSilngleProgressDialog.resx">
+      <DependentUpon>BaseSilngleProgressDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanEditor.resx">
+      <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanSettings.resx">
+      <DependentUpon>pnlPPlanSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.resx">
+      <DependentUpon>pnlPPlanTourPoints.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTours.resx">
+      <DependentUpon>pnlPPlanTours.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanOrders.resx">
+      <DependentUpon>pnlPPlanOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Common\UI.cs" />
+    <Compile Include="Common\Util.cs" />
+    <Compile Include="Route\RouteVisualisationData.cs" />
+    <Compile Include="XMLSerializator.cs" />
+    <None Include="sn.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Animated Notify Icon\Animated Notify Icon.csproj">
+      <Project>{735B55E9-0BB8-43E9-B3B7-959029EDE369}</Project>
+      <Name>Animated Notify Icon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrcNumericTextBox\FrcNumericTextBox.csproj">
+      <Project>{FF4CD9F3-DB53-4FD9-8541-5777947745E9}</Project>
+      <Name>FrcNumericTextBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
+      <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
+      <Name>GMap.NET.WindowsForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TabOrder\TabOrder.csproj">
+      <Project>{6E23D5D1-FB6B-450D-8244-34172B60C166}</Project>
+      <Name>TabOrder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WinFormsUI\WinFormsUI.csproj">
+      <Project>{C75532C4-765B-418E-B09B-46D36B2ABDB1}</Project>
+      <Name>WinFormsUI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\map.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shadow50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bigMarker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flag2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flag3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\editorloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gridloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ppreviewloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="map.ico" />
+    <None Include="Resources\tray\11.ico" />
+    <None Include="Resources\tray\10.ico" />
+    <None Include="Resources\tray\8.ico" />
+    <None Include="Resources\tray\6.ico" />
+    <None Include="Resources\tray\5.ico" />
+    <None Include="Resources\tray\3.ico" />
+    <None Include="Resources\tray\1.ico" />
+    <None Include="Resources\tray\13.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

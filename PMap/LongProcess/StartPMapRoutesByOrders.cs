@@ -1,0 +1,102 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using PMap.DB;
+using PMap.DB.Base;
+using PMap.LongProcess.Base;
+using PMap.Forms;
+using GMap.NET;
+using PMap.BO;
+using PMap.BLL;
+using PMap.Route;
+using PMap.Common;
+
+namespace PMap.LongProcess
+{
+    /// <summary>
+    /// Megrendelések lerakóira történő útvonalszámítás indítása. Ennek a threadnak csak az útvonalszámítás elindítása a feladat. 
+    /// </summary>
+    public class StartPMapRoutesByOrders : BaseLongProcess
+    {
+        private string m_ORD_DATE_S = "";
+        private string m_ORD_DATE_E = "";
+        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+
+        private bllRoute m_bllRoute;
+        private bool m_savePoints;
+        
+        public StartPMapRoutesByOrders(string p_ORD_DATE_S, string p_ORD_DATE_E, bool p_savePoints)
+            : base(ThreadPriority.Normal)
+
+        {
+            m_ORD_DATE_S = p_ORD_DATE_S;
+            m_ORD_DATE_E = p_ORD_DATE_E;
+            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_conn.ConnectDB();
+            m_bllRoute = new bllRoute(m_conn.DB);
+            m_savePoints = p_savePoints;
+
+        }
+
+        protected override void DoWork()
+        {
+
+            Thread thWaitMessage = new Thread(new ThreadStart(waitMessageThread));
+            thWaitMessage.SetApartmentState(ApartmentState.STA);
+            try
+            {
+
+                while (true)
+                {
+                    using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectCalc, 500))
+                    {
+                        if (lockObj.LockSuccessful)
+                        {
+                            if (thWaitMessage.IsAlive)
+                                thWaitMessage.Abort();
+
+                            List<boRoute> res = m_bllRoute.GetDistancelessOrderNodes(Convert.ToDateTime(m_ORD_DATE_S, Util.GetDefauldDTFormat()), Convert.ToDateTime(m_ORD_DATE_E, Util.GetDefauldDTFormat()));
+
+                            bool bOK = false;
+
+                            if (PMapIniParams.Instance.RouteThreadNum > 1)
+                                bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByOrders, false, m_savePoints);
+                            else
+                                bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByOrders, false, m_savePoints);
+
+                            break;
+
+                        }
+                        else
+                        {
+                            if (!thWaitMessage.IsAlive)
+                                thWaitMessage.Start();
+                            System.Threading.Thread.Sleep(500);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            finally
+            {
+
+                if (thWaitMessage.IsAlive)
+                    thWaitMessage.Abort();
+            }
+        }
+
+
+        private static void waitMessageThread()
+        {
+            dlgWait d = new dlgWait();
+            d.ShowDialog();
+
+        }
+    }
+}
