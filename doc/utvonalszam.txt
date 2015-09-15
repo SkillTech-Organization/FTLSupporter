@@ -6,3 +6,4 @@ Döntések:
 4
 
 1. Edge osztály létrehozása és feltöltése select * from viewmap alapján.
+2.
