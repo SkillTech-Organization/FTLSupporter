@@ -180,12 +180,19 @@ namespace PMap.BLL.DataXChange
 
                                         int DEP_ID = bllDepot.AddDepot(depot);
                                         bllDepot.SetAllTruckToDep(DEP_ID);
+                                        boXDepotRes res = new boXDepotRes() { ID = DEP_ID, Lat = 0, Lng = 0 };
+                                          boNode nod = bllRoute.GetNode(NOD_ID);
+                                          if (nod != null)
+                                          {
+                                              res.Lat = nod.NOD_YPOS / Global.LatLngDivider;
+                                              res.Lng = nod.NOD_XPOS / Global.LatLngDivider;
+                                          }
 
                                         dtXResult itemRes = new dtXResult()
                                         {
                                             ItemNo = nItem,
                                             Status = dtXResult.EStatus.OK,
-                                            Data = DEP_ID
+                                            Data = res
                                         };
                                         result.Add(itemRes);
 

@@ -109,40 +109,7 @@ Function .onInit
   SetOutPath "$TEMP"
   SetOverwrite try
 
-  Call checkDotNet
-
-  ${If} $dotnetOK != "${X_TRUE}"
-
-   ;  SetDetailsView hide
-
-     MessageBox MB_OK|MB_ICONINFORMATION "${X_DOTNETMSG}"
-
-     inetc::get /POPUP  "http://download.microsoft.com/download/0/6/1/061F001C-8752-4600-A198-53214C69B51F/dotnetfx35setup.exe" \
-                /caption ".NET 4.0 letöltése és telepítése" \
-                /canceltext "Mégsem" \
-                "http://download.microsoft.com/download/0/6/1/061F001C-8752-4600-A198-53214C69B51F/dotnetfx35setup.exe" \
-                "$TEMP\dotnetfx35setup.exe" \
-                /end
-     Pop $0
-
-     ${If} $0 != "${X_OK}"
-           Delete "$TEMP\dotnetfx35setup.exe"
-           MessageBox MB_OK|MB_ICONINFORMATION "Sikertelen a keretrendszer letöltése:$0"
-           Abort "Sikertelen a keretrendszer letöltése:$0"
-     ${EndIf}
-
-     StrCpy $dotnetOK "${X_TRUE}"
-
-     ExecWait "$TEMP\dotnetfx35setup.exe"
-     Delete "$TEMP\dotnetfx35setup.exe"
-
-     Call checkDotNet
-     ${If} $dotnetOK != "${X_TRUE}"
-           MessageBox MB_OK|MB_ICONINFORMATION "A keretrendszer telepítése megszakítva. - A telepítõprogram kilép -"
-           Abort "A keretrendszer telepítése megszakítva."
-     ${EndIf}
-   ; SetDetailsView show
-  ${EndIf}
+  
 
 
 ;**************************************

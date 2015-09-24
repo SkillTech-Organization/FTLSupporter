@@ -308,7 +308,7 @@ namespace PMapTestApp
         {
             List<boXDepot> depots = new List<boXDepot>();
 
-            dlgTestInput d = new dlgTestInput();
+       //     dlgTestInput d = new dlgTestInput();
             boXDepot dep = new boXDepot();
 
             dep.DEP_CODE = "TEST12";
@@ -342,9 +342,9 @@ namespace PMapTestApp
             dep.Lat = 0.0;
             dep.Lng = 0.0;
 
-            d.propertyGridCtrl1.SetObject(dep);
+     //       d.propertyGridCtrl1.SetObject(dep);
 
-            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+     //       if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 depots.Add(dep);
                 List<dtXResult> res = (new PMapInterface()).ImportDepots("", dbConf, depots);

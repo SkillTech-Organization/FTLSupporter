@@ -24,6 +24,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animated Notify Icon", "Ani
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabOrder", "TabOrder\TabOrder.csproj", "{6E23D5D1-FB6B-450D-8244-34172B60C166}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE152D52-1346-4F9C-A0D3-0CD98319DD14}"
+	ProjectSection(SolutionItems) = preProject
+		Correct-Tour.ini = Correct-Tour.ini
+		Installer\Correct-Tour.ini = Installer\Correct-Tour.ini
+		doc\PMap kapcsolat külső rendszerekkel.doc = doc\PMap kapcsolat külső rendszerekkel.doc
+		doc\PMap tervezés modul felhasználói leírása.docx = doc\PMap tervezés modul felhasználói leírása.docx
+		PMAP.ini = PMAP.ini
+		Installer\PMAP.ini = Installer\PMAP.ini
+		doc\PMap2.fazis1 = doc\PMap2.fazis1
+		doc\PMAp_build.doc = doc\PMAp_build.doc
+		Installer\PMapInstaller.nsi = Installer\PMapInstaller.nsi
+		Installer\PMapInstaller64.nsi = Installer\PMapInstaller64.nsi
+		doc\pmmanual.doc = doc\pmmanual.doc
+		doc\pmmanualx.docx = doc\pmmanualx.docx
+		doc\SWH_RDP.txt = doc\SWH_RDP.txt
+		doc\SWH_TEST.RDP = doc\SWH_TEST.RDP
+		doc\utvonalszam.txt = doc\utvonalszam.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 10

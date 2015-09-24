@@ -214,6 +214,7 @@
     <Compile Include="BO\boOrder.cs" />
     <Compile Include="BO\boOrderType.cs" />
     <Compile Include="BO\boTourOrder.cs" />
+    <Compile Include="BO\DataXChange\boXDepotRes.cs" />
     <Compile Include="BO\DataXChange\boXNewPlan.cs" />
     <Compile Include="BO\DataXChange\boXOrder.cs" />
     <Compile Include="BO\DataXChange\boXFullPlan.cs" />

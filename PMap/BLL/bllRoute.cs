@@ -880,7 +880,10 @@ namespace PMap.BLL
                     DataSet d3 = new DataSet();
                     DBA.DA.Fill(d3);
                     DataTable dt3 = d3.Tables[0];
-                    string sDB_ZIP_NUM =  ("0000" + Util.getFieldValue<int>(dt3.Rows[0], "ZIP_NUM").ToString()).RightString( 4);
+                    string sDB_ZIP_NUM = "";
+
+                    if (dt3.Rows.Count > 0)
+                         sDB_ZIP_NUM =  ("0000" + Util.getFieldValue<int>(dt3.Rows[0], "ZIP_NUM").ToString()).RightString( 4);
 
 
                     if (dt3.Rows.Count > 0 && (sZIP_NUM == "" ||
