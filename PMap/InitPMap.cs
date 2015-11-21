@@ -29,11 +29,11 @@ namespace PMap
 
         public static startErrCode Start(bool p_checkConnection)
         {
-            /* felhasználási jogsultság ellenőrzés */
+            /* felhasználási jogsultság ellenőrzés
             if (DateTime.Now > new DateTime(2015, 10, 31))
                 throw new Exception("Y2");
-            
-            
+             */
+
             /*
                       System.Environment.Exit(0);
                        Application.Exit();
