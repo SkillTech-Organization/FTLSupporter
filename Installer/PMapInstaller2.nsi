@@ -50,6 +50,8 @@ Section "Fõszakasz" SEC01
   File "..\PMap\bin\Release\*.dll"
   File "..\VBInterface\bin\Release\*.tlb"
   File "..\VBInterface\bin\Release\*.dll"
+  File "RegAsm.exe"
+
 SectionEnd
 
 Section -AdditionalIcons
@@ -77,7 +79,10 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  ExecWait "$INSTDIR\RegAsm.exe VBInterface.dll    /unregister >>$INSTDIR\RegAsm.log"
+
   Delete "$INSTDIR\uninst.exe"
+  Delete "$INSTDIR\regasm.exe"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\*.tlb"
 
