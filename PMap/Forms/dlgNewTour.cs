@@ -47,8 +47,18 @@ namespace PMap.Forms
             dtpWhsE.MinDate = m_ActivePlanInfo.OPEN;
             dtpWhsS.MaxDate = m_ActivePlanInfo.CLOSE;
             dtpWhsE.MaxDate = m_ActivePlanInfo.CLOSE;
+
+
+            //Win10 compatibilitás miatt újraépítjük a dátumot
+            /*
+            dtpWhsS.Value = new DateTime(m_ActivePlanInfo.OPEN.Year, m_ActivePlanInfo.OPEN.Month, m_ActivePlanInfo.OPEN.Day, m_ActivePlanInfo.OPEN.Hour, m_ActivePlanInfo.OPEN.Minute, m_ActivePlanInfo.OPEN.Second);
+            DateTime dtWrk = m_ActivePlanInfo.OPEN.AddMinutes(Convert.ToInt32(m_ActivePlanInfo.WHS_SRVTIME));
+            dtpWhsE.Value = new DateTime(dtWrk.Year, dtWrk.Month, dtWrk.Day, dtWrk.Hour, dtWrk.Minute, dtWrk.Second);
+            */
             dtpWhsS.Value = m_ActivePlanInfo.OPEN;
-            dtpWhsE.Value = m_ActivePlanInfo.OPEN.AddMinutes(Convert.ToInt32(m_ActivePlanInfo.WHS_SRVTIME));
+            dtpWhsE.Value =  m_ActivePlanInfo.OPEN.AddMinutes(Convert.ToInt32(m_ActivePlanInfo.WHS_SRVTIME)) > m_ActivePlanInfo.CLOSE ?
+                m_ActivePlanInfo.CLOSE :  m_ActivePlanInfo.OPEN.AddMinutes(Convert.ToInt32(m_ActivePlanInfo.WHS_SRVTIME));
+
             InitDialog();
 
         }
