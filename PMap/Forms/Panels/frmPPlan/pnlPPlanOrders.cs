@@ -128,7 +128,7 @@ namespace PMap.Forms.Panels.frmPPlan
             gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
             int ID =0;
 
-            if (p_setFocus)
+            if (p_setFocus && gridViewPlanOrders.FocusedRowHandle >= 0)
                 ID = (int)gridViewPlanOrders.GetRowCellValue(gridViewPlanOrders.FocusedRowHandle, gridColumnID);
 
             gridPlanOrders.DataSource = PPlanCommonVars.Instance.PlanOrderList;

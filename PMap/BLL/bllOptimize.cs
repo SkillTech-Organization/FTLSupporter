@@ -802,7 +802,7 @@ namespace PMap.BLL
                                                        ID = Util.getFieldValue<int>(r, "ID"),
                                                        NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
                                                        NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                                       EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME"),
+                                                       EDG_NAME = "",
                                                        EDG_LENGTH = Util.getFieldValue<float>(r, "EDG_LENGTH"),
                                                        RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
                                                    }
@@ -1110,8 +1110,7 @@ namespace PMap.BLL
                                     throw new NotImplementedException("Áttárolás feldolgozása nincs megoldva");
                                 }
 
-
-                                PTP_ORDER++;
+//                               PTP_ORDER++;
                             }
 
 

@@ -596,13 +596,9 @@ namespace PMap.Forms
                 dlgOptimize dOpt = new dlgOptimize(PPlanCommonVars.Instance.PLN_ID, m_selTour.ID);
                 if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK && dOpt.Result == TourOptimizerProcess.eOptResult.OK)
                 {
+                    m_PlanEditFuncs.RefreshToursAfterModify(m_selTour.ID, 0);
                     PPlanCommonVars.Instance.PlanOrderList = m_bllPlan.GetPlanOrders(PPlanCommonVars.Instance.PLN_ID);  //
                     RefreshAll(new PlanEventArgs(ePlanEventMode.RefreshOrders));
-
-                    //TODO : RefreshTourData
-                    //PPlanCommonVars.Instance.RefreshTourData(m_bllPlan.GetPlanTour(m_selTour.ID));
-                    PlanEventArgs eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, PPlanCommonVars.Instance.GetTourByID(m_selTour.ID));
-                    RefreshAll(eve);
                 }
                 else
                 {

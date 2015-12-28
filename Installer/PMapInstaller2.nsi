@@ -46,7 +46,7 @@ FunctionEnd
 
 Section "Fõszakasz" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite ifnewer
+  SetOverwrite on
   File "..\PMap\bin\Release\*.dll"
   File "..\VBInterface\bin\Release\*.tlb"
   File "..\VBInterface\bin\Release\*.dll"

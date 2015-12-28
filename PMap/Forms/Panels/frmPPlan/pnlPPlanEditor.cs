@@ -1610,6 +1610,11 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 m_EditMode = true;
                 //          SetFocusedTour(null);
+
+                setEditedRoute(null);
+                m_EditedTourPoint = null;
+                m_EditedUnplannedOrder = null;
+
                 gMapControl.Refresh();
                 statusStrip.BackColor = Color.BlanchedAlmond;
 
