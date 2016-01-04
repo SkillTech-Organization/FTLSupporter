@@ -45,7 +45,9 @@ namespace PMap.Forms.Panels.frmPPlan
                 List<boPlanTour> tl = m_PPlanCommonVars.TourList;
                 try
                 {
+                    gridViewTours.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTours_FocusedRowChanged);
                     gridTours.DataSource = tl;
+                    gridViewTours.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTours_FocusedRowChanged);
                 }
                 catch { }
                     

@@ -44,7 +44,9 @@ namespace PMap.Forms.Panels.frmPPlan
                 m_PlanEditFuncs = new PlanEditFuncs(this, m_PPlanCommonVars);
                 try
                 {
+                    gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
                     gridPlanOrders.DataSource = m_PPlanCommonVars.PlanOrderList;
+                    gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
                 }
                 catch { }
             }

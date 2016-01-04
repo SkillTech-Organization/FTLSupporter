@@ -105,9 +105,7 @@ namespace PMap.Forms
             initPPlanForm(p_PLN_ID);
             SetViewMode();
 
-            //minden inicializáció végén állítjuk be a listenert.
-            m_PPlanCommonVars.NotifyDataChanged += Instance_NotifyDataChanged;
-
+ 
         }
 
 
@@ -115,6 +113,10 @@ namespace PMap.Forms
         {
             try
             {
+
+                //minden inicializáció végén állítjuk be a listenert.
+                m_PPlanCommonVars.NotifyDataChanged -= Instance_NotifyDataChanged;
+
                 if (!DesignMode)
                 {
 
@@ -174,6 +176,7 @@ namespace PMap.Forms
 
         private void initPPlanForm(int p_PLN_ID)
         {
+
             if (m_pnlPPlanTours != null)
                 m_pnlPPlanTours.SetFocusedTourBySelectedItem();
 
@@ -207,7 +210,12 @@ namespace PMap.Forms
             btnChgTruck.Enabled = (p_PLN_ID > 0);
             btnTurnTour.Enabled = (p_PLN_ID > 0);
 
-            this.Text += "<< DB=" + PMapIniParams.Instance.DBConfigName + ">> ";
+            //minden inicializáció végén állítjuk be a listenert.
+            m_PPlanCommonVars.NotifyDataChanged += Instance_NotifyDataChanged;
+
+            this.Text = "Megnyitott terv:"+ (p_PLN_ID > 0 ? cmbPlans.ComboBox.Text : "-") + " Adatbázis=" + PMapIniParams.Instance.DBConfigName  ;
+            RefreshAll(new PlanEventArgs(ePlanEventMode.Init));
+ 
         }
 
         void Instance_NotifyDataChanged(object sender, PlanEventArgs e)
@@ -242,7 +250,7 @@ namespace PMap.Forms
                 btnTourDetails.Enabled = e.Tour != null;
                 btnOptimizeTrk.Enabled = e.Tour != null;
 
-                bool bVisible = e.Tour != null && e.Tour.Layer.IsVisibile;
+                bool bVisible = e.Tour != null && e.Tour.Layer != null && e.Tour.Layer.IsVisibile;
                 btnDelTour.Enabled = e.Tour != null && m_PPlanCommonVars.EditMode && bVisible;
                 btnChgTruck.Enabled = e.Tour != null && m_PPlanCommonVars.EditMode && bVisible;
                 btnTurnTour.Enabled = e.Tour != null && m_PPlanCommonVars.EditMode && bVisible;
@@ -415,7 +423,6 @@ namespace PMap.Forms
                 Util.ExceptionLog(e);
                 CreatePanels(true);
             }
-            RefreshAll(new PlanEventArgs(ePlanEventMode.Init));
         }
 
         private IDockContent getContentFromPersistString(string p_persistString)

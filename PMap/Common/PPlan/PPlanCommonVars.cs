@@ -138,25 +138,25 @@ namespace PMap.Common.PPlan
                     {
                         if (po.PTP_ID == 0)
                         {
-                            FocusedUnplannedOrder = null;
-                            FocusedOrder = po;
+                            m_focusedUnplannedOrder = null;
+                            m_focusedOrder = po;
                         }
                         else
                         {
-                            FocusedUnplannedOrder = po;
-                            FocusedOrder = null;
+                            m_focusedUnplannedOrder = po;
+                            m_focusedOrder = null;
                         }
                     }
                     else
                     {
-                        FocusedUnplannedOrder = null;
-                        FocusedOrder = null;
+                        m_focusedUnplannedOrder = null;
+                        m_focusedOrder = null;
                     }
                 }
                 else
                 {
-                    FocusedUnplannedOrder = null;
-                    FocusedOrder = null;
+                    m_focusedUnplannedOrder = null;
+                    m_focusedOrder = null;
                 }
             }
         }
@@ -180,9 +180,9 @@ namespace PMap.Common.PPlan
                 PlanEventArgs pea = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_focusedTour);
                 DoNotifyDataChanged(pea);
                 if (m_focusedTour != null)
-                    FocusedPoint = m_focusedTour.TourPoints.FirstOrDefault();
+                    m_focusedPoint = m_focusedTour.TourPoints.FirstOrDefault();
                 else
-                    FocusedPoint = null;
+                    m_focusedPoint = null;
             }
         }
 
@@ -195,6 +195,7 @@ namespace PMap.Common.PPlan
                 m_focusedPoint = value;
                 PlanEventArgs pea = new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, m_focusedPoint);
                 DoNotifyDataChanged(pea);
+                
             }
         }
 
@@ -215,7 +216,10 @@ namespace PMap.Common.PPlan
         public boPlanOrder FocusedUnplannedOrder
         {
             get { return m_focusedUnplannedOrder; }
-            set { m_focusedUnplannedOrder = value; }
+            set { 
+                m_focusedUnplannedOrder = value;
+                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedOrder, m_focusedUnplannedOrder));
+            }
         }
 
 
