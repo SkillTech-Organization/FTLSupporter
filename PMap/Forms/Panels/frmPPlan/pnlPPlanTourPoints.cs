@@ -26,12 +26,16 @@ namespace PMap.Forms.Panels.frmPPlan
         private bllPlanEdit m_bllPlanEdit;
         private bllPlan m_bllPlan;
         private PlanEditFuncs m_PlanEditFuncs;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        public pnlPPlanTourPoints()
+        public pnlPPlanTourPoints(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
+            m_PPlanCommonVars = p_PPlanCommonVars;
             if (!DesignMode)
-                Init();
+            {
+                InitPanelBase();
+            }
         }
 
         public bool IsFocusedItemExist()
@@ -42,10 +46,9 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             try
             {
-                InitPanel();
                 m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
                 m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
-                m_PlanEditFuncs = new PlanEditFuncs(this);
+                m_PlanEditFuncs = new PlanEditFuncs(this, m_PPlanCommonVars);
 
                 if (!DesignMode)
                 {
@@ -57,6 +60,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     gridViewTourPoints.Appearance.GetAppearance("HeaderPanel").BorderColor = Color.Empty;
                     gridViewTourPoints.Appearance.GetAppearance("HeaderPanel").Options.UseBackColor = false;
 
+                    SetDataSet(m_PPlanCommonVars.FocusedTour);
                 }
             }
             catch (Exception e)
@@ -71,9 +75,9 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             switch (p_planEventArgs.EventMode)
             {
-                case ePlanEventMode.ReInit:
+                case ePlanEventMode.Init:
                     this.Init();
-                    break;
+                   break;
                 case ePlanEventMode.Refresh:
                     gridViewTourPoints.RefreshData();
                     break;
@@ -91,15 +95,19 @@ namespace PMap.Forms.Panels.frmPPlan
                     SetTourColor(p_planEventArgs.Color);
                     break;
                 case ePlanEventMode.ChgFocusedTour:
-                    gridViewTourPoints.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
-
-                    SetDataSet(p_planEventArgs.Tour);
-
-                    gridViewTourPoints.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
+                    if (p_planEventArgs.Tour != null)
+                    {
+                        gridViewTourPoints.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
+                        SetDataSet(p_planEventArgs.Tour);
+                        gridViewTourPoints.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
+                    }
                     break;
 
                 case ePlanEventMode.ChgFocusedTourPoint:
-                    refreshTourPoints(p_planEventArgs.TourPoint.TPL_ID, p_planEventArgs.TourPoint.ID);
+                    if (p_planEventArgs.TourPoint != null)
+                    {
+                        refreshTourPoints(p_planEventArgs.TourPoint.TPL_ID, p_planEventArgs.TourPoint.ID);
+                    }
                     break;
 
                 default:
@@ -114,7 +122,7 @@ namespace PMap.Forms.Panels.frmPPlan
         private void refreshTourPoints(int TPL_ID, int PTP_ID)
         {
             gridViewTourPoints.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
-            SetDataSet(PPlanCommonVars.Instance.GetTourByID(TPL_ID));
+            SetDataSet(m_PPlanCommonVars.GetTourByID(TPL_ID));
             if (gridTourPoints.DataSource != null)
             {
 
@@ -139,7 +147,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 int? ID = (int?)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnID);
                 if (ID != null && ID.Value != GridControl.InvalidRowHandle)
                 {
-                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, PPlanCommonVars.Instance.GetTourPointByID(ID.Value)));
+                    m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.GetTourPointByID(ID.Value);
                 }
             }
 
@@ -167,7 +175,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 int ID = (int)gridViewTourPoints.GetRowCellValue(gridViewTourPoints.FocusedRowHandle, gridColumnID);
                 if (ID != GridControl.InvalidRowHandle)
                 {
-                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, PPlanCommonVars.Instance.GetTourPointByID(ID)));
+                    m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.GetTourPointByID(ID);
                 }
             }
         }
@@ -228,21 +236,21 @@ namespace PMap.Forms.Panels.frmPPlan
 
                 if (!dragRect.Contains(new Point(e.X, e.Y)))
                 {
-                    if (m_StartDragHitInfo.InRow && PPlanCommonVars.Instance.DraggedObj == null)
+                    if (m_StartDragHitInfo.InRow && m_PPlanCommonVars.DraggedObj == null)
                     {
                         int itemID = (int)gridViewTourPoints.GetRowCellValue(m_StartDragHitInfo.RowHandle, gridColumnID);
-                        boPlanTourPoint draggedTourPoint = PPlanCommonVars.Instance.GetTourPointByID(itemID);
+                        boPlanTourPoint draggedTourPoint = m_PPlanCommonVars.GetTourPointByID(itemID);
 Console.WriteLine("draggedTourPoint=" + draggedTourPoint.ToString());
 
                         if (draggedTourPoint.PTP_TYPE == Global.PTP_TYPE_DEP)        //csak túrapontot drag&drop-olunk
                         {
-                            PPlanCommonVars.Instance.DraggedObj = new PPlanCommonVars.PPlanDragObject(PPlanCommonVars.PPlanDragObject.ESourceDataObjectType.TourPoint) { ID = itemID, DataObject = draggedTourPoint, SrcGridControl = gridTourPoints };
+                            m_PPlanCommonVars.DraggedObj = new PPlanCommonVars.PPlanDragObject(PPlanCommonVars.PPlanDragObject.ESourceDataObjectType.TourPoint) { ID = itemID, DataObject = draggedTourPoint, SrcGridControl = gridTourPoints };
                         }
 
                     }
 
-                    if (PPlanCommonVars.Instance.DraggedObj != null)
-                        gridTourPoints.DoDragDrop(PPlanCommonVars.Instance.DraggedObj, DragDropEffects.All);
+                    if (m_PPlanCommonVars.DraggedObj != null)
+                        gridTourPoints.DoDragDrop(m_PPlanCommonVars.DraggedObj, DragDropEffects.All);
 
                 }
             }
@@ -255,7 +263,7 @@ Console.WriteLine("draggedTourPoint=" + draggedTourPoint.ToString());
 
         private void gridTourPoints_DragDrop(object sender, DragEventArgs e)
         {
-            if (PPlanCommonVars.Instance.DraggedObj != null )
+            if (m_PPlanCommonVars.DraggedObj != null )
             {
 
                 GridHitInfo hi = gridViewTourPoints.CalcHitInfo(gridTourPoints.PointToClient(new Point(e.X, e.Y)));
@@ -264,26 +272,26 @@ Console.WriteLine("draggedTourPoint=" + draggedTourPoint.ToString());
                 {
 
                     int itemID = (int)gridViewTourPoints.GetRowCellValue(insPosHandle, gridColumnID);
-                    boPlanTourPoint insPoint = PPlanCommonVars.Instance.GetTourPointByID(itemID);
+                    boPlanTourPoint insPoint = m_PPlanCommonVars.GetTourPointByID(itemID);
 
-                    if (PPlanCommonVars.Instance.DraggedObj.SrcGridControl == gridTourPoints)
+                    if (m_PPlanCommonVars.DraggedObj.SrcGridControl == gridTourPoints)
                     {
 
                         // A griden belül mozogtunk el
-                        boPlanTourPoint draggedPoint = (boPlanTourPoint)PPlanCommonVars.Instance.DraggedObj.DataObject;
+                        boPlanTourPoint draggedPoint = (boPlanTourPoint)m_PPlanCommonVars.DraggedObj.DataObject;
 
                         if (insPoint.NextTourPoint != draggedPoint)
                             m_PlanEditFuncs.ReorganizeTour(draggedPoint, insPoint.Tour, insPoint);
 
                     }
-                    else if (PPlanCommonVars.Instance.DraggedObj.SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
+                    else if (m_PPlanCommonVars.DraggedObj.SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
                     {
                         //a megrendelés gridről jöttünk
-                        boPlanOrder draggedOrder = (boPlanOrder)PPlanCommonVars.Instance.DraggedObj.DataObject;
+                        boPlanOrder draggedOrder = (boPlanOrder)m_PPlanCommonVars.DraggedObj.DataObject;
                         if (draggedOrder.PTP_ID > 0)        //Van-e a megrendelésnek túrapontja
                         {
                             //Már túrába szervezett megrendelés, újraszervezés
-                            boPlanTourPoint draggedPoint = PPlanCommonVars.Instance.GetTourPointByID(draggedOrder.PTP_ID);
+                            boPlanTourPoint draggedPoint = m_PPlanCommonVars.GetTourPointByID(draggedOrder.PTP_ID);
                             m_PlanEditFuncs.ReorganizeTour(draggedPoint, insPoint.Tour, insPoint);
                         }
                         else
@@ -294,7 +302,7 @@ Console.WriteLine("draggedTourPoint=" + draggedTourPoint.ToString());
                     }
                 }
 
-                PPlanCommonVars.Instance.DraggedObj = null;
+                m_PPlanCommonVars.DraggedObj = null;
 
             }
                 m_StartDragHitInfo = null;
@@ -302,20 +310,20 @@ Console.WriteLine("draggedTourPoint=" + draggedTourPoint.ToString());
 
         private void gridTourPoints_DragLeave(object sender, EventArgs e)
         {
-            if (PPlanCommonVars.Instance.DraggedObj != null )
+            if (m_PPlanCommonVars.DraggedObj != null )
             {
-                if (PPlanCommonVars.Instance.DraggedObj.SrcGridControl == gridTourPoints)
+                if (m_PPlanCommonVars.DraggedObj.SrcGridControl == gridTourPoints)
                 {
 
-                    boPlanTourPoint draggedPoint = (boPlanTourPoint)PPlanCommonVars.Instance.DraggedObj.DataObject;
+                    boPlanTourPoint draggedPoint = (boPlanTourPoint)m_PPlanCommonVars.DraggedObj.DataObject;
                     m_PlanEditFuncs.RemoveTourPoint(draggedPoint);
 
-                    PPlanCommonVars.Instance.DraggedObj= null;
+                    m_PPlanCommonVars.DraggedObj= null;
                 }
-                else if (PPlanCommonVars.Instance.DraggedObj.SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
+                else if (m_PPlanCommonVars.DraggedObj.SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
                 {
 
-                    PPlanCommonVars.Instance.DraggedObj = null;
+                    m_PPlanCommonVars.DraggedObj = null;
                 }
 
             }

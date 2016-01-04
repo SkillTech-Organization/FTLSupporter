@@ -27,14 +27,16 @@ namespace PMap.Forms
 
         private bllPlan m_bllPlan;
         private PlanEditFuncs m_PlanEditFuncs;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        public dlgTruckChg(int p_PLN_ID, boPlanTour p_Tour, PlanEditFuncs p_PlanEditFuncs)
+        public dlgTruckChg(int p_PLN_ID, boPlanTour p_Tour, PlanEditFuncs p_PlanEditFuncs, PPlanCommonVars p_PPlanCommonVars)
             : base(eEditMode.editmode)
         {
             InitializeComponent();
 
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
             m_PlanEditFuncs = p_PlanEditFuncs;
+            m_PPlanCommonVars = p_PPlanCommonVars;
 
             TPL_ID = 0;
             m_PLN_ID = p_PLN_ID;
@@ -77,7 +79,7 @@ namespace PMap.Forms
 
             TPL_ID = Convert.ToInt32(cmbTruck.SelectedValue);
 
-            boPlanTour newTour = PPlanCommonVars.Instance.TourList.Where(i => i.ID == TPL_ID).FirstOrDefault();
+            boPlanTour newTour = m_PPlanCommonVars.TourList.Where(i => i.ID == TPL_ID).FirstOrDefault();
 
 
             boPlanTourPoint prevTourPoint = null;

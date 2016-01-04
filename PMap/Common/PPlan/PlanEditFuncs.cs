@@ -18,9 +18,12 @@ namespace PMap.Common.PPlan
         private bllPlan m_bllPlan;
         private bllPlanEdit m_bllPlanEdit;
         private BasePanel m_panel;
-        public PlanEditFuncs(BasePanel p_panel)
+        private PPlanCommonVars m_PPlanCommonVars;
+
+        public PlanEditFuncs(BasePanel p_panel, PPlanCommonVars p_PPlanCommonVars)
         {
             m_panel = p_panel;
+            m_PPlanCommonVars = p_PPlanCommonVars;
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
             m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
         }
@@ -88,13 +91,12 @@ namespace PMap.Common.PPlan
                         refreshedTour = RefreshToursAfterModify(p_ReorganizedTourPoint.Tour.ID, 0);
 
                     //Rápozícionálunk a túrára
-                    PlanEventArgs eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, p_Tour);
-                    m_panel.DoNotifyDataChanged(eve);
+                    m_PPlanCommonVars.FocusedTour = p_Tour;
 
                     //rápozícionálunk az új túrapontra
-                    //
-                    eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, PPlanCommonVars.Instance.GetTourPointByID(PTP_ID));
-                    m_panel.DoNotifyDataChanged(eve);
+                    m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.GetTourPointByID(PTP_ID);
+
+
                 }
             }
             return refreshedTour;
@@ -150,13 +152,10 @@ namespace PMap.Common.PPlan
                         refreshedTour = RefreshToursAfterModify(p_Tour.ID, 0);
 
                         //Rápozícionálunk a túrára
-                        PlanEventArgs eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, refreshedTour);
-                        m_panel.DoNotifyDataChanged(eve);
+                        m_PPlanCommonVars.FocusedTour = p_Tour;
 
                         //rápozícionálunk az új túrapontra
-                        //
-                        eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, PPlanCommonVars.Instance.GetTourPointByID(PTP_ID));
-                        m_panel.DoNotifyDataChanged(eve);
+                        m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.GetTourPointByID(PTP_ID);
                     }
                 }
             }
@@ -172,9 +171,7 @@ namespace PMap.Common.PPlan
 
                 m_bllPlanEdit.CreateNewTour(p_PLN_ID, p_WHS_ID, p_TPL_ID, p_color, p_WhsS, p_WhsE, p_srvTime);
                 refreshedTour = RefreshToursAfterModify(p_TPL_ID, 0);
-
-                PlanEventArgs eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, refreshedTour);
-                m_panel.DoNotifyDataChanged(eve);
+                m_PPlanCommonVars.FocusedTour = refreshedTour;
             }
             return refreshedTour;
         }
@@ -210,17 +207,13 @@ namespace PMap.Common.PPlan
             }
             refreshedTour = RefreshToursAfterModify(p_OldTPL_ID, p_NewTPL_ID);
 
-            PlanEventArgs eve = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, refreshedTour);
-            m_panel.DoNotifyDataChanged(eve);
-
             return refreshedTour;
         }
 
         public void RefreshOrdersFromDB()
         {
-            PPlanCommonVars.Instance.PlanOrderList = m_bllPlan.GetPlanOrders(PPlanCommonVars.Instance.PLN_ID);
-            m_panel.DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.RefreshOrders));
-            PPlanCommonVars.Instance.FocusedUnplannedOrder = null;
+            m_PPlanCommonVars.PlanOrderList = m_bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);
+            m_PPlanCommonVars.FocusedUnplannedOrder = null;
         }
 
         public boPlanTour RefreshToursAfterModify(int pChangedTourID1, int pChangedTourID2)
@@ -231,7 +224,7 @@ namespace PMap.Common.PPlan
             RefreshOrdersFromDB();
 
             boPlanTour TourWithFreshData = null;
-            PPlanCommonVars.Instance.FocusedPoint = null;
+            m_PPlanCommonVars.FocusedPoint = null;
 
             if (pChangedTourID1 > 0)
             {
@@ -250,21 +243,16 @@ namespace PMap.Common.PPlan
             string sFndText = sFindORD_NUM.ToUpper();
 
 
-            boPlanOrder ord = PPlanCommonVars.Instance.GetOrderByORD_NUM(sFndText);
+            boPlanOrder ord = m_PPlanCommonVars.GetOrderByORD_NUM(sFndText);
             if (ord != null)
             {
 
-                PlanEventArgs evt = new PlanEventArgs(ePlanEventMode.ChgFocusedOrder, ord);
-                m_panel.DoNotifyDataChanged(evt);
-
+                m_PPlanCommonVars.FocusedOrder = ord;
                 if (ord.PTP_ID > 0)
                 {
-                    boPlanTourPoint ptp = PPlanCommonVars.Instance.GetTourPointByID(ord.PTP_ID);
-                    evt = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, ptp.Tour);
-                    m_panel.DoNotifyDataChanged(evt);
-
-                    evt = new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, ptp);
-                    m_panel.DoNotifyDataChanged(evt);
+                    boPlanTourPoint ptp = m_PPlanCommonVars.GetTourPointByID(ord.PTP_ID);
+                    m_PPlanCommonVars.FocusedTour = ptp.Tour;
+                    m_PPlanCommonVars.FocusedPoint = ptp;
                 }
                 return true;
 
@@ -295,20 +283,17 @@ namespace PMap.Common.PPlan
         private boPlanTour RefreshTourDataFromDB(int p_TPL_ID)
         {
 
-            boPlanTour TourWithOldData = PPlanCommonVars.Instance.GetTourByID(p_TPL_ID);
+            boPlanTour TourWithOldData = m_PPlanCommonVars.GetTourByID(p_TPL_ID);
             boPlanTour TourWithFreshData = m_bllPlan.GetPlanTour(p_TPL_ID);
             if (TourWithOldData != null)
             {
 
                 //kitöröljük a régi adatokkal rendelkező túrát és beszúrjuk a firssítést
-                int index = PPlanCommonVars.Instance.TourList.IndexOf(TourWithOldData);
-                PPlanCommonVars.Instance.TourList.Remove(TourWithOldData);
-                m_panel.DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.RemoveTour, TourWithOldData));
-
+                int index = m_PPlanCommonVars.TourList.IndexOf(TourWithOldData);
+                m_PPlanCommonVars.RemoveTourFromList(TourWithOldData);
                 if (TourWithFreshData != null)
                 {
-                    PPlanCommonVars.Instance.TourList.Insert(index, TourWithFreshData);
-                    m_panel.DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.AddTour, TourWithFreshData));
+                    m_PPlanCommonVars.AddTourToList(index, TourWithFreshData);
                 }
             }
             else
@@ -316,8 +301,7 @@ namespace PMap.Common.PPlan
                 //Nem volt még a listában, hozzáadás
                 if (TourWithFreshData != null)
                 {
-                    PPlanCommonVars.Instance.TourList.Add(TourWithFreshData);
-                    m_panel.DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.AddTour, TourWithFreshData));
+                    m_PPlanCommonVars.AddTourToList(TourWithFreshData);
                 }
             }
             return TourWithFreshData;

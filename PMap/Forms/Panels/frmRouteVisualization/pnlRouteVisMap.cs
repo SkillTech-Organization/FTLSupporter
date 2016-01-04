@@ -24,6 +24,8 @@ namespace PMap.Forms.Panels.frmRouteVisualization
     public partial class pnlRouteVisMap : BasePanel
     {
 
+      
+
         private AccessMode MapAccessMode { get; set; }
         public GMapProvider MapProvider { get; set; }
 
@@ -37,10 +39,12 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         private GMapMarker m_MovedMarker = null;
 
         private bllRoute m_Route = null;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        public pnlRouteVisMap()
+        public pnlRouteVisMap(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
+            m_PPlanCommonVars = p_PPlanCommonVars;
             m_Route = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
 
             init();
@@ -50,7 +54,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         {
             try
             {
-                InitPanel();
+                InitPanelBase();
 
 
                 if (!DesignMode)
@@ -130,7 +134,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
                         tp.NOD_NAME = rtDep.Depot.DEP_NAME;
                         tp.ID = rtDep.Depot.ID;
                         PPlanMarker mrkTourPoint = new PPlanMarker(rtDep.Depot.Position, Color.YellowGreen, tp);
-                        mrkTourPoint.ToolTipMode = PPlanCommonVars.Instance.TooltipMode;
+                        mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                         mrkTourPoint.Size = new System.Drawing.Size(20, 20);
                         mrkTourPoint.ToolTipText = rtDep.Depot.DEP_NAME;
                         m_depotsLayer.Markers.Add(mrkTourPoint);
@@ -205,7 +209,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         private void zoomChanged()
         {
             RouteVisCommonVars.Instance.Zoom = (int)(gMapControl.Zoom);
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgZoom));
+            DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgZoom));
         }
         private void setToolTipMode()
         {
@@ -227,7 +231,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
 
             PPlanMarker mrk = (PPlanMarker)item;
             RouteVisCommonVars.Instance.SelectedDepID = mrk.TourPoint.ID;   //az ID-ben a DEP_ID van tárolva
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgDepotSelected));
+            DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgDepotSelected));
 
         }
 

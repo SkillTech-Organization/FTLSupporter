@@ -39,10 +39,11 @@ namespace PMap.LongProcess
 
         private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
         private bllRoute m_bllRoute;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        int m_genTPL_ID = -1;
+        int m_genTPL_ID = -1;               // kitöltés esetén csak ezt a túrát kell térképre generálni
 
-        public GetRoutePathProcess(BaseProgressDialog p_Form, List<boPlanTour> p_TourList, GMapControl p_gMapControl, GMapOverlay p_baseLayer, int p_genTPL_ID)
+        public GetRoutePathProcess(BaseProgressDialog p_Form, List<boPlanTour> p_TourList, GMapControl p_gMapControl, GMapOverlay p_baseLayer, int p_genTPL_ID, PPlanCommonVars p_PPlanCommonVars)
             : base(p_Form, ThreadPriority.Normal)
         {
             m_TourList = p_TourList;
@@ -52,19 +53,14 @@ namespace PMap.LongProcess
             m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
             m_conn.ConnectDB();
             m_bllRoute = new bllRoute(m_conn.DB);
+            m_PPlanCommonVars = p_PPlanCommonVars;
 
         }
         protected override void DoWork()
         {
 
             CompleteCode = eCompleteCode.OK;
-            if (m_genTPL_ID <= 0)
-            {
-                //az alaplayert csak teljes útvonalgenerálásnál töröljük
-                m_baseLayer.Routes.Clear();
-                m_baseLayer.Markers.Clear();
-            }
-
+ 
             for (int i = 0; i < m_TourList.Count; i++)
             {
                 if (m_genTPL_ID <= 0 || m_TourList[i].ID == m_genTPL_ID)
@@ -181,7 +177,7 @@ namespace PMap.LongProcess
                             if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSOUT)
                             {
                                 mrkFlag = new PPlanMarkerFlag(start, p_tour.TourPoints[i]);
-                                mrkFlag.ToolTipMode = PPlanCommonVars.Instance.TooltipMode;
+                                mrkFlag.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                 p_tour.TourPoints[i].ToolTipText = p_tour.TourPoints[i].TIME_AND_NAME;
                                 //                            mrkFlag.Size = new System.Drawing.Size(20, 20);
 
@@ -192,7 +188,7 @@ namespace PMap.LongProcess
 
                             if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSIN)
                             {
-                                //ide csak multit]ra esetén futhat a program !!!
+                                //ide csak multitúra esetén futhat a program !!!
                                 //
                                 mrkFlag = new PPlanMarkerFlag(start, p_tour.TourPoints[i]);
                                 dashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
@@ -205,7 +201,7 @@ namespace PMap.LongProcess
                             if (p_tour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TPOINT)
                             {
                                 PPlanMarker mrkTourPoint = new PPlanMarker(end, p_tour.PCOLOR, p_tour.TourPoints[i]);
-                                mrkTourPoint.ToolTipMode = PPlanCommonVars.Instance.TooltipMode;
+                                mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                 mrkTourPoint.Size = new System.Drawing.Size(20, 20);
 
                                 if (PMapIniParams.Instance.DepCodeInToolTip)

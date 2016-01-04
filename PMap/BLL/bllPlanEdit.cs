@@ -80,7 +80,6 @@ namespace PMap.BLL
 
                     }
                     RecalcTour(p_insertionPoint.PTP_ORDER, p_TPL_ID, p_Weather);
-                    PPlanCommonVars.Instance.Changed = true;
                 }
                 catch (Exception e)
                 {
@@ -154,7 +153,6 @@ namespace PMap.BLL
 
                     }
 
-                    PPlanCommonVars.Instance.Changed = true;
                 }
                 catch (Exception e)
                 {

@@ -25,13 +25,15 @@ namespace PMap.Forms
 
         private bllPlan m_bllPlan;
         private PlanEditFuncs m_PlanEditFuncs;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        public dlgNewTour(int p_PLN_ID, PlanEditFuncs p_PlanEditFuncs)
+        public dlgNewTour(int p_PLN_ID, PlanEditFuncs p_PlanEditFuncs, PPlanCommonVars p_PPlanCommonVars)
             : base(eEditMode.editmode)
         {
             InitializeComponent();
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
             m_PlanEditFuncs = p_PlanEditFuncs;
+            m_PPlanCommonVars = p_PPlanCommonVars;
             
             m_PLN_ID = p_PLN_ID;
             m_dtUnplannedTrucks = m_bllPlan.GetUnplannedTrucks(m_PLN_ID);
@@ -104,7 +106,7 @@ namespace PMap.Forms
         {
 
             int TPL_ID = Convert.ToInt32(cmbTruck.SelectedValue);
-            boPlanTour tour = PPlanCommonVars.Instance.TourList.Where( i=> i.ID == TPL_ID).ToList().First();
+            boPlanTour tour = m_PPlanCommonVars.TourList.Where( i=> i.ID == TPL_ID).ToList().First();
             if (tour != null)
             {
                 cmbColor.SelectedColor = tour.PCOLOR;

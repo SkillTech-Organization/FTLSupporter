@@ -1110,10 +1110,8 @@ namespace PMap.BLL
                                     throw new NotImplementedException("Áttárolás feldolgozása nincs megoldva");
                                 }
 
-//                               PTP_ORDER++;
                             }
-
-
+                            
                         }
                         else if (aFn[0] == getIgnoredOrder)
                         {

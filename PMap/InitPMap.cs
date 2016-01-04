@@ -89,7 +89,7 @@ namespace PMap
 
 
             PMapCommonVars.Instance.MapAccessMode = AccessMode.ServerOnly;
-            PPlanCommonVars.Instance.Changed = true;
+    //??        PPlanCommonVars.Instance.Changed = true;
 
             GoogleMapProvider.Instance.APIKey = PMapIniParams.Instance.GoogleMapsAPIKey;
 

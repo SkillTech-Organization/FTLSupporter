@@ -24,32 +24,39 @@ namespace PMap.Forms.Panels.frmPPlan
         private bllPlanEdit m_bllPlanEdit;
         private bllPlan m_bllPlan;
         private PlanEditFuncs m_PlanEditFuncs;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        public pnlPPlanSettings()
+        public pnlPPlanSettings(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
-            Init();
-            tbZoom.ValueChanged += new EventHandler(tbZoom_ValueChanged);
+            m_PPlanCommonVars = p_PPlanCommonVars;
+            if (!DesignMode)
+            {
+                InitPanelBase();
+            }
 
         }
 
-        public void Init()
+        public void init()
         {
-            InitPanel();
+
+//          tbZoom.ValueChanged -= new EventHandler(tbZoom_ValueChanged);
+            tbZoom.ValueChanged += new EventHandler(tbZoom_ValueChanged);
+
             m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
-            m_PlanEditFuncs = new PlanEditFuncs(this);
+            m_PlanEditFuncs = new PlanEditFuncs(this, m_PPlanCommonVars);
 
             tbZoom.Minimum = Global.DefMinZoom;
             tbZoom.Maximum = Global.DefMaxZoom;
-            tbZoom.Value = PPlanCommonVars.Instance.Zoom;
-            chkShowPlannedDepots.Checked = PPlanCommonVars.Instance.ShowPlannedDepots;
-            chkShowUnplannedDepots.Checked = PPlanCommonVars.Instance.ShowUnPlannedDepots;
-            chkZoomToSelectedTour.Checked = PPlanCommonVars.Instance.ZoomToSelectedPlan;
-            chkZoomToSelectedUnPlanned.Checked = PPlanCommonVars.Instance.ZoomToSelectedUnPlanned;
-            chkShowAllOrdersInGrid.Checked = PPlanCommonVars.Instance.ShowAllOrdersInGrid;
+            tbZoom.Value = m_PPlanCommonVars.Zoom;
+            chkShowPlannedDepots.Checked = m_PPlanCommonVars.ShowPlannedDepots;
+            chkShowUnplannedDepots.Checked = m_PPlanCommonVars.ShowUnPlannedDepots;
+            chkZoomToSelectedTour.Checked = m_PPlanCommonVars.ZoomToSelectedPlan;
+            chkZoomToSelectedUnPlanned.Checked = m_PPlanCommonVars.ZoomToSelectedUnPlanned;
+            chkShowAllOrdersInGrid.Checked = m_PPlanCommonVars.ShowAllOrdersInGrid;
 
-            switch (PPlanCommonVars.Instance.TooltipMode)
+            switch (m_PPlanCommonVars.TooltipMode)
             {
                 case MarkerTooltipMode.OnMouseOver:
                     rdbOnMouseOver.Checked = true;
@@ -68,11 +75,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void tbZoom_ValueChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.Zoom = (tbZoom.Value);
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgZoom));
-
-
-
+            m_PPlanCommonVars.Zoom = (tbZoom.Value);
         }
 
 
@@ -80,9 +83,14 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             switch (p_planEventArgs.EventMode)
             {
+                case ePlanEventMode.Init:
+                    this.init();
+                    break;
+                case ePlanEventMode.Refresh:
+                    break;
                 case ePlanEventMode.ChgZoom:
                     tbZoom.ValueChanged -= new EventHandler(tbZoom_ValueChanged);
-                    tbZoom.Value = PPlanCommonVars.Instance.Zoom;
+                    tbZoom.Value = m_PPlanCommonVars.Zoom;
                     tbZoom.ValueChanged += new EventHandler(tbZoom_ValueChanged);
                     break;
                 case ePlanEventMode.ChgShowPlannedFlag:
@@ -97,58 +105,50 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void chkShowPlannedDepots_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.ShowPlannedDepots = chkShowPlannedDepots.Checked;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgShowPlannedFlag));
-
-
+            m_PPlanCommonVars.ShowPlannedDepots = chkShowPlannedDepots.Checked;
         }
 
         private void chkShowUnplannedDepots_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.ShowUnPlannedDepots = chkShowUnplannedDepots.Checked;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgShowUnPlannedFlag));
+            m_PPlanCommonVars.ShowUnPlannedDepots = chkShowUnplannedDepots.Checked;
         }
 
         private void rdbNever_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.TooltipMode = MarkerTooltipMode.Never;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTooltipMode));
-
+            m_PPlanCommonVars.TooltipMode = MarkerTooltipMode.Never;
         }
 
         private void rdbOnMouseOver_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.TooltipMode = MarkerTooltipMode.OnMouseOver;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTooltipMode));
+            m_PPlanCommonVars.TooltipMode = MarkerTooltipMode.OnMouseOver;
         }
 
         private void rdbAlways_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.TooltipMode = MarkerTooltipMode.Always;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTooltipMode));
+            m_PPlanCommonVars.TooltipMode = MarkerTooltipMode.Always;
         }
 
         private void btnHideShowAllTours_Click(object sender, EventArgs e)
         {
 
-            foreach (boPlanTour rt in PPlanCommonVars.Instance.TourList)
+            foreach (boPlanTour rt in m_PPlanCommonVars.TourList)
             {
                 rt.PSelect = !m_hideAll;
                 rt.Layer.IsVisibile = !m_hideAll;
             }
-            m_bllPlanEdit.ChangeAllTourSelected(PPlanCommonVars.Instance.PLN_ID, !m_hideAll);
+            m_bllPlanEdit.ChangeAllTourSelected(m_PPlanCommonVars.PLN_ID, !m_hideAll);
 
             if (m_hideAll)
             {
                 m_hideAll = false;
                 btnHideShowAllTours.Text = PMapMessages.M_SETT_SHOWALL;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.HideAllTours));
+                DoNotifyPanelChanged(new PlanEventArgs(ePlanEventMode.HideAllTours));
             }
             else
             {
                 m_hideAll = true;
                 btnHideShowAllTours.Text = PMapMessages.M_SETT_HIDEALL;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ShowAllTours));
+                DoNotifyPanelChanged(new PlanEventArgs(ePlanEventMode.ShowAllTours));
             }
 
 
@@ -156,21 +156,17 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void chkZoomToSelectedTour_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.ZoomToSelectedPlan = chkZoomToSelectedTour.Checked;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgZoomToSelectedTour));
-
+            m_PPlanCommonVars.ZoomToSelectedPlan = chkZoomToSelectedTour.Checked;
         }
 
         private void chkZoomToSelectedUnPlanned_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.ZoomToSelectedUnPlanned = chkZoomToSelectedUnPlanned.Checked;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgZoomToSelectedUnPlanned));
+            m_PPlanCommonVars.ZoomToSelectedUnPlanned = chkZoomToSelectedUnPlanned.Checked;
         }
 
         private void chkAllOrders_CheckedChanged(object sender, EventArgs e)
         {
-            PPlanCommonVars.Instance.ShowAllOrdersInGrid = chkShowAllOrdersInGrid.Checked;
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgShowAllOrdersInGrid));
+            m_PPlanCommonVars.ShowAllOrdersInGrid = chkShowAllOrdersInGrid.Checked;
         }
 
         private void buttonFind_Click(object sender, EventArgs e)

@@ -23,7 +23,7 @@ namespace PMap.Common.PPlan
         AddTour,                        //Új túra létrehozása történt
         HideAllTours,                   //Összes túra eltüntetése
         ShowAllTours,                   //Összes túra megjelenítése
-        ReInit,                         //Mindent újrainicializálni
+        Init,                           //inicializálás
         Refresh,                        //Minden frissítése
         RefreshTour,                    //Egy túra frissítése
         RefreshOrders,                  //Megrendelések frissítése

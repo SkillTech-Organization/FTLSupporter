@@ -782,8 +782,6 @@ namespace VBInterface
             {
                 frmPPlan pp = new frmPPlan(Convert.ToInt32("0" + p_PLN_ID), Convert.ToInt32("0" + p_USR_ID), p_planParams);
                 pp.ShowDialog();
-
-                res.Data = PPlanCommonVars.Instance.Changed;
             }
             catch (Exception e)
             {

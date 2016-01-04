@@ -23,11 +23,16 @@ namespace PMap.Forms.Panels.frmPPlan
     {
         private GridHitInfo m_HitInfo = null;
         private PlanEditFuncs m_PlanEditFuncs;
+        private PPlanCommonVars m_PPlanCommonVars;
 
-        public pnlPPlanOrders()
+        public pnlPPlanOrders(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
-            init();
+            m_PPlanCommonVars = p_PPlanCommonVars;
+            if (!DesignMode)
+            {
+                InitPanelBase();
+            }
         }
 
         private void init()
@@ -36,12 +41,12 @@ namespace PMap.Forms.Panels.frmPPlan
             {
 
                 gridViewPlanOrders.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
-                m_PlanEditFuncs = new PlanEditFuncs(this);
-                if (!DesignMode)
+                m_PlanEditFuncs = new PlanEditFuncs(this, m_PPlanCommonVars);
+                try
                 {
-                    InitPanel();
-                    gridPlanOrders.DataSource = PPlanCommonVars.Instance.PlanOrderList;
+                    gridPlanOrders.DataSource = m_PPlanCommonVars.PlanOrderList;
                 }
+                catch { }
             }
             catch (Exception e)
             {
@@ -55,9 +60,9 @@ namespace PMap.Forms.Panels.frmPPlan
             int rowHandle;
             switch (p_planEventArgs.EventMode)
             {
-                case ePlanEventMode.ReInit:
+                case ePlanEventMode.Init:
                     this.init();
-                    refreshAll(false);
+//                    refreshAll(false);
                     break;
                 case ePlanEventMode.Refresh:
                     refreshAll();
@@ -81,18 +86,24 @@ namespace PMap.Forms.Panels.frmPPlan
                 case ePlanEventMode.ChgFocusedTour:
                     break;
                 case ePlanEventMode.ChgFocusedTourPoint:
-                    gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
-                    rowHandle = gridViewPlanOrders.LocateByValue(0, gridColumnPTP_ID, p_planEventArgs.TourPoint.ID);
-                    if (rowHandle != GridControl.InvalidRowHandle)
-                        gridViewPlanOrders.FocusedRowHandle = rowHandle;
-                    gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
+                    if (p_planEventArgs.TourPoint != null)
+                    {
+                        gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
+                        rowHandle = gridViewPlanOrders.LocateByValue(0, gridColumnPTP_ID, p_planEventArgs.TourPoint.ID);
+                        if (rowHandle != GridControl.InvalidRowHandle)
+                            gridViewPlanOrders.FocusedRowHandle = rowHandle;
+                        gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
+                    }
                     break;
                 case ePlanEventMode.ChgFocusedOrder:
-                    gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
-                    rowHandle = gridViewPlanOrders.LocateByValue(0, gridColumnID, p_planEventArgs.PlanOrder.ID);
-                    if (rowHandle != GridControl.InvalidRowHandle)
-                        gridViewPlanOrders.FocusedRowHandle = rowHandle;
-                    gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
+                    if (p_planEventArgs.PlanOrder != null)
+                    {
+                        gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
+                        rowHandle = gridViewPlanOrders.LocateByValue(0, gridColumnID, p_planEventArgs.PlanOrder.ID);
+                        if (rowHandle != GridControl.InvalidRowHandle)
+                            gridViewPlanOrders.FocusedRowHandle = rowHandle;
+                        gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
+                    }
                     break;
 
                 default:
@@ -110,14 +121,13 @@ namespace PMap.Forms.Panels.frmPPlan
                     int PTP_ID = (int)gridViewPlanOrders.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_ID);
                     if (PTP_ID == 0)
                     {
-                        DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedOrder, PPlanCommonVars.Instance.GetPlannedOrderByID(ID)));
+                        m_PPlanCommonVars.FocusedOrder = m_PPlanCommonVars.GetPlannedOrderByID(ID);
                     }
                     else
                     {
-                        boPlanTourPoint pt = PPlanCommonVars.Instance.GetTourPointByID(PTP_ID);
-                        boPlanTour tour = PPlanCommonVars.Instance.GetTourByID(pt.TPL_ID);
-                        DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, tour));
-                        DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, pt));
+                        boPlanTourPoint pt = m_PPlanCommonVars.GetTourPointByID(PTP_ID);
+                        m_PPlanCommonVars.FocusedPoint = pt;
+                        m_PPlanCommonVars.FocusedTour = m_PPlanCommonVars.GetTourByID(pt.TPL_ID);
                     }
                 }
             }
@@ -131,10 +141,10 @@ namespace PMap.Forms.Panels.frmPPlan
             if (p_setFocus && gridViewPlanOrders.FocusedRowHandle >= 0)
                 ID = (int)gridViewPlanOrders.GetRowCellValue(gridViewPlanOrders.FocusedRowHandle, gridColumnID);
 
-            gridPlanOrders.DataSource = PPlanCommonVars.Instance.PlanOrderList;
+            gridPlanOrders.DataSource = m_PPlanCommonVars.PlanOrderList;
             gridViewPlanOrders.RefreshData();
 
-            if (PPlanCommonVars.Instance.ShowAllOrdersInGrid)
+            if (m_PPlanCommonVars.ShowAllOrdersInGrid)
             {
                 gridViewPlanOrders.ActiveFilter.Clear();
             }
@@ -196,14 +206,14 @@ namespace PMap.Forms.Panels.frmPPlan
             Rectangle dragRect = new Rectangle(new Point(
                 m_HitInfo.HitPoint.X - SystemInformation.DragSize.Width / 2,
                 m_HitInfo.HitPoint.Y - SystemInformation.DragSize.Height / 2), SystemInformation.DragSize);
-            if (!dragRect.Contains(new Point(e.X, e.Y)) && PPlanCommonVars.Instance.DraggedObj == null)
+            if (!dragRect.Contains(new Point(e.X, e.Y)) && m_PPlanCommonVars.DraggedObj == null)
             {
                 if (m_HitInfo.InRow)
                 {
                     int itemID = (int)gridViewPlanOrders.GetRowCellValue(m_HitInfo.RowHandle, gridColumnID);
-                    boPlanOrder draggedOrder = PPlanCommonVars.Instance.GetPlannedOrderByID(itemID);
-                    PPlanCommonVars.Instance.DraggedObj = new PPlanCommonVars.PPlanDragObject(PPlanCommonVars.PPlanDragObject.ESourceDataObjectType.TourPoint) { ID = itemID, DataObject = draggedOrder, SrcGridControl = gridPlanOrders };
-                    gridPlanOrders.DoDragDrop(PPlanCommonVars.Instance.DraggedObj, DragDropEffects.All);
+                    boPlanOrder draggedOrder = m_PPlanCommonVars.GetPlannedOrderByID(itemID);
+                    m_PPlanCommonVars.DraggedObj = new PPlanCommonVars.PPlanDragObject(PPlanCommonVars.PPlanDragObject.ESourceDataObjectType.TourPoint) { ID = itemID, DataObject = draggedOrder, SrcGridControl = gridPlanOrders };
+                    gridPlanOrders.DoDragDrop(m_PPlanCommonVars.DraggedObj, DragDropEffects.All);
                 }
             }
 

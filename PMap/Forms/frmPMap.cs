@@ -50,6 +50,7 @@ namespace PMap.Forms
         private bllPlan m_bllPlan;
 
         private const int grpShowMarkersShrink = 15;
+        private PPlanCommonVars m_PPlanCommonVars = new PPlanCommonVars();
 
         public frmPMap(double p_lat, double p_lng, string sHint)
         {
@@ -405,7 +406,7 @@ namespace PMap.Forms
                     PointLatLng pos = new PointLatLng(rup.NOD_YPOS / Global.LatLngDivider, rup.NOD_XPOS / Global.LatLngDivider);
                     PPlanMarkerUnPlanned gm;
                     gm = new PPlanMarkerUnPlanned(pos, rup);
-                    gm.ToolTipMode = PPlanCommonVars.Instance.TooltipMode;
+                    gm.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                     gm.ToolTipText = rup.DEP_NAME + "\n" + rup.ZIP_NUM.ToString() + " " + rup.ZIP_CITY + " " + rup.DEP_ADRSTREET;
                     m_depotsLayer.Markers.Add(gm);
                     gm.IsVisible = chkShowDepots.Checked;
@@ -450,7 +451,7 @@ namespace PMap.Forms
                                 if (tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSOUT)
                                 {
                                     mrkFlag = new PPlanMarkerFlag(start, tour.TourPoints[i]);
-                                    mrkFlag.ToolTipMode = PPlanCommonVars.Instance.TooltipMode;
+                                    mrkFlag.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                     tour.TourPoints[i].ToolTipText = tour.TourPoints[i].TIME_AND_NAME;
                                     //                            mrkFlag.Size = new System.Drawing.Size(20, 20);
 
@@ -471,7 +472,7 @@ namespace PMap.Forms
                                 if (tour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TPOINT)
                                 {
                                     PPlanMarker mrkTourPoint = new PPlanMarker(end, tour.PCOLOR, tour.TourPoints[i]);
-                                    mrkTourPoint.ToolTipMode = PPlanCommonVars.Instance.TooltipMode;
+                                    mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                     mrkTourPoint.Size = new System.Drawing.Size(20, 20);
 
                                     tour.TourPoints[i + 1].ToolTipText = tour.TourPoints[i + 1].DEP_CODE + "  ";
