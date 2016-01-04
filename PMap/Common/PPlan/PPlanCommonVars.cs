@@ -96,10 +96,6 @@ namespace PMap.Common.PPlan
             set
             {
                 m_tourList = value;
-                if (m_tourList != null && m_tourList.Count > 0)
-                    FocusedTour = m_tourList.FirstOrDefault();
-                else
-                    FocusedTour = null;
             }
         }
 
@@ -131,33 +127,6 @@ namespace PMap.Common.PPlan
             {
                 m_planOrderList = value;
                 DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.RefreshOrders));
-                if( m_planOrderList != null && m_planOrderList.Count > 0)
-                {
-                    boPlanOrder po = m_planOrderList.FirstOrDefault(x => x.PTP_ID == 0 || ShowAllOrdersInGrid);
-                    if (po != null)
-                    {
-                        if (po.PTP_ID == 0)
-                        {
-                            m_focusedUnplannedOrder = null;
-                            m_focusedOrder = po;
-                        }
-                        else
-                        {
-                            m_focusedUnplannedOrder = po;
-                            m_focusedOrder = null;
-                        }
-                    }
-                    else
-                    {
-                        m_focusedUnplannedOrder = null;
-                        m_focusedOrder = null;
-                    }
-                }
-                else
-                {
-                    m_focusedUnplannedOrder = null;
-                    m_focusedOrder = null;
-                }
             }
         }
 
@@ -179,10 +148,6 @@ namespace PMap.Common.PPlan
                 m_focusedTour = value;
                 PlanEventArgs pea = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_focusedTour);
                 DoNotifyDataChanged(pea);
-                if (m_focusedTour != null)
-                    m_focusedPoint = m_focusedTour.TourPoints.FirstOrDefault();
-                else
-                    m_focusedPoint = null;
             }
         }
 

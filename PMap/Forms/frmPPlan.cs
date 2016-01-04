@@ -159,9 +159,42 @@ namespace PMap.Forms
                     m_PPlanCommonVars.TourList = m_bllPlan.GetPlanTours(p_PLN_ID);
                     m_PPlanCommonVars.PlanOrderList = m_bllPlan.GetPlanOrders(p_PLN_ID);
 
+                    //Alapértelmezések
+                    m_PPlanCommonVars.FocusedTour = m_PPlanCommonVars.TourList.FirstOrDefault();
+                    if( m_PPlanCommonVars.FocusedTour != null)
+                        m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.FocusedTour.TourPoints.FirstOrDefault();
+
+                    if (m_PPlanCommonVars.PlanOrderList != null && m_PPlanCommonVars.PlanOrderList.Count > 0)
+                    {
+                        boPlanOrder po = m_PPlanCommonVars.PlanOrderList.FirstOrDefault(x => x.PTP_ID == 0 || m_PPlanCommonVars.ShowAllOrdersInGrid);
+                        if (po != null)
+                        {
+                            if (po.PTP_ID == 0)
+                            {
+                                m_PPlanCommonVars.FocusedUnplannedOrder = null;
+                                m_PPlanCommonVars.FocusedOrder = po;
+                            }
+                            else
+                            {
+                                m_PPlanCommonVars.FocusedUnplannedOrder = po;
+                                m_PPlanCommonVars.FocusedOrder = null;
+                            }
+                        }
+                        else
+                        {
+                            m_PPlanCommonVars.FocusedUnplannedOrder = null;
+                            m_PPlanCommonVars.FocusedOrder = null;
+                        }
+                    }
+                    else
+                    {
+                        m_PPlanCommonVars.FocusedUnplannedOrder = null;
+                        m_PPlanCommonVars.FocusedOrder = null;
+
+                    }
+                
+
                     m_bllPlanEdit.SetTourColors(m_PPlanCommonVars.TourList);
-
-
 
                 }
             }
