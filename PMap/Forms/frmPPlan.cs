@@ -308,7 +308,7 @@ namespace PMap.Forms
             string MPP_DOCK = Encoding.UTF8.GetString(msDock.GetBuffer(), 0, Convert.ToInt32(msDock.Length));
             msDock.Close();
 
-            string MPP_PARAM = XMLSerializator.SerializeObject(this);
+            string MPP_PARAM = XMLSerializator.SerializeObject(m_PPlanCommonVars);
             string MPP_TGRID = Util.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
             string MPP_PGRID = Util.SaveGridLayoutToString(m_pnlPPlanTourPoints.gridViewTourPoints);
             string MPP_UGRID = Util.SaveGridLayoutToString(m_pnlPlanOrders.gridViewPlanOrders);
@@ -357,13 +357,15 @@ namespace PMap.Forms
 
 
                 if (MPP_PARAM != "")
-                {
+                { 
+
                     PPlanCommonVars p = (PPlanCommonVars)XMLSerializator.DeserializeObject(MPP_PARAM, typeof(PPlanCommonVars));
 
                     m_PPlanCommonVars.ShowPlannedDepots = p.ShowPlannedDepots;
                     m_PPlanCommonVars.ShowUnPlannedDepots = p.ShowUnPlannedDepots;
                     m_PPlanCommonVars.TooltipMode = p.TooltipMode;
                     m_PPlanCommonVars.ZoomToSelectedPlan = p.ZoomToSelectedPlan;
+                    m_PPlanCommonVars.ZoomToSelectedUnPlanned = p.ZoomToSelectedUnPlanned;
                     m_PPlanCommonVars.ShowAllOrdersInGrid = p.ShowAllOrdersInGrid;
                }
 

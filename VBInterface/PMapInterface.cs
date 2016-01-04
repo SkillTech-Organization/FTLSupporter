@@ -254,7 +254,7 @@ namespace VBInterface
         {
             
             List<dtXResult> res = PlanTours(p_iniPath, p_dbConf, p_PLN_ID, p_USR_ID, p_planParams);
-            return (bool)(res.First().Data) ?  "1" : "0";
+            return (bool)(res.First().Status == dtXResult.EStatus.OK ) ?  "1" : "0";
         }
 
 
