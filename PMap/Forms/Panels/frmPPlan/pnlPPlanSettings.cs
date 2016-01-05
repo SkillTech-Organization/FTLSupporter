@@ -30,6 +30,7 @@ namespace PMap.Forms.Panels.frmPPlan
         public pnlPPlanSettings(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
+            m_PPlanCommonVars = p_PPlanCommonVars;
             Init();
             tbZoom.ValueChanged += new EventHandler(tbZoom_ValueChanged);
         }

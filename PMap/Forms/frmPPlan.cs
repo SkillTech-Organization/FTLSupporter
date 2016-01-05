@@ -42,7 +42,7 @@ namespace PMap.Forms
 
         private PlanParams m_planParams;
 
-        private boPlanTour m_selTour = null;
+   //     private boPlanTour m_selTour = null;
         private bool m_firsActivate = true;
 
         private bllPlanEdit m_bllPlanEdit;
@@ -242,12 +242,7 @@ namespace PMap.Forms
                 btnTurnTour.Enabled = e.Tour != null && m_pnlPPlanEditor.EditMode && bVisible;
                 btnDelTourPoint.Enabled = m_pnlPPlanTourPoints.IsFocusedItemExist() && m_pnlPPlanEditor.EditMode && bVisible;
 
-                //if (e.Tour != null && bVisible)
-                if (e.Tour != null)
-                    m_selTour = e.Tour;
-                else
-                    m_selTour = null;
-            }
+             }
 
 
 
@@ -434,9 +429,9 @@ namespace PMap.Forms
             btnToEditMode.Visible = false;
             btnToViewMode.Visible = true;
             btnDelTourPoint.Enabled = m_pnlPPlanTourPoints.IsFocusedItemExist();
-            btnTurnTour.Enabled = m_selTour != null;
-            btnDelTour.Enabled = m_selTour != null;
-            btnChgTruck.Enabled = m_selTour != null;
+            btnTurnTour.Enabled = m_PPlanCommonVars.FocusedTour != null;
+            btnDelTour.Enabled = m_PPlanCommonVars.FocusedTour != null;
+            btnChgTruck.Enabled = m_PPlanCommonVars.FocusedTour != null;
         }
 
         private void SetViewMode(bool p_refresh)
@@ -518,12 +513,12 @@ namespace PMap.Forms
                 m_pnlPPlanTours = new pnlPPlanTours(m_PPlanCommonVars);
                 m_pnlPPlanTours.NotifyDataChanged += new EventHandler<EventArgs>(m_pnlPPlanTours_NotifyDataChanged);
 
-                m_selTour = m_pnlPPlanTours.GetSelectedTour();
-                btnTourDetails.Enabled = m_selTour != null;
-                btnOptimizeTrk.Enabled = m_selTour != null;
-                btnTurnTour.Enabled = m_selTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
-                btnDelTour.Enabled = m_selTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
-                btnChgTruck.Enabled = m_selTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
+                m_PPlanCommonVars.FocusedTour = m_pnlPPlanTours.GetSelectedTour();
+                btnTourDetails.Enabled = m_PPlanCommonVars.FocusedTour != null;
+                btnOptimizeTrk.Enabled = m_PPlanCommonVars.FocusedTour != null;
+                btnTurnTour.Enabled = m_PPlanCommonVars.FocusedTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
+                btnDelTour.Enabled = m_PPlanCommonVars.FocusedTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
+                btnChgTruck.Enabled = m_PPlanCommonVars.FocusedTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
 
                 //letároljuk a default beállítást
                 m_defaultMPP_TGRID = Util.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
@@ -558,17 +553,17 @@ namespace PMap.Forms
 
         private void btnTourDetails_Click(object sender, EventArgs e)
         {
-            if (m_selTour != null)
+            if (m_PPlanCommonVars.FocusedTour != null)
             {
 
-                BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, m_selTour.TourPoints.Count() - 1, "Túrarészletező", true);
-                GetTourDetailsProcess cdp = new GetTourDetailsProcess(pd, m_selTour);
+                BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, m_PPlanCommonVars.FocusedTour.TourPoints.Count() - 1, "Túrarészletező", true);
+                GetTourDetailsProcess cdp = new GetTourDetailsProcess(pd, m_PPlanCommonVars.FocusedTour);
                 cdp.Run();
                 pd.ShowDialog();
                 if (cdp.Completed)
                 {
 
-                    dlgTourDetails td = new dlgTourDetails(m_selTour, cdp.TourDetails);
+                    dlgTourDetails td = new dlgTourDetails(m_PPlanCommonVars.FocusedTour, cdp.TourDetails);
                     td.ShowDialog(this);
                 }
             }
@@ -581,23 +576,23 @@ namespace PMap.Forms
 
         private void btnTurnTour_Click(object sender, EventArgs e)
         {
-            if (m_selTour != null)
-                m_PlanEditFuncs.TurnTour(m_selTour.ID);
+            if (m_PPlanCommonVars.FocusedTour != null)
+                m_PlanEditFuncs.TurnTour(m_PPlanCommonVars.FocusedTour.ID);
         }
 
         private void btnOptimizeTrk_Click(object sender, EventArgs e)
         {
-            if (m_selTour != null)
+            if (m_PPlanCommonVars.FocusedTour != null)
             {
-                if (m_selTour.LOCKED)
+                if (m_PPlanCommonVars.FocusedTour.LOCKED)
                 {
                     UI.Message( PMapMessages.E_PEDIT_LOCKEDTRUCK);
                     return;
                 }
-                dlgOptimize dOpt = new dlgOptimize(m_PPlanCommonVars.PLN_ID, m_selTour.ID);
+                dlgOptimize dOpt = new dlgOptimize(m_PPlanCommonVars.PLN_ID, m_PPlanCommonVars.FocusedTour.ID);
                 if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK && dOpt.Result == TourOptimizerProcess.eOptResult.OK)
                 {
-                    m_PlanEditFuncs.RefreshToursAfterModify(m_selTour.ID, 0);
+                    m_PlanEditFuncs.RefreshToursAfterModify(m_PPlanCommonVars.FocusedTour.ID, 0);
                     m_PPlanCommonVars.PlanOrderList = m_bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);  //
                     RefreshAll(new PlanEventArgs(ePlanEventMode.RefreshOrders));
                 }

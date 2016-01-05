@@ -40,52 +40,328 @@ namespace PMap.Common.PPlan
             public DevExpress.XtraGrid.GridControl SrcGridControl { get; set; }
         }
 
-        // private static readonly object padlock = new object();
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        private static volatile object padlock = new object();
+        // *** Lock ***
+        private object m_propertyLock = new object();
 
+        private int m_zoom;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public int Zoom { get; set; }
+        public int Zoom
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_zoom;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_zoom = value;
+                }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public PointLatLng CurrentPosition { get; set; }
+            }
+        }
 
+        private PointLatLng m_currentPosition;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public int PLN_ID { get; set; }
+        public PointLatLng CurrentPosition
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_currentPosition;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_currentPosition = value;
+                }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public List<boPlanTour> TourList { get; set; }
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public List<boPlanOrder> PlanOrderList { get; set; }
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanTour SelectedTour { get; set; }
+            }
+        }
 
+        public int m_PLN_ID;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public bool Changed { get; set; }
+        public int PLN_ID
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_PLN_ID;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_PLN_ID = value;
+                }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public PPlanDragObject DraggedObj { get; set; }
+            }
+        }
 
+        private List<boPlanTour> m_tourList;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanTour FocusedTour { get; set; }
+        public List<boPlanTour> TourList
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_tourList;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_tourList = value;
+                }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanTourPoint FocusedPoint { get; set; }
+            }
+        }
 
+
+        private List<boPlanOrder> m_planOrderList;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanOrder FocusedUnplannedOrder { get; set; }
+        public List<boPlanOrder> PlanOrderList
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_planOrderList;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_planOrderList = value;
+                }
+
+            }
+        }
+
+
+
+        private PPlanDragObject m_draggedObj;
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public PPlanDragObject DraggedObj
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_draggedObj;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_draggedObj = value;
+                }
+
+            }
+        }
+
+        private boPlanTour m_focusedTour;
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public boPlanTour FocusedTour
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_focusedTour;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_focusedTour = value;
+                }
+
+            }
+        }
+
+        private boPlanTourPoint m_focusedPoint;
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public boPlanTourPoint FocusedPoint
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_focusedPoint;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_focusedPoint = value;
+                }
+
+            }
+        }
+
+        private boPlanOrder m_focusedUnplannedOrder;
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public boPlanOrder FocusedUnplannedOrder
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_focusedUnplannedOrder;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_focusedUnplannedOrder = value;
+                }
+
+            }
+        }
+
 
 
 
         /// <summary>
         /// serilizálandó paraméterek
         /// </summary>
-        public bool ShowPlannedDepots { get; set; }
-        public bool ShowUnPlannedDepots { get; set; }
-        public MarkerTooltipMode TooltipMode { get; set; }
-        public bool ZoomToSelectedPlan { get; set; }
-        public bool ZoomToSelectedUnPlanned { get; set; }
-        public bool ShowAllOrdersInGrid { get; set; }
+        private bool m_showPlannedDepots;
+        public bool ShowPlannedDepots
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_showPlannedDepots;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_showPlannedDepots = value;
+                }
+
+            }
+        }
+
+        private bool m_showUnPlannedDepots;
+        public bool ShowUnPlannedDepots
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_showUnPlannedDepots;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_showUnPlannedDepots = value;
+                }
+
+            }
+        }
+
+
+        private MarkerTooltipMode m_tooltipMode;
+        public MarkerTooltipMode TooltipMode
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_tooltipMode;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_tooltipMode = value;
+                }
+
+            }
+        }
+
+
+        private bool m_zoomToSelectedPlan;
+        public bool ZoomToSelectedPlan
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_zoomToSelectedPlan;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_zoomToSelectedPlan = value;
+                }
+
+            }
+        }
+
+        private bool m_zoomToSelectedUnPlanned;
+        public bool ZoomToSelectedUnPlanned
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_zoomToSelectedUnPlanned;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_zoomToSelectedUnPlanned = value;
+                }
+
+            }
+        }
+
+        private bool m_showAllOrdersInGrid;
+        public bool ShowAllOrdersInGrid
+        {
+            get
+            {
+                lock (m_propertyLock)
+                {
+                    return m_showAllOrdersInGrid;
+                }
+            }
+            set
+            {
+                lock (m_propertyLock)
+                {
+                    m_showAllOrdersInGrid = value;
+                }
+
+            }
+        }
 
         public boPlanTour GetTourByID(int p_ID)
         {
