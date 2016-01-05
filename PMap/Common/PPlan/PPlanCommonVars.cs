@@ -138,14 +138,36 @@ namespace PMap.Common.PPlan
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public PPlanDragObject DraggedObj { get; set; }
 
-        private boPlanTour m_focusedTour;
+        private boPlanTour m_focusedTour = null;
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public boPlanTour FocusedTour
         {
             get { return m_focusedTour; }
             set
             {
+
+                //Kiválasztott vastagságot megszüntetjük
+                if (m_focusedTour != null && m_focusedTour.Layer != null)
+                {
+                    foreach (GMapRoute gr in m_focusedTour.Layer.Routes)
+                    {
+                        gr.Stroke.Color = Util.GetSemiTransparentColor(m_focusedTour.PCOLOR);
+                        gr.Stroke.Width = Global.TourLineWidthNormal;
+                    }
+                }
+ 
                 m_focusedTour = value;
+
+                //Kiválasztott túrát megvastagítjuk
+                if (m_focusedTour != null && m_focusedTour.Layer != null)
+                {
+                    foreach (GMapRoute gr in m_focusedTour.Layer.Routes)
+                    {
+                        gr.Stroke.Color = Util.GetSemiTransparentColor(m_focusedTour.PCOLOR);
+                        gr.Stroke.Width = Global.TourLineWidthSelected;
+                    }
+                }
+
                 PlanEventArgs pea = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_focusedTour);
                 DoNotifyDataChanged(pea);
             }
@@ -176,14 +198,14 @@ namespace PMap.Common.PPlan
             }
         }
 
-        private boPlanOrder m_focusedUnplannedOrder { get; set; }
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public boPlanOrder FocusedUnplannedOrder
         {
-            get { return m_focusedUnplannedOrder; }
-            set { 
-                m_focusedUnplannedOrder = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedOrder, m_focusedUnplannedOrder));
+            get {
+                if (FocusedOrder != null && FocusedOrder.PTP_ID != 0)
+                    return FocusedOrder;
+                else 
+                    return null;
             }
         }
 

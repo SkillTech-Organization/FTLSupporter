@@ -88,7 +88,8 @@ namespace PMap.Forms.Panels.frmPPlan
                 case ePlanEventMode.ChgFocusedTour:
                     break;
                 case ePlanEventMode.ChgFocusedTourPoint:
-                    if (p_planEventArgs.TourPoint != null)
+                    if (p_planEventArgs.TourPoint != null &&
+                        p_planEventArgs.TourPoint.ID !=  (int)gridViewPlanOrders.GetRowCellValue(gridViewPlanOrders.FocusedRowHandle, gridColumnPTP_ID))
                     {
                         gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
                         rowHandle = gridViewPlanOrders.LocateByValue(0, gridColumnPTP_ID, p_planEventArgs.TourPoint.ID);
@@ -98,7 +99,8 @@ namespace PMap.Forms.Panels.frmPPlan
                     }
                     break;
                 case ePlanEventMode.ChgFocusedOrder:
-                    if (p_planEventArgs.PlanOrder != null)
+                    if (p_planEventArgs.PlanOrder != null &&
+                        p_planEventArgs.PlanOrder.PTP_ID !=  (int)gridViewPlanOrders.GetRowCellValue(gridViewPlanOrders.FocusedRowHandle, gridColumnPTP_ID))
                     {
                         gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
                         rowHandle = gridViewPlanOrders.LocateByValue(0, gridColumnID, p_planEventArgs.PlanOrder.ID);

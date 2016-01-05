@@ -213,7 +213,6 @@ namespace PMap.Common.PPlan
         public void RefreshOrdersFromDB()
         {
             m_PPlanCommonVars.PlanOrderList = m_bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);
-            m_PPlanCommonVars.FocusedUnplannedOrder = null;
         }
 
         public boPlanTour RefreshToursAfterModify(int pChangedTourID1, int pChangedTourID2)
@@ -224,7 +223,7 @@ namespace PMap.Common.PPlan
             RefreshOrdersFromDB();
 
             boPlanTour TourWithFreshData = null;
-            m_PPlanCommonVars.FocusedPoint = null;
+//???            m_PPlanCommonVars.FocusedPoint = null;
 
             if (pChangedTourID1 > 0)
             {

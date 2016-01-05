@@ -165,33 +165,9 @@ namespace PMap.Forms
                         m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.FocusedTour.TourPoints.FirstOrDefault();
 
                     if (m_PPlanCommonVars.PlanOrderList != null && m_PPlanCommonVars.PlanOrderList.Count > 0)
-                    {
-                        boPlanOrder po = m_PPlanCommonVars.PlanOrderList.FirstOrDefault(x => x.PTP_ID == 0 || m_PPlanCommonVars.ShowAllOrdersInGrid);
-                        if (po != null)
-                        {
-                            if (po.PTP_ID == 0)
-                            {
-                                m_PPlanCommonVars.FocusedUnplannedOrder = null;
-                                m_PPlanCommonVars.FocusedOrder = po;
-                            }
-                            else
-                            {
-                                m_PPlanCommonVars.FocusedUnplannedOrder = po;
-                                m_PPlanCommonVars.FocusedOrder = null;
-                            }
-                        }
-                        else
-                        {
-                            m_PPlanCommonVars.FocusedUnplannedOrder = null;
-                            m_PPlanCommonVars.FocusedOrder = null;
-                        }
-                    }
+                        m_PPlanCommonVars.FocusedOrder = m_PPlanCommonVars.PlanOrderList.FirstOrDefault(x => x.PTP_ID == 0 || m_PPlanCommonVars.ShowAllOrdersInGrid);
                     else
-                    {
-                        m_PPlanCommonVars.FocusedUnplannedOrder = null;
                         m_PPlanCommonVars.FocusedOrder = null;
-
-                    }
                 
 
                     m_bllPlanEdit.SetTourColors(m_PPlanCommonVars.TourList);
@@ -245,8 +221,10 @@ namespace PMap.Forms
 
             //minden inicializáció végén állítjuk be a listenert.
             m_PPlanCommonVars.NotifyDataChanged += Instance_NotifyDataChanged;
-
-            this.Text = "Megnyitott terv:"+ (p_PLN_ID > 0 ? cmbPlans.ComboBox.Text : "-") + " Adatbázis=" + PMapIniParams.Instance.DBConfigName  ;
+            if( m_IsEnablePlanManage)
+                this.Text = "Megnyitott terv:"+ (p_PLN_ID > 0 ? cmbPlans.ComboBox.Text : "-") + " Adatbázis=" + PMapIniParams.Instance.DBConfigName  ;
+            else
+                this.Text = "Adatbázis=" + PMapIniParams.Instance.DBConfigName;
             RefreshAll(new PlanEventArgs(ePlanEventMode.Init));
  
         }

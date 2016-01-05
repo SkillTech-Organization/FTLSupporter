@@ -10,7 +10,10 @@ namespace PMap.BO
 {
     public class boPlanTourPoint
     {
-        public int ID { get; set; }             //--> PTP.ID
+        public int ID { get; set; }             //--> PTP.ID vagy PTP_ID
+
+        public int PTP_ID { get { return ID;} }    //ugyanaz!
+
         public int TPL_ID { get; set; }
         public int PTP_ORDER { get; set; }
         public Boolean PTP_BUNDLE { get; set; }

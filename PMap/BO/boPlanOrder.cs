@@ -13,6 +13,8 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "ID", Order = 1)]
         public int ID { get; set; }             //-->más objektumból TOD_ID -vel hivatkozunk rá
 
+        public int TOD_ID { get { return ID; }}             //-->más objektumból TOD_ID -vel hivatkozunk rá
+
         [DisplayNameAttributeX(Name = "Lerakókód", Order = 2)]
         public string DEP_CODE { get; set; }
 
@@ -72,7 +74,7 @@ namespace PMap.BO
         public double ORD_HEIGHT { get; set; }
 
         [DisplayNameAttributeX(Name = "Terv túrapont ID", Order = 21)]
-        public int PTP_ID { get; set; }         //0 esetén a megrendelés nics túrába szervezve
+        public int PTP_ID { get; set; }         //0 esetén a megrendelés nics túrába szervezve  (kapcsolat:boPlanTourPoint.ID)
 
         [DisplayNameAttributeX(Name = "Terv jármű ID", Order = 22)]
         public int TPL_ID { get; set; }         //0 esetén a megrendelés nics túrába szervezve
