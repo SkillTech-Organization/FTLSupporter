@@ -26,16 +26,14 @@ namespace PMap.Forms.Panels.frmPPlan
         private bllPlanEdit m_bllPlanEdit;
         private bllPlan m_bllPlan;
         private PlanEditFuncs m_PlanEditFuncs;
+
         private PPlanCommonVars m_PPlanCommonVars;
 
         public pnlPPlanTourPoints(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
             m_PPlanCommonVars = p_PPlanCommonVars;
-            if (!DesignMode)
-            {
-                InitPanelBase();
-            }
+            Init();
         }
 
         public bool IsFocusedItemExist()
@@ -46,6 +44,7 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             try
             {
+                InitPanel();
                 m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
                 m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
                 m_PlanEditFuncs = new PlanEditFuncs(this, m_PPlanCommonVars);
@@ -60,7 +59,6 @@ namespace PMap.Forms.Panels.frmPPlan
                     gridViewTourPoints.Appearance.GetAppearance("HeaderPanel").BorderColor = Color.Empty;
                     gridViewTourPoints.Appearance.GetAppearance("HeaderPanel").Options.UseBackColor = false;
 
-                    SetDataSet(m_PPlanCommonVars.FocusedTour);
                 }
             }
             catch (Exception e)
@@ -75,9 +73,9 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             switch (p_planEventArgs.EventMode)
             {
-                case ePlanEventMode.Init:
+                case ePlanEventMode.ReInit:
                     this.Init();
-                   break;
+                    break;
                 case ePlanEventMode.Refresh:
                     gridViewTourPoints.RefreshData();
                     break;
@@ -95,17 +93,15 @@ namespace PMap.Forms.Panels.frmPPlan
                     SetTourColor(p_planEventArgs.Color);
                     break;
                 case ePlanEventMode.ChgFocusedTour:
-                    if (p_planEventArgs.Tour != null)
-                    {
-                        SetDataSet(p_planEventArgs.Tour);
-                    }
+                    gridViewTourPoints.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
+
+                    SetDataSet(p_planEventArgs.Tour);
+
+                    gridViewTourPoints.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
                     break;
 
                 case ePlanEventMode.ChgFocusedTourPoint:
-                    if (p_planEventArgs.TourPoint != null)
-                    {
-                        refreshTourPoints(p_planEventArgs.TourPoint.TPL_ID, p_planEventArgs.TourPoint.ID);
-                    }
+                    refreshTourPoints(p_planEventArgs.TourPoint.TPL_ID, p_planEventArgs.TourPoint.ID);
                     break;
 
                 default:
@@ -145,7 +141,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 int? ID = (int?)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnID);
                 if (ID != null && ID.Value != GridControl.InvalidRowHandle)
                 {
-                    m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.GetTourPointByID(ID.Value);
+                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, m_PPlanCommonVars.GetTourPointByID(ID.Value)));
                 }
             }
 
@@ -153,7 +149,6 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void SetDataSet(boPlanTour p_Tour)
         {
-            gridViewTourPoints.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
             if (p_Tour != null)
             {
                 gridTourPoints.DataSource = p_Tour.TourPoints;
@@ -165,7 +160,6 @@ namespace PMap.Forms.Panels.frmPPlan
                 SetTourColor(Color.Gray);
 
             }
-            gridViewTourPoints.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTourPoints_FocusedRowChanged);
         }
 
         private void gridTourPoints_Click(object sender, EventArgs e)
@@ -175,7 +169,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 int ID = (int)gridViewTourPoints.GetRowCellValue(gridViewTourPoints.FocusedRowHandle, gridColumnID);
                 if (ID != GridControl.InvalidRowHandle)
                 {
-                    m_PPlanCommonVars.FocusedPoint = m_PPlanCommonVars.GetTourPointByID(ID);
+                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, m_PPlanCommonVars.GetTourPointByID(ID)));
                 }
             }
         }

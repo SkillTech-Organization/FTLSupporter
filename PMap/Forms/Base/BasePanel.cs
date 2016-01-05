@@ -21,8 +21,8 @@ namespace PMap.Forms.Base
 {
     public partial class BasePanel : DockContent
     {
- 
-        public event EventHandler<EventArgs> NotifyPanelChanged;
+        
+        public event EventHandler<EventArgs> NotifyDataChanged;
 
 
         public BasePanel()
@@ -30,15 +30,13 @@ namespace PMap.Forms.Base
             InitializeComponent();
         }
 
-        public void DoNotifyPanelChanged(EventArgs e)
+        public void DoNotifyDataChanged(EventArgs e)
         {
-            if( this.NotifyPanelChanged != null)
-                NotifyPanelChanged(this, e);
+            if( this.NotifyDataChanged != null)
+                NotifyDataChanged(this, e);
         }
 
-
-
-        protected void InitPanelBase()
+        protected void InitPanel()
         {
             InitPanel(TabOrderManager.TabScheme.AcrossFirst);
         }

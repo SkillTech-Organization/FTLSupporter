@@ -18,7 +18,8 @@ namespace PMap.Forms.Panels.frmRouteVisualization
     public partial class pnlRouteVisDetails : BasePanel
     {
 
-    
+
+
         public pnlRouteVisDetails()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
             {
                 if (!DesignMode)
                 {
-                    InitPanelBase();
+                    InitPanel();
 
 
                     tbZoom.Minimum = Global.DefMinZoom;
@@ -78,6 +79,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         private void tbZoom_ValueChanged(object sender, EventArgs e)
         {
             RouteVisCommonVars.Instance.Zoom = (tbZoom.Value);
+            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgZoom));
         }
 
         public void RefreshPanel(RouteVisEventArgs p_evtArgs)
@@ -110,20 +112,20 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         private void rdbNever_CheckedChanged(object sender, EventArgs e)
         {
             RouteVisCommonVars.Instance.TooltipMode = MarkerTooltipMode.Never;
-            DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode)); 
+            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
         }
 
         private void rdbOnMouseOver_CheckedChanged(object sender, EventArgs e)
         {
             RouteVisCommonVars.Instance.TooltipMode = MarkerTooltipMode.OnMouseOver;
-            DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
+            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
 
         }
 
         private void rdbAlways_CheckedChanged(object sender, EventArgs e)
         {
             RouteVisCommonVars.Instance.TooltipMode = MarkerTooltipMode.Always;
-            DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
+            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
         }
 
 
@@ -144,7 +146,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
 
             CheckEdit chkEdt = (CheckEdit)sender;
             RouteVisCommonVars.Instance.lstDetails[type].Visible = chkEdt.Checked;
-            DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgRouteVisible));
+            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgRouteVisible));
 
         }
 
@@ -154,7 +156,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
             {
                 int ID = (int)gridViewDepots.GetRowCellValue(gridViewDepots.FocusedRowHandle, gridColumnID);
                 RouteVisCommonVars.Instance.SelectedDepID = ID;
-                DoNotifyPanelChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgDepotSelected));
+                DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgDepotSelected));
             }
         }
     }

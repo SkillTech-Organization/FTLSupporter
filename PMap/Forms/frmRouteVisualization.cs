@@ -37,6 +37,8 @@ namespace PMap.Forms
 
         private PPlanCommonVars m_PPlanCommonVars = new PPlanCommonVars();
 
+
+
         public frmRouteVisualization(List<boXRouteSection> p_lstRouteSection, int p_TRK_ID)
         {
             InitializeComponent();
@@ -138,7 +140,7 @@ namespace PMap.Forms
 
                 m_pnlRouteVisMap = new pnlRouteVisMap(m_PPlanCommonVars);
                 m_pnlRouteVisMap.Show(dockPanel, DockState.Document);
-                m_pnlRouteVisMap.NotifyPanelChanged += new EventHandler<EventArgs>(m_pnlRouteVisMap_NotifyDataChanged);
+                m_pnlRouteVisMap.NotifyDataChanged += new EventHandler<EventArgs>(m_pnlRouteVisMap_NotifyDataChanged);
             }
             if (bForce || m_pnlRouteVisDetails == null || m_pnlRouteVisDetails.IsDisposed)
             {
@@ -147,7 +149,7 @@ namespace PMap.Forms
 
                 m_pnlRouteVisDetails = new pnlRouteVisDetails();
                 m_pnlRouteVisDetails.Show(dockPanel, DockState.DockRight);
-                m_pnlRouteVisDetails.NotifyPanelChanged += new EventHandler<EventArgs>(m_pnlRouteVisDetails_NotifyDataChanged);
+                m_pnlRouteVisDetails.NotifyDataChanged += new EventHandler<EventArgs>(m_pnlRouteVisDetails_NotifyDataChanged);
             }
 
         }

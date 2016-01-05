@@ -39,6 +39,7 @@ namespace PMap.LongProcess
 
         private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
         private bllRoute m_bllRoute;
+
         private PPlanCommonVars m_PPlanCommonVars;
 
         int m_genTPL_ID = -1;               // kitöltés esetén csak ezt a túrát kell térképre generálni
@@ -56,11 +57,18 @@ namespace PMap.LongProcess
             m_PPlanCommonVars = p_PPlanCommonVars;
 
         }
+        
         protected override void DoWork()
         {
 
             CompleteCode = eCompleteCode.OK;
- 
+            if (m_genTPL_ID <= 0)
+            {
+                //az alaplayert csak teljes útvonalgenerálásnál töröljük
+                m_baseLayer.Routes.Clear();
+                m_baseLayer.Markers.Clear();
+            }
+
             for (int i = 0; i < m_TourList.Count; i++)
             {
                 if (m_genTPL_ID <= 0 || m_TourList[i].ID == m_genTPL_ID)
@@ -188,7 +196,7 @@ namespace PMap.LongProcess
 
                             if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSIN)
                             {
-                                //ide csak multitúra esetén futhat a program !!!
+                                //ide csak multit]ra esetén futhat a program !!!
                                 //
                                 mrkFlag = new PPlanMarkerFlag(start, p_tour.TourPoints[i]);
                                 dashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;

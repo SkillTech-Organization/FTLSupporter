@@ -29,28 +29,17 @@ namespace PMap.Forms.Panels.frmPPlan
             InitializeComponent();
             m_PPlanCommonVars = p_PPlanCommonVars;
             if (!DesignMode)
-            {
-                InitPanelBase();
-            }
+                init();
         }
-
 
         private void init()
         {
             try
             {
+                InitPanel();
                 m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
-                gridTours.DataSource = new List<boPlanTour>();
 
-                List<boPlanTour> tl = m_PPlanCommonVars.TourList;
-                try
-                {
-                    gridViewTours.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTours_FocusedRowChanged);
-                    gridTours.DataSource = tl;
-                    gridViewTours.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTours_FocusedRowChanged);
-                }
-                catch { }
-                    
+                gridTours.DataSource = m_PPlanCommonVars.TourList;
                 gridViewTours.Appearance.FocusedRow.BackColor = Color.FromArgb(255, 128, 128);
                 gridViewTours.Appearance.HideSelectionRow.BackColor = Color.FromArgb(128, 255, 128, 128);
                 gridViewTours.Appearance.FocusedRow.Options.UseBackColor = false;
@@ -88,25 +77,28 @@ namespace PMap.Forms.Panels.frmPPlan
             if (e.FocusedRowHandle >= 0)
             {
                 RefreshFocusedRow();
-                SetFocusedTourBySelectedItem();
+                OnNotifyDataChanged();
             }
         }
 
-        public void SetFocusedTourBySelectedItem()
+        public void OnNotifyDataChanged()
         {
             if (gridViewTours.FocusedRowHandle >= 0)
             {
                 int? ID = (int? )gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnID);
                 if (ID != null && ID != GridControl.InvalidRowHandle)
-                    m_PPlanCommonVars.FocusedTour = m_PPlanCommonVars.GetTourByID(ID.Value);
+                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_PPlanCommonVars.GetTourByID(ID.Value)));
+
                 else
                 {
-                    m_PPlanCommonVars.FocusedTour = null;
-                 }
+                    boPlanTour nullTour = null;
+                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, nullTour));
+                }
             }
             else
             {
-                m_PPlanCommonVars.FocusedTour = null;
+                boPlanTour nullTour = null;
+                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, nullTour));
             }
         }
 
@@ -129,20 +121,20 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             switch (p_planEventArgs.EventMode)
             {
-                case ePlanEventMode.Init:
+                case ePlanEventMode.ReInit:
                     this.init();
-   //                 refreshAll();
+                    refreshAll();
                     break;
                 case ePlanEventMode.Refresh:
                     refreshAll();
-                    SetFocusedTourBySelectedItem();
+                    OnNotifyDataChanged();
                     break;
 
                 case ePlanEventMode.RemoveTour:
                     if (p_planEventArgs.NeedRefresh)
                     {
                         refreshAll();
-                        SetFocusedTourBySelectedItem();
+                        OnNotifyDataChanged();
                     }
                     break;
 
@@ -150,7 +142,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     if (p_planEventArgs.NeedRefresh)
                     {
                         refreshAll();
-                        SetFocusedTourBySelectedItem();
+                        OnNotifyDataChanged();
                     }
                     break;
                 case ePlanEventMode.ChgZoom:
@@ -227,7 +219,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     if (gridViewTours.RowCount > 0)
                     {
                         gridViewTours.MoveFirst();
-                        SetFocusedTourBySelectedItem();
+                        OnNotifyDataChanged();
                     }
                     break;
                 default:
@@ -245,7 +237,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void refreshAll()
         {
-            if (gridViewTours.FocusedRowHandle >= 0)
+            if (gridViewTours.FocusedRowHandle > 0)
             {
                 gridViewTours.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewTours_FocusedRowChanged);
 
@@ -283,7 +275,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 m_bllPlanEdit.ChangeTourColors(ID, ced.Color.ToArgb());
                 boPlanTour tour = m_PPlanCommonVars.GetTourByID(ID);
                 tour.PCOLOR = ced.Color;
-                DoNotifyPanelChanged(new PlanEventArgs(ePlanEventMode.ChgTourColor, tour, ced.Color));
+                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTourColor, tour, ced.Color));
             }
         }
 
@@ -297,7 +289,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 m_bllPlanEdit.ChangeTourSelected(ID, chkEdt.Checked);
                 boPlanTour tour = m_PPlanCommonVars.GetTourByID(ID);
                 tour.PSelect = chkEdt.Checked;
-                m_PPlanCommonVars.FocusedTour = tour;
+                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTourSelected, tour, chkEdt.Checked));
             }
         }
 

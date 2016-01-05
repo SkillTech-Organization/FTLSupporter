@@ -30,12 +30,11 @@ namespace PMap.Forms.Panels.frmPPlan
     public partial class pnlPPlanEditor : BasePanel
     {
 
-        /* Szerkesztett túraszakasz */
-        private class EditedRoute          
+        private class EditedRoute
         {
-            public boPlanTour Tour { get; set; }                //A szkaszt tartalmazó túra
-            public boPlanTourPoint TpRouteStart { get; set; }   //Ennél a túrapontnál kezdődik a szakasz
-            public string ItemID                                //A szakasz egyedi azonosítója
+            public boPlanTour Tour { get; set; }
+            public boPlanTourPoint TpRouteStart { get; set; }
+            public string ItemID
             {
                 get { return Tour.ID.ToString("000000000000#") + TpRouteStart.ID.ToString("000000000000#"); }
             }
@@ -48,6 +47,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private GMapMarker m_selectorMarker = null;
 
+        private bool m_EditMode = false;
         private EditedRoute m_EditedRoute = null;
         private boPlanTourPoint m_EditedTourPoint = null;
         private boPlanOrder m_EditedUnplannedOrder = null;
@@ -58,6 +58,8 @@ namespace PMap.Forms.Panels.frmPPlan
         private bllPlanEdit m_bllPlanEdit;
         private bllPlan m_bllPlan;
         private PlanEditFuncs m_PlanEditFuncs;
+
+
         private PPlanCommonVars m_PPlanCommonVars;
 
 
@@ -65,12 +67,14 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             InitializeComponent();
             m_PPlanCommonVars = p_PPlanCommonVars;
-            if (!DesignMode)
-            {
-                InitPanelBase();
-            }
+            Init();
         }
 
+        public bool EditMode
+        {
+            get { return m_EditMode; }
+
+        }
 
         public boPlanTourPoint EditedTourPoint
         {
@@ -86,6 +90,7 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             try
             {
+                InitPanel();
 
                 m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
                 m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
@@ -100,8 +105,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
                     clearMarkerTooltip();
 
-                    m_PPlanCommonVars.EditMode = false;
-                    
+                    m_EditMode = false;
 
                     gMapControl.Manager.Mode = PMapCommonVars.Instance.MapAccessMode;
                     gMapControl.MapProvider = PMapCommonVars.Instance.MapProvider;
@@ -160,13 +164,13 @@ namespace PMap.Forms.Panels.frmPPlan
                     m_selectorMarker.IsVisible = false;
                     m_editorLayer.Markers.Add(m_selectorMarker);
 
-                    /*
                     if (m_PPlanCommonVars.FocusedUnplannedOrder != null)
                     {
                         m_PPlanCommonVars.FocusedUnplannedOrder.Marker.IsVisible = false;
                     }
                     m_PPlanCommonVars.FocusedUnplannedOrder = null;
-                    */
+
+                    FullRefreshMap();
                 }
             }
             catch (Exception e)
@@ -177,12 +181,11 @@ namespace PMap.Forms.Panels.frmPPlan
         }
 
         /// <summary>
-        /// Túrák útvonalának térképre rakása
+        /// Egy túra útvonalának térképre rakása
         /// </summary>
-        /// <param name="p_genTPL_ID"></param>:kitöltés esetén csak ezt a túrát kell térképre generálni
-        /// 
+        /// <param name="p_genTPL_ID"></param>
         /// <returns></returns>
-        private GetRoutePathProcess.eCompleteCode renderRoutesToMap(int p_genTPL_ID)
+        public GetRoutePathProcess.eCompleteCode GetRoutesForMap(int p_genTPL_ID)
         {
             GetRoutePathProcess.eCompleteCode CreateCompleted = GetRoutePathProcess.eCompleteCode.OK;
             try
@@ -202,17 +205,10 @@ namespace PMap.Forms.Panels.frmPPlan
                 gMapControl.SuspendLayout();
                 gMapControl.HoldInvalidation = true;
 
-                if (p_genTPL_ID <= 0)
-                {
-                    //az alaplayert  teljes útvonalgenerálásnál ürítjük
-                    m_baseLayer.Routes.Clear();
-                    m_baseLayer.Markers.Clear();
-                }
 
                 BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, m_PPlanCommonVars.TourList.Count - 1, "Túrarészletező", true);
                 GetRoutePathProcess rpp = new GetRoutePathProcess(pd, m_PPlanCommonVars.TourList, gMapControl, m_baseLayer, p_genTPL_ID, m_PPlanCommonVars);
 
-                //layer-ek átadása a GetRoutePathProcess-nek
                 foreach (GMapOverlay ov in gMapControl.Overlays)
                 {
                     if (ov != m_unplannedLayer && ov != m_baseLayer && ov != m_editorLayer)
@@ -258,6 +254,8 @@ namespace PMap.Forms.Panels.frmPPlan
                     UI.Message(PMapMessages.E_PEDIT_NOGETROUTES);
                     Application.Exit();
                 }
+
+
 
 
                 foreach (GMapOverlay ov in rpp.Overlays)
@@ -332,6 +330,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
         #endregion
 
+
         #region frissítés
 
         public void RefreshPanel(PlanEventArgs p_planEventArgs)
@@ -344,13 +343,13 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 switch (p_planEventArgs.EventMode)
                 {
-                    case ePlanEventMode.Init:
+                    case ePlanEventMode.ReInit:
                         this.Init();
-                        FullRefreshMap();
-                      break;
+                        break;
 
                     case ePlanEventMode.Refresh:
                         FullRefreshMap();
+
                         //                        ExitEditMode(false);
                         break;
 
@@ -360,22 +359,26 @@ namespace PMap.Forms.Panels.frmPPlan
                         break;
 
                     case ePlanEventMode.RemoveTour:
-                        m_EditedRoute = null;
+                        setEditedRoute(null);
+                        setFocusedTour(null);
+
                         m_EditedTourPoint = null;
                         m_EditedUnplannedOrder = null;
 
-                        RemoveTourFromMap(p_planEventArgs.Tour);
+                        RemoveTour(p_planEventArgs.Tour);
                         UpdateControls();
                         clearMarkerTooltip();
                         //                        ExitEditMode(false);
                         break;
 
                     case ePlanEventMode.AddTour:
-                        m_EditedRoute = null;
+                        setEditedRoute(null);
+                        setFocusedTour(null);
+
                         m_EditedTourPoint = null;
                         m_EditedUnplannedOrder = null;
 
-                        AddTourToMap(p_planEventArgs.Tour);
+                        AddTour(p_planEventArgs.Tour);
                         UpdateControls();
                         clearMarkerTooltip();
                         //                        ExitEditMode(false);
@@ -387,7 +390,6 @@ namespace PMap.Forms.Panels.frmPPlan
                         gMapControl.Refresh();
                         gMapControl.OnMapZoomChanged += new MapZoomChanged(gMapControl_OnMapZoomChanged);
                         break;
-
                     case ePlanEventMode.ChgShowPlannedFlag:
                         foreach (boPlanTour rTour in m_PPlanCommonVars.TourList)
                         {
@@ -396,14 +398,15 @@ namespace PMap.Forms.Panels.frmPPlan
                                 gm.IsVisible = m_PPlanCommonVars.ShowPlannedDepots;
                             }
                         }
+                        m_PPlanCommonVars.FocusedPoint = null;
                         gMapControl.Refresh();
                         break;
-
                     case ePlanEventMode.ChgShowUnPlannedFlag:
                         foreach (GMapMarker gm in m_unplannedLayer.Markers)
                         {
                             gm.IsVisible = m_PPlanCommonVars.ShowUnPlannedDepots;
                         }
+                        m_PPlanCommonVars.FocusedUnplannedOrder = null;
                         gMapControl.Refresh();
                         break;
 
@@ -414,6 +417,9 @@ namespace PMap.Forms.Panels.frmPPlan
 
                     case ePlanEventMode.ChgTourSelected:
                         p_planEventArgs.Tour.Layer.IsVisibile = p_planEventArgs.IsVisible;
+                        setFocusedTour(p_planEventArgs.Tour);
+                        //m_FocusedPoint = null;
+
                         if (p_planEventArgs.IsVisible && m_PPlanCommonVars.ZoomToSelectedPlan)
                             gMapControl.ZoomAndCenterRoutes(p_planEventArgs.Tour.Layer.Id);
 
@@ -436,10 +442,13 @@ namespace PMap.Forms.Panels.frmPPlan
                                                     p_planEventArgs.Tour == m_FocusedTour ?  Global.TourLineWidthSelected : Global.TourLineWidthNormal);
                         }
                         */
+                        setFocusedTour(p_planEventArgs.Tour);
+                        m_PPlanCommonVars.FocusedPoint = null;
                         gMapControl.Refresh();
                         break;
 
                     case ePlanEventMode.HideAllTours:
+                        setFocusedTour(null);
                         m_EditedTourPoint = null;
                         m_EditedUnplannedOrder = null;
                         gMapControl.Refresh();
@@ -447,7 +456,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         break;
 
                     case ePlanEventMode.ShowAllTours:
-                        m_EditedRoute = null;
+                        setFocusedTour(null);
                         m_EditedTourPoint = null;
                         m_EditedUnplannedOrder = null;
                         gMapControl.Refresh();
@@ -459,53 +468,66 @@ namespace PMap.Forms.Panels.frmPPlan
                         resetEditMode();
                         if (p_planEventArgs.Tour != null)
                         {
-                            if (p_planEventArgs.Tour.PSelect)
-                            {
-                                if (m_PPlanCommonVars.ZoomToSelectedPlan)
-                                    gMapControl.ZoomAndCenterRoutes(p_planEventArgs.Tour.Layer.Id);
-                            }
-                            gMapControl.Refresh();
+                            if (m_PPlanCommonVars.FocusedTour != p_planEventArgs.Tour)
+                                if (p_planEventArgs.Tour.PSelect)
+                                {
+                                    setFocusedTour(p_planEventArgs.Tour);
+                                    if (m_PPlanCommonVars.ZoomToSelectedPlan)
+                                        gMapControl.ZoomAndCenterRoutes(p_planEventArgs.Tour.Layer.Id);
+                                }
+                                else
+                                {
+                                    setFocusedTour(null);
+                                }
                         }
+                        else
+                        {
+                            setFocusedTour(null);
+                        }
+                        gMapControl.Refresh();
                         break;
 
 
                     case ePlanEventMode.ChgFocusedTourPoint:
-                        if (p_planEventArgs.TourPoint != null)
+                        boPlanTour Tour = m_PPlanCommonVars.GetTourByID(p_planEventArgs.TourPoint.TPL_ID);
+                        if (Tour != null && (m_PPlanCommonVars.FocusedPoint == null || m_PPlanCommonVars.FocusedPoint != p_planEventArgs.TourPoint))
                         {
-                            boPlanTour Tour = m_PPlanCommonVars.GetTourByID(p_planEventArgs.TourPoint.TPL_ID);
-                            if (Tour != null && (m_PPlanCommonVars.FocusedPoint == null || m_PPlanCommonVars.FocusedPoint != p_planEventArgs.TourPoint))
+                            m_PPlanCommonVars.FocusedPoint = p_planEventArgs.TourPoint;
+                            m_PPlanCommonVars.FocusedUnplannedOrder = null;
+                            if (m_PPlanCommonVars.ZoomToSelectedPlan)
                             {
-                                m_PPlanCommonVars.FocusedPoint = p_planEventArgs.TourPoint;
-                                if (m_PPlanCommonVars.ZoomToSelectedPlan)
-                                {
-                                    gMapControl.ZoomAndCenterMarkers(Tour.Layer.Id);
-                                }
-                                else
-                                {
-                                    if (m_PPlanCommonVars.FocusedPoint.Marker != null &&
-                                        !gMapControl.ViewArea.Contains(m_PPlanCommonVars.FocusedPoint.Marker.Position))
-                                        gMapControl.Position = m_PPlanCommonVars.FocusedPoint.Marker.Position;
-                                }
+                                gMapControl.ZoomAndCenterMarkers(Tour.Layer.Id);
                             }
-                            gMapControl.Refresh();
+                            else
+                            {
+                                if (m_PPlanCommonVars.FocusedPoint.Marker != null &&
+                                    !gMapControl.ViewArea.Contains(m_PPlanCommonVars.FocusedPoint.Marker.Position))
+                                    gMapControl.Position = m_PPlanCommonVars.FocusedPoint.Marker.Position;
+                            }
                         }
+                        gMapControl.Refresh();
                         break;
 
                     case ePlanEventMode.ChgFocusedOrder:
+
+
                         if (m_PPlanCommonVars.ShowUnPlannedDepots)
                         {
+                       //     setFocusedTour(null);
+                            m_PPlanCommonVars.FocusedPoint = null;
+                            m_PPlanCommonVars.FocusedUnplannedOrder = p_planEventArgs.PlanOrder;
                             if (m_PPlanCommonVars.ZoomToSelectedUnPlanned)
                             {
                                 gMapControl.Position = m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position;
                             }
                             else
                             {
-                                if (m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
+                                if( m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
                                     !gMapControl.ViewArea.Contains(m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position))
                                     gMapControl.Position = m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position;
-                                //                                    gMapControl.ZoomAndCenterMarkers(m_unplannedLayer.Id);
+//                                    gMapControl.ZoomAndCenterMarkers(m_unplannedLayer.Id);
                             }
-
+                            
 
                             gMapControl.Refresh();
                         }
@@ -530,7 +552,7 @@ namespace PMap.Forms.Panels.frmPPlan
             }
         }
 
-        private void RemoveTourFromMap(boPlanTour p_Tour)
+        private void RemoveTour(boPlanTour p_Tour)
         {
             try
             {
@@ -562,13 +584,14 @@ namespace PMap.Forms.Panels.frmPPlan
             }
         }
 
-        private void AddTourToMap(boPlanTour p_Tour)
+        private void AddTour(boPlanTour p_Tour)
         {
             try
             {
 
                 gMapControl.HoldInvalidation = true;
-                renderRoutesToMap(p_Tour.ID);
+                GetRoutesForMap(p_Tour.ID);
+                setFocusedTour(p_Tour);
                 gMapControl.HoldInvalidation = false;
             }
             catch (Exception e)
@@ -580,10 +603,11 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void FullRefreshMap()
         {
+            setEditedRoute(null);
             m_EditedTourPoint = null;
             m_EditedUnplannedOrder = null;
 
-            renderRoutesToMap(-1);
+            GetRoutesForMap(-1);
 
             ClearUnpannedMarkers();
             CreateUnPlannedMarkers();
@@ -596,7 +620,6 @@ namespace PMap.Forms.Panels.frmPPlan
 
         #endregion
 
- 
 
 
         #region útvonal, útszakasz, túrapont keresés
@@ -754,11 +777,12 @@ namespace PMap.Forms.Panels.frmPPlan
                         {
                             if (rUnplanned.Marker.Position == marker.Position)
                             {
-                                m_PPlanCommonVars.FocusedOrder = rUnplanned;
-                                if (m_PPlanCommonVars.EditMode)
+                                m_PPlanCommonVars.FocusedUnplannedOrder = rUnplanned;
+                                if (m_EditMode)
                                     m_EditedUnplannedOrder = rUnplanned;
 
                                 bRefresh = true;
+                                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedOrder, m_PPlanCommonVars.FocusedUnplannedOrder));
                                 break;
                             }
                         }
@@ -772,7 +796,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         {
                             m_EditedTourPoint = m_PPlanCommonVars.FocusedPoint;
                             m_EditedUnplannedOrder  = null;
-                            m_PPlanCommonVars.FocusedOrder = null;
+                            m_PPlanCommonVars.FocusedUnplannedOrder = null;
                             return;
                         }
 
@@ -797,24 +821,27 @@ namespace PMap.Forms.Panels.frmPPlan
                                         //2. szerkesztőmódban nem kattinthatunk raktárra
                                         //                            if (rTourPoint.PTP_TYPE == Global.PTP_TPOINT && rTourPoint.Marker.Position == marker.Position)
 
-                                        if (rTourPoint.Marker != null && rTourPoint.Marker.Position == marker.Position && (!m_PPlanCommonVars.EditMode || rTourPoint.PTP_TYPE == Global.PTP_TPOINT))
+                                        if (rTourPoint.Marker != null && rTourPoint.Marker.Position == marker.Position && (!m_EditMode || rTourPoint.PTP_TYPE == Global.PTP_TPOINT))
                                         {
                                             boPlanTourPoint focusedPt = null;
                                             if (rTourPoint.PTP_TYPE == Global.PTP_TPOINT)
                                             {
                                                 focusedPt = rTourPoint;        //Túrapont esetén
+                                                setFocusedTour(rTourPoint.Tour);
                                             }
                                             else
                                             {
                                                 focusedPt = rTour.TourPoints[0];        //Raktárra kattintás esetén a kiindulási raktár lesz kiválasztva
+                                                setFocusedTour(rTour);
                                             }
+                                            m_PPlanCommonVars.FocusedUnplannedOrder = null;
 
-                                            if (m_PPlanCommonVars.EditMode)
+                                            if (m_EditMode)
                                                 m_EditedTourPoint = rTourPoint;
 
                                             bRefresh = true;
-                                            m_PPlanCommonVars.FocusedTour = rTour;
-                                            m_PPlanCommonVars.FocusedPoint = focusedPt;
+                                            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, rTour));
+                                            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, focusedPt));
                                             break;
                                         }
                                     }
@@ -839,8 +866,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
                                 if (m_PPlanCommonVars.FocusedTour == null)
                                 {
-                                    m_PPlanCommonVars.FocusedTour = routesNearBy[0].Tour;
-                                    m_PPlanCommonVars.FocusedPoint = null;
+                                    setFocusedTour(routesNearBy[0].Tour);
                                 }
                                 else
                                 {
@@ -850,12 +876,11 @@ namespace PMap.Forms.Panels.frmPPlan
                                                      where o.Tour.ID > m_PPlanCommonVars.FocusedTour.ID
                                                      select o);
                                     if (linqTours.Count<EditedRoute>() > 0)
-                                        m_PPlanCommonVars.FocusedTour = linqTours.First<EditedRoute>().Tour;
+                                        setFocusedTour(linqTours.First<EditedRoute>().Tour);
                                     else
-                                        m_PPlanCommonVars.FocusedTour = routesNearBy[0].Tour;
-
-                                    m_PPlanCommonVars.FocusedPoint = null;
+                                        setFocusedTour(routesNearBy[0].Tour);
                                 }
+                                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_PPlanCommonVars.FocusedTour));
                             }
                             else
                             {
@@ -900,7 +925,7 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 //            clearMarkerTooltip();
                 m_mousePosition = gMapControl.FromLocalToLatLng(e.X, e.Y);
-                if (e.Button == MouseButtons.Left && m_PPlanCommonVars.EditMode)
+                if (e.Button == MouseButtons.Left && m_EditMode)
                 {
                     clearMarkerTooltip();
                     m_MouseMoved = true;
@@ -955,7 +980,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         }
                     }
 
-                    m_EditedRoute =  eroute;
+                    setEditedRoute(eroute);
                     gMapControl.Refresh();
                 }
                 UpdateControls();
@@ -973,7 +998,7 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             try
             {
-                if (e.Button == MouseButtons.Left && m_PPlanCommonVars.EditMode)
+                if (e.Button == MouseButtons.Left && m_EditMode)
                 {
                     clearMarkerTooltip();
 
@@ -991,7 +1016,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         eroute.Tour = m_PPlanCommonVars.FocusedTour;
                         eroute.TpRouteStart = m_PPlanCommonVars.FocusedTour.TourPoints[m_PPlanCommonVars.FocusedTour.TourPoints.Count - 2];
 
-                        m_EditedRoute =  eroute;
+                        setEditedRoute(eroute);
                     }
 
                     if (m_EditedRoute != null)
@@ -1091,7 +1116,7 @@ namespace PMap.Forms.Panels.frmPPlan
         private void pnlPPlanEditor_KeyDown(object sender, KeyEventArgs e)
         {
             //          Console.WriteLine("cWM_KEYDOWN");
-            if (e.Control && !m_PPlanCommonVars.EditMode)
+            if (e.Control && !m_EditMode)
             {
                 enterEditMode(true);
             }
@@ -1147,7 +1172,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 }
 
 
-                if (m_PPlanCommonVars.EditMode && (m_EditedTourPoint != null || m_EditedUnplannedOrder != null))
+                if (m_EditMode && (m_EditedTourPoint != null || m_EditedUnplannedOrder != null))
                 {
                     GMapMarker EditedItem = null;
                     if (m_EditedTourPoint != null)
@@ -1477,10 +1502,11 @@ namespace PMap.Forms.Panels.frmPPlan
         private void zoomChanged()
         {
             m_PPlanCommonVars.Zoom = (int)(gMapControl.Zoom);
+            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgZoom));
         }
 
 
-        private void setFocusedTourxx(boPlanTour p_FocusedTour)
+        private void setFocusedTour(boPlanTour p_FocusedTour)
         {
             try
             {
@@ -1526,6 +1552,22 @@ namespace PMap.Forms.Panels.frmPPlan
         }
 
 
+        private void setEditedRoute(EditedRoute p_EditedRoute)
+        {
+            if (m_EditedRoute != null && m_EditedRoute.TpRouteStart.Route != null)
+                m_EditedRoute.TpRouteStart.Route.Stroke.Width = Global.TourLineWidthNormal;
+
+            m_EditedRoute = p_EditedRoute;
+
+            if (m_EditedRoute != null && m_EditedRoute.TpRouteStart.Route != null)
+            {
+                setFocusedTour(m_EditedRoute.Tour);
+                m_EditedRoute.TpRouteStart.Route.Stroke.Width = Global.TourLineWidthSelected;
+            }
+        }
+
+
+
 
         private void pnlPPlanEditor_Load(object sender, EventArgs e)
         {
@@ -1567,32 +1609,45 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void enterEditMode(bool p_notify)
         {
-            if (!m_PPlanCommonVars.EditMode)
+            if (!m_EditMode)
             {
+                m_EditMode = true;
+                //          SetFocusedTour(null);
+
+                setEditedRoute(null);
+                m_EditedTourPoint = null;
+                m_EditedUnplannedOrder = null;
+
                 gMapControl.Refresh();
                 statusStrip.BackColor = Color.BlanchedAlmond;
+
+                if (p_notify)
+                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.EditorMode));
             }
         }
 
         private void exitEditMode(bool p_notify)
         {
-            if (m_PPlanCommonVars.EditMode)
+            if (m_EditMode)
             {
 
-                m_EditedRoute = null;
+                m_EditMode = false;
+                setEditedRoute(null);
                 m_EditedTourPoint = null;
                 m_EditedUnplannedOrder = null;
                 statusStrip.BackColor = SystemColors.Control;
                 gMapControl.Refresh();
+                if (p_notify)
+                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ViewerMode));
             }
         }
 
         private void resetEditMode()
         {
             m_MouseMoved = false;
-            m_EditedRoute = null;
             m_EditedTourPoint = null;
             m_EditedUnplannedOrder = null;
+            setEditedRoute(null);
             gMapControl.Invalidate();
             gMapControl.Refresh();
         }

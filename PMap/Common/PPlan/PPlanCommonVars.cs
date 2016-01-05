@@ -16,16 +16,9 @@ using DevExpress.XtraGrid;
 
 namespace PMap.Common.PPlan
 {
-    public class PPlanCommonVars
+    public sealed class PPlanCommonVars
     {
-        public event EventHandler<PlanEventArgs> NotifyDataChanged;
 
-        public void DoNotifyDataChanged(PlanEventArgs e)
-        {
-            if (this.NotifyDataChanged != null)
-                NotifyDataChanged(this, e);
-        }
-        
         public class PPlanDragObject
         {
             public enum ESourceDataObjectType
@@ -47,39 +40,12 @@ namespace PMap.Common.PPlan
             public DevExpress.XtraGrid.GridControl SrcGridControl { get; set; }
         }
 
-        public PPlanCommonVars()
-        {
-            TourList = new List<boPlanTour>();
-            PlanOrderList = new List<boPlanOrder>();
-        }
-
-         private bool m_editMode = false;
+        // private static readonly object padlock = new object();
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public bool EditMode
-        {
-            get { return m_editMode; }
-            set
-            {
-                m_editMode = value;
-                if (m_editMode)
-                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.EditorMode));
-                else
-                    DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ViewerMode));
+        private static volatile object padlock = new object();
 
-            }
-        }
-
-        private int m_zoom;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public int Zoom        
-        {
-            get { return m_zoom; }
-            set
-            {
-                m_zoom = value;
-                DoNotifyDataChanged( new PlanEventArgs(ePlanEventMode.ChgZoom));
-            }
-        }
+        public int Zoom { get; set; }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public PointLatLng CurrentPosition { get; set; }
@@ -87,50 +53,12 @@ namespace PMap.Common.PPlan
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public int PLN_ID { get; set; }
 
-        private List<boPlanTour> m_tourList;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public List<boPlanTour> TourList 
-        {
-            get { return m_tourList; }
-
-            set
-            {
-                m_tourList = value;
-            }
-        }
-
-        public void AddTourToList(int pIndex, boPlanTour p_PlanTour)
-        {
-            TourList.Insert(pIndex, p_PlanTour);
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.AddTour, p_PlanTour));
-        }
-
-        public void AddTourToList(boPlanTour p_PlanTour)
-        {
-            TourList.Add( p_PlanTour);
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.AddTour, p_PlanTour));
-        }
-
-        public void RemoveTourFromList(boPlanTour p_PlanTour)
-        {
-            TourList.Remove(p_PlanTour);
-            DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.RemoveTour, p_PlanTour));
-        }
-
-
-        private List<boPlanOrder> m_planOrderList;
+        public List<boPlanTour> TourList { get; set; }
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public List<boPlanOrder> PlanOrderList
-        {
-            get { return m_planOrderList; }
-            set
-            {
-                m_planOrderList = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.RefreshOrders));
-            }
-        }
-
-
+        public List<boPlanOrder> PlanOrderList { get; set; }
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public boPlanTour SelectedTour { get; set; }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public bool Changed { get; set; }
@@ -138,149 +66,26 @@ namespace PMap.Common.PPlan
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public PPlanDragObject DraggedObj { get; set; }
 
-        private boPlanTour m_focusedTour = null;
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanTour FocusedTour
-        {
-            get { return m_focusedTour; }
-            set
-            {
-
-                //Kiválasztott vastagságot megszüntetjük
-                if (m_focusedTour != null && m_focusedTour.Layer != null)
-                {
-                    foreach (GMapRoute gr in m_focusedTour.Layer.Routes)
-                    {
-                        gr.Stroke.Color = Util.GetSemiTransparentColor(m_focusedTour.PCOLOR);
-                        gr.Stroke.Width = Global.TourLineWidthNormal;
-                    }
-                }
- 
-                m_focusedTour = value;
-
-                //Kiválasztott túrát megvastagítjuk
-                if (m_focusedTour != null && m_focusedTour.Layer != null)
-                {
-                    foreach (GMapRoute gr in m_focusedTour.Layer.Routes)
-                    {
-                        gr.Stroke.Color = Util.GetSemiTransparentColor(m_focusedTour.PCOLOR);
-                        gr.Stroke.Width = Global.TourLineWidthSelected;
-                    }
-                }
-
-                PlanEventArgs pea = new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_focusedTour);
-                DoNotifyDataChanged(pea);
-            }
-        }
-
-        private boPlanTourPoint m_focusedPoint;
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanTourPoint FocusedPoint
-        {
-            get { return m_focusedPoint; }
-            set { 
-                m_focusedPoint = value;
-                PlanEventArgs pea = new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, m_focusedPoint);
-                DoNotifyDataChanged(pea);
-                
-            }
-        }
-
-        private boPlanOrder m_focusedOrder { get; set; }
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanOrder FocusedOrder
-        {
-            get { return m_focusedOrder; }
-            set
-            {
-                m_focusedOrder = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedOrder, m_focusedOrder));
-            }
-        }
+        public boPlanTour FocusedTour { get; set; }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public boPlanOrder FocusedUnplannedOrder
-        {
-            get {
-                if (FocusedOrder != null && FocusedOrder.PTP_ID != 0)
-                    return FocusedOrder;
-                else 
-                    return null;
-            }
-        }
+        public boPlanTourPoint FocusedPoint { get; set; }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public boPlanOrder FocusedUnplannedOrder { get; set; }
+
 
 
         /// <summary>
         /// serilizálandó paraméterek
         /// </summary>
-        private bool m_showPlannedDepots;
-        public bool ShowPlannedDepots
-        {
-            get { return m_showPlannedDepots; }
-            set
-            {
-                m_showPlannedDepots = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgShowPlannedFlag));
-            }
-        }
-
-        private bool m_showUnPlannedDepots;
-        public bool ShowUnPlannedDepots 
-        {
-            get { return m_showUnPlannedDepots; }
-            set
-            {
-                m_showUnPlannedDepots = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgShowUnPlannedFlag));
-            }
-        }
-
-
-        private MarkerTooltipMode m_tooltipMode;
-        public MarkerTooltipMode TooltipMode
-       {
-           get { return m_tooltipMode; }
-            set
-            {
-                m_tooltipMode = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTooltipMode));
-            }
-        }
-
-
-        private bool m_zoomToSelectedPlan;
-        public bool ZoomToSelectedPlan
-        {
-            get { return m_zoomToSelectedPlan; }
-            set
-            {
-                m_zoomToSelectedPlan = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgZoomToSelectedTour));
-            }
-        }
-
-        private bool m_zoomToSelectedUnPlanned;
-        public bool ZoomToSelectedUnPlanned
-        {
-            get { return m_zoomToSelectedUnPlanned; }
-            set
-            {
-                m_zoomToSelectedUnPlanned = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgZoomToSelectedUnPlanned));
-            }
-        }
-
-        private bool m_showAllOrdersInGrid;
-
-        public bool ShowAllOrdersInGrid
-       {
-           get { return m_showAllOrdersInGrid; }
-            set
-            {
-                m_showAllOrdersInGrid = value;
-                DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgShowAllOrdersInGrid));
-            }
-        }
+        public bool ShowPlannedDepots { get; set; }
+        public bool ShowUnPlannedDepots { get; set; }
+        public MarkerTooltipMode TooltipMode { get; set; }
+        public bool ZoomToSelectedPlan { get; set; }
+        public bool ZoomToSelectedUnPlanned { get; set; }
+        public bool ShowAllOrdersInGrid { get; set; }
 
         public boPlanTour GetTourByID(int p_ID)
         {
