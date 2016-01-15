@@ -23,6 +23,7 @@ namespace FTLSupporter
      */
     public class FTLTruck
     {
+
         [DisplayNameAttributeX(Name = "Rendszám", Order = 1)]
         public string RegNo { get; set; }
         
@@ -30,7 +31,7 @@ namespace FTLSupporter
         public int TruckWeight { get; set; }
 
         [DisplayNameAttributeX(Name = "Raksúly (kg)", Order = 3)]
-        public int CargoWeight { get; set; }
+        public int CapacityWeight { get; set; }
 
         [DisplayNameAttributeX(Name = "Járműtípus", Order = 4)]
         public string TruckType { get; set; }
@@ -48,7 +49,7 @@ namespace FTLSupporter
         public double RelocateCost { get; set; }
 
         [DisplayNameAttributeX(Name = "Teljesítés max. KM", Order = 9)]
-        public double MaxKm { get; set; }
+        public double MaxKM { get; set; }
 
         [DisplayNameAttributeX(Name = "Teljesítés max. idő", Order = 10)]
         public double MaxDuration { get; set; }
