@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMap", "PMap\PMap.csproj", "{3E3FE032-B237-479B-938B-63F693265432}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C} = {D0C39D9D-BED0-418B-9A5E-713176CAF40C}
@@ -46,9 +44,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		doc\utvonalszam.txt = doc\utvonalszam.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLSupporter", "FTLSupporter\FTLSupporter.csproj", "{B4FE3066-F14F-4625-85BB-57EA97751A6E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://gyorgyiantal.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -79,6 +79,9 @@ Global
 		SccProjectUniqueName9 = WinFormsUI\\WinFormsUI.csproj
 		SccProjectName9 = WinFormsUI
 		SccLocalPath9 = WinFormsUI
+		SccProjectUniqueName10 = FTLSupporter\\FTLSupporter.csproj
+		SccProjectName10 = FTLSupporter
+		SccLocalPath10 = FTLSupporter
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -225,6 +228,18 @@ Global
 		{6E23D5D1-FB6B-450D-8244-34172B60C166}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6E23D5D1-FB6B-450D-8244-34172B60C166}.Release|x64.ActiveCfg = Release|Any CPU
 		{6E23D5D1-FB6B-450D-8244-34172B60C166}.Release|x86.ActiveCfg = Release|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
