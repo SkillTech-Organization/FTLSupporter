@@ -14,7 +14,7 @@ namespace PMap.BLL
     {
 
 
-        public bllTariffProf(DBAccess p_DBA)
+        public bllTariffProf(SQLServerAccess p_DBA)
             : base(p_DBA, "TFP_TARIFFPROF")
         {
         }

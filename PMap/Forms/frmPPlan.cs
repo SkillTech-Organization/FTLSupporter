@@ -99,9 +99,9 @@ namespace PMap.Forms
             m_planParams = p_planParams;
             m_IsEnablePlanManage = (p_PLN_ID == 0);
 
-            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
+            m_bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
             m_bllSemaphore.ClearSemaphores();
 
             initPPlanForm(p_PLN_ID, false);
@@ -787,7 +787,7 @@ namespace PMap.Forms
         {
             if (UI.Confirm(PMapMessages.Q_PEDIT_CALCDST))
             {
-                bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
+                bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
                 List<boRoute> res = bllRoute.GetDistancelessPlanNodes(m_PPlanCommonVars.PLN_ID);
                 if (res.Count == 0)
                     return;

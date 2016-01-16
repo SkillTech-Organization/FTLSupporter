@@ -37,7 +37,7 @@ namespace PMap.LongProcess
         private GMapControl m_gMapControl;
         private GMapOverlay m_baseLayer;
 
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bllRoute m_bllRoute;
 
         private PPlanCommonVars m_PPlanCommonVars;
@@ -51,9 +51,9 @@ namespace PMap.LongProcess
             m_gMapControl = p_gMapControl;
             m_baseLayer = p_baseLayer;
             m_genTPL_ID = p_genTPL_ID;
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
-            m_bllRoute = new bllRoute(m_conn.DB);
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_bllRoute = new bllRoute(m_DB);
             m_PPlanCommonVars = p_PPlanCommonVars;
 
         }

@@ -18,9 +18,9 @@ namespace PMap.BLL.Base
         public const string FIELD_ATIME = "ATIME";
         public const string FIELD_LASTDATE = "LASTDATE";
 
-        public DBAccess DBA { get; private set; }
+        public SQLServerAccess DBA { get; private set; }
         public string TableName  { get; private set; }
-        public bllBase(DBAccess p_DBA, string p_TableName)
+        public bllBase(SQLServerAccess p_DBA, string p_TableName)
         {
             DBA = p_DBA;
             TableName = p_TableName;

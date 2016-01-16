@@ -13,7 +13,7 @@ namespace PMap.BLL
     public class bllTruck : bllBase
     {
 
-        public bllTruck(DBAccess p_DBA)
+        public bllTruck(SQLServerAccess p_DBA)
             :base(p_DBA, "TRK_TRUCK")
         {
         }

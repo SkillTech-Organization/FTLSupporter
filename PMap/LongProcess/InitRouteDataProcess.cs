@@ -15,18 +15,18 @@ namespace PMap.LongProcess
 
     public class InitRouteDataProcess : BaseLongProcess
     {
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         public InitRouteDataProcess()
             : base(new BaseSilngleProgressDialog(1, 4, PMapMessages.M_OPT_LOADMAPDATA, false), PMapIniParams.Instance.InitRouteDataProcess)
         {
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
         }
 
         protected override void DoWork()
         {
-            RouteData.Instance.Init(m_conn, this.ProcessForm);
+            RouteData.Instance.Init(m_DB, this.ProcessForm);
 
         }
     }

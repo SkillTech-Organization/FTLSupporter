@@ -11,7 +11,7 @@ namespace PMap.BLL.DataXChange
 {
     public class dtXGetPlan : bllBase
     {
-        public dtXGetPlan(DBAccess p_DBA)
+        public dtXGetPlan(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
         }

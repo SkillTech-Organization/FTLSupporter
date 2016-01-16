@@ -13,7 +13,7 @@ namespace PMap.BLL
     public class bllCarrier : bllBase
     {
 
-        public bllCarrier(DBAccess p_DBA)
+        public bllCarrier(SQLServerAccess p_DBA)
             : base(p_DBA, "CRR_CARRIER")
         {
         }

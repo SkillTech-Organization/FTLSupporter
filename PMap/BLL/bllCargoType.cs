@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllCargoType : bllBase
     {
-        public bllCargoType(DBAccess p_DBA)
+        public bllCargoType(SQLServerAccess p_DBA)
             : base(p_DBA, "CTP_CARGOTYPE")
         {
         }

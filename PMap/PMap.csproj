@@ -270,9 +270,7 @@
     <Compile Include="BLL\DataXChange\dtXResult.cs" />
     <Compile Include="BLL\DataXChange\dtXDepot.cs" />
     <Compile Include="DB\Base\DBAccess.cs" />
-    <Compile Include="DB\Base\DBConnect.cs" />
     <Compile Include="DB\Base\SQLServerAccess.cs" />
-    <Compile Include="DB\Base\SQLServerConnect.cs" />
     <Compile Include="DB\Base\TransactionBlock.cs" />
     <Compile Include="BLL\bllHistory.cs" />
     <Compile Include="BLL\bllMapFormPar.cs" />

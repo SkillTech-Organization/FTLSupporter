@@ -108,11 +108,11 @@ namespace PMapTestApp
                 dlgSelPlan d = new dlgSelPlan();
                 if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    SQLServerConnect db = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-                    db.ConnectDB();
-                    //db.DB.ExecuteNonQuery("truncate table DST_DISTANCE");
-                    //db.DB.ExecuteNonQuery("delete DST_DISTANCE where NOD_ID_FROM = 13 or NOD_ID_TO = 13");
-                    db.CloseDB();
+                    SQLServerAccess db = new SQLServerAccess();
+                    db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+                    //db.ExecuteNonQuery("truncate table DST_DISTANCE");
+                    //db.ExecuteNonQuery("delete DST_DISTANCE where NOD_ID_FROM = 13 or NOD_ID_TO = 13");
+                    db.Close();
                     (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, d.m_PLN_ID, true);
                 }
 
@@ -148,10 +148,10 @@ namespace PMapTestApp
             {
                 PMapIniParams.Instance.ReadParams("", dbConf);
 
-                SQLServerConnect db = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-                db.ConnectDB();
-                db.DB.ExecuteNonQuery("truncate table DST_DISTANCE");
-                db.CloseDB();
+                SQLServerAccess db = new SQLServerAccess();
+                db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+                db.ExecuteNonQuery("truncate table DST_DISTANCE");
+                db.Close();
 
 
                 (new PMapInterface()).CalcPMapRoutesByOrders("", dbConf, "2013.03.22", "2013.03.22");
@@ -187,7 +187,7 @@ namespace PMapTestApp
                 top.Run();
                 pd.ShowDialog();
 
-                PMapCommonVars.Instance.CT_DB.CloseDB();
+                PMapCommonVars.Instance.CT_DB.Close();
 
 
             }
@@ -203,13 +203,13 @@ namespace PMapTestApp
             {
                 PMapCommonVars.Instance.ConnectToDB();
 
-                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB.DB, d.m_PLN_ID, 0, true);
+                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, d.m_PLN_ID, 0, true);
 
                 opt.FillOptimize(null);
                 opt.ProcessResult(PMapIniParams.Instance.PlanResultFile, null);
 
 
-                PMapCommonVars.Instance.CT_DB.CloseDB();
+                PMapCommonVars.Instance.CT_DB.Close();
 
 
             }
@@ -230,11 +230,11 @@ namespace PMapTestApp
 
                 PMapCommonVars.Instance.ConnectToDB();
 
-                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
-                bllDepot depot = new bllDepot(PMapCommonVars.Instance.CT_DB.DB);
+                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                bllDepot depot = new bllDepot(PMapCommonVars.Instance.CT_DB);
 
                 if (UI.Confirm("Összes távolság törlése?"))
-                    PMapCommonVars.Instance.CT_DB.DB.ExecuteNonQuery("truncate table DST_DISTANCE");
+                    PMapCommonVars.Instance.CT_DB.ExecuteNonQuery("truncate table DST_DISTANCE");
 
 
                 bool bOK = true;
@@ -255,7 +255,7 @@ namespace PMapTestApp
                     tep.Run();
                     pd.ShowDialog();
                 }
-                PMapCommonVars.Instance.CT_DB.CloseDB();
+                PMapCommonVars.Instance.CT_DB.Close();
             }
         }
 
@@ -269,8 +269,8 @@ namespace PMapTestApp
                 PMapCommonVars.Instance.ConnectToDB();
 
 
-                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
-                bllDepot depot = new bllDepot(PMapCommonVars.Instance.CT_DB.DB);
+                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                bllDepot depot = new bllDepot(PMapCommonVars.Instance.CT_DB);
                 int ZIP_ID = 0;
                 int NOD_ID = 0;
                 int EDG_ID = 0;
@@ -285,7 +285,7 @@ namespace PMapTestApp
                                    "inner join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID or EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +
                                    "inner join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = NOD.ZIP_NUM " + Environment.NewLine +
                                    "where NOD.ID = " + NOD_ID.ToString() + " and EDG.ID=" + EDG_ID.ToString();
-                    DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSql);
+                    DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql);
                     if (dt.Rows.Count == 1)
                     {
                         UI.Message("NOD.ID = " + NOD_ID.ToString() + ",EDG_ID=" + EDG_ID.ToString() + ",Addr=" +
@@ -448,8 +448,8 @@ namespace PMapTestApp
         private void button18_Click(object sender, EventArgs e)
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
-            SQLServerConnect db = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            db.ConnectDB();
+            SQLServerAccess db = new SQLServerAccess();
+            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
             List<dtXResult> res = (new PMapInterface()).CreateNewPlan("", dbConf, "Xtest1", 1, new DateTime(2013, 04, 11), new DateTime(2013, 04, 12), false, new DateTime(2013, 04, 11), new DateTime(2013, 04, 12));
             dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();

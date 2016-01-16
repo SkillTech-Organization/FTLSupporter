@@ -19,7 +19,7 @@ namespace Map.LongProcess
 
     class RouteVisDataProcess : BaseLongProcess
     {
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bllRouteVis m_bllRouteVis;
         private bllRoute m_bllRoute;
         private bllTruck m_bllTruck;
@@ -32,13 +32,14 @@ namespace Map.LongProcess
         public RouteVisDataProcess()
             : base(new BaseSilngleProgressDialog(0, RouteVisCommonVars.Instance.lstRouteDepots.Count - 1, PMapMessages.M_ROUTVIS_LOADDATA, false), PMapIniParams.Instance.InitRouteDataProcess)
         {
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
-            m_bllRouteVis = new bllRouteVis(m_conn.DB);
-            m_bllRoute = new bllRoute(m_conn.DB);
-            m_bllTruck = new bllTruck(m_conn.DB);
-            m_bllPlanEdit = new bllPlanEdit(m_conn.DB);
-            m_bllSpeedProf = new bllSpeedProf(m_conn.DB);
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+
+            m_bllRouteVis = new bllRouteVis(m_DB);
+            m_bllRoute = new bllRoute(m_DB);
+            m_bllTruck = new bllTruck(m_DB);
+            m_bllPlanEdit = new bllPlanEdit(m_DB);
+            m_bllSpeedProf = new bllSpeedProf(m_DB);
 
 
         }

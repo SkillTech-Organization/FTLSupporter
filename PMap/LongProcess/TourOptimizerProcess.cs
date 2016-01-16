@@ -29,7 +29,7 @@ namespace PMap.LongProcess
         private int m_PLN_ID;
         private int m_TPL_ID;
         private bool m_Replan;
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bool m_silentMode = true;
         private bllOptimize m_optimize;
         private Process m_procOptimizer = new Process();
@@ -41,14 +41,14 @@ namespace PMap.LongProcess
             m_TPL_ID = p_TPL_ID;
             m_Replan = p_Replan;
             m_silentMode = p_silentMode;
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
         }
         protected override void DoWork()
         {
             Result = eOptResult.Init;
 
-            m_optimize = new bllOptimize(m_conn.DB, m_PLN_ID, m_TPL_ID, m_Replan);
+            m_optimize = new bllOptimize(m_DB, m_PLN_ID, m_TPL_ID, m_Replan);
 
             m_optimize.FillOptimize(ProcessForm);
 
@@ -127,7 +127,7 @@ namespace PMap.LongProcess
                     finalize(eOptResult.OK);
                 else
                     finalize(eOptResult.Cancel);
-                m_conn.CloseDB();
+                m_DB.Close();
 
 
             }

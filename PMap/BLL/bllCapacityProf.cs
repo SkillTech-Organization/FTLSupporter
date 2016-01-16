@@ -15,7 +15,7 @@ namespace PMap.BLL
     {
 
 
-        public bllCapacityProf(DBAccess p_DBA)
+        public bllCapacityProf(SQLServerAccess p_DBA)
             : base(p_DBA, "CPP_CAPACITYPROF")
         {
         }

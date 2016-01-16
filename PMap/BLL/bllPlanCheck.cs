@@ -76,7 +76,7 @@ namespace PMap.BLL
             }
             catch (Exception e)
             {
-                PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                PMapCommonVars.Instance.CT_DB.Rollback();
                 throw e;
             }
 
@@ -99,7 +99,7 @@ namespace PMap.BLL
                       "from TOD_TOURORDER TOD " +
                       "inner join ORD_ORDER ORD on TOD.ORD_ID = ORD.ID " +
                       "where TOD.ID = ?";
-            DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, p_TOD_ID);
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, p_TOD_ID);
 
             if (dt.Rows.Count > 0)
             {
@@ -114,7 +114,7 @@ namespace PMap.BLL
                       "inner join TPL_TRUCKPLAN TPL ON TPL.TRK_ID = TRK.ID " +
                       "where TPL.ID = ? AND TCP.CTP_ID = ?";
 
-            dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, p_TPL_ID, CTP_ID);
+            dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, p_TPL_ID, CTP_ID);
             retVal = dt.Rows.Count != 0;
             return retVal;
         }
@@ -139,7 +139,7 @@ namespace PMap.BLL
                       "from TOD_TOURORDER TOD " +
                       "INNER JOIN ORD_ORDER ORD ON TOD.ORD_ID = ORD.ID " +
                       "WHERE TOD.ID = ?";
-            DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, p_TOD_ID);
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, p_TOD_ID);
 
             if (dt.Rows.Count > 0)
             {
@@ -150,7 +150,7 @@ namespace PMap.BLL
             sSQLStr = "select count(*) as DEPCNT " +
                       "from DPT_DEPTRUCK DPT " +
                       "where DPT.DEP_ID = ?";
-            dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, lDEP_ID);
+            dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lDEP_ID);
             iDepCnt = Util.getFieldValue<int>(dt.Rows[0], "DEPCNT");
 
             if (iDepCnt != 0)
@@ -161,7 +161,7 @@ namespace PMap.BLL
                           "from DPT_DEPTRUCK DPT " +
                           "inner join TPL_TRUCKPLAN TPL on DPT.TRK_ID = TPL.TRK_ID and DPT.DEP_ID = ? " +
                           "where TPL.ID = ?";
-                dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, lDEP_ID, p_TPL_ID);
+                dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lDEP_ID, p_TPL_ID);
                 retVal = dt.Rows.Count != 0;
             }
 
@@ -183,7 +183,7 @@ namespace PMap.BLL
                           "inner join v_trk_RZN_ID_LIST RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                           "where TPL.ID = ?  ";
 
-            DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQL, p_TPL_ID);
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQL, p_TPL_ID);
             if (dt.Rows.Count == 1)
             {
                 sRZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
@@ -192,7 +192,7 @@ namespace PMap.BLL
                        "inner join DEP_DEPOT DEP on DEP.ID = TOD.DEP_ID " +
                        "inner join DST_DISTANCE DST on DST.RZN_ID_LIST = ? and (DST.NOD_ID_FROM=DEP.NOD_ID or DST.NOD_ID_TO=DEP.NOD_ID) and DST.DST_DISTANCE >= 0 " +
                        "where TOD.ID= ? ";
-                dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQL, sRZN_ID_LIST, p_TOD_ID);
+                dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQL, sRZN_ID_LIST, p_TOD_ID);
                 return dt.Rows.Count > 0;
             }
             else
@@ -220,7 +220,7 @@ namespace PMap.BLL
                       "FROM TOD_TOURORDER TOD " +
                       "INNER JOIN ORD_ORDER ORD ON TOD.ORD_ID = ORD.ID " +
                       "WHERE TOD.ID = ? ";
-            DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, p_TOD_ID);
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, p_TOD_ID);
             if (dt.Rows.Count > 0)
             {
                 dORD_LENGTH = Util.getFieldValue<double>(dt.Rows[0], "ORD_LENGTH");
@@ -239,7 +239,7 @@ namespace PMap.BLL
                       " AND (TRK_WIDTH is null  OR TRK_WIDTH =0 OR TRK_WIDTH >=? ) " +
                       " AND (TRK_HEIGHT is null OR TRK_HEIGHT=0 OR TRK_HEIGHT>=? ) ";
 
-            dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, p_TPL_ID, dORD_LENGTH, dORD_WIDTH, dORD_HEIGHT);
+            dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, p_TPL_ID, dORD_LENGTH, dORD_WIDTH, dORD_HEIGHT);
             if( dt.Rows.Count > 0)
                 iTrkCnt = Util.getFieldValue<int>(dt.Rows[0], "TRKCNT");
 
@@ -264,7 +264,7 @@ namespace PMap.BLL
 
             //1. Kiszedem a megrendelés azonosítóját
             sSQLStr = "select ORD_ID from TOD_TOURORDER where ID = ?";
-            DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, p_TOD_ID);
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, p_TOD_ID);
             if (dt.Rows.Count > 0)
             {
                 lORD_ID = Util.getFieldValue<int>(dt.Rows[0], "ORD_ID");
@@ -278,7 +278,7 @@ namespace PMap.BLL
                       "inner join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " +
                       "where ORD_ID = ?  and TPL_ID = ?  and PTP_TYPE = ?";
 
-            dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQLStr, lORD_ID, p_TPL_ID, Global.PTP_TPOINT);
+            dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lORD_ID, p_TPL_ID, Global.PTP_TPOINT);
 
             if (dt.Rows.Count == 0)
             {
@@ -306,7 +306,7 @@ namespace PMap.BLL
 
             string sSql = "select DST_DISTANCE,DST_EDGES from DST_DISTANCE DST " +
                            "where RZN_ID_LIST=? and NOD_ID_FROM = ? and NOD_ID_TO = ? ";
-            DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSql, p_RZN_ID_LIST, p_NOD_ID_FROM, p_NOD_ID_TO);
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql, p_RZN_ID_LIST, p_NOD_ID_FROM, p_NOD_ID_TO);
 
             if (dt.Rows.Count == 1)
             {

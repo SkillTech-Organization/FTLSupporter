@@ -9,7 +9,7 @@ namespace PMap.BLL
 {
     public class bllApp : bllBase
     {
-        public bllApp(DBAccess p_DBA)
+        public bllApp(SQLServerAccess p_DBA)
             : base(p_DBA, "APP_APPVER")
         {
         }

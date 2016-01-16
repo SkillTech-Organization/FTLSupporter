@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllWarehouse : bllBase
     {
-        public bllWarehouse(DBAccess p_DBA)
+        public bllWarehouse(SQLServerAccess p_DBA)
             : base(p_DBA, "WHS_WAREHOUSE")
         {
         }

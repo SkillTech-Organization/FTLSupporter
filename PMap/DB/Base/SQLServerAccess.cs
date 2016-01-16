@@ -4,40 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data.Common;
+using PMap.Common;
 
 namespace PMap.DB.Base
 {
-    class SQLServerAccess : DBAccess
+
+    public class SQLServerAccess : DBAccess<SqlConnection, SqlDataAdapter, SqlTransaction, SqlCommand, SqlParameter>
     {
-        ///<summary>
-        ///Kapcsolat letrehozasa (kapcsolodni kulon kell a Connect-tel)
-        ///</summary>
-        ///<param name="connection_string">Connection string</param>
-        public SQLServerAccess(string connection_string, int p_TimeOut)
-            : base(connection_string, p_TimeOut)
+
+
+        public SQLServerAccess(string connection_string)
+            : base(connection_string)
         {
-            Con = new SqlConnection(connection_string);
-            DA = new SqlDataAdapter();
+ 
         }
+
+        public SQLServerAccess()
+            : base()
+        {
+ 
+        }
+        
+        
+        public void ConnectToDB(string p_DBServer, string p_DBName, string p_DBUser, string p_DBPwd, int p_TimeOut)
+        {
+          //TODO: itt le lehetne kezelni, hogy ne konnektáljunk minden esetben
+            if (p_DBUser == "" && p_DBUser == "")
+                Connect(String.Format("Data Source={0};Initial Catalog={1};Trusted_Connection=Yes", p_DBServer, p_DBName), p_TimeOut);
+            else
+                Connect(String.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}", p_DBServer, p_DBName, p_DBUser, p_DBPwd), p_TimeOut);
+            this.Open();
+    }
 
         ///<summary>
         ///Utolso INSERT ID lekerdezese
         ///</summary>
         public override int LastID()
         {
-            string s = ExecuteScalar("SELECT   @@IDENTITY").ToString();
-            return Convert.ToInt32(s);
+            return Int32.Parse(ExecuteScalar("SELECT   @@IDENTITY").ToString());
         }
-
-        ///<summary>
-        ///Rekord létezés lekérdezés
-        ///</summary>
-        public override bool IsExists(string p_tablename, string p_where)
-        {
-            string s = ExecuteScalar( String.Format("select case when exists (select top 1 * from {0} where {1}) then 1 else 0 end", p_tablename, p_where)).ToString();
-            return Convert.ToInt32(s) == 1;
-        }
-
-
     }
+   
 }

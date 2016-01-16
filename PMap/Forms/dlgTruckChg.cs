@@ -34,7 +34,7 @@ namespace PMap.Forms
         {
             InitializeComponent();
 
-            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
             m_PlanEditFuncs = p_PlanEditFuncs;
             m_PPlanCommonVars = p_PPlanCommonVars;
 

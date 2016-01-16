@@ -13,7 +13,7 @@ namespace PMap.BLL.DataXChange
 {
     public class dtXTruck : bllBase
     {
-        public dtXTruck(DBAccess p_DBA)
+        public dtXTruck(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
         }

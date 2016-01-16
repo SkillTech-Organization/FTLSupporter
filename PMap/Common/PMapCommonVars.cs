@@ -37,7 +37,7 @@ namespace PMap.Common
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public SQLServerConnect CT_DB { get; private set; }
+        public SQLServerAccess CT_DB { get; private set; }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public int USR_ID { get; set; }
@@ -69,7 +69,7 @@ namespace PMap.Common
             {
                 if (m_LstEToll == null)
                 {
-                    bllEtoll et = new bllEtoll(CT_DB.DB);
+                    bllEtoll et = new bllEtoll(CT_DB);
                     m_LstEToll = et.GetAllEtolls();
                 }
                 return m_LstEToll;
@@ -82,12 +82,9 @@ namespace PMap.Common
         
         public void ConnectToDB()
         {
+            CT_DB = new SQLServerAccess();
+            CT_DB.ConnectToDB( PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
-            //TODO: itt le lehetne kezelni, hogy ne konnektáljunk minden esetben
-
-            CT_DB = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            CT_DB.ConnectDB();
-            
             //TODO: ide kell rakni az automatikus updatert.
         }
     }

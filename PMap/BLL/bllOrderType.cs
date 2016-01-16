@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllOrderType: bllBase
     {
-        public bllOrderType(DBAccess p_DBA)
+        public bllOrderType(SQLServerAccess p_DBA)
             : base(p_DBA, "OTP_ORDERTYPE")
         {
         }

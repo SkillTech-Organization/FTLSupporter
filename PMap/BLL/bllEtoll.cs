@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllEtoll : bllBase
     {
-        public bllEtoll(DBAccess p_DBA)
+        public bllEtoll(SQLServerAccess p_DBA)
             : base(p_DBA, "ETL_ETOLL")
         {
         }

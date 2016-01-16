@@ -26,7 +26,7 @@ namespace PMap.BLL
         private bllRoute m_bllRoute;
         private bllWarehouse m_bllWarehouse;
 
-        public bllPlanEdit(DBAccess p_DBA)
+        public bllPlanEdit(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
             m_bllRoute = new bllRoute(p_DBA);
@@ -51,7 +51,7 @@ namespace PMap.BLL
                     if (o_PTP_ORDER == 0)
                     */
                     {
-                        newPTP_ID = DBA.InsertEx("PTP_PLANTOURPOINT",
+                        newPTP_ID = DBA.InsertPar("PTP_PLANTOURPOINT",
                             "TPL_ID", p_TPL_ID,
                             "TOD_ID", p_UpOrder.ID,
                             "NOD_ID", p_UpOrder.NOD_ID,
@@ -521,7 +521,7 @@ namespace PMap.BLL
                 {
                     string sSQLStr = "delete from OPP_OPTPAR WHERE PLN_ID = ? ";
                     DBA.ExecuteNonQuery(sSQLStr, p_PLN_ID);
-                    newID = DBA.InsertEx("OPP_OPTPAR",
+                    newID = DBA.InsertPar("OPP_OPTPAR",
                         "PLN_ID", p_PLN_ID,
                         "OPP_DISTLIMIT", p_OPP_DISTLIMIT,
                         "OPP_ISDEEP", p_OPP_ISDEEP,
@@ -579,7 +579,7 @@ namespace PMap.BLL
         public void CreateNewTour(int p_PLN_ID, int p_WHS_ID, int p_TPL_ID, Color p_color, DateTime p_WhsS, DateTime p_WhsE, int p_srvTime)
         {
 
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB.DB))
+            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
             {
                 try
                 {
@@ -601,7 +601,7 @@ namespace PMap.BLL
                 }
                 catch (Exception exc)
                 {
-                    PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                    PMapCommonVars.Instance.CT_DB.Rollback();
                     throw exc;
                 }
             }
@@ -616,7 +616,7 @@ namespace PMap.BLL
             {
                 try
                 {
-                    newPTP_ID = DBA.InsertEx("PTP_PLANTOURPOINT",
+                    newPTP_ID = DBA.InsertPar("PTP_PLANTOURPOINT",
                         "TPL_ID", p_TPL_ID,
                         "TOD_ID", p_TOD_ID,
                         "NOD_ID", p_NOD_ID,
@@ -1055,7 +1055,7 @@ namespace PMap.BLL
             if (dt.Rows.Count == 1)
             {
                 DataRow dr = dt.Rows[0];
-                int newTOD_ID = DBA.InsertEx("TOD_TOURORDER",
+                int newTOD_ID = DBA.InsertPar("TOD_TOURORDER",
                     "DEP_ID", Util.getFieldValue<int>(dr, "DEPID"),
                     "ORD_ID", Util.getFieldValue<int>(dr, "ORDID"),
                     "PLN_ID", p_PLN_ID,
@@ -1149,7 +1149,7 @@ namespace PMap.BLL
 
                 p_QTY = GetOrdQtyWithMul(dQty1, dQty2, dQty3, dQty5, dQTYMul1, dQTYMul2, dQTYMul3, dQTYMul5);
 
-                int newTOD_ID = DBA.InsertEx("TOD_TOURORDER",
+                int newTOD_ID = DBA.InsertPar("TOD_TOURORDER",
                     "DEP_ID", Util.getFieldValue<int>(dr, "DEPID"),
                     "ORD_ID", Util.getFieldValue<int>(dr, "ORDID"),
                     "PLN_ID", p_PLN_ID,
@@ -1183,7 +1183,7 @@ namespace PMap.BLL
             {
                 try
                 {
-                    bllPlan pl = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
+                    bllPlan pl = new bllPlan(PMapCommonVars.Instance.CT_DB);
                     if (pl.GetPlanByName(p_PLN_NAME) != null)
                     {
                         ret.Status = boXNewPlan.EStatus.ERROR;
@@ -1216,7 +1216,7 @@ namespace PMap.BLL
                     }
 
                     //Új terv rekord
-                    PLN_ID = DBA.InsertEx("PLN_PUBLICATEDPLAN",
+                    PLN_ID = DBA.InsertPar("PLN_PUBLICATEDPLAN",
                                     "PLN_NAME", p_PLN_NAME,
                                     "WHS_ID", p_WHS_ID,
                                     "PLN_DATE_B", p_PLN_DATE_B,
@@ -1293,7 +1293,7 @@ namespace PMap.BLL
 
 
                     //A geokódolás nélküli lerakókat összegyűjtöm
-                    bllDepot dep = new bllDepot(PMapCommonVars.Instance.CT_DB.DB);
+                    bllDepot dep = new bllDepot(PMapCommonVars.Instance.CT_DB);
                     ret.lstDepWithoutGeoCoding = dep.GetDeptosWithoutGeocodingByPlan(PLN_ID);
 
                     //kitöröljük a problémás tételeket

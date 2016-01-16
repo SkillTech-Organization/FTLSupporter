@@ -37,7 +37,7 @@ namespace PMap.Forms.Panels.frmPPlan
             try
             {
                 InitPanel();
-                m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
+                m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
                 gridTours.DataSource = m_PPlanCommonVars.TourList;
                 gridViewTours.Appearance.FocusedRow.BackColor = Color.FromArgb(255, 128, 128);

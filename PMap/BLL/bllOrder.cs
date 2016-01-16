@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllOrder : bllBase
     {
-        public bllOrder(DBAccess p_DBA)
+        public bllOrder(SQLServerAccess p_DBA)
             : base(p_DBA, "ORD_ORDER")
         {
         }

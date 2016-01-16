@@ -14,7 +14,7 @@ namespace PMap.BLL
     {
 
 
-        public bllSpeedProf(DBAccess p_DBA)
+        public bllSpeedProf(SQLServerAccess p_DBA)
             : base(p_DBA, "SPP_SPEEDPROF")
         {
         }
@@ -107,13 +107,13 @@ namespace PMap.BLL
                 {
 
                     SPP_ID = AddItem( p_speedProf);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 1, "SPV_VALUE", p_speedProf.SPEED1);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 2, "SPV_VALUE", p_speedProf.SPEED2);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 3, "SPV_VALUE", p_speedProf.SPEED3);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 4, "SPV_VALUE", p_speedProf.SPEED4);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 5, "SPV_VALUE", p_speedProf.SPEED5);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 6, "SPV_VALUE", p_speedProf.SPEED6);
-                    DBA.InsertEx("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 7, "SPV_VALUE", p_speedProf.SPEED7);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 1, "SPV_VALUE", p_speedProf.SPEED1);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 2, "SPV_VALUE", p_speedProf.SPEED2);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 3, "SPV_VALUE", p_speedProf.SPEED3);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 4, "SPV_VALUE", p_speedProf.SPEED4);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 5, "SPV_VALUE", p_speedProf.SPEED5);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 6, "SPV_VALUE", p_speedProf.SPEED6);
+                    DBA.InsertPar("SPV_SPEEDPROFVALUE", "SPP_ID", SPP_ID, "RDT_ID", 7, "SPV_VALUE", p_speedProf.SPEED7);
 
                     bllHistory.WriteHistory(0, "SPV_SPEEDPROFVALUE", SPP_ID, bllHistory.EMsgCodes.ADD, p_speedProf);
                 }

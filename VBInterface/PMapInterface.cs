@@ -352,7 +352,7 @@ namespace VBInterface
 
         public bool calculatePMapRoutesByPlan(int p_PLN_ID, bool p_savePoints)
         {
-            bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
+            bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
             List<boRoute> res = bllRoute.GetDistancelessPlanNodes(p_PLN_ID);
             if (res.Count == 0)
                 return true;
@@ -430,7 +430,7 @@ namespace VBInterface
                 //Util.Log2File(">>START:CalcTOLL( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_TPL_ID_List='" + p_TPL_ID_List + "')");
                 PMapCommonVars.Instance.ConnectToDB();
 
-                bllPlanEdit bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
+                bllPlanEdit bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
                 string[] TPL_IDArr = p_TPL_ID_List.Split(',');
                 foreach (string sTPL_ID in TPL_IDArr)
@@ -469,7 +469,7 @@ namespace VBInterface
                 //Util.Log2File(">>START:RecalcPlTours( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_TPL_ID_List='" + p_TPL_ID_List + "')");
                 PMapCommonVars.Instance.ConnectToDB();
                 
-                bllPlanEdit bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
+                bllPlanEdit bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
                 string[] TPL_IDArr = p_TPL_ID_List.Split(',');
                 foreach (string sTPL_ID in TPL_IDArr)
@@ -505,7 +505,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
                 
 
-                dtXDepot xdep = new dtXDepot(PMapCommonVars.Instance.CT_DB.DB);
+                dtXDepot xdep = new dtXDepot(PMapCommonVars.Instance.CT_DB);
                 result = xdep.ImportDepots(p_depots);
             }
             catch (Exception e)
@@ -536,7 +536,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
                 
 
-                dtXTruck xtrk = new dtXTruck(PMapCommonVars.Instance.CT_DB.DB);
+                dtXTruck xtrk = new dtXTruck(PMapCommonVars.Instance.CT_DB);
                 result = xtrk.ImportTrucks(p_truck);
 
             }
@@ -568,7 +568,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
                 
 
-                dtXOrder xord = new dtXOrder(PMapCommonVars.Instance.CT_DB.DB);
+                dtXOrder xord = new dtXOrder(PMapCommonVars.Instance.CT_DB);
                 result = xord.ImportOrders(p_orders);
             }
             catch (Exception e)
@@ -728,7 +728,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
                 
 
-                bllPlanEdit pe = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
+                bllPlanEdit pe = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
                 boXNewPlan np = pe.CreatePlan(p_PLN_NAME, p_WHS_ID, p_PLN_DATE_B, p_PLN_DATE_E, p_PLN_USEINTERVAL, p_PLN_INTERVAL_B, p_PLN_INTERVAL_E, p_enabledTruckList);
                 if (np.Status == boXNewPlan.EStatus.OK)
@@ -794,7 +794,7 @@ namespace VBInterface
             {
                 if (PMapCommonVars.Instance.CT_DB != null)
                 {
-                    bllSemaphore sem = new bllSemaphore(PMapCommonVars.Instance.CT_DB.DB);
+                    bllSemaphore sem = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
                     sem.ClearSemaphores();
                 }
 
@@ -828,7 +828,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
 
 
-                dtXGetPlan xGetPlan = new dtXGetPlan(PMapCommonVars.Instance.CT_DB.DB);
+                dtXGetPlan xGetPlan = new dtXGetPlan(PMapCommonVars.Instance.CT_DB);
                 res.Data = xGetPlan.GetPlan(p_PLN_ID);
                 res.Status = dtXResult.EStatus.OK;
    
@@ -872,7 +872,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
 
 
-                dtXGetPlan xGetPlan = new dtXGetPlan(PMapCommonVars.Instance.CT_DB.DB);
+                dtXGetPlan xGetPlan = new dtXGetPlan(PMapCommonVars.Instance.CT_DB);
                 res.Data = xGetPlan.GetPlans(p_WHS_ID, p_PLN_DATE_B, p_PLN_DATE_E);
                 res.Status = dtXResult.EStatus.OK;
 

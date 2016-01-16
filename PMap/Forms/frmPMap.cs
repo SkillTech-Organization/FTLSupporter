@@ -102,8 +102,8 @@ namespace PMap.Forms
                     PMapCommonVars.Instance.ConnectToDB();
                     
 
-                    m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
-                    m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
+                    m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                    m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
 
                     tbZoom.Minimum = Global.DefMinZoom;
                     tbZoom.Maximum = Global.DefMaxZoom;

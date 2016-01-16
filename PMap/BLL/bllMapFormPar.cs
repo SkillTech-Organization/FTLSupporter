@@ -16,32 +16,32 @@ namespace PMap.BLL
 
             //Egyenlőre nincs tervenkénti paraméterbeállítás
             p_PLN_ID = 0;
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB.DB))
+            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
             {
                 try
                 {
 
                     string sSQL = "select * from MPP_MAPPLANPAR where PLN_ID = ? and USR_ID = ? ";
 
-                    DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQL, p_PLN_ID, p_USR_ID);
+                    DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQL, p_PLN_ID, p_USR_ID);
                     if (dt.Rows.Count == 0)
                     {
                         sSQL = "insert into MPP_MAPPLANPAR (PLN_ID, USR_ID, MPP_WINDOW, MPP_DOCK, MPP_PARAM, MPP_TGRID, MPP_PGRID, MPP_UGRID) " +
                                "values( ?, ?, ?, ?, ?, ?, ?, ?)";
-                        PMapCommonVars.Instance.CT_DB.DB.ExecuteNonQuery(sSQL,
+                        PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQL,
                             p_PLN_ID, p_USR_ID, p_MPP_WINDOW, p_MPP_DOCK, p_MPP_PARAM, p_MPP_TGRID, p_MPP_PGRID, p_MPP_UGRID);
                     }
                     else
                     {
 
                         sSQL = "update MPP_MAPPLANPAR set MPP_WINDOW=?, MPP_DOCK=?, MPP_PARAM=?, MPP_TGRID=?, MPP_PGRID=?, MPP_UGRID=? where PLN_ID = ? and USR_ID=? ";
-                        PMapCommonVars.Instance.CT_DB.DB.ExecuteNonQuery(sSQL,
+                        PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQL,
                                 p_MPP_WINDOW, p_MPP_DOCK, p_MPP_PARAM, p_MPP_TGRID, p_MPP_PGRID, p_MPP_UGRID, p_PLN_ID, p_USR_ID);
                     }
                 }
                 catch (Exception e)
                 {
-                    PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                    PMapCommonVars.Instance.CT_DB.Rollback();
                     throw e;
                 }
             }
@@ -56,7 +56,7 @@ namespace PMap.BLL
             {
                 string sSQL = "select * from MPP_MAPPLANPAR where PLN_ID = ? and USR_ID = ? ";
 
-                DataTable dt = PMapCommonVars.Instance.CT_DB.DB.Query2DataTable(sSQL, p_PLN_ID, p_USR_ID);
+                DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQL, p_PLN_ID, p_USR_ID);
                 if (dt.Rows.Count > 0)
                 {
                     o_MPP_WINDOW = dt.Rows[0].Field<string>("MPP_WINDOW");
@@ -82,7 +82,7 @@ namespace PMap.BLL
             }
             catch (Exception e)
             {
-                PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                PMapCommonVars.Instance.CT_DB.Rollback();
                 throw e;
             }
         }
@@ -92,7 +92,7 @@ namespace PMap.BLL
             //Egyenlőre nincs tervenkénti paraméterbeállítás
             p_PLN_ID = 0;
             string sSQL = "delete MPP_MAPPLANPAR where PLN_ID = ? and USR_ID = ? ";
-            PMapCommonVars.Instance.CT_DB.DB.ExecuteNonQuery(sSQL, p_PLN_ID, p_USR_ID);
+            PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQL, p_PLN_ID, p_USR_ID);
         }
     }
 }

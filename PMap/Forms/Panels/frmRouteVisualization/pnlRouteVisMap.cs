@@ -42,7 +42,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         {
             InitializeComponent();
             m_PPlanCommonVars = p_PPlanCommonVars;
-            m_Route = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
+            m_Route = new bllRoute(PMapCommonVars.Instance.CT_DB);
 
             init();
         }

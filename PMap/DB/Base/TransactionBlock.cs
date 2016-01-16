@@ -8,10 +8,10 @@ namespace PMap.DB.Base
 {
     class TransactionBlock : IDisposable
     {
-        private DBAccess m_DBA;
+        private SQLServerAccess m_DBA;
         private bool m_isInTrans;
         private Cursor m_oldCursor;
-        public TransactionBlock(DBAccess pDBA)
+        public TransactionBlock(SQLServerAccess pDBA)
         {
             m_DBA = pDBA;
             m_isInTrans = false;

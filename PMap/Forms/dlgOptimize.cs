@@ -31,9 +31,9 @@ namespace PMap.Forms
             : base(eEditMode.editmode)
         {
             InitializeComponent();
-            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
+            m_bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
 
             m_boPlan = m_bllPlan.GetPlan(p_PLN_ID);
 

@@ -33,10 +33,10 @@ namespace PMapTestApp
                     "inner join ZIP_ZIPCODE ZIP on ZIP.ID = DEP.ZIP_ID " +
                     ") x " +
                     "order by x.XNAME";
-            SQLServerConnect db = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            db.ConnectDB();
-            DataTable dt = db.DB.Query2DataTable( sSql);
-            db.CloseDB();
+            SQLServerAccess db = new SQLServerAccess();
+            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            DataTable dt = db.Query2DataTable( sSql);
+            db.Close();
             gridWHSDEP.DataSource = dt;
 
 

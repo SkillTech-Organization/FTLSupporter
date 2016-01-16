@@ -80,11 +80,11 @@ namespace PMap.BLL
         
         public static void WriteHistory(long p_USR_ID, string p_HST_TABLENAME, int p_HST_ITEMID, EMsgCodes p_HST_MSGCODE, string p_HST_DESC)
         {
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB.DB))
+            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
             {
                 try
                 {
-                    int newPTP_ID = PMapCommonVars.Instance.CT_DB.DB.InsertEx("HST_HISTORY",
+                    int newPTP_ID = PMapCommonVars.Instance.CT_DB.InsertPar("HST_HISTORY",
                         "USR_ID", p_USR_ID,
                         "HST_TABLENAME", p_HST_TABLENAME,
                         "HST_ITEMID", p_HST_ITEMID,
@@ -93,7 +93,7 @@ namespace PMap.BLL
                 }
                 catch (Exception e)
                 {
-                    PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                    PMapCommonVars.Instance.CT_DB.Rollback();
                     throw e;
                 }
             }

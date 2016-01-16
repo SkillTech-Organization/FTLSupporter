@@ -27,7 +27,7 @@ namespace PMap.LongProcess
         public bool Completed { get; set; }
 
         private List<boRoute> m_CalcDistances = null;
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private string m_Hint = "";
 
         private bool m_savePoints = true;
@@ -38,10 +38,9 @@ namespace PMap.LongProcess
         {
             m_CalcDistances = p_CalcDistances;
             m_Hint = p_Hint;
-
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
-            m_bllRoute = new bllRoute(m_conn.DB);
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_bllRoute = new bllRoute(m_DB);
             m_savePoints = p_savePoints;
         }
 
@@ -51,9 +50,10 @@ namespace PMap.LongProcess
             m_CalcDistances = p_CalcDistances;
             m_Hint = p_Hint;
 
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
-            m_bllRoute = new bllRoute(m_conn.DB);
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_bllRoute = new bllRoute(m_DB);
+
             m_savePoints = p_savePoints;
 
         }
@@ -75,7 +75,7 @@ namespace PMap.LongProcess
 
                 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
-                RouteData.Instance.Init(m_conn, null);
+                RouteData.Instance.Init(m_DB, null);
                 RectLatLng boundary = new RectLatLng();
 
                 if (m_CalcDistances.Count > 0)
@@ -180,7 +180,7 @@ namespace PMap.LongProcess
                 //Eredmény adatbázisba írása
                 //            m_bllRoute.WriteRoutes(results, m_conn.DB);
                 Completed = true;
-                m_conn.CloseDB();
+                m_DB.Close();
             }
             catch (Exception e)
             {

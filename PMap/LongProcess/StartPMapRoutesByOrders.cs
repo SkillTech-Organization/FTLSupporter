@@ -22,7 +22,7 @@ namespace PMap.LongProcess
     {
         private string m_ORD_DATE_S = "";
         private string m_ORD_DATE_E = "";
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
 
         private bllRoute m_bllRoute;
         private bool m_savePoints;
@@ -33,9 +33,9 @@ namespace PMap.LongProcess
         {
             m_ORD_DATE_S = p_ORD_DATE_S;
             m_ORD_DATE_E = p_ORD_DATE_E;
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
-            m_bllRoute = new bllRoute(m_conn.DB);
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_bllRoute = new bllRoute(m_DB);
             m_savePoints = p_savePoints;
 
         }

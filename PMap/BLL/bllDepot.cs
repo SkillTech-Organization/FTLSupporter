@@ -16,7 +16,7 @@ namespace PMap.BLL
 
     public class bllDepot : bllBase
     {
-        public bllDepot(DBAccess p_DBA)
+        public bllDepot(SQLServerAccess p_DBA)
             : base(p_DBA, "DEP_DEPOT")
         {
         }

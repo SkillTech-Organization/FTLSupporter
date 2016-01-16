@@ -24,7 +24,7 @@ namespace PMap.BLL
         private bllRoute m_bllRoute;
         private bllSpeedProf m_bllSpeedProf;
 
-        public bllOptimize(DBAccess p_DBA, int p_PLN_ID, int p_TPL_ID, bool p_Replan)
+        public bllOptimize(SQLServerAccess p_DBA, int p_PLN_ID, int p_TPL_ID, bool p_Replan)
             : base(p_DBA, "")
         {
             m_bllPlanEdit = new bllPlanEdit(p_DBA);

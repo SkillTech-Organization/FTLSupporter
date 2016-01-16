@@ -61,15 +61,15 @@ namespace PMap.LongProcess
 
         }
 
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private string m_fileName;
         private List<boDepot> m_depots = null;
 
         public TollExportProcess(BaseProgressDialog p_Form, string p_fileName, List<boDepot> p_depots)
             : base(p_Form, ThreadPriority.Normal)
         {
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
             m_fileName = p_fileName;
             m_depots = p_depots;
@@ -89,8 +89,8 @@ namespace PMap.LongProcess
                 File.Delete(logf);
 
 
-            bllRoute route = new bllRoute(m_conn.DB);
-            bllPlan plan = new bllPlan(m_conn.DB);
+            bllRoute route = new bllRoute(m_DB);
+            bllPlan plan = new bllPlan(m_DB);
 
             Dictionary<string, Dictionary<string, double>> dicAllTolls = route.GetAllTolls();
 
@@ -148,7 +148,7 @@ namespace PMap.LongProcess
 
                 nItemNo = 0;
                 Util.Log2File("START " + dep.DEP_CODE + "" + dep.DEP_NAME + " " +  dep.ZIP_NUM.ToString() + " " + dep.ZIP_CITY + " " + dep.DEP_ADRSTREET + " " + dep.DEP_ADRNUM, LOG_FILENAME);
-                DataTable dt = m_conn.DB.Query2DataTable(sSql, dep.ID);
+                DataTable dt = m_DB.Query2DataTable(sSql, dep.ID);
                 foreach (DataRow dr in dt.Rows)
                 {
                     nItemNo++;

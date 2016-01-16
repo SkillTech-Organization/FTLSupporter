@@ -24,8 +24,8 @@ namespace PMap.Common.PPlan
         {
             m_panel = p_panel;
             m_PPlanCommonVars = p_PPlanCommonVars;
-            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
+            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
         }
 
         public boPlanTour RemoveTourPoint(boPlanTourPoint p_TourPoint)
@@ -195,7 +195,7 @@ namespace PMap.Common.PPlan
         {
 
             boPlanTour refreshedTour = null;
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB.DB))
+            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
             {
                 try
                 {
@@ -205,7 +205,7 @@ namespace PMap.Common.PPlan
                 }
                 catch (Exception exc)
                 {
-                    PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                    PMapCommonVars.Instance.CT_DB.Rollback();
                     Util.ExceptionLog(exc);
                     throw new Exception(exc.Message);
                 }

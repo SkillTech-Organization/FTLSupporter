@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllRouteVis : bllBase
     {
-        public bllRouteVis(DBAccess p_DBA)
+        public bllRouteVis(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
         }

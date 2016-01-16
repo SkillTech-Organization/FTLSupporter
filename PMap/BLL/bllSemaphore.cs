@@ -36,7 +36,7 @@ namespace PMap.BLL
         public const int SMPLAN_CANCEL = -1;
         public const int SMPLAN_KILL = -2;
 
-        public bllSemaphore(DBAccess p_DBA)
+        public bllSemaphore(SQLServerAccess p_DBA)
             : base(p_DBA, "SEM_SEMAPHORE")
         {
         }
@@ -86,9 +86,9 @@ namespace PMap.BLL
 
 
                     sSQLStr = "delete  SEM_SEMAPHORE where SEM_CODE=? and  PLN_ID = ? and SEM_OWNER = ?";
-                    PMapCommonVars.Instance.CT_DB.DB.ExecuteNonQuery(sSQLStr,SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
+                    PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQLStr,SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
 
-                    int newPTP_ID = DBA.InsertEx("SEM_SEMAPHORE",
+                    int newPTP_ID = DBA.InsertPar("SEM_SEMAPHORE",
                         "SEM_CODE", SEM_CODE_PLAN,
                         "PLN_ID", p_PLN_ID,
                         "SEM_VALUE", SEMValues.SMV_LOCKED,
@@ -112,13 +112,13 @@ namespace PMap.BLL
                 try
                 {
                     String sSQLStr = "delete  SEM_SEMAPHORE where SEM_CODE=? and  PLN_ID = ? and SEM_OWNER = ?";
-                    PMapCommonVars.Instance.CT_DB.DB.ExecuteNonQuery(sSQLStr, SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
+                    PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQLStr, SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
 
                     return SEMValues.SMV_FREE;
                 }
                 catch (Exception e)
                 {
-                    PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                    PMapCommonVars.Instance.CT_DB.Rollback();
                     throw e;
                 }
             }

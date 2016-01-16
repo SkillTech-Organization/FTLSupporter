@@ -27,9 +27,9 @@ namespace PMap.Route
             bllDepot bllDepot;
             bllTruck bllTruck;
 
-            bllRouteVis = new bllRouteVis(PMapCommonVars.Instance.CT_DB.DB);
-            bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB.DB);
-            bllTruck = new bllTruck(PMapCommonVars.Instance.CT_DB.DB);
+            bllRouteVis = new bllRouteVis(PMapCommonVars.Instance.CT_DB);
+            bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB);
+            bllTruck = new bllTruck(PMapCommonVars.Instance.CT_DB);
 
             //Az utolsó elemre rárakom a finish-t
             p_lstRouteSection.Last().RouteSectionType = boXRouteSection.ERouteSectionType.Finish;

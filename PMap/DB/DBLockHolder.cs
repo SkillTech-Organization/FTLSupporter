@@ -8,15 +8,15 @@ using PMap.Common;
 
 namespace PMap.DB
 {
-    public class DBLockHolder : LockHolder<DBAccess>
+    public class DBLockHolder : LockHolder<SQLServerAccess>
     {
-        public DBLockHolder(DBAccess handle, int milliSecondTimeout)
+        public DBLockHolder(SQLServerAccess handle, int milliSecondTimeout)
             : base(handle, milliSecondTimeout)
         {
 
         }
 
-        public DBLockHolder(DBAccess handle)
+        public DBLockHolder(SQLServerAccess handle)
             : base(handle)
         {
         }

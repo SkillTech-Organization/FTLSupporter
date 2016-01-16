@@ -23,7 +23,7 @@ namespace PMap.LongProcess
         public bool Completed { get; set; }
         public List<dlgTourDetails.CTourDetails> TourDetails { get; set; }
         private boPlanTour m_Tour;
-        private SQLServerConnect m_conn = null;                 //A multithread miatt saját connection kell
+        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
 
         private bllRoute m_bllRoute;
         private bllSpeedProf m_bllSpeedProf;
@@ -34,10 +34,10 @@ namespace PMap.LongProcess
             Completed = true;
             TourDetails = new List<dlgTourDetails.CTourDetails>();
             m_Tour = p_Tour;
-            m_conn = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_conn.ConnectDB();
-            m_bllRoute = new bllRoute(m_conn.DB);
-            m_bllSpeedProf = new bllSpeedProf(m_conn.DB);
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_bllRoute = new bllRoute(m_DB);
+            m_bllSpeedProf = new bllSpeedProf(m_DB);
         }
 
         protected override void DoWork()

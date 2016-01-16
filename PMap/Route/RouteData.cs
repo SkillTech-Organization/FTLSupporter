@@ -67,8 +67,8 @@ namespace PMap.Route
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="p_conn"></param>
-        public void Init(SQLServerConnect p_conn, BaseProgressDialog p_form)
+        /// <param name="p_DBA"></param>
+        public void Init(SQLServerAccess p_DBA, BaseProgressDialog p_form)
         {
 
 
@@ -76,7 +76,7 @@ namespace PMap.Route
             {
                 if (!m_Initalized)
                 {
-                    m_bllRoute = new bllRoute(p_conn.DB);
+                    m_bllRoute = new bllRoute(p_DBA);
 
 
                     Edges = new Dictionary<string, boEdge>();
@@ -207,7 +207,7 @@ namespace PMap.Route
 
                     finally
                     {
-                        //             PMapCommonVars.Instance.CT_DB.DB.CloseQuery();
+                        //             PMapCommonVars.Instance.CT_DB.CloseQuery();
                     }
                     m_Initalized = true;
                 }

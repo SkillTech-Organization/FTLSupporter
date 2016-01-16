@@ -12,7 +12,7 @@ namespace PMap.BLL
 {
     public class bllZIP : bllBase
     {
-        public bllZIP(DBAccess p_DBA)
+        public bllZIP(SQLServerAccess p_DBA)
             : base(p_DBA, "ZIP_ZIPCODE")
         {
         }

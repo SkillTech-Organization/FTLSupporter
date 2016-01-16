@@ -47,8 +47,8 @@ namespace PMapTestApp
         {
             InitializeComponent();
             m_route = p_route;
-            m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllSpeedProf = new bllSpeedProf(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            m_bllSpeedProf = new bllSpeedProf(PMapCommonVars.Instance.CT_DB);
             m_sp = m_bllSpeedProf.GetSpeedValuesToDict();
             m_rdt = m_bllRoute.GetRoadTypesToDict();
             gridRouteDetails.DataSource = m_listItems;

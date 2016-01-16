@@ -23,7 +23,7 @@ namespace PMap.BLL
 
 
         private bllPlan m_bllPlan;
-        public bllRoute(DBAccess p_DBA)
+        public bllRoute(SQLServerAccess p_DBA)
             :base(p_DBA, "")
         {
             m_bllPlan = new bllPlan(p_DBA);
@@ -93,12 +93,8 @@ namespace PMap.BLL
                     try
                     {
                         DateTime dtStart = DateTime.Now;
-                        var sqlConn = DBA.Con as SqlConnection;
-                        var sqlTrans = DBA.Tran as SqlTransaction;
-
-
-
-                        SqlCommand command = new SqlCommand(null, sqlConn);
+  
+                        SqlCommand command = new SqlCommand(null, DBA.Conn);
                         command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
 
                         command.Parameters.Add(new SqlParameter("@NOD_ID_FROM", SqlDbType.Int, 0));
@@ -108,7 +104,7 @@ namespace PMap.BLL
                         command.Parameters.Add(new SqlParameter("@DST_EDGES", SqlDbType.VarBinary, Int32.MaxValue));
                         command.Parameters.Add(new SqlParameter("@DST_POINTS", SqlDbType.VarBinary, Int32.MaxValue));
 
-                        command.Transaction = sqlTrans;
+                        command.Transaction = DBA.Tran;
                         command.Prepare();
 
 
@@ -765,8 +761,8 @@ namespace PMap.BLL
             }
 
 
-            DbCommand sqlCmd;
-            sqlCmd = DBA.Con.CreateCommand();
+            SqlCommand sqlCmd;
+            sqlCmd = DBA.Conn.CreateCommand();
             sqlCmd.Parameters.Clear();
 
             string sWhereAddr = "";
@@ -841,6 +837,7 @@ namespace PMap.BLL
 
             //Teljes címre keresés
             sqlCmd.CommandText =  sSql + (sWhereAddr != "" || sWhereZipNum != "" || sWhereAddrNum != "" ? " where " + sWhereAddr + sWhereZipNum +  sWhereAddrNum : "");
+
             DBA.DA.SelectCommand = sqlCmd;
             DataSet d = new DataSet();
             DBA.DA.Fill(d);
@@ -879,7 +876,7 @@ namespace PMap.BLL
                     DBA.DA.SelectCommand = sqlCmd;
                     DataSet d3 = new DataSet();
                     DBA.DA.Fill(d3);
-                    DataTable dt3 = d3.Tables[0];
+                    DataTable dt3 =  d3.Tables[0];
                     string sDB_ZIP_NUM = "";
 
                     if (dt3.Rows.Count > 0)

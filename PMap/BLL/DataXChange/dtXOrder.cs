@@ -14,7 +14,7 @@ namespace PMap.BLL.DataXChange
     public class dtXOrder : bllBase
     {
 
-        public dtXOrder(DBAccess p_DBA)
+        public dtXOrder(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
         }

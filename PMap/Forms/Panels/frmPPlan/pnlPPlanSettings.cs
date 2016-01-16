@@ -39,8 +39,8 @@ namespace PMap.Forms.Panels.frmPPlan
         public void Init()
         {
             InitPanel();
-            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+            m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
             m_PlanEditFuncs = new PlanEditFuncs(this, m_PPlanCommonVars);
 
             tbZoom.Minimum = Global.DefMinZoom;

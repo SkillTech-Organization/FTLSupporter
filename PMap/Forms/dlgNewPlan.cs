@@ -28,8 +28,8 @@ namespace PMap.Forms
         {
             InitializeComponent();
 
-            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB.DB);
-            m_bllWarehouse = new bllWarehouse(PMapCommonVars.Instance.CT_DB.DB);
+            m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+            m_bllWarehouse = new bllWarehouse(PMapCommonVars.Instance.CT_DB);
             m_planParams = p_planParams;
 
             cmbWarehouse.DisplayMember = "WHS_NAME";
@@ -67,7 +67,7 @@ namespace PMap.Forms
 
         public override bool OKPressed()
         {
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB.DB))
+            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
             {
                 try
                 {
@@ -77,7 +77,7 @@ namespace PMap.Forms
                     if (ret.Status != boXNewPlan.EStatus.OK)
                     {
                         UI.Error(ret.ErrMessage);
-                        PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                        PMapCommonVars.Instance.CT_DB.Rollback();
                         return false;
                     }
                     if (ret.lstDepWithoutGeoCoding.Count > 0)
@@ -90,7 +90,7 @@ namespace PMap.Forms
                 }
                 catch (Exception exc)
                 {
-                    PMapCommonVars.Instance.CT_DB.DB.Rollback();
+                    PMapCommonVars.Instance.CT_DB.Rollback();
                     Util.ExceptionLog(exc);
                     throw new Exception(exc.Message);
                 }

@@ -15,7 +15,7 @@ namespace PMap.BLL.DataXChange
 {
     public class dtXDepot : bllBase
     {
-        public dtXDepot(DBAccess p_DBA)
+        public dtXDepot(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
         }

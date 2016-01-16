@@ -64,8 +64,8 @@ namespace PMapTestApp
                     InitPMap.startErrCode res = InitPMap.Start(true);
                     PMapCommonVars.Instance.ConnectToDB();
                     
-                    m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB.DB);
-                    m_bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB.DB);
+                    m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                    m_bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB);
 
                     switch (res)
                     {

@@ -16,7 +16,7 @@ namespace PMap.BLL
     public class bllPlan : bllBase
     {
 
-        public bllPlan(DBAccess p_DBA)
+        public bllPlan(SQLServerAccess p_DBA)
             : base(p_DBA, "PLN_PUBLICATEDPLAN")
         {
         }

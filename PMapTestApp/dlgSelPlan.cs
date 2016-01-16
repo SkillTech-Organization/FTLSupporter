@@ -18,10 +18,10 @@ namespace PMapTestApp
         public dlgSelPlan()
         {
             InitializeComponent();
-            SQLServerConnect db = new PMap.DB.Base.SQLServerConnect(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            db.ConnectDB();
-            DataTable dt = db.DB.Query2DataTable("select * from PLN_PUBLICATEDPLAN order by ID desc");
-            db.CloseDB();
+            SQLServerAccess db = new SQLServerAccess();
+            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            DataTable dt = db.Query2DataTable("select * from PLN_PUBLICATEDPLAN order by ID desc");
+            db.Close();
             gridPLN.DataSource = dt;
 
         }
