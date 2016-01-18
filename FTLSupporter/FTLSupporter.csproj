@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FTLResult.cs" />
+    <Compile Include="FTLRunningTask.cs" />
     <Compile Include="FTLTask.cs" />
     <Compile Include="FTLTruck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
