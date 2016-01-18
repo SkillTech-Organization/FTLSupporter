@@ -28,12 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
-            DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPMapTest));
+            this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.repositoryItemDateEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
+            this.repositoryItemSpinEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
+            this.repositoryItemSpinEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -59,19 +57,35 @@
             this.button22 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
             this.button24 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(repositoryItemCheckEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(repositoryItemDateEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(repositoryItemSpinEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(repositoryItemSpinEdit2)).BeginInit();
+            this.button25 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit2)).BeginInit();
             this.SuspendLayout();
+            // 
+            // repositoryItemCheckEdit1
+            // 
+            this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
+            // 
+            // repositoryItemDateEdit1
+            // 
+            this.repositoryItemDateEdit1.Name = "repositoryItemDateEdit1";
+            // 
+            // repositoryItemSpinEdit1
+            // 
+            this.repositoryItemSpinEdit1.Name = "repositoryItemSpinEdit1";
+            // 
+            // repositoryItemSpinEdit2
+            // 
+            this.repositoryItemSpinEdit2.Name = "repositoryItemSpinEdit2";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(8, 64);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Location = new System.Drawing.Point(6, 52);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(297, 42);
+            this.button1.Size = new System.Drawing.Size(223, 34);
             this.button1.TabIndex = 1;
             this.button1.Text = "Útvonal";
             this.button1.UseVisualStyleBackColor = true;
@@ -79,10 +93,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(8, 15);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Location = new System.Drawing.Point(6, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(297, 42);
+            this.button2.Size = new System.Drawing.Size(223, 34);
             this.button2.TabIndex = 0;
             this.button2.Text = "Kiválasztás";
             this.button2.UseVisualStyleBackColor = true;
@@ -90,10 +103,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(337, 15);
-            this.button3.Margin = new System.Windows.Forms.Padding(4);
+            this.button3.Location = new System.Drawing.Point(253, 12);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(297, 42);
+            this.button3.Size = new System.Drawing.Size(223, 34);
             this.button3.TabIndex = 2;
             this.button3.Text = "Lerakók";
             this.button3.UseVisualStyleBackColor = true;
@@ -101,10 +113,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(337, 64);
-            this.button4.Margin = new System.Windows.Forms.Padding(4);
+            this.button4.Location = new System.Drawing.Point(253, 52);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(297, 42);
+            this.button4.Size = new System.Drawing.Size(223, 34);
             this.button4.TabIndex = 3;
             this.button4.Text = "Lerakók és útvonal";
             this.button4.UseVisualStyleBackColor = true;
@@ -112,10 +123,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(8, 178);
-            this.button5.Margin = new System.Windows.Forms.Padding(4);
+            this.button5.Location = new System.Drawing.Point(6, 145);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(297, 42);
+            this.button5.Size = new System.Drawing.Size(223, 34);
             this.button5.TabIndex = 4;
             this.button5.Text = "Tervezés";
             this.button5.UseVisualStyleBackColor = true;
@@ -123,10 +133,9 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(337, 228);
-            this.button8.Margin = new System.Windows.Forms.Padding(4);
+            this.button8.Location = new System.Drawing.Point(253, 185);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(297, 42);
+            this.button8.Size = new System.Drawing.Size(223, 34);
             this.button8.TabIndex = 7;
             this.button8.Text = "Távolságszámítás új";
             this.button8.UseVisualStyleBackColor = true;
@@ -134,10 +143,9 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(8, 133);
-            this.button10.Margin = new System.Windows.Forms.Padding(4);
+            this.button10.Location = new System.Drawing.Point(6, 108);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(297, 42);
+            this.button10.Size = new System.Drawing.Size(223, 34);
             this.button10.TabIndex = 9;
             this.button10.Text = "PMap vizuális útvonalellenőrzés";
             this.button10.UseVisualStyleBackColor = true;
@@ -145,10 +153,9 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(337, 273);
-            this.button9.Margin = new System.Windows.Forms.Padding(4);
+            this.button9.Location = new System.Drawing.Point(253, 222);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(297, 42);
+            this.button9.Size = new System.Drawing.Size(223, 34);
             this.button9.TabIndex = 10;
             this.button9.Text = "Távolságszámítás új (ORDER)";
             this.button9.UseVisualStyleBackColor = true;
@@ -156,10 +163,9 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(8, 273);
-            this.button11.Margin = new System.Windows.Forms.Padding(4);
+            this.button11.Location = new System.Drawing.Point(6, 222);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(297, 42);
+            this.button11.Size = new System.Drawing.Size(223, 34);
             this.button11.TabIndex = 11;
             this.button11.Text = "Útdíjszámítás";
             this.button11.UseVisualStyleBackColor = true;
@@ -167,10 +173,9 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(665, 133);
-            this.button6.Margin = new System.Windows.Forms.Padding(4);
+            this.button6.Location = new System.Drawing.Point(499, 108);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(297, 42);
+            this.button6.Size = new System.Drawing.Size(223, 34);
             this.button6.TabIndex = 12;
             this.button6.Text = "Optimalizálás problémafájl";
             this.button6.UseVisualStyleBackColor = true;
@@ -178,10 +183,9 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(665, 178);
-            this.button7.Margin = new System.Windows.Forms.Padding(4);
+            this.button7.Location = new System.Drawing.Point(499, 145);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(297, 42);
+            this.button7.Size = new System.Drawing.Size(223, 34);
             this.button7.TabIndex = 13;
             this.button7.Text = "Optimalizálás eredmény felolvasása";
             this.button7.UseVisualStyleBackColor = true;
@@ -189,10 +193,9 @@
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(337, 133);
-            this.button12.Margin = new System.Windows.Forms.Padding(4);
+            this.button12.Location = new System.Drawing.Point(253, 108);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(297, 42);
+            this.button12.Size = new System.Drawing.Size(223, 34);
             this.button12.TabIndex = 14;
             this.button12.Text = "Útvonalszámító init";
             this.button12.UseVisualStyleBackColor = true;
@@ -200,10 +203,9 @@
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(337, 182);
-            this.button13.Margin = new System.Windows.Forms.Padding(4);
+            this.button13.Location = new System.Drawing.Point(253, 148);
             this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(297, 42);
+            this.button13.Size = new System.Drawing.Size(223, 34);
             this.button13.TabIndex = 15;
             this.button13.Text = "Údtíj export";
             this.button13.UseVisualStyleBackColor = true;
@@ -217,10 +219,9 @@
             // 
             // button14
             // 
-            this.button14.Location = new System.Drawing.Point(665, 228);
-            this.button14.Margin = new System.Windows.Forms.Padding(4);
+            this.button14.Location = new System.Drawing.Point(499, 185);
             this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(297, 42);
+            this.button14.Size = new System.Drawing.Size(223, 34);
             this.button14.TabIndex = 16;
             this.button14.Text = "Geokódolás teszt";
             this.button14.UseVisualStyleBackColor = true;
@@ -228,10 +229,9 @@
             // 
             // button15
             // 
-            this.button15.Location = new System.Drawing.Point(8, 338);
-            this.button15.Margin = new System.Windows.Forms.Padding(4);
+            this.button15.Location = new System.Drawing.Point(6, 275);
             this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(297, 42);
+            this.button15.Size = new System.Drawing.Size(223, 34);
             this.button15.TabIndex = 17;
             this.button15.Text = "Lerakóimport teszt";
             this.button15.UseVisualStyleBackColor = true;
@@ -239,10 +239,9 @@
             // 
             // button16
             // 
-            this.button16.Location = new System.Drawing.Point(337, 338);
-            this.button16.Margin = new System.Windows.Forms.Padding(4);
+            this.button16.Location = new System.Drawing.Point(253, 275);
             this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(297, 42);
+            this.button16.Size = new System.Drawing.Size(223, 34);
             this.button16.TabIndex = 18;
             this.button16.Text = "Járműimport teszt";
             this.button16.UseVisualStyleBackColor = true;
@@ -250,10 +249,9 @@
             // 
             // button18
             // 
-            this.button18.Location = new System.Drawing.Point(8, 388);
-            this.button18.Margin = new System.Windows.Forms.Padding(4);
+            this.button18.Location = new System.Drawing.Point(6, 315);
             this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(297, 42);
+            this.button18.Size = new System.Drawing.Size(223, 34);
             this.button18.TabIndex = 20;
             this.button18.Text = "Új terv létrehozás teszt";
             this.button18.UseVisualStyleBackColor = true;
@@ -261,10 +259,9 @@
             // 
             // button17
             // 
-            this.button17.Location = new System.Drawing.Point(337, 388);
-            this.button17.Margin = new System.Windows.Forms.Padding(4);
+            this.button17.Location = new System.Drawing.Point(253, 315);
             this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(297, 42);
+            this.button17.Size = new System.Drawing.Size(223, 34);
             this.button17.TabIndex = 19;
             this.button17.Text = "Menetlevél ellenőrzés teszt";
             this.button17.UseVisualStyleBackColor = true;
@@ -272,10 +269,9 @@
             // 
             // button19
             // 
-            this.button19.Location = new System.Drawing.Point(665, 338);
-            this.button19.Margin = new System.Windows.Forms.Padding(4);
+            this.button19.Location = new System.Drawing.Point(499, 275);
             this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(297, 42);
+            this.button19.Size = new System.Drawing.Size(223, 34);
             this.button19.TabIndex = 21;
             this.button19.Text = "Menetlevél ellenőrzés BATCH teszt";
             this.button19.UseVisualStyleBackColor = true;
@@ -283,10 +279,9 @@
             // 
             // button20
             // 
-            this.button20.Location = new System.Drawing.Point(665, 388);
-            this.button20.Margin = new System.Windows.Forms.Padding(4);
+            this.button20.Location = new System.Drawing.Point(499, 315);
             this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(297, 42);
+            this.button20.Size = new System.Drawing.Size(223, 34);
             this.button20.TabIndex = 22;
             this.button20.Text = "Megrendelésimport teszt";
             this.button20.UseVisualStyleBackColor = true;
@@ -294,10 +289,9 @@
             // 
             // button21
             // 
-            this.button21.Location = new System.Drawing.Point(8, 224);
-            this.button21.Margin = new System.Windows.Forms.Padding(4);
+            this.button21.Location = new System.Drawing.Point(6, 182);
             this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(297, 42);
+            this.button21.Size = new System.Drawing.Size(223, 34);
             this.button21.TabIndex = 23;
             this.button21.Text = "Tervezés új terv létrehozással";
             this.button21.UseVisualStyleBackColor = true;
@@ -305,10 +299,9 @@
             // 
             // button22
             // 
-            this.button22.Location = new System.Drawing.Point(665, 17);
-            this.button22.Margin = new System.Windows.Forms.Padding(4);
+            this.button22.Location = new System.Drawing.Point(499, 14);
             this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(297, 39);
+            this.button22.Size = new System.Drawing.Size(223, 32);
             this.button22.TabIndex = 24;
             this.button22.Text = "Parse encoding teszt";
             this.button22.UseVisualStyleBackColor = true;
@@ -316,10 +309,9 @@
             // 
             // button23
             // 
-            this.button23.Location = new System.Drawing.Point(8, 437);
-            this.button23.Margin = new System.Windows.Forms.Padding(4);
+            this.button23.Location = new System.Drawing.Point(6, 355);
             this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(297, 42);
+            this.button23.Size = new System.Drawing.Size(223, 34);
             this.button23.TabIndex = 25;
             this.button23.Text = "Terv lekérdezés";
             this.button23.UseVisualStyleBackColor = true;
@@ -327,21 +319,30 @@
             // 
             // button24
             // 
-            this.button24.Location = new System.Drawing.Point(337, 437);
-            this.button24.Margin = new System.Windows.Forms.Padding(4);
+            this.button24.Location = new System.Drawing.Point(253, 355);
             this.button24.Name = "button24";
-            this.button24.Size = new System.Drawing.Size(297, 42);
+            this.button24.Size = new System.Drawing.Size(223, 34);
             this.button24.TabIndex = 26;
             this.button24.Text = "Összes terv lekérdezése";
             this.button24.UseVisualStyleBackColor = true;
             this.button24.Click += new System.EventHandler(this.button24_Click);
- 
+            // 
+            // button25
+            // 
+            this.button25.Location = new System.Drawing.Point(499, 355);
+            this.button25.Name = "button25";
+            this.button25.Size = new System.Drawing.Size(223, 34);
+            this.button25.TabIndex = 27;
+            this.button25.Text = "FTL Supporter";
+            this.button25.UseVisualStyleBackColor = true;
+            this.button25.Click += new System.EventHandler(this.button25_Click);
             // 
             // frmPMapTest
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 524);
+            this.ClientSize = new System.Drawing.Size(747, 426);
+            this.Controls.Add(this.button25);
             this.Controls.Add(this.button24);
             this.Controls.Add(this.button23);
             this.Controls.Add(this.button22);
@@ -366,11 +367,15 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmPMapTest";
             this.Text = "PMAP teszt";
             this.Load += new System.EventHandler(this.frmPMapTest_Load);
-                      this.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit2)).EndInit();
+            this.ResumeLayout(false);
 
         }
 
@@ -402,6 +407,11 @@
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button24;
         private PMap.Controls.PropertyGridCtrl propertyGridCtrl1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit2;
+        private System.Windows.Forms.Button button25;
     }
 }
 

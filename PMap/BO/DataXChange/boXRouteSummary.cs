@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using PMap.Common;
 using PMap.BO;
 using PMap.BO.Base;
+using PMap.Common.Attrib;
 
 namespace PMap.BLL.DataXChange
 {

@@ -6,8 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using PMap.Localize;
 using System.Drawing;
 using System.ComponentModel;
-using PMap.Common;
 using PMap.BO.Base;
+using PMap.Common.Attrib;
 
 namespace PMap.BO.DataXChange
 {

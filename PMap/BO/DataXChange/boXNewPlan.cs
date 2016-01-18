@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using PMap.BO.Base;
-using PMap.Common;
+using PMap.Common.Attrib;
 
 namespace PMap.BO.DataXChange
 {

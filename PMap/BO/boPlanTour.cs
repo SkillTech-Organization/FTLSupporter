@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
-using PMap.Common;
+using PMap.Common.Attrib;
 
 namespace PMap.BO
 {

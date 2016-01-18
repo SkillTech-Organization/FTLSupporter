@@ -153,9 +153,6 @@
     <Reference Include="DevExpress.XtraVerticalGrid.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Itchin.Winforms.Controls.NavigationBar">
-      <HintPath>..\..\NyPlus\Libs\Itchin.Winforms.Controls.NavigationBar.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -294,6 +291,10 @@
       <Project>{735B55E9-0BB8-43E9-B3B7-959029EDE369}</Project>
       <Name>Animated Notify Icon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj">
+      <Project>{b4fe3066-f14f-4625-85bb-57ea97751a6e}</Project>
+      <Name>FTLSupporter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
       <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
       <Name>GMap.NET.Core</Name>
@@ -309,6 +310,10 @@
     <ProjectReference Include="..\VBInterface\VBInterface.csproj">
       <Project>{50AA2C7B-A6DA-4EB7-8316-9D87CAEBA9B7}</Project>
       <Name>VBInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WinFormsUI\WinFormsUI.csproj">
+      <Project>{c75532c4-765b-418e-b09b-46d36b2abdb1}</Project>
+      <Name>WinFormsUI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

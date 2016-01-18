@@ -245,8 +245,13 @@
     <Compile Include="BO\boWarehouse.cs" />
     <Compile Include="BO\DataXChange\boXDepot.cs" />
     <Compile Include="Common\ApplicationInfo.cs" />
+    <Compile Include="Common\Attrib\AttribUtils.cs" />
+    <Compile Include="Common\Attrib\DisplayNameAttributeX.cs" />
+    <Compile Include="Common\Attrib\EditorX.cs" />
+    <Compile Include="Common\Attrib\EvalBase.cs" />
+    <Compile Include="Common\Attrib\PropertyOrderX.cs" />
+    <Compile Include="Common\Attrib\ErrorIfAttrX.cs" />
     <Compile Include="Common\CSVParser.cs" />
-    <Compile Include="Common\CustomAttributes.cs" />
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\JSONHelper.cs" />
     <Compile Include="Common\LockHolder.cs" />

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using PMap.Localize;
-using PMap.Common;
 using PMap.BO.Base;
+using PMap.Common.Attrib;
 
 namespace PMap.BO.DataXChange
 {

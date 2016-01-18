@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.Common;
 using System.Reflection;
 using PMap.BO.Base;
+using PMap.Common.Attrib;
 
 namespace PMap.BO.DataXChange
 {

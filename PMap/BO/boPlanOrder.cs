@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using PMap.Markers;
 using System.Web.Script.Serialization;
-using PMap.Common;
+using PMap.Common.Attrib;
 
 namespace PMap.BO
 {

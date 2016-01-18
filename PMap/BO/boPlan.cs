@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.Common;
+using PMap.Common.Attrib;
 
 namespace PMap.BO
 {

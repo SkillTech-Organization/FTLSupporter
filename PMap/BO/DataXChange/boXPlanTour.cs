@@ -6,6 +6,7 @@ using PMap.BO.Base;
 using PMap.Common;
 using System.Web.Script.Serialization;
 using System.Drawing;
+using PMap.Common.Attrib;
 
 namespace PMap.BO.DataXChange
 {
@@ -99,6 +100,9 @@ namespace PMap.BO.DataXChange
 
         [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 27)]
         public double TollMultiplier { get; set; }
+
+        internal int NOD_ID_FROM { get; set; }
+        internal int NOD_ID_TO { get; set; }
 
     }
 }
