@@ -1,4 +1,5 @@
 ﻿using PMap.Common;
+using PMap.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

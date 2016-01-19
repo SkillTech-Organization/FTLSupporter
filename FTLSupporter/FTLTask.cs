@@ -1,5 +1,4 @@
-﻿using PMap.Common;
-using PMap.Common.Attrib;
+﻿using PMap.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -50,8 +49,8 @@ namespace FTLSupporter
         public DateTime StartFrom { get; set; }                              
 
         [DisplayNameAttributeX(Name = "Felrakás vége", Order = 6)]
-        [Required(ErrorMessage = "Kötelező mező:EndFrom")]
         [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnotherAndNotNull, "StartFrom", "A felrakás kezdete későbbi, mint a befejezése")]
+        [Required(ErrorMessage = "Kötelező mező:EndFrom")]
         public DateTime EndFrom { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 7)]

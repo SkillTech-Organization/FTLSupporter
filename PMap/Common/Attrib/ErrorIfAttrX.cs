@@ -155,6 +155,7 @@ namespace PMap.Common.Attrib
                 return this.m_typeId;
             }
         }
+ 
         public ErrorIfPropAttrX(EvalMode p_evalMode, String p_anotherPropName, string p_errMsg)
         {
             m_evalMode = p_evalMode;

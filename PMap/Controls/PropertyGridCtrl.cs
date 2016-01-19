@@ -8,9 +8,9 @@ using DevExpress.XtraEditors.Repository;
 using DevExpress.Utils;
 using DevExpress.XtraVerticalGrid.Rows;
 using System.Reflection;
-using PMap.Common;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using PMap.Common.Attrib;
 
 namespace PMap.Controls
 {

@@ -610,7 +610,7 @@ namespace PMapTestApp
                 Client = "Megbízó 1",
                 PartnerNameFrom = "Felrakó 1",
                 StartFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete reggel 6-tól
-                EndFrom = DateTime.Now.Date.AddHours(12),                   //Felrakás vége reggel 12-ig
+                EndFrom = DateTime.Now.Date.AddHours(2),                   //Felrakás vége reggel 12-ig
                 LatFrom = 47.244,                                           //Velenei tó környéke
                 LngFrom = 18.628,
                 PartnerNameTo = "Lerakó 1",
