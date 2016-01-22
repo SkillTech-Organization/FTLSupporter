@@ -434,7 +434,7 @@ namespace PMap.BLL
                              tOwned = (Util.getFieldValue<int>(r, "CRR_OWN") != 0 ? 1 : 0),
                              maxDistance = 10000000,
                              capId = boOpt.dicCapacityProfile[Util.getFieldValue<int>(r, "CPP_ID")].innerID,
-                             maxWorktime = 1140, //TODO:eredetileg ez van beégetve
+                             maxWorktime = PMapIniParams.Instance.TrkMaxWorkTime, 
                              earliestStart = (int)Math.Max(Util.getFieldValue<DateTime>(r, "AVAIL").TimeOfDay.TotalMinutes - boOpt.PLN_DATE_B.Date.Subtract(Util.getFieldValue<DateTime>(r, "AVAIL").Date).TotalMinutes, boOpt.PLN_DATE_B.TimeOfDay.TotalMinutes),
                              latestStart = (int)Math.Max(Math.Max(Util.getFieldValue<DateTime>(r, "AVAIL").TimeOfDay.TotalMinutes - boOpt.PLN_DATE_B.Date.Subtract(Util.getFieldValue<DateTime>(r, "AVAIL").Date).TotalMinutes, boOpt.PLN_DATE_B.TimeOfDay.TotalMinutes),
                                             boOpt.PLN_DATE_E.TimeOfDay.TotalMinutes + boOpt.PLN_DATE_E.Date.Subtract(boOpt.PLN_DATE_B.Date).TotalMinutes),

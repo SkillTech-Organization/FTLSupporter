@@ -72,6 +72,8 @@ namespace PMap.Common
         public string PlanOK { get; private set; }
         public string PlanErr { get; private set; }
         public int OptimizeTimeOutSec { get; private set; }
+        public int TrkMaxWorkTime { get; private set; }
+
 
 
         public bool UseProxy { get; private set; }
@@ -257,6 +259,10 @@ namespace PMap.Common
             OptimizeTimeOutSec = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniOptimizeTimeOutSec));
             if (OptimizeTimeOutSec < 60)
                 OptimizeTimeOutSec = 60;
+
+            TrkMaxWorkTime = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniTrkMaxWorkTime));
+            if (TrkMaxWorkTime == 0)
+                TrkMaxWorkTime = 1440;
 
 
             string sUseProxy = ini.ReadString(Global.iniProxy, Global.UseProxy);
