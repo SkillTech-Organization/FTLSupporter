@@ -585,7 +585,8 @@ namespace PMap.BLL
                 if (SERVE > Util.getFieldValue<int>(dr, "DEP_CLOSE"))
                     SERVE = Util.getFieldValue<int>(dr, "DEP_CLOSE");
                 ord.orMaxTime = SERVE;
-
+                if (ord.orMinTime > ord.orMaxTime)
+                    Console.WriteLine("itt tartok");
                 ord.client = boOpt.dicClient[Util.getFieldValue<int>(dr, "DEP_ID")];
                 boOpt.dicOrder.Add(ord.ID, ord);
 
