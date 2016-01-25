@@ -19,6 +19,7 @@ using PMap.Common;
 using PMap.BLL.DataXChange;
 using PMap.Common.PPlan;
 using PMap.BO.DataXChange;
+using FTLSupporter;
 
 namespace PMapTestApp
 {
@@ -610,7 +611,7 @@ namespace PMapTestApp
                 Client = "Megbízó 1",
                 PartnerNameFrom = "Felrakó 1",
                 StartFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete reggel 6-tól
-                EndFrom = DateTime.Now.Date.AddHours(2),                   //Felrakás vége reggel 12-ig
+                EndFrom = DateTime.Now.Date.AddHours(12),                   //Felrakás vége reggel 12-ig
                 LatFrom = 47.244,                                           //Velenei tó környéke
                 LngFrom = 18.628,
                 PartnerNameTo = "Lerakó 1",
@@ -672,7 +673,26 @@ namespace PMapTestApp
             lstTrk.Add( trk1);
             lstTrk.Add( trk2);
             lstTrk.Add( trk3);
-            List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk, "", dbConf);
+
+            FTLRunningTask rtsk1 = new FTLRunningTask()
+            {
+                RegNo = "AAA-111",
+                IsOneWay = true,
+                IsRunningTask = true,
+                TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
+                TimeTo = DateTime.Now.Date.AddHours(18),                   //10:00
+                Finish = DateTime.Now.Date.AddHours(19),                   //10:00
+                LatFrom = 47.665,                                           //valahol Győr környéke
+                LngFrom = 17.668,
+                TimeCurr = DateTime.Now.Date.AddHours(11),                 //10:00
+                LatCurr = 47.500,                                          //valahol Tatabánya környéke
+                LngCurr = 18.558,
+            };
+
+            List<FTLSupporter.FTLRunningTask> lstRTsk = new List<FTLSupporter.FTLRunningTask>();
+            lstRTsk.Add( rtsk1);
+            
+            List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk, lstRTsk, "", dbConf);
             dlgImportResult ir = new dlgImportResult();
 
             int i = 1;

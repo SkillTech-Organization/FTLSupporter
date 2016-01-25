@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dlgTourDetails));
             this.gridTourDetails = new DevExpress.XtraGrid.GridControl();
             this.gridViewTourDetails = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemImageComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
-            this.imlTypes = new System.Windows.Forms.ImageList();
+            this.imlTypes = new System.Windows.Forms.ImageList(this.components);
             this.colText = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDist = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colSpeed = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -155,6 +156,8 @@
             this.colDist.FieldName = "Dist";
             this.colDist.Name = "colDist";
             this.colDist.OptionsColumn.AllowEdit = false;
+            this.colDist.SummaryItem.DisplayFormat = "{0}";
+            this.colDist.SummaryItem.SummaryType = DevExpress.Data.SummaryItemType.Sum;
             this.colDist.Visible = true;
             this.colDist.VisibleIndex = 2;
             this.colDist.Width = 80;

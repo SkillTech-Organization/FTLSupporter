@@ -49,8 +49,7 @@ namespace FTLSupporter
         public DateTime StartFrom { get; set; }                              
 
         [DisplayNameAttributeX(Name = "Felrakás vége", Order = 6)]
-        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnotherAndNotNull, "StartFrom", "A felrakás kezdete későbbi, mint a befejezése")]
-        [Required(ErrorMessage = "Kötelező mező:EndFrom")]
+        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "StartFrom", "A felrakás kezdete későbbi, mint a befejezése")]
         public DateTime EndFrom { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 7)]

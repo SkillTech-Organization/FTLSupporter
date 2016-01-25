@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="errProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>164, 17</value>
+    <value>17, 17</value>
   </metadata>
   <metadata name="tabSchemeProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>123, 17</value>
   </metadata>
   <metadata name="imlTypes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>363, 17</value>
@@ -131,7 +131,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACM
-        CAAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        CAAAAk1TRnQBSQFMAgEBAgEAARQBAAEUAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAARADAAEBAQABCAYAAQQYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -177,36 +177,35 @@
   <data name="printToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAi1JREFUOE+1k/9P
-        UlEYxv2nWK2tVlttGmpltrCcEQ1XUjSMaUHJNLIpNcnCragplBvUoC/okJhZLG92ySUpU8RNICdIhAio
-        EF+e7r1UZMDW1jrb+8t7z/N83vucc8rK/sdyeYIwvpopWYbRaZTk0uIx0o0/V/JbGt7lVTwxT6CKKylt
-        oLd8xGYihS/hKGz2WaaeWUnoTATsMz7UCztx9Ex7cYN3jkUQU4tb4DR5LZaAcyEAg4VE5YlLMFmJQoNQ
-        JA61gUA6k4XPH9pCN9s+gZz2oq5Jjlq+DDfUz3Fba86bOGY9jHiUdDF0mvqT7A/F4fKEcE9nZf5d1jOI
-        B4ZxVJ2U5gyc8z70akegMX3AXb0ND1+8R6/GgvZbeog61OA2K3CA2lxR34JjZ69B2T8EsVyN/Q0XcwY3
-        B14iGk8UpE43UukMNqhA6QyC4Q0srcQg7dagsbWHmuDHScj7jDC9nsJTqx0a4xjuaIfRqXoMSXc/hG0q
-        8C4owGnqwEGeFOXHxThH9eoEV7G7VpiboE2pK0qnm9H1JLz+NUzOBfHWEcAQsQSuqAuVDa1gVZzKGUgU
-        jwoMqAzxNZbC3Od1jDvDYPdth+7NCpP8Yf4V7KoR5A1arg8gmQIoGMLxLJYjWSwEMphwb2J4MoZB2yqU
-        LBZUIxHGYB9HlBfTE4jl9+GmBPTHv6lfo//+GGoaZajmXQabumXl1HHt5TRjz5Hz2HlIgB3Vp7GNzWeo
-        RcX/+pq/AwHYL0leVl8fAAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIpSURBVDhPtZL/T1JRGMb5p1itrVZbbRpqZbawnBENV1I0
+        jGlByTSyJTXJwq2oKZQb1KAv6JCYWSxvBrkkZUq4CeQEiRABFeLL072Xa0zRra31bO8v57zP5znnPYf1
+        X+TxhWF6O7VtGYcnwbSWijKPOLzYrPSvLPwLS3huGUMlT7o9wGD9grVUBj+icdid03S9tDmgNxNwTgVQ
+        J+rA8XNtWwM+uuZATMwxmQVRycuJFNyzIRitDlScugKzjSgFRGJJaIwEsrk8AsHIhnSL/Ssck37UNipQ
+        I5DjtuYV7uksRYhr2kebhx2eP6nrycFIEh5fBA/1Nvru8q5+PDaOovK0rABwfwugWzcErfkzHhjsePL6
+        E7q1VrTdNUDcrgGvSYlDZHN5XTNOnL8BVe8AJAoNDtZfLgDu9L1BPJmikzcrk81hlRwodZJwdBXziwnI
+        OrVoaOkiT8C8hKLHBPO7CbywOaE1jeC+bhAd6meQdvZC1KoG/5IS3MZ2HObLUHZSggvkWq3wOvbWiAqA
+        VpWeyStVfCUNf3AZ4zNhfHCFMEDMgye+hYr6FrDLzxQAUuVTpr0ocn74mchg5vsKRt1RcHp2Qv9+kZ78
+        UcE17KkWFgHNN/uQzgBkGKLJPBZiecyGchjzrmFwPIF++xJUbDbUQzEacIArLpopSRSP4CUN1Obf1Abz
+        uqob5KjiXwWH/GVl5HPt5zZh37GL2H1EiF1VZ7GDI6CNW5r/TSzWbwHYL0mKJ5czAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="excelToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         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
-        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
+        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
+        LhAIBL8ByxmhJDO9TtAAAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="openExcel.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

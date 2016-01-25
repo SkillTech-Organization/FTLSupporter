@@ -52,7 +52,7 @@ namespace PMap.Common.Attrib
 
         private object m_constValue;
         private object[] m_constValues;
-
+        
         private object m_typeId = new object();
         public override object TypeId
         {
@@ -61,7 +61,7 @@ namespace PMap.Common.Attrib
                 return this.m_typeId;
             }
         }
-
+        
         public ErrorIfConstAttrX(EvalMode p_evalMode, String p_constValues, string p_errMsg)
         {
             m_evalMode = p_evalMode;

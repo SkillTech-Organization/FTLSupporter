@@ -48,7 +48,9 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "Aktuális lng", Order = 9)]
         public double LngCurr { get; set; }
-    
+
+        internal int NOD_ID_CURR { get; set; }
+
 
     }
 }

@@ -30,7 +30,7 @@ namespace PMap.Common
             //Annotációk alapján levalidáljuk az input tartalmát
             var context = new ValidationContext(p_obj, serviceProvider: null, items: null);
             var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(p_obj, context, results);
+            var isValid = Validator.TryValidateObject(p_obj, context, results, true);
             if (!isValid)
             {
 

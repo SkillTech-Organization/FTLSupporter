@@ -13,10 +13,20 @@ namespace PMap.Common.Attrib
         {
             string sStr = "";
 
-            if (o != null)
-                sStr = o.ToString();
+            if (o.GetType() == typeof(DateTime))
+            {
+                if (o != null)
+                    sStr = ((DateTime)(o)).ToString("yyyy.MM.dd HH:mm:ss");
+                else
+                    sStr = "0000.00.00 00:00:00";
+            }
             else
-                sStr = "";
+            {
+                if (o != null)
+                    sStr = o.ToString();
+                else
+                    sStr = "";
+            }
             return sStr;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using PMap.BLL;
+using PMap.BO;
 using PMap.Common;
 using PMap.DB.Base;
 using System;
@@ -12,12 +13,11 @@ namespace FTLSupporter
     public static class FTLInterface
     {
 
-        public static List<FTLResult> FTLSupport(FTLTask p_Task, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf)
+        public static List<FTLResult> FTLSupport(FTLTask p_Task, List<FTLTruck> p_TruckList, List<FTLRunningTask> p_RunningTaskList, string p_iniPath, string p_dbConf)
         {
 
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
 
-            
             bool bValid = true;
             List<FTLResult> result = new List<FTLResult>();
 
@@ -63,6 +63,30 @@ namespace FTLSupporter
                 }
             }
 
+            foreach (FTLRunningTask rtsk in p_RunningTaskList)
+            {
+                List<ObjectValidator.ValidationError> trkErros = ObjectValidator.ValidateObject(rtsk);
+                if (trkErros.Count != 0)
+                {
+                    bValid = false;
+                    int item = 0;
+                    foreach (var err in trkErros)
+                    {
+                        FTLResult itemRes = new FTLResult()
+                        {
+                            Object = "RUNNINGTASK",
+                            Item = item++,
+                            Field = err.Field,
+                            Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
+                            Message = err.Message
+
+                        };
+                        result.Add(itemRes);
+                    }
+                }
+            }
+
+
             if (bValid)
             {
                 SQLServerAccess DB;
@@ -70,14 +94,56 @@ namespace FTLSupporter
                 DB = new SQLServerAccess();
                 DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
                 bllRoute route = new bllRoute(DB);
-                //1.Szállítási feladat nod ID-k meghatározása
-                p_Task.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatFrom, p_Task.LngFrom));
-                p_Task.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatTo, p_Task.LngTo));
-                List<FTLTruck> lstTrucks = p_TruckList.Where(x => ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 &&
+
+                
+                
+                //1. Szóbajöhető járművek meghatározása
+                //  1.1: Ha ki van töltve, mely típusú járművek szállíthatják, a megfelelő típusú járművek levállogatása
+                //  1.2: Szállíthatja-e jármű az árutípust?
+                //  1.3: Járműkapacitás megfelelő ?
+                //  1.4: A felrakás vége előtt rendelkezésre áll-e (a felrakási időt most nem vesszük figyelembe)
+                //  1.5: Mely járműveknek nincsen feladata a kiindulási (felrakodás végző) és érkezési (lerakodás kezdő) időablakok között. 
+                List<FTLTruck> lstTrucks = p_TruckList.Where(x => (p_Task.TruckTypes.Length >= 0 ?  ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
                                                               ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
                                                               x.CapacityWeight >= p_Task.Weight &&
-                                                              x.Available <= p_Task.EndFrom).ToList();
+                                                              x.Available <= p_Task.EndFrom &&
+                                                              (p_RunningTaskList.FirstOrDefault(r => r.RegNo==x.RegNo)==null ||
+                                                               p_RunningTaskList.FirstOrDefault( r => r.RegNo==x.RegNo && x.Available ))
+                                                             ).ToList();
 
+
+                //2. A felhasználható futó túraadatok levállogatása
+                //  2.1:Csak azok a futó túraadatok szükésgesek, amelyhez tartozó járművek át lettek adva
+                //  2.2:Az aktuális ideje korábbi, mint a szállítási feladat befejezőideje
+                List<FTLRunningTask> lstRTask = p_RunningTaskList.Where(x => lstTrucks.FirstOrDefault(t => t.RegNo == x.RegNo) != null &&
+                                                            x.TimeCurr < p_Task.EndTo).ToList();
+
+                //
+                // Ügyelni kell nem csak a tervezett, hanem a tényleges időpontokra is.
+                lstTrucks = lstTrucks.Where(x => (p_Task.TruckTypes.Length >= 0 ? ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
+                                                       ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
+                                                       x.CapacityWeight >= p_Task.Weight &&
+                                                       x.Available <= p_Task.EndFrom).ToList();
+         
+                
+ 
+
+                //3.nod ID-k meghatározása
+                //  3.1:Szállítási feladatok
+                p_Task.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatFrom, p_Task.LngFrom));
+                p_Task.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatTo, p_Task.LngTo));
+
+                //  3.2:Futó túrainformációk
+                foreach (FTLRunningTask rtsk in lstRTask)
+                {
+                    rtsk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatCurr, rtsk.LngCurr));
+                }
+
+
+
+
+                var x1 = lstTrucks.FirstOrDefault(t => t.RegNo == "AAA-111");
+                var x2 = lstTrucks.FirstOrDefault(t => t.RegNo == "AAA-111xcx");
 
 
                 Console.WriteLine(lstTrucks.Count);                                            
