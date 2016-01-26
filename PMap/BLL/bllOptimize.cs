@@ -573,7 +573,9 @@ namespace PMap.BLL
                 ord.canCut = Util.getFieldValue<int>(dr, "CTP_VALUE") == Global.CTP_VALUE_DRY ? 1 : 0;
 
                 //Kiszolgálási idõ (10 kg-ra van megadva)
-                ord.orServiceTime = (int)Math.Max(Util.getFieldValue<int>(dr, "DEP_SRVTIME") + Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)), 1);
+//2016.01.26, SzL: A fix kiszolgálási időt nem szabad itt átadni
+//                ord.orServiceTime = (int)Math.Max(Util.getFieldValue<int>(dr, "DEP_SRVTIME") + Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)), 1);
+                ord.orServiceTime = (int)Math.Max(Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)), 1);
 
                 //Idõablak
                 int SERVS = Math.Max(Util.getFieldValue<int>(dr, "ORD_SERVS"), Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") : boOpt.MinTime);
@@ -586,7 +588,7 @@ namespace PMap.BLL
                     SERVE = Util.getFieldValue<int>(dr, "DEP_CLOSE");
                 ord.orMaxTime = SERVE;
                 if (ord.orMinTime > ord.orMaxTime)
-                    Console.WriteLine("itt tartok");
+                    Console.WriteLine("Ezt kezelni kell");
                 ord.client = boOpt.dicClient[Util.getFieldValue<int>(dr, "DEP_ID")];
                 boOpt.dicOrder.Add(ord.ID, ord);
 
