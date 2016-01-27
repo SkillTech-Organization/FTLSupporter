@@ -94,39 +94,26 @@ namespace FTLSupporter
                 DB = new SQLServerAccess();
                 DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
                 bllRoute route = new bllRoute(DB);
-
                 
                 
                 //1. Szóbajöhető járművek meghatározása
                 //  1.1: Ha ki van töltve, mely típusú járművek szállíthatják, a megfelelő típusú járművek levállogatása
                 //  1.2: Szállíthatja-e jármű az árutípust?
                 //  1.3: Járműkapacitás megfelelő ?
-                //  1.4: A felrakás vége előtt rendelkezésre áll-e (a felrakási időt most nem vesszük figyelembe)
-                //  1.5: Mely járműveknek nincsen feladata a kiindulási (felrakodás végző) és érkezési (lerakodás kezdő) időablakok között. 
+                //  1.4: A felrakás megkezdése előtt rendelkezésre áll-e 
+                //       1.4.1 : Elérhető a rakodás megkezdésekor
+                //       1.4.2 : Nincs a szállítási feladat megkezdésekor futó szállítási feladata
+                //
                 List<FTLTruck> lstTrucks = p_TruckList.Where(x => (p_Task.TruckTypes.Length >= 0 ?  ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
-                                                              ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
-                                                              x.CapacityWeight >= p_Task.Weight &&
-                                                              x.Available <= p_Task.EndFrom &&
-                                                              (p_RunningTaskList.FirstOrDefault(r => r.RegNo==x.RegNo)==null ||
-                                                               p_RunningTaskList.FirstOrDefault( r => r.RegNo==x.RegNo && x.Available ))
-                                                             ).ToList();
-
+                                                                ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
+                                                                x.CapacityWeight >= p_Task.Weight &&
+                                                                x.Available <= p_Task.StartFrom &&
+                                                                p_RunningTaskList.FirstOrDefault(r => r.RegNo == x.RegNo && r.TimeFinish < p_Task.StartFrom) == null).ToList();
 
                 //2. A felhasználható futó túraadatok levállogatása
                 //  2.1:Csak azok a futó túraadatok szükésgesek, amelyhez tartozó járművek át lettek adva
-                //  2.2:Az aktuális ideje korábbi, mint a szállítási feladat befejezőideje
-                List<FTLRunningTask> lstRTask = p_RunningTaskList.Where(x => lstTrucks.FirstOrDefault(t => t.RegNo == x.RegNo) != null &&
-                                                            x.TimeCurr < p_Task.EndTo).ToList();
+                List<FTLRunningTask> lstRTask = p_RunningTaskList.Where(x => lstTrucks.FirstOrDefault(t => t.RegNo == x.RegNo) != null).ToList();
 
-                //
-                // Ügyelni kell nem csak a tervezett, hanem a tényleges időpontokra is.
-                lstTrucks = lstTrucks.Where(x => (p_Task.TruckTypes.Length >= 0 ? ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
-                                                       ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
-                                                       x.CapacityWeight >= p_Task.Weight &&
-                                                       x.Available <= p_Task.EndFrom).ToList();
-         
-                
- 
 
                 //3.nod ID-k meghatározása
                 //  3.1:Szállítási feladatok
@@ -139,6 +126,7 @@ namespace FTLSupporter
                     rtsk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatCurr, rtsk.LngCurr));
                 }
 
+                //4. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
 
 
 

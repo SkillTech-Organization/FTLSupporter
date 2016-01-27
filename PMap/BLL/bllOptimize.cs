@@ -277,7 +277,7 @@ namespace PMap.BLL
 
             innerID = 1;
 
-            //A dicClient-ben a raktárak nehatív értékű kulccsal vannak felvéve
+            //A dicClient-ben a raktárak negatív értékű kulccsal vannak felvéve
             boOpt.dicClient =
                     (from r in dt.AsEnumerable()
                      select new

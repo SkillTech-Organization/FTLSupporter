@@ -20,17 +20,17 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Futó túra?", Order = 3)]
         public bool IsRunningTask { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás (tervezett)időpontja", Order = 3)]
+        [DisplayNameAttributeX(Name = "Indulás (tervezett) időpontja", Order = 3)]
         [Required(ErrorMessage = "Kötelező mező:TimeFrom")]
         public DateTime TimeFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Lerakás (tervezett)időpontja", Order = 3)]
+        [DisplayNameAttributeX(Name = "Lerakás (tervezett) időpontja", Order = 3)]
         [Required(ErrorMessage = "Kötelező mező:TimeTo")]
         public DateTime TimeTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Befejezés (tervezett)időpontja", Order = 3)]
+        [DisplayNameAttributeX(Name = "Befejezés (tervezett) időpontja", Order = 3)]
         [Required(ErrorMessage = "Kötelező mező:Finish")]
-        public DateTime Finish { get; set; }
+        public DateTime TimeFinish { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 8)]
         [Required(ErrorMessage = "Kötelező mező:LatFrom")]
@@ -40,6 +40,14 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:LngFrom")]
         public double LngFrom { get; set; }
 
+        [DisplayNameAttributeX(Name = "Lerakó lat", Order = 8)]
+        [Required(ErrorMessage = "Kötelező mező:LatTo")]
+        public double LatTo { get; set; }
+
+        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 9)]
+        [Required(ErrorMessage = "Kötelező mező:LngTo")]
+        public double LngTo { get; set; }
+        
         [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 8)]
         public DateTime TimeCurr { get; set; }
 
@@ -49,6 +57,8 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Aktuális lng", Order = 9)]
         public double LngCurr { get; set; }
 
+        internal int NOD_ID_FROM { get; set; }
+        internal int NOD_ID_TO { get; set; }
         internal int NOD_ID_CURR { get; set; }
 
 

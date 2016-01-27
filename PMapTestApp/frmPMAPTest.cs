@@ -681,7 +681,7 @@ namespace PMapTestApp
                 IsRunningTask = true,
                 TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
                 TimeTo = DateTime.Now.Date.AddHours(18),                   //10:00
-                Finish = DateTime.Now.Date.AddHours(19),                   //10:00
+                TimeFinish = DateTime.Now.Date.AddHours(19),                   //10:00
                 LatFrom = 47.665,                                           //valahol Győr környéke
                 LngFrom = 17.668,
                 TimeCurr = DateTime.Now.Date.AddHours(11),                 //10:00
