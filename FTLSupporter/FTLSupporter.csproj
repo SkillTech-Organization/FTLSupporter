@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FTLCalcRouteProcess.cs" />
     <Compile Include="FTLInterface.cs" />
     <Compile Include="FTLResult.cs" />
     <Compile Include="FTLRunningTask.cs" />

@@ -123,7 +123,9 @@ namespace FTLSupporter
                 //  3.2:Futó túrainformációk
                 foreach (FTLRunningTask rtsk in lstRTask)
                 {
+                    rtsk.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatFrom, rtsk.LngFrom));
                     rtsk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatCurr, rtsk.LngCurr));
+                    rtsk.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatTo, rtsk.LngTo));
                 }
 
                 //4. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt

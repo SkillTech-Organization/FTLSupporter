@@ -68,18 +68,20 @@ namespace PMap.Route
         /// 
         /// </summary>
         /// <param name="p_DBA"></param>
-        public void Init(SQLServerAccess p_DBA, BaseProgressDialog p_form)
+        public void Init(SQLServerAccess p_DBA, BaseProgressDialog p_form, bool p_Forced = false)
         {
 
 
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
-                if (!m_Initalized)
+                if (!m_Initalized || p_Forced)
                 {
                     m_bllRoute = new bllRoute(p_DBA);
 
 
                     Edges = new Dictionary<string, boEdge>();
+                    NodePositions = null;
+
                     if (p_form != null)
                     {
                         p_form.SetInfoText(PMapMessages.M_ROUTEDT_EDGES); //TODO:Message/be

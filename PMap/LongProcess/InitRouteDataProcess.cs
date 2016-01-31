@@ -26,7 +26,7 @@ namespace PMap.LongProcess
 
         protected override void DoWork()
         {
-            RouteData.Instance.Init(m_DB, this.ProcessForm);
+            RouteData.Instance.Init(m_DB, this.ProcessForm, true);
 
         }
     }
