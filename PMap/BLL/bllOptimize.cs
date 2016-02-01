@@ -310,7 +310,7 @@ namespace PMap.BLL
                              innerID = innerID++,
                              ID = Util.getFieldValue<int>(r, "ID"),
                              cap1 = Convert.ToInt32(Math.Ceiling(Util.getFieldValue<double>(r, "CPP_LOADQTY") * Global.csQTY_DEC)),
-                             cap2 = Util.getFieldValue<int>(r, "CPP_LOADVOL"),              //dm3-ban értendő, nem szorozzuk fel
+                             cap2 = Util.getFieldValue<int>(r, "CPP_LOADVOL"),              //m3-ban értendő, nem szorozzuk fel
                              cap3 = 0,
                              cap4 = 0,
                              cap5 = 0
@@ -561,7 +561,7 @@ namespace PMap.BLL
                     ord.dQty *= -1;
                 }
                 ord.orLoad1 = Convert.ToInt32(ord.dQty * Global.csQTY_DEC);
-                ord.orLoad2 = Convert.ToInt32(ord.dVolume * Global.csVolumeMultiplier);      //dm3-->m3 konverzió
+                ord.orLoad2 = Convert.ToInt32(ord.dVolume * PMapIniParams.Instance.OrdVolumeMultiplier);      //dm3-->m3 konverzió
 
                 ord.mb = 0;
                 ord.prType = Util.getFieldValue<int>(dr, "CTP_VALUE");
@@ -575,7 +575,7 @@ namespace PMap.BLL
                 //Kiszolgálási idõ (10 kg-ra van megadva)
 //2016.01.26, SzL: A fix kiszolgálási időt nem szabad itt átadni
 //                ord.orServiceTime = (int)Math.Max(Util.getFieldValue<int>(dr, "DEP_SRVTIME") + Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)), 1);
-                ord.orServiceTime = (int)Math.Max(Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)), 1);
+                ord.orServiceTime = (int)Math.Round(Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)));
 
                 //Idõablak
                 int SERVS = Math.Max(Util.getFieldValue<int>(dr, "ORD_SERVS"), Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") : boOpt.MinTime);
@@ -1064,13 +1064,22 @@ namespace PMap.BLL
                                     //megrendelés feleosztás esetén arányosítunk
 
                                     double dVolume = Math.Round(ord.dVolume * ord.orLoad1 / dLoad1, 2); // A térfogat 2 dec. jegyig értelmezett
+
+                                    /*
                                     double dQty = Math.Ceiling(ord.dQty * ord.orLoad1 / dLoad1);
                                     double dQty1 = Math.Ceiling(ord.dQty1 * ord.orLoad1 / dLoad1);
                                     double dQty2 = Math.Ceiling(ord.dQty2 * ord.orLoad1 / dLoad1);
                                     double dQty3 = Math.Ceiling(ord.dQty3 * ord.orLoad1 / dLoad1);
                                     double dQty4 = Math.Ceiling(ord.dQty4 * ord.orLoad1 / dLoad1);
                                     double dQty5 = Math.Ceiling(ord.dQty5 * ord.orLoad1 / dLoad1);
+                                    */
 
+                                    double dQty = Math.Round(ord.dQty * ord.orLoad1 / dLoad1, 2);
+                                    double dQty1 = Math.Round(ord.dQty1 * ord.orLoad1 / dLoad1, 2);
+                                    double dQty2 = Math.Round(ord.dQty2 * ord.orLoad1 / dLoad1, 2);
+                                    double dQty3 = Math.Round(ord.dQty3 * ord.orLoad1 / dLoad1, 2);
+                                    double dQty4 = Math.Round(ord.dQty4 * ord.orLoad1 / dLoad1, 2);
+                                    double dQty5 = Math.Round(ord.dQty5 * ord.orLoad1 / dLoad1, 2);
 
                                     int TOD_ID = ple.CreatePlanOrder(boOpt.PLN_ID, ord.ID,
                                                     dQty, dQty1, dQty2, dQty3, dQty4, dQty5, dVolume,

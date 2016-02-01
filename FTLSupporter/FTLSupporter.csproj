@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FTLCalcRouteProcess.cs" />
+    <Compile Include="FTLCalcTour.cs" />
     <Compile Include="FTLInterface.cs" />
+    <Compile Include="FTLMessages.cs" />
     <Compile Include="FTLResult.cs" />
     <Compile Include="FTLRunningTask.cs" />
     <Compile Include="FTLTask.cs" />
@@ -54,6 +57,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Animated Notify Icon\Animated Notify Icon.csproj">
+      <Project>{735b55e9-0bb8-43e9-b3b7-959029ede369}</Project>
+      <Name>Animated Notify Icon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
       <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
       <Name>GMap.NET.Core</Name>

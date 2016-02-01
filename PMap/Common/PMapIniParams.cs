@@ -73,6 +73,7 @@ namespace PMap.Common
         public string PlanErr { get; private set; }
         public int OptimizeTimeOutSec { get; private set; }
         public int TrkMaxWorkTime { get; private set; }
+        public int OrdVolumeMultiplier { get; private set; }
 
 
 
@@ -263,6 +264,11 @@ namespace PMap.Common
             TrkMaxWorkTime = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniTrkMaxWorkTime));
             if (TrkMaxWorkTime == 0)
                 TrkMaxWorkTime = 1440;
+
+
+            OrdVolumeMultiplier = Convert.ToInt32("0" + ini.ReadString(Global.iniPlan, Global.iniOrdVolumeMultiplier));
+            if (OrdVolumeMultiplier == 0)
+                OrdVolumeMultiplier = 1000;         //alapértelmezés 1000 a dm3 --> m3 konverzióhoz
 
 
             string sUseProxy = ini.ReadString(Global.iniProxy, Global.UseProxy);

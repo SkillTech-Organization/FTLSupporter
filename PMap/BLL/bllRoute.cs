@@ -258,7 +258,7 @@ namespace PMap.BLL
         }
 
 
-        public  DataTable GetRestZoneListToDT()
+        public  DataTable GetRestZonesToDT()
         {
             string sSql = "select distinct " + Environment.NewLine +
                           "isnull( stuff( " + Environment.NewLine +
@@ -282,14 +282,13 @@ namespace PMap.BLL
                           "UNION  " + Environment.NewLine +
                           " select '' as RESTZONE_IDS, '***nincs engedély***' as RESTZONE_NAMES";
 
-
             return DBA.Query2DataTable(sSql);
         }
 
 
-        public string getAllRestZonesToString()
+        public string GetAllRestZones()
         {
-            string sRESTZONES = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16";
+            string sRESTZONES = Global.RST_ALLRESTZONES;
             string sSql = "(select distinct     " + Environment.NewLine +
                           "isnull(stuff(        " + Environment.NewLine +
                           "( " + Environment.NewLine +
@@ -306,6 +305,23 @@ namespace PMap.BLL
             }
             return sRESTZONES;
         }
+
+        public string GetRestZonesByRST_ID(int p_RST_ID)
+        {
+            string sRESTZONES = Global.RST_ALLRESTZONES;
+            string sSql = "select  isnull( stuff ((SELECT ',' + CONVERT(varchar(MAX), ID) " + Environment.NewLine +
+                          "  FROM RZN_RESTRZONE RZN " + Environment.NewLine;
+            if (p_RST_ID != Global.RST_NORESTRICT)
+                sSql += "  WHERE RST_ID <=? " + Environment.NewLine;
+            sSql += " ORDER BY ID FOR XML PATH('')), 1, 1, ''), '') AS RZN_ID_LIST ";
+
+            DataTable dt = DBA.Query2DataTable(sSql, p_RST_ID);
+            if (dt.Rows.Count > 0)
+            {
+                sRESTZONES = Util.getFieldValue<string>(dt.Rows[0], "RESTZONES");
+            }
+            return sRESTZONES;
+       }
 
         public  DataTable GetSpeedProfsToDT()
         {

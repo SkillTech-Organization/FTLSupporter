@@ -34,7 +34,6 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:TaskID")]
         public string TaskID { get; set; }
 
-
         [DisplayNameAttributeX(Name = "Irányos túra?", Order = 2)]
         public bool IsOneWay { get; set; }
 

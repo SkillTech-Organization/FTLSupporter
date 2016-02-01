@@ -260,15 +260,14 @@ namespace PMap.BLL
                         sSQL = "delete from TRZ_TRUCKRESTRZONE  where TRK_ID = ? ";
                         DBA.ExecuteNonQuery(sSQL, p_TRK_ID);
                     }
-
-                    sSQL = "insert into TRZ_TRUCKRESTRZONE (TRK_ID, RZN_ID) " + Environment.NewLine +
+                     sSQL = "insert into TRZ_TRUCKRESTRZONE (TRK_ID, RZN_ID) " + Environment.NewLine +
                            "select TRK.ID, RZN.ID " + Environment.NewLine +
                            "from TRK_TRUCK TRK " + Environment.NewLine +
                            "inner join RST_RESTRICTTYPE RST on " + Environment.NewLine +
                            "(TRK_WEIGHT <= 3500)  or  " + Environment.NewLine +
-                           "(TRK_WEIGHT <= 7500  and RST.ID in (1,2,3,4)) or   " + Environment.NewLine +
-                           "(TRK_WEIGHT <= 12000  and RST.ID in (1,2,3)) or   " + Environment.NewLine +
-                           "(TRK_WEIGHT > 12000  and RST.ID in (1,2)) " + Environment.NewLine +
+                           "(TRK_WEIGHT <= 7500  and RST.ID in (" + Global.RST_NORESTRICT.ToString() + "," + Global.RST_MORE12T.ToString() + "," + Global.RST_MAX12T.ToString() + "," + Global.RST_MAX75T.ToString() + ")) or   " + Environment.NewLine +
+                           "(TRK_WEIGHT <= 12000  and RST.ID in (" + Global.RST_NORESTRICT.ToString() + "," + Global.RST_MORE12T.ToString() + "," + Global.RST_MAX12T.ToString() + ")) or   " + Environment.NewLine +
+                           "(TRK_WEIGHT > 12000  and RST.ID in (" + Global.RST_NORESTRICT.ToString() + "," + Global.RST_MORE12T.ToString() + ")) " + Environment.NewLine +
                            "inner join RZN_RESTRZONE RZN on RZN.RST_ID = RST.ID " + Environment.NewLine +
                            "left outer join TRZ_TRUCKRESTRZONE  TRZ on TRZ.RZN_ID = RZN.ID and TRZ.TRK_ID = TRK.ID  " + Environment.NewLine +
                            "where TRZ.ID is null and TRK.ID = ?";
@@ -286,9 +285,8 @@ namespace PMap.BLL
                 }
             }
         }
-
         
-
+  
 
     }
 }

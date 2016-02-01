@@ -680,13 +680,17 @@ namespace PMapTestApp
                 IsOneWay = true,
                 IsRunningTask = true,
                 TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
-                TimeTo = DateTime.Now.Date.AddHours(18),                   //10:00
-                TimeFinish = DateTime.Now.Date.AddHours(19),                   //10:00
                 LatFrom = 47.665,                                           //valahol Győr környéke
                 LngFrom = 17.668,
-                TimeCurr = DateTime.Now.Date.AddHours(11),                 //10:00
+
+                TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
+                LatTo = 48.407,                                           //valahol Nyíregyháza környéke
+                LngTo = 20.852,
+
+                TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
                 LatCurr = 47.500,                                          //valahol Tatabánya környéke
-                LngCurr = 18.558,
+                LngCurr = 18.558
+                 
             };
 
             List<FTLSupporter.FTLRunningTask> lstRTsk = new List<FTLSupporter.FTLRunningTask>();

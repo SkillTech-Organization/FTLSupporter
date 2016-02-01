@@ -1,4 +1,5 @@
-﻿using PMap.BLL;
+﻿using PMap;
+using PMap.BLL;
 using PMap.BO;
 using PMap.Common;
 using PMap.DB.Base;
@@ -116,9 +117,12 @@ namespace FTLSupporter
 
 
                 //3.nod ID-k meghatározása
+                List<int[]> lstNOD_ID = new List<int[]>();
+
                 //  3.1:Szállítási feladatok
                 p_Task.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatFrom, p_Task.LngFrom));
                 p_Task.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatTo, p_Task.LngTo));
+                lstNOD_ID.Add(new int[] { p_Task.NOD_ID_FROM, p_Task.NOD_ID_TO});
 
                 //  3.2:Futó túrainformációk
                 foreach (FTLRunningTask rtsk in lstRTask)
@@ -126,7 +130,33 @@ namespace FTLSupporter
                     rtsk.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatFrom, rtsk.LngFrom));
                     rtsk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatCurr, rtsk.LngCurr));
                     rtsk.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatTo, rtsk.LngTo));
+
+                    lstNOD_ID.Add(new int[] { rtsk.NOD_ID_FROM, rtsk.NOD_ID_CURR });
+                    lstNOD_ID.Add(new int[] { rtsk.NOD_ID_CURR, rtsk.NOD_ID_TO });
                 }
+
+                //Járművek behajtási övezeteinek meghatározása
+                //
+            /*
+                       public const int RST_NORESTRICT = 1;    //1:korlátozás nélküli
+        public const int RST_MORE12T = 2;       //2:12 tonnánál több
+        public const int RST_MAX12T = 3;        //3:max 12 tonna
+        public const int RST_MAX75T = 4;        //4:max 7.5 tonna
+        public const int RST_MAX35T = 5;        //5.max 3.5 tonna
+             */
+                foreach (FTLTruck trk in lstTrucks)
+                {
+                    if (trk.CapacityWeight <= 3500)
+                        trk.RST_ID = Global.RST_MAX35T;
+                    else if (trk.CapacityWeight <= 7500)
+                        trk.RST_ID = Global.RST_MAX75T;
+                    else if (trk.CapacityWeight <= 12000)
+                        trk.RST_ID = Global.RST_MAX12T;
+                    else if (trk.CapacityWeight > 12000)
+                        trk.RST_ID = Global.RST_MORE12T;
+                    trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
+                }
+
 
                 //4. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
 
@@ -139,6 +169,19 @@ namespace FTLSupporter
                 Console.WriteLine(lstTrucks.Count);                                            
 
 
+
+                //Eredmény összeállítása
+                FTLResult resOK = new FTLResult()
+                {
+                    Object = "RUNNINGTASK",
+                    Item = 0,
+                    Field = "",
+                    Status = FTLResult.FTLResultStatus.OK,
+                    Message = ""
+
+                };
+
+                result.Add(resOK);
             }
 
             return result;

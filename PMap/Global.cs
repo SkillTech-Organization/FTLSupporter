@@ -69,6 +69,7 @@ namespace PMap
         public const string iniPlanErr = "PlanErr";
         public const string iniOptimizeTimeOutSec = "OptimizeTimeOutSec";
         public const string iniTrkMaxWorkTime = "TrkMaxWorkTime";
+        public const string iniOrdVolumeMultiplier = "OrdVolumeMultiplier";
 
         public const string iniProxy = "Proxy";
         public const string UseProxy = "UseProxy";
@@ -155,6 +156,8 @@ namespace PMap
         public const int RST_MAX12T = 3;        //3:max 12 tonna
         public const int RST_MAX75T = 4;        //4:max 7.5 tonna
         public const int RST_MAX35T = 5;        //5.max 3.5 tonna
+
+        public const string RST_ALLRESTZONES = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16";        //Összes behajtási zóna ID-je
 
         public const int CTP_VALUE_DRY = 1;      //TODO:Ez csak a Pfenninges alkalmazásnál volt igaz. Árutípus-törzs mezővel kell megoldani!
 

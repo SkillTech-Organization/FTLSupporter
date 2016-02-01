@@ -82,9 +82,6 @@ namespace PMap.MapProvider
             foreach (int NOD_ID_TO in p_ListNOD_ID_TO)
             {
 
-                if (p_NOD_ID_FROM == 299396 && NOD_ID_TO == 360892)
-                    Console.WriteLine("x");
-
                 int[] optimizedPath = new int[0];
                 if (optimizedPathsForAllDest != null)
                 {

@@ -298,10 +298,7 @@ namespace PMap.BLL
         public double GetOrdQtyWithMul(double p_QTY1, double p_QTY2, double p_QTY3, double p_QTY5,
                                          double d_QTYMul1, double p_QTYMul2, double p_QTYMul3, double p_QTYMul5)
         {
-
-            //        Public Const csQTY_DEC = 100
-
-            return Math.Ceiling((p_QTY1 * d_QTYMul1 + p_QTY2 * p_QTYMul2 + p_QTY3 * p_QTYMul3 + p_QTY5 * p_QTYMul5) * 100) / 100;
+            return Math.Ceiling((p_QTY1 * d_QTYMul1 + p_QTY2 * p_QTYMul2 + p_QTY3 * p_QTYMul3 + p_QTY5 * p_QTYMul5) * Global.csQTY_DEC) / Global.csQTY_DEC;
         }
 
 

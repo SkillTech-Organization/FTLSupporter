@@ -81,7 +81,7 @@ namespace PMapTestApp
             cmbSpeedProfile.ValueMember = "ID";
             cmbSpeedProfile.DataSource = dtSp;
 
-            DataTable dtRs = m_bllRoute.GetRestZoneListToDT();
+            DataTable dtRs = m_bllRoute.GetRestZonesToDT();
             cmbRST_ID_LIST.ValueMember = "RESTZONE_IDS";
             cmbRST_ID_LIST.DisplayMember = "RESTZONE_NAMES";
             cmbRST_ID_LIST.DataSource = dtRs;

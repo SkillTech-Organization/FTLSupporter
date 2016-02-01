@@ -387,9 +387,10 @@ namespace PMap.BO
                 OptimizerContent += String.Format("createOrder({0})\n", ord.clId);
                 OptimizerContent += String.Format("setOrderInformation( {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11})\n",
                                     ord.innerID, ord.orLoad1, ord.orLoad2, ord.orLoad3, ord.orLoad4, ord.orLoad5, ord.readyTime, ord.mb, ord.prType, ord.depot, ord.stayAfter, ord.canCut);
-                OptimizerContent += String.Format("setOrderServiceTime({0}, {1})\n", ord.innerID, ord.orServiceTime);
+                if (ord.orServiceTime > 0)           //opcionális
+                    OptimizerContent += String.Format("setOrderServiceTime({0}, {1})\n", ord.innerID, ord.orServiceTime);
                 OptimizerContent += String.Format("addOrderTimeWindow({0}, {1}, {2})\n", ord.innerID, ord.orMinTime, ord.orMaxTime);
-            }
+            }   
         }
 
         public void P_AddOrderTruck()

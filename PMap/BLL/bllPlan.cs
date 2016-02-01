@@ -342,7 +342,7 @@ namespace PMap.BLL
                 if (ret.VOLDETAILS != "")
                     ret.VOLDETAILS += "/";
                 ret.VOLDETAILS += Util.getFieldValue<double>(dr, "PLVOL").ToString(Global.NUMFORMAT);
-                if ((Util.getFieldValue<double>(dr, "PLVOL") * Global.csVolumeMultiplier) > ret.CPP_LOADVOL) //dm->m3 konverzió
+                if ((Util.getFieldValue<double>(dr, "PLVOL") * PMapIniParams.Instance.OrdVolumeMultiplier) > ret.CPP_LOADVOL) //dm->m3 konverzió
                     ret.VOLErr = true;
 
                 if (ret.TOLLDETAILS != "")

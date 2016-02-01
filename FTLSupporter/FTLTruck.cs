@@ -64,5 +64,9 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Teljesítés max. idő", Order = 10)]
         public double MaxDuration { get; set; }
 
+        internal int RST_ID { get; set; }
+        internal string RZN_ID_LIST { get; set; }
+
+
     }
 }

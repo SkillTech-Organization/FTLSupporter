@@ -406,7 +406,7 @@ namespace PMapTestApp
 
         private void frmRouteCheck_Load(object sender, EventArgs e)
         {
-            DataTable dt = m_bllRoute.GetRestZoneListToDT();
+            DataTable dt = m_bllRoute.GetRestZonesToDT();
             cmbRST_ID_LIST.ValueMember= "RESTZONE_IDS";
             cmbRST_ID_LIST.DisplayMember = "RESTZONE_NAMES";
             cmbRST_ID_LIST.DataSource = dt;

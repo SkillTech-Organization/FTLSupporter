@@ -14,6 +14,10 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:RegNo")]
         public string RegNo { get; set; }
 
+        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 2)]
+        [Required(ErrorMessage = "Kötelező mező:TaskID")]
+        public string TaskID { get; set; }
+
         [DisplayNameAttributeX(Name = "Irányos túra?", Order = 3)]
         public bool IsOneWay { get; set; }
 
