@@ -50,6 +50,7 @@ namespace PMap.Route
                     UI.Error(sError);
                 return false;
             }
+
             RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT = p_CalcTRK_ETOLLCAT > 0 ? Math.Min(p_CalcTRK_ETOLLCAT, 4) : RouteVisCommonVars.Instance.Truck.TRK_ETOLLCAT;
             List<boDepot> allDepots = bllDepot.GetAllDepots("DEP.ID in (" + string.Join(",", p_lstRouteSection.Select(i => i.Start_DEP_ID).ToArray()) + ") ");
 

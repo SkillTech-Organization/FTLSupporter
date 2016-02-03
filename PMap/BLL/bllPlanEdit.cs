@@ -771,7 +771,7 @@ namespace PMap.BLL
                                         {
                                             if (edge.EDG_ETLCODE.Length > 0)
                                             {
-                                                dToll += edge.Tolls["J" + TRK_ETOLLCAT.ToString()] * dTollMultiplier;
+                                                dToll += edge.Tolls[Global.ETOLLCAT_Prefix + TRK_ETOLLCAT.ToString()] * dTollMultiplier;
                                             }
                                             lastETLCODE = edge.EDG_ETLCODE;
                                         }
@@ -798,13 +798,16 @@ namespace PMap.BLL
             }
         }
 
-        //Környezetvédelmi kategóriánkénti szorzók
-        //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória
+        //Környezetvédelmi kategóriánkénti szorzók (J1 kategória = 0)
+        //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória    
         //A kategória (≥EURO III.)	        0,85	            0,8
         //B kategória (EURO II.)	        1	                  1   
         //C kategória (≤ EURO I.)	        1,15	            1,2
         public static double GetTollMultiplier(int p_TRK_ETOLLCAT, int p_TRK_ENGINEEURO)
         {
+            if (p_TRK_ETOLLCAT == 1)
+                return 0;
+
             double dMultiplier = 1;
             if (p_TRK_ETOLLCAT == 2 || p_TRK_ETOLLCAT == 3)
             {

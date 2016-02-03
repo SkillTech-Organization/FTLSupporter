@@ -51,7 +51,7 @@
     <Compile Include="FTLInterface.cs" />
     <Compile Include="FTLMessages.cs" />
     <Compile Include="FTLResult.cs" />
-    <Compile Include="FTLRunningTask.cs" />
+    <Compile Include="FTLRoute.cs" />
     <Compile Include="FTLTask.cs" />
     <Compile Include="FTLTruck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

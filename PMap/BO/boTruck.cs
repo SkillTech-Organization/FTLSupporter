@@ -91,7 +91,7 @@ namespace PMap.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int TRK_ENGINEEURO { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public int TRK_ETOLLCAT { get; set; }
+        public int TRK_ETOLLCAT { get; set; }                               //0:nincs útdíj
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string TRK_COMMENT { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]

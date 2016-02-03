@@ -152,7 +152,7 @@ namespace PMap
         public const int TCT_VALUE_DEP = 3;
 
         public const int RST_NORESTRICT = 1;    //1:korlátozás nélküli
-        public const int RST_MORE12T = 2;       //2:12 tonnánál több
+        public const int RST_BIGGER12T = 2;     //2:12 tonnánál több
         public const int RST_MAX12T = 3;        //3:max 12 tonna
         public const int RST_MAX75T = 4;        //4:max 7.5 tonna
         public const int RST_MAX35T = 5;        //5.max 3.5 tonna
@@ -199,7 +199,7 @@ namespace PMap
         public static Color DISABLEDFONTCOLOR = Color.Black;
         public static Color UNPLANNEDITEMCOLOR = Color.Azure;
 
-
+        public static string ETOLLCAT_Prefix = "J";
 
     }
 }

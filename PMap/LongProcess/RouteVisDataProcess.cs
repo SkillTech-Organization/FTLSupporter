@@ -241,9 +241,9 @@ namespace Map.LongProcess
                         p_RouteVis.SumToll += edge.Tolls["J" + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
 
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Empty)
-                            p_RouteVis.SumTollEmpty += edge.Tolls["J" + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                            p_RouteVis.SumTollEmpty += edge.Tolls[Global.ETOLLCAT_Prefix + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Loaded)
-                            p_RouteVis.SumTollLoaded += edge.Tolls["J" + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                            p_RouteVis.SumTollLoaded += edge.Tolls[Global.ETOLLCAT_Prefix  + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
 
                     }
                     p_lastETLCODE = edge.EDG_ETLCODE;

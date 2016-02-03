@@ -134,7 +134,7 @@ namespace PMap.LongProcess
 
                                 if (m_Tour.TRK_ETOLLCAT > 1 && LastETLCODE != edge.EDG_ETLCODE && xedge.Tolls.Count > 0)
                                 {
-                                    td.OrigToll = xedge.Tolls["J" + m_Tour.TRK_ETOLLCAT.ToString()] * Global.VAT;
+                                    td.OrigToll = xedge.Tolls[Global.ETOLLCAT_Prefix + m_Tour.TRK_ETOLLCAT.ToString()] * Global.VAT;
                                     td.Toll = td.OrigToll * m_Tour.TollMultiplier;
                                 }
 

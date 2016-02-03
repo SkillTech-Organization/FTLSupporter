@@ -22,19 +22,19 @@ namespace FTLSupporter
         private bllRoute m_bllRoute;
 
 
-        private List<int[]> m_lstNOD_ID;
+        List<FTLRoute> m_lstRoutes = new List<FTLRoute>();
         List<FTLTruck> m_lstTrucks;
         Dictionary<string, boSpeedProfValues> m_sp;
 
-        public FTLCalcRouteProcess(List<int[]> p_lstNOD_ID, List<FTLTruck> p_lstTrucks)
-            : base(new BaseSilngleProgressDialog(0, p_lstNOD_ID.Count - 1, FTLMessages.M_CALCROUTES, false), System.Threading.ThreadPriority.Normal)
+        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRoute> p_lstRoutes, List<FTLTruck> p_lstTrucks)
+            : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
             m_bllRoute = new bllRoute(m_DB);
-  
-            m_lstNOD_ID = p_lstNOD_ID;
+
+            m_lstRoutes = p_lstRoutes;
             m_lstTrucks = p_lstTrucks;
 
         }
@@ -60,8 +60,8 @@ namespace FTLSupporter
                 RouteData.Instance.Init(m_DB, null);
                 RectLatLng boundary = new RectLatLng();
 
-                List<int> fromNodes = m_lstNOD_ID.GroupBy(g => g[0]).Select(x => x.Key).ToList();
-                List<int> toNodes = m_lstNOD_ID.GroupBy(g => g[1]).Select(x => x.Key).ToList();
+                List<int> fromNodes = m_lstRoutes.GroupBy(g => g.fromNOD_ID).Select(x => x.Key).ToList();
+                List<int> toNodes = m_lstRoutes.GroupBy(g => g.toNOD_ID).Select(x => x.Key).ToList();
                 List<int> allNodes = fromNodes.Union(toNodes).ToList();
                 boundary = m_bllRoute.getBoundary(allNodes);
 
@@ -83,6 +83,8 @@ namespace FTLSupporter
                         List<boRoute> results = provider.GetAllRoutes(sRZN, NOD_ID_FROM, toNodes,
                                             NeighborsArrFull[sRZN], NeighborsArrCut[sRZN],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+
+//                        p_RouteVis.SumDuration += bllPlanEdit.GetDuration(p_route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
 
                     }
 

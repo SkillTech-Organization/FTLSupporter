@@ -3,6 +3,7 @@ using PMap.BLL;
 using PMap.BO;
 using PMap.Common;
 using PMap.DB.Base;
+using PMap.LongProcess.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace FTLSupporter
     public static class FTLInterface
     {
 
-        public static List<FTLResult> FTLSupport(FTLTask p_Task, List<FTLTruck> p_TruckList, List<FTLRunningTask> p_RunningTaskList, string p_iniPath, string p_dbConf)
+        public static List<FTLResult> FTLSupport(FTLTask p_Task, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf)
         {
 
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
@@ -64,28 +65,6 @@ namespace FTLSupporter
                 }
             }
 
-            foreach (FTLRunningTask rtsk in p_RunningTaskList)
-            {
-                List<ObjectValidator.ValidationError> trkErros = ObjectValidator.ValidateObject(rtsk);
-                if (trkErros.Count != 0)
-                {
-                    bValid = false;
-                    int item = 0;
-                    foreach (var err in trkErros)
-                    {
-                        FTLResult itemRes = new FTLResult()
-                        {
-                            Object = "RUNNINGTASK",
-                            Item = item++,
-                            Field = err.Field,
-                            Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
-                            Message = err.Message
-
-                        };
-                        result.Add(itemRes);
-                    }
-                }
-            }
 
 
             if (bValid)
@@ -108,31 +87,44 @@ namespace FTLSupporter
                 List<FTLTruck> lstTrucks = p_TruckList.Where(x => (p_Task.TruckTypes.Length >= 0 ?  ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
                                                                 ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
                                                                 x.CapacityWeight >= p_Task.Weight &&
-                                                                x.Available <= p_Task.StartFrom &&
-                                                                p_RunningTaskList.FirstOrDefault(r => r.RegNo == x.RegNo && r.TimeFinish < p_Task.StartFrom) == null).ToList();
+                                                                x.TimeCurr <= p_Task.StartFrom &&
+                                                                x.TimeFinish <=p_Task.StartFrom).ToList();
 
-                //2. A felhasználható futó túraadatok levállogatása
-                //  2.1:Csak azok a futó túraadatok szükésgesek, amelyhez tartozó járművek át lettek adva
-                List<FTLRunningTask> lstRTask = p_RunningTaskList.Where(x => lstTrucks.FirstOrDefault(t => t.RegNo == x.RegNo) != null).ToList();
 
 
                 //3.nod ID-k meghatározása
-                List<int[]> lstNOD_ID = new List<int[]>();
+                List<FTLRoute> lstRoutes = new List<FTLRoute>();
 
                 //  3.1:Szállítási feladatok
                 p_Task.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatFrom, p_Task.LngFrom));
                 p_Task.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatTo, p_Task.LngTo));
-                lstNOD_ID.Add(new int[] { p_Task.NOD_ID_FROM, p_Task.NOD_ID_TO});
+    //            lstNOD_ID.Add(new int[] { p_Task.NOD_ID_FROM, p_Task.NOD_ID_TO});
 
                 //  3.2:Futó túrainformációk
-                foreach (FTLRunningTask rtsk in lstRTask)
+                foreach (FTLTruck trk in lstTrucks)
                 {
-                    rtsk.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatFrom, rtsk.LngFrom));
-                    rtsk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatCurr, rtsk.LngCurr));
-                    rtsk.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(rtsk.LatTo, rtsk.LngTo));
+                    trk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatCurr, trk.LngCurr));
 
-                    lstNOD_ID.Add(new int[] { rtsk.NOD_ID_FROM, rtsk.NOD_ID_CURR });
-                    lstNOD_ID.Add(new int[] { rtsk.NOD_ID_CURR, rtsk.NOD_ID_TO });
+                    if (trk.TaskID.Length > 0)
+                    {
+                        trk.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatFrom, trk.LngFrom));
+                        trk.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatTo, trk.LngTo));
+                    }
+                    else
+                    {
+                        trk.NOD_ID_FROM = trk.NOD_ID_CURR;
+                        trk.NOD_ID_TO = trk.NOD_ID_CURR;
+                    }
+
+                    //3.2.1. Számítandó útvonalak gyűjése
+                    //3.2.1.1. From -> Curr
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID =  trk.NOD_ID_FROM, toNOD_ID =  trk.NOD_ID_CURR });
+                    //3.2.1.2. Curr -> To
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.NOD_ID_TO });
+                    //3.2.1.3. to ->  task from (ez átállás)
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM });
+                    //3.2.1.4. task from -> task to (a beosztandó túra teljesítése)
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM });
                 }
 
                 //Járművek behajtási övezeteinek meghatározása
@@ -153,13 +145,15 @@ namespace FTLSupporter
                     else if (trk.CapacityWeight <= 12000)
                         trk.RST_ID = Global.RST_MAX12T;
                     else if (trk.CapacityWeight > 12000)
-                        trk.RST_ID = Global.RST_MORE12T;
+                        trk.RST_ID = Global.RST_BIGGER12T;
                     trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
                 }
 
 
                 //4. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
-
+                ProcessNotifyIcon ni =  new ProcessNotifyIcon();
+                FTLCalcRouteProcess rp = new FTLCalcRouteProcess(ni, lstRoutes, lstTrucks);
+  
 
 
                 var x1 = lstTrucks.FirstOrDefault(t => t.RegNo == "AAA-111");

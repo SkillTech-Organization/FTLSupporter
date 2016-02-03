@@ -121,14 +121,16 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Raktér magassága", Order = 30)]
         public double TRK_HEIGHT { get; set; }
 
+        [DisplayNameAttributeX(Name = "Összsúly", Order = 31)]
+        public double TRK_WEIGHT { get; set; }
 
-        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 31)]
-        public int TRK_ETOLLCAT { get; set; }
+        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 32)]
+        public int TRK_ETOLLCAT { get; set; }                               //0: nincs útdíj
 
-        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 32)]
+        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 33)]
         public int TRK_ENGINEEURO { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 33)]
+        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 34)]
         public double TollMultiplier { get; set; }
 
 
