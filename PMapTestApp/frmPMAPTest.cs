@@ -688,22 +688,22 @@ namespace PMapTestApp
                 KMCost = 65,
                 RelocateCost = 55,
                 MaxKM = 0,
-                MaxDuration = 0
+                MaxDuration = 0,
 
             
-                // futó túra adatok
-                TruckTaskType = FTLTruck.eTruckTaskType.Running,
-                TaskID = "Szállítási feladat 2",
+                // trevezett túra adatok
+                TruckTaskType = FTLTruck.eTruckTaskType.Planned,
+                TaskID = "Tervezett zállítási feladat 2",
                 IsOneWay = true,
                 IsRunningTask = true,
-                TimeFrom = DateTime.Now.Date.AddHours(4),                 //04:00
+                TimeFrom = DateTime.Now.Date.AddHours(16),                 //16:00
                 LatFrom = 46.242,                                         //valahol Szeged
                 LngFrom = 20.148,
 
-                TimeTo = DateTime.Now.Date.AddHours(11),                  //11:00
+                TimeTo = DateTime.Now.Date.AddHours(22),                  //22:00
                 LatTo = 48.668,                                           //valahol Hatvan környéke
                 LngTo = 19.668,
-                TimeFinish = DateTime.Now.Date.AddHours(12),              //12:00
+                TimeFinish = DateTime.Now.Date.AddHours(23),              //23:00
 
                 /*
                 TimeCurr = DateTime.Now.Date.AddHours(11),                //11:00
@@ -717,17 +717,8 @@ namespace PMapTestApp
             lstTrk.Add( trk1);
             lstTrk.Add( trk2);
             lstTrk.Add( trk3);
-
-            FTLTruckTask rtsk1 = new FTLTruckTask()
-            {
-                RegNo = "AAA-111",
-                 
-            };
-
-            List<FTLSupporter.FTLTruckTask> lstRTsk = new List<FTLSupporter.FTLTruckTask>();
-            lstRTsk.Add( rtsk1);
             
-            List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk, lstRTsk, "", dbConf);
+            List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk,  "", dbConf);
             dlgImportResult ir = new dlgImportResult();
 
             int i = 1;

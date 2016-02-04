@@ -32,8 +32,8 @@ namespace FTLSupporter
                 {
                     FTLResult itemRes = new FTLResult()
                     {
-                        Object = "TASK",
-                        Item = 0,
+                        ObjectName = "TASK",
+                        ItemNo = 0,
                         Field = err.Field,
                         Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
                         Message = err.Message
@@ -53,8 +53,8 @@ namespace FTLSupporter
                     {
                         FTLResult itemRes = new FTLResult()
                         {
-                            Object = "TRUCK",
-                            Item = item++,
+                            ObjectName = "TRUCK",
+                            ItemNo = item++,
                             Field = err.Field,
                             Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
                             Message = err.Message
@@ -164,16 +164,52 @@ namespace FTLSupporter
 
 
 
-                //Eredmény összeállítása
+                //Kamu visszatérési érték
+                //
+                List<FTLCalcTour> lstCalcTours = new List<FTLCalcTour>();
+                int i = 1;
+                foreach (FTLTruck trk in lstTrucks)
+                {
+                    lstCalcTours.Add(new FTLCalcTour()
+                    {
+                        Rank = i++,
+                        RegNo = trk.RegNo,
+                        CurrTaskID = trk.TaskID,
+                        TimeCurrFinish = trk.TimeFinish,
+                        StartFrom = p_Task.StartFrom,
+                        EndFrom = p_Task.EndFrom,
+                        StartTo = p_Task.StartTo,
+                        EndTo = p_Task.EndTo,
+                        T1Km = 0,
+                        T1Toll = 0,
+                        T1Cost = 0,
+                        T1Route = "",
+                        RelKm = 0,
+                        RelToll = 0,
+                        RelCost = 0,
+                        RelRoute = "",
+                        T2Km = 0,
+                        T2Toll = 0,
+                        T2Cost = 0,
+                        T2Route = ""
+                    });
+                }
+
+
+
+                 //Eredmény összeállítása
                 FTLResult resOK = new FTLResult()
                 {
-                    Object = "RUNNINGTASK",
-                    Item = 0,
+                    ObjectName = "RESULT",
+                    ItemNo = 0,
                     Field = "",
                     Status = FTLResult.FTLResultStatus.OK,
-                    Message = ""
+                    Message = "",
+                    Data = lstCalcTours
 
                 };
+
+
 
                 result.Add(resOK);
             }

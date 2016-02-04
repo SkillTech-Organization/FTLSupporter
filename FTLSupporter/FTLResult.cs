@@ -25,8 +25,8 @@ namespace FTLSupporter
             WARNING
         };
         public FTLResultStatus Status { get; set; }
-        public string Object { get; set; }
-        public int Item { get; set; }
+        public string ObjectName { get; set; }
+        public int ItemNo { get; set; }
         public string Field { get; set; }
         public string Message { get; set; }
         public object Data { get; set; }
