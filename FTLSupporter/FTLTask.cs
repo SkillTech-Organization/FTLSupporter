@@ -43,11 +43,11 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Felrakó megnevezés", Order = 4)]
         public string PartnerNameFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás kezdete", Order = 5)]
+        [DisplayNameAttributeX(Name = "Felrakás időablak kezdete ", Order = 5)]
         [Required(ErrorMessage = "Kötelező mező:StartFrom")]
-        public DateTime StartFrom { get; set; }                              
+        public DateTime StartFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás vége", Order = 6)]
+        [DisplayNameAttributeX(Name = "Felrakás időablak vége", Order = 6)]
         [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "StartFrom", "A felrakás kezdete későbbi, mint a befejezése")]
         public DateTime EndFrom { get; set; }
 

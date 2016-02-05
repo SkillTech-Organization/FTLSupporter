@@ -24,20 +24,20 @@ namespace PMap.BLL
 
         private bllPlan m_bllPlan;
         public bllRoute(SQLServerAccess p_DBA)
-            :base(p_DBA, "")
+            : base(p_DBA, "")
         {
             m_bllPlan = new bllPlan(p_DBA);
 
         }
 
         /* multithread-os környezetből hívható rutinok */
-        public  int GetMaxNodeID()
+        public int GetMaxNodeID()
         {
             DataTable dtx = DBA.Query2DataTable("select max(ID) as MAXID from NOD_NODE");
             return Util.getFieldValue<int>(dtx.Rows[0], "MAXID");
         }
 
-        public  PointLatLng GetPointLatLng(int p_NOD_ID)
+        public PointLatLng GetPointLatLng(int p_NOD_ID)
         {
             string sSql = "select * from NOD_NODE NOD  where ID=?";
             DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID);
@@ -50,7 +50,7 @@ namespace PMap.BLL
                 return new PointLatLng();
         }
 
-        public  DataTable GetEdgesToDT()
+        public DataTable GetEdgesToDT()
         {
             /*
             String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
@@ -76,14 +76,14 @@ namespace PMap.BLL
         }
 
 
-        public  DataTable GetNodestoDT(String p_NodeList)
+        public DataTable GetNodestoDT(String p_NodeList)
         {
             return DBA.Query2DataTable("select * from NOD_NODE where ID in (" + p_NodeList + ")");
         }
 
 
 
-        public  void WriteRoutes(List<boRoute> p_Routes, bool p_savePoints)
+        public void WriteRoutes(List<boRoute> p_Routes, bool p_savePoints)
         {
             //           using (DBLockHolder lockObj = new DBLockHolder(DBA))
             {
@@ -93,7 +93,7 @@ namespace PMap.BLL
                     try
                     {
                         DateTime dtStart = DateTime.Now;
-  
+
                         SqlCommand command = new SqlCommand(null, DBA.Conn);
                         command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
 
@@ -146,13 +146,13 @@ namespace PMap.BLL
                 }
             }
         }
-        
 
 
 
 
 
-        public  boRoute GetRouteFromDB(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
+
+        public boRoute GetRouteFromDB(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
@@ -194,25 +194,25 @@ namespace PMap.BLL
                     DataTable dtEdges = DBA.Query2DataTable(sSql);
                     dicEdges = (from r in dtEdges.AsEnumerable()
                                 select new
-                                 {
-                                     Key = Util.getFieldValue<int>(r, "EDGID").ToString(),
-                                     Value = new boEdge
-                                            {
-                                                ID = Util.getFieldValue<int>(r, "EDGID"),
-                                                NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
-                                                NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                                EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME") != "" ? Util.getFieldValue<string>(r, "EDG_NAME") : "*** nincs név ***",
-                                                EDG_LENGTH = Util.getFieldValue<int>(r, "EDG_LENGTH"),
-                                                RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
-                                                WZONE = Util.getFieldValue<string>(r, "RZN_ZONENAME"),
-                                                EDG_ONEWAY = Util.getFieldValue<bool>(r, "EDG_ONEWAY"),
-                                                EDG_DESTTRAFFIC = Util.getFieldValue<bool>(r, "EDG_DESTTRAFFIC"),
-                                                EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),
-                                                Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
-                                                       .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
+                                {
+                                    Key = Util.getFieldValue<int>(r, "EDGID").ToString(),
+                                    Value = new boEdge
+                                    {
+                                        ID = Util.getFieldValue<int>(r, "EDGID"),
+                                        NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
+                                        NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
+                                        EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME") != "" ? Util.getFieldValue<string>(r, "EDG_NAME") : "*** nincs név ***",
+                                        EDG_LENGTH = Util.getFieldValue<int>(r, "EDG_LENGTH"),
+                                        RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
+                                        WZONE = Util.getFieldValue<string>(r, "RZN_ZONENAME"),
+                                        EDG_ONEWAY = Util.getFieldValue<bool>(r, "EDG_ONEWAY"),
+                                        EDG_DESTTRAFFIC = Util.getFieldValue<bool>(r, "EDG_DESTTRAFFIC"),
+                                        EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),
+                                        Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
+                                               .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
 
-                                            }
-                                 }).ToDictionary(n => n.Key, n => n.Value);
+                                    }
+                                }).ToDictionary(n => n.Key, n => n.Value);
                     //így boztosítjuk a visszaadott élek rendezettségét
                     String[] aEdges = edges.Split(Global.SEP_EDGEC);
                     foreach (string e in aEdges)
@@ -225,7 +225,7 @@ namespace PMap.BLL
         }
 
 
-        public  MapRoute GetMapRouteFromDB(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
+        public MapRoute GetMapRouteFromDB(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
@@ -242,7 +242,7 @@ namespace PMap.BLL
 
                 if (Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
                 {
-                    byte[] buff = Util.getFieldValue<byte[]>( dt.Rows[0], "DST_POINTS");
+                    byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
                     String points = Util.UnZipStr(buff);
                     String[] aPoints = points.Split(Global.SEP_POINTC);
                     foreach (string point in aPoints)
@@ -258,7 +258,7 @@ namespace PMap.BLL
         }
 
 
-        public  DataTable GetRestZonesToDT()
+        public DataTable GetRestZonesToDT()
         {
             string sSql = "select distinct " + Environment.NewLine +
                           "isnull( stuff( " + Environment.NewLine +
@@ -288,7 +288,7 @@ namespace PMap.BLL
 
         public string GetAllRestZones()
         {
-            string sRESTZONES = Global.RST_ALLRESTZONES;
+            string sRZN_ID_LIST = Global.RST_ALLRESTZONES;
             string sSql = "(select distinct     " + Environment.NewLine +
                           "isnull(stuff(        " + Environment.NewLine +
                           "( " + Environment.NewLine +
@@ -296,19 +296,19 @@ namespace PMap.BLL
                           "from RZN_RESTRZONE RZN   " + Environment.NewLine +
                           "order by RZN.ID          " + Environment.NewLine +
                           "FOR XML PATH('')         " + Environment.NewLine +
-                          "), 1, 1, ''), '')  as RESTZONES  " + Environment.NewLine +
+                          "), 1, 1, ''), '')  as RZN_ID_LIST  " + Environment.NewLine +
                           ")   ";
             DataTable dt = DBA.Query2DataTable(sSql);
             if (dt.Rows.Count > 0)
             {
-                sRESTZONES = Util.getFieldValue<string>(dt.Rows[0], "RESTZONES");
+                sRZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
             }
-            return sRESTZONES;
+            return sRZN_ID_LIST;
         }
 
         public string GetRestZonesByRST_ID(int p_RST_ID)
         {
-            string sRESTZONES = Global.RST_ALLRESTZONES;
+            string sRZN_ID_LIST = Global.RST_ALLRESTZONES;
             string sSql = "select  isnull( stuff ((SELECT ',' + CONVERT(varchar(MAX), ID) " + Environment.NewLine +
                           "  FROM RZN_RESTRZONE RZN " + Environment.NewLine;
             if (p_RST_ID != Global.RST_NORESTRICT)
@@ -318,18 +318,18 @@ namespace PMap.BLL
             DataTable dt = DBA.Query2DataTable(sSql, p_RST_ID);
             if (dt.Rows.Count > 0)
             {
-                sRESTZONES = Util.getFieldValue<string>(dt.Rows[0], "RESTZONES");
+                sRZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
             }
-            return sRESTZONES;
-       }
+            return sRZN_ID_LIST;
+        }
 
-        public  DataTable GetSpeedProfsToDT()
+        public DataTable GetSpeedProfsToDT()
         {
             return DBA.Query2DataTable("select * from SPP_SPEEDPROF where SPP_DELETED = 0");
         }
 
 
-        public  Dictionary<int, string> GetRoadTypesToDict()
+        public Dictionary<int, string> GetRoadTypesToDict()
         {
             DataTable dt = DBA.Query2DataTable("select * from RDT_ROADTYPE");
             return (from r in dt.AsEnumerable()
@@ -347,12 +347,12 @@ namespace PMap.BLL
             return DBA.Query2DataTable("select * from NOD_NODE ");
         }
 
-        public  List<int> GetAllNodes()
+        public List<int> GetAllNodes()
         {
-            string sSQL = "select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine + 
-                            "   inner join NOD_NODE NOD on WHS.NOD_ID = NOD.ID " + Environment.NewLine + 
-                            "union " + Environment.NewLine + 
-                            "select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine + 
+            string sSQL = "select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                            "   inner join NOD_NODE NOD on WHS.NOD_ID = NOD.ID " + Environment.NewLine +
+                            "union " + Environment.NewLine +
+                            "select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
                             "  inner join NOD_NODE NOD on dep.NOD_ID = nod.ID";
             DataTable dt = DBA.Query2DataTable(sSQL);
 
@@ -412,7 +412,7 @@ namespace PMap.BLL
                     }).ToList();
         }
 
-        public  RectLatLng getBoundary(List<int> p_nodes)
+        public RectLatLng getBoundary(List<int> p_nodes)
         {
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
             string sSql = "select * from NOD_NODE where id in (" + sNODE_IDs + ")";
@@ -510,9 +510,9 @@ namespace PMap.BLL
         /// </summary>
         /// <param name="p_maxRecCount"></param>
         /// <returns></returns>
-        public List<boRoute> GetDistancelessNodesForAllZones( int p_maxRecCount)
+        public List<boRoute> GetDistancelessNodesForAllZones(int p_maxRecCount)
         {
-            string sSQL = "select top "+ p_maxRecCount.ToString() +" * from ( select * from " + Environment.NewLine +
+            string sSQL = "select top " + p_maxRecCount.ToString() + " * from ( select * from " + Environment.NewLine +
                           "  ( " + Environment.NewLine +
                           "      --összes használt NODE-ID  " + Environment.NewLine +
                           "      select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO " + Environment.NewLine +
@@ -550,14 +550,14 @@ namespace PMap.BLL
                     }).ToList();
 
         }
-            
+
         /// <summary>
         /// Egy lerakó ID lista hiányzó, összes behajtási zónát használó távolságainak lekérése
         /// 
         /// </summary>
         /// <param name="p_lstDEP_ID"></param>
         /// <returns></returns>
-        public List<boRoute> GetDistancelessNodesForAllZonesByDepList( List<int> p_lstDEP_ID)
+        public List<boRoute> GetDistancelessNodesForAllZonesByDepList(List<int> p_lstDEP_ID)
         {
             string sDepIDList = string.Join(",", p_lstDEP_ID.Select(x => x.ToString()).ToArray());
 
@@ -580,8 +580,8 @@ namespace PMap.BLL
                           "--kivonjuk a létező távolságokat " + Environment.NewLine +
                           "EXCEPT " + Environment.NewLine +
                           "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES from DST_DISTANCE DST";
-            
-            DataTable dt = DBA.Query2DataTable(String.Format( sSQL, sDepIDList, sDepIDList));
+
+            DataTable dt = DBA.Query2DataTable(String.Format(sSQL, sDepIDList, sDepIDList));
             return (from row in dt.AsEnumerable()
                     select new boRoute
                     {
@@ -594,7 +594,7 @@ namespace PMap.BLL
 
         }
 
-        public  void WriteOneRoute(boRoute p_Route)
+        public void WriteOneRoute(boRoute p_Route)
         {
             using (TransactionBlock transObj = new TransactionBlock(DBA))
             {
@@ -602,31 +602,31 @@ namespace PMap.BLL
                 {
                     DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and NOD_ID_FROM=? and NOD_ID_TO=?", p_Route.RZN_ID_LIST, p_Route.NOD_ID_FROM, p_Route.NOD_ID_TO);
                     String sSql = "insert into DST_DISTANCE ( RZN_ID_LIST, NOD_ID_FROM, NOD_ID_TO, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(?, ?, ?, ?, ?, ?)";
-                        byte[] bEdges = null;
-                        byte[] bPoints = null;
+                    byte[] bEdges = null;
+                    byte[] bPoints = null;
 
-                        if (p_Route.Edges != null && p_Route.Route.Points != null)
-                        {
-                            bEdges = Util.ZipStr(getEgesFromEdgeList(p_Route.Edges));
-                            bPoints = Util.ZipStr(getPointsFromPointList(p_Route.Route.Points));
-                        }
-                        else
-                        {
-                            bEdges = new byte[0];
-                            bPoints = new byte[0];
-
-                        }
-
-                        DBA.ExecuteNonQuery(sSql,
-                            p_Route.RZN_ID_LIST,
-                            p_Route.NOD_ID_FROM,
-                            p_Route.NOD_ID_TO,
-                            p_Route.DST_DISTANCE,
-                            bEdges,
-                            bPoints
-                        );
+                    if (p_Route.Edges != null && p_Route.Route.Points != null)
+                    {
+                        bEdges = Util.ZipStr(getEgesFromEdgeList(p_Route.Edges));
+                        bPoints = Util.ZipStr(getPointsFromPointList(p_Route.Route.Points));
                     }
-                
+                    else
+                    {
+                        bEdges = new byte[0];
+                        bPoints = new byte[0];
+
+                    }
+
+                    DBA.ExecuteNonQuery(sSql,
+                        p_Route.RZN_ID_LIST,
+                        p_Route.NOD_ID_FROM,
+                        p_Route.NOD_ID_TO,
+                        p_Route.DST_DISTANCE,
+                        bEdges,
+                        bPoints
+                    );
+                }
+
 
                 catch (Exception e)
                 {
@@ -640,12 +640,12 @@ namespace PMap.BLL
             }
         }
 
-        private  string getEgesFromEdgeList(List<boEdge> p_Edges)
+        private string getEgesFromEdgeList(List<boEdge> p_Edges)
         {
             return string.Join(Global.SEP_EDGE, p_Edges.Select(x => (x.ID).ToString()).ToArray());
         }
 
-        private  string getPointsFromPointList(List<PointLatLng> p_Points)
+        private string getPointsFromPointList(List<PointLatLng> p_Points)
         {
             return string.Join(Global.SEP_POINT, p_Points.Select(x => x.Lat.ToString() + Global.SEP_COORD + x.Lng.ToString()).ToArray());
         }
@@ -664,21 +664,21 @@ namespace PMap.BLL
             if (dt.Rows.Count > 0)
             {
                 boEdge res = new boEdge
-                             {
-                                 ID = Util.getFieldValue<int>(dt.Rows[0], "EDGID"),
-                                 NOD_ID_FROM = Util.getFieldValue<int>(dt.Rows[0], "NOD_NUM"),
-                                 NOD_ID_TO = Util.getFieldValue<int>(dt.Rows[0], "NOD_NUM2"),
-                                 EDG_NAME = Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") != "" ? Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") : "*** nincs név ***",
-                                 EDG_LENGTH = Util.getFieldValue<int>(dt.Rows[0], "EDG_LENGTH"),
-                                 RDT_VALUE = Util.getFieldValue<int>(dt.Rows[0], "RDT_VALUE"),
-                                 WZONE = Util.getFieldValue<string>(dt.Rows[0], "RZN_ZONENAME"),
-                                 EDG_ONEWAY = Util.getFieldValue<bool>(dt.Rows[0], "EDG_ONEWAY"),
-                                 EDG_DESTTRAFFIC = Util.getFieldValue<bool>(dt.Rows[0], "EDG_DESTTRAFFIC"),
-                                 EDG_ETLCODE = Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"),
-                                 Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"))
-                                        .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
+                {
+                    ID = Util.getFieldValue<int>(dt.Rows[0], "EDGID"),
+                    NOD_ID_FROM = Util.getFieldValue<int>(dt.Rows[0], "NOD_NUM"),
+                    NOD_ID_TO = Util.getFieldValue<int>(dt.Rows[0], "NOD_NUM2"),
+                    EDG_NAME = Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") != "" ? Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") : "*** nincs név ***",
+                    EDG_LENGTH = Util.getFieldValue<int>(dt.Rows[0], "EDG_LENGTH"),
+                    RDT_VALUE = Util.getFieldValue<int>(dt.Rows[0], "RDT_VALUE"),
+                    WZONE = Util.getFieldValue<string>(dt.Rows[0], "RZN_ZONENAME"),
+                    EDG_ONEWAY = Util.getFieldValue<bool>(dt.Rows[0], "EDG_ONEWAY"),
+                    EDG_DESTTRAFFIC = Util.getFieldValue<bool>(dt.Rows[0], "EDG_DESTTRAFFIC"),
+                    EDG_ETLCODE = Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"),
+                    Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"))
+                           .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
 
-                             };
+                };
                 return res;
             }
             else
@@ -831,8 +831,8 @@ namespace PMap.BLL
                 sqlCmd.Parameters.Add(par);
             }
 
-//                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
-//                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
+            //                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
+            //                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                           "select  * from ( " + Environment.NewLine +
                           "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY, " + Environment.NewLine +
@@ -852,7 +852,7 @@ namespace PMap.BLL
             sSql = sSql.Replace("'***************'", "'FormClosedEventArgs01'");
 
             //Teljes címre keresés
-            sqlCmd.CommandText =  sSql + (sWhereAddr != "" || sWhereZipNum != "" || sWhereAddrNum != "" ? " where " + sWhereAddr + sWhereZipNum +  sWhereAddrNum : "");
+            sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" || sWhereAddrNum != "" ? " where " + sWhereAddr + sWhereZipNum + sWhereAddrNum : "");
 
             DBA.DA.SelectCommand = sqlCmd;
             DataSet d = new DataSet();
@@ -892,16 +892,16 @@ namespace PMap.BLL
                     DBA.DA.SelectCommand = sqlCmd;
                     DataSet d3 = new DataSet();
                     DBA.DA.Fill(d3);
-                    DataTable dt3 =  d3.Tables[0];
+                    DataTable dt3 = d3.Tables[0];
                     string sDB_ZIP_NUM = "";
 
                     if (dt3.Rows.Count > 0)
-                         sDB_ZIP_NUM =  ("0000" + Util.getFieldValue<int>(dt3.Rows[0], "ZIP_NUM").ToString()).RightString( 4);
+                        sDB_ZIP_NUM = ("0000" + Util.getFieldValue<int>(dt3.Rows[0], "ZIP_NUM").ToString()).RightString(4);
 
 
                     if (dt3.Rows.Count > 0 && (sZIP_NUM == "" ||
                         (sDB_ZIP_NUM.Substring(0, 1) == "1" && sDB_ZIP_NUM.Substring(0, 1) == sZIP_NUM.Substring(0, 1)) ||
-                        (sDB_ZIP_NUM.Substring(0, 1) != "1" &&  sDB_ZIP_NUM.Substring(0, 3) == sZIP_NUM.Substring(0, 3))))
+                        (sDB_ZIP_NUM.Substring(0, 1) != "1" && sDB_ZIP_NUM.Substring(0, 3) == sZIP_NUM.Substring(0, 3))))
                     {
                         //Megadott irányítószám esetén csak akkor vesszük megtaláltnak a pontot, ha az átadott és a megtalált pont irányítószáma 
                         //ugyan abba a körzetbe esik
@@ -969,7 +969,7 @@ namespace PMap.BLL
             var xdoc = XDocument.Load(response.GetResponseStream());
 
             var xElement = xdoc.Element("GeocodeResponse");
-            if (xElement != null )
+            if (xElement != null)
             {
                 if (xElement.Element("status").Value == "OK")
                 {
@@ -1010,7 +1010,7 @@ namespace PMap.BLL
                 boEdge edg = GetEdgeByNOD_ID(NOD_ID);
                 if (edg == null)
                     return false;
-         
+
                 EDG_ID = edg.ID;
                 return true;
             }

@@ -376,6 +376,31 @@ namespace PMap.BLL
             return Convert.ToInt32(linq.Sum(itm => itm.Duration));
         }
 
+        /// <summary>
+        /// Egy útvonal útdíj kiszámítása
+        /// </summary>
+        /// <param name="p_Edges">Útvonal élei</param>
+        /// <param name="p_TRK_ETOLLCAT">Jármű útdíjkategória</param>
+        /// <param name="p_TollMultiplier">Jármű útdíjszorzó</param>
+        /// <param name="p_lastETLCODE">A számolandó útvonal előtti útdíjal elszámolt szakasz azonosítója. A Törvény úgy szól, hogy minden megkezdett szakaszra kell kifizetni az útdíjat.
+        /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETLCODE-adjuk át a legutolsó útdíjazonosítót (és arra már 
+        /// nem számol díjat). A rutin ezt a paramétert visszadja, hogy amennyiben a következő  számítás evvel az útszakasszal kezdődne, ne számoljunk el arra már díjat.</param>
+        /// <returns></returns>
+        public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, int p_TollMultiplier, ref string p_lastETLCODE)
+        {
+            double dToll = 0;
+
+            foreach (boEdge edge in p_Edges)
+            {
+                if (p_TRK_ETOLLCAT > 1 && p_lastETLCODE != edge.EDG_ETLCODE)
+                {
+                    dToll += edge.Tolls["J" + p_TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                    p_lastETLCODE = edge.EDG_ETLCODE;
+                }
+            }
+            return dToll * Global.VAT;
+        }
+
         public bool IsBundleInTour(int pTPL_ID, int pLastPoint)
         {
             string sSQLStr;

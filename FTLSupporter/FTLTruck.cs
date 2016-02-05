@@ -86,27 +86,27 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Befejezés (tervezett) időpontja", Order = 17)]
         public DateTime TimeFinish { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakó lat", Order = 17)]
+        [DisplayNameAttributeX(Name = "Felrakó lat", Order = 18)]
         public double LatFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 18)]
+        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 19)]
         public double LngFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Lerakó lat", Order = 19)]
+        [DisplayNameAttributeX(Name = "Lerakó lat", Order = 20)]
         public double LatTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 20)]
+        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 21)]
         public double LngTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 21)]          
+        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 22)]          
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime TimeCurr { get; set; }
 
-        [DisplayNameAttributeX(Name = "Aktuális lat", Order = 22)]
+        [DisplayNameAttributeX(Name = "Aktuális lat", Order = 23)]
         [Required(ErrorMessage = "Kötelező mező:LatCurr")]
         public double LatCurr { get; set; }
 
-        [DisplayNameAttributeX(Name = "Aktuális lng", Order = 23)]
+        [DisplayNameAttributeX(Name = "Aktuális lng", Order = 24)]
         [Required(ErrorMessage = "Kötelező mező:LngCurr")]
         public double LngCurr { get; set; }
 

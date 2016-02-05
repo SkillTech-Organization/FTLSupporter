@@ -1,4 +1,5 @@
 ﻿using GMap.NET;
+using PMap;
 using PMap.BLL;
 using PMap.BO;
 using PMap.Common;
@@ -83,8 +84,22 @@ namespace FTLSupporter
                         List<boRoute> results = provider.GetAllRoutes(sRZN, NOD_ID_FROM, toNodes,
                                             NeighborsArrFull[sRZN], NeighborsArrCut[sRZN],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                        
+                        //A kiszámolt eredmények 'bedolgozása'
+                        foreach (boRoute route in result)
+                        {
+                            //levállogatjuk, mely útvonalakra tartozik a számítás
+                            List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == sRZN).ToList();
+                            foreach( FTLRoute ftr in  lstFTLR)
+                            {
+                                ftr.route = route;
+                                ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                ftr.toll = bllPlanEdit.GetToll( 
 
-//                        p_RouteVis.SumDuration += bllPlanEdit.GetDuration(p_route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                            }
+
+                        }
+
 
                     }
 

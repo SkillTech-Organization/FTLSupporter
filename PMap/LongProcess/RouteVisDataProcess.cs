@@ -27,7 +27,7 @@ namespace Map.LongProcess
         private bllSpeedProf m_bllSpeedProf;
 
         Dictionary<string, boSpeedProfValues> m_sp;
-        private Dictionary<int, string> m_rdt = null;
+        private Dictionary<int, string> m_rdt = null;   //Úttípusok
 
         public RouteVisDataProcess()
             : base(new BaseSilngleProgressDialog(0, RouteVisCommonVars.Instance.lstRouteDepots.Count - 1, PMapMessages.M_ROUTVIS_LOADDATA, false), PMapIniParams.Instance.InitRouteDataProcess)
@@ -234,11 +234,11 @@ namespace Map.LongProcess
                 if (RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT > 1 && p_lastETLCODE != edge.EDG_ETLCODE)
                 {
                     //Az 
-                    detail.Toll += edge.Tolls["J" + RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                    detail.Toll += edge.Tolls[Global.ETOLLCAT_Prefix + RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT.ToString()] * p_TollMultiplier;
 
                     if (edge.EDG_ETLCODE.Length > 0)
                     {
-                        p_RouteVis.SumToll += edge.Tolls["J" + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                        p_RouteVis.SumToll += edge.Tolls[Global.ETOLLCAT_Prefix + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
 
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Empty)
                             p_RouteVis.SumTollEmpty += edge.Tolls[Global.ETOLLCAT_Prefix + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
