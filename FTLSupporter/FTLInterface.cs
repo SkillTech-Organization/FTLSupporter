@@ -77,14 +77,14 @@ namespace FTLSupporter
                 
                 
                 //1. Szóbajöhető járművek meghatározása
-                //  1.1: Ha ki van töltve, mely típusú járművek szállíthatják, a megfelelő típusú járművek levállogatása
+                //  1.1: Ha ki van töltve, mely típusú járművek szállíthatják, a megfelelő típusú járművek leválogatása
                 //  1.2: Szállíthatja-e jármű az árutípust?
                 //  1.3: Járműkapacitás megfelelő ?
                 //  1.4: A felrakás megkezdése előtt rendelkezésre áll-e 
                 //       1.4.1 : Elérhető a rakodás megkezdésekor
                 //       1.4.2 : Nincs a szállítási feladat megkezdésekor futó szállítási feladata
                 //
-                List<FTLTruck> lstTrucks = p_TruckList.Where(x => (p_Task.TruckTypes.Length >= 0 ?  ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
+                    List<FTLTruck> lstTrucks = p_TruckList.Where(x => (p_Task.TruckTypes.Length >= 0 ?  ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
                                                                 ("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0 &&
                                                                 x.CapacityWeight >= p_Task.Weight &&
                                                                 (x.TruckTaskType == FTLTruck.eTruckTaskType.Available ? x.TimeCurr <= p_Task.EndFrom : 
@@ -92,6 +92,11 @@ namespace FTLSupporter
                                                                 x.TimeCurr <= p_Task.EndFrom))).ToList();
 
 
+                foreach (FTLTruck trk in lstTrucks)
+                {
+                    trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
+                }
+                
 
                 //3.nod ID-k meghatározása
                 List<FTLRoute> lstRoutes = new List<FTLRoute>();
@@ -99,51 +104,33 @@ namespace FTLSupporter
                 //  3.1:Szállítási feladatok
                 p_Task.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatFrom, p_Task.LngFrom));
                 p_Task.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatTo, p_Task.LngTo));
-    //            lstNOD_ID.Add(new int[] { p_Task.NOD_ID_FROM, p_Task.NOD_ID_TO});
+
+                foreach (string RZN_ID_LIST in lstTrucks.GroupBy(g => g.RZN_ID_LIST).Select(s => s.Key).ToList())
+                {
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = p_Task.NOD_ID_FROM, toNOD_ID = p_Task.NOD_ID_TO, RZN_ID_LIST = RZN_ID_LIST });
+                }
+                //            lstNOD_ID.Add(new int[] { p_Task.NOD_ID_FROM, p_Task.NOD_ID_TO});
 
                 //  3.2:Futó túrainformációk
                 foreach (FTLTruck trk in lstTrucks)
                 {
-                    trk.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatCurr, trk.LngCurr));
+                    trk.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatFrom, trk.LngFrom));
                     trk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatCurr, trk.LngCurr));
-                    trk.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatCurr, trk.LngCurr));
+                    trk.NOD_ID_TO = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.LatTo, trk.LngTo));
 
 
                     //3.2.1. Számítandó útvonalak gyűjése
                     //3.2.1.1. From -> Curr
-                    lstRoutes.Add(new FTLRoute { fromNOD_ID =  trk.NOD_ID_FROM, toNOD_ID =  trk.NOD_ID_CURR });
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID =  trk.NOD_ID_FROM, toNOD_ID =  trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.2. Curr -> To
-                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.NOD_ID_TO });
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.NOD_ID_TO, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.3. to ->  task from (ez átállás)
-                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM });
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.4. task from -> task to (a beosztandó túra teljesítése)
-                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM });
+                    lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM, RZN_ID_LIST = trk.RZN_ID_LIST });
                 }
 
-                //Járművek behajtási övezeteinek meghatározása
-                //
-            /*
-                       public const int RST_NORESTRICT = 1;    //1:korlátozás nélküli
-        public const int RST_MORE12T = 2;       //2:12 tonnánál több
-        public const int RST_MAX12T = 3;        //3:max 12 tonna
-        public const int RST_MAX75T = 4;        //4:max 7.5 tonna
-        public const int RST_MAX35T = 5;        //5.max 3.5 tonna
-             */
-                
-
-                foreach (FTLTruck trk in lstTrucks)
-                {
-                    if (trk.CapacityWeight <= 3500)
-                        trk.RST_ID = Global.RST_MAX35T;
-                    else if (trk.CapacityWeight <= 7500)
-                        trk.RST_ID = Global.RST_MAX75T;
-                    else if (trk.CapacityWeight <= 12000)
-                        trk.RST_ID = Global.RST_MAX12T;
-                    else if (trk.CapacityWeight > 12000)
-                        trk.RST_ID = Global.RST_BIGGER12T;
-                    trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
-                }
-                
+  
 
                 //4. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
                 ProcessNotifyIcon ni =  new ProcessNotifyIcon();

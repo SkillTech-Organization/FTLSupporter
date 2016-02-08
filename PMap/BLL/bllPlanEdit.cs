@@ -386,15 +386,15 @@ namespace PMap.BLL
         /// Amennyiben a kiszámolandó útszakasz egy olyan útvonal KÖZVETLEN folytatása, amelyre már lett útdíj elszámolva, a p_lastETLCODE-adjuk át a legutolsó útdíjazonosítót (és arra már 
         /// nem számol díjat). A rutin ezt a paramétert visszadja, hogy amennyiben a következő  számítás evvel az útszakasszal kezdődne, ne számoljunk el arra már díjat.</param>
         /// <returns></returns>
-        public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, int p_TollMultiplier, ref string p_lastETLCODE)
+        public static double GetToll(List<boEdge> p_Edges, int p_TRK_ETOLLCAT, double p_TollMultiplier, ref string p_lastETLCODE)
         {
             double dToll = 0;
 
             foreach (boEdge edge in p_Edges)
             {
-                if (p_TRK_ETOLLCAT > 1 && p_lastETLCODE != edge.EDG_ETLCODE)
+                if (p_TRK_ETOLLCAT > 1  && p_lastETLCODE != edge.EDG_ETLCODE)
                 {
-                    dToll += edge.Tolls["J" + p_TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                    dToll += edge.Tolls[Global.ETOLLCAT_Prefix + p_TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
                     p_lastETLCODE = edge.EDG_ETLCODE;
                 }
             }
@@ -925,7 +925,7 @@ namespace PMap.BLL
                                         {
                                             if (edge.EDG_ETLCODE.Length > 0)
                                             {
-                                                dToll += edge.Tolls["J" + TRK_ETOLLCAT.ToString()] * dTollMultiplier;
+                                                dToll += edge.Tolls[ Global.ETOLLCAT_Prefix + TRK_ETOLLCAT.ToString()] * dTollMultiplier;
                                             }
                                             lastETLCODE = edge.EDG_ETLCODE;
                                         }

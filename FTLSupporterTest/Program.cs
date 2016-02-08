@@ -43,6 +43,7 @@ namespace FTLSupporterTest
                 RelocateCost = 55,
                 MaxKM = 0,
                 MaxDuration = 0,
+                EngineEuro = 1,
 
                 // futó túra adatok
                 TruckTaskType = FTLTruck.eTruckTaskType.Running,
@@ -76,6 +77,7 @@ namespace FTLSupporterTest
                 RelocateCost = 55,
                 MaxKM = 0,
                 MaxDuration = 0,
+                EngineEuro = 2,
 
                 TruckTaskType = FTLTruck.eTruckTaskType.Available,
                 TimeCurr = DateTime.Now.Date.AddHours(8),                 //Elérhatőség : 08:00
@@ -96,6 +98,7 @@ namespace FTLSupporterTest
                 RelocateCost = 55,
                 MaxKM = 0,
                 MaxDuration = 0,
+                EngineEuro = 3,
 
 
                 // trevezett túra adatok

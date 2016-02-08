@@ -200,6 +200,10 @@ namespace PMap
         public static Color UNPLANNEDITEMCOLOR = Color.Azure;
 
         public static string ETOLLCAT_Prefix = "J";
+        public const int ETOLLCAT_MAX35T = 1;         //1.max 3.5 tonna (nics útdíj)
+        public const int ETOLLCAT_MAX75T = 2;         //2:max 7.5 tonna
+        public const int ETOLLCAT_MAX12T = 3;         //3:max 12 tonna
+        public const int ETOLLCAT_BIGGER12T = 4;      //4:12 tonnánál több
 
     }
 }

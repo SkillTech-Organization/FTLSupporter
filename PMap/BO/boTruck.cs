@@ -90,8 +90,14 @@ namespace PMap.BO
         public int TRK_AXLENUM { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int TRK_ENGINEEURO { get; set; }
+
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public int TRK_ETOLLCAT { get; set; }                               //0:nincs útdíj
+        public int TRK_ETOLLCAT { get; set; }                       //A díjszámításnál használandó járműkategória:
+                                                                    // 2 => J2
+                                                                    // 3 => J3
+                                                                    // 4 => J4
+
+                              
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string TRK_COMMENT { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]
