@@ -73,6 +73,7 @@ namespace FTLSupporter
 
                 RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST.Values.ToList(), out NeighborsArrFull, out NeighborsArrCut, boundary);
 
+
                 DateTime dtStartX2 = DateTime.Now;
                 foreach (int NOD_ID_FROM in fromNodes)
                 {
@@ -91,29 +92,30 @@ namespace FTLSupporter
                         {
                             //leválogatjuk, mely útvonalakra tartozik a számítás
                             List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN.Value).ToList();
-                            foreach( FTLRoute ftr in  lstFTLR)
+                            foreach (FTLRoute ftr in lstFTLR)
                             {
                                 ftr.route = route;
                                 ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
 
-                                foreach ( FTLTruck trk in m_lstTrucks)
+                                foreach (FTLTruck trk in m_lstTrucks)
                                 {
-                                    if (ftr.Toll.Where(x => x.ETollCat == trk.ETollCat && x.EngineEuro == trk.EngineEuro) == null)
+                                    if (ftr.Toll.Where(x => x.ETollCat == trk.ETollCat && x.EngineEuro == trk.EngineEuro).FirstOrDefault() == null)
                                     {
 
 
-                                    string sLastETLCode = "";           // HIBALEHETŐSÉG: az útdíjat a teljesített és a teljesítendő útvonalakra külön számítjuk. Elképzelhető, hogy az eredményben
-                                                                        // a részútvonalakat úgy adódnak össze, hogy két fizetős útszakasz összekapcsolódik, ezért arra a szakaszra csak egy útdíjat 
-                                                                        // kell számolni. Az eredmény útdíját újra kell számolni !!!
+                                        string sLastETLCode = "";           // HIBALEHETŐSÉG: az útdíjat a teljesített és a teljesítendő útvonalakra külön számítjuk. Elképzelhető, hogy az eredményben
+                                        // a részútvonalakat úgy adódnak össze, hogy két fizetős útszakasz összekapcsolódik, ezért arra a szakaszra csak egy útdíjat 
+                                        // kell számolni. Az eredmény útdíját újra kell számolni !!!
 
-                                    double dToll = bllPlanEdit.GetToll(route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);    
-      
+                                        FTLRoute.FTLToll toll = new FTLRoute.FTLToll() { ETollCat = trk.ETollCat, EngineEuro = trk.EngineEuro,
+                                            Toll = bllPlanEdit.GetToll(route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode)};
+
+                                        ftr.Toll.Add(toll);
                                     }
                                 }
                             }
 
                         }
-
 
                     }
 

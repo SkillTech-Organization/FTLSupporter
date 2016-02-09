@@ -267,7 +267,7 @@ namespace PMap.Route
                         }
                     }
                 }
-                Console.WriteLine("RZN_ID_LIST:" + sRZN_ID_LIST + " " + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
+                Console.WriteLine("RZN_ID_LIST:" + sRZN_ID_LIST + " edgcnt:" + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
                 o_neighborsFull.Add(sRZN_ID_LIST, neighboursFull);
                 o_neighborsCut.Add(sRZN_ID_LIST, neighboursCut);
             }
