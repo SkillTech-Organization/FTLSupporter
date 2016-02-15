@@ -99,6 +99,7 @@ namespace FTLSupporter
 
                                 foreach (FTLTruck trk in m_lstTrucks)
                                 {
+                                    //Járműkategóriánként és EURO besorolásként kiszámított útdíjak
                                     if (ftr.Toll.Where(x => x.ETollCat == trk.ETollCat && x.EngineEuro == trk.EngineEuro).FirstOrDefault() == null)
                                     {
 

@@ -8,34 +8,12 @@ using System.Threading.Tasks;
 
 namespace FTLSupporter
 {
-    /*
-        ID		Sztring	I
-        Típus		Sztring	I
-        Irányos túra		Logikai	I
-        Megbízó		Sztring	N
-        Felrakó megnevezés		Sztring	N
-        Felrakó cím		Szám	N
-        Felrakás kezdete		Időpont	I
-        Felrakás vége		Időpont	I
-        Felrakó lat		Szám	I
-        Felrakó lng		Szám	I
-        Lerakó megnevezés		Sztring	N
-        Lerakó cím		Sztring	N
-        Lerakás kezdete		Időpont	I
-        Lerakás vége		Időpont	I
-        Lerakó lat		Szám	I
-        Lerakó lng		Szám	I
-        Súly		Szám	I
-        Teljesítő járműtípusok		Sztring	I
-     */
+  
     public class FTLTask
     {
         [DisplayNameAttributeX(Name = "Azonosító", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:TaskID")]
         public string TaskID { get; set; }
-
-        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 2)]
-        public bool IsOneWay { get; set; }
 
         [DisplayNameAttributeX(Name = "Megbízó", Order = 3)]
         public string Client { get; set; }
@@ -45,11 +23,12 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "Felrakás időablak kezdete ", Order = 5)]
         [Required(ErrorMessage = "Kötelező mező:StartFrom")]
-        public DateTime StartFrom { get; set; }
+        public DateTime OpenFrom { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakás időablak vége", Order = 6)]
-        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "StartFrom", "A felrakás kezdete későbbi, mint a befejezése")]
-        public DateTime EndFrom { get; set; }
+        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "OpenFrom", "A felrakás kezdete későbbi, mint a befejezése")]
+        public DateTime CloseFrom { get; set; }
+felrakás időtartama
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 7)]
         [Required(ErrorMessage = "Kötelező mező:LatFrom")]
@@ -62,13 +41,14 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Felrakó megnevezés", Order = 9)]
         public string PartnerNameTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás kezdete", Order = 10)]
+        [DisplayNameAttributeX(Name = "Felrakás időablak kezdete", Order = 10)]
         [Required(ErrorMessage = "Kötelező mező:StartTo")]
-        public DateTime StartTo { get; set; }
+        public DateTime OpenTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás vége", Order = 11)]
+        [DisplayNameAttributeX(Name = "Felrakás időablak vége", Order = 11)]
         [Required(ErrorMessage = "Kötelező mező:EndTo")]
-        public DateTime EndTo { get; set; }
+        public DateTime CloseTo { get; set; }
+learkás időtartama
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 12)]
         [Required(ErrorMessage = "Kötelező mező:LatTo")]

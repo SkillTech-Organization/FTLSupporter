@@ -9,6 +9,25 @@ namespace FTLSupporter
 {
     public class FTLCalcTour
     {
+        public FTLCalcTour()
+        {
+            Rank = 0;
+            T1Km = 0;
+            T1Toll = 0;
+            T1Cost = 0;
+            T1Route = "";
+
+            RelKm = 0;
+            RelToll = 0;
+            RelCost = 0;
+            RelRoute = "";
+
+            T2Km = 0;
+            T2Toll = 0;
+            T2Cost = 0;
+            T2Route = "";
+
+        }
 
         [DisplayNameAttributeX(Name = "Helyezés", Order = 1)]
         public int Rank { get; set; }
@@ -19,12 +38,12 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Szállítási feladat azonosítója", Order = 3)]
         public string CurrTaskID { get; set; }
 
+        [DisplayNameAttributeX(Name = "Beosztott szállítási feladat azonosítója", Order = 4)]
+        public string TaskID { get; set; }
 
-        [DisplayNameAttributeX(Name = "Futó szállítási feladat befejezés (tervezett)időpontja", Order = 4)]
+        [DisplayNameAttributeX(Name = "Futó szállítási feladat befejezés (tervezett)időpontja", Order = 5)]
         public DateTime TimeCurrFinish { get; set; }
 
-        [DisplayNameAttributeX(Name = "Beosztott szállítási feladat azonosítója", Order = 5)]
-        public string TaskID { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakás kezdete", Order = 6)]
         public DateTime StartFrom { get; set; }
@@ -73,5 +92,6 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "II.túra útvonal", Order = 21)]
         public string T2Route { get; set; }
+
     }
 }

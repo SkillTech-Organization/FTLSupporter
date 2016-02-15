@@ -610,13 +610,13 @@ namespace PMapTestApp
                 IsOneWay = true,
                 Client = "Megbízó 1",
                 PartnerNameFrom = "Felrakó 1",
-                StartFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete reggel 6-tól
-                EndFrom = DateTime.Now.Date.AddHours(12),                   //Felrakás vége reggel 12-ig
+                OpenFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete reggel 6-tól
+                CloseFrom = DateTime.Now.Date.AddHours(12),                   //Felrakás vége reggel 12-ig
                 LatFrom = 47.244,                                           //Velenei tó környéke
                 LngFrom = 18.628,
                 PartnerNameTo = "Lerakó 1",
-                StartTo = DateTime.Now.Date.AddHours(10),                   //Lelrakás kezdete reggel 10-tól
-                EndTo = DateTime.Now.Date.AddHours(18),                     //Lelrakás vége 18-ig
+                OpenTo = DateTime.Now.Date.AddHours(10),                   //Lelrakás kezdete reggel 10-tól
+                CloseTo = DateTime.Now.Date.AddHours(18),                     //Lelrakás vége 18-ig
                 LatTo = 46.881,                                             //Kecskemét környéke
                 LngTo = 19.707,
                 CargoType = "Normál",

@@ -21,7 +21,7 @@ namespace FTLSupporter
             Planned,                    // Tervezett
             Running                     // Futó
         }
-
+ 
         [DisplayNameAttributeX(Name = "Rendszám", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:RegNo")]
         public string RegNo { get; set; }
@@ -76,17 +76,18 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Irányos túra?", Order = 13)]
         public bool IsOneWay { get; set; }
 
-        [DisplayNameAttributeX(Name = "Futó túra?", Order = 14)]
-        public bool IsRunningTask { get; set; }
-
         [DisplayNameAttributeX(Name = "Indulás (tervezett) időpontja", Order = 15)]
         [Required(ErrorMessage = "Kötelező mező:TimeFrom")]
         public DateTime TimeFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Lerakás (tervezett) időpontja", Order = 16)]
+        [DisplayNameAttributeX(Name = "Megérkezés (tervezett) időpontja", Order = 16)]
+        [Required(ErrorMessage = "Kötelező mező:TimeTo")]
+        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "TimeFrom", "A megérkezés korábbi, mint a befejezés!")]
         public DateTime TimeTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Befejezés (tervezett) időpontja", Order = 17)]
+        [DisplayNameAttributeX(Name = "Lerakás befejezés (tervezett) időpontja", Order = 17)]
+        [Required(ErrorMessage = "Kötelező mező:TimeFinish")]
+        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "TimeTo", "A befejezés korábbi, mint a megérkezés!")]
         public DateTime TimeFinish { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 18)]

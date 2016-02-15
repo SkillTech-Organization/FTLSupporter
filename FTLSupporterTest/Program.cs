@@ -17,13 +17,13 @@ namespace FTLSupporterTest
                 IsOneWay = true,
                 Client = "Megbízó 1",
                 PartnerNameFrom = "Felrakó 1",
-                StartFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete időablak reggel 6-tól
-                EndFrom = DateTime.Now.Date.AddHours(20),                   //Felrakás vége időablak 20-ig
+                OpenFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete időablak reggel 6-tól
+                CloseFrom = DateTime.Now.Date.AddHours(20),                   //Felrakás vége időablak 20-ig
                 LatFrom = 47.244,                                           //Velenei tó környéke
                 LngFrom = 18.628,
                 PartnerNameTo = "Lerakó 1",
-                StartTo = DateTime.Now.Date.AddHours(10),                   //Lelrakás kezdete időablak reggel 10-tól
-                EndTo = DateTime.Now.Date.AddHours(20),                     //Lelrakás vége időablak 20-ig
+                OpenTo = DateTime.Now.Date.AddHours(10),                   //Lelrakás kezdete időablak reggel 10-tól
+                CloseTo = DateTime.Now.Date.AddHours(20),                     //Lelrakás vége időablak 20-ig
                 LatTo = 46.881,                                             //Kecskemét környéke
                 LngTo = 19.707,
                 CargoType = "Normál",
