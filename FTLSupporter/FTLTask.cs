@@ -28,45 +28,49 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Felrakás időablak vége", Order = 6)]
         [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "OpenFrom", "A felrakás kezdete későbbi, mint a befejezése")]
         public DateTime CloseFrom { get; set; }
-felrakás időtartama
 
-        [DisplayNameAttributeX(Name = "Felrakó lat", Order = 7)]
+        [DisplayNameAttributeX(Name = "Felrakás időtartama", Order = 7)]
+        public int LoadDuration { get; set; }
+
+        [DisplayNameAttributeX(Name = "Felrakó lat", Order = 8)]
         [Required(ErrorMessage = "Kötelező mező:LatFrom")]
         public double LatFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 8)]
+        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 9)]
         [Required(ErrorMessage = "Kötelező mező:LngFrom")]
         public double LngFrom { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakó megnevezés", Order = 9)]
+        [DisplayNameAttributeX(Name = "Felrakó megnevezés", Order = 10)]
         public string PartnerNameTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás időablak kezdete", Order = 10)]
+        [DisplayNameAttributeX(Name = "Felrakás időablak kezdete", Order = 11)]
         [Required(ErrorMessage = "Kötelező mező:StartTo")]
         public DateTime OpenTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakás időablak vége", Order = 11)]
+        [DisplayNameAttributeX(Name = "Felrakás időablak vége", Order = 12)]
         [Required(ErrorMessage = "Kötelező mező:EndTo")]
         public DateTime CloseTo { get; set; }
-learkás időtartama
 
-        [DisplayNameAttributeX(Name = "Felrakó lat", Order = 12)]
+        [DisplayNameAttributeX(Name = "Lerakás időtartama", Order = 13)]
+        public int UnLoadDuration { get; set; }
+
+        [DisplayNameAttributeX(Name = "Felrakó lat", Order = 14)]
         [Required(ErrorMessage = "Kötelező mező:LatTo")]
         public double LatTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 13)]
+        [DisplayNameAttributeX(Name = "Felrakó lng", Order = 15)]
         [Required(ErrorMessage = "Kötelező mező:LngTo")]
         public double LngTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Árutpus", Order = 14)]
+        [DisplayNameAttributeX(Name = "Árutpus", Order = 16)]
         [Required(ErrorMessage = "Kötelező mező:TaskType")]
         public string CargoType { get; set; }
 
-        [DisplayNameAttributeX(Name = "Súly", Order = 15)]
+        [DisplayNameAttributeX(Name = "Súly", Order = 17)]
         [Required(ErrorMessage = "Kötelező mező:Weight")]
         public double Weight { get; set; }
 
-        [DisplayNameAttributeX(Name = "Teljesítő járműtípusok", Order = 15)]
+        [DisplayNameAttributeX(Name = "Teljesítő járműtípusok", Order = 18)]
         public string TruckTypes { get; set; }
 
 

@@ -66,9 +66,23 @@ namespace FTLSupporter
 
         /******************* Járműfeladat ******************************/
 
+        private eTruckTaskType m_TruckTaskType;
         [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 11)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
-        public eTruckTaskType TruckTaskType { get; set; }
+        public eTruckTaskType TruckTaskType
+        {
+            get { return m_TruckTaskType; }
+            set
+            {
+                m_TruckTaskType = value;
+                if (value == eTruckTaskType.Available)
+                {
+                    LatTo = LatCurr;
+                    LngTo = LngCurr;
+                }
+            }
+        }
+
 
         [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 12)]
         public string TaskID { get; set; }
@@ -87,8 +101,8 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "Lerakás befejezés (tervezett) időpontja", Order = 17)]
         [Required(ErrorMessage = "Kötelező mező:TimeFinish")]
-        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "TimeTo", "A befejezés korábbi, mint a megérkezés!")]
-        public DateTime TimeFinish { get; set; }
+        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "TimeUnload", "A lerakodás vége korábbi, mint a megérkezés!")]      //lerakás időtartama: TimeFinish-TimeTo
+        public DateTime TimeUnload { get; set; }
 
         [DisplayNameAttributeX(Name = "Felrakó lat", Order = 18)]
         public double LatFrom { get; set; }
@@ -106,13 +120,34 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime TimeCurr { get; set; }
 
+        private double m_LatCurr;
         [DisplayNameAttributeX(Name = "Aktuális lat", Order = 23)]
         [Required(ErrorMessage = "Kötelező mező:LatCurr")]
-        public double LatCurr { get; set; }
+        public double LatCurr
+        {
+            get { return m_LatCurr; }
+            set
+            {
+                m_LatCurr = value;
+                if (TruckTaskType == eTruckTaskType.Available)
+                    LatTo = value;
+            }
+        }
 
+        private double m_LngCurr;
         [DisplayNameAttributeX(Name = "Aktuális lng", Order = 24)]
         [Required(ErrorMessage = "Kötelező mező:LngCurr")]
-        public double LngCurr { get; set; }
+        public double LngCurr
+        {
+            get { return m_LngCurr; }
+            set
+            {
+                m_LngCurr = value;
+                if (TruckTaskType == eTruckTaskType.Available)
+                    LngTo = value;
+            }
+        }
+
 
         internal int RST_ID                             //Behajtási övezet ID
         {
@@ -148,7 +183,13 @@ namespace FTLSupporter
             }
         }
 
-
+        internal int CurrUnloadDuration
+        {
+            get
+            {
+                return TimeUnload.Subtract(TimeTo).Minutes;
+            }
+        }
 
         internal string RZN_ID_LIST { get; set; }
 

@@ -607,7 +607,6 @@ namespace PMapTestApp
             FTLSupporter.FTLTask tsk = new FTLSupporter.FTLTask()
             {
                 TaskID = "TSK001",
-                IsOneWay = true,
                 Client = "Megbízó 1",
                 PartnerNameFrom = "Felrakó 1",
                 OpenFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete reggel 6-tól
@@ -641,7 +640,6 @@ namespace PMapTestApp
                 TruckTaskType = FTLTruck.eTruckTaskType.Running,
                 TaskID = "Szállítási feladat 1",
                 IsOneWay = true,
-                IsRunningTask = true,
                 TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
                 LatFrom = 47.665,                                           //valahol Győr környéke
                 LngFrom = 17.668,
@@ -649,7 +647,7 @@ namespace PMapTestApp
                 TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
                 LatTo = 48.407,                                           //valahol Nyíregyháza környéke
                 LngTo = 20.852,
-                TimeFinish = DateTime.Now.Date.AddHours(19),               //19:00
+                TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
 
                 TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
                 LatCurr = 47.500,                                          //valahol Tatabánya környéke
@@ -695,7 +693,6 @@ namespace PMapTestApp
                 TruckTaskType = FTLTruck.eTruckTaskType.Planned,
                 TaskID = "Tervezett zállítási feladat 2",
                 IsOneWay = true,
-                IsRunningTask = true,
                 TimeFrom = DateTime.Now.Date.AddHours(16),                 //16:00
                 LatFrom = 46.242,                                         //valahol Szeged
                 LngFrom = 20.148,
@@ -703,7 +700,7 @@ namespace PMapTestApp
                 TimeTo = DateTime.Now.Date.AddHours(22),                  //22:00
                 LatTo = 48.668,                                           //valahol Hatvan környéke
                 LngTo = 19.668,
-                TimeFinish = DateTime.Now.Date.AddHours(23),              //23:00
+                TimeUnload = DateTime.Now.Date.AddHours(23),              //23:00
 
                 /*
                 TimeCurr = DateTime.Now.Date.AddHours(11),                //11:00

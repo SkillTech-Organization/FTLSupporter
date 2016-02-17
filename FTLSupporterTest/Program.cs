@@ -1,8 +1,11 @@
 ﻿using FTLSupporter;
+using GMap.NET;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FTLSupporterTest
@@ -14,7 +17,6 @@ namespace FTLSupporterTest
             FTLSupporter.FTLTask tsk = new FTLSupporter.FTLTask()
             {
                 TaskID = "TSK001",
-                IsOneWay = true,
                 Client = "Megbízó 1",
                 PartnerNameFrom = "Felrakó 1",
                 OpenFrom = DateTime.Now.Date.AddHours(6),                  //Felrakás kezdete időablak reggel 6-tól
@@ -49,7 +51,6 @@ namespace FTLSupporterTest
                 TruckTaskType = FTLTruck.eTruckTaskType.Running,
                 TaskID = "Szállítási feladat 1",
                 IsOneWay = true,
-                IsRunningTask = true,
                 TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
                 LatFrom = 47.665,                                           //valahol Győr környéke
                 LngFrom = 17.668,
@@ -57,7 +58,7 @@ namespace FTLSupporterTest
                 TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
                 LatTo = 48.407,                                           //valahol Nyíregyháza környéke
                 LngTo = 20.852,
-                TimeFinish = DateTime.Now.Date.AddHours(19),               //19:00
+                TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
 
                 TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
                 LatCurr = 47.500,                                          //valahol Tatabánya környéke
@@ -105,7 +106,6 @@ namespace FTLSupporterTest
                 TruckTaskType = FTLTruck.eTruckTaskType.Planned,
                 TaskID = "Tervezett zállítási feladat 2",
                 IsOneWay = true,
-                IsRunningTask = true,
                 TimeFrom = DateTime.Now.Date.AddHours(16),                 //16:00
                 LatFrom = 46.242,                                         //valahol Szeged
                 LngFrom = 20.148,
@@ -113,7 +113,7 @@ namespace FTLSupporterTest
                 TimeTo = DateTime.Now.Date.AddHours(22),                  //22:00
                 LatTo = 48.668,                                           //valahol Hatvan környéke
                 LngTo = 19.668,
-                TimeFinish = DateTime.Now.Date.AddHours(23),              //23:00
+                TimeUnload = DateTime.Now.Date.AddHours(23),              //23:00
 
                 /*              Tervezett feladat esrtén nincs értelmezve
                 TimeCurr = DateTime.Now.Date.AddHours(11),                //11:00
@@ -122,6 +122,8 @@ namespace FTLSupporterTest
                 */
 
             };
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+            Console.WriteLine("  Átállás {0}->{1},{2} KM:{3:#,#0.00},útdíj:{4:#,#0.00},ktg:{5:#,#0.00}", new PointLatLng(trk3.LatTo, trk3.LngTo), tsk.LatFrom, tsk.LngFrom, 1112.22, 333.32, 34444.44);
 
             List<FTLSupporter.FTLTruck> lstTrk = new List<FTLSupporter.FTLTruck>();
             lstTrk.Add(trk1);
@@ -140,10 +142,50 @@ namespace FTLSupporterTest
                 Console.WriteLine("Objektumnév:" + rr.ObjectName);
                 Console.WriteLine("Elemsorszám:" + rr.ItemNo.ToString());
                 Console.WriteLine("Üzenet     :" + rr.Message);
-                if( rr.Data != null)
-                Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
+                if (rr.Data != null)
+                    Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
+                if (rr.Status == FTLResult.FTLResultStatus.OK)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+
+                    List<FTLCalcTour> clcTours = (List<FTLCalcTour>)rr.Data;
+                    foreach (FTLCalcTour clc in clcTours)
+                    {
+                        FTLTruck trk = lstTrk.Where(t => t.RegNo == clc.RegNo).FirstOrDefault();
+                        if (trk != null)
+                        {
+                            Console.WriteLine("Sorsz:{0}, Jármű:{1}", clc.Rank, clc.RegNo);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                            Console.Write("  Átállás {0},{1}->{2},{3}", trk.LatTo, trk.LngTo, tsk.LatFrom, tsk.LngFrom);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                            Console.WriteLine("  KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RelKm, clc.RelToll, clc.RelCost);
+
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                            Console.Write("  Beoszt {0},{1}->{2},{3}", tsk.LatFrom, tsk.LngFrom, tsk.LatTo, tsk.LngTo);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                            Console.WriteLine("  KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.T2Km, clc.T2Toll, clc.T2Cost);
+
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                            Console.Write("  Vissza {0},{1}->{2},{3}", tsk.LatTo, tsk.LngTo, trk.LatFrom, trk.LatTo);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                            Console.WriteLine("  KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RetKm, clc.RetToll, clc.RetCost);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Ismeretlen jármű:{1}", clc.RegNo);
+
+                        }
+
+                    }
+
+
+                }
+
             }
             Console.ReadKey();
         }
     }
+
 }
+

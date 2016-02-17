@@ -56,6 +56,10 @@
       <Project>{b4fe3066-f14f-4625-85bb-57ea97751a6e}</Project>
       <Name>FTLSupporter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PMap\PMap.csproj">
       <Project>{3e3fe032-b237-479b-938b-63f693265432}</Project>
       <Name>PMap</Name>
