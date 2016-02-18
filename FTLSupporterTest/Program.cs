@@ -35,7 +35,7 @@ namespace FTLSupporterTest
 
             FTLSupporter.FTLTruck trk1 = new FTLSupporter.FTLTruck()
             {
-                RegNo = "AAA-111",
+                RegNo = "3,5T",
                 TruckWeight = 3500,
                 CapacityWeight = 2000,
                 TruckType = "Hűtős",
@@ -56,8 +56,8 @@ namespace FTLSupporterTest
                 LngFrom = 17.668,
 
                 TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
-                LatTo = 48.407,                                           //valahol Nyíregyháza környéke
-                LngTo = 20.852,
+                LatTo = 47.932,                                           //valahol Nyíregyháza környéke
+                LngTo = 21.680,
                 TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
 
                 TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
@@ -68,7 +68,7 @@ namespace FTLSupporterTest
 
             FTLSupporter.FTLTruck trk2 = new FTLSupporter.FTLTruck()
             {
-                RegNo = "BBB-222",
+                RegNo = "12Tonna I.",
                 TruckWeight = 12000,
                 CapacityWeight = 10000,
                 TruckType = "Hűtős",
@@ -89,7 +89,7 @@ namespace FTLSupporterTest
 
             FTLSupporter.FTLTruck trk3 = new FTLSupporter.FTLTruck()
             {
-                RegNo = "CCC-333",
+                RegNo = "12Tonna II.",
                 TruckWeight = 12000,
                 CapacityWeight = 10000,
                 TruckType = "Darus",
@@ -122,8 +122,6 @@ namespace FTLSupporterTest
                 */
 
             };
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-            Console.WriteLine("  Átállás {0}->{1},{2} KM:{3:#,#0.00},útdíj:{4:#,#0.00},ktg:{5:#,#0.00}", new PointLatLng(trk3.LatTo, trk3.LngTo), tsk.LatFrom, tsk.LngFrom, 1112.22, 333.32, 34444.44);
 
             List<FTLSupporter.FTLTruck> lstTrk = new List<FTLSupporter.FTLTruck>();
             lstTrk.Add(trk1);
@@ -154,21 +152,24 @@ namespace FTLSupporterTest
                         FTLTruck trk = lstTrk.Where(t => t.RegNo == clc.RegNo).FirstOrDefault();
                         if (trk != null)
                         {
-                            Console.WriteLine("Sorsz:{0}, Jármű:{1}", clc.Rank, clc.RegNo);
+                            Console.WriteLine("Sorsz:{0}, Jármű:{1}, Száll.feladat ktg:{2}", clc.Rank, clc.RegNo, clc.AdditionalCost);
                             Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-                            Console.Write("  Átállás {0},{1}->{2},{3}", trk.LatTo, trk.LngTo, tsk.LatFrom, tsk.LngFrom);
+                            Console.Write(" Átállás {0},{1}->{2},{3}\t", trk.LatTo, trk.LngTo, tsk.LatFrom, tsk.LngFrom);
                             Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
-                            Console.WriteLine("  KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RelKm, clc.RelToll, clc.RelCost);
+                            Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RelKm, clc.RelToll, clc.RelCost);
 
                             Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-                            Console.Write("  Beoszt {0},{1}->{2},{3}", tsk.LatFrom, tsk.LngFrom, tsk.LatTo, tsk.LngTo);
+                            Console.Write(" Beoszt {0},{1}->{2},{3}\t", tsk.LatFrom, tsk.LngFrom, tsk.LatTo, tsk.LngTo);
                             Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
-                            Console.WriteLine("  KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.T2Km, clc.T2Toll, clc.T2Cost);
+                            Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.T2Km, clc.T2Toll, clc.T2Cost);
 
-                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-                            Console.Write("  Vissza {0},{1}->{2},{3}", tsk.LatTo, tsk.LngTo, trk.LatFrom, trk.LatTo);
-                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
-                            Console.WriteLine("  KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RetKm, clc.RetToll, clc.RetCost);
+                            if (!trk.IsOneWay)
+                            {
+                                Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                                Console.Write(" Vissza {0},{1}->{2},{3}\t", tsk.LatTo, tsk.LngTo, trk.LatFrom, trk.LngFrom);
+                                Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                                Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RetKm, clc.RetToll, clc.RetCost);
+                            }
                         }
                         else
                         {

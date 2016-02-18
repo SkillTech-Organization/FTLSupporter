@@ -151,12 +151,6 @@ namespace FTLSupporter
                 foreach (FTLRoute r in lstRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                 {
                     Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " " + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.duration.ToString());
-/*
-                    for (int x = 0; x < r.route.Route.Points.Count; x++ )
-                        Console.Write(r.route.Route.Points[x].ToString() + ",");
-*/
-                    foreach (FTLRoute.FTLToll t in r.Toll)
-                        Console.WriteLine("ETollCat:" + t.ETollCat.ToString() + " EngineEURO:" + t.EngineEuro.ToString() + " Toll:" + t.Toll.ToString());
 
                 }
   
@@ -246,7 +240,7 @@ namespace FTLSupporter
 
                 //Költség fordított sorrendben berendezzük
                 int rank = 0;
-                List<FTLCalcTour> lstCalcRes = lstCalcTours.OrderByDescending(x => x.AdditionalCost).Select(x => x).ToList();
+                List<FTLCalcTour> lstCalcRes = lstCalcTours.OrderBy(x => x.AdditionalCost).Select(x => x).ToList();
                 lstCalcRes.ForEach(r => r.Rank = rank++);
 
         

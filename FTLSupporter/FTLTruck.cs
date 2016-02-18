@@ -130,7 +130,11 @@ namespace FTLSupporter
             {
                 m_LatCurr = value;
                 if (TruckTaskType == eTruckTaskType.Available)
+                {
+                    LatFrom = value;
                     LatTo = value;
+                }
+                    
             }
         }
 
@@ -144,7 +148,10 @@ namespace FTLSupporter
             {
                 m_LngCurr = value;
                 if (TruckTaskType == eTruckTaskType.Available)
+                {
+                    LngFrom = value;
                     LngTo = value;
+                }
             }
         }
 

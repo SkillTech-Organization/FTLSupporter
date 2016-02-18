@@ -25,7 +25,6 @@ namespace FTLSupporter
 
         List<FTLRoute> m_lstRoutes = new List<FTLRoute>();
         List<FTLTruck> m_lstTrucks;
-        Dictionary<string, boSpeedProfValues> m_sp;
 
         public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRoute> p_lstRoutes, List<FTLTruck> p_lstTrucks)
             : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
@@ -97,6 +96,7 @@ namespace FTLSupporter
                                 ftr.route = route;
                                 ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
 
+                                /* EZ NEM KELL
                                 foreach (FTLTruck trk in m_lstTrucks)
                                 {
                                     //Járműkategóriánként és EURO besorolásként kiszámított útdíjak
@@ -114,6 +114,7 @@ namespace FTLSupporter
                                         ftr.Toll.Add(toll);
                                     }
                                 }
+                                 */
                             }
 
                         }
