@@ -44,6 +44,7 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Futó szállítási feladat befejezés (tervezett)időpontja lerakodással", Order = 5)]
         public DateTime TimeCurrTourFinish { get; set; }
 
+        #region beosztandó szállítási feladat mezői 
         [DisplayNameAttributeX(Name = "Felrakás kezdete", Order = 6)]
         public DateTime TimeStartFrom { get; set; }
 
@@ -104,6 +105,8 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Visszatérés időtartam", Order = 25)]
         public double RetDuration { get; set; }
 
+        #endregion
+        
         [DisplayNameAttributeX(Name = "Befejezés időpontja", Order = 26)]
         public DateTime TimeComplete { get; set; }
 

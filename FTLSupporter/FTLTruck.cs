@@ -116,9 +116,23 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Felrakó lng", Order = 21)]
         public double LngTo { get; set; }
 
-        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 22)]          
+
+        private DateTime m_TimeCurr;
+        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 22)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
-        public DateTime TimeCurr { get; set; }
+        public DateTime TimeCurr
+        {
+            get { return m_TimeCurr; }
+            set
+            {
+                m_TimeCurr = value;
+                if (TruckTaskType == eTruckTaskType.Available)
+                {
+                    TimeFrom = value;
+                    TimeTo = value;
+                }
+            }
+        }
 
         private double m_LatCurr;
         [DisplayNameAttributeX(Name = "Aktuális lat", Order = 23)]

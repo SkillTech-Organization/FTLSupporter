@@ -25,7 +25,7 @@ namespace FTLSupporterTest
                 LngFrom = 18.628,
                 PartnerNameTo = "Lerakó 1",
                 OpenTo = DateTime.Now.Date.AddHours(10),                   //Lelrakás kezdete időablak reggel 10-tól
-                CloseTo = DateTime.Now.Date.AddHours(20),                     //Lelrakás vége időablak 20-ig
+                CloseTo = DateTime.Now.Date.AddHours(23),                     //Lelrakás vége időablak 20-ig
                 LatTo = 46.881,                                             //Kecskemét környéke
                 LngTo = 19.707,
                 CargoType = "Normál",
@@ -51,16 +51,16 @@ namespace FTLSupporterTest
                 TruckTaskType = FTLTruck.eTruckTaskType.Running,
                 TaskID = "Szállítási feladat 1",
                 IsOneWay = true,
-                TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
+                TimeFrom = DateTime.Now.Date.AddHours(7),                 //07:00
                 LatFrom = 47.665,                                           //valahol Győr környéke
                 LngFrom = 17.668,
 
-                TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
+                TimeTo = DateTime.Now.Date.AddHours(15),                   //15:00 (tervezett időpont)
                 LatTo = 47.932,                                           //valahol Nyíregyháza környéke
                 LngTo = 21.680,
-                TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
+                TimeUnload = DateTime.Now.Date.AddHours(16),               //16:00
 
-                TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
+                TimeCurr = DateTime.Now.Date.AddHours(9),                 //09:00
                 LatCurr = 47.500,                                          //valahol Tatabánya környéke
                 LngCurr = 18.558
 
@@ -123,10 +123,114 @@ namespace FTLSupporterTest
 
             };
 
+            //KM miatt nem szerepel az eredményben
+            FTLSupporter.FTLTruck trk4 = new FTLSupporter.FTLTruck()
+            {
+                RegNo = "3,5T kevésKM",
+                TruckWeight = 3500,
+                CapacityWeight = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Normál",
+                FixCost = 5000,
+                KMCost = 65,
+                RelocateCost = 55,
+                MaxKM = 100,
+                MaxDuration = 0,
+                EngineEuro = 1,
+
+                // futó túra adatok
+                TruckTaskType = FTLTruck.eTruckTaskType.Running,
+                TaskID = "Szállítási feladat kevésKM",
+                IsOneWay = true,
+                TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
+                LatFrom = 47.665,                                           //valahol Győr környéke
+                LngFrom = 17.668,
+
+                TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
+                LatTo = 47.932,                                           //valahol Nyíregyháza környéke
+                LngTo = 21.680,
+                TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
+
+                TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
+                LatCurr = 47.500,                                          //valahol Tatabánya környéke
+                LngCurr = 18.558
+
+            };
+
+            //Max futásidő túllépés miatt nem szerepel az eredményben
+            FTLSupporter.FTLTruck trk5 = new FTLSupporter.FTLTruck()
+            {
+                RegNo = "3,5T kevésFutásidő",
+                TruckWeight = 3500,
+                CapacityWeight = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Normál",
+                FixCost = 5000,
+                KMCost = 65,
+                RelocateCost = 55,
+                MaxKM = 0,
+                MaxDuration = 100,
+                EngineEuro = 1,
+
+                // futó túra adatok
+                TruckTaskType = FTLTruck.eTruckTaskType.Running,
+                TaskID = "Szállítási feladat (kevésFutásidő)",
+                IsOneWay = true,
+                TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
+                LatFrom = 47.665,                                           //valahol Győr környéke
+                LngFrom = 17.668,
+
+                TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00
+                LatTo = 47.932,                                           //valahol Nyíregyháza környéke
+                LngTo = 21.680,
+                TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
+
+                TimeCurr = DateTime.Now.Date.AddHours(11),                 //11:00
+                LatCurr = 47.500,                                          //valahol Tatabánya környéke
+                LngCurr = 18.558
+
+            };
+
+            FTLSupporter.FTLTruck trk6 = new FTLSupporter.FTLTruck()
+            {
+                RegNo = "3,5T nem ér oda",
+                TruckWeight = 3500,
+                CapacityWeight = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Normál",
+                FixCost = 5000,
+                KMCost = 65,
+                RelocateCost = 55,
+                MaxKM = 0,
+                MaxDuration = 0,
+                EngineEuro = 1,
+
+                // futó túra adatok
+                TruckTaskType = FTLTruck.eTruckTaskType.Running,
+                TaskID = "Szállítási feladat nem ér oda",
+                IsOneWay = true,
+                TimeFrom = DateTime.Now.Date.AddHours(10),                 //10:00
+                LatFrom = 47.665,                                           //valahol Győr környéke
+                LngFrom = 17.668,
+
+                TimeTo = DateTime.Now.Date.AddHours(18),                   //18:00 (tervezett időpont)
+                LatTo = 47.932,                                           //valahol Nyíregyháza környéke
+                LngTo = 21.680,
+                TimeUnload = DateTime.Now.Date.AddHours(19),               //19:00
+
+                TimeCurr = DateTime.Now.Date.AddHours(11),                 //09:00
+                LatCurr = 47.500,                                          //valahol Tatabánya környéke
+                LngCurr = 18.558
+
+            };
+
             List<FTLSupporter.FTLTruck> lstTrk = new List<FTLSupporter.FTLTruck>();
             lstTrk.Add(trk1);
             lstTrk.Add(trk2);
             lstTrk.Add(trk3);
+            lstTrk.Add(trk4);
+            lstTrk.Add(trk5);
+            lstTrk.Add(trk6);
 
             List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk, "", "DB0");
             int i = 1;
@@ -152,7 +256,7 @@ namespace FTLSupporterTest
                         FTLTruck trk = lstTrk.Where(t => t.RegNo == clc.RegNo).FirstOrDefault();
                         if (trk != null)
                         {
-                            Console.WriteLine("Sorsz:{0}, Jármű:{1}, Száll.feladat ktg:{2}", clc.Rank, clc.RegNo, clc.AdditionalCost);
+                            Console.WriteLine("Sorsz:{0}, Jármű:{1}, Száll.feladat ktg:{2}, Időtartam:{3}", clc.Rank, clc.RegNo, clc.AdditionalCost, clc.FullDuration);
                             Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
                             Console.Write(" Átállás {0},{1}->{2},{3}\t", trk.LatTo, trk.LngTo, tsk.LatFrom, tsk.LngFrom);
                             Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");

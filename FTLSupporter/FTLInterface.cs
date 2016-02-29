@@ -188,7 +188,8 @@ namespace FTLSupporter
                         clc.T1Km = r1.route.DST_DISTANCE / 1000;
                         clc.T1Cost = trk.KMCost * r1.route.DST_DISTANCE / 1000;
                         clc.T1Toll = bllPlanEdit.GetToll(r1.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.T1Duration = (trk.TimeCurr - trk.TimeFrom).TotalMinutes;
+                        if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                            clc.T1Duration = (trk.TimeCurr - trk.TimeFrom).TotalMinutes;
                     }
 
                     //Curr -> To
