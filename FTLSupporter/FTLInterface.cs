@@ -188,6 +188,7 @@ namespace FTLSupporter
                         clc.T1Km = r1.route.DST_DISTANCE / 1000;
                         clc.T1Cost = trk.KMCost * r1.route.DST_DISTANCE / 1000;
                         clc.T1Toll = bllPlanEdit.GetToll(r1.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                        clc.T1Duration = (trk.TimeCurr - trk.TimeFrom).TotalMinutes;
                     }
 
                     //Curr -> To
@@ -196,6 +197,7 @@ namespace FTLSupporter
                         clc.T1Km += r2.route.DST_DISTANCE / 1000;
                         clc.T1Cost += trk.KMCost * r2.route.DST_DISTANCE / 1000;
                         clc.T1Toll += bllPlanEdit.GetToll(r2.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                        clc.T1Duration += r2.duration;
                         clc.TimeCurrTourFinish = trk.TimeCurr.AddMinutes(r2.duration + trk.CurrUnloadDuration);
                     }
 
@@ -205,6 +207,7 @@ namespace FTLSupporter
                         clc.RelKm += r3.route.DST_DISTANCE / 1000;
                         clc.RelCost += trk.RelocateCost * r3.route.DST_DISTANCE / 1000;
                         clc.RelToll += bllPlanEdit.GetToll(r3.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                        clc.RelDuration += r3.duration;
 
                         //felrakás kezdete/vége beállítás
                         clc.TimeStartFrom = clc.TimeCurrTourFinish.AddMinutes(r3.duration);
@@ -217,6 +220,7 @@ namespace FTLSupporter
                         clc.T2Km = r4.route.DST_DISTANCE / 1000;
                         clc.T2Cost = trk.KMCost * r4.route.DST_DISTANCE / 1000;
                         clc.T2Toll = bllPlanEdit.GetToll(r4.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                        clc.T2Duration += r4.duration;
 
                         //II.túra megérkezés és befejezés számítása
                         clc.TimeStartTo = clc.TimeEndFrom.AddMinutes(r4.duration);
@@ -231,11 +235,55 @@ namespace FTLSupporter
                         clc.RetKm = r5.route.DST_DISTANCE / 1000;
                         clc.RetCost = trk.KMCost * r5.route.DST_DISTANCE / 1000;
                         clc.RetToll = bllPlanEdit.GetToll(r5.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                        clc.RetDuration += r5.duration;
+
                         clc.TimeComplete = clc.TimeEndTo.AddMinutes(r5.duration);
                     }
                     lstCalcTours.Add(clc);
 
                 }
+
+                //Nem teljesíjtések kiszűrése
+                //
+                //1. max tejesítési időbe nem fér a túra
+                //
+                var linqDuration = from clcx in lstCalcTours
+                             join trkx in lstTrucks on new { clcx.RegNo } equals new { trkx.RegNo }
+                             where trkx.MaxDuration == 0 || clcx.FullDuration <= trkx.MaxDuration
+                             select clcx;
+                lstCalcTours = linqDuration.ToList();
+
+                //2. max teljesítési KM-be nem fér a túra
+                var linqKM = from clcx in lstCalcTours
+                             join trkx in lstTrucks on new {clcx.RegNo} equals new {trkx.RegNo}
+                             where trkx.MaxKM == 0 || clcx.FullKM <= trkx.MaxKM
+                             select clcx;
+
+                lstCalcTours = linqKM.ToList();
+
+                //3. nyitva tartási időre nem ér oda
+                var linqOpen = from clcx in lstCalcTours
+                               where p_Task.OpenFrom <= clcx.TimeStartFrom && p_Task.CloseFrom >= clcx.TimeStartFrom &&
+                               p_Task.OpenTo <= clcx.TimeStartTo && p_Task.CloseTo >= clcx.TimeStartTo
+                             select clcx;
+
+                lstCalcTours = linqOpen.ToList();
+
+
+
+/*
+ *                   var linqTours = (from o in routesNearBy
+                                     orderby o.ItemID
+                                     where o.ItemID.CompareTo(m_EditedRoute.ItemID) > 0
+                                     select o);
+   var query = from person in people
+                join pet in pets on person equals pet.Owner
+                select new { OwnerName = person.FirstName, PetName = pet.Name };
+
+ * 
+ */
+
+
 
 
                 //Költség fordított sorrendben berendezzük
