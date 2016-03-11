@@ -538,10 +538,6 @@ namespace PMap.BLL
                 ord.ID = Util.getFieldValue<int>(dr, "XORD_ID");
                 ord.clId = boOpt.dicClient[Util.getFieldValue<int>(dr, "DEP_ID")].innerID;
 
-                if (boOpt.dicClient[Util.getFieldValue<int>(dr, "DEP_ID")].clName == "CBA ART-KER.FRISS KFT.")
-                    Console.WriteLine("x");
-
-
                 ord.TOD_ID = Util.getFieldValue<int>(dr, "TOD_ID");
                 ord.NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
 
@@ -555,13 +551,11 @@ namespace PMap.BLL
                 ord.dQty4 = Util.getFieldValue<double>(dr, "ORD_ORIGQTY4") - Util.getFieldValue<double>(dr, "PUBQTY4");//a dohányárut nem osztjuk
                 ord.dQty5 = Util.getFieldValue<double>(dr, "ORD_ORIGQTY5") - Util.getFieldValue<double>(dr, "PUBQTY5");
                 ord.dVolume = Util.getFieldValue<double>(dr, "ORD_VOLUME") - Util.getFieldValue<double>(dr, "PUBVOL");
-                ord.dQty = Convert.ToInt32(m_bllPlanEdit.GetOrdQty(ord.dQty1, ord.dQty2, ord.dQty3, ord.dQty5));
+                ord.dQty = m_bllPlanEdit.GetOrdQty(ord.dQty1, ord.dQty2, ord.dQty3, ord.dQty5);
                 if (Util.getFieldValue<int>(dr, "OTP_VALUE") == Global.OTP_INPUT || Util.getFieldValue<int>(dr, "OTP_VALUE") == Global.OTP_UNLOAD)
                 {
                     ord.dQty *= -1;
                 }
-                ord.orLoad1 = Convert.ToInt32(ord.dQty * Global.csQTY_DEC);
-                ord.orLoad2 = Convert.ToInt32(ord.dVolume * PMapIniParams.Instance.OrdVolumeMultiplier);      //dm3-->m3 konverzió
 
                 ord.mb = 0;
                 ord.prType = Util.getFieldValue<int>(dr, "CTP_VALUE");
@@ -590,6 +584,10 @@ namespace PMap.BLL
                 if (ord.orMinTime > ord.orMaxTime)
                     Console.WriteLine("Ezt kezelni kell");
                 ord.client = boOpt.dicClient[Util.getFieldValue<int>(dr, "DEP_ID")];
+
+                ord.orLoad1 = Convert.ToInt32(ord.dQty * Global.csQTY_DEC);
+                ord.orLoad2 = Convert.ToInt32(ord.dVolume * PMapIniParams.Instance.OrdVolumeMultiplier);      //dm3-->m3 konverzió
+
                 boOpt.dicOrder.Add(ord.ID, ord);
 
             }

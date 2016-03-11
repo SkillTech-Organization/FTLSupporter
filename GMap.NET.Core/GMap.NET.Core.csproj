@@ -75,6 +75,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -191,6 +192,11 @@
     <Compile Include="GMap.NET\DirectionsProvider.cs" />
     <Compile Include="GMap.NET\GeocodingProvider.cs" />
     <Compile Include="GMap.NET\RoutingProvider.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="GMap.NET.CacheProviders\MsSQLCePureImageCache.cs" />
     <Compile Include="GMap.NET.CacheProviders\PostgreSQLPureImageCache.cs" />
@@ -258,6 +264,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\System.Data.SQLite.x64.NET2.dll.gz" />
     <None Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
     <None Include="Resources\System.Data.SQLite.x86.NET2.dll.gz" />

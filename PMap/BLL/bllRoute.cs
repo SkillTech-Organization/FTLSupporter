@@ -279,8 +279,8 @@ namespace PMap.BLL
                           "    FOR XML PATH('') " + Environment.NewLine +
                           "), 1, 1, ''), '') as RESTZONE_NAMES " + Environment.NewLine +
                           "from TRK_TRUCK TRK " + Environment.NewLine +
-                          "UNION  " + Environment.NewLine +
-                          " select '' as RESTZONE_IDS, '***nincs engedély***' as RESTZONE_NAMES";
+                          "UNION  select '' as RESTZONE_IDS, '***nincs engedély***' as RESTZONE_NAMES " + Environment.NewLine +
+                          "EXCEPT select '' as RESTZONE_IDS, '' as RESTZONE_NAMES ";
 
             return DBA.Query2DataTable(sSql);
         }

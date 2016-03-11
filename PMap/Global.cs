@@ -169,8 +169,8 @@ namespace PMap
 
         public const int CostDivider = 10;
 
-        public const int csQTY_DEC = 10;
-        public const int csQTYSRVDivider = 10;
+        public const int csQTY_DEC = 100;
+        public const int csQTYSRVDivider = 10;          //10 kg-onként van kiszolgálási idő megadva
         public const int csVolumeMultiplier = 1000; //m3->dm3 konverzióhoz
 
         public const string NUMFORMAT = "#,#0.00";
