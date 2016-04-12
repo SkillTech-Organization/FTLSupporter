@@ -16,8 +16,9 @@ namespace FTLSupporter
     public static class FTLInterface
     {
 
-        public static List<FTLResult> FTLSupport(FTLTask p_Task, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf)
+        public static List<FTLResult> FTLSupport(FTLTask p_Task, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_logErr = false)
         {
+            string sErrLog = "";
 
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
 
@@ -91,6 +92,28 @@ namespace FTLSupporter
                                                                 (x.TruckTaskType == FTLTruck.eTruckTaskType.Available ? x.TimeCurr <= p_Task.CloseFrom : 
                                                                 (x.TruckTaskType == FTLTruck.eTruckTaskType.Planned ? x.TimeUnload <= p_Task.CloseFrom :
                                                                 x.TimeCurr <= p_Task.CloseFrom))).ToList();
+                    if (p_logErr)
+                    {
+                        //Hibalista generálása
+                        //
+                        List<FTLTruck> lstTrucksErr = p_TruckList.Where(x => !(p_Task.TruckTypes.Length >= 0 ? ("," + p_Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true)).ToList();
+                        if (lstTrucksErr.Count > 0)
+                            sErrLog += "Járműtípus miatt nem teljesítheti a túrát:" + string.Join(",", lstTrucksErr.Select(x => x.RegNo).ToArray()) + Environment.NewLine;
+
+                        lstTrucksErr = p_TruckList.Where(x => !(("," + x.CargoTypes + ",").IndexOf("," + p_Task.CargoType + ",") >= 0)).ToList();
+                        if (lstTrucksErr.Count > 0)
+                            sErrLog += "Árutípus miatt nem teljesítheti a túrát:" + string.Join(",", lstTrucksErr.Select(x => x.RegNo).ToArray()) + Environment.NewLine;
+
+                        lstTrucksErr = p_TruckList.Where(x => !(x.CapacityWeight >= p_Task.Weight)).ToList();
+                        if (lstTrucksErr.Count > 0)
+                            sErrLog += "Kapacitás miatt nem teljesítheti a túrát:" + string.Join(",", lstTrucksErr.Select(x => x.RegNo).ToArray()) + Environment.NewLine;
+
+                        lstTrucksErr = p_TruckList.Where(x => !(x.TruckTaskType == FTLTruck.eTruckTaskType.Available ? x.TimeCurr <= p_Task.CloseFrom :
+                                                                    (x.TruckTaskType == FTLTruck.eTruckTaskType.Planned ? x.TimeUnload <= p_Task.CloseFrom :
+                                                                    x.TimeCurr <= p_Task.CloseFrom))).ToList();
+                        if (lstTrucksErr.Count > 0)
+                            sErrLog += "A túra teljesítésekor nem érhető el:" + string.Join(",", lstTrucksErr.Select(x => x.RegNo).ToArray()) + Environment.NewLine;
+                    }
 
 
                 foreach (FTLTruck trk in lstTrucks)
@@ -252,6 +275,19 @@ namespace FTLSupporter
                              join trkx in lstTrucks on new { clcx.RegNo } equals new { trkx.RegNo }
                              where trkx.MaxDuration == 0 || clcx.FullDuration <= trkx.MaxDuration
                              select clcx;
+
+                if (p_logErr)
+                {
+                    var linqDurationErr = from clcx in lstCalcTours
+                                       join trkx in lstTrucks on new { clcx.RegNo } equals new { trkx.RegNo }
+                                       where !(trkx.MaxDuration == 0 || clcx.FullDuration <= trkx.MaxDuration)
+                                       select clcx;
+
+                    if (linqDurationErr.ToList().Count > 0)
+                        sErrLog += "Max tejesítési időbe nem fér a túra:" + string.Join(",", linqDurationErr.Select(x => x.RegNo+"("+x.FullDuration.ToString()+")").ToArray()) + Environment.NewLine;
+
+                }
+
                 lstCalcTours = linqDuration.ToList();
 
                 //2. max teljesítési KM-be nem fér a túra
@@ -260,7 +296,19 @@ namespace FTLSupporter
                              where trkx.MaxKM == 0 || clcx.FullKM <= trkx.MaxKM
                              select clcx;
 
+                if (p_logErr)
+                {
+                    var linqKMErr = from clcx in lstCalcTours
+                                 join trkx in lstTrucks on new { clcx.RegNo } equals new { trkx.RegNo }
+                                 where !(trkx.MaxKM == 0 || clcx.FullKM <= trkx.MaxKM)
+                                 select clcx;
+                    if (linqKMErr.ToList().Count > 0)
+                        sErrLog += "Max tejesítési KM-be nem fér a túra:" + string.Join(",", linqKMErr.Select(x => x.RegNo + "(" + x.FullKM.ToString() + ")").ToArray()) + Environment.NewLine;
+
+                }
+
                 lstCalcTours = linqKM.ToList();
+
 
                 //3. nyitva tartási időre nem ér oda
                 var linqOpen = from clcx in lstCalcTours
@@ -268,10 +316,20 @@ namespace FTLSupporter
                                p_Task.OpenTo <= clcx.TimeStartTo && p_Task.CloseTo >= clcx.TimeStartTo
                              select clcx;
 
+
+                if (p_logErr)
+                {
+                    var linqOpenErr = from clcx in lstCalcTours
+                                   where !(p_Task.OpenFrom <= clcx.TimeStartFrom && p_Task.CloseFrom >= clcx.TimeStartFrom &&
+                                   p_Task.OpenTo <= clcx.TimeStartTo && p_Task.CloseTo >= clcx.TimeStartTo)
+                                   select clcx;
+                    if (linqOpenErr.ToList().Count > 0)
+                        sErrLog += "Nyitva tartási időre nem ér oda:" + string.Join(",", linqOpenErr.Select(x => x.RegNo + "(" + x.TimeStartFrom.ToString() + "-" + x.TimeStartTo.ToString() + ")").ToArray()) + Environment.NewLine;
+
+                }
+
                 lstCalcTours = linqOpen.ToList();
-
-
-
+                
 /*
  *                   var linqTours = (from o in routesNearBy
                                      orderby o.ItemID

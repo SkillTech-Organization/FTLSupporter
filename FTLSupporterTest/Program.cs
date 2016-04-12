@@ -232,7 +232,7 @@ namespace FTLSupporterTest
             lstTrk.Add(trk5);
             lstTrk.Add(trk6);
 
-            List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk, "", "DB0");
+            List<FTLSupporter.FTLResult> res = FTLSupporter.FTLInterface.FTLSupport(tsk, lstTrk, "", "DB0", true);
             int i = 1;
             foreach (var rr in res)
             {
@@ -294,3 +294,66 @@ namespace FTLSupporterTest
 
 }
 
+
+/*
+ *   var tsk = new FTLTask
+
+            {
+
+                TaskID = "TSK001",Client = "Megbízó 1",PartnerNameFrom = "Felrakó 1",OpenFrom = DateTime.Now.Date.AddHours(6),OpenTo = DateTime.Now.Date.AddHours(12),
+
+                LatFrom = 47.244,LngFrom = 18.628,PartnerNameTo = "Lerakó 1",CloseFrom = DateTime.Now.Date.AddHours(10),CloseTo = DateTime.Now.Date.AddHours(18),
+
+                LatTo = 46.881,LngTo = 19.707,CargoType = "Normál",Weight = 1000,TruckTypes = "Hűtős",LoadDuration = 1,UnLoadDuration = 1
+
+            };
+
+ 
+
+            var trk1 = new FTLTruck
+
+            {
+
+                RegNo = "AAA-111",TruckWeight = 3500,CapacityWeight = 2000,TruckType = "Hűtős",CargoTypes = "Normál",FixCost = 5000,KMCost = 65,RelocateCost = 55,
+
+                MaxKM = 0,MaxDuration = 0, TruckTaskType = FTLTruck.eTruckTaskType.Running,TaskID = "Szállítási feladat 1",IsOneWay = true,
+
+                TimeFrom = DateTime.Now.Date.AddHours(10),LatFrom = 47.665,LngFrom = 17.668,TimeTo = DateTime.Now.Date.AddHours(18),
+
+                LatTo = 48.407,LngTo = 20.852,TimeUnload = DateTime.Now.Date.AddHours(19),TimeCurr = DateTime.Now.Date.AddHours(11),
+
+                LatCurr = 47.500,LngCurr = 18.558
+
+            };
+
+ 
+
+            var trk2 = new FTLTruck
+
+            {
+
+                RegNo = "BBB-222",TruckWeight = 12000,CapacityWeight = 10000,TruckType = "Hűtős",CargoTypes = "Normál,Extra",FixCost = 5000,KMCost = 65,
+
+                RelocateCost = 55,MaxKM = 0,MaxDuration = 0,TruckTaskType = FTLTruck.eTruckTaskType.Available,TimeCurr = DateTime.Now.Date.AddHours(8),
+
+                LatCurr = 47.391,LngCurr = 19.118
+
+            };
+
+ 
+
+            var trk3 = new FTLTruck
+
+            {
+
+                RegNo = "CCC-333",TruckWeight = 12000,CapacityWeight = 10000,TruckType = "Hűtős",CargoTypes = "Normál,Extra",FixCost = 5000,KMCost = 65,
+
+                RelocateCost = 55,MaxKM = 0,MaxDuration = 0,TruckTaskType = FTLTruck.eTruckTaskType.Planned,TaskID = "Tervezett zállítási feladat 2",
+
+                IsOneWay = true,TimeFrom = DateTime.Now.Date.AddHours(16),LatFrom = 46.242,LngFrom = 20.148,TimeTo = DateTime.Now.Date.AddHours(22),
+
+                LatTo = 48.668,LngTo = 19.668,TimeUnload = DateTime.Now.Date.AddHours(23)
+
+            };
+
+ */
