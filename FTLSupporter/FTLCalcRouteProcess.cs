@@ -23,10 +23,10 @@ namespace FTLSupporter
         private bllRoute m_bllRoute;
 
 
-        List<FTLRoute> m_lstRoutes = new List<FTLRoute>();
-        List<FTLTruck> m_lstTrucks;
+        List<FTLRouteX> m_lstRoutes = new List<FTLRouteX>();
+        List<FTLTruckX> m_lstTrucks;
 
-        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRoute> p_lstRoutes, List<FTLTruck> p_lstTrucks)
+        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRouteX> p_lstRoutes, List<FTLTruckX> p_lstTrucks)
             : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
@@ -90,8 +90,8 @@ namespace FTLSupporter
                         foreach (boRoute route in results)
                         {
                             //leválogatjuk, mely útvonalakra tartozik a számítás
-                            List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN.Value).ToList();
-                            foreach (FTLRoute ftr in lstFTLR)
+                            List<FTLRouteX> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN.Value).ToList();
+                            foreach (FTLRouteX ftr in lstFTLR)
                             {
                                 ftr.route = route;
                                 ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);

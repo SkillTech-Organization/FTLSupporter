@@ -7,9 +7,9 @@ using System.Text;
 
 namespace FTLSupporter
 {
-    public class FTLCalcTour
+    public class FTLCalcTourX
     {
-        public FTLCalcTour()
+        public FTLCalcTourX()
         {
             Rank = 0;
             T1Km = 0;

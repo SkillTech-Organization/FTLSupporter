@@ -163,13 +163,10 @@ namespace PMap.Common
                 dir = Path.GetDirectoryName(Application.ExecutablePath);
 
             string ExcFileName = Path.Combine(dir, Global.ExcFileName);
-            StackTrace stackTrace = new StackTrace();
-            StackFrame stackFrame = stackTrace.GetFrame(1);
-            MethodBase methodBase = stackFrame.GetMethod();
 
             string sMsg = String.Format("{0}: {1} "+Environment.NewLine +"{2}", 
                 DateTime.Now.ToString(Global.DATETIMEFORMAT), 
-                GetExceptionText( p_ecx), GetExceptionStack( p_ecx));
+                GetExceptionText( p_ecx), p_ecx.StackTrace);
 
             Util.String2File(sMsg + Environment.NewLine, ExcFileName, true);
         }
@@ -217,20 +214,6 @@ namespace PMap.Common
                 innerMsg = p_ecx.InnerException.Message;
 
             return String.Format("{0} {1}", p_ecx.Message, innerMsg).Trim();
-        }
-
-        /// <summary>
-        /// call stack exceptionból
-        /// </summary>
-        /// <param name="p_ecx"></param>
-        /// <returns></returns>
-        public static string GetExceptionStack(Exception p_ecx)
-        {
-            StackTrace stackTrace = new StackTrace();
-            StackFrame stackFrame = stackTrace.GetFrame(1);
-            MethodBase methodBase = stackFrame.GetMethod();
-
-            return String.Format("{0}.{1} SOURCE {2}" + Environment.NewLine + "***STACK***:" + Environment.NewLine + "{3}", methodBase.DeclaringType.Name, methodBase.Name, p_ecx.Source, p_ecx.StackTrace);
         }
 
 
