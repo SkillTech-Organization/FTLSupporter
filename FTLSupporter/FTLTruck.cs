@@ -18,8 +18,8 @@ namespace FTLSupporter
         }
  
 
-        [DisplayNameAttributeX(Name = "Feladat azonosító", Order = 1)]
-        [Required(ErrorMessage = "Kötelező mező:TruckID")]
+        [DisplayNameAttributeX(Name = "Jármű azonosító", Order = 1)]
+        [Required(ErrorMessage = "Kötelező mező:TruckID")]              /* jellemzően a rendszám */
         public string TruckID { get; set; }
 
         [DisplayNameAttributeX(Name = "Összsúly", Order = 2)]           /* gross vehicle weight rating */
@@ -28,7 +28,6 @@ namespace FTLSupporter
 
 
         [DisplayNameAttributeX(Name = "Kapacitás (súly)", Order = 3)]
-        [Required(ErrorMessage = "Kötelező mező:Capacity")]
         public int Capacity { get; set; }
 
 
@@ -63,6 +62,7 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 11)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
+        public eTruckTaskType TruckTaskType { get; set; }
 
         [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 12)]
         public string RunningTaskID { get; set; }
@@ -71,20 +71,91 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Irányos túra?", Order = 13)]
         public bool CurrIsOneWay { get; set; }
 
+        private DateTime m_CurrTime;
         [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 14)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
-        public DateTime CurrTime { get; set; }
+        public DateTime CurrTime
+        {
+            get {
+                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
+                {
+                    FTLPoint firstPt = CurrTPoints.FirstOrDefault();
+                    if (firstPt != null)
+                        return firstPt.Departure;
+                    else
+                        return DateTime.MinValue;
+                }
+                else
+                    return m_CurrTime; 
+            
+            }
+            set
+            {
+                if (TruckTaskType != eTruckTaskType.Planned)
+                {
+                    m_CurrTime = value;
+                }
+            }
+        }
 
+        private double m_CurrLat;
+        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 15)]
+        [Required(ErrorMessage = "Kötelező mező:CurrLat")]
+        public double CurrLat
+        {
+            get
+            {
+                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
+                {
+                    FTLPoint firstPt = CurrTPoints.FirstOrDefault();
+                    if (firstPt != null)
+                        return firstPt.Lat;
+                    else
+                        return 0;
+                }
+                else
+                    return m_CurrLat;
 
-        [DisplayNameAttributeX(Name = "Aktuális lat", Order = 23)]
-        [Required(ErrorMessage = "Kötelező mező:LatCurr")]
-        public double CurrLat { get; set; }
+            }
+            set
+            {
+                if (TruckTaskType != eTruckTaskType.Planned)
+                {
+                    m_CurrLat = value;
+                }
+            }
+        }
 
-        [DisplayNameAttributeX(Name = "Aktuális lng", Order = 24)]
-        [Required(ErrorMessage = "Kötelező mező:LngCurr")]
-        public double CurrLng { get; set; }
+        private double m_CurrLng;
+        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 16)]
+        [Required(ErrorMessage = "Kötelező mező:CurrLng")]
+        public double CurrLng
+        {
+            get
+            {
+                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
+                {
+                    FTLPoint firstPt = CurrTPoints.FirstOrDefault();
+                    if (firstPt != null)
+                        return firstPt.Lng;
+                    else
+                        return 0;
+                }
+                else
+                    return m_CurrLng;
 
-        [DisplayNameAttributeX(Name = "Túrapontok", Order = 6)]
+            }
+            set
+            {
+                if (TruckTaskType != eTruckTaskType.Planned)
+                {
+                    m_CurrLng = value;
+                }
+            }
+        }
+
+        
+        [DisplayNameAttributeX(Name = "Túrapontok", Order = 17)]
         [Required(ErrorMessage = "Kötelező mező:TPoints")]
         public List<FTLPoint> CurrTPoints { get; set; }
 

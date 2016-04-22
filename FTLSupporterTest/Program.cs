@@ -15,7 +15,7 @@ namespace FTLSupporterTest
         static void Main(string[] args)
         {
 
-            #region túraponok
+            #region túraponok 
             FTLPoint tp1  =  new FTLPoint()
             {
                 TPID = "TP001",
@@ -26,7 +26,8 @@ namespace FTLSupporterTest
                 SrvDuration = 20,
                 Lat = 47.6764844,
                 Lng = 17.6660156,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             FTLPoint tp2  =  new FTLPoint()
@@ -39,7 +40,8 @@ namespace FTLSupporterTest
                 SrvDuration = 30,
                 Lat = 47.1768204,
                 Lng = 18.4189224,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             FTLPoint tp3  =  new FTLPoint()
@@ -52,7 +54,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.4254452,
                 Lng = 19.1494274,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             FTLPoint tp4  =  new FTLPoint()
@@ -65,7 +68,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.4937477,
                 Lng = 19.0563869,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
 
@@ -79,7 +83,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.6711096,
                 Lng = 19.6692610,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             FTLPoint tp6 = new FTLPoint()
@@ -92,7 +97,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.5144182,
                 Lng = 21.6061592,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             FTLPoint tp7 = new FTLPoint()
@@ -105,7 +111,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.9415894,
                 Lng = 21.7126322,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
             
             FTLPoint tp8 = new FTLPoint()
@@ -118,7 +125,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 46.8733652,
                 Lng = 19.7151375,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             FTLPoint tp9 = new FTLPoint()
@@ -131,7 +139,8 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 46.2652228,
                 Lng = 20.1315880,
-                Completed = false
+                Completed = false,
+                Arrival = DateTime.MinValue
             };
 
             #endregion 
@@ -154,7 +163,7 @@ namespace FTLSupporterTest
             FTLTask tsk2 = new FTLTask()
             {
                 TaskID = "TSK2",
-                CargoType = "Száraz",
+                CargoType = "Romlandó",
                 TruckTypes = "Hűtős",
                 Weight = 100,
                 Client = "Debrecen-Nyíregyháza",
@@ -165,10 +174,99 @@ namespace FTLSupporterTest
 
             #endregion
 
-
             #region járművek és futó szállítási feladatok
 
+            /*Szabad jármű, Gyáli tartózkodással */
+            FTLTruck trk1 = new FTLTruck()
+            {
+                TruckID = "TRK1 Gyál",
+                GVWR = 3500,
+                Capacity = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Száraz,Romlandó",
+                FixCost = 10000,
+                KMCost = 50,
+                RelocateCost = 500,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Available,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTime = DateTime.Now.Date.AddHours(7),
+                CurrLat = 47.3844618,
+                CurrLng = 19.2114830,
+                CurrTPoints = new List<FTLPoint>()
+            };
+
+
+            /*Szeged-Kecskemét-Budapest tervezett */
+            /*Indulás 7:00, KKMét:9:00, Bp:11:00 */
+            FTLTruck trk2 = new FTLTruck()
+            {
+                TruckID = "TRK2 Szeged-Kecskemét-Budapest",
+                GVWR = 3500,
+                Capacity = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Egyéb",
+                FixCost = 10000,
+                KMCost = 50,
+                RelocateCost = 500,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Planned,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTPoints = new List<FTLPoint>()
+            };
+
+            var tpx1 = tp9.ShallowCopy();
+            tpx1.Arrival = DateTime.Now.Date.AddHours(7);
+            trk2.CurrTPoints.Add(tpx1);
+            var tpx2 = tp8.ShallowCopy();
+            tpx2.Arrival = DateTime.Now.Date.AddHours(9);
+            trk2.CurrTPoints.Add(tpx2);
+            var tpx3 = tp3.ShallowCopy();
+            tpx3.Arrival = DateTime.Now.Date.AddHours(11);
+            trk2.CurrTPoints.Add(tpx3);
+
+
+            /*Kecskemét-Budapest-Hatvan futó */
+            /*KKMét:8:00, Bp:12:00, Hatvan:14:00 */
+            FTLTruck trk3 = new FTLTruck()
+            {
+                TruckID = "TRK3 Kecskemét-Budapest-Hatvan",
+                GVWR = 3500,
+                Capacity = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Egyéb",
+                FixCost = 10000,
+                KMCost = 50,
+                RelocateCost = 500,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Running,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTPoints = new List<FTLPoint>()
+            };
+
+            var tpx5 = tp8.ShallowCopy();
+            tpx5.Arrival = DateTime.Now.Date.AddHours(8);
+            trk3.CurrTPoints.Add(tpx5);
+            var tpx6 = tp4.ShallowCopy();
+            tpx6.Arrival = DateTime.Now.Date.AddHours(12);
+            trk3.CurrTPoints.Add(tpx6);
+            var tpx7 = tp5.ShallowCopy();
+            tpx7.Arrival = DateTime.Now.Date.AddHours(14);
+            trk3.CurrTPoints.Add(tpx7);
+
             #endregion
+
+            var lstTsk = new List<FTLTask> { tsk1, tsk2};
+            var lstTrk = new List<FTLTruck> { trk1, trk2, trk3 };
+
+            var res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+
 
         }
 

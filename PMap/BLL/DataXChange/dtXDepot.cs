@@ -231,8 +231,7 @@ namespace PMap.BLL.DataXChange
                         ItemNo = nItem,
                         Status = dtXResult.EStatus.EXCEPTION,
                         ErrMessage = Util.GetExceptionText(e),
-                        Data = Util.GetExceptionStack(e)
-
+                        Data = (object) e.StackTrace
                     };
                     result.Add(itemRes);
                     Util.ExceptionLog(e);
