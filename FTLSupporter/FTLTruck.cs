@@ -16,8 +16,9 @@ namespace FTLSupporter
             Planned,                    // Tervezett
             Running                     // Futó
         }
- 
 
+
+        [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Jármű azonosító", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:TruckID")]              /* jellemzően a rendszám */
         public string TruckID { get; set; }

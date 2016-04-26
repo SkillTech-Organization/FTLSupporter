@@ -256,6 +256,7 @@
     <Compile Include="Common\Attrib\DisplayNameAttributeX.cs" />
     <Compile Include="Common\Attrib\EditorX.cs" />
     <Compile Include="Common\Attrib\EvalBase.cs" />
+    <Compile Include="Common\Attrib\ItemIDAttr.cs" />
     <Compile Include="Common\Attrib\PropertyOrderX.cs" />
     <Compile Include="Common\Attrib\ErrorIfAttrX.cs" />
     <Compile Include="Common\CSVParser.cs" />

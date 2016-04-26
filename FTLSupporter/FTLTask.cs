@@ -9,6 +9,7 @@ namespace FTLSupporter
 {
     public class FTLTask
     {
+        [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Feladat azonosító", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:TaskID")]
         public string TaskID { get; set; }

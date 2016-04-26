@@ -10,6 +10,7 @@ namespace FTLSupporter
 
     public class FTLPoint
     {
+        [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Túrapont azonosító", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:TPID")]
         public string TPID { get; set; }
