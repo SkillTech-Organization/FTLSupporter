@@ -20,121 +20,37 @@ namespace FTLSupporter
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
 
-                bool bValid = true;
 
                 //Paraméterek validálása
-                      var List<FTLResult> ValidateObjList(List<object> p_list)
-        {
-            List<FTLResult> result = new List<FTLResult>();
-            foreach (object item in p_list)
-            {
-                List<ObjectValidator.ValidationError> tskErros = ObjectValidator.ValidateObject(item);
-                if (tskErros.Count != 0)
-                {
-                    foreach (var err in tskErros)
-                    {
-                        FTLResMsg msg = new FTLResMsg()
-                        {
-                            Field = err.Field,
-                            Message = err.Message,
-                            CallStack = ""
-                        };
-
-                        PropertyInfo ItemIDProp = item.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
-
-                        FTLResult itemRes = new FTLResult()
-                        {
-                            Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
-                            ObjectName = item.GetType().Name,
-                            ItemID = ItemIDProp != null ? item.GetType().GetProperty(ItemIDProp.Name).GetValue(item, null).ToString() : "???",
-                            Data = msg
-                        };
-                        result.Add(itemRes);
-                    }
-                }
-            }
-
-            return result;
-
-        }
-
+                result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
                 foreach (FTLTask tsk in p_TaskList)
-                {
-                    List<ObjectValidator.ValidationError> tskErros = ObjectValidator.ValidateObject(tsk);
-                    if (tskErros.Count != 0)
-                    {
-                        bValid = false;
-                        foreach (var err in tskErros)
-                        {
-                            FTLResMsg msg = new FTLResMsg()
-                            {
-                                Field = err.Field,
-                                Message = err.Message,
-                                CallStack = ""
-                            };
+                    result.AddRange(ValidateObjList<FTLPoint>(tsk.TPoints));
 
-                            FTLResult itemRes = new FTLResult()
-                            {
-                                Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
-                                ObjectName = "FTLTask",
-                                ItemID = tsk.TaskID,
-                                Data = msg
-                            };
-                            result.Add(itemRes);
-                        }
-
-                        //Túrapontok validálása
-                        foreach(FTLPoint pt in tsk.TPoints)
-                        {
-
-                        }
-
-                    }
-                }
-
+                result.AddRange(ValidateObjList<FTLTruck>(p_TruckList));
                 foreach (FTLTruck trk in p_TruckList)
+                    result.AddRange(ValidateObjList<FTLPoint>(trk.CurrTPoints));
+
+
+
+
+                if (result.Count == 0)
                 {
-                    List<ObjectValidator.ValidationError> trkErros = ObjectValidator.ValidateObject(trk);
-                    if (trkErros.Count != 0)
+                    SQLServerAccess DB;
+
+                    DB = new SQLServerAccess();
+                    DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+                    bllRoute route = new bllRoute(DB);
+                    PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+
+                    //Útvonalszámításhoz a pontok összeszedése
+                    foreach (FTLTask tsk in p_TaskList)
                     {
-                        bValid = false;
-                        foreach (var err in trkErros)
-                        {
-                            FTLResMsg msg = new FTLResMsg()
-                            {
-                                Field = err.Field,
-                                Message = err.Message,
-                                CallStack = ""
-                            };
 
 
 
-                            FTLResult itemRes = new FTLResult()
-                            {
-                                Status = FTLResult.FTLResultStatus.VALIDATIONERROR,
-                                ObjectName = "FTLTruck",
-                                ItemID = trk.TruckID,
-                                Data = msg
-                            };
-                            result.Add(itemRes);
-                        }
                     }
+
                 }
-
-
-
-                SQLServerAccess DB;
-
-                DB = new SQLServerAccess();
-                DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-                bllRoute route = new bllRoute(DB);
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-
-
-
-
-
-
 
 
             }
@@ -162,7 +78,7 @@ namespace FTLSupporter
 
         }
         
-        private List<FTLResult> ValidateObjList( List<object>p_list)
+        private static List<FTLResult> ValidateObjList<T>( List<T>p_list)
         {
             List<FTLResult> result = new List<FTLResult>();
             foreach (object item in p_list)
