@@ -155,11 +155,13 @@ namespace FTLSupporter
             }
         }
 
-        
-        [DisplayNameAttributeX(Name = "Túrapontok", Order = 17)]
-        [Required(ErrorMessage = "Kötelező mező:TPoints")]
+        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 17)]
+        [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
         public List<FTLPoint> CurrTPoints { get; set; }
 
+        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 18)]
+        public int TPointCompleted { get; set; }
+     
 
         internal int RST_ID                             //Összsúly alapján a behajtási övezet ID
         {
@@ -194,6 +196,9 @@ namespace FTLSupporter
                 return Global.ETOLLCAT_MAX35T;
             }
         }
+
+        internal string RZN_ID_LIST { get; set; }
+        internal int NOD_ID_CURR { get; set; }
 
     }
 }

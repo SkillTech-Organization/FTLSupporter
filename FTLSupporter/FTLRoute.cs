@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
-    public class FTLRouteX
+    public class FTLRoute
     {
         public class FTLToll
         {
@@ -15,7 +15,7 @@ namespace FTLSupporter
             public double Toll { get; set; }                           //Útdíj
         }
 
-        public FTLRouteX()
+        public FTLRoute()
         {
             Toll = new List<FTLToll>();
         }

@@ -41,20 +41,17 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:Lng")]
         public double Lng { get; set; }
 
-        [DisplayNameAttributeX(Name = "Teljesítve ?", Order = 9)]
-        public bool Completed { get; set; }
-
-        [DisplayNameAttributeX(Name = "Érkezés", Order = 10)]
+        [DisplayNameAttributeX(Name = "Érkezés", Order = 9)]
 //        [Required(ErrorMessage = "Kötelező mező:Arrival")]
         public DateTime Arrival { get; set; }
 
-        [DisplayNameAttributeX(Name = "Indulás", Order = 11)]
+        [DisplayNameAttributeX(Name = "Indulás", Order = 10)]
 //        [Required(ErrorMessage = "Kötelező mező:Departure")]
         public DateTime Departure { get { return Arrival.AddMinutes(SrvDuration); } }
 
 
         /* local members */
-        internal int NOD_ID_TO { get; set; }
+        internal int NOD_ID { get; set; }
 
         public FTLPoint ShallowCopy()
         {
