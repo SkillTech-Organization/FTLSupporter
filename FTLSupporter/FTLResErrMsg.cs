@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
-    public class FTLResMsg
+    public class FTLResErrMsg
     {
         public string Field { get; set; }
         public string Message { get; set; }

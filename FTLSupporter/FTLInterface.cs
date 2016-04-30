@@ -38,7 +38,7 @@ namespace FTLSupporter
                     if ((trk.TruckTaskType == FTLTruck.eTruckTaskType.Planned || trk.TruckTaskType == FTLTruck.eTruckTaskType.Running) &&
                         trk.TPointCompleted > trk.CurrTPoints.Count - 1)
                     {
-                        FTLResMsg msg = new FTLResMsg()
+                        FTLResErrMsg msg = new FTLResErrMsg()
                         {
                             Field = "TPointCompleted",
                             Message = FTLMessages.E_TRKWRONGCOMPLETED,
@@ -258,8 +258,26 @@ namespace FTLSupporter
                         Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.duration.ToString());
 
 
-                    //Útvonalszámításhoz a pontok összeszedése
-                    foreach (FTLTask tsk in p_TaskList)
+                    //6.eredmény összeállítása
+                    /*
+                    foreach (FTLCalcTask clctsk in tskResult)
+                    {
+                        //6.1 Útvonalak kiolvasása
+                        //6.1.1 From -> Curr 
+                        FTLRoute r1 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_FROM && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                        //6.1.2 Curr -> To
+                        FTLRoute r2 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                        //6.1.3 to ->  taskFrom (ez átállás)
+                        FTLRoute r3 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_TO && x.toNOD_ID == p_Task.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                        //6.1.4 taskFrom -> taskTo (a beosztandó túra teljesítése)
+                        FTLRoute r4 = lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_FROM && x.toNOD_ID == p_Task.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                        //6.1.5 Nem irányos túra esetén TaskTo --> From
+                        FTLRoute r5 = lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_TO && x.toNOD_ID == trk.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                    }
+                    */
+
+                        //Útvonalszámításhoz a pontok összeszedése
+                        foreach (FTLTask tsk in p_TaskList)
                     {
 
 
@@ -272,7 +290,7 @@ namespace FTLSupporter
             catch (Exception ex)
             {
                 Util.ExceptionLog(ex);
-                FTLResMsg rm = new FTLResMsg();
+                FTLResErrMsg rm = new FTLResErrMsg();
                 rm.Field = "";
                 rm.Message = ex.Message;
                 if (ex.InnerException != null)
@@ -303,7 +321,7 @@ namespace FTLSupporter
                 {
                     foreach (var err in tskErros)
                     {
-                        FTLResMsg msg = new FTLResMsg()
+                        FTLResErrMsg msg = new FTLResErrMsg()
                         {
                             Field = err.Field,
                             Message = err.Message,

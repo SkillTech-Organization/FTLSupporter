@@ -83,8 +83,6 @@ namespace FTLSupporter
                                             NeighborsArrFull[xRZN], NeighborsArrCut[xRZN],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 
-                        if( m_cacheRoutes)
-                            m_bllRoute.WriteRoutes(results, true);
 
                         //A kiszámolt eredmények 'bedolgozása'
                         foreach (boRoute route in results)
@@ -93,6 +91,14 @@ namespace FTLSupporter
                             List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN).ToList();
                             foreach (FTLRoute ftr in lstFTLR)
                             {
+
+                                if (m_cacheRoutes)
+                                {
+                                    List<boRoute> rtl = new List<boRoute>();
+                                    rtl.Add(route);
+                                    m_bllRoute.WriteRoutes(rtl, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
+                                }
+
                                 ftr.route = route;
                                 ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                            }

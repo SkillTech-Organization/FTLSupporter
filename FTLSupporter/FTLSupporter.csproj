@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FTLCalcRoute.cs" />
     <Compile Include="FTLCalcRouteProcess.cs" />
     <Compile Include="FTLCalcTask.cs" />
     <Compile Include="FTLCalcTour.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="FTLInterfaceX.cs" />
     <Compile Include="FTLMessages.cs" />
     <Compile Include="FTLPoint.cs" />
-    <Compile Include="FTLResMsg.cs" />
+    <Compile Include="FTLResErrMsg.cs" />
     <Compile Include="FTLResult.cs" />
     <Compile Include="FTLResultX.cs" />
     <Compile Include="FTLRoute.cs" />
