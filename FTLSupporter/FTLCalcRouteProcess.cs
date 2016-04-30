@@ -21,12 +21,11 @@ namespace FTLSupporter
         public List<boRoute> result { get; set; }
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bllRoute m_bllRoute;
-
+        private bool m_cacheRoutes;
 
         List<FTLRoute> m_lstRoutes = new List<FTLRoute>();
-        List<FTLTruckX> m_lstTrucks;
 
-        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRoute> p_lstRoutes, List<FTLTruckX> p_lstTrucks)
+        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRoute> p_lstRoutes, bool p_cacheRoutes)
             : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
@@ -35,8 +34,7 @@ namespace FTLSupporter
             m_bllRoute = new bllRoute(m_DB);
 
             m_lstRoutes = p_lstRoutes;
-            m_lstTrucks = p_lstTrucks;
-
+            m_cacheRoutes = p_cacheRoutes;
         }
 
 
@@ -66,11 +64,11 @@ namespace FTLSupporter
                 boundary = m_bllRoute.getBoundary(allNodes);
 
  
-                Dictionary<int, string> aRZN_ID_LIST = m_lstTrucks.GroupBy(grp => grp.RST_ID).ToDictionary(grp => grp.Key, grp => grp.Max( x=>x.RZN_ID_LIST));
+                List<string> aRZN_ID_LIST = m_lstRoutes.GroupBy(g => g.RZN_ID_LIST).Select(x => x.Key).ToList();
                 Dictionary<string, List<int>[]> NeighborsArrFull = null;
                 Dictionary<string, List<int>[]> NeighborsArrCut = null;
 
-                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST.Values.ToList(), out NeighborsArrFull, out NeighborsArrCut, boundary);
+                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out NeighborsArrFull, out NeighborsArrCut, boundary);
 
 
                 DateTime dtStartX2 = DateTime.Now;
@@ -81,41 +79,23 @@ namespace FTLSupporter
 
                     foreach (var xRZN in aRZN_ID_LIST)
                     {
-                        List<boRoute> results = provider.GetAllRoutes(xRZN.Value, NOD_ID_FROM, toNodes,
-                                            NeighborsArrFull[xRZN.Value], NeighborsArrCut[xRZN.Value],
+                        List<boRoute> results = provider.GetAllRoutes(xRZN, NOD_ID_FROM, toNodes,
+                                            NeighborsArrFull[xRZN], NeighborsArrCut[xRZN],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 
-                           
+                        if( m_cacheRoutes)
+                            m_bllRoute.WriteRoutes(results, true);
+
                         //A kiszámolt eredmények 'bedolgozása'
                         foreach (boRoute route in results)
                         {
                             //leválogatjuk, mely útvonalakra tartozik a számítás
-                            List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN.Value).ToList();
+                            List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN).ToList();
                             foreach (FTLRoute ftr in lstFTLR)
                             {
                                 ftr.route = route;
                                 ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-
-                                /* EZ NEM KELL
-                                foreach (FTLTruck trk in m_lstTrucks)
-                                {
-                                    //Járműkategóriánként és EURO besorolásként kiszámított útdíjak
-                                    if (ftr.Toll.Where(x => x.ETollCat == trk.ETollCat && x.EngineEuro == trk.EngineEuro).FirstOrDefault() == null)
-                                    {
-
-
-                                        string sLastETLCode = "";           // HIBALEHETŐSÉG: az útdíjat a teljesített és a teljesítendő útvonalakra külön számítjuk. Elképzelhető, hogy az eredményben
-                                        // a részútvonalakat úgy adódnak össze, hogy két fizetős útszakasz összekapcsolódik, ezért arra a szakaszra csak egy útdíjat 
-                                        // kell számolni. Az eredmény útdíját újra kell számolni !!!
-
-                                        FTLRoute.FTLToll toll = new FTLRoute.FTLToll() { ETollCat = trk.ETollCat, EngineEuro = trk.EngineEuro,
-                                            Toll = bllPlanEdit.GetToll(route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode)};
-
-                                        ftr.Toll.Add(toll);
-                                    }
-                                }
-                                 */
-                            }
+                           }
 
                         }
 
@@ -133,7 +113,6 @@ namespace FTLSupporter
                     string infoText1 = i.ToString() + "/" + fromNodes.Count();
                     if (PMapIniParams.Instance.TestMode)
                         infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
-                    //                ProcessForm.SetInfoText(m_Hint.Trim() + "=>" + Util.GetSysInfo().PadRight(15) + " " + infoText1.PadRight(25) + " NODE_ID:" + item.Key.ToString());
                     if (ProcessForm != null)
                     {
                         ProcessForm.SetInfoText( infoText1);

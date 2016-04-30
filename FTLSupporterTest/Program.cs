@@ -26,7 +26,6 @@ namespace FTLSupporterTest
                 SrvDuration = 20,
                 Lat = 47.6764844,
                 Lng = 17.6660156,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -40,7 +39,6 @@ namespace FTLSupporterTest
                 SrvDuration = 30,
                 Lat = 47.1768204,
                 Lng = 18.4189224,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -54,7 +52,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.4254452,
                 Lng = 19.1494274,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -68,7 +65,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.4937477,
                 Lng = 19.0563869,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -83,7 +79,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.6711096,
                 Lng = 19.6692610,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -97,7 +92,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.5144182,
                 Lng = 21.6061592,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -111,7 +105,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 47.9415894,
                 Lng = 21.7126322,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
             
@@ -125,7 +118,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 46.8733652,
                 Lng = 19.7151375,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -139,7 +131,6 @@ namespace FTLSupporterTest
                 SrvDuration = 15,
                 Lat = 46.2652228,
                 Lng = 20.1315880,
-                Completed = false,
                 Arrival = DateTime.MinValue
             };
 
@@ -247,7 +238,9 @@ namespace FTLSupporterTest
                 TruckTaskType = FTLTruck.eTruckTaskType.Running,
                 RunningTaskID = "",
                 CurrIsOneWay = false,
-                CurrTPoints = new List<FTLPoint>()
+                CurrTPoints = new List<FTLPoint>(),
+                TPointCompleted = 1                         /* Kecskemét teljesítve */
+                
             };
 
             var tpx5 = tp8.ShallowCopy();

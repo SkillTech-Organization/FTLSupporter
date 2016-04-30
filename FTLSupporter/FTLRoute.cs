@@ -18,6 +18,7 @@ namespace FTLSupporter
         public FTLRoute()
         {
             Toll = new List<FTLToll>();
+            route = null;
         }
         public int fromNOD_ID { get; set; }
         public int toNOD_ID { get; set; }
