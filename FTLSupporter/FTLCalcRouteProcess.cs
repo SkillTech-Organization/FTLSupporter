@@ -74,12 +74,14 @@ namespace FTLSupporter
                 DateTime dtStartX2 = DateTime.Now;
                 foreach (int NOD_ID_FROM in fromNodes)
                 {
+                    List<int> toNodesX = m_lstRoutes.Where(w=>w.fromNOD_ID==NOD_ID_FROM).GroupBy(g => g.toNOD_ID).Select(x => x.Key).ToList();
+
                     i++;
                     dtStart = DateTime.Now;
 
                     foreach (var xRZN in aRZN_ID_LIST)
                     {
-                        List<boRoute> results = provider.GetAllRoutes(xRZN, NOD_ID_FROM, toNodes,
+                        List<boRoute> results = provider.GetAllRoutes(xRZN, NOD_ID_FROM, toNodesX,
                                             NeighborsArrFull[xRZN], NeighborsArrCut[xRZN],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 

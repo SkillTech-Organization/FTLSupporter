@@ -58,22 +58,25 @@ namespace FTLSupporter
         public double MaxDuration { get; set; }
 
 
+        [DisplayNameAttributeX(Name = "motor EURO besorolás", Order = 11)]
+        [Required(ErrorMessage = "Kötelező mező:EngineEuro")]
+        public int EngineEuro { get; set; }                 // 1,2,3,4,.... ==> EURO I, EURO II, EURO III, EURO IV...
 
         /******************* Járműfeladat ******************************/
 
-        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 11)]
+        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 12)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
         public eTruckTaskType TruckTaskType { get; set; }
 
-        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 12)]
+        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 13)]
         public string RunningTaskID { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 13)]
+        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 14)]
         public bool CurrIsOneWay { get; set; }
 
         private DateTime m_CurrTime;
-        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 14)]
+        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 15)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime CurrTime
         {
@@ -100,7 +103,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLat;
-        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 15)]
+        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 16)]
         [Required(ErrorMessage = "Kötelező mező:CurrLat")]
         public double CurrLat
         {
@@ -128,7 +131,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLng;
-        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 16)]
+        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 17)]
         [Required(ErrorMessage = "Kötelező mező:CurrLng")]
         public double CurrLng
         {
@@ -155,11 +158,11 @@ namespace FTLSupporter
             }
         }
 
-        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 17)]
+        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 18)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
         public List<FTLPoint> CurrTPoints { get; set; }
 
-        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 18)]
+        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 19)]
         public int TPointCompleted { get; set; }
      
 

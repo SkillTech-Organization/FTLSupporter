@@ -22,13 +22,13 @@ namespace FTLSupporter
         public bool Completed { get; set; }
 
         [DisplayNameAttributeX(Name = "Útvonal", Order = 4)]
-        public string Route { get; set; }
+        public FTLPMapRoute Route { get; set; }
 
 
         public double Duration { get; set; }
         public double Distance { get; set; }
         public double Toll { get; set; }
 
-
+        public bool Current { get; set; }
     }
 }

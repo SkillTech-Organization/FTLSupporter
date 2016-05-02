@@ -13,6 +13,7 @@ namespace FTLSupporter
         public const string E_TRKCAPACITY = "Kapacitás miatt nem teljesítheti a túrát:";
         public const string E_TRKCLOSETP = "Valamelyik túrapont már zárva:";
         public const string E_TRKWRONGCOMPLETED = "Helytelen teljesített túrapont érték !";
+        public const string E_WRONGCOORD = "Helytelen koordináta!";
 
     }
 }
