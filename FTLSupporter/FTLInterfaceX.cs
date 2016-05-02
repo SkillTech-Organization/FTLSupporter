@@ -123,7 +123,7 @@ namespace FTLSupporter
                 
 
                 //3.nod ID-k meghatározása
-                List<FTLRoute> lstRoutes = new List<FTLRoute>();
+                List<FTLPMapRoute> lstRoutes = new List<FTLPMapRoute>();
 
                 //  3.1:Szállítási feladatok
                 p_Task.NOD_ID_FROM = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_Task.LatFrom, p_Task.LngFrom));
@@ -131,7 +131,7 @@ namespace FTLSupporter
 
                 foreach (string RZN_ID_LIST in lstTrucks.GroupBy(g => g.RZN_ID_LIST).Select(s => s.Key).ToList())
                 {
-                    lstRoutes.Add(new FTLRoute { fromNOD_ID = p_Task.NOD_ID_FROM, toNOD_ID = p_Task.NOD_ID_TO, RZN_ID_LIST = RZN_ID_LIST });
+                    lstRoutes.Add(new FTLPMapRoute { fromNOD_ID = p_Task.NOD_ID_FROM, toNOD_ID = p_Task.NOD_ID_TO, RZN_ID_LIST = RZN_ID_LIST });
                 }
                 //            lstNOD_ID.Add(new int[] { p_Task.NOD_ID_FROM, p_Task.NOD_ID_TO});
 
@@ -146,24 +146,24 @@ namespace FTLSupporter
                     //3.2.1. Számítandó útvonalak gyűjése
                     //3.2.1.1. From -> Curr (nem kell)
                     if( lstRoutes.Where( x=>x.fromNOD_ID==trk.NOD_ID_FROM && x.toNOD_ID==trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault() == null)
-                        lstRoutes.Add(new FTLRoute { fromNOD_ID =  trk.NOD_ID_FROM, toNOD_ID =  trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST });
+                        lstRoutes.Add(new FTLPMapRoute { fromNOD_ID =  trk.NOD_ID_FROM, toNOD_ID =  trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.2. Curr -> To
                     if (lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault() == null)
-                        lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.NOD_ID_TO, RZN_ID_LIST = trk.RZN_ID_LIST });
+                        lstRoutes.Add(new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.NOD_ID_TO, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.3. to ->  taskFrom (ez átállás)
                     if (lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_TO && x.toNOD_ID == p_Task.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault() == null)
-                        lstRoutes.Add(new FTLRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM, RZN_ID_LIST = trk.RZN_ID_LIST });
+                        lstRoutes.Add(new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_TO, toNOD_ID = p_Task.NOD_ID_FROM, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.4. taskFrom -> taskTo (a beosztandó túra teljesítése)
                     if (lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_FROM && x.toNOD_ID == p_Task.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault() == null)
-                        lstRoutes.Add(new FTLRoute { fromNOD_ID = p_Task.NOD_ID_FROM, toNOD_ID = p_Task.NOD_ID_TO, RZN_ID_LIST = trk.RZN_ID_LIST });
+                        lstRoutes.Add(new FTLPMapRoute { fromNOD_ID = p_Task.NOD_ID_FROM, toNOD_ID = p_Task.NOD_ID_TO, RZN_ID_LIST = trk.RZN_ID_LIST });
                     //3.2.1.5. Nem irányos túra esetén TaskTo --> From
                     if (!trk.IsOneWay && lstRoutes.Where(x => x.toNOD_ID == p_Task.NOD_ID_TO && x.toNOD_ID == trk.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault() == null)
-                        lstRoutes.Add(new FTLRoute { fromNOD_ID = p_Task.NOD_ID_TO, toNOD_ID = trk.NOD_ID_FROM, RZN_ID_LIST = trk.RZN_ID_LIST });
+                        lstRoutes.Add(new FTLPMapRoute { fromNOD_ID = p_Task.NOD_ID_TO, toNOD_ID = trk.NOD_ID_FROM, RZN_ID_LIST = trk.RZN_ID_LIST });
 
                 }
 
   
-                foreach( FTLRoute r in lstRoutes.OrderBy( o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
+                foreach( FTLPMapRoute r in lstRoutes.OrderBy( o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                     Console.WriteLine( r.fromNOD_ID.ToString() + " -> " +  r.toNOD_ID.ToString() + " " + r.RZN_ID_LIST);
 
                 //4. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
@@ -171,9 +171,9 @@ namespace FTLSupporter
     //            FTLCalcRouteProcess rp = new FTLCalcRouteProcess(ni, lstRoutes, lstTrucks);
     //            rp.RunWait();
 
-                foreach (FTLRoute r in lstRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
+                foreach (FTLPMapRoute r in lstRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                 {
-                    Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " " + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.duration.ToString());
+                    Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " " + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.duration_nemkell.ToString());
 
                 }
   
@@ -192,15 +192,15 @@ namespace FTLSupporter
 
                     //5.1 Útvonalak kiolvasása
                     //5.1.1 From -> Curr 
-                    FTLRoute r1 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_FROM && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                    FTLPMapRoute r1 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_FROM && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                     //5.1.2 Curr -> To
-                    FTLRoute r2 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                    FTLPMapRoute r2 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                     //5.1.3 to ->  taskFrom (ez átállás)
-                    FTLRoute r3 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_TO && x.toNOD_ID == p_Task.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                    FTLPMapRoute r3 = lstRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_TO && x.toNOD_ID == p_Task.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                     //5.1.4 taskFrom -> taskTo (a beosztandó túra teljesítése)
-                    FTLRoute r4 = lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_FROM && x.toNOD_ID == p_Task.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                    FTLPMapRoute r4 = lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_FROM && x.toNOD_ID == p_Task.NOD_ID_TO && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                     //5.1.5 Nem irányos túra esetén TaskTo --> From
-                    FTLRoute r5 = lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_TO && x.toNOD_ID == trk.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                    FTLPMapRoute r5 = lstRoutes.Where(x => x.fromNOD_ID == p_Task.NOD_ID_TO && x.toNOD_ID == trk.NOD_ID_FROM && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
 
 
                     string sLastETLCode = "";
@@ -221,8 +221,8 @@ namespace FTLSupporter
                         clc.T1Km += r2.route.DST_DISTANCE / 1000;
                         clc.T1Cost += trk.KMCost * r2.route.DST_DISTANCE / 1000;
                         clc.T1Toll += bllPlanEdit.GetToll(r2.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.T1Duration += r2.duration;
-                        clc.TimeCurrTourFinish = trk.TimeCurr.AddMinutes(r2.duration + trk.CurrUnloadDuration);
+                        clc.T1Duration += r2.duration_nemkell;
+                        clc.TimeCurrTourFinish = trk.TimeCurr.AddMinutes(r2.duration_nemkell + trk.CurrUnloadDuration);
                     }
 
                     //to ->  taskFrom (ez átállás)
@@ -231,10 +231,10 @@ namespace FTLSupporter
                         clc.RelKm += r3.route.DST_DISTANCE / 1000;
                         clc.RelCost += trk.RelocateCost * r3.route.DST_DISTANCE / 1000;
                         clc.RelToll += bllPlanEdit.GetToll(r3.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.RelDuration += r3.duration;
+                        clc.RelDuration += r3.duration_nemkell;
 
                         //felrakás kezdete/vége beállítás
-                        clc.TimeStartFrom = clc.TimeCurrTourFinish.AddMinutes(r3.duration);
+                        clc.TimeStartFrom = clc.TimeCurrTourFinish.AddMinutes(r3.duration_nemkell);
                         clc.TimeEndFrom = clc.TimeStartFrom.AddMinutes(p_Task.LoadDuration);
                     }
 
@@ -244,10 +244,10 @@ namespace FTLSupporter
                         clc.T2Km = r4.route.DST_DISTANCE / 1000;
                         clc.T2Cost = trk.KMCost * r4.route.DST_DISTANCE / 1000;
                         clc.T2Toll = bllPlanEdit.GetToll(r4.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.T2Duration += r4.duration;
+                        clc.T2Duration += r4.duration_nemkell;
 
                         //II.túra megérkezés és befejezés számítása
-                        clc.TimeStartTo = clc.TimeEndFrom.AddMinutes(r4.duration);
+                        clc.TimeStartTo = clc.TimeEndFrom.AddMinutes(r4.duration_nemkell);
                         clc.TimeEndTo = clc.TimeStartTo.AddMinutes(p_Task.UnLoadDuration);
                         clc.TimeComplete = clc.TimeEndTo;
                     }
@@ -259,9 +259,9 @@ namespace FTLSupporter
                         clc.RetKm = r5.route.DST_DISTANCE / 1000;
                         clc.RetCost = trk.KMCost * r5.route.DST_DISTANCE / 1000;
                         clc.RetToll = bllPlanEdit.GetToll(r5.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.RetDuration += r5.duration;
+                        clc.RetDuration += r5.duration_nemkell;
 
-                        clc.TimeComplete = clc.TimeEndTo.AddMinutes(r5.duration);
+                        clc.TimeComplete = clc.TimeEndTo.AddMinutes(r5.duration_nemkell);
                     }
                     lstCalcTours.Add(clc);
 

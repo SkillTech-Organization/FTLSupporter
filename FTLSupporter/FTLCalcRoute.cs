@@ -25,5 +25,10 @@ namespace FTLSupporter
         public string Route { get; set; }
 
 
+        public double Duration { get; set; }
+        public double Distance { get; set; }
+        public double Toll { get; set; }
+
+
     }
 }

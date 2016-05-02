@@ -23,9 +23,9 @@ namespace FTLSupporter
         private bllRoute m_bllRoute;
         private bool m_cacheRoutes;
 
-        List<FTLRoute> m_lstRoutes = new List<FTLRoute>();
+        List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
-        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLRoute> p_lstRoutes, bool p_cacheRoutes)
+        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
             : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
@@ -88,8 +88,8 @@ namespace FTLSupporter
                         foreach (boRoute route in results)
                         {
                             //leválogatjuk, mely útvonalakra tartozik a számítás
-                            List<FTLRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN).ToList();
-                            foreach (FTLRoute ftr in lstFTLR)
+                            List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN).ToList();
+                            foreach (FTLPMapRoute ftr in lstFTLR)
                             {
 
                                 if (m_cacheRoutes)
@@ -100,7 +100,7 @@ namespace FTLSupporter
                                 }
 
                                 ftr.route = route;
-                                ftr.duration = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+            //                    ftr.duration_nemkell = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                            }
 
                         }

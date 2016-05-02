@@ -18,18 +18,22 @@ namespace FTLSupporter
             T1Km = 0;
             T1Toll = 0;
             T1Cost = 0;
+            T1CalcRoute = new List<FTLCalcRoute>();
 
             RelKm = 0;
             RelToll = 0;
             RelCost = 0;
+            RelCalcRoute = new List<FTLCalcRoute>();
 
             T2Km = 0;
             T2Toll = 0;
             T2Cost = 0;
+            T2CalcRoute = new List<FTLCalcRoute>();
 
             RetKm = 0;
             RetToll = 0;
             RetCost = 0;
+            RetCalcRoute = new List<FTLCalcRoute>();
         }
 
         [DisplayNameAttributeX(Name = "Beosztott szállítási feladat", Order = 1)]
@@ -70,41 +74,54 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "I.túra időtartam", Order = 12)]
         public double T1Duration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás KM", Order = 13)]
+        [DisplayNameAttributeX(Name = "I.túra részletek", Order = 13)]
+        public List<FTLCalcRoute> T1CalcRoute { get; set; }
+
+        [DisplayNameAttributeX(Name = "Átállás KM", Order = 14)]
         public double RelKm { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás útdíj", Order = 14)]
+        [DisplayNameAttributeX(Name = "Átállás útdíj", Order = 15)]
         public double RelToll { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás költség", Order = 15)]
+        [DisplayNameAttributeX(Name = "Átállás költség", Order = 16)]
         public double RelCost { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás időtartam", Order = 16)]
+        [DisplayNameAttributeX(Name = "Átállás időtartam", Order = 17)]
         public double RelDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra KM", Order = 17)]
+        [DisplayNameAttributeX(Name = "Átállás részletek", Order = 18)]
+        public List<FTLCalcRoute> RelCalcRoute { get; set; }
+
+        [DisplayNameAttributeX(Name = "II.túra KM", Order = 19)]
         public double T2Km { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra útdíj", Order = 18)]
+        [DisplayNameAttributeX(Name = "II.túra útdíj", Order = 20)]
         public double T2Toll { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra költség", Order = 19)]
+        [DisplayNameAttributeX(Name = "II.túra költség", Order = 21)]
         public double T2Cost { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra időtartam", Order = 20)]
+        [DisplayNameAttributeX(Name = "II.túra időtartam", Order = 22)]
         public double T2Duration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés KM", Order = 21)]
+        [DisplayNameAttributeX(Name = "II.túra részletek", Order = 23)]
+        public List<FTLCalcRoute> T2CalcRoute { get; set; }
+
+
+        [DisplayNameAttributeX(Name = "Visszatérés KM", Order = 24)]
         public double RetKm { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés  útdíj", Order = 22)]
+        [DisplayNameAttributeX(Name = "Visszatérés  útdíj", Order = 25)]
         public double RetToll { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés  költség", Order = 23)]
+        [DisplayNameAttributeX(Name = "Visszatérés  költség", Order = 26)]
         public double RetCost { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés időtartam", Order = 24)]
+        [DisplayNameAttributeX(Name = "Visszatérés időtartam", Order = 27)]
         public double RetDuration { get; set; }
+
+        [DisplayNameAttributeX(Name = "Visszatérés részletek", Order = 28)]
+        public List<FTLCalcRoute> RetCalcRoute { get; set; }
 
         #endregion
 

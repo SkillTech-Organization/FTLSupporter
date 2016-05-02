@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
-    public class FTLRoute
+    public class FTLPMapRoute
     {
         public class FTLToll
         {
@@ -15,17 +15,18 @@ namespace FTLSupporter
             public double Toll { get; set; }                           //Útdíj
         }
 
-        public FTLRoute()
+        public FTLPMapRoute()
         {
-            Toll = new List<FTLToll>();
+            Toll_nemkell = new List<FTLToll>();
             route = null;
         }
         public int fromNOD_ID { get; set; }
         public int toNOD_ID { get; set; }
         public string RZN_ID_LIST { get; set; }
         public boRoute route { get; set; }
-        public double duration { get; set; }
-        public List<FTLToll> Toll { get; set; }
+   
+        public double duration_nemkell { get; set; }
+        public List<FTLToll> Toll_nemkell { get; set; }
 
     }
 }

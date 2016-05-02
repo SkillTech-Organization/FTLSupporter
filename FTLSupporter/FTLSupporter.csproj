@@ -64,7 +64,7 @@
     <Compile Include="FTLResErrMsg.cs" />
     <Compile Include="FTLResult.cs" />
     <Compile Include="FTLResultX.cs" />
-    <Compile Include="FTLRoute.cs" />
+    <Compile Include="FTLPMapRoute.cs" />
     <Compile Include="FTLTask.cs" />
     <Compile Include="FTLTaskX.cs" />
     <Compile Include="FTLTruck.cs" />
