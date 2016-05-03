@@ -19,7 +19,7 @@ namespace FTLSupporter
         {
             List<FTLResult> result = new List<FTLResult>();
 
-   
+
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
@@ -51,7 +51,7 @@ namespace FTLSupporter
                         pt.NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                         if (pt.NOD_ID == 0)
                         {
-                            result.Add( getValidationError( pt,  "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                            result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
                         }
                     }
                 }
@@ -70,7 +70,7 @@ namespace FTLSupporter
                     }
 
                     trk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng));
-                    if( trk.NOD_ID_CURR == 0)
+                    if (trk.NOD_ID_CURR == 0)
                         result.Add(getValidationError(trk, "CurrLat,CurrLng", FTLMessages.E_WRONGCOORD));
 
                     //Koordináta feloldás és ellenőrzés
@@ -285,7 +285,7 @@ namespace FTLSupporter
                                     Arrival = trk.CurrTPoints[0].Arrival,
                                     Departure = trk.CurrTPoints[0].Departure,
                                     Completed = trk.TPointCompleted > 0,
-                                    Route = null,
+                                    PMapRoute = null,
                                     Duration = 0,
                                     Distance = 0,
                                     Toll = 0
@@ -304,9 +304,9 @@ namespace FTLSupporter
                                         Arrival = trk.CurrTPoints[i].Arrival,
                                         Departure = trk.CurrTPoints[i].Departure,
                                         Completed = true,
-                                        Route = rt,
+                                        PMapRoute = rt,
                                         Duration = 0,
-                                        Distance = rt.route.DST_DISTANCE,
+                                        Distance = 0,
                                         Toll = 0
                                     };
 
@@ -322,10 +322,10 @@ namespace FTLSupporter
                                         TPoint = null,
                                         Arrival = DateTime.MinValue,
                                         Departure = DateTime.MinValue,
-                                        Completed = false,
-                                        Route = rt,
+                                        Completed = true,
+                                        PMapRoute = rt,
                                         Duration = 0,
-                                        Distance = rt.route.DST_DISTANCE,
+                                        Distance = 0,
                                         Toll = 0,
                                         Current = true
                                     };
@@ -339,9 +339,9 @@ namespace FTLSupporter
                                         Arrival = DateTime.MinValue,
                                         Departure = DateTime.MinValue,
                                         Completed = false,
-                                        Route = rt,
+                                        PMapRoute = rt,
                                         Duration = 0,
-                                        Distance = rt.route.DST_DISTANCE,
+                                        Distance = 0,
                                         Toll = 0,
                                         Current = true
                                     };
@@ -359,9 +359,9 @@ namespace FTLSupporter
                                         Arrival = DateTime.MinValue,
                                         Departure = DateTime.MinValue,
                                         Completed = false,
-                                        Route = rt,
+                                        PMapRoute = rt,
                                         Duration = 0,
-                                        Distance = rt.route.DST_DISTANCE,
+                                        Distance = 0,
                                         Toll = 0
                                     };
 
@@ -371,26 +371,40 @@ namespace FTLSupporter
                             }
 
                             string sLastETLCode = "";
-
+                            DateTime dtPrevTime = DateTime.MinValue;
                             //clctour.T1CalcRoute-ben összegyűjtve a teljes útvonal
                             //
-                            foreach( FTLCalcRoute clr in clctour.T1CalcRoute )
+                            foreach (FTLCalcRoute clr in clctour.T1CalcRoute)
                             {
+                                clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
+                                clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+
+                                if (clr.Completed)
+                                    if (clr.Current)
+                                    {
+                                        //akutális pozíció
+                                        clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather) + clr.TPoint.SrvDuration;
+                                        clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
+                                        clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
+                                    }
+                                    else
+                                    {
+                                        //teljesített túrapont esetén a tényadatokat olvassuk ki.
+                                        clr.Duration = Convert.ToInt32((clr.TPoint.Departure - dtPrevTime).TotalMinutes);
+                                        clr.Arrival = clr.TPoint.Arrival;
+                                        clr.Departure = clr.TPoint.Departure;
+                                    }
+                                else
+                                {
+                                    clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather) + clr.TPoint.SrvDuration;
+                                    clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);
+                                    clr.Departure = clr.Arrival.AddMinutes(clr.TPoint.SrvDuration);
+                                }
+                                dtPrevTime = clr.Departure;
                                 clctour.T1Km += clr.Distance;
-                                clctour.T1Toll += bllPlanEdit.GetToll(clr.Route.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-T1Toll
-T1Cost
-T1Duration
-T1CalcRoute
-                                clc.T1Km = r1.route.DST_DISTANCE / 1000;
-                                clc.T1Cost = trk.KMCost * r1.route.DST_DISTANCE / 1000;
-                                clc.T1Toll = bllPlanEdit.GetToll(r1.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                                if (trk.TruckTaskType != FTLTruckX.eTruckTaskTypeX.Available)
-                                    clc.T1Duration = (trk.TimeCurr - trk.TimeFrom).TotalMinutes;
-
+                                clctour.T1Toll += clr.Toll;
+                                clctour.T1Cost += trk.KMCost * clr.Distance / 1000;
                             }
-
-
                         }
                     }
                     //Eredményt a resultba

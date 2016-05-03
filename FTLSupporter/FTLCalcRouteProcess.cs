@@ -25,7 +25,7 @@ namespace FTLSupporter
 
         List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
-        public FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
+        internal FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
             : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
@@ -74,6 +74,7 @@ namespace FTLSupporter
                 DateTime dtStartX2 = DateTime.Now;
                 foreach (int NOD_ID_FROM in fromNodes)
                 {
+                    //Az FTL esetén csak a megadott pontpárokra kell a számítást elvégezni
                     List<int> toNodesX = m_lstRoutes.Where(w=>w.fromNOD_ID==NOD_ID_FROM).GroupBy(g => g.toNOD_ID).Select(x => x.Key).ToList();
 
                     i++;
