@@ -270,7 +270,7 @@ namespace FTLSupporter
                         {
                             FTLCalcTour clctour = new FTLCalcTour();        //Hozzáadni a FTLCalcTask.CalcTours -hoz!!!
 
-
+                            // Útvonal összeállítása
 
                             /***********/
                             /* T1 túra */
@@ -278,46 +278,44 @@ namespace FTLSupporter
                             if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                             {
 
-                                //6.1.1.1 : legelső pont:
-                                FTLCalcRoute crt0 = new FTLCalcRoute()
-                                {
-                                    TPoint = trk.CurrTPoints[0],
-                                    Arrival = trk.CurrTPoints[0].Arrival,
-                                    Departure = trk.CurrTPoints[0].Departure,
-                                    Completed = trk.TPointCompleted > 0,
-                                    PMapRoute = null,
-                                    Duration = 0,
-                                    Distance = 0,
-                                    Toll = 0
-                                };
+                                //6.1.1 : legelső pont:
+                                clctour.T1CalcRoute.Add(new FTLCalcRoute()
+                                   {
+                                       TPoint = trk.CurrTPoints[0],
+                                       Arrival = trk.CurrTPoints[0].Arrival,
+                                       Departure = trk.CurrTPoints[0].Departure,
+                                       Completed = trk.TPointCompleted > 0,
+                                       PMapRoute = null,
+                                       Duration = 0,
+                                       Distance = 0,
+                                       Toll = 0,
+                                       Current = false
+                                   });
 
-                                clctour.T1CalcRoute.Add(crt0);
-
-                                //6.1.1.2 : második pont->utolsó teljesített pont 
+                                //6.1.2 : második pont->utolsó teljesített pont 
 
                                 for (int i = 1; i < trk.TPointCompleted - 1; i++)
                                 {
                                     FTLPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                    FTLCalcRoute crt1 = new FTLCalcRoute()
-                                    {
-                                        TPoint = trk.CurrTPoints[i],
-                                        Arrival = trk.CurrTPoints[i].Arrival,
-                                        Departure = trk.CurrTPoints[i].Departure,
-                                        Completed = true,
-                                        PMapRoute = rt,
-                                        Duration = 0,
-                                        Distance = 0,
-                                        Toll = 0
-                                    };
-
-                                    clctour.T1CalcRoute.Add(crt1);
+                                    clctour.T1CalcRoute.Add(new FTLCalcRoute()
+                                      {
+                                          TPoint = trk.CurrTPoints[i],
+                                          Arrival = trk.CurrTPoints[i].Arrival,
+                                          Departure = trk.CurrTPoints[i].Departure,
+                                          Completed = true,
+                                          PMapRoute = rt,
+                                          Duration = 0,
+                                          Distance = 0,
+                                          Toll = 0,
+                                          Current = false
+                                      });
                                 }
 
-                                //6.1.1.3  Utolsó teljesített pont -> Curr
+                                //6.1.3  Utolsó teljesített pont -> Curr
                                 if (trk.TPointCompleted > 0)
                                 {
                                     FTLPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                    FTLCalcRoute crt2 = new FTLCalcRoute()
+                                    clctour.T1CalcRoute.Add(new FTLCalcRoute()
                                     {
                                         TPoint = null,
                                         Arrival = DateTime.MinValue,
@@ -328,12 +326,11 @@ namespace FTLSupporter
                                         Distance = 0,
                                         Toll = 0,
                                         Current = true
-                                    };
-                                    clctour.T1CalcRoute.Add(crt2);
+                                    });
 
-                                    //6.1.1.4  Curr --> első teljesítetlen túrapont 
+                                    //6.1.4  Curr --> első teljesítetlen túrapont 
                                     rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == trk.CurrTPoints[trk.TPointCompleted].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                    FTLCalcRoute crt3 = new FTLCalcRoute()
+                                    clctour.T1CalcRoute.Add(new FTLCalcRoute()
                                     {
                                         TPoint = trk.CurrTPoints[trk.TPointCompleted],
                                         Arrival = DateTime.MinValue,
@@ -343,47 +340,147 @@ namespace FTLSupporter
                                         Duration = 0,
                                         Distance = 0,
                                         Toll = 0,
-                                        Current = true
-                                    };
-                                    clctour.T1CalcRoute.Add(crt3);
+                                        Current = false
+                                    });
                                 }
 
-                                //6.1.1.5  első teljesítetlen túrapont --> befejezés
+                                //6.1.5  első teljesítetlen túrapont --> befejezés
 
                                 for (int i = trk.TPointCompleted + 1; i < trk.CurrTPoints.Count; i++)
                                 {
                                     FTLPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints[i - 1].NOD_ID && x.toNOD_ID == trk.CurrTPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                    FTLCalcRoute crt4 = new FTLCalcRoute()
-                                    {
-                                        TPoint = trk.CurrTPoints[i],
-                                        Arrival = DateTime.MinValue,
-                                        Departure = DateTime.MinValue,
-                                        Completed = false,
-                                        PMapRoute = rt,
-                                        Duration = 0,
-                                        Distance = 0,
-                                        Toll = 0
-                                    };
-
-                                    clctour.T1CalcRoute.Add(crt4);
-
+                                    clctour.T1CalcRoute.Add(new FTLCalcRoute()
+                                     {
+                                         TPoint = trk.CurrTPoints[i],
+                                         Arrival = DateTime.MinValue,
+                                         Departure = DateTime.MinValue,
+                                         Completed = false,
+                                         PMapRoute = rt,
+                                         Duration = 0,
+                                         Distance = 0,
+                                         Toll = 0,
+                                         Current = false
+                                     });
                                 }
                             }
+                            else
+                            {
+                                // elérhetőség esetén a legelső túrapont az átállás lesz
+                            }
+
+
+
+                            /***********/
+                            /* Átállás */
+                            /***********/
+                            FTLPMapRoute rtx;
+                            if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                            {
+                                //6.2  utolsó beosztott túrapont --> első beosztandó túrapont
+                                rtx = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.CurrTPoints.Last().NOD_ID && x.toNOD_ID == clctsk.Task.TPoints.First().NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                            }
+                            else
+                            {
+                                //6.2  elérhetőség esetén CURR --> első beosztandó túrapont
+                                rtx = lstPMapRoutes.Where(x => x.fromNOD_ID == trk.NOD_ID_CURR && x.toNOD_ID == clctsk.Task.TPoints.First().NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                            }
+                            clctour.RelCalcRoute= new FTLCalcRoute()
+                            {
+                                TPoint = clctsk.Task.TPoints.First(),
+                                Arrival = DateTime.MinValue,
+                                Departure = DateTime.MinValue,
+                                Completed = false,
+                                PMapRoute = rtx,
+                                Duration = 0,
+                                Distance = 0,
+                                Toll = 0,
+                                Current = false
+                            };
+                            
+                             //6.3 : második pont->utolsó teljesített pont 
+
+                            for (int i = 1; i < clctsk.Task.TPoints.Count - 1; i++)
+                            {
+                                FTLPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints[i - 1].NOD_ID && x.toNOD_ID == clctsk.Task.TPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                                clctour.T2CalcRoute.Add(new FTLCalcRoute()
+                                {
+                                    TPoint = clctsk.Task.TPoints[i],
+                                    Arrival = DateTime.MinValue,
+                                    Departure = DateTime.MinValue,
+                                    Completed = false,
+                                    PMapRoute = rt,
+                                    Duration = 0,
+                                    Distance = 0,
+                                    Toll = 0,
+                                    Current = false
+                                });
+                            }
+
+                            //6.4 : Nem irányos túra esetén tervezett utolsó pont -> futó első pont 
+                            if (!trk.CurrIsOneWay)
+                            {
+                                FTLPoint pt2 = null; 
+
+                                FTLPMapRoute rtx2;
+                                if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                                {
+                                    //6.2  utolsó beosztott túrapont --> első beosztandó túrapont
+                                    rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.CurrTPoints.First().NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                                    pt2 = clctsk.Task.TPoints.Last();
+                                }
+                                else
+                                {
+                                    //6.2  elérhetőség esetén CURR --> első beosztandó túrapont
+                                    rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+                                }
+                                clctour.RetCalcRoute = new FTLCalcRoute()
+                                {
+                                    TPoint = pt2,
+                                    Arrival = DateTime.MinValue,
+                                    Departure = DateTime.MinValue,
+                                    Completed = false,
+                                    PMapRoute = rtx2,
+                                    Duration = 0,
+                                    Distance = 0,
+                                    Toll = 0,
+                                    Current = false
+                                };
+                            }
+
+/********************************************************************************************************************************************************/
+                            //Számítások
 
                             string sLastETLCode = "";
                             DateTime dtPrevTime = DateTime.MinValue;
+
+                            /**********************************************/
+                            /* Aktuálisan teljestített útvonal számítása */
+                            /**********************************************/
+
                             //clctour.T1CalcRoute-ben összegyűjtve a teljes útvonal
                             //
+ 
+                            if( trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                            {
+                               dtPrevTime = clctour.T1CalcRoute.First().Departure;
+                               clctour.T1Start = clctour.T1CalcRoute.First().Arrival;
+                            }
+                            else
+                            {
+                                dtPrevTime = trk.CurrTime;
+                            }
+
+   
                             foreach (FTLCalcRoute clr in clctour.T1CalcRoute)
                             {
                                 clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
                                 clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
 
-                                if (clr.Completed)
+                                if (clr.Completed || clr == clctour.T1CalcRoute.First())
                                     if (clr.Current)
                                     {
                                         //akutális pozíció
-                                        clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather) + clr.TPoint.SrvDuration;
+                                        clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                         clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
                                         clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
                                     }
@@ -396,15 +493,93 @@ namespace FTLSupporter
                                     }
                                 else
                                 {
-                                    clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather) + clr.TPoint.SrvDuration;
+                                    clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                     clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);
-                                    clr.Departure = clr.Arrival.AddMinutes(clr.TPoint.SrvDuration);
+                                    clr.Departure =  dtPrevTime.AddMinutes(clr.TPoint.SrvDuration + clr.TPoint.SrvDuration);
                                 }
                                 dtPrevTime = clr.Departure;
                                 clctour.T1Km += clr.Distance;
                                 clctour.T1Toll += clr.Toll;
                                 clctour.T1Cost += trk.KMCost * clr.Distance / 1000;
+                                
                             }
+
+
+                            if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                            {
+                                clctour.T1End = clctour.T1CalcRoute.Last().Departure;
+                            }
+
+
+                            /*********************/
+                            /* Átállás számítása */
+                            /*********************/
+                            var relclr = clctour.RelCalcRoute;      //csak hogy ne kelljen a clctour.RelCalcRoute válozónevet használni
+                            relclr.Distance = relclr.PMapRoute.route.DST_DISTANCE;
+                            relclr.Toll = bllPlanEdit.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                            relclr.Duration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                            relclr.Arrival = dtPrevTime.AddMinutes(relclr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
+                            relclr.Departure = dtPrevTime.AddMinutes(relclr.Duration +relclr.TPoint.SrvDuration);
+                            dtPrevTime = relclr.Departure;
+                            clctour.RelKm = relclr.Distance;
+                            clctour.RelToll = relclr.Toll;
+                            clctour.RelCost = trk.RelocateCost * relclr.Distance / 1000;
+
+                            if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                                clctour.RelStart = clctour.T1End;
+                            else
+                                clctour.RelStart = trk.CurrTime;
+                            clctour.RelEnd = relclr.Departure;
+
+
+
+                            /*********************************/
+                            /* II. túra teljesítés számítása */
+                            /*********************************/
+                            foreach (FTLCalcRoute clr in clctour.T2CalcRoute)
+                            {
+                                clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
+                                clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                                clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
+                                clr.Departure = dtPrevTime.AddMinutes(clr.Duration + clr.TPoint.SrvDuration);
+
+                                dtPrevTime = clr.Departure;
+                                clctour.T2Km += clr.Distance;
+                                clctour.T2Toll = clr.Toll;
+                                clctour.T2Cost = trk.KMCost * clr.Distance / 1000;
+                            }
+
+                            clctour.T2Start = clctour.RelEnd;
+                            clctour.T2End = clctour.T2CalcRoute.Last().Departure;
+
+
+                            /*************************/
+                            /* Visszatérés számítása */
+                            /*************************/
+                            if (!trk.CurrIsOneWay)
+                            {
+                                var retclr = clctour.RetCalcRoute;      //csak hogy ne kelljen a clctour.RerCalcRoute válozónevet használni
+                                retclr.Distance = retclr.PMapRoute.route.DST_DISTANCE;
+                                retclr.Toll = bllPlanEdit.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                                retclr.Duration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                retclr.Arrival = dtPrevTime.AddMinutes(retclr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
+                                retclr.Departure = dtPrevTime.AddMinutes(retclr.Duration + retclr.TPoint.SrvDuration);
+                                dtPrevTime = retclr.Departure;
+                                clctour.RelKm = retclr.Distance;
+                                clctour.RelToll = retclr.Toll;
+                                clctour.RelCost = trk.KMCost * retclr.Distance / 1000;
+
+                                clctour.RetStart = clctour.T2End;
+                                clctour.RetEnd = retclr.Departure;
+                            }
+
+                            //Összesítők
+                            AdditionalCost
+FullCost
+FullKm
+FullDuration
+
                         }
                     }
                     //Eredményt a resultba

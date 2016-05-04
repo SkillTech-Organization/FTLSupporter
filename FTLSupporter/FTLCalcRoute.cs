@@ -9,6 +9,20 @@ namespace FTLSupporter
     //Eredmény útvonalak
     public class FTLCalcRoute
     {
+
+        public void FTLCalcRoute()
+        {
+            TPoint = null;
+            Arrival = DateTime.MinValue;
+            Departure = DateTime.MinValue;
+            Completed = false;
+            PMapRoute = null;
+            Duration = 0;
+            Distance = 0;
+            Toll = 0;
+            Current = false;
+        }
+
         [DisplayNameAttributeX(Name = "Túrapont", Order = 1)]
         public FTLPoint TPoint { get; set; }
 
