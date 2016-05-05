@@ -10,7 +10,7 @@ namespace FTLSupporter
     public class FTLCalcRoute
     {
 
-        public void FTLCalcRoute()
+        public FTLCalcRoute()
         {
             TPoint = null;
             Arrival = DateTime.MinValue;

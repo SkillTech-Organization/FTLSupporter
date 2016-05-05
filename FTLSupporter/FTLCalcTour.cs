@@ -29,7 +29,7 @@ namespace FTLSupporter
             RelDuration = 0;
             RelStart = DateTime.MinValue;
             RelEnd = DateTime.MinValue;
-            RelCalcRoute = new FTLCalcRoute>();
+            RelCalcRoute = new FTLCalcRoute();
 
             T2Km = 0;
             T2Toll = 0;
@@ -45,7 +45,7 @@ namespace FTLSupporter
             RetDuration = 0;
             RetStart = DateTime.MinValue;
             RetEnd = DateTime.MinValue;
-            RetCalcRoute = new FTLCalcRoute>();
+            RetCalcRoute = new FTLCalcRoute();
         }
 
         [DisplayNameAttributeX(Name = "Beosztott szállítási feladat", Order = 1)]
@@ -58,6 +58,7 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Jármű", Order = 3)]
         public FTLTruck Truck { get; set; }
 
+        #region túrarészletezők
         [DisplayNameAttributeX(Name = "I.túra KM", Order = 4)]
         public double T1Km { get; set; }
 

@@ -17,16 +17,12 @@ namespace FTLSupporter
 
         public FTLPMapRoute()
         {
-            Toll_nemkell = new List<FTLToll>();
             route = null;
         }
         public int fromNOD_ID { get; set; }
         public int toNOD_ID { get; set; }
         public string RZN_ID_LIST { get; set; }
         public boRoute route { get; set; }
-
-        public double duration_nemkell { get; set; }
-        public List<FTLToll> Toll_nemkell { get; set; }
 
     }
 }

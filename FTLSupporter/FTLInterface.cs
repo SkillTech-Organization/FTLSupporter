@@ -259,7 +259,7 @@ namespace FTLSupporter
                     //
                     //debug info
                     foreach (FTLPMapRoute r in lstPMapRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
-                        Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.duration_nemkell.ToString());
+                        Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString());
 
 
                     //6.eredmény összeállítása
@@ -268,7 +268,8 @@ namespace FTLSupporter
                     {
                         foreach (FTLTruck trk in clctsk.CalcTrucks)
                         {
-                            FTLCalcTour clctour = new FTLCalcTour();        //Hozzáadni a FTLCalcTask.CalcTours -hoz!!!
+                            FTLCalcTour clctour = new FTLCalcTour();
+                            clctsk.CalcTours.Add(clctour);
 
                             // Útvonal összeállítása
 
@@ -493,9 +494,10 @@ namespace FTLSupporter
                                     }
                                 else
                                 {
-                                    clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-                                    clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);
-                                    clr.Departure =  dtPrevTime.AddMinutes(clr.TPoint.SrvDuration + clr.TPoint.SrvDuration);
+                                    int routeduration =  bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather) ;
+                                    clr.Arrival = dtPrevTime.AddMinutes(routeduration);
+                                    clr.Duration = routeduration+clr.TPoint.SrvDuration;
+                                    clr.Departure =  dtPrevTime.AddMinutes(clr.Duration);
                                 }
                                 dtPrevTime = clr.Departure;
                                 clctour.T1Km += clr.Distance;
@@ -517,9 +519,12 @@ namespace FTLSupporter
                             var relclr = clctour.RelCalcRoute;      //csak hogy ne kelljen a clctour.RelCalcRoute válozónevet használni
                             relclr.Distance = relclr.PMapRoute.route.DST_DISTANCE;
                             relclr.Toll = bllPlanEdit.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                            relclr.Duration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-                            relclr.Arrival = dtPrevTime.AddMinutes(relclr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
-                            relclr.Departure = dtPrevTime.AddMinutes(relclr.Duration +relclr.TPoint.SrvDuration);
+                            
+                            int rtduration =  bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                            relclr.Arrival = dtPrevTime.AddMinutes(rtduration);             // ez egy köztes pont, itt nincs kiszolgálási idő
+                            relclr.Duration = rtduration + relclr.TPoint.SrvDuration;
+                            relclr.Departure = dtPrevTime.AddMinutes( relclr.Duration);
+
                             dtPrevTime = relclr.Departure;
                             clctour.RelKm = relclr.Distance;
                             clctour.RelToll = relclr.Toll;
@@ -540,9 +545,10 @@ namespace FTLSupporter
                             {
                                 clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
                                 clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                                clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-                                clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
-                                clr.Departure = dtPrevTime.AddMinutes(clr.Duration + clr.TPoint.SrvDuration);
+                                int routeduration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                clr.Arrival = dtPrevTime.AddMinutes(routeduration);
+                                clr.Duration = routeduration + clr.TPoint.SrvDuration;
+                                clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
 
                                 dtPrevTime = clr.Departure;
                                 clctour.T2Km += clr.Distance;
@@ -563,8 +569,8 @@ namespace FTLSupporter
                                 retclr.Distance = retclr.PMapRoute.route.DST_DISTANCE;
                                 retclr.Toll = bllPlanEdit.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
                                 retclr.Duration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-                                retclr.Arrival = dtPrevTime.AddMinutes(retclr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
-                                retclr.Departure = dtPrevTime.AddMinutes(retclr.Duration + retclr.TPoint.SrvDuration);
+                                retclr.Arrival = dtPrevTime.AddMinutes(retclr.Duration);             
+                                retclr.Departure = dtPrevTime.AddMinutes(retclr.Duration);
                                 dtPrevTime = retclr.Departure;
                                 clctour.RelKm = retclr.Distance;
                                 clctour.RelToll = retclr.Toll;
@@ -573,12 +579,6 @@ namespace FTLSupporter
                                 clctour.RetStart = clctour.T2End;
                                 clctour.RetEnd = retclr.Departure;
                             }
-
-                            //Összesítők
-                            AdditionalCost
-FullCost
-FullKm
-FullDuration
 
                         }
                     }

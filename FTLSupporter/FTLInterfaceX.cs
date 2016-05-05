@@ -173,7 +173,7 @@ namespace FTLSupporter
 
                 foreach (FTLPMapRoute r in lstRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                 {
-                    Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " " + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.duration_nemkell.ToString());
+//                    Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " " + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString() + " duration:" + r.route.duration_nemkell.ToString());
 
                 }
   
@@ -221,8 +221,8 @@ namespace FTLSupporter
                         clc.T1Km += r2.route.DST_DISTANCE / 1000;
                         clc.T1Cost += trk.KMCost * r2.route.DST_DISTANCE / 1000;
                         clc.T1Toll += bllPlanEdit.GetToll(r2.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.T1Duration += r2.duration_nemkell;
-                        clc.TimeCurrTourFinish = trk.TimeCurr.AddMinutes(r2.duration_nemkell + trk.CurrUnloadDuration);
+//                        clc.T1Duration += r2.duration_nemkell;
+//                        clc.TimeCurrTourFinish = trk.TimeCurr.AddMinutes(r2.duration_nemkell + trk.CurrUnloadDuration);
                     }
 
                     //to ->  taskFrom (ez átállás)
@@ -231,10 +231,10 @@ namespace FTLSupporter
                         clc.RelKm += r3.route.DST_DISTANCE / 1000;
                         clc.RelCost += trk.RelocateCost * r3.route.DST_DISTANCE / 1000;
                         clc.RelToll += bllPlanEdit.GetToll(r3.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.RelDuration += r3.duration_nemkell;
+//                        clc.RelDuration += r3.duration_nemkell;
 
                         //felrakás kezdete/vége beállítás
-                        clc.TimeStartFrom = clc.TimeCurrTourFinish.AddMinutes(r3.duration_nemkell);
+//                        clc.TimeStartFrom = clc.TimeCurrTourFinish.AddMinutes(r3.duration_nemkell);
                         clc.TimeEndFrom = clc.TimeStartFrom.AddMinutes(p_Task.LoadDuration);
                     }
 
@@ -244,10 +244,10 @@ namespace FTLSupporter
                         clc.T2Km = r4.route.DST_DISTANCE / 1000;
                         clc.T2Cost = trk.KMCost * r4.route.DST_DISTANCE / 1000;
                         clc.T2Toll = bllPlanEdit.GetToll(r4.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.T2Duration += r4.duration_nemkell;
+//                        clc.T2Duration += r4.duration_nemkell;
 
                         //II.túra megérkezés és befejezés számítása
-                        clc.TimeStartTo = clc.TimeEndFrom.AddMinutes(r4.duration_nemkell);
+//                        clc.TimeStartTo = clc.TimeEndFrom.AddMinutes(r4.duration_nemkell);
                         clc.TimeEndTo = clc.TimeStartTo.AddMinutes(p_Task.UnLoadDuration);
                         clc.TimeComplete = clc.TimeEndTo;
                     }
@@ -259,9 +259,9 @@ namespace FTLSupporter
                         clc.RetKm = r5.route.DST_DISTANCE / 1000;
                         clc.RetCost = trk.KMCost * r5.route.DST_DISTANCE / 1000;
                         clc.RetToll = bllPlanEdit.GetToll(r5.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                        clc.RetDuration += r5.duration_nemkell;
+//                        clc.RetDuration += r5.duration_nemkell;
 
-                        clc.TimeComplete = clc.TimeEndTo.AddMinutes(r5.duration_nemkell);
+//                        clc.TimeComplete = clc.TimeEndTo.AddMinutes(r5.duration_nemkell);
                     }
                     lstCalcTours.Add(clc);
 
