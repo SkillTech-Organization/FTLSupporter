@@ -107,16 +107,20 @@ namespace FTLSupporter
 
                     Dictionary<string, FTLPMapRoute> dicRoutes = new Dictionary<string, FTLPMapRoute>();
 
-                    //2. Szóbajöhető járművek meghatározása
-                    //
+                    /************************************************************************************/
+                    /*Járművek előszűrése, NOD_ID meghatározás és visszatérési érték objektum felépítése*/
+                    /************************************************************************************/
+
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
+                        //2. Szóbajöhető járművek meghatározása
+                        //
                         //  2.1: Ha ki van töltve, mely típusú járművek szállíthatják, a megfelelő típusú járművek leválogatása
                         //  2.2: Szállíthatja-e jármű az árutípust?
                         //  2.3: Járműkapacitás megfelelő ?
                         //  2.4: Az jármű pillanatnyi időpontja az összes túrapont zárása előtti-e
                         //
-                        clctsk.CalcTrucks = p_TruckList.Where(x => (clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
+                        List<FTLTruck> CalcTrucks = p_TruckList.Where(x => (clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
                                                                     ("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0 &&
                                                                     x.Capacity >= clctsk.Task.Weight &&
                                                                     clctsk.Task.TPoints.Where(p => p.Close > x.CurrTime).FirstOrDefault() != null).ToList();
@@ -141,7 +145,7 @@ namespace FTLSupporter
 
                         //4. Kiszámolandó útvonalak összegyűjtése
                         string sKey;
-                        List<string> lstRZN_ID_LIST = clctsk.CalcTrucks.GroupBy(g => g.RZN_ID_LIST).Select(s => s.Key).ToList();
+                        List<string> lstRZN_ID_LIST = CalcTrucks.GroupBy(g => g.RZN_ID_LIST).Select(s => s.Key).ToList();
                         //4.1 Beosztandó szállítási feladatok összes pontjára minden szóbejöhető jármű zónalistájával
                         for (int i = 0; i < clctsk.Task.TPoints.Count - 1; i++)
                         {
@@ -153,7 +157,7 @@ namespace FTLSupporter
                             }
                         }
 
-                        foreach (FTLTruck trk in clctsk.CalcTrucks)
+                        foreach (FTLTruck trk in CalcTrucks)
                         {
                             if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                             {
@@ -212,6 +216,16 @@ namespace FTLSupporter
 
                             }
                         }
+
+                        /********************************/
+                        /* Eredmény objektum felépítése */ 
+                        /********************************/
+                        foreach (FTLTruck trk in CalcTrucks)
+                        {
+                            FTLCalcTour clctour = new FTLCalcTour();
+                            clctour.Truck = trk;
+                            clctsk.CalcTours.Add(clctour);
+                        }
                     }
 
                     //5. legeneráljuk az összes futó túra befejezés és a szállítási feladat felrakás távolságot/menetidőt
@@ -266,11 +280,10 @@ namespace FTLSupporter
 
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
-                        foreach (FTLTruck trk in clctsk.CalcTrucks)
+                        foreach ( FTLCalcTour clctour in clctsk.CalcTours)
                         {
-                            FTLCalcTour clctour = new FTLCalcTour();
-                            clctsk.CalcTours.Add(clctour);
 
+                            FTLTruck trk  = clctour.Truck; 
                             // Útvonal összeállítása
 
                             /***********/
@@ -400,7 +413,7 @@ namespace FTLSupporter
                             
                              //6.3 : második pont->utolsó teljesített pont 
 
-                            for (int i = 1; i < clctsk.Task.TPoints.Count - 1; i++)
+                            for (int i = 1; i < clctsk.Task.TPoints.Count ; i++)
                             {
                                 FTLPMapRoute rt = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints[i - 1].NOD_ID && x.toNOD_ID == clctsk.Task.TPoints[i].NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                                 clctour.T2CalcRoute.Add(new FTLCalcRoute()
@@ -431,7 +444,7 @@ namespace FTLSupporter
                                 }
                                 else
                                 {
-                                    //6.2  elérhetőség esetén CURR --> első beosztandó túrapont
+                                    //6.2  elérhetőség esetén utolsó beosztandó túrapont --> CURR
                                     rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.NOD_ID_CURR && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
                                 }
                                 clctour.RetCalcRoute = new FTLCalcRoute()
@@ -447,63 +460,126 @@ namespace FTLSupporter
                                     Current = false
                                 };
                             }
+                        }
+                    }
 
 /********************************************************************************************************************************************************/
-                            //Számítások
+
+                    
+                    /*****************************************************************************************************/
+                    /* Járművek törlése, amelyek nem tudják teljesíteni a túrákat, mert nem találtunk útvonalat hozzájuk */
+                    /*****************************************************************************************************/
+                    foreach (FTLCalcTask clctsk in tskResult)
+                    {
+
+                        List<FTLTruck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available &&
+                                                                               x.T1CalcRoute.Where(r => r.PMapRoute != null &&
+                                                                                                    r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
+                        if (lstTrucksErrT1.Count > 0)
+                            clctsk.Messages.Add(FTLMessages.E_T1MISSROUTE + string.Join(",", lstTrucksErrT1.Select(x => x.TruckID).ToArray()));
+
+                        List<FTLTruck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.RelCalcRoute.PMapRoute.fromNOD_ID != x.RelCalcRoute.PMapRoute.toNOD_ID && x.RelCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
+                        if (lstTrucksErrRel.Count > 0)
+                            clctsk.Messages.Add(FTLMessages.E_RELMISSROUTE + string.Join(",", lstTrucksErrRel.Select(x => x.TruckID).ToArray()));
+
+
+                        List<FTLTruck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.T2CalcRoute.Where(r => r.PMapRoute != null &&
+                                                                                    r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
+                        if (lstTrucksErrT2.Count > 0)
+                            clctsk.Messages.Add(FTLMessages.E_T2MISSROUTE + string.Join(",", lstTrucksErrT2.Select(x => x.TruckID).ToArray()));
+
+                        List<FTLTruck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.RetCalcRoute.PMapRoute != null && x.RetCalcRoute.PMapRoute.fromNOD_ID != x.RetCalcRoute.PMapRoute.toNOD_ID && x.RetCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
+                        if (lstTrucksErrRet.Count > 0)
+                            clctsk.Messages.Add(FTLMessages.E_RETMISSROUTE + string.Join(",", lstTrucksErrRet.Select(x => x.TruckID).ToArray()));
+
+                        clctsk.CalcTours.RemoveAll( x => lstTrucksErrT1.Contains(x.Truck) ||
+                                                        lstTrucksErrRel.Contains(x.Truck) ||
+                                                        lstTrucksErrT2.Contains(x.Truck) ||
+                                                        lstTrucksErrRet.Contains(x.Truck));
+                    }
+
+                    
+                    /***************/
+                    /* Számítások  */
+                    /***************/
+
+                    foreach (FTLCalcTask clctsk in tskResult)
+                    {
+                        foreach ( FTLCalcTour clctour in clctsk.CalcTours)
+                        {
+
+                            FTLTruck trk  = clctour.Truck; 
+                            
 
                             string sLastETLCode = "";
                             DateTime dtPrevTime = DateTime.MinValue;
 
-                            /**********************************************/
-                            /* Aktuálisan teljestített útvonal számítása */
-                            /**********************************************/
 
-                            //clctour.T1CalcRoute-ben összegyűjtve a teljes útvonal
-                            //
- 
-                            if( trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
-                            {
-                               dtPrevTime = clctour.T1CalcRoute.First().Departure;
-                               clctour.T1Start = clctour.T1CalcRoute.First().Arrival;
-                            }
-                            else
+
+
+                            if (trk.TruckTaskType == FTLTruck.eTruckTaskType.Available)
                             {
                                 dtPrevTime = trk.CurrTime;
                             }
 
-   
+
+                            /**********************************************/
+                            /* Aktuálisan teljestített útvonal számítása */
+                            /**********************************************/
                             foreach (FTLCalcRoute clr in clctour.T1CalcRoute)
                             {
-                                clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
-                                clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-
-                                if (clr.Completed || clr == clctour.T1CalcRoute.First())
-                                    if (clr.Current)
+                                if (clr == clctour.T1CalcRoute.First())     // legelső túrapont (raktári felrakás)
+                                {
+                                    if (clr.Completed)
                                     {
-                                        //akutális pozíció
-                                        clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-                                        clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
-                                        clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
-                                    }
-                                    else
-                                    {
-                                        //teljesített túrapont esetén a tényadatokat olvassuk ki.
-                                        clr.Duration = Convert.ToInt32((clr.TPoint.Departure - dtPrevTime).TotalMinutes);
+                                        // ha teljesítve van a felrakás, a tényadatokat vesszük
+                                        clr.Duration = Convert.ToInt32((clr.TPoint.Departure - clr.TPoint.Arrival).TotalMinutes);
                                         clr.Arrival = clr.TPoint.Arrival;
                                         clr.Departure = clr.TPoint.Departure;
                                     }
+                                    else
+                                    {
+                                        //Ha nincs teljesítve a felrakás, a clr.Arrival-t vesszük első időpontnak
+                                        clr.Duration = clr.TPoint.SrvDuration;
+                                        clr.Arrival = clr.TPoint.Arrival;
+                                        clr.Departure = clr.TPoint.Arrival.AddMinutes(clr.TPoint.SrvDuration);
+                                    }
+                                    clr.Distance = 0;
+                                    clr.Toll = 0;
+                                }
                                 else
                                 {
-                                    int routeduration =  bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather) ;
-                                    clr.Arrival = dtPrevTime.AddMinutes(routeduration);
-                                    clr.Duration = routeduration+clr.TPoint.SrvDuration;
-                                    clr.Departure =  dtPrevTime.AddMinutes(clr.Duration);
+
+                                    clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
+                                    clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+
+                                    if (clr.Completed)
+                                        if (clr.Current)
+                                        {
+                                            //akutális pozíció mindig teljesített
+                                            clr.Duration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                            clr.Arrival = dtPrevTime.AddMinutes(clr.Duration);             // ez egy köztes pont, itt nincs kiszolgálási idő
+                                            clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
+                                        }
+                                        else
+                                        {
+                                            //teljesített túrapont esetén a tényadatokat olvassuk ki.
+                                            clr.Duration = Convert.ToInt32((clr.TPoint.Departure - dtPrevTime).TotalMinutes);
+                                            clr.Arrival = clr.TPoint.Arrival;
+                                            clr.Departure = clr.TPoint.Departure;
+                                        }
+                                    else
+                                    {
+                                        int routeduration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                        clr.Arrival = dtPrevTime.AddMinutes(routeduration);
+                                        clr.Duration = routeduration + clr.TPoint.SrvDuration;
+                                        clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
+                                    }
                                 }
                                 dtPrevTime = clr.Departure;
-                                clctour.T1Km += clr.Distance;
+                                clctour.T1M += clr.Distance;
                                 clctour.T1Toll += clr.Toll;
                                 clctour.T1Cost += trk.KMCost * clr.Distance / 1000;
-                                
                             }
 
 
@@ -526,9 +602,10 @@ namespace FTLSupporter
                             relclr.Departure = dtPrevTime.AddMinutes( relclr.Duration);
 
                             dtPrevTime = relclr.Departure;
-                            clctour.RelKm = relclr.Distance;
+                            clctour.RelM = relclr.Distance;
                             clctour.RelToll = relclr.Toll;
                             clctour.RelCost = trk.RelocateCost * relclr.Distance / 1000;
+                            clctour.RelDuration = relclr.Duration;
 
                             if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                                 clctour.RelStart = clctour.T1End;
@@ -551,7 +628,7 @@ namespace FTLSupporter
                                 clr.Departure = dtPrevTime.AddMinutes(clr.Duration);
 
                                 dtPrevTime = clr.Departure;
-                                clctour.T2Km += clr.Distance;
+                                clctour.T2M += clr.Distance;
                                 clctour.T2Toll = clr.Toll;
                                 clctour.T2Cost = trk.KMCost * clr.Distance / 1000;
                             }
@@ -572,7 +649,7 @@ namespace FTLSupporter
                                 retclr.Arrival = dtPrevTime.AddMinutes(retclr.Duration);             
                                 retclr.Departure = dtPrevTime.AddMinutes(retclr.Duration);
                                 dtPrevTime = retclr.Departure;
-                                clctour.RelKm = retclr.Distance;
+                                clctour.RelM = retclr.Distance;
                                 clctour.RelToll = retclr.Toll;
                                 clctour.RelCost = trk.KMCost * retclr.Distance / 1000;
 
@@ -631,7 +708,7 @@ namespace FTLSupporter
 
         private static FTLResult getValidationError(Object p_obj, string p_field, string p_msg)
         {
-            FTLResErrMsg msg = new FTLResErrMsg() { Field = "Lat,Lng", Message = FTLMessages.E_WRONGCOORD, CallStack = "" };
+            FTLResErrMsg msg = new FTLResErrMsg() { Field = p_field, Message = p_msg, CallStack = "" };
             PropertyInfo ItemIDProp = p_obj.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
 
             FTLResult itemRes = new FTLResult()

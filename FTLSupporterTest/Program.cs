@@ -171,10 +171,11 @@ namespace FTLSupporterTest
             FTLTruck trk1 = new FTLTruck()
             {
                 TruckID = "TRK1 Gyál",
-                GVWR = 3500,
+                GVWR = 20000,
                 Capacity = 2000,
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz,Romlandó",
+                EngineEuro = 2,
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -199,6 +200,7 @@ namespace FTLSupporterTest
                 Capacity = 2000,
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz",
+                EngineEuro = 2,
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -230,6 +232,7 @@ namespace FTLSupporterTest
                 Capacity = 2000,
                 TruckType = "Hűtős",
                 CargoTypes = "Nemlétező típus",
+                EngineEuro = 2,
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -239,8 +242,10 @@ namespace FTLSupporterTest
                 RunningTaskID = "",
                 CurrIsOneWay = false,
                 CurrTPoints = new List<FTLPoint>(),
-                TPointCompleted = 1                         /* Kecskemét teljesítve */
-                
+                TPointCompleted = 1,                         /* Kecskemét teljesítve */
+                    CurrTime = DateTime.Now.Date.AddHours(9),       //9:00-kor tart itt
+                    CurrLat = 47.047533,                     
+                    CurrLng = 19.557893,
             };
 
             var tpx5 = tp8.ShallowCopy();

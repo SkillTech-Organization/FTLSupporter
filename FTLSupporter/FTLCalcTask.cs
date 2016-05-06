@@ -10,7 +10,6 @@ namespace FTLSupporter
         public FTLCalcTask()
         {
             CalcTours = new List<FTLCalcTour>();
-            CalcTrucks = new List<FTLTruck>();
             Messages = new List<string>();
         }
 
@@ -18,9 +17,6 @@ namespace FTLSupporter
         public List<FTLCalcTour>  CalcTours { get; set; }
         public List<string> Messages { get; set; }
 
-
-        // Belső használatú mezők
-        internal List<FTLTruck> CalcTrucks { get; set; }
 
     }
 }

@@ -46,7 +46,7 @@ namespace PMap.Common.Attrib
 
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
-    public class ErrorIfConstAttrX : ValidationAttribute
+    public class    ErrorIfConstAttrX : ValidationAttribute
     {
         private EvalMode m_evalMode;
 
@@ -62,13 +62,13 @@ namespace PMap.Common.Attrib
             }
         }
         
-        public ErrorIfConstAttrX(EvalMode p_evalMode, String p_constValues, string p_errMsg)
+        public ErrorIfConstAttrX(EvalMode p_evalMode, object p_constValues, string p_errMsg)
         {
             m_evalMode = p_evalMode;
             ErrorMessage = p_errMsg;
 
             if (m_evalMode == EvalMode.EvalIsInArray || m_evalMode == EvalMode.EvalIsInArray)
-                m_constValues = p_constValues.Split(',');
+                m_constValues = p_constValues.ToString().Split(',');
             else
                 m_constValue = p_constValues;
 

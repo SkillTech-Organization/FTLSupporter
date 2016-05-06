@@ -20,11 +20,11 @@ namespace FTLSupporter
 
         [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Jármű azonosító", Order = 1)]
-        [Required(ErrorMessage = "Kötelező mező:TruckID")]              /* jellemzően a rendszám */
+        [Required(ErrorMessage = "Kötelező mező:TruckID")]                          /* jellemzően a rendszám */
         public string TruckID { get; set; }
 
         [DisplayNameAttributeX(Name = "Összsúly", Order = 2)]           /* gross vehicle weight rating */
-        [Required(ErrorMessage = "Kötelező mező:GVWR")]
+        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:GVWR")]              
         public int GVWR { get; set; }
 
 
@@ -59,7 +59,7 @@ namespace FTLSupporter
 
 
         [DisplayNameAttributeX(Name = "motor EURO besorolás", Order = 11)]
-        [Required(ErrorMessage = "Kötelező mező:EngineEuro")]
+        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:EngineEuro")]
         public int EngineEuro { get; set; }                 // 1,2,3,4,.... ==> EURO I, EURO II, EURO III, EURO IV...
 
         /******************* Járműfeladat ******************************/
@@ -104,7 +104,7 @@ namespace FTLSupporter
 
         private double m_CurrLat;
         [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 16)]
-        [Required(ErrorMessage = "Kötelező mező:CurrLat")]
+        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLat")]
         public double CurrLat
         {
             get
@@ -132,7 +132,7 @@ namespace FTLSupporter
 
         private double m_CurrLng;
         [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 17)]
-        [Required(ErrorMessage = "Kötelező mező:CurrLng")]
+        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLng")]
         public double CurrLng
         {
             get

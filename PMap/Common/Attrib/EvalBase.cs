@@ -136,7 +136,7 @@ namespace PMap.Common.Attrib
             string sCurrObj = getStringValue(o);
             string sAnotherObj = getStringValue(m_anotherValue);
 
-            if (m_inverseCondition)                                 //Azért, hogy az egyelnlőség false legyen, nem lehet a compareTo-t negálni.
+            if (m_inverseCondition)                                 //Azért, hogy az egyenlőség false legyen, nem lehet a compareTo-t negálni.
                 return (sCurrObj.CompareTo(sAnotherObj) < 0);
             else
                 return (sCurrObj.CompareTo(sAnotherObj) > 0);

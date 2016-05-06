@@ -14,6 +14,10 @@ namespace FTLSupporter
         public const string E_TRKCLOSETP = "Valamelyik túrapont már zárva:";
         public const string E_TRKWRONGCOMPLETED = "Helytelen teljesített túrapont érték !";
         public const string E_WRONGCOORD = "Helytelen koordináta!";
+        public const string E_T1MISSROUTE = "Aktuális túra teljesítésénél hiányzó szakasz:";
+        public const string E_RELMISSROUTE = "Átálásnál hiányzó szakasz:";
+        public const string E_T2MISSROUTE = "Beosztandó túra teljesítésénél hiányzó szakasz:";
+        public const string E_RETMISSROUTE = "Visszetérés teljesítésénél hiányzó szakasz:";
 
     }
 }
