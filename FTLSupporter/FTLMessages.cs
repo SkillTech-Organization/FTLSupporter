@@ -11,7 +11,7 @@ namespace FTLSupporter
         public const string E_TRKTYPE = "Járműtípus miatt nem teljesítheti a túrát!";
         public const string E_TRKCARGOTYPE = "Árutípus miatt nem teljesítheti a túrát!";
         public const string E_TRKCAPACITY = "Kapacitás miatt nem teljesítheti a túrát!";
-        public const string E_TRKCLOSETP = "Valamelyik túrapont már zárva:";
+        public const string E_TRKCLOSETP = "Túrapont már zárva a számítás időpontjában:";
         public const string E_TRKWRONGCOMPLETED = "Helytelen teljesített túrapont érték !";
         public const string E_WRONGCOORD = "Helytelen koordináta!";
         public const string E_T1MISSROUTE = "Aktuális túra teljesítésénél hiányzó szakasz!";
@@ -20,6 +20,7 @@ namespace FTLSupporter
         public const string E_RETMISSROUTE = "Visszetérés teljesítésénél hiányzó szakasz!";
         public const string E_MAXDURATION = "Teljesítés max. idő túllépés!";
         public const string E_MAXKM = "Teljesítés max. KM túllépés!";
+        public const string E_CLOSETP = "Túrapont zárva az érkezés időpontjában:";
 
     }
 }

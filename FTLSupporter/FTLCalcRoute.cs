@@ -17,7 +17,9 @@ namespace FTLSupporter
             Departure = DateTime.MinValue;
             Completed = false;
             PMapRoute = null;
-            Duration = 0;
+            RouteDuration = 0;
+            WaitingDuration = 0;
+            SrvDuration = 0;
             Distance = 0;
             Toll = 0;
             Current = false;
@@ -35,14 +37,25 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Teljesítve", Order = 4)]
         public bool Completed { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útvonal", Order = 4)]
+        [DisplayNameAttributeX(Name = "Útvonal", Order = 5)]
         public string RouteX { get; set; }
 
+        [DisplayNameAttributeX(Name = "Utazás időtartama", Order = 6)]
+        public int RouteDuration { get; set; }
 
-        public int Duration { get; set; }
+        [DisplayNameAttributeX(Name = "Várakozási idő", Order = 7)]
+        public int WaitingDuration { get; set; }
+
+        [DisplayNameAttributeX(Name = "Kiszolgálási idő", Order = 8)]
+        public int SrvDuration { get; set; }
+
+        [DisplayNameAttributeX(Name = "Távolság (m)", Order = 9)]
         public double Distance { get; set; }
+
+        [DisplayNameAttributeX(Name = "Útdíj", Order = 10)]
         public double Toll { get; set; }
 
+        [DisplayNameAttributeX(Name = "Aktuális pont?", Order = 11)]
         public bool Current { get; set; }
 
 

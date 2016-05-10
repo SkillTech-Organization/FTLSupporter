@@ -23,7 +23,7 @@ namespace FTLSupporter
         public FTLCalcTour()
         {
             Status = FTLCalcTourStatus.OK;
-            Msg = "";
+            Msg = new List<string>();
 
             Rank = 0;
             T1M = 0;

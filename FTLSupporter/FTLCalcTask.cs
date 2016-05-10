@@ -10,7 +10,6 @@ namespace FTLSupporter
         public FTLCalcTask()
         {
             CalcTours = new List<FTLCalcTour>();
-            Messages = new List<string>();
         }
 
         public FTLTask Task { get; set; }
