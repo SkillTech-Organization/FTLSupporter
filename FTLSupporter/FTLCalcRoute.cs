@@ -23,6 +23,7 @@ namespace FTLSupporter
             Distance = 0;
             Toll = 0;
             Current = false;
+            RoutePoints = "";
         }
 
         [DisplayNameAttributeX(Name = "Túrapont", Order = 1)]
@@ -37,28 +38,28 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Teljesítve", Order = 4)]
         public bool Completed { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útvonal", Order = 5)]
-        public string RouteX { get; set; }
-
-        [DisplayNameAttributeX(Name = "Utazás időtartama", Order = 6)]
+        [DisplayNameAttributeX(Name = "Utazás időtartama", Order = 5)]
         public int RouteDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Várakozási idő", Order = 7)]
+        [DisplayNameAttributeX(Name = "Várakozási idő", Order = 6)]
         public int WaitingDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Kiszolgálási idő", Order = 8)]
+        [DisplayNameAttributeX(Name = "Kiszolgálási idő", Order = 7)]
         public int SrvDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Távolság (m)", Order = 9)]
+        [DisplayNameAttributeX(Name = "Távolság (m)", Order = 8)]
         public double Distance { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíj", Order = 10)]
+        [DisplayNameAttributeX(Name = "Útdíj", Order = 9)]
         public double Toll { get; set; }
 
-        [DisplayNameAttributeX(Name = "Aktuális pont?", Order = 11)]
+        [DisplayNameAttributeX(Name = "Aktuális pont?", Order = 10)]
         public bool Current { get; set; }
 
+        [DisplayNameAttributeX(Name = "Útvonal pontok", Order = 11)]
+        public string RoutePoints { get; set; }
 
+        /* munkamező */
         internal FTLPMapRoute PMapRoute { get; set; }
     
     }

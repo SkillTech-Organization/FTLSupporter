@@ -68,114 +68,114 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Beosztott szállítási feladat", Order = 3)]
         public FTLTask Task { get; set; }
 
-        [DisplayNameAttributeX(Name = "Helyezés", Order = 2)]
+        [DisplayNameAttributeX(Name = "Helyezés", Order = 4)]
         public int Rank { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Jármű", Order = 3)]
+        [DisplayNameAttributeX(Name = "Jármű", Order = 5)]
         public FTLTruck Truck { get; set; }
 
         #region túrarészletezők
-        [DisplayNameAttributeX(Name = "I.túra hossz (m)", Order = 4)]
+        [DisplayNameAttributeX(Name = "I.túra hossz (m)", Order = 6)]
         public double T1M { get; set; }
 
-        [DisplayNameAttributeX(Name = "I.túra útdíj", Order = 5)]
+        [DisplayNameAttributeX(Name = "I.túra útdíj", Order = 7)]
         public double T1Toll { get; set; }
 
-        [DisplayNameAttributeX(Name = "I.túra költség", Order = 6)]
+        [DisplayNameAttributeX(Name = "I.túra költség", Order = 8)]
         public double T1Cost { get; set; }
 
-        [DisplayNameAttributeX(Name = "I.túra időtartam", Order = 7)]
+        [DisplayNameAttributeX(Name = "I.túra időtartam", Order = 9)]
         public double T1Duration { get; set; }
 
-        [DisplayNameAttributeX(Name = "I.túra kezdete", Order = 8)]
+        [DisplayNameAttributeX(Name = "I.túra kezdete", Order = 10)]
         public DateTime T1Start { get; set; }
 
-        [DisplayNameAttributeX(Name = "I.túra vége", Order = 9)]
+        [DisplayNameAttributeX(Name = "I.túra vége", Order = 11)]
         public DateTime T1End { get; set; }
 
-        [DisplayNameAttributeX(Name = "I.túra részletek", Order = 10)]
+        [DisplayNameAttributeX(Name = "I.túra részletek", Order = 12)]
         public List<FTLCalcRoute> T1CalcRoute { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás hossz (m)", Order = 11)]
+        [DisplayNameAttributeX(Name = "Átállás hossz (m)", Order = 13)]
         public double RelM { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás útdíj", Order = 12)]
+        [DisplayNameAttributeX(Name = "Átállás útdíj", Order = 14)]
         public double RelToll { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás költség", Order = 13)]
+        [DisplayNameAttributeX(Name = "Átállás költség", Order = 15)]
         public double RelCost { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás időtartam", Order = 14)]
+        [DisplayNameAttributeX(Name = "Átállás időtartam", Order = 16)]
         public double RelDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás kezdete", Order = 15)]
+        [DisplayNameAttributeX(Name = "Átállás kezdete", Order = 17)]
         public DateTime RelStart { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás vége", Order = 16)]
+        [DisplayNameAttributeX(Name = "Átállás vége", Order = 18)]
         public DateTime RelEnd { get; set; }
 
-        [DisplayNameAttributeX(Name = "Átállás részletek", Order = 17)]
+        [DisplayNameAttributeX(Name = "Átállás részletek", Order = 19)]
         public FTLCalcRoute RelCalcRoute { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra hossz (m)", Order = 18)]
+        [DisplayNameAttributeX(Name = "II.túra hossz (m)", Order = 20)]
         public double T2M { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra útdíj", Order = 19)]
+        [DisplayNameAttributeX(Name = "II.túra útdíj", Order = 21)]
         public double T2Toll { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra költség", Order = 20)]
+        [DisplayNameAttributeX(Name = "II.túra költség", Order = 22)]
         public double T2Cost { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra időtartam", Order = 21)]
+        [DisplayNameAttributeX(Name = "II.túra időtartam", Order = 23)]
         public double T2Duration { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra kezdete", Order = 22)]
+        [DisplayNameAttributeX(Name = "II.túra kezdete", Order = 24)]
         public DateTime T2Start { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra vége", Order = 23)]
+        [DisplayNameAttributeX(Name = "II.túra vége", Order = 25)]
         public DateTime T2End { get; set; }
 
-        [DisplayNameAttributeX(Name = "II.túra részletek", Order = 24)]
+        [DisplayNameAttributeX(Name = "II.túra részletek", Order = 26)]
         public List<FTLCalcRoute> T2CalcRoute { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Visszatérés hossz (m)", Order = 25)]
+        [DisplayNameAttributeX(Name = "Visszatérés hossz (m)", Order = 27)]
         public double RetM { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés  útdíj", Order = 26)]
+        [DisplayNameAttributeX(Name = "Visszatérés  útdíj", Order = 28)]
         public double RetToll { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés  költség", Order = 27)]
+        [DisplayNameAttributeX(Name = "Visszatérés  költség", Order = 29)]
         public double RetCost { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés időtartam", Order = 28)]
+        [DisplayNameAttributeX(Name = "Visszatérés időtartam", Order = 30)]
         public double RetDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés kezdete", Order = 29)]
+        [DisplayNameAttributeX(Name = "Visszatérés kezdete", Order = 31)]
         public DateTime RetStart { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés vége", Order = 29)]
+        [DisplayNameAttributeX(Name = "Visszatérés vége", Order = 32)]
         public DateTime RetEnd { get; set; }
 
-        [DisplayNameAttributeX(Name = "Visszatérés részletek", Order = 30)]
+        [DisplayNameAttributeX(Name = "Visszatérés részletek", Order = 33)]
         public FTLCalcRoute RetCalcRoute { get; set; }
 
         #endregion
 
-        [DisplayNameAttributeX(Name = "Befejezés időpontja", Order = 31)]
+        [DisplayNameAttributeX(Name = "Befejezés időpontja", Order = 34)]
         public DateTime TimeComplete { get { return Truck.CurrIsOneWay ? T2End : RetEnd; } }
 
-        [DisplayNameAttributeX(Name = "II.túra teljesítésének költsége", Order = 32)]
+        [DisplayNameAttributeX(Name = "II.túra teljesítésének költsége", Order = 35)]
         public double AdditionalCost { get { return RelToll + RelCost + T2Toll + T2Cost + RetToll + RetCost; } }
 
-        [DisplayNameAttributeX(Name = "Összes költség", Order = 33)]
+        [DisplayNameAttributeX(Name = "Összes költség", Order = 36)]
         public double FullCost { get { return T1Toll + T1Cost + AdditionalCost; } }
 
-        [DisplayNameAttributeX(Name = "Teljes hossz (m)", Order = 34)]
+        [DisplayNameAttributeX(Name = "Teljes hossz (m)", Order = 37)]
         public double FullM { get { return T1M + RelM + T2M + RetM; } }
 
-        [DisplayNameAttributeX(Name = "Teljes időtartam", Order = 35)]
+        [DisplayNameAttributeX(Name = "Teljes időtartam", Order = 38)]
         public double FullDuration { get { return T1Duration + RelDuration + T2Duration + RetDuration; } }
 
     }

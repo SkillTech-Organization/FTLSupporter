@@ -26,7 +26,7 @@ namespace PMap.BO
         [ScriptIgnore]
         public Dictionary<string, double> Tolls { get; set; }      //Útdíjak járműkategóriánként, teljes szelvénydíjakkal
         [ScriptIgnore]
-        public PointLatLng fromLatLng { get; set; }
+        public PointLatLng fromLatLng { get; set; }                //LatLng kiemelése, hogy gyors lehessen a térképkivágás útvonalszámításnál
         [ScriptIgnore]
         public PointLatLng toLatLng { get; set; }
     }

@@ -266,6 +266,62 @@ namespace FTLSupporterTest
             var res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
 
 
+            int i = 1;
+            foreach (var rr in res)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("VISSZATÉRÉSI ERTEK " + i++.ToString() + "/" + res.Count.ToString());
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Status     :" + rr.Status);
+                Console.WriteLine("Objektumnév:" + rr.ObjectName);
+                Console.WriteLine("Elemsorszám:" + rr.ItemNo.ToString());
+                Console.WriteLine("Üzenet     :" + rr.Message);
+                if (rr.Data != null)
+                    Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
+                if (rr.Status == FTLResultX.FTLResultStatus.OK)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+
+                    List<FTLCalcTourX> clcTours = (List<FTLCalcTourX>)rr.Data;
+                    foreach (FTLCalcTourX clc in clcTours)
+                    {
+                        FTLTruckX trk = lstTrk.Where(t => t.RegNo == clc.RegNo).FirstOrDefault();
+                        if (trk != null)
+                        {
+                            Console.WriteLine("Sorsz:{0}, Jármű:{1}, Száll.feladat ktg:{2}, Időtartam:{3}", clc.Rank, clc.RegNo, clc.AdditionalCost, clc.FullDuration);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                            Console.Write(" Átállás {0},{1}->{2},{3}\t", trk.LatTo, trk.LngTo, tsk.LatFrom, tsk.LngFrom);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                            Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RelKm, clc.RelToll, clc.RelCost);
+
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                            Console.Write(" Beoszt {0},{1}->{2},{3}\t", tsk.LatFrom, tsk.LngFrom, tsk.LatTo, tsk.LngTo);
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                            Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.T2Km, clc.T2Toll, clc.T2Cost);
+
+                            if (!trk.IsOneWay)
+                            {
+                                Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+                                Console.Write(" Vissza {0},{1}->{2},{3}\t", tsk.LatTo, tsk.LngTo, trk.LatFrom, trk.LngFrom);
+                                Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
+                                Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RetKm, clc.RetToll, clc.RetCost);
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Ismeretlen jármű:{1}", clc.RegNo);
+
+                        }
+
+                    }
+
+
+                }
+
+            }
+            Console.ReadKey();
         }
 
         static void Mainx(string[] args)
