@@ -15,7 +15,6 @@ namespace FTLSupporter
 
         public FTLTask Task { get; set; }
         public List<FTLCalcTour>  CalcTours { get; set; }
-        public List<string> Messages { get; set; }
 
 
     }

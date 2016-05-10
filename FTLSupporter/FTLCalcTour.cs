@@ -1,6 +1,7 @@
 ﻿using PMap.Common.Attrib;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -12,8 +13,18 @@ namespace FTLSupporter
     /// </summary>
     public class FTLCalcTour
     {
+        public enum FTLCalcTourStatus
+        {
+            [Description("OK")]
+            OK,
+            [Description("ERR")]
+            ERR
+        };
         public FTLCalcTour()
         {
+            Status = FTLCalcTourStatus.OK;
+            Msg = "";
+
             Rank = 0;
             T1M = 0;
             T1Toll = 0;
@@ -48,7 +59,13 @@ namespace FTLSupporter
             RetCalcRoute = new FTLCalcRoute();
         }
 
-        [DisplayNameAttributeX(Name = "Beosztott szállítási feladat", Order = 1)]
+        [DisplayNameAttributeX(Name = "Státusz", Order = 1)]
+        public FTLCalcTourStatus Status { get; set; }
+
+        [DisplayNameAttributeX(Name = "Üzenet", Order = 2)]
+        public List<string> Msg { get; set; }
+
+        [DisplayNameAttributeX(Name = "Beosztott szállítási feladat", Order = 3)]
         public FTLTask Task { get; set; }
 
         [DisplayNameAttributeX(Name = "Helyezés", Order = 2)]
