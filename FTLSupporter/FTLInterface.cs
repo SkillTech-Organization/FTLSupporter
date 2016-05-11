@@ -753,7 +753,7 @@ namespace FTLSupporter
                     /****************************/
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
-                        clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
+                        //Útvonalpontok 
                         clctsk.CalcTours.ForEach(x =>
                                 {
                                     x.T1CalcRoute.Where(w => w.PMapRoute != null).ToList()
@@ -763,7 +763,17 @@ namespace FTLSupporter
                                         .ForEach(i => i.RoutePoints = string.Join(",", i.PMapRoute.route.Route.Points));
                                     x.RetCalcRoute.RoutePoints = x.RetCalcRoute.PMapRoute == null ? "" : string.Join(",", x.RetCalcRoute.PMapRoute.route.Route.Points);
                                 });
+
+                        //Költség fordított sorrendben berendezzük
+                        int rank = 0;
+                        clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK).
+                                         OrderBy(x => x.AdditionalCost).Select(x => x).ToList().
+                                         ForEach(r => r.Rank = rank++);
+
+                        // A hibás tételek rank-ja: 999999
+                        clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
                     }
+
 
                     FTLResult res = new FTLResult()
                            {

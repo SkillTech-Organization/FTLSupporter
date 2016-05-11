@@ -275,51 +275,61 @@ namespace FTLSupporterTest
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Status     :" + rr.Status);
                 Console.WriteLine("Objektumnév:" + rr.ObjectName);
-                Console.WriteLine("Elemsorszám:" + rr.ItemNo.ToString());
-                Console.WriteLine("Üzenet     :" + rr.Message);
+                Console.WriteLine("Elem ID    :" + rr.ItemID);
                 if (rr.Data != null)
                     Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
-                if (rr.Status == FTLResultX.FTLResultStatus.OK)
+
+
+                if (rr.Status == FTLResult.FTLResultStatus.RESULT)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-
-                    List<FTLCalcTourX> clcTours = (List<FTLCalcTourX>)rr.Data;
-                    foreach (FTLCalcTourX clc in clcTours)
+                    List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
+                    foreach (FTLCalcTask clctsk in  tskResult)
                     {
-                        FTLTruckX trk = lstTrk.Where(t => t.RegNo == clc.RegNo).FirstOrDefault();
-                        if (trk != null)
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
+                        foreach (FTLCalcTour clctour in clctsk.CalcTours)
                         {
-                            Console.WriteLine("Sorsz:{0}, Jármű:{1}, Száll.feladat ktg:{2}, Időtartam:{3}", clc.Rank, clc.RegNo, clc.AdditionalCost, clc.FullDuration);
-                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-                            Console.Write(" Átállás {0},{1}->{2},{3}\t", trk.LatTo, trk.LngTo, tsk.LatFrom, tsk.LngFrom);
-                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
-                            Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RelKm, clc.RelToll, clc.RelCost);
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Státusz:{0}, Helyezés:{1}, Jármű:{2},", clctour.Status, clctour.Rank, clctour.Truck.TruckID);
 
-                            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-                            Console.Write(" Beoszt {0},{1}->{2},{3}\t", tsk.LatFrom, tsk.LngFrom, tsk.LatTo, tsk.LngTo);
-                            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
-                            Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.T2Km, clc.T2Toll, clc.T2Cost);
+                            //Aktuális túra
+                            Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T1Start, clctour.T1End);
+                            Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1Duration);
 
-                            if (!trk.IsOneWay)
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
                             {
-                                Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-                                Console.Write(" Vissza {0},{1}->{2},{3}\t", tsk.LatTo, tsk.LngTo, trk.LatFrom, trk.LngFrom);
-                                Thread.CurrentThread.CurrentCulture = new CultureInfo("hu");
-                                Console.WriteLine("KM:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}", clc.RetKm, clc.RetToll, clc.RetCost);
+                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint!=null?clcroute.TPoint.Name:"**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.RouteDuration);
+                            }
+
+                            //Átállás
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine("Átállás kezd:{0},bef:{1}", clctour.RelStart, clctour.RelEnd);
+                            Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelDuration);
+                            Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.RouteDuration);
+
+                            //Beosztandó túra
+                            Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
+                            Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2Duration);
+
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
+                            {
+                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.RouteDuration);
+                            }
+
+                            //Visszatérés
+                            if (!clctour.Truck.CurrIsOneWay)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.WriteLine("Visszatérés kezd:{0},bef:{1}", clctour.RetStart, clctour.RetEnd);
+                                Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetDuration);
+                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RelCalcRoute.RouteDuration);
                             }
                         }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Ismeretlen jármű:{1}", clc.RegNo);
-
-                        }
-
                     }
-
-
                 }
-
             }
             Console.ReadKey();
         }
