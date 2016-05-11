@@ -26,18 +26,18 @@ namespace PMap.Common.Attrib
         IsEqual,
         [Description("IsNotEqual")]             //kétoperandusú
         IsNotEqual,
-        [Description("IsBiggerThanAnother")]    //kétoperandusú
-        IsBiggerThanAnother,
-        [Description("IsBiggerThanAnotherAndNotNull")]    //kétoperandusú
-        IsBiggerThanAnotherAndNotNull,
-        [Description("IsSmallerThanAnother")]   //kétoperandusú
-        IsSmallerThanAnother,
-        [Description("IsSmallerThanAnotherAndNotNull")]   //kétoperandusú
-        IsSmallerThanAnotherAndNotNull,
-        [Description("IsSmallerThanOrEqualAnother")]    //kétoperandusú
-        IsSmallerThanOrEqualAnother,
-        [Description("IsBiggerThanOrEqualAnother")] //kétoperandusú
-        IsBiggerThanOrEqualAnother,
+        [Description("IsBigger")]               //kétoperandusú
+        IsBigger,
+        [Description("IsBiggerAndNotNull")]     //kétoperandusú
+        IsBiggerAndNotNull,
+        [Description("IsSmaller")]              //kétoperandusú
+        IsSmaller,
+        [Description("IsSmallerAndNotNull")]    //kétoperandusú
+        IsSmallerAndNotNull,
+        [Description("IsSmallerOrEqual")]       //kétoperandusú
+        IsSmallerOrEqualr,
+        [Description("IsBiggerOrEqual")]        //kétoperandusú
+        IsBiggerOrEqual,
         [Description("EvalIsInArray")]
         EvalIsInArray,
         [Description("EvalIsNotInArray")]
@@ -97,22 +97,22 @@ namespace PMap.Common.Attrib
                 case EvalMode.IsNotEqual:
                     evalField = new EvalIsNotEqual(m_constValue);
                     break;
-                case EvalMode.IsBiggerThanAnother:
+                case EvalMode.IsBigger:
                     evalField = new EvalIsBiggerThanAnother(m_constValue);
                     break;
-                case EvalMode.IsBiggerThanAnotherAndNotNull:
+                case EvalMode.IsBiggerAndNotNull:
                     evalField = new EvalIsBiggerThanAnother(m_constValue, false, true);
                     break;
-                case EvalMode.IsSmallerThanAnother:
+                case EvalMode.IsSmaller:
                     evalField = new EvalIsSmallerThanAnother(m_constValue, false);
                     break;
-                case EvalMode.IsSmallerThanAnotherAndNotNull:
+                case EvalMode.IsSmallerAndNotNull:
                     evalField = new EvalIsSmallerThanAnother(m_constValue, true);
                     break;
-                case EvalMode.IsSmallerThanOrEqualAnother:
+                case EvalMode.IsSmallerOrEqualr:
                     evalField = new EvalIsSmallerThanOrEqualAnother(m_constValue);
                     break;
-                case EvalMode.IsBiggerThanOrEqualAnother:
+                case EvalMode.IsBiggerOrEqual:
                     evalField = new EvalIsBiggerThanOrEqualAnother(m_constValue);
                     break;
                 case EvalMode.EvalIsInArray:
@@ -181,22 +181,22 @@ namespace PMap.Common.Attrib
                 case EvalMode.IsNotEqual:
                     evalField = new EvalIsNotEqual(currAnotherPropValue);
                     break;
-                case EvalMode.IsBiggerThanAnother:
+                case EvalMode.IsBigger:
                     evalField = new EvalIsBiggerThanAnother(currAnotherPropValue);
                     break;
-                case EvalMode.IsBiggerThanAnotherAndNotNull:
+                case EvalMode.IsBiggerAndNotNull:
                     evalField = new EvalIsBiggerThanAnother(currAnotherPropValue, false, true);
                     break;
-                case EvalMode.IsSmallerThanAnother:
+                case EvalMode.IsSmaller:
                     evalField = new EvalIsSmallerThanAnother(currAnotherPropValue, false);
                     break;
-                case EvalMode.IsSmallerThanAnotherAndNotNull:
+                case EvalMode.IsSmallerAndNotNull:
                     evalField = new EvalIsSmallerThanAnother(currAnotherPropValue, true);
                     break;
-                case EvalMode.IsSmallerThanOrEqualAnother:
+                case EvalMode.IsSmallerOrEqualr:
                     evalField = new EvalIsSmallerThanOrEqualAnother(currAnotherPropValue);
                     break;
-                case EvalMode.IsBiggerThanOrEqualAnother:
+                case EvalMode.IsBiggerOrEqual:
                     evalField = new EvalIsBiggerThanOrEqualAnother(currAnotherPropValue);
                     break;
                 default:

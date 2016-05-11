@@ -27,10 +27,8 @@ namespace FTLSupporter
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:GVWR")]              
         public int GVWR { get; set; }
 
-
         [DisplayNameAttributeX(Name = "Kapacitás (súly)", Order = 3)]
         public int Capacity { get; set; }
-
 
         [DisplayNameAttributeX(Name = "Járműtípus", Order = 4)]
         [Required(ErrorMessage = "Kötelező mező:TruckType")]

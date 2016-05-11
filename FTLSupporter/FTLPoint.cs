@@ -19,7 +19,7 @@ namespace FTLSupporter
         public string Name { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Megnevezés", Order = 3)]
+        [DisplayNameAttributeX(Name = "Cím", Order = 3)]
         public string Addr { get; set; }
 
         [DisplayNameAttributeX(Name = "Kiszolgálás időablak kezdete ", Order = 4)]
@@ -27,18 +27,19 @@ namespace FTLSupporter
         public DateTime Open { get; set; }
 
         [DisplayNameAttributeX(Name = "Kiszolgálás időablak vége", Order = 5)]
-        [ErrorIfPropAttrX(EvalMode.IsSmallerThanAnother, "Close", "A felrakás kezdete későbbi, mint a befejezése")]
+        [ErrorIfPropAttrX(EvalMode.IsSmaller, "Close", "A felrakás kezdete későbbi, mint a befejezése")]
         public DateTime Close { get; set; }
 
         [DisplayNameAttributeX(Name = "Kiszolgálás időtartama", Order = 6)]
+        [ErrorIfConstAttrX(EvalMode.IsSmaller, 0, "Kötelező mező:Lng")]
         public int SrvDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "Hosszúsági koordináta (lat)", Order = 7)]
-        [Required(ErrorMessage = "Kötelező mező:Lat")]
+        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqualr, 0, "Kötelező mező:Lat")]
         public double Lat { get; set; }
 
         [DisplayNameAttributeX(Name = "Szélességi koordináta (lng)", Order = 8)]
-        [Required(ErrorMessage = "Kötelező mező:Lng")]
+        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqualr, 0, "Kötelező mező:Lng")]
         public double Lng { get; set; }
 
         [DisplayNameAttributeX(Name = "Érkezés", Order = 9)]
@@ -46,7 +47,6 @@ namespace FTLSupporter
         public DateTime Arrival { get; set; }
 
         [DisplayNameAttributeX(Name = "Indulás", Order = 10)]
-//        [Required(ErrorMessage = "Kötelező mező:Departure")]
         public DateTime Departure { get { return Arrival.AddMinutes(SrvDuration); } }
 
 
