@@ -27,6 +27,14 @@ namespace FTLSupporter
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
 
+                List<FTLPMapRoute> lstCalcPMapRoutesx = new List<FTLPMapRoute>();        //Számolandó útvonalak
+                var rx = new FTLPMapRoute { fromNOD_ID = 345264, toNOD_ID = 340835, RZN_ID_LIST = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15" };
+                lstCalcPMapRoutesx.Add(rx);
+                ProcessNotifyIcon nix = new ProcessNotifyIcon();
+                FTLCalcRouteProcess rpx = new FTLCalcRouteProcess(nix, lstCalcPMapRoutesx, false);
+                rpx.RunWait();
+
+
 
                 //Paraméterek validálása
                 result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
@@ -303,8 +311,8 @@ namespace FTLSupporter
                                 clctour.T1CalcRoute.Add(new FTLCalcRoute()
                                 {
                                     TPoint = trk.CurrTPoints[0],
-                                    Arrival = trk.CurrTPoints[0].Arrival,
-                                    Departure = trk.CurrTPoints[0].Departure,
+                                    Arrival = trk.CurrTPoints[0].RealArrival,
+                                    Departure = trk.CurrTPoints[0].RealDeparture,
                                     Completed = trk.TPointCompleted > 0,
                                     PMapRoute = null,
                                     Current = false
@@ -318,8 +326,8 @@ namespace FTLSupporter
                                     clctour.T1CalcRoute.Add(new FTLCalcRoute()
                                     {
                                         TPoint = trk.CurrTPoints[i],
-                                        Arrival = trk.CurrTPoints[i].Arrival,
-                                        Departure = trk.CurrTPoints[i].Departure,
+                                        Arrival = trk.CurrTPoints[i].RealArrival,
+                                        Departure = trk.CurrTPoints[i].RealDeparture,
                                         Completed = true,
                                         PMapRoute = rt,
                                         Current = false
@@ -518,9 +526,9 @@ namespace FTLSupporter
                                         // ha teljesítve van a felrakás, a tényadatokat vesszük
                                         clr.RouteDuration = 0;
                                         clr.WaitingDuration = 0;
-                                        clr.SrvDuration = Convert.ToInt32((clr.TPoint.Departure - clr.TPoint.Arrival).TotalMinutes);
-                                        clr.Arrival = clr.TPoint.Arrival;
-                                        clr.Departure = clr.TPoint.Departure;
+                                        clr.SrvDuration = Convert.ToInt32((clr.TPoint.RealDeparture - clr.TPoint.RealArrival).TotalMinutes);
+                                        clr.Arrival = clr.TPoint.RealArrival;
+                                        clr.Departure = clr.TPoint.RealDeparture;
                                     }
                                     else
                                     {
@@ -528,8 +536,8 @@ namespace FTLSupporter
                                         clr.RouteDuration = 0;
                                         clr.WaitingDuration = 0;
                                         clr.SrvDuration = clr.TPoint.SrvDuration;
-                                        clr.Arrival = clr.TPoint.Arrival;
-                                        clr.Departure = clr.TPoint.Arrival.AddMinutes(clr.TPoint.SrvDuration);
+                                        clr.Arrival = clr.TPoint.RealArrival;
+                                        clr.Departure = clr.TPoint.RealArrival.AddMinutes(clr.TPoint.SrvDuration);
                                     }
                                     clr.Distance = 0;
                                     clr.Toll = 0;
@@ -553,11 +561,11 @@ namespace FTLSupporter
                                         else
                                         {
                                             //teljesített túrapont esetén a tényadatokat olvassuk ki.
-                                            clr.RouteDuration = Convert.ToInt32((clr.TPoint.Arrival - dtPrevTime).TotalMinutes);
+                                            clr.RouteDuration = Convert.ToInt32((clr.TPoint.RealArrival - dtPrevTime).TotalMinutes);
                                             clr.WaitingDuration = 0;            //nem tudjuk meghatározni, a menetidő vagy a rakodás a várakozást is tartalmazza-e
-                                            clr.SrvDuration = Convert.ToInt32((clr.TPoint.Departure - clr.TPoint.Arrival).TotalMinutes);
-                                            clr.Arrival = clr.TPoint.Arrival;
-                                            clr.Departure = clr.TPoint.Departure;
+                                            clr.SrvDuration = Convert.ToInt32((clr.TPoint.RealDeparture - clr.TPoint.RealArrival).TotalMinutes);
+                                            clr.Arrival = clr.TPoint.RealArrival;
+                                            clr.Departure = clr.TPoint.RealDeparture;
                                         }
                                     else
                                     {
@@ -705,7 +713,7 @@ namespace FTLSupporter
                                 lstTrucksErrOpen.Add(clctour.Truck);
                                 foreach (FTLPoint tp in lstOpenErrT1)
                                 {
-                                    clctour.Msg.Add(FTLMessages.E_CLOSETP + tp.Name);
+                                    clctour.Msg.Add("(T1)"+FTLMessages.E_CLOSETP + tp.Name);
                                 }
                             }
 
@@ -713,7 +721,7 @@ namespace FTLSupporter
                             if (clctour.RelCalcRoute.Arrival > clctour.RelCalcRoute.TPoint.Close)
                             {
                                 lstTrucksErrOpen.Add(clctour.Truck);
-                                clctour.Msg.Add(FTLMessages.E_CLOSETP + clctour.RelCalcRoute.TPoint.Name);
+                                clctour.Msg.Add("(Rel)" + FTLMessages.E_CLOSETP + clctour.RelCalcRoute.TPoint.Name);
                             }
 
                             //Beosztott túra tartás ellenőrzése
@@ -723,7 +731,7 @@ namespace FTLSupporter
                                 lstTrucksErrOpen.Add(clctour.Truck);
                                 foreach (FTLPoint tp in lstOpenErrT2)
                                 {
-                                    clctour.Msg.Add(FTLMessages.E_CLOSETP + tp.Name);
+                                    clctour.Msg.Add("(T2)" + FTLMessages.E_CLOSETP + tp.Name);
                                 }
                             }
 
@@ -733,7 +741,7 @@ namespace FTLSupporter
                                 if (clctour.RetCalcRoute.Arrival > clctour.RetCalcRoute.TPoint.Close)
                                 {
                                     lstTrucksErrOpen.Add(clctour.Truck);
-                                    clctour.Msg.Add(FTLMessages.E_CLOSETP + clctour.RetCalcRoute.TPoint.Name);
+                                    clctour.Msg.Add("(Ret)" + FTLMessages.E_CLOSETP + clctour.RetCalcRoute.TPoint.Name);
                                 }
                             }
 

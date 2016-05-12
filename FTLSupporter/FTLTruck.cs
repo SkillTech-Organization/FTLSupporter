@@ -83,7 +83,7 @@ namespace FTLSupporter
                 {
                     FTLPoint firstPt = CurrTPoints.FirstOrDefault();
                     if (firstPt != null)
-                        return firstPt.Departure;
+                        return firstPt.RealDeparture;
                     else
                         return DateTime.MinValue;
                 }

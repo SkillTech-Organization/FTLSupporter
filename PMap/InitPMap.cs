@@ -30,7 +30,7 @@ namespace PMap
         public static startErrCode Start(bool p_checkConnection)
         {
             /* felhasználási jogsultság ellenőrzés */
-            if (DateTime.Now > new DateTime(2016, 04, 30))
+            if (DateTime.Now > new DateTime(2016, 07, 30))
                 throw new Exception("Y2");
              
 

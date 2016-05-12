@@ -44,10 +44,10 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "Érkezés", Order = 9)]
 //        [Required(ErrorMessage = "Kötelező mező:Arrival")]
-        public DateTime Arrival { get; set; }
+        public DateTime RealArrival { get; set; }
 
         [DisplayNameAttributeX(Name = "Indulás", Order = 10)]
-        public DateTime Departure { get { return Arrival.AddMinutes(SrvDuration); } }
+        public DateTime RealDeparture { get { return RealArrival.AddMinutes(SrvDuration); } }
 
 
         /* local members */

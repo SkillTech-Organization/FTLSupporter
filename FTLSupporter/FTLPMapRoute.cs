@@ -24,5 +24,13 @@ namespace FTLSupporter
         public string RZN_ID_LIST { get; set; }
         public boRoute route { get; set; }
 
+        public string NODEList
+        {
+            get {
+                return fromNOD_ID.ToString() + "," + string.Join(",", route.Edges.Select(x => x.NOD_ID_TO.ToString()).ToArray()); 
+
+            }
+        }
+
     }
 }
