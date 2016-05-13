@@ -397,6 +397,12 @@ namespace FTLSupporterTest
                     Console.WriteLine("");
 
                 }
+                else
+                {
+                    FTLResErrMsg em = (FTLResErrMsg)rr.Data;
+                    Console.WriteLine(em.Message);
+                    Console.WriteLine(em.CallStack);
+                }
             }
             Console.ReadKey();
         }
