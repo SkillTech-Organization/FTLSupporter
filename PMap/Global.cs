@@ -157,21 +157,22 @@ namespace PMap
         public const int RST_MAX75T = 4;        //4:max 7.5 tonna
         public const int RST_MAX35T = 5;        //5.max 3.5 tonna
 
-        public const string RST_ALLRESTZONES = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16";        //Összes behajtási zóna ID-je
-
         public const int CTP_VALUE_DRY = 1;      //TODO:Ez csak a Pfenninges alkalmazásnál volt igaz. Árutípus-törzs mezővel kell megoldani!
 
         public static DateTime SQLMINDATE = new DateTime(1753, 1, 1);
 
         public const double ROUTE_APPROACH = 0.002;    // 
 
-        public const int LatLngDivider = 1000000;
+        public const int NearestNOD_ID_Approach = 5000;         //A jármű GPS-pozíjciója alapján történő elérhető node keresésnek közelítő tűrése
+                                                                //Lehet, hogy ini paraméter lesz
+        
+        public const int LatLngDivider = 1000000;               //Adatbázis koordináta -> GPS koordiánta osztó
 
         public const int CostDivider = 10;
 
         public const int csQTY_DEC = 100;
-        public const int csQTYSRVDivider = 10;          //10 kg-onként van kiszolgálási idő megadva
-        public const int csVolumeMultiplier = 1000; //m3->dm3 konverzióhoz
+        public const int csQTYSRVDivider = 10;                  //10 kg-onként van kiszolgálási idő megadva
+        public const int csVolumeMultiplier = 1000;             //m3->dm3 konverzióhoz
 
         public const string NUMFORMAT = "#,#0.00";
         public const string INTFORMAT = "#,#0";

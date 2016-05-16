@@ -50,8 +50,8 @@ namespace FTLSupporterTest
                 Open =  DateTime.Now.Date.AddHours(6),
                 Close =  DateTime.Now.Date.AddHours(22),
                 SrvDuration = 15,
-                Lat = 47.4254452,
-                Lng = 19.1494274,
+                Lat = 47.4264324,       //47.4254452,
+                Lng = 19.1512299,       // 19.1494274,
                 RealArrival = DateTime.MinValue
             };
 
@@ -275,8 +275,8 @@ namespace FTLSupporterTest
             /*KKMét:4:00, Szeged:06:00, Debrecen:?? */
             FTLTruck trk4 = new FTLTruck()
             {
-                TruckID = "TRK4 Kecskemét-Szeged-Debrecen",
-                GVWR = 3500,
+                TruckID = "TRK4 Kecskemét-Szeged-Debrecen 12T",
+                GVWR = 12000,
                 Capacity = 2000,
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz",

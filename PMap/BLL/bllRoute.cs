@@ -288,7 +288,7 @@ namespace PMap.BLL
 
         public string GetAllRestZones()
         {
-            string sRZN_ID_LIST = Global.RST_ALLRESTZONES;
+            string sRZN_ID_LIST = "";
             string sSql = "(select distinct     " + Environment.NewLine +
                           "isnull(stuff(        " + Environment.NewLine +
                           "( " + Environment.NewLine +
@@ -308,7 +308,7 @@ namespace PMap.BLL
 
         public string GetRestZonesByRST_ID(int p_RST_ID)
         {
-            string sRZN_ID_LIST = Global.RST_ALLRESTZONES;
+            string sRZN_ID_LIST = "";
             string sSql = "select  isnull( stuff ((SELECT ',' + CONVERT(varchar(MAX), ID) " + Environment.NewLine +
                           "  FROM RZN_RESTRZONE RZN " + Environment.NewLine;
             if (p_RST_ID != Global.RST_NORESTRICT)
@@ -412,6 +412,11 @@ namespace PMap.BLL
                     }).ToList();
         }
 
+        /// <summary>
+        /// NODE_ID-k által meghatározott téglalap
+        /// </summary>
+        /// <param name="p_nodes"></param>
+        /// <returns></returns>
         public RectLatLng getBoundary(List<int> p_nodes)
         {
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
@@ -684,7 +689,12 @@ namespace PMap.BLL
             else
                 return null;
         }
-
+        
+        /// <summary>
+        /// NODE üzleti objektum visszaadása ID alapján
+        /// </summary>
+        /// <param name="p_NOD_ID"></param>
+        /// <returns></returns>
         public boNode GetNode(int p_NOD_ID)
         {
 
@@ -713,10 +723,14 @@ namespace PMap.BLL
                 return null;
         }
 
-
+        /// <summary>
+        /// Egy térképi ponthoz legközelebb lévő NOD_ID visszaadása
+        /// </summary>
+        /// <param name="p_pt"></param>
+        /// <returns></returns>
         public int GetNearestNOD_ID(PointLatLng p_pt)
         {
-            string sSql = "select top 1 ID, ZIP_NUM, abs( NOD_YPOS-?) as YD, abs( NOD_XPOS-?) as XD from NOD_NODE " +
+            string sSql = "select top 1 ID, ZIP_NUM, abs( NOD_YPOS-?) as YD, abs( NOD_XPOS-?) as XD from NOD_NODE where NOD_DELETED=0 " +
                 "order by abs( NOD_YPOS-?) + abs( NOD_XPOS-?) asc";
             DataTable dt = DBA.Query2DataTable(sSql, p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider,
                   p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider);
@@ -725,6 +739,41 @@ namespace PMap.BLL
                 return Util.getFieldValue<int>(dt.Rows[0], "ID");
             }
             return 0;
+        }
+        
+        /// <summary>
+        /// Egy térképi ponthoz a leközelebb eső, 
+        /// </summary>
+        /// <param name="p_pt"></param>
+        /// <param name="p_RZN_ID_LIST"></param>
+        /// <returns></returns>
+      public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach)
+        {
+            string sSql = "select top 1 NOD.ID as ID, " + Environment.NewLine +
+                          "abs(NOD_YPOS - ?) + abs(NOD_XPOS - ?) as XDIFF, " + Environment.NewLine +
+                          "isnull(EDG.EDG_DESTTRAFFIC, EDG2.EDG_DESTTRAFFIC) as XEDG_DESTTRAFFIC, " + Environment.NewLine +
+                          "isnull(RZN1.ID, RZN2.ID) as XRZN_ID " + Environment.NewLine +
+                          "from NOD_NODE NOD " + Environment.NewLine +
+                          "left outer join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID " + Environment.NewLine +
+                          "left outer join RZN_RESTRZONE RZN1 on RZN1.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
+                          "left outer join EDG_EDGE EDG2 on EDG2.NOD_NUM2 = NOD.ID " + Environment.NewLine +
+                          "left outer join RZN_RESTRZONE RZN2 on RZN2.RZN_ZoneCode = EDG2.RZN_ZONECODE " + Environment.NewLine +
+                          " where ( isnull(RZN1.ID,RZN2.ID) is null " + Environment.NewLine +
+                          (p_RZN_ID_LIST.Length > 0 ? " or charindex( ','+convert( varchar(50), isnull(isnull(RZN1.ID,RZN2.ID),0)), ',"+p_RZN_ID_LIST+"') > 0 " : "") + Environment.NewLine +
+                          (PMapIniParams.Instance.DestTraffic ? "  or isnull(EDG.EDG_DESTTRAFFIC, EDG2.EDG_DESTTRAFFIC) = 1 " : " ") + ") and " + Environment.NewLine +
+                          "abs(NOD_YPOS - ?) + abs(NOD_XPOS - ?) < ? " + Environment.NewLine +
+                          "order by abs( NOD_YPOS-?) + abs( NOD_XPOS-?) asc";
+
+            DataTable dt = DBA.Query2DataTable(sSql, p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider,
+                  p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider,
+                  p_approach,
+                  p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider);
+            if (dt.Rows.Count > 0)
+            {
+                return Util.getFieldValue<int>(dt.Rows[0], "ID");
+            }
+            return 0;
+
         }
 
         public bool GeocodingByAddr(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID, out boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT)

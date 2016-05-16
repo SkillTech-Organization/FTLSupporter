@@ -26,14 +26,14 @@ namespace FTLSupporter
                 PMapCommonVars.Instance.ConnectToDB();
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-
+                /*
                 List<FTLPMapRoute> lstCalcPMapRoutesx = new List<FTLPMapRoute>();        //Számolandó útvonalak
                 var rx = new FTLPMapRoute { fromNOD_ID = 345264, toNOD_ID = 340835, RZN_ID_LIST = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15" };
                 lstCalcPMapRoutesx.Add(rx);
                 ProcessNotifyIcon nix = new ProcessNotifyIcon();
                 FTLCalcRouteProcess rpx = new FTLCalcRouteProcess(nix, lstCalcPMapRoutesx, false);
                 rpx.RunWait();
-
+                */
 
 
                 //Paraméterek validálása
@@ -49,17 +49,42 @@ namespace FTLSupporter
 
                 }
 
+
+
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
+
+     
+             //  int nn = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(47.4254452, 19.1494274), route.GetRestZonesByRST_ID(Global.RST_BIGGER12T), Global.NearestNOD_ID_Approach / 2);
+
                 foreach (FTLTask tsk in p_TaskList)
                 {
                     //Koordináta feloldás és ellenőrzés
                     foreach (FTLPoint pt in tsk.TPoints)
                     {
-                        pt.NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
+                        //A beosztandó szállíási feladat esetén olyan NOD_ID-t keresünk, 
+                        //amelyet egy távolságon belül lehetőleg minden járműtípus számára elérhető
+                        //
+                        // 
+                        string sXRZN_ID_LIST;
+                        pt.NOD_ID = 0;
+                        for ( int iRST = Global.RST_BIGGER12T; iRST <= Global.RST_MAX75T && pt.NOD_ID == 0; iRST++)
+                        {
+                            sXRZN_ID_LIST = route.GetRestZonesByRST_ID(iRST);
+                            //Kicsit s
+                            pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                        }
+
+                        //nem találtun korlátozásokhoz NODE-t, nézünk egy korlátozás nélküli közeli pontot. 
+                        //
                         if (pt.NOD_ID == 0)
                         {
-                            result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                            sXRZN_ID_LIST = route.GetRestZonesByRST_ID(Global.RST_NORESTRICT);
+                            pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                            if (pt.NOD_ID == 0)
+                            {
+                                result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                            }
                         }
                     }
                 }
@@ -67,8 +92,10 @@ namespace FTLSupporter
 
                 //Validálás, koordináta feloldás:jármű aktuális pozíció, szállítási feladat
                 //
+                //1.1 A járművek zónalistájának összeállítása
                 foreach (FTLTruck trk in p_TruckList)
                 {
+                    trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
 
                     //Teljesített túrapont ellenőrzés
                     if ((trk.TruckTaskType == FTLTruck.eTruckTaskType.Planned || trk.TruckTaskType == FTLTruck.eTruckTaskType.Running) &&
@@ -77,14 +104,14 @@ namespace FTLSupporter
                         result.Add(getValidationError(trk, "TPointCompleted", FTLMessages.E_TRKWRONGCOMPLETED));
                     }
 
-                    trk.NOD_ID_CURR = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng));
+                    trk.NOD_ID_CURR = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
                     if (trk.NOD_ID_CURR == 0)
                         result.Add(getValidationError(trk, "CurrLat,CurrLng", FTLMessages.E_WRONGCOORD));
 
                     //Koordináta feloldás és ellenőrzés
                     foreach (FTLPoint pt in trk.CurrTPoints)
                     {
-                        pt.NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
+                        pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
                         if (pt.NOD_ID == 0)
                         {
                             result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
@@ -115,11 +142,6 @@ namespace FTLSupporter
 
                     //1. Előkészítés:
 
-                    //1.1 A járművek zónalistájának összeállítása
-                    foreach (FTLTruck trk in p_TruckList)
-                    {
-                        trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
-                    }
 
                     Dictionary<string, FTLPMapRoute> dicRoutes = new Dictionary<string, FTLPMapRoute>();
 
@@ -552,11 +574,11 @@ namespace FTLSupporter
                                         if (clr.Current)
                                         {
                                             //akutális pozíció mindig teljesített
-                                            clr.RouteDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                            clr.RouteDuration = Convert.ToInt32((trk.CurrTime - dtPrevTime).TotalMinutes);
                                             clr.WaitingDuration = 0;
                                             clr.SrvDuration = 0;    // ez egy köztes pont, itt nincs kiszolgálási idő
-                                            clr.Arrival = dtPrevTime.AddMinutes(clr.RouteDuration);
-                                            clr.Departure = clr.Arrival;
+                                            clr.Arrival = trk.CurrTime;
+                                            clr.Departure = trk.CurrTime;
                                         }
                                         else
                                         {
@@ -707,7 +729,7 @@ namespace FTLSupporter
                         {
 
                             //Teljesítés nyitva tartások ellenőrzése
-                            List<FTLPoint> lstOpenErrT1 = clctour.T1CalcRoute.Where(x => x.Arrival > x.TPoint.Close).Select(s => s.TPoint).ToList();
+                            List<FTLPoint> lstOpenErrT1 = clctour.T1CalcRoute.Where(x => x.TPoint != null && x.Arrival > x.TPoint.Close).Select(s => s.TPoint).ToList();
                             if (lstOpenErrT1.Count > 0)
                             {
                                 lstTrucksErrOpen.Add(clctour.Truck);
