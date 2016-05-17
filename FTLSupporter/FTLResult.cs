@@ -14,8 +14,6 @@ namespace FTLSupporter
             RESULT,
             [Description("VALIDATIONERROR")]
             VALIDATIONERROR,
-            [Description("BLOGICERROR")]
-            BLOGICERROR,
             [Description("EXCEPTION")]
             EXCEPTION
         };

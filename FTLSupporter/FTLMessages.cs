@@ -17,7 +17,7 @@ namespace FTLSupporter
         public const string E_T1MISSROUTE = "Aktuális túra teljesítésénél hiányzó szakasz!";
         public const string E_RELMISSROUTE = "Átálásnál hiányzó szakasz!";
         public const string E_T2MISSROUTE = "Beosztandó túra teljesítésénél hiányzó szakasz!";
-        public const string E_RETMISSROUTE = "Visszetérés teljesítésénél hiányzó szakasz!";
+        public const string E_RETMISSROUTE = "Visszatérés teljesítésénél hiányzó szakasz!";
         public const string E_MAXDURATION = "Teljesítés max. idő túllépés!";
         public const string E_MAXKM = "Teljesítés max. KM túllépés!";
         public const string E_CLOSETP = "Túrapont zárva az érkezés időpontjában:";

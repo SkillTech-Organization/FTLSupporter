@@ -54,8 +54,8 @@ namespace FTLSupporter
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
 
-     
-             //  int nn = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(47.4254452, 19.1494274), route.GetRestZonesByRST_ID(Global.RST_BIGGER12T), Global.NearestNOD_ID_Approach / 2);
+
+                //  int nn = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(47.4254452, 19.1494274), route.GetRestZonesByRST_ID(Global.RST_BIGGER12T), Global.NearestNOD_ID_Approach / 2);
 
                 foreach (FTLTask tsk in p_TaskList)
                 {
@@ -68,7 +68,7 @@ namespace FTLSupporter
                         // 
                         string sXRZN_ID_LIST;
                         pt.NOD_ID = 0;
-                        for ( int iRST = Global.RST_BIGGER12T; iRST <= Global.RST_MAX75T && pt.NOD_ID == 0; iRST++)
+                        for (int iRST = Global.RST_BIGGER12T; iRST <= Global.RST_MAX75T && pt.NOD_ID == 0; iRST++)
                         {
                             sXRZN_ID_LIST = route.GetRestZonesByRST_ID(iRST);
                             //Kicsit s
@@ -99,7 +99,7 @@ namespace FTLSupporter
 
                     //Teljesített túrapont ellenőrzés
                     if ((trk.TruckTaskType == FTLTruck.eTruckTaskType.Planned || trk.TruckTaskType == FTLTruck.eTruckTaskType.Running) &&
-                        trk.TPointCompleted > trk.CurrTPoints.Count - 1)
+                        trk.TPointCompleted < 0 || trk.TPointCompleted > trk.CurrTPoints.Count - 1)
                     {
                         result.Add(getValidationError(trk, "TPointCompleted", FTLMessages.E_TRKWRONGCOMPLETED));
                     }
@@ -795,7 +795,7 @@ namespace FTLSupporter
                                 });
 
                         //Költség fordított sorrendben berendezzük
-                        int rank = 0;
+                        int rank = 1;
                         clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK).
                                          OrderBy(x => x.AdditionalCost).Select(x => x).ToList().
                                          ForEach(r => r.Rank = rank++);
