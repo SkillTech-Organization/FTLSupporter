@@ -310,11 +310,11 @@ namespace FTLSupporterTest
 
             #endregion
 
-            //var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
-            //var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
+            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
+            var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
 
-            var lstTsk = new List<FTLTask> { tsk3 };
-            var lstTrk = new List<FTLTruck> { trk4 };
+            //var lstTsk = new List<FTLTask> { tsk3 };
+            //var lstTrk = new List<FTLTruck> { trk4 };
 
             var res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
 
@@ -359,21 +359,21 @@ namespace FTLSupporterTest
 
                                     foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
                                     {
-                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.RouteDuration);
+                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Aktuálsi poz.**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
                                     }
                                 }
                                 //Átállás
                                 Console.WriteLine("Átállás kezd:{0},bef:{1}", clctour.RelStart, clctour.RelEnd);
                                 Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelDuration);
-                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.RouteDuration);
+                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.Distance);
 
                                 //Beosztandó túra
-                                Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
+                                Console.WriteLine("Beosztandó túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
                                 Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2Duration);
 
                                 foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
                                 {
-                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.RouteDuration);
+                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
                                 }
 
                                 //Visszatérés
@@ -381,7 +381,7 @@ namespace FTLSupporterTest
                                 {
                                     Console.WriteLine("Visszatérés kezd:{0},bef:{1}", clctour.RetStart, clctour.RetEnd);
                                     Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetDuration);
-                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RelCalcRoute.RouteDuration);
+                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RetCalcRoute.Distance);
                                 }
                             }
                             else

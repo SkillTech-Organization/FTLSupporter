@@ -759,9 +759,9 @@ namespace PMap.BLL
                           "left outer join EDG_EDGE EDG2 on EDG2.NOD_NUM2 = NOD.ID " + Environment.NewLine +
                           "left outer join RZN_RESTRZONE RZN2 on RZN2.RZN_ZoneCode = EDG2.RZN_ZONECODE " + Environment.NewLine +
                           " where ( isnull(RZN1.ID,RZN2.ID) is null " + Environment.NewLine +
-                          (p_RZN_ID_LIST.Length > 0 ? " or charindex( ','+convert( varchar(50), isnull(isnull(RZN1.ID,RZN2.ID),0)), ',"+p_RZN_ID_LIST+"') > 0 " : "") + Environment.NewLine +
-                          (PMapIniParams.Instance.DestTraffic ? "  or isnull(EDG.EDG_DESTTRAFFIC, EDG2.EDG_DESTTRAFFIC) = 1 " : " ") + ") and " + Environment.NewLine +
-                          "abs(NOD_YPOS - ?) + abs(NOD_XPOS - ?) < ? " + Environment.NewLine +
+                          (p_RZN_ID_LIST.Length > 0 ? " or ( isnull(RZN1.ID,RZN2.ID) is NOT null and charindex( ','+convert( varchar(50), isnull(isnull(RZN1.ID,RZN2.ID),0)), '," + p_RZN_ID_LIST + "') > 0) " : "") + Environment.NewLine +
+                          " or abs(NOD_YPOS - ?) + abs(NOD_XPOS - ?) < ? " + Environment.NewLine +
+                          (PMapIniParams.Instance.DestTraffic ? "  or isnull(EDG.EDG_DESTTRAFFIC, EDG2.EDG_DESTTRAFFIC) = 1 " : " ") + ")  " + Environment.NewLine +
                           "order by abs( NOD_YPOS-?) + abs( NOD_XPOS-?) asc";
 
             DataTable dt = DBA.Query2DataTable(sSql, p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider,

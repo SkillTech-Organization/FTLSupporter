@@ -99,7 +99,7 @@ namespace FTLSupporter
 
                     //Teljesített túrapont ellenőrzés
                     if ((trk.TruckTaskType == FTLTruck.eTruckTaskType.Planned || trk.TruckTaskType == FTLTruck.eTruckTaskType.Running) &&
-                        trk.TPointCompleted < 0 || trk.TPointCompleted > trk.CurrTPoints.Count - 1)
+                        (trk.TPointCompleted < 0 || trk.TPointCompleted > trk.CurrTPoints.Count - 1))
                     {
                         result.Add(getValidationError(trk, "TPointCompleted", FTLMessages.E_TRKWRONGCOMPLETED));
                     }
@@ -456,7 +456,7 @@ namespace FTLSupporter
                                 {
                                     //6.2  utolsó beosztott túrapont --> első beosztandó túrapont
                                     rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.CurrTPoints.First().NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
-                                    pt2 = clctsk.Task.TPoints.Last();
+                                    pt2 = trk.CurrTPoints.First();
                                 }
                                 else
                                 {
