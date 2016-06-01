@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace PMap.Common.Attrib
 {
+    //this attribute indicates header type fields
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class TMPartitionKeyAttr : Attribute
+    public class AzurePartitionAttr : Attribute
     {
+
     }
 }

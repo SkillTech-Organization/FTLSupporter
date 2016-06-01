@@ -285,10 +285,13 @@
     <Compile Include="Common\Attrib\ItemIDAttr.cs" />
     <Compile Include="Common\Attrib\PropertyOrderX.cs" />
     <Compile Include="Common\Attrib\ErrorIfAttrX.cs" />
-    <Compile Include="Common\Attrib\TMPartitionKeyAttr.cs" />
-    <Compile Include="Common\Attrib\TMRowKeyAttr.cs" />
-    <Compile Include="Common\Azure\ModelBase.cs" />
-    <Compile Include="Common\Azure\TableStore.cs" />
+    <Compile Include="Common\Attrib\AzureTablePartitionKeyAttr.cs" />
+    <Compile Include="Common\Attrib\AzureTableRowKeyAttr.cs" />
+    <Compile Include="Common\Attrib\AzurePartitionAttr.cs" />
+    <Compile Include="Common\Attrib\AzureRowAttr.cs" />
+    <Compile Include="Common\Azure\AzurePMapLog.cs" />
+    <Compile Include="Common\Azure\AzureTableObjBase.cs" />
+    <Compile Include="Common\Azure\AzureTableStore.cs" />
     <Compile Include="Common\CSVParser.cs" />
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\JSONHelper.cs" />

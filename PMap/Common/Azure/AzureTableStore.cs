@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 
 namespace PMap.Common.Azure
 {
-    public class TableStore
+    public class AzureTableStore
     {
         private static volatile object m_lock = new object();
         /*
@@ -26,8 +26,8 @@ namespace PMap.Common.Azure
         private CloudStorageAccount m_account = null;
         private CloudTableClient m_client = null;
 
-        static private TableStore m_instance = null;        //Mivel statikus tag a program indulásakor 
-        static public TableStore Instance                   //inicializálódik, ezért biztos létrejon az instance osztály)
+        static private AzureTableStore m_instance = null;        //Mivel statikus tag a program indulásakor 
+        static public AzureTableStore Instance                   //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
@@ -35,7 +35,7 @@ namespace PMap.Common.Azure
                 {
                     if (m_instance == null)
                     {
-                        m_instance = new TableStore();
+                        m_instance = new AzureTableStore();
                     }
                     return m_instance;
 
@@ -43,7 +43,7 @@ namespace PMap.Common.Azure
             }
 
         }
-        private TableStore() { }
+        private AzureTableStore() { }
 
         private void InitTableStore()
         {
@@ -75,21 +75,21 @@ namespace PMap.Common.Azure
 
             DynamicTableEntity TableEntity = null;
             Type tp = p_obj.GetType();
-            PropertyInfo PartitionKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(TMPartitionKeyAttr))).FirstOrDefault();
+            PropertyInfo PartitionKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
             if (PartitionKeyProp == null)
-                throw new Exception("TMPartitionKeyAttr annotation is missing!");
+                throw new Exception("AzureTablePartitionKeyAttr annotation is missing!");
 
-            PropertyInfo RowKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(TMRowKeyAttr))).FirstOrDefault();
+            PropertyInfo RowKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr))).FirstOrDefault();
             if (RowKeyProp != null)
-                TableEntity = new DynamicTableEntity(tp.GetProperty(PartitionKeyProp.Name).GetValue(p_obj).ToString(), tp.GetProperty(RowKeyProp.Name).GetValue(p_obj).ToString());
+                TableEntity = new DynamicTableEntity(tp.GetProperty(PartitionKeyProp.Name).GetValue(p_obj, null).ToString(), tp.GetProperty(RowKeyProp.Name).GetValue(p_obj, null).ToString());
             else
-                TableEntity = new DynamicTableEntity(tp.GetProperty(PartitionKeyProp.Name).GetValue(p_obj).ToString(), "");
+                TableEntity = new DynamicTableEntity(tp.GetProperty(PartitionKeyProp.Name).GetValue(p_obj, null).ToString(), "");
 
             try
             {
                 PropertyInfo[] writeProps = tp.GetProperties().Where(pi => (Attribute.IsDefined(pi, typeof(DataMemberAttribute)) &&
-                                                                           !Attribute.IsDefined(pi, typeof(TMPartitionKeyAttr)) &&
-                                                                           !Attribute.IsDefined(pi, typeof(TMRowKeyAttr)))).ToArray<PropertyInfo>();
+                                                                           !Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr)) &&
+                                                                           !Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr)))).ToArray<PropertyInfo>();
                 foreach (var propInf in writeProps)
                 {
                     try
@@ -98,7 +98,7 @@ namespace PMap.Common.Azure
                         if (propInf.CanWrite)
                         {
 
-                            var val = tp.GetProperty(propInf.Name).GetValue(p_obj);
+                            var val = tp.GetProperty(propInf.Name).GetValue(p_obj, null);
                             if (propInf.PropertyType == typeof(bool?) || propInf.PropertyType == typeof(bool))
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty((bool?)val));
                             else if (propInf.PropertyType == typeof(byte[]))
@@ -135,31 +135,31 @@ namespace PMap.Common.Azure
         {
             object result = Activator.CreateInstance(typeof(T));
             Type t = typeof(T);
-            PropertyInfo PartitionKeyProp = typeof(T).GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(TMPartitionKeyAttr))).FirstOrDefault();
+            PropertyInfo PartitionKeyProp = typeof(T).GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
             if (PartitionKeyProp == null)
-                throw new Exception("TMPartitionKeyAttr annotation is missing!");
+                throw new Exception("AzureTablePartitionKeyAttr annotation is missing!");
 
             if (PartitionKeyProp.PropertyType == typeof(Guid?) || PartitionKeyProp.PropertyType == typeof(Guid))
-                t.GetProperty(PartitionKeyProp.Name).SetValue(result, new Guid(p_obj.PartitionKey));
+                t.GetProperty(PartitionKeyProp.Name).SetValue(result, new Guid(p_obj.PartitionKey), null);
             else if (PartitionKeyProp.PropertyType == typeof(int?) || PartitionKeyProp.PropertyType == typeof(int))
-                t.GetProperty(PartitionKeyProp.Name).SetValue(result, int.Parse(p_obj.PartitionKey));
+                t.GetProperty(PartitionKeyProp.Name).SetValue(result, int.Parse(p_obj.PartitionKey), null);
             else
-                t.GetProperty(PartitionKeyProp.Name).SetValue(result, p_obj.PartitionKey);
+                t.GetProperty(PartitionKeyProp.Name).SetValue(result, p_obj.PartitionKey, null);
 
 
-            PropertyInfo RowKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(TMRowKeyAttr))).FirstOrDefault();
+            PropertyInfo RowKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr))).FirstOrDefault();
             if (RowKeyProp != null)
             {
                 if (RowKeyProp.PropertyType == typeof(Guid?) || RowKeyProp.PropertyType == typeof(Guid))
-                    t.GetProperty(RowKeyProp.Name).SetValue(result, new Guid(p_obj.RowKey));
+                    t.GetProperty(RowKeyProp.Name).SetValue(result, new Guid(p_obj.RowKey), null);
                 else if (RowKeyProp.PropertyType == typeof(int?) || RowKeyProp.PropertyType == typeof(int))
-                    t.GetProperty(RowKeyProp.Name).SetValue(result, int.Parse(p_obj.RowKey));
+                    t.GetProperty(RowKeyProp.Name).SetValue(result, int.Parse(p_obj.RowKey), null);
                 else
-                    t.GetProperty(RowKeyProp.Name).SetValue(result, p_obj.RowKey);
+                    t.GetProperty(RowKeyProp.Name).SetValue(result, p_obj.RowKey, null);
             }
             PropertyInfo[] writeProps = t.GetProperties().Where(pi => (Attribute.IsDefined(pi, typeof(DataMemberAttribute)) &&
-                                                                   !Attribute.IsDefined(pi, typeof(TMPartitionKeyAttr)) &&
-                                                                   !Attribute.IsDefined(pi, typeof(TMRowKeyAttr)))).ToArray<PropertyInfo>();
+                                                                   !Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr)) &&
+                                                                   !Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr)))).ToArray<PropertyInfo>();
             foreach (var propInf in writeProps)
             {
                 try
@@ -167,21 +167,21 @@ namespace PMap.Common.Azure
                     if (propInf.CanWrite && p_obj.Properties.ContainsKey(propInf.Name))
                     {
                         if (p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].StringValue);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].StringValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Int64)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].Int64Value);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].Int64Value, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Int32)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].Int32Value);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].Int32Value, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.DateTime)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].DateTime);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].DateTime, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Guid)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].GuidValue);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].GuidValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Boolean)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].BooleanValue);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].BooleanValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Double)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].DoubleValue);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].DoubleValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Binary)
-                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].BinaryValue);
+                            t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].BinaryValue, null);
                     }
                 }
                 catch (Exception ex) { }     //szebben megoldani!
@@ -211,10 +211,10 @@ namespace PMap.Common.Azure
                 bool bOK =  parseHttpStatus(res.HttpStatusCode);
                 if (bOK)
                 {
-                    if( tp.IsSubclassOf(typeof(ModelBase)))
+                    if( tp.IsSubclassOf(typeof(AzureTableObjBase)))
                     {
-                        ModelBase mb = (ModelBase)p_obj;
-                        mb.SetObjState(ModelBase.enObjectState.Stored);
+                        AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                        mb.SetObjState(AzureTableObjBase.enObjectState.Stored);
                     }
                   
                 }
@@ -289,14 +289,14 @@ namespace PMap.Common.Azure
             string partitionKey = "";
             string rowKey = "";
             Type tp = p_obj.GetType();
-            PropertyInfo PartitionKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(TMPartitionKeyAttr))).FirstOrDefault();
+            PropertyInfo PartitionKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
             if (PartitionKeyProp == null)
-                throw new Exception("TMPartitionKeyAttr annotation is missing!");
-            partitionKey = tp.GetProperty(PartitionKeyProp.Name).GetValue(p_obj).ToString();
+                throw new Exception("AzureTablePartitionKeyAttr annotation is missing!");
+            partitionKey = tp.GetProperty(PartitionKeyProp.Name).GetValue(p_obj, null).ToString();
 
-            PropertyInfo RowKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(TMRowKeyAttr))).FirstOrDefault();
+            PropertyInfo RowKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr))).FirstOrDefault();
             if (RowKeyProp != null)
-                rowKey = tp.GetProperty(RowKeyProp.Name).GetValue(p_obj).ToString();
+                rowKey = tp.GetProperty(RowKeyProp.Name).GetValue(p_obj, null).ToString();
             return Retrieve<T>(partitionKey, rowKey);
         }
 

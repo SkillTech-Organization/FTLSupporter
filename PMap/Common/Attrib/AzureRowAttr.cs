@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace PMap.Common.Attrib
 {
+    //this attribute indicates item type fields
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class TMRowKeyAttr : Attribute
+    public class AzureRowAttr : Attribute
     {
     }
 }

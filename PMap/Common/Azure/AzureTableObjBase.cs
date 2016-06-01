@@ -16,7 +16,7 @@ using System.Xml.Serialization;
 
 namespace PMap.Common.Azure
 {
-    public class ModelBase :  INotifyPropertyChanged, IDataErrorInfo
+    public class AzureTableObjBase :  INotifyPropertyChanged, IDataErrorInfo
     {
         public enum enObjectState
         {
@@ -48,7 +48,7 @@ namespace PMap.Common.Azure
                 this.m_State = enObjectState.Modified;
         }
 
-        public ModelBase()
+        public AzureTableObjBase()
         {
             m_State = enObjectState.New;
         }
@@ -135,7 +135,7 @@ namespace PMap.Common.Azure
                 var context = new ValidationContext(this, null, null);
                 context.MemberName = pi.Name;
                 var results = new List<ValidationResult>();
-                var v = pi.GetValue(this);
+                var v = pi.GetValue(this, null);
                 var isValid = Validator.TryValidateProperty(v, context, results);
                 if (!isValid)
                 {
