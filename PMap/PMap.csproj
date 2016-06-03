@@ -225,7 +225,7 @@
     <Compile Include="BLL\Base\bllBase.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
-    <Compile Include="BLL\Base\WriteFieldAttribute.cs" />
+    <Compile Include="Common\Attrib\WriteFieldAttribute.cs" />
     <Compile Include="BLL\bllApp.cs" />
     <Compile Include="BLL\bllCapacityProf.cs" />
     <Compile Include="BLL\bllCargoType.cs" />
@@ -292,6 +292,7 @@
     <Compile Include="Common\Azure\AzurePMapLog.cs" />
     <Compile Include="Common\Azure\AzureTableObjBase.cs" />
     <Compile Include="Common\Azure\AzureTableStore.cs" />
+    <Compile Include="Common\Azure\PMapAzureLog.cs" />
     <Compile Include="Common\CSVParser.cs" />
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\JSONHelper.cs" />

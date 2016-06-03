@@ -5,6 +5,7 @@ using System.Text;
 using PMap.BLL.Base;
 using GMap.NET;
 using System.Web.Script.Serialization;
+using PMap.Common.Attrib;
 
 namespace PMap.BO
 {

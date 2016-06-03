@@ -141,7 +141,7 @@ namespace PMap.Common
             Log2File(p_msg, Global.LogFileName, p_sendToParse);
         }
 
-        public static void Log2File(string p_msg, string p_logFileName, bool p_sendToParse = true)
+        public static void Log2File(string p_msg, string p_logFileName, bool p_sendToCloud = true)
         {
             string dir = PMapIniParams.Instance.LogDir;
             if (dir == null || dir == "")
@@ -151,7 +151,8 @@ namespace PMap.Common
             string sMsg = String.Format("{0}: {1}", DateTime.Now.ToString(Global.DATETIMEFORMAT), p_msg);
             Console.WriteLine(sMsg);
             String2File(sMsg + Environment.NewLine, LogFileName, true);
-            if (p_sendToParse && PMapIniParams.Instance.ParseLog)
+
+            if (p_sendToCloud && PMapIniParams.Instance.ParseLog)
                 ParseSynchLog.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3),  DateTime.Now, p_msg);
 
         }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using PMap.BLL.Base;
 using PMap.Common;
+using PMap.Common.Attrib;
 
 namespace PMap.BO
 {

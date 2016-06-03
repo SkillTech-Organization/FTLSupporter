@@ -14,13 +14,9 @@ namespace PMap.Common.Azure
     public class AzureTableStore
     {
         private static volatile object m_lock = new object();
-        /*
-        private string m_accountName = "ttest01";
-        private string m_accountKey = "LurHRkszmopfEfqrV47Ol/0ZcpgqD0uLkxkl8T1xARrn4wY+iTmwWe56e8ccbHjvirxNRX4jFVFvCZwDRZn7Iw==";
-        */
-        private string m_accountName = "topmaxstorage";
-     //   private string m_accountKey = "RehBuMDPre1Wgr8m9IoIifHwPZw1mim+PTUEivEfIV4SguZc3JiaOonbIZLraT3EODc0Bvd3F8qxMBxkQVHqbQ==";
-        private string m_accountKey = "6UsDvdIKr3AfEmRJdLSDp5znNPgMGzOamFu+3dJSxOXRudx7uYMcfxzuL8nAdxlIDOn2x5DnEhBgpQex800zlA==";
+
+        private string m_accountName = "pmaplog";
+        private string m_accountKey = "jazm8HHskSidL3HMqRrjytwqMH5hAkv8QgNo9XiF/pxsqer7YhAE8dKQ9m7zGw1h6z5L2HwwXMhaGp/Mf+xytQ==";
 
         private StorageCredentials m_creds = null;
         private CloudStorageAccount m_account = null;

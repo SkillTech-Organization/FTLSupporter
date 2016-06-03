@@ -6,6 +6,7 @@ using PMap.DB.Base;
 using PMap.Common;
 using System.Reflection;
 using System.Collections;
+using PMap.Common.Attrib;
 
 namespace PMap.BLL.Base
 {
