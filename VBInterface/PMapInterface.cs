@@ -83,7 +83,7 @@ namespace VBInterface
        //   Util.Log2File(">>END:SelectPosition()-->" + sRet, false);
 
             if( !PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now-dt);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now-dt);
             return sRetStatus;
         }
 
@@ -113,7 +113,7 @@ namespace VBInterface
             //Util.Log2File(">>END:ShowGoogleMap()-->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
             return sRetStatus;
         }
 
@@ -143,7 +143,7 @@ namespace VBInterface
 //            Util.Log2File(">>END:ShowRoute()-->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_routeList);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_routeList);
             return sRetStatus;
         }
 
@@ -173,7 +173,7 @@ namespace VBInterface
 //            Util.Log2File(">>END:ShowDepots()-->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_DepotList);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_DepotList);
             return sRetStatus;
         }
 
@@ -201,7 +201,7 @@ namespace VBInterface
             //Util.Log2File(">>END:ShowDepotsAndRoute()");
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID, p_TPL_ID);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID, p_TPL_ID);
             return sRetStatus;
         }
 
@@ -279,7 +279,7 @@ namespace VBInterface
             //Util.Log2File(">>END:InitPMapRouteData() -->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
             return sRetStatus;
         }
 
@@ -346,7 +346,7 @@ namespace VBInterface
             //Util.Log2File(">>END:CalcPMapRoutesByPlan()-->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID, p_savePoints.ToString());
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID, p_savePoints.ToString());
             return sRetStatus;
         }
 
@@ -407,7 +407,7 @@ namespace VBInterface
 
             //Util.Log2File(">>END:CalcPMapRoutesByOrders()-->" + sRet);
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_ORD_DATE_S, p_ORD_DATE_E);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_ORD_DATE_S, p_ORD_DATE_E);
             return sRetStatus;
         }
 
@@ -446,7 +446,7 @@ namespace VBInterface
             }
             //Util.Log2File(">>END:CalcTOLL()-->" + sRet);
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_TPL_ID_List);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_TPL_ID_List);
             return sRetStatus;
         }
 
@@ -485,7 +485,7 @@ namespace VBInterface
             }
             //Util.Log2File(">>END:RecalcPlTours()-->" + sRet);
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_TPL_ID_List);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_TPL_ID_List);
             return sRetStatus;
         }
         #endregion
@@ -518,7 +518,7 @@ namespace VBInterface
 
             //Util.Log2File(">>END:ImportDepots()");
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_depots.Count());
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_depots.Count());
             return result;
         }
 
@@ -549,7 +549,7 @@ namespace VBInterface
 
             //Util.Log2File(">>END:ImportTrucks()");
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_truck.Count());
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_truck.Count());
             return result;
         }
 
@@ -579,7 +579,7 @@ namespace VBInterface
             }
             //Util.Log2File(">>END:ImportOrders()");
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_orders.Count());
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_orders.Count());
             return result;
         }
 
@@ -632,7 +632,7 @@ namespace VBInterface
             resArr.Add(res);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_lstRouteSection.Count(), p_TRK_ID, p_GetRouteWithTruckSpeeds, p_CalcTRK_ETOLLCAT);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_lstRouteSection.Count(), p_TRK_ID, p_GetRouteWithTruckSpeeds, p_CalcTRK_ETOLLCAT);
             return resArr;
         }
 
@@ -676,7 +676,7 @@ namespace VBInterface
             resArr.Add(res);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_lstRouteSection.Count(), p_TRK_ID, p_GetRouteWithTruckSpeeds, p_CalcTRK_ETOLLCAT);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_lstRouteSection.Count(), p_TRK_ID, p_GetRouteWithTruckSpeeds, p_CalcTRK_ETOLLCAT);
             return resArr;
         }
 
@@ -759,7 +759,7 @@ namespace VBInterface
             resArr.Add(res);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_NAME, p_WHS_ID, p_PLN_DATE_B, p_PLN_DATE_E, p_PLN_USEINTERVAL, p_PLN_INTERVAL_B, p_PLN_INTERVAL_E, p_enabledTruckList);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_NAME, p_WHS_ID, p_PLN_DATE_B, p_PLN_DATE_E, p_PLN_USEINTERVAL, p_PLN_INTERVAL_B, p_PLN_INTERVAL_E, p_enabledTruckList);
             return resArr;
         }
 
@@ -806,7 +806,7 @@ namespace VBInterface
             resArr.Add(res);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID, p_USR_ID);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID, p_USR_ID);
             return resArr;
         }
 
@@ -846,7 +846,7 @@ namespace VBInterface
             List<dtXResult> resArr = new List<dtXResult>();
             resArr.Add(res);
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_PLN_ID);
             return resArr;
         }
 
@@ -890,7 +890,7 @@ namespace VBInterface
             resArr.Add(res);
 
             if (!PMapIniParams.Instance.TestMode)
-                ParseSynchLog.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_WHS_ID, p_PLN_DATE_B, p_PLN_DATE_E);
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_WHS_ID, p_PLN_DATE_B, p_PLN_DATE_E);
             return resArr;
         }
 

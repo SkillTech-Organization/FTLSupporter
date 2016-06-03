@@ -124,7 +124,7 @@
   <data name="printToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAIpSURBVDhPtZL/T1JRGMb5p1itrVZbbRpqZbawnBENV1I0
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIpSURBVDhPtZL/T1JRGMb5p1itrVZbbRpqZbawnBENV1I0
         jGlByTSyJTXJwq2oKZQb1KAv6JCYWSxvBrkkZUq4CeQEiRABFeLL072Xa0zRra31bO8v57zP5znnPYf1
         X+TxhWF6O7VtGYcnwbSWijKPOLzYrPSvLPwLS3huGUMlT7o9wGD9grVUBj+icdid03S9tDmgNxNwTgVQ
         J+rA8XNtWwM+uuZATMwxmQVRycuJFNyzIRitDlScugKzjSgFRGJJaIwEsrk8AsHIhnSL/Ssck37UNipQ
@@ -139,20 +139,20 @@
   <data name="excelToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAL3SURBVDhPhZLdS1NhHMd3lX9CWBddClFaKRV1US61WYG9
-        WVmZTucUTW3owiBTp5FphiYqVIhSdFFRVnNqU2vO5UYzelmm5st8jU2Xez1Hd8769pyz1QyEfvDhuXjO
-        98P5fc8RcBN7VZN6pFqvTril/xlXpqfISfPUcKeBTqgeoA/d1Jn2yrV1mxMfr+NDqyf+er/W6qQXZyw2
-        1uZehs0VZNHJQePbvBPFL6dx9tawR5SrCglE/XO4Umf9sbDEDpi9MEwxMEwz0JsZ6CZXoPm+jM4hN5YZ
-        QDlMobhtCul3TNQ/krgSNeXwrGBwhsWHGYacDN7zkhX0jS3j9ZCHCHwYnGdhmPOiQjUN4ZXeR3z4TE30
-        xKmyxF/SxhNIbziJhq5WlD+rgbAkHNEEUcUexCp2olZZy6/iohlYljyILehjeMHpauHT3i/taB+9jwZ9
-        IS9JqT+EwofJyGtNgqTpKNKa0qD8ZEG7yYVXnx2wk57iFP00LxDViUJEpfmsfuQtHnxRoEqTy0tSGw+T
-        8DFk3c2EdszNr9IzSkFNelhyexFX/s4v4Ca+so+WNYthHNOhyXAZN7oLcKbmAFLrE2E0e2AkxXIFa8f9
-        ndiIIFaxSrDvWol3V9EmJNeJMDg+gIq32VCoZEi6HYNWzQt8nGVgJMUOTHrxjmB1eiEsDQh2yEOlkfKN
-        yGs5h/ON8ThXe5CXyFTJkD/LJG8SA+5+cJrFe+4TE5ykyCiZzi+IlK+fjZRvIA+FIrIwFMerYpBzTwzt
-        kBoV6iJkPxFD0ngaRiIwkH9DTwS014dt+ZrgCvtl/fS8ncanWZanb2QOl5qzkEGC0qYkFLRc/HvH4Vlh
-        EZGvDAq2E9uMLSj4H26yQkRmW1CwW/bGYzJbf6318FrY7E7f1hSlKxAnRWZ1T0w5PE7T1KJvYoHChJXC
-        WIAFl5eHa95Fs7DYHD6KouxhFzq+BuICQVRWV06EpLN7u1Rti5A+p/+S4Sf8D5LndJikY2lLWkdPuFiV
-        LhAIBL8ByxmhJDO9TtAAAAAASUVORK5CYII=
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAL3SURBVDhPhZJZTxNRGIZ7pT/BoBdekhgFtUaNXijIUsAE
+        NwSiKEspBGQTajARIQUjshiQAIkaAtF4oQZUoCwFpJRCG4oRQQRkLUugtCxdZqAz5fXMtFpNSPySJ+fi
+        zPtkvndGwI3/A2X0xWKNIrREsxaQp6HISfOUcqeWDi3up4OfqEfOSlXlh8Le7uFDf0/Qo16VwUwb9ctG
+        1mTdgsnixmjmoPFjyYycT3pElozZRCnyva6oc0IK1YYlwxrbP2uHdo6BVs9AM8tAPbMN5c8ttI5ascUA
+        TWMUcj7MIe7ZCPWPJCC3ndq0bWNwnsWXeYacDAZ4yTZ6JrfQPmojAgcGl1hoF+0okOvhe7/rDR+OKPWZ
+        vp4XtiOpuoq4ymuobKtDfn0pfHO94EMQFZyBv+wkyprK+FUsNIOVdRv87/YwvCC82Pd913AzmideolKT
+        xUtuVwQj63UUUusiIa6+hNjqWDQNraB5xILGb5vYID0FyHppXiAqF+0NzE1jNePdeDUsQ5EyhZdEV4WQ
+        8GUkPk+AatLKr9I5QUFBeli32hGQ3+cUcBNU2ENn1MRAN6lGtfYeHndkIqL0AqIrwqCbtUFHiuUKVk05
+        OzERgb/sL8G5h7n2U9kHEVUuwuBUPwq6kyCTZyDyqR/qlB/xdYGBjhTbP2NHH8FgtsM3zyU4LvWQCKUH
+        kFp7AzergnCjLJCXZMijIK1PIG/iB+5+UM9igPvEBDMpUpiudgqE0n0LQul+8pAHhFkeuFLkh+QXMVCN
+        KlCgyEbSuxiIq8KhIwIt+Tc0REDbHfBOU7pXOJ/eSy9t0BhaYHl6xheRXpOIeBKUVEcis/bOnzsO2zZL
+        BI1uwVFimze5Bf/DSlbwTmhwC05nfLYNz6zs7PbwbhjXNx1HbjdZXHFSZGLH9NymzTw8u+qYXqUwbaAw
+        6WLVYufhmrfQLJaNGw6KojY8b7V8d8UFghOJbcne4taOYxKFyVvSQP8h3onXb8QNtKe4Zf1wbEunV4w8
+        TiAQCH4BkPChBKRJ4EwAAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="openExcel.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

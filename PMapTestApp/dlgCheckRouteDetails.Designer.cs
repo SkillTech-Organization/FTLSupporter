@@ -82,21 +82,20 @@
             this.layoutDialog.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.9924F));
             this.layoutDialog.Controls.Add(this.buttonClose, 0, 0);
             this.layoutDialog.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.layoutDialog.Location = new System.Drawing.Point(0, 569);
-            this.layoutDialog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.layoutDialog.Location = new System.Drawing.Point(0, 462);
             this.layoutDialog.Name = "layoutDialog";
             this.layoutDialog.RowCount = 1;
             this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.layoutDialog.Size = new System.Drawing.Size(1207, 49);
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.layoutDialog.Size = new System.Drawing.Size(905, 40);
             this.layoutDialog.TabIndex = 3;
             // 
             // buttonClose
@@ -104,10 +103,9 @@
             this.buttonClose.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonClose.CausesValidation = false;
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonClose.Location = new System.Drawing.Point(547, 4);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonClose.Location = new System.Drawing.Point(410, 4);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(112, 41);
+            this.buttonClose.Size = new System.Drawing.Size(84, 33);
             this.buttonClose.TabIndex = 2;
             this.buttonClose.Text = "Bezárás";
             this.buttonClose.UseVisualStyleBackColor = true;
@@ -116,10 +114,8 @@
             // gridRouteDetails
             // 
             this.gridRouteDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridRouteDetails.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gridRouteDetails.Location = new System.Drawing.Point(0, 75);
+            this.gridRouteDetails.Location = new System.Drawing.Point(0, 67);
             this.gridRouteDetails.MainView = this.gridViewRouteDetails;
-            this.gridRouteDetails.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gridRouteDetails.Name = "gridRouteDetails";
             this.gridRouteDetails.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.imageEditType,
@@ -128,7 +124,7 @@
             this.repositoryItemImageComboBox1,
             this.repositoryItemCheckEdit1,
             this.repositoryItemCheckEdit2});
-            this.gridRouteDetails.Size = new System.Drawing.Size(1207, 494);
+            this.gridRouteDetails.Size = new System.Drawing.Size(905, 395);
             this.gridRouteDetails.TabIndex = 7;
             this.gridRouteDetails.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewRouteDetails});
@@ -322,19 +318,17 @@
             this.panel1.Controls.Add(this.cmbSpeedProfile);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 27);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1207, 48);
+            this.panel1.Size = new System.Drawing.Size(905, 40);
             this.panel1.TabIndex = 8;
             // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(355, 16);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(266, 13);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(109, 17);
+            this.label7.Size = new System.Drawing.Size(84, 13);
             this.label7.TabIndex = 7;
             this.label7.Text = "Behajt.övezetek";
             // 
@@ -343,60 +337,54 @@
             this.cmbRST_ID_LIST.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRST_ID_LIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRST_ID_LIST.FormattingEnabled = true;
-            this.cmbRST_ID_LIST.Location = new System.Drawing.Point(476, 11);
-            this.cmbRST_ID_LIST.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmbRST_ID_LIST.Location = new System.Drawing.Point(357, 9);
             this.cmbRST_ID_LIST.Name = "cmbRST_ID_LIST";
-            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(333, 24);
+            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(250, 21);
             this.cmbRST_ID_LIST.TabIndex = 6;
             this.cmbRST_ID_LIST.SelectedIndexChanged += new System.EventHandler(this.cmbRST_ID_LIST_SelectedIndexChanged);
             // 
             // lblDistance
             // 
             this.lblDistance.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblDistance.Location = new System.Drawing.Point(895, 12);
-            this.lblDistance.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDistance.Location = new System.Drawing.Point(671, 10);
             this.lblDistance.Name = "lblDistance";
-            this.lblDistance.Size = new System.Drawing.Size(104, 22);
+            this.lblDistance.Size = new System.Drawing.Size(78, 18);
             this.lblDistance.TabIndex = 5;
             this.lblDistance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(817, 16);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(613, 13);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 17);
+            this.label4.Size = new System.Drawing.Size(51, 13);
             this.label4.TabIndex = 4;
             this.label4.Text = "Távolság";
             // 
             // lblDuration
             // 
             this.lblDuration.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblDuration.Location = new System.Drawing.Point(1085, 12);
-            this.lblDuration.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDuration.Location = new System.Drawing.Point(814, 10);
             this.lblDuration.Name = "lblDuration";
-            this.lblDuration.Size = new System.Drawing.Size(104, 22);
+            this.lblDuration.Size = new System.Drawing.Size(78, 18);
             this.lblDuration.TabIndex = 3;
             this.lblDuration.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1008, 16);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(756, 13);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 17);
+            this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Menetidő";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 16);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(3, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 17);
+            this.label1.Size = new System.Drawing.Size(79, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Sebességprofil:";
             // 
@@ -404,10 +392,9 @@
             // 
             this.cmbSpeedProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSpeedProfile.FormattingEnabled = true;
-            this.cmbSpeedProfile.Location = new System.Drawing.Point(119, 11);
-            this.cmbSpeedProfile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmbSpeedProfile.Location = new System.Drawing.Point(89, 9);
             this.cmbSpeedProfile.Name = "cmbSpeedProfile";
-            this.cmbSpeedProfile.Size = new System.Drawing.Size(225, 24);
+            this.cmbSpeedProfile.Size = new System.Drawing.Size(170, 21);
             this.cmbSpeedProfile.TabIndex = 0;
             this.cmbSpeedProfile.SelectedIndexChanged += new System.EventHandler(this.cmbSpeedProfile_SelectedIndexChanged);
             this.cmbSpeedProfile.TextChanged += new System.EventHandler(this.cmbSpeedProfile_TextChanged);
@@ -421,7 +408,7 @@
             this.excelToolStripButton});
             this.toolMain.Location = new System.Drawing.Point(0, 0);
             this.toolMain.Name = "toolMain";
-            this.toolMain.Size = new System.Drawing.Size(1207, 27);
+            this.toolMain.Size = new System.Drawing.Size(905, 27);
             this.toolMain.TabIndex = 9;
             this.toolMain.Text = "toolStrip1";
             // 
@@ -453,14 +440,13 @@
             // 
             // dlgCheckRouteDetails
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1207, 618);
+            this.ClientSize = new System.Drawing.Size(905, 502);
             this.Controls.Add(this.gridRouteDetails);
             this.Controls.Add(this.layoutDialog);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolMain);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "dlgCheckRouteDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Útvonalrészletek";
