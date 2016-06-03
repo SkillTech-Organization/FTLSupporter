@@ -289,7 +289,6 @@
     <Compile Include="Common\Attrib\AzureTableRowKeyAttr.cs" />
     <Compile Include="Common\Attrib\AzurePartitionAttr.cs" />
     <Compile Include="Common\Attrib\AzureRowAttr.cs" />
-    <Compile Include="Common\Azure\AzurePMapLog.cs" />
     <Compile Include="Common\Azure\AzureTableObjBase.cs" />
     <Compile Include="Common\Azure\AzureTableStore.cs" />
     <Compile Include="Common\Azure\PMapAzureLog.cs" />
@@ -299,7 +298,7 @@
     <Compile Include="Common\LockHolder.cs" />
     <Compile Include="Common\ObjectValidator.cs" />
     <Compile Include="Common\Parse\ParseSynchLog.cs" />
-    <Compile Include="Common\Parse\PMapLog.cs" />
+    <Compile Include="Common\PMapLog.cs" />
     <Compile Include="Common\Parse\PMapCalls.cs" />
     <Compile Include="Common\PPlan\PlanEditFuncs.cs" />
     <Compile Include="Common\PPlan\PlanParams.cs" />

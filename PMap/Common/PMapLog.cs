@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace PMap.Common.Parse
+namespace PMap.Common
 {
     [Serializable]
     [DataContract(Namespace = "")]
