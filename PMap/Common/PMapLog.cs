@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using PMap.Common.Azure;
+using PMap.Common.Attrib;
 
 namespace PMap.Common
 {
     [Serializable]
     [DataContract(Namespace = "")]
-    public class AzurePMapLog : PMapLog
+    public class PMapLog : AzureTableObjBase
     {
         /*****************/
         /* partition key */
@@ -16,9 +18,9 @@ namespace PMap.Common
 
         public PMapLog() { m_ID = Guid.NewGuid(); }
 
-        public AzurePMapLog ShallowCopy()
+        public PMapLog ShallowCopy()
         {
-            return (AzurePMapLog)this.MemberwiseClone();
+            return (PMapLog)this.MemberwiseClone();
         }
 
         private Guid m_ID;

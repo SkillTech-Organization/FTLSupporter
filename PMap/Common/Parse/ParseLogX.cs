@@ -7,7 +7,7 @@ using System.IO;
 
 namespace PMap.Common.Parse
 {
-    public static class ParseSynchLog
+    public static class ParseLogX
     {
         private static string APP_ID = "38ZCHZtDbcGtPjgbSsgl4rD16GL3RbSaqrJjBDya";
         private static string REST_API_KEY = "42jLGdwUF6sP62sEmEGCvR5jPeD2v1zD7mpiNX3R";

@@ -21,6 +21,7 @@ using System.Net;
 using System.Net.Sockets;
 using PMap.Common.Parse;
 using System.Web.Script.Serialization;
+using PMap.Common.Azure;
 
 namespace PMap.Common
 {
@@ -153,7 +154,9 @@ namespace PMap.Common
             String2File(sMsg + Environment.NewLine, LogFileName, true);
 
             if (p_sendToCloud && PMapIniParams.Instance.ParseLog)
-                ParseSynchLog.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3),  DateTime.Now, p_msg);
+                ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3),  DateTime.Now, p_msg);
+            if (p_sendToCloud && PMapIniParams.Instance.AzureLog)
+                AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
 
         }
 

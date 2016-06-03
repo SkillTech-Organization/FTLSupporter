@@ -291,13 +291,13 @@
     <Compile Include="Common\Attrib\AzureRowAttr.cs" />
     <Compile Include="Common\Azure\AzureTableObjBase.cs" />
     <Compile Include="Common\Azure\AzureTableStore.cs" />
-    <Compile Include="Common\Azure\PMapAzureLog.cs" />
+    <Compile Include="Common\Azure\AzureLogX.cs" />
     <Compile Include="Common\CSVParser.cs" />
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\JSONHelper.cs" />
     <Compile Include="Common\LockHolder.cs" />
     <Compile Include="Common\ObjectValidator.cs" />
-    <Compile Include="Common\Parse\ParseSynchLog.cs" />
+    <Compile Include="Common\Parse\ParseLogX.cs" />
     <Compile Include="Common\PMapLog.cs" />
     <Compile Include="Common\Parse\PMapCalls.cs" />
     <Compile Include="Common\PPlan\PlanEditFuncs.cs" />

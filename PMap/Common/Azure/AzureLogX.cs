@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PMap.Common.Azure
 {
-    public class PMapAzureLog
+    public class AzureLogX
     {
         public static void LogToAzure(string p_type, DateTime p_timestamp, string p_text)
         {
@@ -16,8 +16,9 @@ namespace PMap.Common.Azure
                 LOG_TIMESTAMP = p_timestamp.ToString(Global.DATETIMEFORMAT),
                 LOG_TEXT = p_text,
                 LOG_VALUE = ""
+            
             };
-            sendToParse(URL, pl);
+            AzureTableStore.Instance.Insert(pl);
         }
 
     }

@@ -16,6 +16,7 @@ using System.Xml.Serialization;
 
 namespace PMap.Common.Azure
 {
+    [DataContract(Name = "AzureTableObjBase")]
     public class AzureTableObjBase :  INotifyPropertyChanged, IDataErrorInfo
     {
         public enum enObjectState
