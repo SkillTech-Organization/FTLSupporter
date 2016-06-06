@@ -59,33 +59,41 @@ namespace FTLSupporter
 
                 foreach (FTLTask tsk in p_TaskList)
                 {
-                    //Koordináta feloldás és ellenőrzés
-                    foreach (FTLPoint pt in tsk.TPoints)
+                    if (tsk.TPoints.Count >= 2)
                     {
-                        //A beosztandó szállíási feladat esetén olyan NOD_ID-t keresünk, 
-                        //amelyet egy távolságon belül lehetőleg minden járműtípus számára elérhető
-                        //
-                        // 
-                        string sXRZN_ID_LIST;
-                        pt.NOD_ID = 0;
-                        for (int iRST = Global.RST_BIGGER12T; iRST <= Global.RST_MAX75T && pt.NOD_ID == 0; iRST++)
-                        {
-                            sXRZN_ID_LIST = route.GetRestZonesByRST_ID(iRST);
-                            //Kicsit s
-                            pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
-                        }
 
-                        //nem találtun korlátozásokhoz NODE-t, nézünk egy korlátozás nélküli közeli pontot. 
-                        //
-                        if (pt.NOD_ID == 0)
+                        //Koordináta feloldás és ellenőrzés
+                        foreach (FTLPoint pt in tsk.TPoints)
                         {
-                            sXRZN_ID_LIST = route.GetRestZonesByRST_ID(Global.RST_NORESTRICT);
-                            pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                            //A beosztandó szállíási feladat esetén olyan NOD_ID-t keresünk, 
+                            //amelyet egy távolságon belül lehetőleg minden járműtípus számára elérhető
+                            //
+                            // 
+                            string sXRZN_ID_LIST;
+                            pt.NOD_ID = 0;
+                            for (int iRST = Global.RST_BIGGER12T; iRST <= Global.RST_MAX75T && pt.NOD_ID == 0; iRST++)
+                            {
+                                sXRZN_ID_LIST = route.GetRestZonesByRST_ID(iRST);
+                                //Kicsit s
+                                pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                            }
+
+                            //nem találtun korlátozásokhoz NODE-t, nézünk egy korlátozás nélküli közeli pontot. 
+                            //
                             if (pt.NOD_ID == 0)
                             {
-                                result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                                sXRZN_ID_LIST = route.GetRestZonesByRST_ID(Global.RST_NORESTRICT);
+                                pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                                if (pt.NOD_ID == 0)
+                                {
+                                    result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                                }
                             }
                         }
+                    }
+                    else
+                    {
+                        result.Add(getValidationError(tsk, "TPoints", FTLMessages.E_FEWPOINTS));
                     }
                 }
 

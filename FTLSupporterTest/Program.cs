@@ -134,6 +134,33 @@ namespace FTLSupporterTest
                 RealArrival = DateTime.MinValue
             };
 
+            FTLPoint tp10 = new FTLPoint()
+            {
+                TPID = "TP010",
+                Name = "Cegléd ",
+                Addr = "pontos megérkezés",
+                Open = DateTime.Now.Date.AddHours(14),
+                Close = DateTime.Now.Date.AddHours(14),
+                SrvDuration = 20,
+                Lat = 47.175575,
+                Lng = 20.1315880,
+                RealArrival = DateTime.MinValue
+            };
+            
+            FTLPoint tp11 = new FTLPoint()
+            {
+                TPID = "TP011",
+                Name = "Szolnok ",
+                Addr = "pontos megérkezés",
+                Open = DateTime.Now.Date.AddHours(16),
+                Close = DateTime.Now.Date.AddHours(16),
+                SrvDuration = 10,
+                Lat = 47.174833,
+                Lng = 20.175767,
+                RealArrival = DateTime.MinValue
+            };
+            
+
             #endregion 
 
             #region beosztandó szállítási feladatok
@@ -175,6 +202,20 @@ namespace FTLSupporterTest
             tsk3.TPoints.Add(tp7.ShallowCopy());
             tsk3.TPoints.Add(tp5.ShallowCopy());
             tsk3.TPoints.Add(tp3.ShallowCopy());
+
+
+            FTLTask tsk4 = new FTLTask()
+            {
+                TaskID = "TSK4",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Cegléd pontos megérkezés - Kecskemét",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk4.TPoints.Add(tp10.ShallowCopy());
+            tsk4.TPoints.Add(tp11.ShallowCopy());
+
             #endregion
 
             #region járművek és futó szállítási feladatok
@@ -309,16 +350,22 @@ namespace FTLSupporterTest
             trk4.CurrTPoints.Add(tpx10);
 
             #endregion
+            
+            /* nagy teszt */
+            //var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
+            //var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
 
-            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
-            var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
-
+            /* egy elem teszt */
             //var lstTsk = new List<FTLTask> { tsk3 };
             //var lstTrk = new List<FTLTruck> { trk4 };
 
+            /* pontos megérkezés teszt            */
+            var lstTsk = new List<FTLTask> { tsk4 };
+            var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
+
             var res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
 
-
+            
             int i = 1;
             foreach (var rr in res)
             {
