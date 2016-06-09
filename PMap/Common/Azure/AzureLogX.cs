@@ -11,7 +11,7 @@ namespace PMap.Common.Azure
         {
             PMapLog pl = new PMapLog()
             {
-                LOG_IP = PMapCommonVars.Instance.IPAddress,
+                LOG_INSTANCE = PMapCommonVars.Instance.IPAddress,
                 LOG_TYPE = p_type,
                 LOG_TIMESTAMP = p_timestamp.ToString(Global.DATETIMEFORMAT),
                 LOG_TEXT = p_text,

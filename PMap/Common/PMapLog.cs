@@ -23,10 +23,17 @@ namespace PMap.Common
             return (PMapLog)this.MemberwiseClone();
         }
 
+        [DataMember]
+        [AzurePartitionAttr]
+        [AzureTablePartitionKeyAttr]
+        [DisplayNameAttributeX(Name = "Instance", Order = 1, NoPrefix=true)]
+        public string LOG_INSTANCE { get; set; }
+
+
         private Guid m_ID;
         [DataMember]
-        [AzureTablePartitionKeyAttr]
-        [AzurePartitionAttr]
+        [AzureRowAttr]
+        [AzureTableRowKeyAttr]
         public Guid ID
         {
             get { return m_ID; }
@@ -34,19 +41,23 @@ namespace PMap.Common
         }
 
         [DataMember]
-        [AzurePartitionAttr]
-        public string LOG_IP { get; set; }
-        [DataMember]
-        [AzurePartitionAttr]
+        [AzureRowAttr]
+        [DisplayNameAttributeX(Name = "Bejegyzés típusa", Order = 2, NoPrefix=true)]
         public string LOG_TYPE { get; set; }
+
         [DataMember]
-        [AzurePartitionAttr]
+        [AzureRowAttr]
+        [DisplayNameAttributeX(Name = "Szöveg", Order = 3, NoPrefix=true)]
         public string LOG_TEXT { get; set; }
+
         [DataMember]
-        [AzurePartitionAttr]
+        [AzureRowAttr]
+        [DisplayNameAttributeX(Name = "Időpont", Order = 4, NoPrefix=true)]
         public string LOG_TIMESTAMP { get; set; }
+
         [DataMember]
-        [AzurePartitionAttr]
+        [AzureRowAttr]
+        [DisplayNameAttributeX(Name = "Érték", Order = 5, NoPrefix = true)]
         public string LOG_VALUE { get; set; }
     }
 }

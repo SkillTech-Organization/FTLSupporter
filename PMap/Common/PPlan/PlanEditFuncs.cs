@@ -228,23 +228,22 @@ namespace PMap.Common.PPlan
 
         public boPlanTour RefreshToursAfterModify(int pChangedTourID1, int pChangedTourID2)
         {
-            Cursor oldCursor = Cursor.Current;
-            Cursor.Current = Cursors.WaitCursor;
-
-            RefreshOrdersFromDB();
-
             boPlanTour TourWithFreshData = null;
-            m_PPlanCommonVars.FocusedPoint = null;
+            using (new WaitCursor())
+            {
+                RefreshOrdersFromDB();
 
-            if (pChangedTourID1 > 0)
-            {
-                TourWithFreshData = RefreshTourDataFromDB(pChangedTourID1);
+                m_PPlanCommonVars.FocusedPoint = null;
+
+                if (pChangedTourID1 > 0)
+                {
+                    TourWithFreshData = RefreshTourDataFromDB(pChangedTourID1);
+                }
+                if (pChangedTourID2 > 0)
+                {
+                    TourWithFreshData = RefreshTourDataFromDB(pChangedTourID2);
+                }
             }
-            if (pChangedTourID2 > 0)
-            {
-                TourWithFreshData = RefreshTourDataFromDB(pChangedTourID2);
-            }
-            Cursor.Current = oldCursor;
             return TourWithFreshData;
         }
 

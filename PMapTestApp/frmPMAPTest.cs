@@ -307,6 +307,12 @@ namespace PMapTestApp
 
         private void button15_Click(object sender, EventArgs e)
         {
+            /*
+            dlgImportResult irx = new dlgImportResult();
+            irx.propertyGridCtrl1.SetObject(new dtXResult());
+            irx.ShowDialog();
+            */
+
             List<boXDepot> depots = new List<boXDepot>();
 
        //     dlgTestInput d = new dlgTestInput();

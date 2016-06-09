@@ -304,6 +304,7 @@
     <Compile Include="Common\PPlan\PlanParams.cs" />
     <Compile Include="Common\RouteVisEventArgs.cs" />
     <Compile Include="Common\RouteVisCommonVars.cs" />
+    <Compile Include="Common\WaitCursor.cs" />
     <Compile Include="Controls\ColorComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
