@@ -298,6 +298,7 @@
     <Compile Include="Common\LockHolder.cs" />
     <Compile Include="Common\ObjectValidator.cs" />
     <Compile Include="Common\Parse\ParseLogX.cs" />
+    <Compile Include="Common\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />
     <Compile Include="Common\Parse\PMapCalls.cs" />
     <Compile Include="Common\PPlan\PlanEditFuncs.cs" />

@@ -67,8 +67,11 @@
     </ApplicationDefinition>
     <Compile Include="Common\PMAUtils.cs" />
     <Compile Include="Model\mdlBase.cs" />
-    <Compile Include="Model\mdlInstance.cs" />
+    <Compile Include="Model\mdlLicences.cs" />
     <Compile Include="Model\mdlLog.cs" />
+    <Compile Include="uscLicences.xaml.cs">
+      <DependentUpon>uscLicences.xaml</DependentUpon>
+    </Compile>
     <Compile Include="uscLog.xaml.cs">
       <DependentUpon>uscLog.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="uscLicences.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="uscLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +124,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DTPicker\DTPicker.vbproj">
+      <Project>{05dc0418-566f-47f1-aa53-190009dd01f7}</Project>
+      <Name>DTPicker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PMap\PMap.csproj">
       <Project>{3e3fe032-b237-479b-938b-63f693265432}</Project>
       <Name>PMap</Name>
