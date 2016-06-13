@@ -9,6 +9,7 @@ namespace PMap.Common
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using System.Web;
     using System.Xml.Serialization;
@@ -23,29 +24,41 @@ namespace PMap.Common
         }
 
 
-        public static List<ValidationError> ValidateObject(object p_obj)
+        public static List<ValidationError> ValidateObject(object p_obj,  Type[] p_attrfilter = null)
         {
             List<ValidationError> Errors = new List<ValidationError>();
+            Type tp = p_obj.GetType();
+            PropertyInfo[] writeProps;
+            if (p_attrfilter == null)
+                writeProps = tp.GetProperties();
+            else
+                writeProps = tp.GetProperties().Where(pi => p_attrfilter.Count(px => Attribute.IsDefined(pi, px)) > 0).ToArray();
 
-            //Annotációk alapján levalidáljuk az input tartalmát
-            var context = new ValidationContext(p_obj, serviceProvider: null, items: null);
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(p_obj, context, results, true);
-            if (!isValid)
+            foreach (var propInf in writeProps)
             {
-
-                foreach (var validationResult in results)
+                try
                 {
-                    foreach (var memberName in validationResult.MemberNames)
+                    var context = new ValidationContext(p_obj, null, null);
+                    context.MemberName = propInf.Name;
+                    var results = new List<ValidationResult>();
+                    var v = propInf.GetValue(p_obj, null);
+                    var isValid = Validator.TryValidateProperty(v, context, results);
+                    if (!isValid)
                     {
-                        ValidationError err = new ValidationError()
-                        {
-                            Field = p_obj.GetType().Name + "." + memberName,
-                            Message = validationResult.ErrorMessage
-                        };
 
-                        Errors.Add(err);
+                        foreach (var validationResult in results)
+                        {
+                            ValidationError err = new ValidationError()
+                            {
+                                Field = p_obj.GetType().Name + "." + validationResult.MemberNames.First(),
+                                Message = validationResult.ErrorMessage
+                            };
+                            Errors.Add(err);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
                 }
             }
             return Errors;

@@ -37,7 +37,7 @@ namespace PMAdmin
 
         private void btnLicence_Click(object sender, RoutedEventArgs e)
         {
-            uscLog l = new uscLicences();
+            uscLicences l = new uscLicences();
 
             l.Width = double.NaN; ;
             l.Height = double.NaN; ;

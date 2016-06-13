@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace PMAdmin.Common
 {
@@ -35,7 +36,7 @@ namespace PMAdmin.Common
 
 
 
-                if (prop.Attributes.OfType<DisplayNameAttributeX>().Any() && bOkCol)
+                if (prop != null && prop.Attributes.OfType<DisplayNameAttributeX>().Any() && bOkCol)
                 {
                     col.Visibility = System.Windows.Visibility.Visible;
                     /*
@@ -125,5 +126,18 @@ namespace PMAdmin.Common
                 return null;
         }
 
+        public static T GetChildOfType<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj == null) return null;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child);
+                if (result != null) return result;
+            }
+            return null;
+        }
     }
 }

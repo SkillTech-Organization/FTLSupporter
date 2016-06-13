@@ -17,7 +17,7 @@ using System.Xml.Serialization;
 namespace PMap.Common.Azure
 {
     [DataContract(Name = "AzureTableObjBase")]
-    public class AzureTableObjBase :  INotifyPropertyChanged, IDataErrorInfo
+    public class AzureTableObjBase : INotifyPropertyChanged, IDataErrorInfo
     {
         public enum enObjectState
         {
@@ -28,7 +28,7 @@ namespace PMap.Common.Azure
         }
 
 
-         public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
 
         // This method is called by the Set accessor of each property. 
@@ -46,7 +46,7 @@ namespace PMap.Common.Azure
                 isDataMember = Attribute.IsDefined(pi, typeof(DataMemberAttribute));
 
             if (isDataMember && propertyName != "State" && this.m_State != enObjectState.Inactive && this.m_State != enObjectState.New)
-                this.m_State = enObjectState.Modified;
+                this.SetObjState( enObjectState.Modified);
         }
 
         public AzureTableObjBase()
@@ -90,7 +90,12 @@ namespace PMap.Common.Azure
         public string State
         {
             get { return m_State.ToString(); }
-            set { m_State = (enObjectState)Enum.Parse(typeof(enObjectState), value); NotifyPropertyChanged(); }
+            set { m_State = (enObjectState)Enum.Parse(typeof(enObjectState), value); NotifyPropertyChanged("State"); }
+        }
+
+        public enObjectState ObjState
+        {
+            get { return m_State; }
         }
 
         public void SetObjState(enObjectState p_state)
@@ -103,7 +108,7 @@ namespace PMap.Common.Azure
             NotifyPropertyChanged("UnSavedState");
         }
 
-        
+
         #region IDataErrorInfo Members
 
         [ScriptIgnoreAttribute]

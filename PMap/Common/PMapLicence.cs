@@ -13,17 +13,23 @@ namespace PMap.Common
     [DataContract(Namespace = "")]
     public class PMapLicence : AzureTableObjBase
     {
-        public PMapLicence() { m_ID = Guid.NewGuid(); }
-        public PMapLog ShallowCopy()
+        public PMapLicence() { m_ID = Guid.NewGuid(); LIC_EXPIRED = DateTime.Now.Date; }
+        public PMapLicence ShallowCopy()
         {
-            return (PMapLog)this.MemberwiseClone();
+            return (PMapLicence)this.MemberwiseClone();
         }
+
+        private string m_LIC_INSTANCE;
         [DataMember]
         [AzurePartitionAttr]
         [AzureTablePartitionKeyAttr]
         [DisplayNameAttributeX(Name = "Instance megnevezés", Order = 1, NoPrefix = true)]
         [Required(ErrorMessage = "Instance megnevezést kötelező kitölteni !")]
-        public string LIC_INSTANCE { get; set; }
+        public string LIC_INSTANCE 
+        {
+            get { return m_LIC_INSTANCE; }
+            set { m_LIC_INSTANCE = value; NotifyPropertyChanged("LIC_INSTANCE"); }
+        }
 
         private Guid m_ID;
         [DataMember]
@@ -35,16 +41,30 @@ namespace PMap.Common
             set { m_ID = value; NotifyPropertyChanged("ID"); }
         }
 
+        private DateTime m_LIC_EXPIRED;
         [DataMember]
         [AzureRowAttr]
         [DisplayNameAttributeX(Name = "Lejárati dátum", Order = 2, NoPrefix = true)]
         [Required(ErrorMessage = "Lejárati dátumot kötelező kitölteni !")]
-        public DateTime LIC_EXPIRED { get; set; }
+        public DateTime LIC_EXPIRED 
+        {
+            get { return m_LIC_EXPIRED; }
+            set { m_LIC_EXPIRED = value; NotifyPropertyChanged("LIC_EXPIRED"); }
+        }
 
+        private string m_LIC_COMMENT;
         [DataMember]
         [AzureRowAttr]
         [DisplayNameAttributeX(Name = "Megjegyzés", Order = 3, NoPrefix = true)]
-        public string LIC_COMMENT { get; set; }
+        public string LIC_COMMENT  
+        {
+            get { return m_LIC_COMMENT; }
+            set { m_LIC_COMMENT = value; NotifyPropertyChanged("LIC_COMMENT"); }
+        }
+
+        [DisplayNameAttributeX(Name = "State", Order = 4, NoPrefix = true)]
+        public string xState { get{ return this.State; } }
+
 
     }
 }

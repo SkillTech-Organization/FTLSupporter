@@ -35,5 +35,47 @@ namespace PMAdmin.Model
 
         }
 
+        public bool IsNeedSave
+        {
+            get
+            {
+                if (EditedItem != null)
+                    return EditedItem.UnSavedState;
+                return false;
+            }
+        }
+
+        /***************************/
+        /*     Business logic      */
+        /***************************/
+        public void AddNewItem(PMapLicence p_newItem)
+        {
+            this.PMapLicenceList.Add(p_newItem);
+            NotifyPropertyChanged("PMapLicenceList");
+
+        }
+
+        public void ModifyItem(PMapLicence p_modItem)
+        {
+            PMapLicence pml = PMapLicenceList.Where(x => x.ID == p_modItem.ID ).FirstOrDefault();
+            if (pml != null)
+            {
+                int idx = PMapLicenceList.IndexOf(pml);
+                PMapLicenceList[idx] = p_modItem;
+                NotifyPropertyChanged("PMapLicenceList");
+            }
+        }
+
+        public void DeleteItem(PMapLicence p_modItem)
+        {
+            PMapLicence pml = PMapLicenceList.Where(x => x.ID == p_modItem.ID).FirstOrDefault();
+            if (pml != null)
+            {
+                PMapLicenceList.Remove( pml);
+                EditedItem = new PMapLicence();
+                NotifyPropertyChanged("PMapLicenceList");
+            }
+        }
+       
     }
 }
