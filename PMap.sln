@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMap", "PMap\PMap.csproj", "{3E3FE032-B237-479B-938B-63F693265432}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -55,9 +55,49 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLSupporterTest", "FTLSupp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMAdmin", "PMAdmin\PMAdmin.csproj", "{15132AAF-C9BC-49DE-AE91-33AE21C04138}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DTPicker", "DTPicker\DTPicker.vbproj", "{05DC0418-566F-47F1-AA53-190009DD01F7}"
-EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 13
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://gyorgyiantal.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Animated\u0020Notify\u0020Icon\\Animated\u0020Notify\u0020Icon.csproj
+		SccProjectName1 = Animated\u0020Notify\u0020Icon
+		SccLocalPath1 = Animated\u0020Notify\u0020Icon
+		SccProjectUniqueName2 = FrcNumericTextBox\\FrcNumericTextBox.csproj
+		SccProjectName2 = FrcNumericTextBox
+		SccLocalPath2 = FrcNumericTextBox
+		SccProjectUniqueName3 = GMap.NET.Core\\GMap.NET.Core.csproj
+		SccProjectName3 = GMap.NET.Core
+		SccLocalPath3 = GMap.NET.Core
+		SccProjectUniqueName4 = GMap.NET.WindowsForms\\GMap.NET.WindowsForms.csproj
+		SccProjectName4 = GMap.NET.WindowsForms
+		SccLocalPath4 = GMap.NET.WindowsForms
+		SccProjectUniqueName5 = PMap\\PMap.csproj
+		SccProjectName5 = PMap
+		SccLocalPath5 = PMap
+		SccProjectUniqueName6 = PMapTestApp\\PMapTestApp.csproj
+		SccProjectName6 = PMapTestApp
+		SccLocalPath6 = PMapTestApp
+		SccProjectUniqueName7 = TabOrder\\TabOrder.csproj
+		SccProjectName7 = TabOrder
+		SccLocalPath7 = TabOrder
+		SccProjectUniqueName8 = VBInterface\\VBInterface.csproj
+		SccProjectName8 = VBInterface
+		SccLocalPath8 = VBInterface
+		SccProjectUniqueName9 = WinFormsUI\\WinFormsUI.csproj
+		SccProjectName9 = WinFormsUI
+		SccLocalPath9 = WinFormsUI
+		SccProjectUniqueName10 = FTLSupporter\\FTLSupporter.csproj
+		SccProjectName10 = FTLSupporter
+		SccLocalPath10 = FTLSupporter
+		SccProjectUniqueName11 = FTLSupporterTest\\FTLSupporterTest.csproj
+		SccProjectName11 = FTLSupporterTest
+		SccLocalPath11 = FTLSupporterTest
+		SccProjectUniqueName12 = PMAdmin\\PMAdmin.csproj
+		SccProjectName12 = PMAdmin
+		SccLocalPath12 = PMAdmin
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -244,69 +284,8 @@ Global
 		{15132AAF-C9BC-49DE-AE91-33AE21C04138}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{15132AAF-C9BC-49DE-AE91-33AE21C04138}.Release|x64.ActiveCfg = Release|Any CPU
 		{15132AAF-C9BC-49DE-AE91-33AE21C04138}.Release|x86.ActiveCfg = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|x64.Build.0 = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Debug|x86.Build.0 = Debug|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|x64.ActiveCfg = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|x64.Build.0 = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|x86.ActiveCfg = Release|Any CPU
-		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://gyorgyiantal.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Animated\u0020Notify\u0020Icon\\Animated\u0020Notify\u0020Icon.csproj
-		SccProjectName1 = Animated\u0020Notify\u0020Icon
-		SccLocalPath1 = Animated\u0020Notify\u0020Icon
-		SccProjectUniqueName2 = FrcNumericTextBox\\FrcNumericTextBox.csproj
-		SccProjectName2 = FrcNumericTextBox
-		SccLocalPath2 = FrcNumericTextBox
-		SccProjectUniqueName3 = GMap.NET.Core\\GMap.NET.Core.csproj
-		SccProjectName3 = GMap.NET.Core
-		SccLocalPath3 = GMap.NET.Core
-		SccProjectUniqueName4 = GMap.NET.WindowsForms\\GMap.NET.WindowsForms.csproj
-		SccProjectName4 = GMap.NET.WindowsForms
-		SccLocalPath4 = GMap.NET.WindowsForms
-		SccProjectUniqueName5 = PMap\\PMap.csproj
-		SccProjectName5 = PMap
-		SccLocalPath5 = PMap
-		SccProjectUniqueName6 = PMapTestApp\\PMapTestApp.csproj
-		SccProjectName6 = PMapTestApp
-		SccLocalPath6 = PMapTestApp
-		SccProjectUniqueName7 = TabOrder\\TabOrder.csproj
-		SccProjectName7 = TabOrder
-		SccLocalPath7 = TabOrder
-		SccProjectUniqueName8 = VBInterface\\VBInterface.csproj
-		SccProjectName8 = VBInterface
-		SccLocalPath8 = VBInterface
-		SccProjectUniqueName9 = WinFormsUI\\WinFormsUI.csproj
-		SccProjectName9 = WinFormsUI
-		SccLocalPath9 = WinFormsUI
-		SccProjectUniqueName10 = FTLSupporter\\FTLSupporter.csproj
-		SccProjectName10 = FTLSupporter
-		SccLocalPath10 = FTLSupporter
-		SccProjectUniqueName11 = FTLSupporterTest\\FTLSupporterTest.csproj
-		SccProjectName11 = FTLSupporterTest
-		SccLocalPath11 = FTLSupporterTest
-		SccProjectUniqueName12 = PMAdmin\\PMAdmin.csproj
-		SccProjectName12 = PMAdmin
-		SccLocalPath12 = PMAdmin
-		SccProjectUniqueName13 = DTPicker\\DTPicker.vbproj
-		SccProjectName13 = DTPicker
-		SccLocalPath13 = DTPicker
 	EndGlobalSection
 EndGlobal
