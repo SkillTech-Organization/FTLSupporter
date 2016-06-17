@@ -22,6 +22,8 @@ using System.Net.Sockets;
 using PMap.Common.Parse;
 using System.Web.Script.Serialization;
 using PMap.Common.Azure;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace PMap.Common
 {
@@ -154,7 +156,7 @@ namespace PMap.Common
             String2File(sMsg + Environment.NewLine, LogFileName, true);
 
             if (p_sendToCloud && PMapIniParams.Instance.ParseLog)
-                ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3),  DateTime.Now, p_msg);
+                ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
             if (p_sendToCloud && PMapIniParams.Instance.AzureLog)
                 AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
 
@@ -168,9 +170,9 @@ namespace PMap.Common
 
             string ExcFileName = Path.Combine(dir, Global.ExcFileName);
 
-            string sMsg = String.Format("{0}: {1} "+Environment.NewLine +"{2}", 
-                DateTime.Now.ToString(Global.DATETIMEFORMAT), 
-                GetExceptionText( p_ecx), p_ecx.StackTrace);
+            string sMsg = String.Format("{0}: {1} " + Environment.NewLine + "{2}",
+                DateTime.Now.ToString(Global.DATETIMEFORMAT),
+                GetExceptionText(p_ecx), p_ecx.StackTrace);
 
             Util.String2File(sMsg + Environment.NewLine, ExcFileName, true);
         }
@@ -715,13 +717,56 @@ namespace PMap.Common
             return value.Length <= length ? value : value.Substring(value.Length - length);
         }
 
-        public static object getObjFromJson(string p_JsonStr, Type p_targetType)
+        public static List<T> XmlToObjectList<T>(XmlNode[] p_XMLNodes)
         {
-            JavaScriptSerializer jss = new JavaScriptSerializer();
-            var obj = jss.Deserialize(p_JsonStr, p_targetType);
-            return obj;
+            var returnItemsList = new List<T>();
+
+            foreach (XmlNode node in p_XMLNodes)
+            {
+                if (node.NodeType == XmlNodeType.Element)
+                {
+                    returnItemsList.Add(XmlToObject<T>(node.OuterXml));
+                }
+            }
+
+            return returnItemsList;
         }
 
-    
+
+        public static T XmlToObject<T>(XmlNode[] p_XMLNodes) where T : new()
+        {
+            string sXML = "";
+            foreach (XmlNode node in p_XMLNodes)
+            {
+                if (node.NodeType == XmlNodeType.Element && node.FirstChild != null && node.FirstChild.Value != null)
+                {
+                    sXML += node.OuterXml;
+                }
+            }
+            string resultXML = String.Format("<{0}>{1}</{2}>", typeof(T).Name, sXML, typeof(T).Name);
+            return XmlToObject<T>(resultXML);
+        }
+
+        public static T XmlToObject<T>(string xml)
+        {
+            using (var xmlStream = new StringReader(xml))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                return (T)serializer.Deserialize(XmlReader.Create(xmlStream));
+
+            }
+        }
+
+        public static string ObjToXML(object p_obj)
+        {
+            XmlSerializer xsSubmit = new XmlSerializer(p_obj.GetType());
+            using (StringWriter sww = new StringWriter())
+            using (XmlWriter writer = XmlWriter.Create(sww))
+            {
+                xsSubmit.Serialize(writer, p_obj);
+                return sww.ToString();  
+            }
+        }
     }
+
 }

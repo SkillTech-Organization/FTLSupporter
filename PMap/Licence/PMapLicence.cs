@@ -6,8 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Xml.Serialization;
 
-namespace PMap.Common
+namespace PMap.Licence
 {
     [Serializable]
     [DataContract(Namespace = "")]
@@ -31,6 +32,7 @@ namespace PMap.Common
         }
 
         private string m_LIC_INSTANCE;
+
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Instance megnevezés", Order = 1, NoPrefix = true)]

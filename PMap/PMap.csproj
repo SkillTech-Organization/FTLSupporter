@@ -98,6 +98,9 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="aes-cs">
+      <HintPath>..\lib\aes-cs.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Data.v10.1, Version=10.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -298,7 +301,8 @@
     <Compile Include="Common\LockHolder.cs" />
     <Compile Include="Common\ObjectValidator.cs" />
     <Compile Include="Common\Parse\ParseLogX.cs" />
-    <Compile Include="Common\PMapLicence.cs" />
+    <Compile Include="Licence\PMapID.cs" />
+    <Compile Include="Licence\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />
     <Compile Include="Common\Parse\PMapCalls.cs" />
     <Compile Include="Common\PPlan\PlanEditFuncs.cs" />
@@ -420,6 +424,7 @@
       <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalLocker.cs" />
+    <Compile Include="Licence\AES.cs" />
     <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
     <Compile Include="Localize\Base\DXGridLocalizer.cs" />
     <Compile Include="Localize\Base\DXPrintPreviewLocalizer.cs" />
@@ -724,9 +729,7 @@
     <None Include="Resources\tray\1.ico" />
     <None Include="Resources\tray\13.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Licence\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

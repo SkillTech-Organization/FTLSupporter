@@ -2,9 +2,11 @@
 using PMAdmin.Model;
 using PMap.Common;
 using PMap.Common.Azure;
+using PMap.Licence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,6 +20,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace PMAdmin
 {
@@ -115,6 +119,16 @@ namespace PMAdmin
         private void btnGen_Click(object sender, RoutedEventArgs e)
         {
             m_dataContext.EditedItem.LIC_INSTANCE = "ddddd";
+            /*
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(MyObject));
+            var subReq = new MyObject();
+            using (StringWriter sww = new StringWriter())
+            using (XmlWriter writer = XmlWriter.Create(sww))
+            {
+                xsSubmit.Serialize(writer, subReq);
+                var xml = sww.ToString(); // Your XML
+            }
+            */
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
