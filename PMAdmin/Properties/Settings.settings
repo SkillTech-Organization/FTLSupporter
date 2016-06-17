@@ -1,7 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PMAdmin.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AzureAccount" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">pmaplog</Value>
+    </Setting>
+    <Setting Name="AzureKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">jazm8HHskSidL3HMqRrjytwqMH5hAkv8QgNo9XiF/pxsqer7YhAE8dKQ9m7zGw1h6z5L2HwwXMhaGp/Mf+xytQ==</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

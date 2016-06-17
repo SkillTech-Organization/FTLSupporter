@@ -1,4 +1,6 @@
 ﻿using PMAdmin.Common;
+using PMAdmin.Properties;
+using PMap.Common.Azure;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -40,6 +42,8 @@ namespace PMAdmin
             new FrameworkPropertyMetadata(
                 XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
+            AzureTableStore.Instance.AzureAccount = PMAdmin.Properties.Settings.Default.AzureAccount;
+            AzureTableStore.Instance.AzureKey = PMAdmin.Properties.Settings.Default.AzureKey;
         }
 
         /// <summary>

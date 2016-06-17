@@ -196,9 +196,9 @@ namespace PMap.Common
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static byte[] FileToByteArray(string filename)
+        public static byte[] FileToByteArray(string p_filename)
         {
-            FileStream fs = File.OpenRead(filename);
+            FileStream fs = File.OpenRead(p_filename);
             BinaryReader br = new BinaryReader(fs);
 
             byte[] b = br.ReadBytes((int)fs.Length);
@@ -207,6 +207,20 @@ namespace PMap.Common
             fs.Close();
             return b;
         }
+
+        public static void ByteArrayToFile(string p_filename, byte[] b)
+        {
+            FileStream fs = File.Create(p_filename);
+            BinaryWriter bw = new BinaryWriter(fs);
+
+            bw.Write(b);
+
+            bw.Close();
+            fs.Close();
+
+        }
+
+
 
         /// <summary>
         /// Exception formázott szövege

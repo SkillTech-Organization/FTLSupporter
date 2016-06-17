@@ -1,4 +1,5 @@
-﻿using PMAdmin.Common;
+﻿using Microsoft.Win32;
+using PMAdmin.Common;
 using PMAdmin.Model;
 using PMap.Common;
 using PMap.Common.Azure;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,13 +69,11 @@ namespace PMAdmin
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             m_dataContext.EditedItem = new PMapLicence();
-            enableControls();
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
             selectItem();
-            enableControls();
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -118,17 +118,40 @@ namespace PMAdmin
 
         private void btnGen_Click(object sender, RoutedEventArgs e)
         {
-            m_dataContext.EditedItem.LIC_INSTANCE = "ddddd";
-            /*
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(MyObject));
-            var subReq = new MyObject();
-            using (StringWriter sww = new StringWriter())
-            using (XmlWriter writer = XmlWriter.Create(sww))
+            if (!UI.Confirm("ID file generálás ?"))
+                return;
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "ID file (*.id)|*.id";
+            saveFileDialog.FileName = "Pmap.id";
+            if (saveFileDialog.ShowDialog() == true)
             {
-                xsSubmit.Serialize(writer, subReq);
-                var xml = sww.ToString(); // Your XML
+                    PMapLicence curr = m_dataContext.EditedItem;
+
+                PMapID pmi = new PMapID();
+                pmi.Instance = curr.LIC_INSTANCE;
+
+                pmi.AzureAccountName = PMAdmin.Properties.Settings.Default.AzureAccount;
+                pmi.AzureAccountKey = PMAdmin.Properties.Settings.Default.AzureKey;
+                string idContent = Util.ObjToXML(pmi);
+                // vector (IV).
+
+                //
+                byte[] encrypted;
+                using (Aes myAes = Aes.Create())
+                {
+                    encrypted = AES.EncryptStringToBytes_Aes(idContent, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
+                    Util.ByteArrayToFile(saveFileDialog.FileName, encrypted);
+                    string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
+                }
+                /* teszt 
+                using (Aes myAes2 = Aes.Create())
+                {
+                    string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
+
+                }
+                */
             }
-            */
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
@@ -164,15 +187,6 @@ namespace PMAdmin
                 m_dataContext.EditedItem = new PMapLicence();
         }
 
-        private void enableControls()
-        {
-            /*
-            btnNew.IsEnabled = true;
-            btnReset.IsEnabled = (m_dataContext.EditedItem != null);
-            btnSave.IsEnabled = (m_dataContext.EditedItem != null && m_dataContext.EditedItem.UnSavedState);
-            btnGen.IsEnabled = (m_dataContext.EditedItem != null && m_dataContext.EditedItem.StoredState);
-            */
-        }
 
         private void writeItem(PMapLicence p_item)
         {

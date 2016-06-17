@@ -41,6 +41,9 @@ namespace PMap.Common.Azure
         }
         private AzureTableStore() { }
 
+        public string AzureAccount { get { return m_accountName; } set { m_accountName = value; } }
+        public string AzureKey { get { return m_accountKey; } set { m_accountKey = value; } }
+
         private void InitTableStore()
         {
             lock (m_lock)

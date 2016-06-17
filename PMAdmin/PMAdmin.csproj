@@ -42,9 +42,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
@@ -72,6 +74,7 @@
     <Compile Include="Model\mdlBase.cs" />
     <Compile Include="Model\mdlLicences.cs" />
     <Compile Include="Model\mdlLog.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="uscLicences.xaml.cs">
       <DependentUpon>uscLicences.xaml</DependentUpon>
     </Compile>
@@ -129,7 +132,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
