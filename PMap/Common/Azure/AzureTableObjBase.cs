@@ -46,7 +46,7 @@ namespace PMap.Common.Azure
                 isDataMember = Attribute.IsDefined(pi, typeof(DataMemberAttribute));
 
             if (isDataMember && propertyName != "State" && this.m_State != enObjectState.Inactive && this.m_State != enObjectState.New)
-                this.SetObjState( enObjectState.Modified);
+                    this.SetObjState( enObjectState.Modified);
         }
 
         public AzureTableObjBase()
@@ -84,13 +84,29 @@ namespace PMap.Common.Azure
             get { return m_State != enObjectState.Stored; }
         }
 
+        [ScriptIgnoreAttribute]
+        [IgnoreDataMember]
+        public bool ModifiedState
+        {
+            get { return m_State == enObjectState.Modified; }
+        }
+
+        [ScriptIgnoreAttribute]
+        [IgnoreDataMember]
+        public bool ChangedState
+        {
+            get { return m_State == enObjectState.Modified || m_State == enObjectState.New; }
+        }
+
         private enObjectState m_State;
         [DataMember]
         [XmlElement(ElementName = "State")]
         public string State
         {
             get { return m_State.ToString(); }
-            set { m_State = (enObjectState)Enum.Parse(typeof(enObjectState), value); NotifyPropertyChanged("State"); }
+            set {
+                SetObjState((enObjectState)Enum.Parse(typeof(enObjectState), value));
+            }
         }
 
         public enObjectState ObjState
@@ -106,6 +122,8 @@ namespace PMap.Common.Azure
             NotifyPropertyChanged("ActiveState");
             NotifyPropertyChanged("StoredState");
             NotifyPropertyChanged("UnSavedState");
+            NotifyPropertyChanged("ModifiedState");
+            NotifyPropertyChanged("ChangedState");
         }
 
 

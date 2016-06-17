@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,11 +50,14 @@ namespace PMAdmin
 
         private void dgrLicences_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
+            //Image mező generálása
             PropertyDescriptor pd = (PropertyDescriptor)e.PropertyDescriptor;
             if (pd.PropertyType == typeof(System.Windows.Media.ImageSource))
             {
                 e.Column = PMAUtils.SetDataGridImageColums(pd);
             }
+
+  
         }
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
@@ -81,6 +85,15 @@ namespace PMAdmin
             }
             else
             {
+
+                AzureTableObjBase.enObjectState oriState = curr.ObjState;
+                writeItem(curr);
+                if( oriState == AzureTableObjBase.enObjectState.New)
+                    m_dataContext.AddNewItem(curr);
+                else
+                    m_dataContext.ModifyItem(curr);
+
+                /*
                 PMapLicence ori = m_dataContext.PMapLicenceList.Where(x => x.ID == curr.ID).FirstOrDefault();
                 if (ori == null)
                 {
@@ -90,7 +103,8 @@ namespace PMAdmin
                 {
                     m_dataContext.ModifyItem(curr);
                 }
-                writeItem(curr);
+                */
+
                 dgrLicences.SelectedItem = curr;
                 dgrLicences.ScrollIntoView(curr);
                 dgrLicences.Focus();
@@ -100,16 +114,22 @@ namespace PMAdmin
 
         private void btnGen_Click(object sender, RoutedEventArgs e)
         {
-
+            m_dataContext.EditedItem.LIC_INSTANCE = "ddddd";
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
         {
+            if (!UI.Confirm("Törölhető a tétel?"))
+                return;
+            //Elem kiválasztása
             selectItem();
+
+            //Azure művelet
             PMapLicence curr = m_dataContext.EditedItem;
-            m_dataContext.DeleteItem(curr);
-            curr.SetObjState(AzureTableObjBase.enObjectState.Inactive);
             writeItem(curr);
+
+            //Model művelet
+            m_dataContext.DeleteItem(curr);
 
 
         }
@@ -127,17 +147,17 @@ namespace PMAdmin
             if (sel != null)
                 m_dataContext.EditedItem = sel.ShallowCopy();
             else
-                m_dataContext.EditedItem = null;
-            enableControls();
+                m_dataContext.EditedItem = new PMapLicence();
         }
 
         private void enableControls()
         {
+            /*
             btnNew.IsEnabled = true;
             btnReset.IsEnabled = (m_dataContext.EditedItem != null);
             btnSave.IsEnabled = (m_dataContext.EditedItem != null && m_dataContext.EditedItem.UnSavedState);
             btnGen.IsEnabled = (m_dataContext.EditedItem != null && m_dataContext.EditedItem.StoredState);
-
+            */
         }
 
         private void writeItem(PMapLicence p_item)
@@ -157,6 +177,7 @@ namespace PMAdmin
 
                     break;
                 case AzureTableObjBase.enObjectState.Inactive:
+                    p_item.SetObjState(AzureTableObjBase.enObjectState.Inactive);
                     AzureTableStore.Instance.Delete(p_item);
                     break;
                 default:

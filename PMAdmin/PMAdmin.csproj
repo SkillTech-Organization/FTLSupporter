@@ -78,6 +78,9 @@
     <Compile Include="uscLog.xaml.cs">
       <DependentUpon>uscLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="uscTest.xaml.cs">
+      <DependentUpon>uscTest.xaml</DependentUpon>
+    </Compile>
     <Page Include="dlgValidationErrors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="uscLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="uscTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

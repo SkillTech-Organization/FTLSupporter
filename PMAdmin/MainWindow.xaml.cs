@@ -45,5 +45,16 @@ namespace PMAdmin
 
 
         }
+
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            uscTest t = new uscTest();
+
+            t.Width = double.NaN; ;
+            t.Height = double.NaN; ;
+            this.grpMain.Content = t;
+
+
+        }
     }
 }

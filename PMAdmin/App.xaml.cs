@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Markup;
 
 namespace PMAdmin
 {
@@ -20,9 +23,23 @@ namespace PMAdmin
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            //Magyar nyelv beállítása
+            var ci = new System.Globalization.CultureInfo("hu-HU");
+            Thread.CurrentThread.CurrentUICulture = ci;
+
+            //DatePicker vízjel kikapcsolása
             EventManager.RegisterClassHandler(typeof(DatePicker),
                 DatePicker.LoadedEvent,
                 new RoutedEventHandler(DatePicker_Loaded));
+
+            //FrameworkElement.Language beállítása, hogy minden kontrol
+            //a megfelelő nyelvi formátummal működjön
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(
+                XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
         }
 
         /// <summary>

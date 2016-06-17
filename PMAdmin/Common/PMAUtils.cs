@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -71,7 +72,8 @@ namespace PMAdmin.Common
 
                             if (prop.PropertyType == typeof(DateTime))
                             {
-                                dataGridTextColumn.Binding.StringFormat = "{0:g}";
+                                var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+                                dataGridTextColumn.Binding.StringFormat = "{0:"+dateFormat+"}";
                             }
                             else if (prop.PropertyType == typeof(int))
                             {

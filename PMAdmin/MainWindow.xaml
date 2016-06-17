@@ -51,7 +51,8 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <Button IsEnabled="True" x:Name="btnLog" Content="Napló" HorizontalAlignment="Stretch" Margin="3,3,3,3" Grid.Row="0" VerticalAlignment="Stretch" Click="btnLog_Click" />
-                    <Button IsEnabled="True" x:Name="btnLicence" Content="Licencek" HorizontalAlignment="Stretch" Margin="3,3,3,3" Grid.Row="1" VerticalAlignment="Stretch" ToolTip="DataGridTest" Click="btnLicence_Click" />
+                    <Button IsEnabled="True" x:Name="btnLicence" Content="Licencek" HorizontalAlignment="Stretch" Margin="3,3,3,3" Grid.Row="1" VerticalAlignment="Stretch" ToolTip="Licencek" Click="btnLicence_Click" />
+                    <Button IsEnabled="True" x:Name="btnTest" Content="Teszt" HorizontalAlignment="Stretch" Margin="3,3,3,3" Grid.Row="2" VerticalAlignment="Stretch" ToolTip="Teszt" Click="btnTest_Click" />
                 </Grid>
             </Expander>
             <StatusBar DockPanel.Dock="Right"/>

@@ -19,31 +19,35 @@ namespace PMap.Common
             return (PMapLicence)this.MemberwiseClone();
         }
 
-        private string m_LIC_INSTANCE;
-        [DataMember]
-        [AzurePartitionAttr]
-        [AzureTablePartitionKeyAttr]
-        [DisplayNameAttributeX(Name = "Instance megnevezés", Order = 1, NoPrefix = true)]
-        [Required(ErrorMessage = "Instance megnevezést kötelező kitölteni !")]
-        public string LIC_INSTANCE 
-        {
-            get { return m_LIC_INSTANCE; }
-            set { m_LIC_INSTANCE = value; NotifyPropertyChanged("LIC_INSTANCE"); }
-        }
 
         private Guid m_ID;
         [DataMember]
-        [AzureRowAttr]
-        [AzureTableRowKeyAttr]
+        [AzurePartitionAttr]
+        [AzureTablePartitionKeyAttr]
         public Guid ID
         {
             get { return m_ID; }
             set { m_ID = value; NotifyPropertyChanged("ID"); }
         }
 
+        private string m_LIC_INSTANCE;
+        [DataMember]
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "Instance megnevezés", Order = 1, NoPrefix = true)]
+        [Required(ErrorMessage = "Instance megnevezést kötelező kitölteni !")]
+        public string LIC_INSTANCE 
+        {
+            get { return m_LIC_INSTANCE; }
+            set {
+                m_LIC_INSTANCE = value;
+                NotifyPropertyChanged("LIC_INSTANCE");
+            }
+        }
+
+
         private DateTime m_LIC_EXPIRED;
         [DataMember]
-        [AzureRowAttr]
+        [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Lejárati dátum", Order = 2, NoPrefix = true)]
         [Required(ErrorMessage = "Lejárati dátumot kötelező kitölteni !")]
         public DateTime LIC_EXPIRED 
@@ -54,7 +58,7 @@ namespace PMap.Common
 
         private string m_LIC_COMMENT;
         [DataMember]
-        [AzureRowAttr]
+        [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Megjegyzés", Order = 3, NoPrefix = true)]
         public string LIC_COMMENT  
         {
