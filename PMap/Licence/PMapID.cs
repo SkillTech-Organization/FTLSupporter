@@ -11,6 +11,9 @@ namespace PMap.Licence
         public const string pw = "01EF1AEA0F433DE23F9C5BBB2A222100";
         public const string iv = "01EE23F9C5BBB2A2";
 
+        [XmlElement(ElementName = "ID")]
+        public Guid ID { get; set; }
+
         [XmlElement(ElementName = "Instance")]
         public string Instance { get; set; }
 

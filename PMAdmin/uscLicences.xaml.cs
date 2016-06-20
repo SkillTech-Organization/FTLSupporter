@@ -129,6 +129,7 @@ namespace PMAdmin
                     PMapLicence curr = m_dataContext.EditedItem;
 
                 PMapID pmi = new PMapID();
+                pmi.ID = curr.ID;
                 pmi.Instance = curr.LIC_INSTANCE;
 
                 pmi.AzureAccountName = PMAdmin.Properties.Settings.Default.AzureAccount;

@@ -68,14 +68,14 @@ namespace PMap.Licence
             set { m_LIC_COMMENT = value; NotifyPropertyChanged("LIC_COMMENT"); }
         }
 
-        private string m_LIC_COMPUTERNAME;
+        private string m_LIC_MACHINEID;
         [DataMember]
         [AzurePartitionAttr]
-        [DisplayNameAttributeX(Name = "Legutolsó bejelentkezés számítógépnév", Order = 4, NoPrefix = true)]
-        public string LIC_COMPUTERNAME
+        [DisplayNameAttributeX(Name = "Legutolsó bejelentkezés számítógép", Order = 4, NoPrefix = true)]
+        public string LIC_MACHINEID
         {
-            get { return m_LIC_COMPUTERNAME; }
-            set { m_LIC_COMPUTERNAME = value; NotifyPropertyChanged("LIC_COMPUTERNAME"); }
+            get { return m_LIC_MACHINEID; }
+            set { m_LIC_MACHINEID = value; NotifyPropertyChanged("LIC_MACHINEID"); }
         }
 
         [DisplayNameAttributeX(Name = "State", Order = 5, NoPrefix = true)]

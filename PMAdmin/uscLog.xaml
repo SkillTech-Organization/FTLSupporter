@@ -13,15 +13,25 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" ShowGridLines="True">
+        <Grid Grid.Row="0" ShowGridLines="True" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            
+            <Label Content="Instance"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                      ItemsSource="{Binding Path=PMapLicenceList}" 
+                    DisplayMemberPath="LIC_INSTANCE" 
+            SelectedValuePath="LIC_INSTANCE" 
+            SelectedValue="{Binding Path=SelLicence}"></ComboBox>
+                
+            <Label Content="Időszak"  Grid.Column="2" VerticalAlignment="Center" Margin="34,22,0,22"/>
+            <Label Content="-"  Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
         </Grid>
         <DataGrid Grid.Row="1" x:Name="dgrLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 ItemsSource="{Binding PMapLogList}" CanUserAddRows="False" IsReadOnly="True"

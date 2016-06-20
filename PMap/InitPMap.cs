@@ -14,6 +14,7 @@ using GMap.NET.MapProviders;
 using PMap.MapProvider;
 using PMap.Common;
 using PMap.Common.PPlan;
+using PMap.Licence;
 
 namespace PMap
 {
@@ -29,6 +30,10 @@ namespace PMap
 
         public static startErrCode Start(bool p_checkConnection)
         {
+            ChkLic.Check(Path.GetDirectoryName(Application.ExecutablePath) + "\\" + Global.IdFileName);
+     
+
+
             /* felhasználási jogsultság ellenőrzés */
             if (DateTime.Now > new DateTime(2016, 07, 30))
                 throw new Exception("Y2");

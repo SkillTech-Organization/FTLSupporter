@@ -2,6 +2,7 @@
 using PMAdmin.Model;
 using PMap.Common;
 using PMap.Common.Azure;
+using PMap.Licence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,7 +37,10 @@ namespace PMAdmin
         {
             using (new WaitCursor())
             {
-                m_dataContext.PMapLogList =AzureTableStore.Instance.RetrieveList<PMapLog>();
+//                m_dataContext.PMapLogList =AzureTableStore.Instance.RetrieveList<PMapLog>();
+                m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>();
+
+                m_dataContext.SelLicence = m_dataContext.PMapLicenceList.FirstOrDefault();
             }
         }
 

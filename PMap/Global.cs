@@ -17,6 +17,7 @@ namespace PMap
 
         public const string PMapName = "PMap";
         public const string IniFileName = "PMap.ini";
+        public const string IdFileName = "PMap.id";
         public const string LogFileName = "PMap.log";
         public const string MsgFileName = "PMap.msg";
         public const string DbgFileName = "PMap.dbg";
