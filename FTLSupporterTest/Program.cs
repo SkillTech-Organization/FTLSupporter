@@ -352,16 +352,16 @@ namespace FTLSupporterTest
             #endregion
             
             /* nagy teszt */
-            //var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
-            //var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
+            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
+            var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
 
             /* egy elem teszt */
             //var lstTsk = new List<FTLTask> { tsk3 };
             //var lstTrk = new List<FTLTruck> { trk4 };
 
             /* pontos megérkezés teszt            */
-            var lstTsk = new List<FTLTask> { tsk4 };
-            var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
+            //var lstTsk = new List<FTLTask> { tsk4 };
+            //var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
 
             var res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
 

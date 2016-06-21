@@ -132,9 +132,13 @@ namespace PMap.Common
                 if (!System.IO.Directory.Exists(path))
                     System.IO.Directory.CreateDirectory(path);
 
-                TextWriter tw = new StreamWriter(p_file, p_append);
-                tw.Write(p_s);
-                tw.Close();
+                try
+                {
+                    TextWriter tw = new StreamWriter(p_file, p_append);
+                    tw.Write(p_s);
+                    tw.Close();
+                }
+                catch( Exception e)                { }
                 return p_file;
             }
         }
