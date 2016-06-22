@@ -11,11 +11,23 @@ namespace PMAdmin.Model
 {
     public class mdlLog : mdlBase
     {
+        public class LogType
+        {
+            public string Type { get; set; }
+            public string Name { get; set; }
+
+    }
         
         public mdlLog()
         {
             m_dateS = DateTime.Now.Date;
             m_dateE = DateTime.Now.Date;
+            List<LogType> lt = new List<LogType>();
+            lt.Add( new LogType() { Type = "", Name = "** Minden típus **"});
+            lt.Add( new LogType() { Type = "log", Name = "LOG típus"});
+            lt.Add(new LogType() { Type = "msg", Name = "MSG típus" });
+
+            m_PMapLogTypeList = new ObservableCollection<LogType>(lt);
         }
 
         private ObservableCollection<PMapLicence> m_PMapLicenceList = new ObservableCollection<PMapLicence>();
@@ -61,8 +73,30 @@ namespace PMAdmin.Model
                 NotifyPropertyChanged("SelLicence");
             }
         }
-        
 
+        private ObservableCollection<LogType> m_PMapLogTypeList = new ObservableCollection<LogType>();
+        public ObservableCollection<LogType> PMapLogTypeList
+        {
+            get { return m_PMapLogTypeList; }
+            set
+            {
+                m_PMapLogTypeList = value;
+                NotifyPropertyChanged("PMapLogTypeList");
+            }
+        }
+
+        private string m_selType;
+        public string SelType
+        {
+            get { return m_selType; }
+            set
+            {
+                m_selType = value;
+                NotifyPropertyChanged("SelType");
+            }
+        }
+
+        
         private ObservableCollection<PMapLog> m_PMapLogList = new ObservableCollection<PMapLog>();
         public ObservableCollection<PMapLog> PMapLogList
         {

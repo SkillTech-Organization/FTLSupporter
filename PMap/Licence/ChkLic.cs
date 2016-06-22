@@ -31,11 +31,15 @@ namespace PMap.Licence
 
                     PMapLicence pl = AzureTableStore.Instance.Retrieve<PMapLicence>(pi.ID.ToString(), "");
 
-                    if( pl.LIC_EXPIRED > DateTime.Now.Date)
+                    if( pl.Expired > DateTime.Now.Date)
                         throw (new Exception(PMapMessages.E_LIC_EXPIRED));
 
+                    PMapCommonVars.Instance.AppInstance = pi.AppInstance;
+
+                    /*
                     if (pl.LIC_EXPIRED.AddMonths(-1) > DateTime.Now.Date)
                         throw (new Exception(PMapMessages.W_LIC_EXPIRED_WARN));
+                     */
                 }
             }
             catch (FileNotFoundException fe)

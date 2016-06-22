@@ -36,12 +36,12 @@
                 <Label Content="Instance megnevezés" VerticalAlignment="Center" HorizontalAlignment="Right" />
                 <Label Content="Lejárati dátum" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" />
                 <Label Content="Megjegyzés" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <TextBox x:Name="txtLIC_INSTANCE"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
-                         Text="{Binding Path=EditedItem.LIC_INSTANCE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
-                <DatePicker x:Name="dtpLIC_EXPIRED" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,8,0" Grid.Row="1" VerticalAlignment="Center"
-                            Text="{Binding Path=EditedItem.LIC_EXPIRED, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"  />
-                <TextBox x:Name="txtLIC_COMMENT"  Grid.Column="1" Grid.Row="2" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
-                         Text="{Binding Path=EditedItem.LIC_COMMENT, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
+                <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                         Text="{Binding Path=EditedItem.AppInstance, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
+                <DatePicker x:Name="dtpExpired" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,8,0" Grid.Row="1" VerticalAlignment="Center"
+                            Text="{Binding Path=EditedItem.Expired, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"  />
+                <TextBox x:Name="txtComment"  Grid.Column="1" Grid.Row="2" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                         Text="{Binding Path=EditedItem.Comment, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
             </Grid>
 
             <Grid Grid.Column="1" ShowGridLines="false" >

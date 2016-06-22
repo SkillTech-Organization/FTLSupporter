@@ -26,7 +26,7 @@ namespace PMap.Common
                     if (instance == null)
                     {
                         instance = new PMapCommonVars();
-                        instance.IPAddress = Util.GetLocalIPAddress();
+                        instance.AppInstance = "???";
                         instance.CT_DB = null;
                     }
                 }
@@ -77,7 +77,7 @@ namespace PMap.Common
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public string IPAddress { get; private set; }
+        public string AppInstance { get; set; }
 
         
         public void ConnectToDB()

@@ -14,7 +14,7 @@ namespace PMap.Licence
     [DataContract(Namespace = "")]
     public class PMapLicence : AzureTableObjBase
     {
-        public PMapLicence() { m_ID = Guid.NewGuid(); LIC_EXPIRED = DateTime.Now.Date; }
+        public PMapLicence() { m_ID = Guid.NewGuid(); Expired = DateTime.Now.Date; }
         public PMapLicence ShallowCopy()
         {
             return (PMapLicence)this.MemberwiseClone();
@@ -31,51 +31,50 @@ namespace PMap.Licence
             set { m_ID = value; NotifyPropertyChanged("ID"); }
         }
 
-        private string m_LIC_INSTANCE;
-
+        private string m_AppInstance;
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Instance megnevezés", Order = 1, NoPrefix = true)]
-        [Required(ErrorMessage = "Instance megnevezést kötelező kitölteni !")]
-        public string LIC_INSTANCE 
+        [Required(ErrorMessage = "Az alkalamzáspéldány megnevezést kötelező kitölteni !")]
+        public string AppInstance 
         {
-            get { return m_LIC_INSTANCE; }
+            get { return m_AppInstance; }
             set {
-                m_LIC_INSTANCE = value;
-                NotifyPropertyChanged("LIC_INSTANCE");
+                m_AppInstance = value;
+                NotifyPropertyChanged("AppInstance");
             }
         }
 
 
-        private DateTime m_LIC_EXPIRED;
+        private DateTime m_Expired;
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Lejárati dátum", Order = 2, NoPrefix = true)]
         [Required(ErrorMessage = "Lejárati dátumot kötelező kitölteni !")]
-        public DateTime LIC_EXPIRED 
+        public DateTime Expired 
         {
-            get { return m_LIC_EXPIRED; }
-            set { m_LIC_EXPIRED = value; NotifyPropertyChanged("LIC_EXPIRED"); }
+            get { return m_Expired; }
+            set { m_Expired = value; NotifyPropertyChanged("Expired"); }
         }
 
-        private string m_LIC_COMMENT;
+        private string m_Comment;
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Megjegyzés", Order = 3, NoPrefix = true)]
-        public string LIC_COMMENT  
+        public string Comment  
         {
-            get { return m_LIC_COMMENT; }
-            set { m_LIC_COMMENT = value; NotifyPropertyChanged("LIC_COMMENT"); }
+            get { return m_Comment; }
+            set { m_Comment = value; NotifyPropertyChanged("Comment"); }
         }
 
-        private string m_LIC_MACHINEID;
+        private string m_MachineID;
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Legutolsó bejelentkezés számítógép", Order = 4, NoPrefix = true)]
-        public string LIC_MACHINEID
+        public string MachineID
         {
-            get { return m_LIC_MACHINEID; }
-            set { m_LIC_MACHINEID = value; NotifyPropertyChanged("LIC_MACHINEID"); }
+            get { return m_MachineID; }
+            set { m_MachineID = value; NotifyPropertyChanged("MachineID"); }
         }
 
         [DisplayNameAttributeX(Name = "State", Order = 5, NoPrefix = true)]

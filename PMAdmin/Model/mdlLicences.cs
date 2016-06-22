@@ -11,7 +11,6 @@ namespace PMAdmin.Model
 {
     public class mdlLicences : mdlBase
     {
-
         private ObservableCollection<PMapLicence> m_PMapLicenceList = new ObservableCollection<PMapLicence>();
         public ObservableCollection<PMapLicence> PMapLicenceList
         {

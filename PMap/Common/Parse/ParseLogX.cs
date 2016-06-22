@@ -18,11 +18,11 @@ namespace PMap.Common.Parse
         {
             PMapLog pl = new PMapLog()
                                 {
-                                    LOG_INSTANCE = PMapCommonVars.Instance.IPAddress,
-                                    LOG_TYPE = p_type,
-                                    LOG_TIMESTAMP = p_timestamp.ToString(Global.DATETIMEFORMAT),
-                                    LOG_TEXT = p_text,
-                                    LOG_VALUE = ""
+                                    AppInstance = PMapCommonVars.Instance.AppInstance,
+                                    Type = p_type,
+                                    PMapTimestamp = p_timestamp.ToString(Global.DATETIMEFORMAT),
+                                    Text = p_text,
+                                    Value = ""
                                 };
             sendToParse(URL, pl);
         }
@@ -32,7 +32,7 @@ namespace PMap.Common.Parse
             PMapCalls pc = new PMapCalls()
             {
                 PMC_LICENCE = "***",
-                PMC_IP = PMapCommonVars.Instance.IPAddress,
+                PMC_IP = PMapCommonVars.Instance.AppInstance,
                 PMC_VERSION = String.Format("Product:{0} Ver.:{1}", ApplicationInfo.Title, ApplicationInfo.Version),
                 PMC_FUNCTION = p_function,
                 PMC_TIMESTAMP = DateTime.Now.ToString(Global.DATETIMEFORMAT),

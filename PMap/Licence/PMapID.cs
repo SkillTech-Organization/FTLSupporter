@@ -14,8 +14,8 @@ namespace PMap.Licence
         [XmlElement(ElementName = "ID")]
         public Guid ID { get; set; }
 
-        [XmlElement(ElementName = "Instance")]
-        public string Instance { get; set; }
+        [XmlElement(ElementName = "AppInstance")]
+        public string AppInstance { get; set; }
 
         [XmlElement(ElementName = "AzureAccountName")]
         public string AzureAccountName { get; set; }

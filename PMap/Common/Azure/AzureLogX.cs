@@ -11,11 +11,11 @@ namespace PMap.Common.Azure
         {
             PMapLog pl = new PMapLog()
             {
-                LOG_INSTANCE = PMapCommonVars.Instance.IPAddress,
-                LOG_TYPE = p_type,
-                LOG_TIMESTAMP = p_timestamp.ToString(Global.DATETIMEFORMAT),
-                LOG_TEXT = p_text,
-                LOG_VALUE = ""
+                AppInstance = PMapCommonVars.Instance.AppInstance,
+                Type = p_type,
+                PMapTimestamp = p_timestamp.ToString(Global.DATETIMEFORMAT),
+                Text = p_text,
+                Value = ""
             
             };
             AzureTableStore.Instance.Insert(pl);

@@ -130,7 +130,7 @@ namespace PMAdmin
 
                 PMapID pmi = new PMapID();
                 pmi.ID = curr.ID;
-                pmi.Instance = curr.LIC_INSTANCE;
+                pmi.AppInstance = curr.AppInstance;
 
                 pmi.AzureAccountName = PMAdmin.Properties.Settings.Default.AzureAccount;
                 pmi.AzureAccountKey = PMAdmin.Properties.Settings.Default.AzureKey;
@@ -145,14 +145,7 @@ namespace PMAdmin
                     Util.ByteArrayToFile(saveFileDialog.FileName, encrypted);
                     string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
                 }
-                /* teszt 
-                using (Aes myAes2 = Aes.Create())
-                {
-                    string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
-
-                }
-                */
-            }
+             }
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)

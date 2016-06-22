@@ -12,25 +12,41 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" ShowGridLines="True" >
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Instance"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <ComboBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+            <Label Content="Instance"  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+            <ComboBox x:Name="cmbAppInstance" Grid.Column="1" VerticalAlignment="Center"  
                       ItemsSource="{Binding Path=PMapLicenceList}" 
-                    DisplayMemberPath="LIC_INSTANCE" 
-            SelectedValuePath="LIC_INSTANCE" 
-            SelectedValue="{Binding Path=SelLicence}"></ComboBox>
+                      DisplayMemberPath="AppInstance" 
+                      SelectedValuePath="AppInstance" 
+                      SelectedItem="{Binding Path=SelLicence, Mode=TwoWay}" 
+                      HorizontalContentAlignment="Stretch" SelectionChanged="cmbAppInstance_SelectionChanged" ></ComboBox>
                 
-            <Label Content="Időszak"  Grid.Column="2" VerticalAlignment="Center" Margin="34,22,0,22"/>
+            <Label Content="Időszak"  Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
             <Label Content="-"  Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <DatePicker x:Name="DateS" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                        Text="{Binding Path=DateS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateS_LostFocus"/>
+            <DatePicker x:Name="DateE" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                        Text="{Binding Path=DateE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateE_LostFocus"/>
+            <Label Content="Típus"  Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
+            <ComboBox x:Name="cmbType" Grid.Column="7" VerticalAlignment="Center"  
+                      ItemsSource="{Binding Path=PMapLogTypeList}" 
+                      DisplayMemberPath="Name" 
+                      SelectedValuePath="Type" 
+                      SelectedValue="{Binding Path=SelType, Mode=TwoWay}" 
+                      HorizontalContentAlignment="Stretch" SelectionChanged="cmbType_SelectionChanged"></ComboBox>
+
 
         </Grid>
         <DataGrid Grid.Row="1" x:Name="dgrLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"

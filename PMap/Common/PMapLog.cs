@@ -23,17 +23,10 @@ namespace PMap.Common
             return (PMapLog)this.MemberwiseClone();
         }
 
+        private Guid m_ID;
         [DataMember]
         [AzurePartitionAttr]
         [AzureTablePartitionKeyAttr]
-        [DisplayNameAttributeX(Name = "Instance", Order = 1, NoPrefix=true)]
-        public string LOG_INSTANCE { get; set; }
-
-
-        private Guid m_ID;
-        [DataMember]
-        [AzureRowAttr]
-        [AzureTableRowKeyAttr]
         public Guid ID
         {
             get { return m_ID; }
@@ -41,23 +34,29 @@ namespace PMap.Common
         }
 
         [DataMember]
-        [AzureRowAttr]
-        [DisplayNameAttributeX(Name = "Bejegyzés típusa", Order = 2, NoPrefix=true)]
-        public string LOG_TYPE { get; set; }
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "AppInstance", Order = 1, NoPrefix = true)]
+        public string AppInstance { get; set; }
+
 
         [DataMember]
-        [AzureRowAttr]
-        [DisplayNameAttributeX(Name = "Szöveg", Order = 3, NoPrefix=true)]
-        public string LOG_TEXT { get; set; }
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "Bejegyzés típusa", Order = 2, NoPrefix = true)]
+        public string Type { get; set; }
 
         [DataMember]
-        [AzureRowAttr]
-        [DisplayNameAttributeX(Name = "Időpont", Order = 4, NoPrefix=true)]
-        public string LOG_TIMESTAMP { get; set; }
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "Szöveg", Order = 3, NoPrefix = true)]
+        public string Text { get; set; }
 
         [DataMember]
-        [AzureRowAttr]
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "Időpont", Order = 4, NoPrefix = true)]
+        public string PMapTimestamp { get; set; }
+
+        [DataMember]
+        [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Érték", Order = 5, NoPrefix = true)]
-        public string LOG_VALUE { get; set; }
+        public string Value { get; set; }
     }
 }
