@@ -185,6 +185,7 @@
     <Reference Include="System.Design">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Net">
       <Private>True</Private>
     </Reference>
@@ -300,6 +301,7 @@
     <Compile Include="Common\ObjectValidator.cs" />
     <Compile Include="Common\Parse\ParseLogX.cs" />
     <Compile Include="Licence\ChkLic.cs" />
+    <Compile Include="Licence\FingerPrint.cs" />
     <Compile Include="Licence\PMapID.cs" />
     <Compile Include="Licence\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />
@@ -424,6 +426,7 @@
     </Compile>
     <Compile Include="GlobalLocker.cs" />
     <Compile Include="Licence\AES.cs" />
+    <Compile Include="Licence\PMapLicWarn.cs" />
     <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
     <Compile Include="Localize\Base\DXGridLocalizer.cs" />
     <Compile Include="Localize\Base\DXPrintPreviewLocalizer.cs" />

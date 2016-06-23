@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using PMAdmin.Common;
 using PMAdmin.Model;
+using PMap;
 using PMap.Common;
 using PMap.Common.Azure;
 using PMap.Licence;
@@ -63,13 +64,13 @@ namespace PMAdmin
 
             using (new WaitCursor())
             {
-                string fltDateS = TableQuery.GenerateFilterConditionForDate("PMapTimestamp", QueryComparisons.GreaterThanOrEqual, m_dataContext.DateS);
+                string fltDateS = TableQuery.GenerateFilterCondition("PMapTimestamp", QueryComparisons.GreaterThanOrEqual, m_dataContext.DateS.ToString(Global.DATETIMEFORMAT));
                 string fltDateE = TableQuery.GenerateFilterConditionForDate("PMapTimestamp", QueryComparisons.LessThanOrEqual, m_dataContext.DateE.AddDays(1).AddSeconds(-1));
                 string fltINSTANCE = TableQuery.GenerateFilterCondition("AppInstance", QueryComparisons.Equal, m_dataContext.SelLicence.AppInstance);
                 string fltType = TableQuery.GenerateFilterCondition("Type", QueryComparisons.Equal, m_dataContext.SelType);
 
-//                m_dataContext.PMapLogList = AzureTableStore.Instance.RetrieveList<PMapLog>(fltDateS + " and " + fltDateE + " and " + fltINSTANCE + (m_dataContext.SelType == "" ? "" : "and " + fltType));
-                m_dataContext.PMapLogList = AzureTableStore.Instance.RetrieveList<PMapLog>(fltINSTANCE);
+                m_dataContext.PMapLogList = AzureTableStore.Instance.RetrieveList<PMapLog>(fltDateS + " and " + fltDateE + " and " + fltINSTANCE + (m_dataContext.SelType == "" ? "" : "and " + fltType));
+                m_dataContext.SelLog = new PMapLog();
 
             }
         }
@@ -92,6 +93,17 @@ namespace PMAdmin
         private void DateE_LostFocus(object sender, RoutedEventArgs e)
         {
             getLogList();
+        }
+
+        private void dgrLog_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            PMapLog sel = (PMapLog)dgrLog.SelectedItem;
+            if (sel != null)
+                m_dataContext.SelLog = sel.ShallowCopy();
+            else
+                m_dataContext.SelLog = new PMapLog();
+
         }
 
     }

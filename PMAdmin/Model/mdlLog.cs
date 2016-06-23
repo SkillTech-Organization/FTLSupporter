@@ -108,6 +108,16 @@ namespace PMAdmin.Model
             }
         }
 
+        private PMapLog m_selLog;
+        public PMapLog SelLog
+        {
+            get { return m_selLog; }
+            set
+            {
+                m_selLog = value;
+                NotifyPropertyChanged("SelLog");
+            }
+        }
 
     }
 }

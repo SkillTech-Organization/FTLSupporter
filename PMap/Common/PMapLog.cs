@@ -35,7 +35,7 @@ namespace PMap.Common
 
         [DataMember]
         [AzurePartitionAttr]
-        [DisplayNameAttributeX(Name = "AppInstance", Order = 1, NoPrefix = true)]
+        [DisplayNameAttributeX(Name = "Alkalmazás példány", Order = 1, NoPrefix = true)]
         public string AppInstance { get; set; }
 
 

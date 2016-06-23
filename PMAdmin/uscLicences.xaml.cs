@@ -44,7 +44,8 @@ namespace PMAdmin
         {
             using (new WaitCursor())
             {
-                m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>();
+                m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>("", "AppInstance");
+
             }
         }
 
@@ -187,19 +188,19 @@ namespace PMAdmin
             switch (p_item.ObjState)
             {
                 case AzureTableObjBase.enObjectState.New:
-                    p_item.SetObjState(AzureTableObjBase.enObjectState.Stored);
+//                    p_item.SetObjState(AzureTableObjBase.enObjectState.Stored);
                     AzureTableStore.Instance.Insert(p_item);
                     break;
                 case AzureTableObjBase.enObjectState.Stored:
 
                     break;
                 case AzureTableObjBase.enObjectState.Modified:
-                    p_item.SetObjState(AzureTableObjBase.enObjectState.Stored);
+//                    p_item.SetObjState(AzureTableObjBase.enObjectState.Stored);
                     AzureTableStore.Instance.Modify(p_item);
 
                     break;
                 case AzureTableObjBase.enObjectState.Inactive:
-                    p_item.SetObjState(AzureTableObjBase.enObjectState.Inactive);
+//                    p_item.SetObjState(AzureTableObjBase.enObjectState.Inactive);
                     AzureTableStore.Instance.Delete(p_item);
                     break;
                 default:

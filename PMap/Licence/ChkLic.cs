@@ -35,11 +35,24 @@ namespace PMap.Licence
                         throw (new Exception(PMapMessages.E_LIC_EXPIRED));
 
                     PMapCommonVars.Instance.AppInstance = pi.AppInstance;
+                    string sMachineID = FingerPrint.Value();
 
-                    /*
-                    if (pl.LIC_EXPIRED.AddMonths(-1) > DateTime.Now.Date)
-                        throw (new Exception(PMapMessages.W_LIC_EXPIRED_WARN));
-                     */
+                    if (pl.MachineID != null && pl.MachineID != "" && pl.MachineID != sMachineID)
+                    {
+                        var warn = new PMapLicWarn() 
+                                { AppInstance = pl.AppInstance,
+                                  OldMachineID = pl.MachineID,
+                                  NewMachineID = sMachineID,
+                                  PMapTimestamp = DateTime.Now.ToString(Global.DATETIMEFORMAT)
+                                };
+                        AzureTableStore.Instance.Insert(warn);
+                        
+                    }
+                    if (pl.MachineID != sMachineID)
+                    {
+                        pl.MachineID = sMachineID;
+                        AzureTableStore.Instance.Modify(pl);
+                    }
                 }
             }
             catch (FileNotFoundException fe)

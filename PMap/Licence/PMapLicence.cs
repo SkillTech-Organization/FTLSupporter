@@ -34,7 +34,7 @@ namespace PMap.Licence
         private string m_AppInstance;
         [DataMember]
         [AzurePartitionAttr]
-        [DisplayNameAttributeX(Name = "Instance megnevezés", Order = 1, NoPrefix = true)]
+        [DisplayNameAttributeX(Name = "Példány megnevezés", Order = 1, NoPrefix = true)]
         [Required(ErrorMessage = "Az alkalamzáspéldány megnevezést kötelező kitölteni !")]
         public string AppInstance 
         {

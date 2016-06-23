@@ -200,6 +200,14 @@ namespace PMap.Common.Azure
             {
                 InitTableStore();
                 Type tp = p_obj.GetType();
+                AzureTableObjBase.enObjectState oriState = AzureTableObjBase.enObjectState.New;
+                if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                {
+                    AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                    oriState = mb.ObjState;
+                    mb.SetObjState(AzureTableObjBase.enObjectState.Stored);
+                }
+
 
                 DynamicTableEntity dynObj = cloneForWrite(p_obj);
                 CloudTable table = null;
@@ -208,15 +216,12 @@ namespace PMap.Common.Azure
                 TableOperation insertOperation = TableOperation.InsertOrReplace(dynObj);
                 TableResult res = table.Execute(insertOperation);
                 bool bOK =  parseHttpStatus(res.HttpStatusCode);
-                if (bOK)
+                if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
-                    if( tp.IsSubclassOf(typeof(AzureTableObjBase)))
-                    {
-                        AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                        mb.SetObjState(AzureTableObjBase.enObjectState.Stored);
-                    }
-                  
+                    AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                    mb.SetObjState(oriState);
                 }
+
                 return bOK;
             }
             catch (StorageException sex)
@@ -235,6 +240,14 @@ namespace PMap.Common.Azure
             {
                 InitTableStore();
                 Type tp = p_obj.GetType();
+                AzureTableObjBase.enObjectState oriState = AzureTableObjBase.enObjectState.Modified;
+                if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                {
+                    AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                    oriState = mb.ObjState;
+                    mb.SetObjState(AzureTableObjBase.enObjectState.Stored);
+                }
+
 
                 DynamicTableEntity dynObj = cloneForWrite(p_obj);
                 dynObj.ETag = "*";
@@ -243,7 +256,15 @@ namespace PMap.Common.Azure
                 table.CreateIfNotExists();
                 TableOperation modifyOperation = TableOperation.Replace(dynObj);
                 TableResult res = table.Execute(modifyOperation);
-                return parseHttpStatus(res.HttpStatusCode);
+                bool bOK = parseHttpStatus(res.HttpStatusCode);
+                if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                {
+                    AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                    mb.SetObjState(oriState);
+                }
+
+                return bOK;
+
             }
             catch (StorageException sex)
             {
@@ -261,7 +282,13 @@ namespace PMap.Common.Azure
             {
                 InitTableStore();
                 Type tp = p_obj.GetType();
-
+                AzureTableObjBase.enObjectState oriState = AzureTableObjBase.enObjectState.Stored;
+                if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                {
+                    AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                    oriState = mb.ObjState;
+                    mb.SetObjState(AzureTableObjBase.enObjectState.Inactive);
+                }
                 DynamicTableEntity dynObj = cloneForWrite(p_obj);
                 dynObj.ETag = "*";
 
@@ -270,7 +297,13 @@ namespace PMap.Common.Azure
                 table.CreateIfNotExists();
                 TableOperation deleteOperation = TableOperation.Delete(dynObj);
                 TableResult res = table.Execute(deleteOperation);
-                return parseHttpStatus(res.HttpStatusCode);
+                bool bOK = parseHttpStatus(res.HttpStatusCode);
+                if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                {
+                    AzureTableObjBase mb = (AzureTableObjBase)p_obj;
+                    mb.SetObjState(oriState);
+                }
+                return bOK;
             }
             catch (StorageException sex)
             {
@@ -329,7 +362,17 @@ namespace PMap.Common.Azure
 
         }
 
-        public ObservableCollection<T> RetrieveList<T>(string p_where = null)
+        public ObservableCollection<T> RetrieveList<T>()
+        {
+            return RetrieveList<T>("", "");
+        }
+
+       public ObservableCollection<T> RetrieveList<T>(string p_where)
+        {
+            return RetrieveList<T>(p_where, "");
+        }
+ 
+        public ObservableCollection<T> RetrieveList<T>(string p_where, string p_orderBy )
         {
             List<T> lstResult = new List<T>();
             try
@@ -340,7 +383,7 @@ namespace PMap.Common.Azure
                 table.CreateIfNotExists();
 
                 TableQuery<DynamicTableEntity> query;
-                if (p_where != null)
+                if (p_where != "")
                 {
                     p_where = FixTableStorageWhere(p_where);
                     query = new TableQuery<DynamicTableEntity>().Where(p_where);
@@ -356,6 +399,13 @@ namespace PMap.Common.Azure
                         lstResult.Add((T)Convert.ChangeType(o, typeof(T)));
                     }
                 }
+
+                //itt tartok
+                if( p_orderBy != "")
+                {
+                    lstResult = lstResult.OrderBy(x => x.GetType().GetProperty(p_orderBy).GetValue(x, null)).ToList();
+                }
+
             }
             catch (StorageException sex)
             {
