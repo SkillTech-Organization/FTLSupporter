@@ -49,7 +49,7 @@ namespace PMap.Licence
 
         [DataMember]
         [AzurePartitionAttr]
-        [DisplayNameAttributeX(Name = "Időpont", Order = 3, NoPrefix = true)]
+        [DisplayNameAttributeX(Name = "Időpont", Order = 4, NoPrefix = true)]
         public string PMapTimestamp { get; set; }
     }
 }

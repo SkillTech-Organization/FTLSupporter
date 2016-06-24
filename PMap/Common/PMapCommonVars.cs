@@ -79,6 +79,8 @@ namespace PMap.Common
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public string AppInstance { get; set; }
 
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public DateTime Expired { get; set; }
         
         public void ConnectToDB()
         {

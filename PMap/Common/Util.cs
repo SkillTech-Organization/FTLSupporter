@@ -143,9 +143,9 @@ namespace PMap.Common
             }
         }
 
-        public static void Log2File(string p_msg, bool p_sendToParse = true)
+        public static void Log2File(string p_msg, bool p_sendToCloud = true)
         {
-            Log2File(p_msg, Global.LogFileName, p_sendToParse);
+            Log2File(p_msg, Global.LogFileName, p_sendToCloud);
         }
 
         public static void Log2File(string p_msg, string p_logFileName, bool p_sendToCloud = true)

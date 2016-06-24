@@ -56,5 +56,15 @@ namespace PMAdmin
 
 
         }
+
+        private void btnLicWarns_Click(object sender, RoutedEventArgs e)
+        {
+            uscLicWarns lw = new uscLicWarns();
+
+            lw.Width = double.NaN; ;
+            lw.Height = double.NaN; ;
+            this.grpMain.Content = lw;
+
+        }
     }
 }

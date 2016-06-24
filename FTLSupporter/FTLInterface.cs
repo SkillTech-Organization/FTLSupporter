@@ -7,9 +7,11 @@ using PMap.DB.Base;
 using PMap.LongProcess.Base;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 
 namespace FTLSupporter
 {
@@ -17,11 +19,15 @@ namespace FTLSupporter
     {
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
+
             List<FTLResult> result = new List<FTLResult>();
 
 
             try
             {
+                ChkLic.Check(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Global.IdFileName);
+
+                
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 PMapCommonVars.Instance.ConnectToDB();
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);

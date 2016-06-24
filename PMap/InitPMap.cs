@@ -15,6 +15,7 @@ using PMap.MapProvider;
 using PMap.Common;
 using PMap.Common.PPlan;
 using PMap.Licence;
+using PMap.Localize;
 
 namespace PMap
 {
@@ -28,15 +29,28 @@ namespace PMap
             NoInternetConn
         }
 
-        public static startErrCode Start(bool p_checkConnection)
+        public static startErrCode Start(bool p_checkConnection, bool p_showLicenceErr = true)
         {
-            ChkLic.Check(Path.GetDirectoryName(Application.ExecutablePath) + "\\" + Global.IdFileName);
-     
+            try
+            {
+                ChkLic.Check(Path.GetDirectoryName(Application.ExecutablePath) + "\\" + Global.IdFileName);
+            }
+            catch (PMapLicenceException licex)
+            {
 
+                if (p_showLicenceErr)
+                    UI.Error(licex.Message);
+                throw (licex);
 
-            /* felhasználási jogsultság ellenőrzés */
-            if (DateTime.Now > new DateTime(2016, 07, 30))
-                throw new Exception("Y2");
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            if (p_showLicenceErr && PMapCommonVars.Instance.Expired > DateTime.Now.Date.AddMonths(-1))
+                UI.Warning(PMapMessages.W_LIC_EXPIRED_WARN, PMapCommonVars.Instance.Expired);
+
              
 
             /*
@@ -137,5 +151,5 @@ namespace PMap
 
             return result;
         }
-     }
+    }
 }

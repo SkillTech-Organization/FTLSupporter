@@ -17,8 +17,8 @@ namespace PMap.Licence
         {
             if (string.IsNullOrEmpty(fingerPrint))
             {
-            //    fingerPrint = GetHash("CPU >> " + cpuId() + "\nBIOS >> " + biosId() + "\nBASE >> " + baseId()
-                fingerPrint = GetHash("nBIOS >> " + biosId() + "\nBASE >> " + baseId()
+                //    fingerPrint = GetHash("CPU >> " + cpuId() + "\nBIOS >> " + biosId() + "\nBASE >> " + baseId()
+                fingerPrint = GetHash("nBIOS >> " + biosId() + "\nBASE >> " + baseId() + "\nMAC >> " + macId()
                     //+"\nDISK >> "+ diskId() + "\nVIDEO >> " + videoId() +"\nMAC >> "+ macId()
                                      );
             }

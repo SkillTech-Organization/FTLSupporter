@@ -29,7 +29,7 @@ namespace PMap.Route
         {
             DateTime dtStart = DateTime.Now;
 
-            InitPMap.startErrCode res = InitPMap.Start(false);
+            InitPMap.startErrCode res = InitPMap.Start(false, false);
             switch (res)
             {
                 case InitPMap.startErrCode.FatalErr:
@@ -73,7 +73,7 @@ namespace PMap.Route
 
             Util.Log2File("GetPMapRoutes SingleThread START " + Util.GetSysInfo());
 
-            InitPMap.startErrCode res = InitPMap.Start(false);
+            InitPMap.startErrCode res = InitPMap.Start(false, false);
             switch (res)
             {
                 case InitPMap.startErrCode.FatalErr:
@@ -149,7 +149,7 @@ namespace PMap.Route
 
             Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
 
-            InitPMap.startErrCode res = InitPMap.Start(true);
+            InitPMap.startErrCode res = InitPMap.Start(true,false);
             switch (res)
             {
                 case InitPMap.startErrCode.FatalErr:

@@ -101,10 +101,14 @@
     </Compile>
     <Compile Include="Model\mdlBase.cs" />
     <Compile Include="Model\mdlLicences.cs" />
+    <Compile Include="Model\mdlLicWarns.cs" />
     <Compile Include="Model\mdlLog.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="uscLicences.xaml.cs">
       <DependentUpon>uscLicences.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="uscLicWarns.xaml.cs">
+      <DependentUpon>uscLicWarns.xaml</DependentUpon>
     </Compile>
     <Compile Include="uscLog.xaml.cs">
       <DependentUpon>uscLog.xaml</DependentUpon>
@@ -129,6 +133,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="uscLicences.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="uscLicWarns.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

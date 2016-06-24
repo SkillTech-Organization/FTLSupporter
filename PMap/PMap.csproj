@@ -302,6 +302,7 @@
     <Compile Include="Common\Parse\ParseLogX.cs" />
     <Compile Include="Licence\ChkLic.cs" />
     <Compile Include="Licence\FingerPrint.cs" />
+    <Compile Include="Licence\PMapLicenceException.cs" />
     <Compile Include="Licence\PMapID.cs" />
     <Compile Include="Licence\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />

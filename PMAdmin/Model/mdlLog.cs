@@ -37,7 +37,7 @@ namespace PMAdmin.Model
             set
             {
                 m_PMapLicenceList = value;
-                NotifyPropertyChanged("PMapLicenceList");
+                NotifyPropertyChanged("PMapLicenceList", false);
             }
         }
 
@@ -81,7 +81,7 @@ namespace PMAdmin.Model
             set
             {
                 m_PMapLogTypeList = value;
-                NotifyPropertyChanged("PMapLogTypeList");
+                NotifyPropertyChanged("PMapLogTypeList", false);
             }
         }
 
@@ -104,7 +104,7 @@ namespace PMAdmin.Model
             set
             {
                 m_PMapLogList = value;
-                NotifyPropertyChanged("PMapLogList");
+                NotifyPropertyChanged("PMapLogList", false);
             }
         }
 
@@ -115,7 +115,7 @@ namespace PMAdmin.Model
             set
             {
                 m_selLog = value;
-                NotifyPropertyChanged("SelLog");
+                NotifyPropertyChanged("SelLog",false);
             }
         }
 

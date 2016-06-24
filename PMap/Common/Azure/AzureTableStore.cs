@@ -400,7 +400,6 @@ namespace PMap.Common.Azure
                     }
                 }
 
-                //itt tartok
                 if( p_orderBy != "")
                 {
                     lstResult = lstResult.OrderBy(x => x.GetType().GetProperty(p_orderBy).GetValue(x, null)).ToList();
