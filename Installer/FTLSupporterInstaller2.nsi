@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "FTLSupporter"
-!define PRODUCT_VERSION "3.7.3"
+!define PRODUCT_VERSION "3.7.4"
 !define PRODUCT_PUBLISHER "Pratix Kft."
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"

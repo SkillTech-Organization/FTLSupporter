@@ -7,6 +7,7 @@ using PMap.Licence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -36,16 +38,17 @@ namespace PMAdmin
         public uscLicences()
         {
             InitializeComponent();
-            refreshFromDB();
             this.DataContext = m_dataContext;
+            refreshFromDB();
+
         }
+
 
         private void refreshFromDB()
         {
             using (new WaitCursor())
             {
                 m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>("", "AppInstance");
-
             }
         }
 
@@ -64,7 +67,7 @@ namespace PMAdmin
                 e.Column = PMAUtils.SetDataGridImageColums(pd);
             }
 
-  
+
         }
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
@@ -93,28 +96,14 @@ namespace PMAdmin
 
                 AzureTableObjBase.enObjectState oriState = curr.ObjState;
                 writeItem(curr);
-                if( oriState == AzureTableObjBase.enObjectState.New)
+                if (oriState == AzureTableObjBase.enObjectState.New)
                     m_dataContext.AddNewItem(curr);
                 else
                     m_dataContext.ModifyItem(curr);
-
-                /*
-                PMapLicence ori = m_dataContext.PMapLicenceList.Where(x => x.ID == curr.ID).FirstOrDefault();
-                if (ori == null)
-                {
-                    m_dataContext.AddNewItem(curr);
-                }
-                else
-                {
-                    m_dataContext.ModifyItem(curr);
-                }
-                */
-
                 dgrLicences.SelectedItem = curr;
                 dgrLicences.ScrollIntoView(curr);
                 dgrLicences.Focus();
             }
-
         }
 
         private void btnGen_Click(object sender, RoutedEventArgs e)
@@ -127,7 +116,7 @@ namespace PMAdmin
             saveFileDialog.FileName = "Pmap.id";
             if (saveFileDialog.ShowDialog() == true)
             {
-                    PMapLicence curr = m_dataContext.EditedItem;
+                PMapLicence curr = m_dataContext.EditedItem;
 
                 PMapID pmi = new PMapID();
                 pmi.ID = curr.ID;
@@ -146,7 +135,7 @@ namespace PMAdmin
                     Util.ByteArrayToFile(saveFileDialog.FileName, encrypted);
                     string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
                 }
-             }
+            }
         }
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
@@ -158,10 +147,13 @@ namespace PMAdmin
 
             //Azure művelet
             PMapLicence curr = m_dataContext.EditedItem;
+            curr.SetObjState(PMapLicence.enObjectState.Inactive);
             writeItem(curr);
 
             //Model művelet
+
             m_dataContext.DeleteItem(curr);
+            dgrLicences.Focus();
 
 
         }
@@ -176,10 +168,14 @@ namespace PMAdmin
         {
 
             PMapLicence sel = (PMapLicence)dgrLicences.SelectedItem;
-            if (sel != null)
+            if (sel != null && dgrLicences.CurrentItem == dgrLicences.SelectedItem) //dgrLicences.CurrentItem != dgrLicences.SelectedItem esetén nincs a griden fókusz
                 m_dataContext.EditedItem = sel.ShallowCopy();
             else
+            {
                 m_dataContext.EditedItem = new PMapLicence();
+                dgrLicences.SelectedItem = null;
+                dgrLicences.CurrentItem = null;
+            }
         }
 
 
@@ -188,19 +184,16 @@ namespace PMAdmin
             switch (p_item.ObjState)
             {
                 case AzureTableObjBase.enObjectState.New:
-//                    p_item.SetObjState(AzureTableObjBase.enObjectState.Stored);
                     AzureTableStore.Instance.Insert(p_item);
                     break;
                 case AzureTableObjBase.enObjectState.Stored:
 
                     break;
                 case AzureTableObjBase.enObjectState.Modified:
-//                    p_item.SetObjState(AzureTableObjBase.enObjectState.Stored);
                     AzureTableStore.Instance.Modify(p_item);
 
                     break;
                 case AzureTableObjBase.enObjectState.Inactive:
-//                    p_item.SetObjState(AzureTableObjBase.enObjectState.Inactive);
                     AzureTableStore.Instance.Delete(p_item);
                     break;
                 default:

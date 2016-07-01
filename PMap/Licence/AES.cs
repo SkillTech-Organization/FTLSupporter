@@ -9,7 +9,7 @@ namespace PMap.Licence
     public class AES
     {
 
-        public static byte[] EncryptStringToBytes_Aes(string plainText, byte[] Key, byte[] IV)
+        internal static byte[] EncryptStringToBytes_Aes(string plainText, byte[] Key, byte[] IV)
         {
             // Check arguments.
             if (plainText == null || plainText.Length <= 0)

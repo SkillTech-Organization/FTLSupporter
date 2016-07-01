@@ -18,6 +18,13 @@ namespace PMAdmin.Model
             set
             {
                 m_PMapLicenceList = value;
+                /*
+                PMapLicence first = m_PMapLicenceList.FirstOrDefault();
+                if (first != null)
+                    this.EditedItem = first;
+                else
+                    this.EditedItem = new PMapLicence();
+                */
                 NotifyPropertyChanged("PMapLicenceList");
             }
 

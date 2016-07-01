@@ -44,7 +44,7 @@ namespace PMAdmin.Model
             get { return m_dateE; }
             set
             {
-                m_dateS = value;
+                m_dateE = value;
                 NotifyPropertyChanged("DateE");
             }
         }

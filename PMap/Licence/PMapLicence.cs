@@ -76,10 +76,10 @@ namespace PMap.Licence
             get { return m_MachineID; }
             set { m_MachineID = value; NotifyPropertyChanged("MachineID"); }
         }
-
+/*
         [DisplayNameAttributeX(Name = "State", Order = 5, NoPrefix = true)]
         public string xState { get{ return this.State; } }
-
+*/
 
     }
 }

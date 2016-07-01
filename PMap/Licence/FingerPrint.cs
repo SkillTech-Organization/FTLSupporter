@@ -13,7 +13,7 @@ namespace PMap.Licence
     public class FingerPrint
     {
         private static string fingerPrint = string.Empty;
-        public static string Value()
+        internal static string Value()
         {
             if (string.IsNullOrEmpty(fingerPrint))
             {

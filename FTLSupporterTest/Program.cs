@@ -1,5 +1,6 @@
 ﻿using FTLSupporter;
 using GMap.NET;
+using PMap.Licence;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,7 +15,6 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-
             #region túraponok 
             FTLPoint tp1  =  new FTLPoint()
             {

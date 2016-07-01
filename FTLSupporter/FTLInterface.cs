@@ -4,6 +4,7 @@ using PMap.BO;
 using PMap.Common;
 using PMap.Common.Attrib;
 using PMap.DB.Base;
+using PMap.Licence;
 using PMap.LongProcess.Base;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,8 @@ namespace FTLSupporter
 
             try
             {
-                ChkLic.Check(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Global.IdFileName);
+                
+               ChkLic.Check(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Global.IdFileName);
 
                 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);

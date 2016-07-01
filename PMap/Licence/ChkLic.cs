@@ -5,14 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 
 namespace PMap.Licence
 {
-    internal static class ChkLic
+    public static class ChkLic
     {
+
         internal static void Check(string p_IDFile)
         {
             byte[] buffer;

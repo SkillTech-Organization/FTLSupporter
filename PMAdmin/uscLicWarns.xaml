@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" Width="448.958">
+             d:DesignHeight="300" Width="448.958" >
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -34,9 +34,9 @@
             <Label Content="Időszak"  Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
             <Label Content="-"  Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <DatePicker x:Name="DateS" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                        Text="{Binding Path=DateS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateS_LostFocus"/>
+                        Text="{Binding Path=DateS, Mode=TwoWay, UpdateSourceTrigger=LostFocus,  ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateS_LostFocus"/>
             <DatePicker x:Name="DateE" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                        Text="{Binding Path=DateE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateE_LostFocus"/>
+                        Text="{Binding Path=DateE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateE_LostFocus"/>
         </Grid>
         <DataGrid Grid.Row="1" x:Name="dgrLicWarns" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 ItemsSource="{Binding PMapLicWarnList}" CanUserAddRows="False" IsReadOnly="True"

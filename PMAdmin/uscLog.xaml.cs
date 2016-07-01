@@ -35,7 +35,7 @@ namespace PMAdmin
             this.DataContext = m_dataContext;
             m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>("","AppInstance");
             m_dataContext.SelLicence = m_dataContext.PMapLicenceList.FirstOrDefault();
-            m_dataContext.DateS = DateTime.Now.Date;
+            m_dataContext.DateS = DateTime.Now.AddDays(-7).Date;
             m_dataContext.DateE = DateTime.Now.Date;
             m_dataContext.SelType = "";
             getLogList();
@@ -74,6 +74,7 @@ namespace PMAdmin
 
                 m_dataContext.PMapLogList = AzureTableStore.Instance.RetrieveList<PMapLog>(fltDateS + " and " + fltDateE + " and " + fltINSTANCE + (m_dataContext.SelType == "" ? "" : "and " + fltType), "PMapTimestamp");
                 m_dataContext.SelLog = new PMapLog();
+                dgrLog.SelectedItem = null;
                 m_dataContext.Dirty = false;
             }
         }
@@ -102,7 +103,7 @@ namespace PMAdmin
         {
 
             PMapLog sel = (PMapLog)dgrLog.SelectedItem;
-            if (sel != null)
+            if (sel != null && dgrLog.SelectedItem == dgrLog.CurrentItem)
                 m_dataContext.SelLog = sel.ShallowCopy();
             else
                 m_dataContext.SelLog = new PMapLog();
