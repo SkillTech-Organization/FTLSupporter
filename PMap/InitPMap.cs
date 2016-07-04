@@ -33,7 +33,7 @@ namespace PMap
         {
             try
             {
-                ChkLic.Check(Path.GetDirectoryName(Application.ExecutablePath) + "\\" + Global.IdFileName);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
             }
             catch (PMapLicenceException licex)
             {
@@ -48,8 +48,8 @@ namespace PMap
                 throw (ex);
             }
 
-            if (p_showLicenceErr && PMapCommonVars.Instance.Expired > DateTime.Now.Date.AddMonths(-1))
-                UI.Warning(PMapMessages.W_LIC_EXPIRED_WARN, PMapCommonVars.Instance.Expired);
+            if (p_showLicenceErr && PMapCommonVars.Instance.Expired.AddMonths(-1) < DateTime.Now.Date)
+                UI.Warning(PMapMessages.W_LIC_EXPIRED_WARN, PMapCommonVars.Instance.Expired.ToString(Global.DATEFORMAT));
 
              
 

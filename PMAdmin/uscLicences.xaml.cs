@@ -100,7 +100,9 @@ namespace PMAdmin
                     m_dataContext.AddNewItem(curr);
                 else
                     m_dataContext.ModifyItem(curr);
-                dgrLicences.SelectedItem = curr;
+
+                m_dataContext.SelectedItem = curr;
+                m_dataContext.EditedItem = curr.ShallowCopy();
                 dgrLicences.ScrollIntoView(curr);
                 dgrLicences.Focus();
             }
@@ -108,9 +110,10 @@ namespace PMAdmin
 
         private void btnGen_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (!UI.Confirm("ID file generálás ?"))
                 return;
-
+*/
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "ID file (*.id)|*.id";
             saveFileDialog.FileName = "Pmap.id";
@@ -131,9 +134,10 @@ namespace PMAdmin
                 byte[] encrypted;
                 using (Aes myAes = Aes.Create())
                 {
-                    encrypted = AES.EncryptStringToBytes_Aes(idContent, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
+                    encrypted = AES.EncryptStringToBytes_Aes(idContent, Encoding.Default.GetBytes(ChkLic.pw), Encoding.Default.GetBytes(ChkLic.iv));
                     Util.ByteArrayToFile(saveFileDialog.FileName, encrypted);
-                    string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
+                    string d = AES.DecryptStringFromBytes_Aes(encrypted, Encoding.Default.GetBytes(ChkLic.pw), Encoding.Default.GetBytes(ChkLic.iv));
+                    UI.Message("ID fájl generálás megtörtént:" + saveFileDialog.FileName);
                 }
             }
         }
@@ -153,6 +157,8 @@ namespace PMAdmin
             //Model művelet
 
             m_dataContext.DeleteItem(curr);
+            m_dataContext.SelectedItem = null;
+            m_dataContext.EditedItem = null;
             dgrLicences.Focus();
 
 
@@ -166,7 +172,18 @@ namespace PMAdmin
 
         private void selectItem()
         {
+            if(m_dataContext.SelectedItem != null)
+            {
+                m_dataContext.EditedItem = m_dataContext.SelectedItem.ShallowCopy();
 
+            }
+            else
+            {
+                m_dataContext.EditedItem = new PMapLicence();
+                dgrLicences.SelectedItem = null;
+                dgrLicences.CurrentItem = null;
+            }
+            /*
             PMapLicence sel = (PMapLicence)dgrLicences.SelectedItem;
             if (sel != null && dgrLicences.CurrentItem == dgrLicences.SelectedItem) //dgrLicences.CurrentItem != dgrLicences.SelectedItem esetén nincs a griden fókusz
                 m_dataContext.EditedItem = sel.ShallowCopy();
@@ -176,6 +193,7 @@ namespace PMAdmin
                 dgrLicences.SelectedItem = null;
                 dgrLicences.CurrentItem = null;
             }
+            */
         }
 
 

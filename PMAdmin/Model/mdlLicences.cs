@@ -3,6 +3,7 @@ using PMap.Licence;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,16 @@ namespace PMAdmin.Model
                 m_editedItem = value;
                 NotifyPropertyChanged("EditedItem");
             }
-
+        }
+        private PMapLicence m_selectedItem = new PMapLicence();
+        public PMapLicence SelectedItem
+        {
+            get { return m_selectedItem; }
+            set
+            {
+                m_selectedItem = value;
+                NotifyPropertyChanged("SelectedItem");
+            }
         }
 
         public bool IsNeedSave

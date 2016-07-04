@@ -29,6 +29,7 @@ namespace PMap
         public const string PMapRegLOG = "log";
 
         public const string iniPMap = "PMap";
+        public const string iniIDFile = "IDFile";
         public const string iniCTIniFile = "CTIniFile";
         public const string iniLogDir = "LogDir";
         public const string iniLogVerbose = "LogVerbose";

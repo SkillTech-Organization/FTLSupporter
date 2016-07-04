@@ -37,6 +37,7 @@ namespace PMap.Common
         };
 
 
+        public string IDFile { get; private set; }
         public string CTIniFile { get; private set; }
         public string LogDir { get; private set; }
         public eLogVerbose LogVerbose { get; private set; }
@@ -141,6 +142,7 @@ namespace PMap.Common
 
             INIFile ini = new INIFile(Path.Combine(p_iniPath, "PMap.ini"));
 
+            IDFile = ini.ReadString(Global.iniPMap, Global.iniIDFile);
             CTIniFile = ini.ReadString(Global.iniPMap, Global.iniCTIniFile);
 
 

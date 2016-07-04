@@ -61,7 +61,7 @@ namespace PMapTestApp
                 if (!DesignMode)
                 {
 
-                    InitPMap.startErrCode res = InitPMap.Start(true,false);
+                    InitPMap.startErrCode res = InitPMap.Start(true,true);
                     PMapCommonVars.Instance.ConnectToDB();
                     
                     m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);

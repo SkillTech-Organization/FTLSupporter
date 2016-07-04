@@ -14,19 +14,21 @@ namespace PMap.Licence
 {
     public static class ChkLic
     {
+        public const string pw = "01EF1AEA0F433DE23F9C5BBB2A222100";
+        public const string iv = "01EE23F9C5BBB2A2";
 
         internal static void Check(string p_IDFile)
         {
             byte[] buffer;
 
-
-
+            if (p_IDFile.Length == 0)
+                throw (new PMapLicenceException(PMapMessages.E_LIC_NOFILE));
             try
             {
                 buffer = Util.FileToByteArray( p_IDFile);
                 using (Aes oAes = Aes.Create())
                 {
-                    string xml = AES.DecryptStringFromBytes_Aes(buffer, Encoding.Default.GetBytes(PMapID.pw), Encoding.Default.GetBytes(PMapID.iv));
+                    string xml = AES.DecryptStringFromBytes_Aes(buffer, Encoding.Default.GetBytes(pw), Encoding.Default.GetBytes(iv));
                     PMapID pi = Util.XmlToObject<PMapID>(xml);
                     AzureTableStore.Instance.AzureAccount = pi.AzureAccountName;
                     AzureTableStore.Instance.AzureKey = pi.AzureAccountKey;
@@ -34,7 +36,7 @@ namespace PMap.Licence
                     PMapLicence pl = AzureTableStore.Instance.Retrieve<PMapLicence>(pi.ID.ToString(), "");
 
                     if( pl.Expired < DateTime.Now.Date)
-                        throw (new PMapLicenceException(String.Format( PMapMessages.E_LIC_EXPIRED, pl.Expired)));
+                        throw (new PMapLicenceException(String.Format( PMapMessages.E_LIC_EXPIRED, pl.Expired.ToString(Global.DATEFORMAT))));
 
                     PMapCommonVars.Instance.AppInstance = pi.AppInstance;
                     PMapCommonVars.Instance.Expired = pl.Expired;

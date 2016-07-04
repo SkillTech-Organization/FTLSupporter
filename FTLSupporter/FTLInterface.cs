@@ -27,7 +27,7 @@ namespace FTLSupporter
             try
             {
                 
-               ChkLic.Check(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Global.IdFileName);
+               ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
