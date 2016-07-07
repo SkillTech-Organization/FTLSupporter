@@ -17,7 +17,7 @@
                 </StatusBarItem>
             </StatusBar>
             <Expander x:Name="MenuExpander"
-                  ExpandDirection="Left"
+                  ExpandDirection="Right"
                   BorderThickness="1 1 1 1"
                   Margin="5,10,5,4.816"
                   BorderBrush="Gray"
@@ -26,7 +26,6 @@
                     <ScaleTransform ScaleX="{Binding Value, ElementName=windowZoomSlider}"
                                         ScaleY="{Binding Value, ElementName=windowZoomSlider}" />
                 </Expander.LayoutTransform>
-
                 <Expander.Header>
                     <TextBlock Text="Főmenü"
                            FontSize="14"
@@ -67,7 +66,7 @@
     					CornerRadius="3"
     					Margin="2 2 0 0"
     					Opacity=".5" >
-                        <TextBlock Text="Munkaterület"/>
+                        <TextBlock x:Name="Title" Text="Munkaterület"/>
                     </Border>
                 </GroupBox.Header>
             </GroupBox>

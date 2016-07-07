@@ -12,6 +12,21 @@
             <Button IsEnabled="{Binding Path=EditedItem.UnSavedState}">
                 Click Me!
             </Button>
+            <Expander Header="More Options" ExpandDirection="Up" RenderTransformOrigin="0.5,0.5">
+                <Expander.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1" ScaleX="1"/>
+                        <SkewTransform AngleY="0" AngleX="0"/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Expander.RenderTransform>
+                <StackPanel Margin="10,4,0,0">
+                    <CheckBox Margin="4" Content="Option 1" />
+                    <CheckBox Margin="4" Content="Option 2" />
+                    <CheckBox Margin="4" Content="Option 3" />
+                </StackPanel>
+            </Expander>
         </StackPanel>
     </Grid>
 </UserControl>

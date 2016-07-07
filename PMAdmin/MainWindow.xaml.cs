@@ -31,6 +31,7 @@ namespace PMAdmin
 
             l.Width = double.NaN; ;
             l.Height = double.NaN; ;
+            this.Title.Text = btnLog.Content.ToString();
             this.grpMain.Content = l;
 
         }
@@ -41,6 +42,7 @@ namespace PMAdmin
 
             l.Width = double.NaN; ;
             l.Height = double.NaN; ;
+            this.Title.Text = btnLicence.Content.ToString();
             this.grpMain.Content = l;
 
 
@@ -52,6 +54,7 @@ namespace PMAdmin
 
             t.Width = double.NaN; ;
             t.Height = double.NaN; ;
+            this.Title.Text = btnTest.Content.ToString();
             this.grpMain.Content = t;
 
 
@@ -63,6 +66,7 @@ namespace PMAdmin
 
             lw.Width = double.NaN; ;
             lw.Height = double.NaN; ;
+            this.Title.Text = btnLicWarns.Content.ToString();
             this.grpMain.Content = lw;
 
         }
