@@ -27,10 +27,11 @@ namespace FTLSupporter
             try
             {
                 
-               ChkLic.Check(PMapIniParams.Instance.IDFile);
+
+                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 PMapCommonVars.Instance.ConnectToDB();
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);

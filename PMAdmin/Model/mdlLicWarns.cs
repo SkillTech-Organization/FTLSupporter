@@ -88,6 +88,6 @@ namespace PMAdmin.Model
         public bool HasItems
         {
             get { return m_PMapLicWarnList.Count > 0; }
-           }
+        }
     }
 }

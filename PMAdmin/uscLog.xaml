@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500">
+             d:DesignHeight="300" d:DesignWidth="700">
     <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,6 +24,7 @@
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="45"/>
                 <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <Label Content="Instance"  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
             <ComboBox x:Name="cmbAppInstance" Grid.Column="1" VerticalAlignment="Center"  
@@ -36,9 +37,9 @@
             <Label Content="Időszak"  Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
             <Label Content="-"  Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <DatePicker x:Name="DateS" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                        Text="{Binding Path=DateS, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateS_LostFocus"/>
+                        Text="{Binding Path=DateS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateS_LostFocus"/>
             <DatePicker x:Name="DateE" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                        Text="{Binding Path=DateE, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateE_LostFocus"/>
+                        Text="{Binding Path=DateE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateE_LostFocus"/>
             <Label Content="Típus"  Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" />
             <ComboBox x:Name="cmbType" Grid.Column="7" VerticalAlignment="Center"  
                       ItemsSource="{Binding Path=PMapLogTypeList}" 
@@ -46,6 +47,7 @@
                       SelectedValuePath="Type" 
                       SelectedValue="{Binding Path=SelType, Mode=TwoWay}" 
                       HorizontalContentAlignment="Stretch" SelectionChanged="cmbType_SelectionChanged"></ComboBox>
+            <Button x:Name="btnDel" Content="Tételek törlése" Grid.Column="8" Margin="5,5,5,5" Height="23" IsEnabled="{Binding Path=HasItems}" Click="btnDel_Click"/>
 
 
         </Grid>

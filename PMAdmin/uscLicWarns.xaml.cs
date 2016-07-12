@@ -77,10 +77,19 @@ namespace PMAdmin
             if (!m_dataContext.Dirty)
                 return;
 
+            
             using (new WaitCursor())
             {
+                if (m_dataContext.DateS > m_dataContext.DateE)
+                {
+                    var tmp = m_dataContext.DateS;
+                    m_dataContext.DateS = m_dataContext.DateE;
+                    m_dataContext.DateE = tmp;
+
+                }
+
                 string fltDateS = TableQuery.GenerateFilterCondition("PMapTimestamp", QueryComparisons.GreaterThanOrEqual, m_dataContext.DateS.ToString(Global.DATETIMEFORMAT));
-                string fltDateE = TableQuery.GenerateFilterConditionForDate("PMapTimestamp", QueryComparisons.LessThanOrEqual, m_dataContext.DateE.AddDays(1).AddSeconds(-1));
+                string fltDateE = TableQuery.GenerateFilterCondition("PMapTimestamp", QueryComparisons.LessThanOrEqual, m_dataContext.DateE.AddDays(1).AddSeconds(-1).ToString(Global.DATETIMEFORMAT));
                 string fltINSTANCE = TableQuery.GenerateFilterCondition("AppInstance", QueryComparisons.Equal, m_dataContext.SelLicence.AppInstance);
 
                 m_dataContext.PMapLicWarnList = AzureTableStore.Instance.RetrieveList<PMapLicWarn>(fltDateS + " and " + fltDateE + " and " + fltINSTANCE);
@@ -108,7 +117,7 @@ namespace PMAdmin
 
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void btnDel_Click(object sender, RoutedEventArgs e)
         {
             if (!UI.Confirm("A lekérdezésben szereplő összes tétel törlése ?"))
                 return;

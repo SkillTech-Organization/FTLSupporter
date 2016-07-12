@@ -476,7 +476,6 @@
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="Common\PMapIniParams.cs" />
-    <Compile Include="InitPMap.cs" />
     <Compile Include="LongProcess\Base\BaseLongProcess.cs" />
     <Compile Include="LongProcess\Base\BaseMultiProgressDialog.cs">
       <SubType>Form</SubType>

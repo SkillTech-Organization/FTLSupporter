@@ -83,22 +83,6 @@ namespace PMap.Forms
                 if (!DesignMode)
                 {
 
-                    InitPMap.startErrCode res = InitPMap.Start(true);
-                    switch (res)
-                    {
-                        case InitPMap.startErrCode.FatalErr:
-                            string msg = PMapMessages.E_PPLAN_FATALERRINSTART;
-                            Util.Log2File(msg);
-                            throw new Exception(msg);
-                        case InitPMap.startErrCode.NoInternetConn:
-                            Util.Log2File(PMapMessages.E_PPLAN_NOINTERNETCONN);
-                            gMapControl.Manager.Mode = AccessMode.CacheOnly;
-                            break;
-                        case InitPMap.startErrCode.OK:
-                            gMapControl.Manager.Mode = PMapIniParams.Instance.MapCacheMode;
-                            break;
-                    }
-
                     PMapCommonVars.Instance.ConnectToDB();
                     
 

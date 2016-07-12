@@ -123,21 +123,6 @@ namespace PMap.Forms
                 {
 
 
-                    InitPMap.startErrCode res = InitPMap.Start(true);
-                    switch (res)
-                    {
-                        case InitPMap.startErrCode.FatalErr:
-                            string msg = PMapMessages.E_PPLAN_FATALERRINSTART;
-                            Util.Log2File(msg);
-                            throw new Exception(msg);
-                        case InitPMap.startErrCode.NoInternetConn:
-                            Util.Log2File(PMapMessages.E_PPLAN_NOINTERNETCONN);
-                            PMapCommonVars.Instance.MapAccessMode = AccessMode.CacheOnly;
-                            break;
-                        case InitPMap.startErrCode.OK:
-                            PMapCommonVars.Instance.MapAccessMode = PMapIniParams.Instance.MapCacheMode;
-                            break;
-                    }
 
                     m_PPlanCommonVars.Zoom = Global.DefZoom;
                     m_PPlanCommonVars.TooltipMode = GMap.NET.WindowsForms.MarkerTooltipMode.Never;

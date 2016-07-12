@@ -17,7 +17,6 @@ namespace PMap.Localize
 
         public const string M_FRMPMAP_SELPOS = "Kiválasztott pozíció";
 
-        public const string E_PEDIT_NOINTRCONN = "PMap - Nincs Internetkapcsolat!";
         public const string E_PEDIT_NOINSPOINT = "A túrapont a zónakorlátozások miatt nem illeszthető a tervbe!";
         public const string E_PEDIT_NOMOVEPOINT = "A {0} jármű {1} túrapontja nincs másik útszakaszra mozgatva!";
         public const string E_PEDIT_NOMOVEAFTERWHS = "A {0} jármű {1} túrapontot raktárba érkezés után nem lehet beszúrni!";
@@ -34,7 +33,6 @@ namespace PMap.Localize
         public const string E_PPLAN_FATALERRINSTART = "PPlan - Végzetes hiba programindulásnál!";
         public const string E_PPLAN_NOINTERNETCONN = "PPlan - Nincs Internetkapcsolat!";
 
-        public const string E_PEDIT_FATALERR = "Végzetes hiba!";
         public const string M_PEDIT_ORDNOTFOUND = "A keresett megrendelésszám nem létezik!";
         public const string M_PEDIT_ROUTECALCABORTED = "Útvonalszámítás megszakítva!";
         public const string E_PEDIT_NOGETROUTES = "Útvonalak nem kérhetőek le! Lehet, hogy hálózati hiba történt.";
@@ -131,6 +129,7 @@ namespace PMap.Localize
         public const string E_LIC_EXPIRED = "A program felhasználási jogosultsága {0} napon lejárt !";
         public const string W_LIC_EXPIRED_WARN = "A program felhasználási jogosultsága {0} napon lejár!\nKérjük, újítsa meg a jogosultságot!";
         public const string E_LIC_NOFILE = "A regisztrációs állomány neve nincs megadva !";
+        public const string E_LIC_INVALIDFILE = "A regisztrációs állomány érvénytelen szerkezetű!";
     }
 
 }

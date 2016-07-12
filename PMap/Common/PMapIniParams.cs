@@ -9,6 +9,8 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Globalization;
+using GMap.NET.MapProviders;
+using System.Net;
 
 namespace PMap.Common
 {
@@ -36,6 +38,7 @@ namespace PMap.Common
 	        15   //Fel/lehajtók, rámpák
         };
 
+        public bool  Loaded { get; private set; }
 
         public string IDFile { get; private set; }
         public string CTIniFile { get; private set; }
@@ -63,6 +66,7 @@ namespace PMap.Common
         public Dictionary<int, int> dicSpeed { get; private set; }
 
         public int MapType { get; private set; }
+
         public string GoogleMapsAPIKey { get; private set; }
         public AccessMode MapCacheMode { get; private set; }
         public string MapCacheDB { get; private set; }
@@ -112,6 +116,7 @@ namespace PMap.Common
                     if (instance == null)
                     {
                         instance = new PMapIniParams();
+                        instance.Loaded = false;
                     }
                 }
                 return instance;
@@ -163,6 +168,22 @@ namespace PMap.Common
                 LogVerbose = (eLogVerbose)Enum.Parse(typeof(eLogVerbose), sLogVerbose);
             else
                 LogVerbose = eLogVerbose.normal;
+
+
+            //Debug átirányítása
+            //
+            if (LogVerbose >= PMapIniParams.eLogVerbose.debug)
+            {
+                string DbgFileName = Path.Combine(LogDir, Global.DbgFileName);
+
+                TextWriterTraceListener[] listeners = new TextWriterTraceListener[] 
+                {
+                new TextWriterTraceListener(DbgFileName),
+                new TextWriterTraceListener(Console.Out)
+                };
+                Debug.Listeners.AddRange(listeners);
+            }
+
 
 
             string sDepCodeInToolTip = ini.ReadString(Global.iniPMap, Global.iniDepCodeInToolTip);
@@ -239,16 +260,51 @@ namespace PMap.Common
                 MapType = Convert.ToInt32(sMapType);
             else
                 MapType = Global.mtGMap;
+            
+            switch (MapType)
+            {
+                case Global.mtGMap:
+                    PMapCommonVars.Instance.MapProvider = GMapProviders.GoogleTerrainMap;
+                    break;
+                case Global.mtOpenStreetMap:
+                    PMapCommonVars.Instance.MapProvider = GMapProviders.OpenStreetMap;
+                    break;
+                /*
+                 Ezekre nics útvonalszámítás implementálva
+                case Global.mtBingMap:
+                    PPlanCommonVars.Instance.MapProvider = GMapProviders.BingMap;
+                    break;
+                case Global.mtYahooMap:
+                    PPlanCommonVars.Instance.MapProvider = GMapProviders.YahooMap;
+                    break;
+                case Global.mtOviMap:
+                    PPlanCommonVars.Instance.MapProvider = GMapProviders.OviMap;
+                    break;
+                case Global.mtTest:
+                    PPlanCommonVars.Instance.MapProvider = GMapProviders.YandexMap;
+                    break;
+                 
+                 
+                 */
 
+                default:
+                    PMapCommonVars.Instance.MapProvider = GMapProviders.GoogleTerrainMap;
+                    break;
+
+            }
 
 
             GoogleMapsAPIKey = ini.ReadString(Global.iniGMap, Global.iniGoogleMapsAPIKey);
+            GoogleMapProvider.Instance.APIKey = GoogleMapsAPIKey;
 
 
             MapCacheMode = AccessMode.ServerOnly;
             string sAccesMode = ini.ReadString(Global.iniGMap, Global.iniMapCacheMode);
             if (sAccesMode != "")
                 MapCacheMode = (AccessMode)Enum.Parse(typeof(AccessMode), sAccesMode);
+
+            PMapCommonVars.Instance.MapAccessMode = MapCacheMode;
+
 
             MapCacheDB = ini.ReadString(Global.iniGMap, Global.iniMapCacheDB);
             if (MapCacheDB != "")
@@ -288,7 +344,16 @@ namespace PMap.Common
                 ProxyUser = ini.ReadString(Global.iniProxy, Global.ProxyUser);
                 ProxyPassword = ini.ReadString(Global.iniProxy, Global.ProxyPassword);
                 ProxyDomain = ini.ReadString(Global.iniProxy, Global.ProxyDomain);
+
+                GMapProvider.WebProxy = new WebProxy(ProxyServer, ProxyPort);
+                GMapProvider.WebProxy.Credentials = new NetworkCredential(ProxyUser, ProxyPassword, ProxyDomain);
+
             }
+            else
+            {
+                GMapProvider.WebProxy = null;
+            }
+                
 
             // DB paraméterek felolvasása CT inifájlból
 
@@ -301,7 +366,7 @@ namespace PMap.Common
             DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
             if (DBCmdTimeOut == 0)
                 DBCmdTimeOut = 60;
-
+            Loaded = true;
 
 
         }

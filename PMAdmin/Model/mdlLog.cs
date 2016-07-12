@@ -74,6 +74,7 @@ namespace PMAdmin.Model
             }
         }
 
+ 
         private ObservableCollection<LogType> m_PMapLogTypeList = new ObservableCollection<LogType>();
         public ObservableCollection<LogType> PMapLogTypeList
         {
@@ -96,6 +97,11 @@ namespace PMAdmin.Model
             }
         }
 
+        public bool HasItems
+        {
+            get { return m_PMapLogList.Count > 0; }
+        }
+
         
         private ObservableCollection<PMapLog> m_PMapLogList = new ObservableCollection<PMapLog>();
         public ObservableCollection<PMapLog> PMapLogList
@@ -105,8 +111,10 @@ namespace PMAdmin.Model
             {
                 m_PMapLogList = value;
                 NotifyPropertyChanged("PMapLogList", false);
+                NotifyPropertyChanged("HasItems", false);
             }
         }
+
 
         private PMapLog m_selLog;
         public PMapLog SelLog

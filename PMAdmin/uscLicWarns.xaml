@@ -38,7 +38,7 @@
                         Text="{Binding Path=DateS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,  ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateS_LostFocus"/>
             <DatePicker x:Name="DateE" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" 
                         Text="{Binding Path=DateE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" LostFocus="DateE_LostFocus"/>
-            <Button x:Name="button" Content="Tételek törlése" Grid.Column="6" Margin="5,5,5,5" Height="23" Click="button_Click" RenderTransformOrigin="0.502,0.5" IsEnabled="{Binding Path=HasItems}"/>
+            <Button x:Name="btnDel" Content="Tételek törlése" Grid.Column="6" Margin="5,5,5,5" Height="23" Click="btnDel_Click"  IsEnabled="{Binding Path=HasItems}"/>
         </Grid>
         <DataGrid Grid.Row="1" x:Name="dgrLicWarns" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 ItemsSource="{Binding PMapLicWarnList}" CanUserAddRows="False" IsReadOnly="True"

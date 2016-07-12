@@ -61,26 +61,10 @@ namespace PMapTestApp
                 if (!DesignMode)
                 {
 
-                    InitPMap.startErrCode res = InitPMap.Start(true,true);
                     PMapCommonVars.Instance.ConnectToDB();
                     
                     m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
                     m_bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB);
-
-                    switch (res)
-                    {
-                        case InitPMap.startErrCode.FatalErr:
-                            string msg = PMapMessages.E_PEDIT_FATALERR;
-                            Util.Log2File(msg);
-                            throw new Exception(msg);
-                        case InitPMap.startErrCode.NoInternetConn:
-                            Util.Log2File(PMapMessages.E_PEDIT_NOINTRCONN);
-                            gMapControl.Manager.Mode = AccessMode.CacheOnly;
-                            break;
-                        case InitPMap.startErrCode.OK:
-                            gMapControl.Manager.Mode = PMapIniParams.Instance.MapCacheMode;
-                            break;
-                    }
 
 
                     tbZoom.Minimum = Global.DefMinZoom;

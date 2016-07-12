@@ -67,8 +67,15 @@ namespace PMAdmin
 
             using (new WaitCursor())
             {
+                if (m_dataContext.DateS > m_dataContext.DateE)
+                {
+                    var tmp = m_dataContext.DateS;
+                    m_dataContext.DateS = m_dataContext.DateE;
+                    m_dataContext.DateE = tmp;
+                }
+
                 string fltDateS = TableQuery.GenerateFilterCondition("PMapTimestamp", QueryComparisons.GreaterThanOrEqual, m_dataContext.DateS.ToString(Global.DATETIMEFORMAT));
-                string fltDateE = TableQuery.GenerateFilterConditionForDate("PMapTimestamp", QueryComparisons.LessThanOrEqual, m_dataContext.DateE.AddDays(1).AddSeconds(-1));
+                string fltDateE = TableQuery.GenerateFilterCondition("PMapTimestamp", QueryComparisons.LessThanOrEqual, m_dataContext.DateE.AddDays(1).AddSeconds(-1).ToString(Global.DATETIMEFORMAT));
                 string fltINSTANCE = TableQuery.GenerateFilterCondition("AppInstance", QueryComparisons.Equal, m_dataContext.SelLicence.AppInstance);
                 string fltType = TableQuery.GenerateFilterCondition("Type", QueryComparisons.Equal, m_dataContext.SelType);
 
@@ -108,6 +115,23 @@ namespace PMAdmin
             else
                 m_dataContext.SelLog = new PMapLog();
 
+        }
+
+        private void btnDel_Click(object sender, RoutedEventArgs e)
+        {
+            if (!UI.Confirm("A lekérdezésben szereplő összes tétel törlése ?"))
+                return;
+
+            using (new WaitCursor())
+            {
+                foreach (var item in m_dataContext.PMapLogList)
+                {
+                    AzureTableStore.Instance.Delete(item);
+                }
+                m_dataContext.Dirty = true;
+                getLogList();
+            }
+  
         }
 
     }

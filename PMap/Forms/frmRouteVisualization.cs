@@ -59,23 +59,6 @@ namespace PMap.Forms
                 if (!DesignMode)
                 {
 
-
-                    InitPMap.startErrCode res = InitPMap.Start(true);
-                    switch (res)
-                    {
-                        case InitPMap.startErrCode.FatalErr:
-                            string msg = PMapMessages.E_ROUTVIS_FATALERRINSTART;
-                            Util.Log2File(msg);
-                            throw new Exception(msg);
-                        case InitPMap.startErrCode.NoInternetConn:
-                            Util.Log2File(PMapMessages.E_ROUTVIS_NOINTERNETCONN);
-                            PMapCommonVars.Instance.MapAccessMode = AccessMode.CacheOnly;
-                            break;
-                        case InitPMap.startErrCode.OK:
-                            PMapCommonVars.Instance.MapAccessMode = PMapIniParams.Instance.MapCacheMode;
-                            break;
-                    }
-
                     PMapCommonVars.Instance.ConnectToDB();
                     
                     RouteVisCommonVars.Instance.Zoom = Global.DefZoom;

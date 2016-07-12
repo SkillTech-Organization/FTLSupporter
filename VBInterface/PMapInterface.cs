@@ -59,7 +59,10 @@ namespace VBInterface
         {
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams( p_iniPath, p_dbConf);
-            
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+
+
             DateTime dt = DateTime.Now;
             
        //     logVersion();
@@ -95,6 +98,9 @@ namespace VBInterface
 
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+
             //logVersion();
             Util.Log2File(">>START:ShowGoogleMap(p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
 
@@ -124,6 +130,9 @@ namespace VBInterface
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+
 //            logVersion();
             Util.Log2File(">>START:ShowRoute( p_routeList=" + p_routeList + "p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
 
@@ -154,7 +163,10 @@ namespace VBInterface
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-//            logVersion();
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+            
+            //            logVersion();
             Util.Log2File(">>START:ShowDepots( p_DepotList=" + p_DepotList + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
 
             try
@@ -184,6 +196,8 @@ namespace VBInterface
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
 
             //logVersion();
             Util.Log2File(">>START:ShowDepotsAndRoute( p_PLN_ID=" + p_PLN_ID + ", p_TPL_ID=" + p_TPL_ID + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
@@ -254,7 +268,8 @@ namespace VBInterface
 
         public string PlanToursVB(string p_PLN_ID, string p_USR_ID, PlanParams p_planParams, string p_iniPath, string p_dbConf)
         {
-            
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return "0";
             List<dtXResult> res = PlanTours(p_iniPath, p_dbConf, p_PLN_ID, p_USR_ID, p_planParams);
             return (bool)(res.First().Status == dtXResult.EStatus.OK ) ?  "1" : "0";
         }
@@ -312,6 +327,9 @@ namespace VBInterface
                                 thWaitMessage.Abort();
 
                             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                                return retErr;
+
                             //logVersion();
                             Util.Log2File(">>START:CalcPMapRoutesByPlan( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_PLN_ID=" + p_PLN_ID.ToString() + ")");
 
@@ -352,7 +370,7 @@ namespace VBInterface
             return sRetStatus;
         }
 
-        public bool calculatePMapRoutesByPlan(int p_PLN_ID, bool p_savePoints)
+        private bool calculatePMapRoutesByPlan(int p_PLN_ID, bool p_savePoints)
         {
             bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
             List<boRoute> res = bllRoute.GetDistancelessPlanNodes(p_PLN_ID);
@@ -393,6 +411,9 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                    return retErr;
+
                 //logVersion();
                 Util.Log2File(">>START:CalcPMapRoutesByOrders( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_ORD_DATE_S=" + p_ORD_DATE_S + ",p_ORD_DATE_E=" + p_ORD_DATE_E + ")");
 
@@ -428,6 +449,9 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                    return retErr;
+
                 //logVersion();
                 Util.Log2File(">>START:CalcTOLL( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_TPL_ID_List='" + p_TPL_ID_List + "')");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -467,6 +491,9 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                    return retErr;
+
                 //logVersion();
                 Util.Log2File(">>START:RecalcPlTours( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_TPL_ID_List='" + p_TPL_ID_List + "')");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -492,30 +519,30 @@ namespace VBInterface
         }
 
 
-        public string CheckLicence(string p_iniPath, string p_dbConf)
+        public string CheckLicence(string p_iniPath, string p_dbConf, bool p_showMessage = true)
         {
             string sRetStatus = retOK;
             try
             {
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                if (!PMapIniParams.Instance.Loaded)
+                    PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
             }
             catch (PMapLicenceException licex)
             {
-
-                UI.Error(licex.Message);
+                if (p_showMessage)
+                    UI.Error(licex.Message);
                 sRetStatus = retFailed;
             }
             catch (Exception ex)
             {
-                UI.Error(ex.Message);
+                if (p_showMessage)
+                    UI.Error(ex.Message);
                 sRetStatus = retErr;
             }
 
-            if (sRetStatus == retOK && PMapCommonVars.Instance.Expired.AddMonths(-1) < DateTime.Now.Date)
+            if (p_showMessage && sRetStatus == retOK && PMapCommonVars.Instance.Expired.AddMonths(-1) < DateTime.Now.Date)
                 UI.Warning(PMapMessages.W_LIC_EXPIRED_WARN, PMapCommonVars.Instance.Expired.ToString(Global.DATEFORMAT));
-
-
             return sRetStatus;
         }
 
@@ -531,6 +558,7 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
                 //logVersion();
                 Util.Log2File(">>START:ImportDepots( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_depots.<count>='" + p_depots.Count.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -562,6 +590,8 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
+
                 //logVersion();
                 Util.Log2File(">>START:ImportTrucks( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_truck.<count>='" + p_truck.Count.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -593,6 +623,7 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 //logVersion();
                 Util.Log2File(">>START:ImportOrders( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_orders.<count>='" + p_orders.Count.ToString() + "')");
@@ -624,6 +655,8 @@ namespace VBInterface
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
+
                 //logVersion();
                 Util.Log2File(">>START:RouteVisualization( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_TRK_ID=" + p_TRK_ID.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -676,6 +709,8 @@ namespace VBInterface
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
+
                 //logVersion();
                 Util.Log2File(">>START:RouteVisualizationCalc( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_TRK_ID=" + p_TRK_ID.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -745,6 +780,7 @@ namespace VBInterface
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
                 //logVersion();
                 
                 Util.Log2File(">>START:CreateNewPlan( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_PLN_NAME='" + p_PLN_NAME + "',p_WHS_ID=" + p_WHS_ID.ToString() +
@@ -805,6 +841,7 @@ namespace VBInterface
             string sRetStatus = retOK;
             dtXResult res = new dtXResult();
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
             //logVersion();
             Util.Log2File(">>START:PlanTours( p_PLN_ID=" + p_PLN_ID + ", p_USR_ID=" + p_USR_ID + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
             string sRet = "1";
@@ -853,6 +890,7 @@ namespace VBInterface
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
                 //logVersion();
                 Util.Log2File(">>START:GetPlan( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_PLN_ID=" + p_PLN_ID.ToString() + ")");
                 PMapCommonVars.Instance.ConnectToDB();
@@ -892,6 +930,7 @@ namespace VBInterface
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
                 
                 //logVersion();
                 Util.Log2File(">>START:GetPlans( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf +

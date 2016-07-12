@@ -14,6 +14,7 @@ using Map.LongProcess;
 using PMap.BO;
 using PMap.Localize;
 using PMap.Common;
+using PMap.Licence;
 
 namespace PMap.Route
 {
@@ -29,18 +30,8 @@ namespace PMap.Route
         {
             DateTime dtStart = DateTime.Now;
 
-            InitPMap.startErrCode res = InitPMap.Start(false, false);
-            switch (res)
-            {
-                case InitPMap.startErrCode.FatalErr:
-                    Util.Log2File(PMapMessages.M_INTF_ROUTEINIT);
-                    return;
-                case InitPMap.startErrCode.NoInternetConn:
-                //                    Util.Log2File("GetPMapRoutesMulti - Nincs Internetkapcsolat!");
-                //                    return false;
-                case InitPMap.startErrCode.OK:
-                    break;
-            }
+            PMapIniParams.Instance.ReadParams("", "DB0");
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
             try
             {
 
@@ -73,18 +64,8 @@ namespace PMap.Route
 
             Util.Log2File("GetPMapRoutes SingleThread START " + Util.GetSysInfo());
 
-            InitPMap.startErrCode res = InitPMap.Start(false, false);
-            switch (res)
-            {
-                case InitPMap.startErrCode.FatalErr:
-                    Util.Log2File(PMapMessages.M_INTF_PMROUTES);
-                    return false;
-                case InitPMap.startErrCode.NoInternetConn:
-                //                    Util.Log2File("GetPMapDistances - Nincs Internetkapcsolat!");
-                //                    return false;
-                case InitPMap.startErrCode.OK:
-                    break;
-            }
+            PMapIniParams.Instance.ReadParams("", "DB0");
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
 
             try
             {
@@ -149,18 +130,9 @@ namespace PMap.Route
 
             Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
 
-            InitPMap.startErrCode res = InitPMap.Start(true,false);
-            switch (res)
-            {
-                case InitPMap.startErrCode.FatalErr:
-                    Util.Log2File(PMapMessages.M_INTF_PMROUTES_MULTI);
-                    return false;
-                case InitPMap.startErrCode.NoInternetConn:
-                //                    Util.Log2File("GetPMapRoutesMulti - Nincs Internetkapcsolat!");
-                //                    return false;
-                case InitPMap.startErrCode.OK:
-                    break;
-            }
+            PMapIniParams.Instance.ReadParams("", "DB0");
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
+            
             bool bUseRouteCache = GMaps.Instance.UseRouteCache;
             GMaps.Instance.UseRouteCache = false;
 

@@ -28,6 +28,8 @@ namespace PMap.Common
                         instance = new PMapCommonVars();
                         instance.AppInstance = "???";
                         instance.CT_DB = null;
+                        instance.MapProvider = GMapProviders.GoogleTerrainMap;
+
                     }
                 }
                 return instance;

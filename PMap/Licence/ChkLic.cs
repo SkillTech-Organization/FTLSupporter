@@ -34,6 +34,8 @@ namespace PMap.Licence
                     AzureTableStore.Instance.AzureKey = pi.AzureAccountKey;
 
                     PMapLicence pl = AzureTableStore.Instance.Retrieve<PMapLicence>(pi.ID.ToString(), "");
+                    if( pl == null)
+                        throw (new PMapLicenceException(PMapMessages.E_LIC_INVALIDFILE));
 
                     if( pl.Expired < DateTime.Now.Date)
                         throw (new PMapLicenceException(String.Format( PMapMessages.E_LIC_EXPIRED, pl.Expired.ToString(Global.DATEFORMAT))));

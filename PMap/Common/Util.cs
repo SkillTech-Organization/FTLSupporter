@@ -138,7 +138,7 @@ namespace PMap.Common
                     tw.Write(p_s);
                     tw.Close();
                 }
-                catch( Exception e)                { }
+                catch (Exception e) { }
                 return p_file;
             }
         }
@@ -782,9 +782,16 @@ namespace PMap.Common
             using (XmlWriter writer = XmlWriter.Create(sww))
             {
                 xsSubmit.Serialize(writer, p_obj);
-                return sww.ToString();  
+                return sww.ToString();
             }
         }
-    }
 
+        public static void Swap<T>(ref T x, ref T y)
+        {
+            T t = y;
+            y = x;
+            x = t;
+        }
+    }
 }
+
