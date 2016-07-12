@@ -24,6 +24,7 @@ namespace PMAdmin.Model
             {
                 m_PMapLicenceList = value;
                 NotifyPropertyChanged("PMapLicenceList", false);
+                NotifyPropertyChanged("HasItems", false);
             }
         }
 
@@ -69,6 +70,7 @@ namespace PMAdmin.Model
             {
                 m_PMapLicWarnList = value;
                 NotifyPropertyChanged("PMapLicWarnList", false);
+                NotifyPropertyChanged("HasItems", false);
             }
         }
 
@@ -83,6 +85,9 @@ namespace PMAdmin.Model
                 NotifyPropertyChanged("SelLicWarn", false);
             }
         }
-
+        public bool HasItems
+        {
+            get { return m_PMapLicWarnList.Count > 0; }
+           }
     }
 }

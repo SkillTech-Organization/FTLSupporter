@@ -36,7 +36,7 @@ namespace PMap
         public const string iniDepCodeInToolTip = "DepCodeInToolTip";
         public const string iniTestMode = "TestMode";
         public const string iniParseLog = "ParseLog";
-        public const string iniAzureLog = "AzureLog";
+        public const string iniALog = "ALog";
 
         public const string iniPriority = "Priority";
         public const string iniInitRouteDataProcess = "InitRouteDataProcess";

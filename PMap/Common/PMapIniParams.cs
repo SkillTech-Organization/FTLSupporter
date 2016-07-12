@@ -44,7 +44,7 @@ namespace PMap.Common
         public bool DepCodeInToolTip { get; private set; }
         public bool TestMode { get; private set; }
         public bool ParseLog { get; private set; }
-        public bool AzureLog { get; private set; }
+        public bool ALog { get; private set; }
 
 
     
@@ -174,8 +174,8 @@ namespace PMap.Common
             string sParseLog = ini.ReadString(Global.iniPMap, Global.iniParseLog);
             ParseLog = (sParseLog == "1" || sParseLog.ToLower() == "true");
 
-            string sAzureLog = ini.ReadString(Global.iniPMap, Global.iniAzureLog);
-            AzureLog = (sAzureLog == "1" || sAzureLog.ToLower() == "true");
+            string sALog = ini.ReadString(Global.iniPMap, Global.iniALog);
+            ALog = (sALog == "1" || sALog.ToLower() == "true");
 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")

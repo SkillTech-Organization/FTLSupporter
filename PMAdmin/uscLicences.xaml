@@ -44,11 +44,11 @@
                 <Label Content="Lejárati dátum" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" />
                 <Label Content="Megjegyzés" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" />
                 <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
-                         Text="{Binding Path=EditedItem.AppInstance, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
+                         Text="{Binding Path=EditedItem.AppInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
                 <DatePicker x:Name="dtpExpired" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,8,0" Grid.Row="1" VerticalAlignment="Center"
-                            Text="{Binding Path=EditedItem.Expired, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"  />
+                            Text="{Binding Path=EditedItem.Expired, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"  />
                 <TextBox x:Name="txtComment"  Grid.Column="1" Grid.Row="2" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
-                         Text="{Binding Path=EditedItem.Comment, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
+                         Text="{Binding Path=EditedItem.Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
             </Grid>
 
             <Grid Grid.Column="1" ShowGridLines="false" >

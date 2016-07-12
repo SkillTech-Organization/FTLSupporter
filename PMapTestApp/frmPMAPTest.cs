@@ -600,5 +600,11 @@ namespace PMapTestApp
         {
 
         }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            string sRes = (new PMapInterface()).CheckLicence("", dbConf);
+            MessageBox.Show("Licence eredmény:" + sRes);
+        }
     }
 }

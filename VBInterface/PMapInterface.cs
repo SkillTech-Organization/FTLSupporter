@@ -23,6 +23,8 @@ using PMap.BLL.DataXChange;
 using PMap.Common.PPlan;
 using PMap.BO.DataXChange;
 using PMap.Common.Parse;
+using PMap.Licence;
+using PMap.Localize;
 
 namespace VBInterface
 {
@@ -488,6 +490,35 @@ namespace VBInterface
                 ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_TPL_ID_List);
             return sRetStatus;
         }
+
+
+        public string CheckLicence(string p_iniPath, string p_dbConf)
+        {
+            string sRetStatus = retOK;
+            try
+            {
+                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
+            }
+            catch (PMapLicenceException licex)
+            {
+
+                UI.Error(licex.Message);
+                sRetStatus = retFailed;
+            }
+            catch (Exception ex)
+            {
+                UI.Error(ex.Message);
+                sRetStatus = retErr;
+            }
+
+            if (sRetStatus == retOK && PMapCommonVars.Instance.Expired.AddMonths(-1) < DateTime.Now.Date)
+                UI.Warning(PMapMessages.W_LIC_EXPIRED_WARN, PMapCommonVars.Instance.Expired.ToString(Global.DATEFORMAT));
+
+
+            return sRetStatus;
+        }
+
         #endregion
 
         #region Csak C#-ból hívható szolgáltatások

@@ -108,5 +108,20 @@ namespace PMAdmin
 
         }
 
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            if (!UI.Confirm("A lekérdezésben szereplő összes tétel törlése ?"))
+                return;
+
+            using (new WaitCursor())
+            {
+                foreach (var item in m_dataContext.PMapLicWarnList)
+                {
+                    AzureTableStore.Instance.Delete(item);
+                }
+                m_dataContext.Dirty = true;
+                getList();
+            }
+        }
     }
 }

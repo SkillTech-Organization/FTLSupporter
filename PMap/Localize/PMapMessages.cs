@@ -128,7 +128,7 @@ namespace PMap.Localize
         public const string E_CHGTRK_NOTFITTEDDEP = "Jármű nem teljesítheti a tervet az alábbi útvonalon:\r\n{0} -> {1}";
 
         public const string E_LIC_IDNOTFOUND = "A regisztrációs állomány hiányzik";
-        public const string E_LIC_EXPIRED = "A program felhasználási jogosultsága {0} napon lejárt !\nA művelet nem hajtható végre.";
+        public const string E_LIC_EXPIRED = "A program felhasználási jogosultsága {0} napon lejárt !";
         public const string W_LIC_EXPIRED_WARN = "A program felhasználási jogosultsága {0} napon lejár!\nKérjük, újítsa meg a jogosultságot!";
         public const string E_LIC_NOFILE = "A regisztrációs állomány neve nincs megadva !";
     }
