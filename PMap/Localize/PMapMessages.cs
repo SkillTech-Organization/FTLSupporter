@@ -129,7 +129,7 @@ namespace PMap.Localize
         public const string E_LIC_EXPIRED = "A program felhasználási jogosultsága {0} napon lejárt !";
         public const string W_LIC_EXPIRED_WARN = "A program felhasználási jogosultsága {0} napon lejár!\nKérjük, újítsa meg a jogosultságot!";
         public const string E_LIC_NOFILE = "A regisztrációs állomány neve nincs megadva !";
-        public const string E_LIC_INVALIDFILE = "A regisztrációs állomány érvénytelen szerkezetű!";
+        public const string E_LIC_INVALIDFILE = "Az ID állományban hivatkozott licence nem érhető el!";
     }
 
 }
