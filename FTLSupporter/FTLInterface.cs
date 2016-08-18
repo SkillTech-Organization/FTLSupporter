@@ -899,22 +899,27 @@ namespace FTLSupporter
             //Eredmény megállapítása
             //2. minden járműhöz hozzárendeljuk azt a túrát, amely teljesítésében a legkisebb az átállás+visszaérkezés költsége
 
-            List<Tuple<FTLTruck, FTLTask>> resX = new List<Tuple<FTLTruck, FTLTask>>();
-            resX.AddRange(p_TruckList.Select(i => new Tuple<FTLTruck, FTLTask>(i, null)));
+            List<Tuple<FTLTruck, FTLTask, double>> resX = new List<Tuple<FTLTruck, FTLTask, double>>();
+            resX.AddRange(p_TruckList.Select(i => new Tuple<FTLTruck, FTLTask,double>(i, null, -1)));
             List<FTLResult> calcResult = FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
 
             //2.1 Van-e eredmény
             var cr = calcResult.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (cr != null)
             {
-                //2.2 végigmenni a taskok listáján
-                List<FTLCalcTask> calcTask = ((List<FTLCalcTask>)cr.Data);
-                foreach( var ct in calcTask)
+                foreach (var rX in resX)
                 {
-                    //2.3 Túrákból megkeresni a legjobbat
-                    foreach( var calcTour in ct.CalcTours.Where(i=>i.Status == FTLCalcTour.FTLCalcTourStatus.OK))
+                    //2.2 végigmenni a taskok listáján
+                    List<FTLCalcTask> calcTask = ((List<FTLCalcTask>)cr.Data);
+                    foreach (var ct in calcTask)
                     {
-
+                        //2.3 Túrákból megkeresni a legjobbat
+                        var xx = ct.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK
+                                    && i.Truck == rX.Item1).OrderBy(x => (x.RelCost + x.RelDuration) * -1).FirstOrDefault();
+                        if( xx != null)
+                        {
+                            Console.WriteLine("x");
+                        }
                     }
                 }
             }
