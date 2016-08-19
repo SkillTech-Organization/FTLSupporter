@@ -891,44 +891,85 @@ namespace FTLSupporter
             return itemRes;
         }
 
-
+        /*
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
+        {
+            List<Tuple<FTLTruck, FTLTask, double>> resX = new List<Tuple<FTLTruck, FTLTask, double>>();
+            resX.AddRange(p_TruckList.Select(i => new Tuple<FTLTruck, FTLTask, double>(i, null, -1)));
+            List<FTLResult> calcResult = FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+        }
+        */
+
+
+        public static void FTLSetBestTruck(List<FTLResult> p_calcResult)
         {
             //1. kiszámoljuk az teljesitéseket
 
             //Eredmény megállapítása
             //2. minden járműhöz hozzárendeljuk azt a túrát, amely teljesítésében a legkisebb az átállás+visszaérkezés költsége
 
-            List<Tuple<FTLTruck, FTLTask, double>> resX = new List<Tuple<FTLTruck, FTLTask, double>>();
-            resX.AddRange(p_TruckList.Select(i => new Tuple<FTLTruck, FTLTask,double>(i, null, -1)));
-            List<FTLResult> calcResult = FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
-
-            //2.1 Van-e eredmény
-            var cr = calcResult.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
-            if (cr != null)
+            //2.1 Van-e eredmény ?
+            var calcResult = p_calcResult.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
+            if (calcResult != null)
             {
-                foreach (var rX in resX)
+                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+                //init:kitöröljük az összes ERR státuszú járművet
+                foreach (var ct in calcTaskList)
                 {
-                    //2.2 végigmenni a taskok listáján
-                    List<FTLCalcTask> calcTask = ((List<FTLCalcTask>)cr.Data);
-                    foreach (var ct in calcTask)
+                    ct.CalcTours.RemoveAll(i => i.Status != FTLCalcTour.FTLCalcTourStatus.OK);
+                }
+
+                //2.2 végigmenni a taskok listáján
+                foreach (var calcTask in calcTaskList)
+                {
+                    //2.3 A hozzárendelendő jármű megállapítása
+                    FTLTruck trk = null;
+                    bool done = false;
+                    while (!done && trk == null)
                     {
-                        //2.3 Túrákból megkeresni a legjobbat
-                        var xx = ct.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK
-                                    && i.Truck == rX.Item1).OrderBy(x => (x.RelCost + x.RelDuration) * -1).FirstOrDefault();
-                        if( xx != null)
+                        //2.3.1 Alapesetben a legjobb rank-ú
+                        FTLCalcTour calcTour = calcTask.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(o => o.Rank).FirstOrDefault();
+                        if (calcTour != null)
                         {
-                            Console.WriteLine("x");
+                            trk = calcTour.Truck;
+
+                            //Amennyiben van hozzárendelhető jármű, megnézzük, hogy más taskban szerepel-e jobb eredménnyel?
+                            foreach (var calcTask2 in calcTaskList.Where(i => i != calcTask).ToList())
+                            {
+                                //Ha a kérdéses jármű másutt is első, de jobba a költségmutatói, akkor 
+                                //nem választjuk ki, és a következő ciklusban a sorban következő lesz a hozzárendelt járművet vesszük
+                                FTLCalcTour calcTour2 = calcTask.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                                                                i.Truck == trk).OrderBy(o => o.Rank).FirstOrDefault();
+                                if (calcTour2 != null && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
+                                {
+                                    trk = null;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            //nincs több választható jármű, ciklus vége
+                            done = true;
                         }
                     }
+
+                    if (trk != null)
+                    {
+                        //a taskhoz lehetett járművet rendelni
+                        //3.1 az aktuális taskból kitörlünk minden más járművet
+                        calcTask.CalcTours.RemoveAll(i => i.Truck != trk);
+                        //A többi taskból pedig a kiválasztott járművet töröljük
+                        foreach (var ct in calcTaskList.Where(i => i != calcTask).ToList())
+                        {
+                            ct.CalcTours.RemoveAll(i => i.Truck == trk);
+                        }
+                    }
+
                 }
             }
 
-
-                return null;
-
         }
-
 
     }
 }
