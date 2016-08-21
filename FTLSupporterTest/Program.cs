@@ -20,55 +20,55 @@ namespace FTLSupporterTest
             Test(true);
         }
 
-        static void Test( bool p_bestTruck = false)
+        static void Test(bool p_bestTruck = false)
         {
             #region túraponok 
-            FTLPoint tp1  =  new FTLPoint()
+            FTLPoint tp1 = new FTLPoint()
             {
                 TPID = "TP001",
                 Name = "Győr",
                 Addr = "Szalmatelep",
-                Open =  DateTime.Now.Date.AddHours(6),
-                Close =  DateTime.Now.Date.AddHours(20),
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(20),
                 SrvDuration = 20,
                 Lat = 47.6764844,
                 Lng = 17.6660156,
                 RealArrival = DateTime.MinValue
             };
 
-            FTLPoint tp2  =  new FTLPoint()
+            FTLPoint tp2 = new FTLPoint()
             {
                 TPID = "TP002",
                 Name = "Székesfehérvár",
                 Addr = "Új váralja sor",
-                Open =  DateTime.Now.Date.AddHours(6),
-                Close =  DateTime.Now.Date.AddHours(20),
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(20),
                 SrvDuration = 30,
                 Lat = 47.1768204,
                 Lng = 18.4189224,
                 RealArrival = DateTime.MinValue
             };
 
-            FTLPoint tp3  =  new FTLPoint()
+            FTLPoint tp3 = new FTLPoint()
             {
                 TPID = "TP003",
                 Name = "Budapest M5",
                 Addr = "M5 Tesco",
-                Open =  DateTime.Now.Date.AddHours(6),
-                Close =  DateTime.Now.Date.AddHours(22),
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(22),
                 SrvDuration = 15,
                 Lat = 47.4264324,       //47.4254452,
                 Lng = 19.1512299,       // 19.1494274,
                 RealArrival = DateTime.MinValue
             };
 
-            FTLPoint tp4  =  new FTLPoint()
+            FTLPoint tp4 = new FTLPoint()
             {
                 TPID = "TP004",
                 Name = "Budapest belváros",
                 Addr = "Városház u.",
-                Open =  DateTime.Now.Date.AddHours(6),
-                Close =  DateTime.Now.Date.AddHours(20),
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(20),
                 SrvDuration = 15,
                 Lat = 47.4937477,
                 Lng = 19.0563869,
@@ -114,7 +114,7 @@ namespace FTLSupporterTest
                 Lng = 21.7126322,
                 RealArrival = DateTime.MinValue
             };
-            
+
             FTLPoint tp8 = new FTLPoint()
             {
                 TPID = "TP008",
@@ -153,7 +153,7 @@ namespace FTLSupporterTest
                 Lng = 20.1315880,
                 RealArrival = DateTime.MinValue
             };
-            
+
             FTLPoint tp11 = new FTLPoint()
             {
                 TPID = "TP011",
@@ -166,17 +166,17 @@ namespace FTLSupporterTest
                 Lng = 20.175767,
                 RealArrival = DateTime.MinValue
             };
-            
 
-            #endregion 
+
+            #endregion
 
             #region beosztandó szállítási feladatok
 
             FTLTask tsk1 = new FTLTask()
             {
                 TaskID = "TSK1",
-                CargoType="Száraz",
-                TruckTypes="Hűtős,Egyéb",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
                 Weight = 100,
                 Client = "Budapest belváros-Hatvan-Debrecen",
                 TPoints = new List<FTLPoint>()
@@ -222,6 +222,18 @@ namespace FTLSupporterTest
             };
             tsk4.TPoints.Add(tp10.ShallowCopy());
             tsk4.TPoints.Add(tp11.ShallowCopy());
+
+            FTLTask tsk5 = new FTLTask()
+            {
+                TaskID = "TSK5",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Kecskemét-Hatvan",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk5.TPoints.Add(tp8.ShallowCopy());
+            tsk5.TPoints.Add(tp5.ShallowCopy());
 
             #endregion
 
@@ -303,9 +315,9 @@ namespace FTLSupporterTest
                 CurrIsOneWay = false,
                 CurrTPoints = new List<FTLPoint>(),
                 TPointCompleted = 1,                         /* Kecskemét teljesítve */
-                    CurrTime = DateTime.Now.Date.AddHours(9),       //9:00-kor tart itt
-                    CurrLat = 47.047533,                     
-                    CurrLng = 19.557893,
+                CurrTime = DateTime.Now.Date.AddHours(9),       //9:00-kor tart itt
+                CurrLat = 47.047533,
+                CurrLng = 19.557893,
             };
 
             var tpx5 = tp8.ShallowCopy();
@@ -357,9 +369,9 @@ namespace FTLSupporterTest
             trk4.CurrTPoints.Add(tpx10);
 
             #endregion
-            
+
             /* nagy teszt */
-            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3 };
+            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5 };
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
 
             /* egy elem teszt */
@@ -380,7 +392,7 @@ namespace FTLSupporterTest
                     t.Capacity = 2000;
                     t.TruckType = "T1";
                     t.CargoTypes = "C1";
-                    foreach( var tp in t.CurrTPoints)
+                    foreach (var tp in t.CurrTPoints)
                     {
                         tp.Open = DateTime.Now.Date.AddHours(0);
                         tp.Close = DateTime.Now.Date.AddHours(24);
@@ -400,23 +412,26 @@ namespace FTLSupporterTest
             List<FTLResult> res;
 
             /*
-            res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
-            FileInfo fi = new FileInfo( "res.res");
-            BinarySerializer.Serialize(fi, res);
-             */
-            FileInfo fi = new FileInfo("res.res");
-            res = (List < FTLResult >)BinarySerializer.Deserialize(fi);
- 
-            /*
-            var xmlstring = Util.ObjToXML(res);
-            Util.String2File(xmlstring, "res.xml");
+                res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+                FileInfo fi = new FileInfo( "res.res");
+                BinarySerializer.Serialize(fi, res);
             */
+
+            FileInfo fi = new FileInfo("res.res");
+            res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
+
+            bestTruckConsole(res.FirstOrDefault());
 
             if (p_bestTruck)
                 FTLInterface.FTLSetBestTruck(res);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("********************");
+            bestTruckConsole(res.FirstOrDefault());
+            Console.ReadKey();
 
+            return;
 
-                int i = 1;
+            int i = 1;
             foreach (var rr in res)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -431,13 +446,13 @@ namespace FTLSupporterTest
                 if (rr.Status == FTLResult.FTLResultStatus.RESULT)
                 {
                     List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
-                    foreach (FTLCalcTask clctsk in  tskResult)
+                    foreach (FTLCalcTask clctsk in tskResult)
                     {
 
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("");
                         Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-                        foreach (FTLCalcTour clctour in clctsk.CalcTours)
+                        foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy( x=>x.Rank))
                         {
                             Console.WriteLine("");
                             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -445,41 +460,52 @@ namespace FTLSupporterTest
 
                             if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.OK)
                             {
-                                //Részletező
-
-                                //Aktuális túra
                                 Console.ForegroundColor = ConsoleColor.Cyan;
-                                if (clctour.Truck.TruckTaskType !=  FTLTruck.eTruckTaskType.Available )
+                                if (p_bestTruck)
                                 {
-                                    Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T1Start, clctour.T1End);
-                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1Duration);
+                                    Console.WriteLine("Átállás ktg:{0:#,#0.00}, visszatérés ktg:{1:#,#0.00}", clctour.RelCost, clctour.RetCost);
 
-                                    foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
+                                }
+                                else
+                                {
+                                    //Részletező
+
+                                    //Aktuális túra
+                                    Console.ForegroundColor = ConsoleColor.Cyan;
+                                    if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                                     {
-                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Aktuálsi poz.**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
+                                        Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T1Start, clctour.T1End);
+                                        Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1Duration);
+
+                                        foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
+                                        {
+                                            Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Aktuálsi poz.**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
+                                        }
+                                    }
+                                    //Átállás
+                                    Console.WriteLine("Átállás kezd:{0},bef:{1}", clctour.RelStart, clctour.RelEnd);
+                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelDuration);
+                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.Distance);
+
+                                    //Beosztandó túra
+                                    Console.WriteLine("Beosztandó túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
+                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2Duration);
+
+                                    foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
+                                    {
+                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
+                                    }
+
+                                    //Visszatérés
+                                    if (!clctour.Truck.CurrIsOneWay)
+                                    {
+                                        Console.WriteLine("Visszatérés kezd:{0},bef:{1}", clctour.RetStart, clctour.RetEnd);
+                                        Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetDuration);
+                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RetCalcRoute.Distance);
                                     }
                                 }
-                                //Átállás
-                                Console.WriteLine("Átállás kezd:{0},bef:{1}", clctour.RelStart, clctour.RelEnd);
-                                Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelDuration);
-                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.Distance);
 
-                                //Beosztandó túra
-                                Console.WriteLine("Beosztandó túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
-                                Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2Duration);
 
-                                foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
-                                {
-                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
-                                }
-
-                                //Visszatérés
-                                if (!clctour.Truck.CurrIsOneWay)
-                                {
-                                    Console.WriteLine("Visszatérés kezd:{0},bef:{1}", clctour.RetStart, clctour.RetEnd);
-                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetDuration);
-                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RetCalcRoute.Distance);
-                                }
                             }
                             else
                             {
@@ -503,6 +529,26 @@ namespace FTLSupporterTest
             }
             Console.ReadKey();
         }
+
+
+        private static void bestTruckConsole(FTLResult rr)
+        {
+            List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
+
+            foreach (FTLCalcTask clctsk in tskResult)
+            {
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("");
+                Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
+                foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost+clctour.RetCost);
+                }
+            }
+        }
+
    }
 
 }

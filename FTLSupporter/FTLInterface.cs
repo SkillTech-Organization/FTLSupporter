@@ -938,12 +938,16 @@ namespace FTLSupporter
                             {
                                 //Ha a kérdéses jármű másutt is első, de jobba a költségmutatói, akkor 
                                 //nem választjuk ki, és a következő ciklusban a sorban következő lesz a hozzárendelt járművet vesszük
-                                FTLCalcTour calcTour2 = calcTask2.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
-                                                                i.Truck == trk).OrderBy(o => o.Rank).FirstOrDefault();
-                                if (calcTour2 != null && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
+
+                                //Az első jármű lekérdezése
+                                FTLCalcTour calcTour2 = calcTask2.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK)
+                                                                           .OrderBy(o => o.Rank).FirstOrDefault();
+
+                                if (calcTour2 != null && trk == calcTour2.Truck && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
                                 {
                                     calcTask.CalcTours.RemoveAll(i => i.Truck == trk);
                                     trk = null;
+                                    break;
                                 }
 
                             }
@@ -966,6 +970,9 @@ namespace FTLSupporter
                             ct.CalcTours.RemoveAll(i => i.Truck == trk);
                         }
                     }
+                    else
+                        calcTask.CalcTours.Clear();
+
 
                 }
             }
