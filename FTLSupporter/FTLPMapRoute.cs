@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
+    [Serializable]
     internal class FTLPMapRoute
     {
         public class FTLToll

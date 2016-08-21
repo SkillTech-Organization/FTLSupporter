@@ -5,6 +5,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
+    [Serializable]
     public class FTLCalcTask
     {
         public FTLCalcTask()

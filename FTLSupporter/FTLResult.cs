@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
+    [Serializable]
     public class FTLResult
     {
         public enum FTLResultStatus

@@ -7,6 +7,7 @@ using System.Text;
 namespace FTLSupporter
 {
     //Eredmény útvonalak
+    [Serializable]
     public class FTLCalcRoute
     {
 

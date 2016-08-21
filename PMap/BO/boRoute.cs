@@ -6,6 +6,8 @@ using GMap.NET;
 
 namespace PMap.BO
 {
+
+    [Serializable]
     public class boRoute
     {
         public boRoute()

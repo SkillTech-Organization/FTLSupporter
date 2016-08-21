@@ -1,9 +1,11 @@
 ﻿using FTLSupporter;
 using GMap.NET;
+using PMap.Common;
 using PMap.Licence;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -369,27 +371,47 @@ namespace FTLSupporterTest
             //var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
 
 
-            if( p_bestTruck)
+            if (p_bestTruck)
             {
                 //besttruck tesztnél mindent beállítunk, hogy az összes jármű task-hoz rendelhető legyen
-                foreach( var t in lstTrk)
+                foreach (var t in lstTrk)
                 {
                     t.GVWR = 3500;
                     t.Capacity = 2000;
                     t.TruckType = "T1";
                     t.CargoTypes = "C1";
+                    foreach( var tp in t.CurrTPoints)
+                    {
+                        tp.Open = DateTime.Now.Date.AddHours(0);
+                        tp.Close = DateTime.Now.Date.AddHours(24);
+                    }
                 }
                 foreach (var t in lstTsk)
-                    {
+                {
+                    t.CargoType = "C1";
+                    t.TruckTypes = "T1";
                     foreach (var tp in t.TPoints)
                     {
                         tp.Open = DateTime.Now.Date.AddHours(0);
                         tp.Close = DateTime.Now.Date.AddHours(24);
                     }
                 }
-
             }
-            var res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+            List<FTLResult> res;
+
+            /*
+            res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+            FileInfo fi = new FileInfo( "res.res");
+            BinarySerializer.Serialize(fi, res);
+             */
+            FileInfo fi = new FileInfo("res.res");
+            res = (List < FTLResult >)BinarySerializer.Deserialize(fi);
+ 
+            /*
+            var xmlstring = Util.ObjToXML(res);
+            Util.String2File(xmlstring, "res.xml");
+            */
+
             if (p_bestTruck)
                 FTLInterface.FTLSetBestTruck(res);
 

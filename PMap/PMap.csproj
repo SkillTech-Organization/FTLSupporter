@@ -294,6 +294,7 @@
     <Compile Include="Common\Azure\AzureTableObjBase.cs" />
     <Compile Include="Common\Azure\AzureTableStore.cs" />
     <Compile Include="Common\Azure\AzureLogX.cs" />
+    <Compile Include="Common\BinarySerializer.cs" />
     <Compile Include="Common\CSVParser.cs" />
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\JSONHelper.cs" />

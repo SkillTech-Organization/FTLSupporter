@@ -11,6 +11,7 @@ namespace FTLSupporter
     /// <summary>
     /// Túraajánlat
     /// </summary>
+    [Serializable]
     public class FTLCalcTour
     {
         public enum FTLCalcTourStatus

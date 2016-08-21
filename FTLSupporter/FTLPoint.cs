@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
-
+    [Serializable]
     public class FTLPoint
     {
         [ItemIDAttr]

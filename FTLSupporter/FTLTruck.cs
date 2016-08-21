@@ -8,6 +8,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
+    [Serializable]
     public class FTLTruck
     {
         public enum eTruckTaskType

@@ -7,6 +7,7 @@ using System.Web.Script.Serialization;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boEdge
     {
         public int ID { get; set; }
