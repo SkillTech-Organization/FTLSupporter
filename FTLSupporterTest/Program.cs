@@ -427,6 +427,23 @@ namespace FTLSupporterTest
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("********************");
             bestTruckConsole(res.FirstOrDefault());
+
+            List<FTLTask> lstTsk2 = new List<FTLTask>();
+            var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(res);
+
+            var calcResult = res.Where(x => x.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
+            if (calcResult != null)
+            {
+                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+                lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Count == 0).Select(s => s.Task));
+            }
+
+            var res2 = FTLInterface.FTLSupport(lstTsk2, lstTrk2, "", "DB0", true);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("********************");
+            bestTruckConsole(res2.FirstOrDefault());
+
+
             Console.ReadKey();
 
             return;
@@ -452,7 +469,7 @@ namespace FTLSupporterTest
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("");
                         Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-                        foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy( x=>x.Rank))
+                        foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
                         {
                             Console.WriteLine("");
                             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -541,7 +558,7 @@ namespace FTLSupporterTest
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("");
                 Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-                foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
+                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o=>o.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost+clctour.RetCost);

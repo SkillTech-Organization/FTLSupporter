@@ -26,12 +26,12 @@ namespace FTLSupporter
 
             try
             {
-                
+
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
 
-                
+
                 PMapCommonVars.Instance.ConnectToDB();
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
@@ -752,7 +752,7 @@ namespace FTLSupporter
                                 lstTrucksErrOpen.Add(clctour.Truck);
                                 foreach (FTLPoint tp in lstOpenErrT1)
                                 {
-                                    clctour.Msg.Add("(T1)"+FTLMessages.E_CLOSETP + tp.Name);
+                                    clctour.Msg.Add("(T1)" + FTLMessages.E_CLOSETP + tp.Name);
                                 }
                             }
 
@@ -823,13 +823,13 @@ namespace FTLSupporter
 
 
                     FTLResult res = new FTLResult()
-                           {
-                               Status = FTLResult.FTLResultStatus.RESULT,
-                               ObjectName = "",
-                               ItemID = "",
-                               Data = tskResult
+                    {
+                        Status = FTLResult.FTLResultStatus.RESULT,
+                        ObjectName = "",
+                        ItemID = "",
+                        Data = tskResult
 
-                           };
+                    };
                     result.Add(res);
                 }
             }
@@ -856,8 +856,8 @@ namespace FTLSupporter
             return result;
 
         }
-        
-        private static List<FTLResult> ValidateObjList<T>( List<T>p_list)
+
+        private static List<FTLResult> ValidateObjList<T>(List<T> p_list)
         {
             List<FTLResult> result = new List<FTLResult>();
             foreach (object item in p_list)
@@ -891,14 +891,29 @@ namespace FTLSupporter
             return itemRes;
         }
 
-        /*
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-            List<Tuple<FTLTruck, FTLTask, double>> resX = new List<Tuple<FTLTruck, FTLTask, double>>();
-            resX.AddRange(p_TruckList.Select(i => new Tuple<FTLTruck, FTLTask, double>(i, null, -1)));
-            List<FTLResult> calcResult = FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+            /*
+                        List<FTLResult> res = FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+                        FileInfo fi = new FileInfo("res.res");
+                        BinarySerializer.Serialize(fi, res);
+            */
+            FileInfo fi = new FileInfo("res.res");
+            List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
+            var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
+            if (calcResult != null)
+            {
+                FTLInterface.FTLSetBestTruck(res);
+
+
+                while (false) ;
+
+            }
+
+            return res;
         }
-        */
+
+
 
 
         public static void FTLSetBestTruck(List<FTLResult> p_calcResult)
@@ -913,12 +928,13 @@ namespace FTLSupporter
             if (calcResult != null)
             {
                 List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+                /*
                 //init:kitöröljük az összes ERR státuszú járművet
                 foreach (var ct in calcTaskList)
                 {
                     ct.CalcTours.RemoveAll(i => i.Status != FTLCalcTour.FTLCalcTourStatus.OK);
                 }
-
+                */
                 //2.2 végigmenni a taskok listáján
                 foreach (var calcTask in calcTaskList)
                 {
@@ -945,7 +961,8 @@ namespace FTLSupporter
 
                                 if (calcTour2 != null && trk == calcTour2.Truck && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
                                 {
-                                    calcTask.CalcTours.RemoveAll(i => i.Truck == trk);
+                                    calcTask.CalcTours.Where(i => i.Truck == trk).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
+                                    //calcTask.CalcTours.RemoveAll(i => i.Truck == trk);
                                     trk = null;
                                     break;
                                 }
@@ -963,20 +980,48 @@ namespace FTLSupporter
                     {
                         //a taskhoz lehetett járművet rendelni
                         //3.1 az aktuális taskból kitörlünk minden más járművet
-                        calcTask.CalcTours.RemoveAll(i => i.Truck != trk);
+
+                        // calcTask.CalcTours.RemoveAll(i => i.Truck != trk);
+                        calcTask.CalcTours.Where(i => i.Truck != trk).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
+
                         //A többi taskból pedig a kiválasztott járművet töröljük
                         foreach (var ct in calcTaskList.Where(i => i != calcTask).ToList())
                         {
-                            ct.CalcTours.RemoveAll(i => i.Truck == trk);
+                            // ct.CalcTours.RemoveAll(i => i.Truck == trk);
+                            ct.CalcTours.Where(i => i.Truck == trk).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
                         }
                     }
                     else
-                        calcTask.CalcTours.Clear();
+                    {
+                        // calcTask.CalcTours.Clear();
+                        calcTask.CalcTours.Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
 
 
+                    }
                 }
             }
+        }
 
+        public static List<FTLTruck> FTLGenerateTrucksFromCalcTours(List<FTLResult> p_calcResult)
+        {
+            List<FTLTruck> res = new List<FTLTruck>();
+            var calcResult = p_calcResult.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
+            if (calcResult != null)
+            {
+                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+                foreach (var calcTask in calcTaskList)
+                {
+                    foreach (var ct in calcTask.CalcTours)
+                    {
+                        FTLTruck trk = ct.Truck.ShallowCopy();
+                        //A túrapontokhoz hozzáadjuk a tervezett túrapontokat (a visszatérést nem!)
+                        trk.CurrTPoints.Add(ct.RelCalcRoute.TPoint);                    //átállás
+                        trk.CurrTPoints.AddRange(ct.T2CalcRoute.Select(i => i.TPoint));
+                        res.Add(trk);
+                    }
+                }
+            }
+            return res;
         }
 
     }

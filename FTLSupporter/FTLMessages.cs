@@ -22,6 +22,8 @@ namespace FTLSupporter
         public const string E_MAXDURATION = "Teljesítés max. idő túllépés!";
         public const string E_MAXKM = "Teljesítés max. KM túllépés!";
         public const string E_CLOSETP = "Túrapont zárva az érkezés időpontjában:";
+        public const string E_OTHERTASK = "Más szállítási feladatot teljesít!";
+        public const string E_NOTASK = "Nem teljesíti a szállítási feladatot!";
 
 
     }

@@ -10,6 +10,12 @@ namespace FTLSupporter
     [Serializable]
     public class FTLTask
     {
+        public FTLTask ShallowCopy()
+        {
+            return (FTLTask)this.MemberwiseClone();
+        }
+
+
         [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Feladat azonosító", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:TaskID")]

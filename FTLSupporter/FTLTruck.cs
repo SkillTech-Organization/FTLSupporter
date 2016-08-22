@@ -18,6 +18,11 @@ namespace FTLSupporter
             Running                     // Futó
         }
 
+        public FTLTruck ShallowCopy()
+        {
+            return (FTLTruck)this.MemberwiseClone();
+        }
+
 
         [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Jármű azonosító", Order = 1)]
