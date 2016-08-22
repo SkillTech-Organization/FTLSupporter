@@ -24,6 +24,7 @@ namespace FTLSupporter
         public const string E_CLOSETP = "Túrapont zárva az érkezés időpontjában:";
         public const string E_OTHERTASK = "Más szállítási feladatot teljesít!";
         public const string E_NOTASK = "Nem teljesíti a szállítási feladatot!";
+        public const string E_ERRINSECONDPHASE = "Hiba a kimaradt szállítási feladatok tervezésében ! (lásd a többi FTLResult tételt)";
 
 
     }

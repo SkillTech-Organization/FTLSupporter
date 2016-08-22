@@ -235,6 +235,18 @@ namespace FTLSupporterTest
             tsk5.TPoints.Add(tp8.ShallowCopy());
             tsk5.TPoints.Add(tp5.ShallowCopy());
 
+            FTLTask tsk6 = new FTLTask()
+            {
+                TaskID = "TSK5",
+                CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Székesfehérvár-Szeged",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk6.TPoints.Add(tp2.ShallowCopy());
+            tsk6.TPoints.Add(tp9.ShallowCopy());
+
             #endregion
 
             #region járművek és futó szállítási feladatok
@@ -371,7 +383,7 @@ namespace FTLSupporterTest
             #endregion
 
             /* nagy teszt */
-            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5 };
+            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5, tsk6 };
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
 
             /* egy elem teszt */
@@ -408,6 +420,7 @@ namespace FTLSupporterTest
                         tp.Close = DateTime.Now.Date.AddHours(24);
                     }
                 }
+                tsk6.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
             }
             List<FTLResult> res;
 
@@ -417,6 +430,7 @@ namespace FTLSupporterTest
                 BinarySerializer.Serialize(fi, res);
             */
 
+            /*
             FileInfo fi = new FileInfo("res.res");
             res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
 
@@ -447,6 +461,9 @@ namespace FTLSupporterTest
             Console.ReadKey();
 
             return;
+            */
+
+            res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
 
             int i = 1;
             foreach (var rr in res)

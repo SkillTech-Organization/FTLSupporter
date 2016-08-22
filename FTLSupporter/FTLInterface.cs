@@ -893,20 +893,86 @@ namespace FTLSupporter
 
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-            /*
-                        List<FTLResult> res = FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
-                        FileInfo fi = new FileInfo("res.res");
-                        BinarySerializer.Serialize(fi, res);
-            */
+         /*   
+                List<FTLResult> res = FTLInterface.FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+                FileInfo fi = new FileInfo( "res.res");
+                BinarySerializer.Serialize(fi, res);
+           */ 
+            
             FileInfo fi = new FileInfo("res.res");
             List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
+            
             var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (calcResult != null)
             {
                 FTLInterface.FTLSetBestTruck(res);
+                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+
+                while (calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
+                {
+                    List<FTLTask> lstTsk2 = new List<FTLTask>();
+                    var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(res);
+                    lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
+                    List<FTLResult> res2 = FTLInterface.FTLSupport(lstTsk2, lstTrk2, p_iniPath, p_dbConf, p_cacheRoutes);
+
+                    var calcResult2 = res2.Where(x => x.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
+                    if (calcResult2 != null)
+                    {
+                        //Elvileg itt már kell, hogy legyen result típusú tétel, mert a validálás az előző menetmen megrtörtént.
+
+                        
+                        FTLInterface.FTLSetBestTruck(res2);
+
+                        List<FTLCalcTask> calcTaskList2 = ((List<FTLCalcTask>)calcResult2.Data);
+
+                        //Megvizsgáljuk, hogy a számítási menet hozott-e eredményt.
+                        if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
+                            return res;             //ha nincs eredmény, ennyi volt...
 
 
-                while (false) ;
+                        foreach(FTLCalcTask calcTask2 in  calcTaskList2)
+                        {
+                            //van-e eredmény?
+                            if( calcTask2.CalcTours.Count( i=>i.Status == FTLCalcTour.FTLCalcTourStatus.OK) > 0)
+                            {
+                                //megkeressük a tételt a RES-ben és beírjuk az eredménylistát.
+                                var calcTaskOri = calcTaskList.Where( i=>i.Task.TaskID ==calcTask2.Task.TaskID).FirstOrDefault();
+                                if(calcTaskOri != null)
+                                {
+                                    //Ha az teljesítő túra előző túrában visszatérés van, akkor törölni azt !!
+itt tartok !!!
+                                    
+                                    calcTaskOri.CalcTours = calcTask2.CalcTours;
+
+                                }
+                            }
+                        }
+
+
+
+
+                    }
+                    else
+                    {
+                        //Ha nincs eredmény (Status == RESULT), akkor felveszünk egy hibatételt és kilépünk
+                        FTLResErrMsg rm = new FTLResErrMsg();
+                        rm.Field = "";
+                        rm.Message = FTLMessages.E_ERRINSECONDPHASE;
+                        FTLResult resErr = new FTLResult()
+                        {
+                            Status = FTLResult.FTLResultStatus.ERROR,
+                            ObjectName = "",
+                            ItemID = "",
+                            Data = rm
+
+                        };
+                        res2.Add(resErr);
+                        return res2;
+                    }
+                        
+
+
+                }
 
             }
 
@@ -1011,7 +1077,7 @@ namespace FTLSupporter
                 List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
                 foreach (var calcTask in calcTaskList)
                 {
-                    foreach (var ct in calcTask.CalcTours)
+                    foreach (var ct in calcTask.CalcTours.Where( i=>i.Status == FTLCalcTour.FTLCalcTourStatus.OK))
                     {
                         FTLTruck trk = ct.Truck.ShallowCopy();
                         //A túrapontokhoz hozzáadjuk a tervezett túrapontokat (a visszatérést nem!)

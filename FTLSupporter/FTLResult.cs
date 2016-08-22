@@ -16,7 +16,9 @@ namespace FTLSupporter
             [Description("VALIDATIONERROR")]
             VALIDATIONERROR,
             [Description("EXCEPTION")]
-            EXCEPTION
+            EXCEPTION,
+            [Description("ERROR")]
+            ERROR
         };
         public FTLResultStatus Status { get; set; }
         public string ObjectName { get; set; }
