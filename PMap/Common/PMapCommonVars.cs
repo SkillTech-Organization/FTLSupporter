@@ -29,6 +29,7 @@ namespace PMap.Common
                         instance.AppInstance = "???";
                         instance.CT_DB = null;
                         instance.MapProvider = GMapProviders.GoogleTerrainMap;
+                        instance.TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string>, int>();
 
                     }
                 }
@@ -83,7 +84,11 @@ namespace PMap.Common
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public DateTime Expired { get; set; }
-        
+
+
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public Dictionary<Tuple<PointLatLng, string>, int> TruckNod_IDCahce = null;  //Jármű Node ID cache
+
         public void ConnectToDB()
         {
             CT_DB = new SQLServerAccess();

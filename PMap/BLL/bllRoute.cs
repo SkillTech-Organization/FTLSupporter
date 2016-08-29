@@ -742,13 +742,14 @@ namespace PMap.BLL
         }
         
         /// <summary>
-        /// Egy térképi ponthoz a leközelebb eső, 
+        /// Egy térképi ponthoz a leközelebb eső, egy jármű által megközelíthető pont (p_RZN_ID_LIST tartalmazza a behajtási zónákat)
         /// </summary>
         /// <param name="p_pt"></param>
         /// <param name="p_RZN_ID_LIST"></param>
         /// <returns></returns>
         public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach)
         {
+            
             string sSql = "select top 1 NOD.ID as ID, " + Environment.NewLine +
                           "abs(NOD_YPOS - ?) + abs(NOD_XPOS - ?) as XDIFF, " + Environment.NewLine +
                           "isnull(EDG.EDG_DESTTRAFFIC, EDG2.EDG_DESTTRAFFIC) as XEDG_DESTTRAFFIC, " + Environment.NewLine +

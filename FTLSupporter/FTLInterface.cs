@@ -1,4 +1,5 @@
-﻿using PMap;
+﻿using GMap.NET;
+using PMap;
 using PMap.BLL;
 using PMap.BO;
 using PMap.Common;
@@ -84,7 +85,7 @@ namespace FTLSupporter
                             {
                                 sXRZN_ID_LIST = route.GetRestZonesByRST_ID(iRST);
                                 //Kicsit s
-                                pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                                pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
                             }
 
                             //nem találtun korlátozásokhoz NODE-t, nézünk egy korlátozás nélküli közeli pontot. 
@@ -92,7 +93,7 @@ namespace FTLSupporter
                             if (pt.NOD_ID == 0)
                             {
                                 sXRZN_ID_LIST = route.GetRestZonesByRST_ID(Global.RST_NORESTRICT);
-                                pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
+                                pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach / 2);
                                 if (pt.NOD_ID == 0)
                                 {
                                     result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
@@ -121,14 +122,14 @@ namespace FTLSupporter
                         result.Add(getValidationError(trk, "TPointCompleted", FTLMessages.E_TRKWRONGCOMPLETED));
                     }
 
-                    trk.NOD_ID_CURR = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
+                    trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
                     if (trk.NOD_ID_CURR == 0)
                         result.Add(getValidationError(trk, "CurrLat,CurrLng", FTLMessages.E_WRONGCOORD));
 
                     //Koordináta feloldás és ellenőrzés
                     foreach (FTLPoint pt in trk.CurrTPoints)
                     {
-                        pt.NOD_ID = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
+                        pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
                         if (pt.NOD_ID == 0)
                         {
                             result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
@@ -893,7 +894,7 @@ namespace FTLSupporter
 
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-         /*   
+            /*
                 List<FTLResult> res = FTLInterface.FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
                 FileInfo fi = new FileInfo( "res.res");
                 BinarySerializer.Serialize(fi, res);
@@ -940,7 +941,19 @@ namespace FTLSupporter
                                 if(calcTaskOri != null)
                                 {
                                     //Ha az teljesítő túra előző túrában visszatérés van, akkor törölni azt !!
-itt tartok !!!
+                                    var OriCalcTour = calcTaskOri.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).FirstOrDefault();
+                                    if (OriCalcTour != null && !OriCalcTour.Truck.CurrIsOneWay )
+                                    {
+                                        OriCalcTour.RetM = 0;
+                                        OriCalcTour.RetToll = 0;
+                                        OriCalcTour.RetCost = 0;
+                                        OriCalcTour.RetDuration = 0;
+                                        OriCalcTour.RetStart = DateTime.MinValue;
+                                        OriCalcTour.RetEnd = DateTime.MinValue;
+                                        OriCalcTour.RetCalcRoute = new FTLCalcRoute();
+                                    }
+
+//itt tartok !!!
                                     
                                     calcTaskOri.CalcTours = calcTask2.CalcTours;
 
@@ -1027,7 +1040,7 @@ itt tartok !!!
 
                                 if (calcTour2 != null && trk == calcTour2.Truck && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
                                 {
-                                    calcTask.CalcTours.Where(i => i.Truck == trk).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
+                                    calcTask.CalcTours.Where(i => i.Truck == trk && i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
                                     //calcTask.CalcTours.RemoveAll(i => i.Truck == trk);
                                     trk = null;
                                     break;
@@ -1048,19 +1061,19 @@ itt tartok !!!
                         //3.1 az aktuális taskból kitörlünk minden más járművet
 
                         // calcTask.CalcTours.RemoveAll(i => i.Truck != trk);
-                        calcTask.CalcTours.Where(i => i.Truck != trk).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
+                        calcTask.CalcTours.Where(i => i.Truck != trk && i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
 
                         //A többi taskból pedig a kiválasztott járművet töröljük
                         foreach (var ct in calcTaskList.Where(i => i != calcTask).ToList())
                         {
                             // ct.CalcTours.RemoveAll(i => i.Truck == trk);
-                            ct.CalcTours.Where(i => i.Truck == trk).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
+                            ct.CalcTours.Where(i => i.Truck == trk && i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
                         }
                     }
                     else
                     {
                         // calcTask.CalcTours.Clear();
-                        calcTask.CalcTours.Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
+                        calcTask.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
 
 
                     }
@@ -1090,5 +1103,19 @@ itt tartok !!!
             return res;
         }
 
+        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach)
+        {
+            int NOD_ID = 0;
+            if (PMapCommonVars.Instance.TruckNod_IDCahce.ContainsKey(Tuple.Create(p_pt, p_RZN_ID_LIST)))
+            {
+                NOD_ID = PMapCommonVars.Instance.TruckNod_IDCahce[Tuple.Create(p_pt, p_RZN_ID_LIST)];
+            }
+            else
+            {
+                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_approach);
+                PMapCommonVars.Instance.TruckNod_IDCahce.Add(Tuple.Create(p_pt, p_RZN_ID_LIST), NOD_ID);
+            }
+            return NOD_ID;
+        }
     }
 }

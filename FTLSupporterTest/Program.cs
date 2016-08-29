@@ -237,7 +237,7 @@ namespace FTLSupporterTest
 
             FTLTask tsk6 = new FTLTask()
             {
-                TaskID = "TSK5",
+                TaskID = "TSK6",
                 CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)",
                 TruckTypes = "Hűtős,Egyéb",
                 Weight = 100,
@@ -423,17 +423,21 @@ namespace FTLSupporterTest
                 tsk6.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
             }
             List<FTLResult> res;
-
             /*
-                res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+            res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
+            bestTruckConsole(res.FirstOrDefault());
+            Console.ReadKey();
+            return;
+             */
+            /*
+                res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
                 FileInfo fi = new FileInfo( "res.res");
                 BinarySerializer.Serialize(fi, res);
             */
-
             /*
+            
             FileInfo fi = new FileInfo("res.res");
             res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
-
             bestTruckConsole(res.FirstOrDefault());
 
             if (p_bestTruck)
@@ -461,13 +465,17 @@ namespace FTLSupporterTest
             Console.ReadKey();
 
             return;
-            */
+             */
+
+
 
             res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
 
             int i = 1;
             foreach (var rr in res)
             {
+                bestTruckConsole(res.FirstOrDefault());
+
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("VISSZATÉRÉSI ÉRTÉK " + i++.ToString() + "/" + res.Count.ToString());
                 Console.WriteLine("Status     :" + rr.Status);
