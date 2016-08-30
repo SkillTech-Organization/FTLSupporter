@@ -503,7 +503,7 @@ namespace FTLSupporterTest
                             if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.OK)
                             {
                                 Console.ForegroundColor = ConsoleColor.Cyan;
-                                if (p_bestTruck)
+                                if (!p_bestTruck)
                                 {
                                     Console.WriteLine("Átállás ktg:{0:#,#0.00}, visszatérés ktg:{1:#,#0.00}", clctour.RelCost, clctour.RetCost);
 
