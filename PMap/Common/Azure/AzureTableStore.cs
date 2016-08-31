@@ -13,7 +13,6 @@ namespace PMap.Common.Azure
 {
     public class AzureTableStore
     {
-        private static volatile object m_lock = new object();
 
         private string m_accountName = "pmaplog";
         private string m_accountKey = "jazm8HHskSidL3HMqRrjytwqMH5hAkv8QgNo9XiF/pxsqer7YhAE8dKQ9m7zGw1h6z5L2HwwXMhaGp/Mf+xytQ==";
@@ -22,45 +21,38 @@ namespace PMap.Common.Azure
         private CloudStorageAccount m_account = null;
         private CloudTableClient m_client = null;
 
-        static private AzureTableStore m_instance = null;        //Mivel statikus tag a program indulásakor 
+        //Lazy objects are thread safe, double checked and they have better performance than locks.
+        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
+        private static readonly Lazy<AzureTableStore> m_instance = new Lazy<AzureTableStore>(() => new AzureTableStore(), true);
+
         static public AzureTableStore Instance                   //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
-                lock (m_lock)
-                {
-                    if (m_instance == null)
-                    {
-                        m_instance = new AzureTableStore();
-                    }
-                    return m_instance;
-
-                }
+                return m_instance.Value;            //It's thread safe!
             }
-
         }
+
         private AzureTableStore() { }
 
+  
         public string AzureAccount { get { return m_accountName; } set { m_accountName = value; } }
         public string AzureKey { get { return m_accountKey; } set { m_accountKey = value; } }
 
         private void InitTableStore()
         {
-            lock (m_lock)
+            try
             {
-                try
-                {
-                    if (m_creds == null)
-                        m_creds = new StorageCredentials(m_accountName, m_accountKey);
-                    if (m_account == null)
-                        m_account = new CloudStorageAccount(m_creds, useHttps: true);
-                    if (m_client == null)
-                        m_client = m_account.CreateCloudTableClient();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                if (m_creds == null)
+                    m_creds = new StorageCredentials(m_accountName, m_accountKey);
+                if (m_account == null)
+                    m_account = new CloudStorageAccount(m_creds, useHttps: true);
+                if (m_client == null)
+                    m_client = m_account.CreateCloudTableClient();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

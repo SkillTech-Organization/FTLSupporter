@@ -13,30 +13,25 @@ namespace PMap.Common
     public class PMapCommonVars
     {
 
-        private static volatile object padlock = new object();
+        //Lazy objects are thread safe, double checked and they have better performance than locks.
+        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
+        private static readonly Lazy<PMapCommonVars> m_instance = new Lazy<PMapCommonVars>(() => new PMapCommonVars(), true);
 
-        //Singleton technika...
-        static private PMapCommonVars instance = null;                          //Mivel statikus tag a program indulásakor 
+
         static public PMapCommonVars Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new PMapCommonVars();
-                        instance.AppInstance = "???";
-                        instance.CT_DB = null;
-                        instance.MapProvider = GMapProviders.GoogleTerrainMap;
-                        instance.TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string>, int>();
-
-                    }
-                }
-                return instance;
-
+                return m_instance.Value;            //It's thread safe!
             }
+        }
 
+        private PMapCommonVars()
+        {
+            AppInstance = "???";
+            CT_DB = null;
+            MapProvider = GMapProviders.GoogleTerrainMap;
+            TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string>, int>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]

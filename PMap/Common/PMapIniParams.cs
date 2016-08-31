@@ -103,27 +103,23 @@ namespace PMap.Common
         public int DBCmdTimeOut { get; set; }
 
 
+        //Lazy objects are thread safe, double checked and they have better performance than locks.
+        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
+        private static readonly Lazy<PMapIniParams> m_instance = new Lazy<PMapIniParams>(() => new PMapIniParams(), true);
 
-
-        private static volatile object padlock = new object();
-        static private PMapIniParams instance = null;        //Mivel statikus tag a program indulásakor 
+ 
         static public PMapIniParams Instance                //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new PMapIniParams();
-                        instance.Loaded = false;
-                    }
-                }
-                return instance;
+                return m_instance.Value;            //It's thread safe!
             }
         }
 
-
+        private PMapIniParams()
+        {
+            Loaded = false;
+        }
 
         public void ReadParams(string p_iniPath, string p_dbConf)
         {

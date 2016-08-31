@@ -19,7 +19,6 @@ namespace PMap.Route
     {
         public int NOD_ID_FROM { get; set; }
         public string RZN_ID_LIST { get; set; }
-
     }
 
 
@@ -28,7 +27,10 @@ namespace PMap.Route
     public class RouteData
     {
 
-        private static volatile object m_Lock = new object();
+        //Lazy objects are thread safe, double checked and they have better performance than locks.
+        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
+        private static readonly Lazy<RouteData> m_instance = new Lazy<RouteData>(() => new RouteData(), true);
+
         private static volatile bool m_Initalized = false;
 
         public Dictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
@@ -38,30 +40,18 @@ namespace PMap.Route
         Dictionary<string, Dictionary<string, double>> dicAllTolls = new Dictionary<string, Dictionary<string, double>>();
 
         private bllRoute m_bllRoute;
-
         public int NodeCount { get; set; }
-        RouteData()
+        private RouteData()
         {
         }
 
         //Singleton technika...
-        static private RouteData instance = null;        //Mivel statikus tag a program indulásakor 
         static public RouteData Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
-                lock (m_Lock)
-                {
-                    if (instance == null)
-                    {
-
-                        instance = new RouteData();
-                    }
-                }
-                return instance;
-
+                return m_instance.Value;            //It's thread safe!
             }
-
         }
 
         /// <summary>
@@ -91,7 +81,7 @@ namespace PMap.Route
 
                     //összes útdíj felolvasása
                     dicAllTolls = m_bllRoute.GetAllTolls();
-                    
+
                     /// <summary>
                     /// Teljes térkép felolvasása
                     /// Megj: Az útvonalkereső 0-tól kezdődő sorszámokkal dolgozik, ezért az összes a 0. elemet dummy értékre vesszük
@@ -133,7 +123,7 @@ namespace PMap.Route
                                   Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
                                   fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
                                   toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider)
-                                  
+
                               };
 
 

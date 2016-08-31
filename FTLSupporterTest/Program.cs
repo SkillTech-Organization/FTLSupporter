@@ -167,6 +167,45 @@ namespace FTLSupporterTest
                 RealArrival = DateTime.MinValue
             };
 
+            FTLPoint tp12 = new FTLPoint()
+            {
+                TPID = "TP012",
+                Name = "Baja",
+                Addr = "Szabadság út 17",
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(18),
+                SrvDuration = 10,
+                Lat = 46.175011,
+                Lng = 18.952474,
+                RealArrival = DateTime.MinValue
+            };
+            
+
+            FTLPoint tp13 = new FTLPoint()
+            {
+                TPID = "TP013",
+                Name = "Pécs",
+                Addr = "48-as tér 2",
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(18),
+                SrvDuration = 10,
+                Lat = 46.075381,
+                Lng = 18.239859,
+                RealArrival = DateTime.MinValue
+            };
+
+            FTLPoint tp14 = new FTLPoint()
+            {
+                TPID = "TP014",
+                Name = "Kaposvár",
+                Addr = "Nemzetőr sor 9",
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(22),
+                SrvDuration = 10,
+                Lat = 46.364219,
+                Lng = 17.789608,
+                RealArrival = DateTime.MinValue
+            };
 
             #endregion
 
@@ -238,14 +277,41 @@ namespace FTLSupporterTest
             FTLTask tsk6 = new FTLTask()
             {
                 TaskID = "TSK6",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Baja-Pécs-Kaposvár",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk6.TPoints.Add(tp12.ShallowCopy());
+            tsk6.TPoints.Add(tp13.ShallowCopy());
+            tsk6.TPoints.Add(tp14.ShallowCopy());
+
+            FTLTask tsk7 = new FTLTask()
+            {
+                TaskID = "TSK7",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Pécs-Baja-Szolnok",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk7.TPoints.Add(tp13.ShallowCopy());
+            tsk7.TPoints.Add(tp12.ShallowCopy());
+            tsk7.TPoints.Add(tp11.ShallowCopy());
+            
+            FTLTask tskX = new FTLTask()
+            {
+                TaskID = "TSKX",
                 CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)",
                 TruckTypes = "Hűtős,Egyéb",
                 Weight = 100,
                 Client = "Székesfehérvár-Szeged",
                 TPoints = new List<FTLPoint>()
             };
-            tsk6.TPoints.Add(tp2.ShallowCopy());
-            tsk6.TPoints.Add(tp9.ShallowCopy());
+            tskX.TPoints.Add(tp2.ShallowCopy());
+            tskX.TPoints.Add(tp9.ShallowCopy());
+
 
             #endregion
 
@@ -383,7 +449,7 @@ namespace FTLSupporterTest
             #endregion
 
             /* nagy teszt */
-            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5, tsk6 };
+            var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5, tsk6, tsk7, tskX };
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
 
             /* egy elem teszt */
@@ -420,7 +486,7 @@ namespace FTLSupporterTest
                         tp.Close = DateTime.Now.Date.AddHours(24);
                     }
                 }
-                tsk6.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
+                tskX.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
             }
             List<FTLResult> res;
             /*
@@ -469,7 +535,14 @@ namespace FTLSupporterTest
 
 
 
+            DateTime dtStart = DateTime.Now;
+            /*
+            PMapIniParams.Instance.ReadParams("", "DB0");
+            PMapCommonVars.Instance.ConnectToDB();
+            PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
+            */
             res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
+            Console.WriteLine("FTLSupportX  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
 
             int i = 1;
             foreach (var rr in res)
@@ -586,7 +659,7 @@ namespace FTLSupporterTest
                 foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o=>o.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost+clctour.RetCost);
+                    Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost);
                 }
             }
         }

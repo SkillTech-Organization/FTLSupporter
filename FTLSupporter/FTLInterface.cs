@@ -289,8 +289,10 @@ namespace FTLSupporter
                     List<FTLPMapRoute> lstCalcPMapRoutes = new List<FTLPMapRoute>();        //Számolandó útvonalak
 
                     //debug info
+                    /*
                     foreach (FTLPMapRoute r in lstPMapRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                         Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST);
+                    */
 
                     // 5.1 ha cache-eljük az útvonalakat, megnézzük, kiolvassuk a meglévőket
                     //
@@ -327,9 +329,10 @@ namespace FTLSupporter
 
                     //
                     //debug info
+                    /*
                     foreach (FTLPMapRoute r in lstPMapRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                         Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString());
-
+                    */
 
                     //6.eredmény összeállítása
 
@@ -898,15 +901,15 @@ namespace FTLSupporter
 
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-            /*
+           /*
                 List<FTLResult> res = FTLInterface.FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
-                FileInfo fi = new FileInfo( "res.res");
-                BinarySerializer.Serialize(fi, res);
-           */
-            
-            FileInfo fi = new FileInfo("res.res");
-            List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
-           
+                
+                                 FileInfo fi = new FileInfo( "res.res");
+                                 BinarySerializer.Serialize(fi, res);
+            */
+                                 FileInfo fi = new FileInfo("res.res");
+                                 List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
+
             var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (calcResult != null)
             {
@@ -1109,6 +1112,14 @@ namespace FTLSupporter
                         //A túrapontokhoz hozzáadjuk a tervezett túrapontokat (a visszatérést nem!)
                         trk.CurrTPoints.Add(ct.RelCalcRoute.TPoint);                    //átállás
                         trk.CurrTPoints.AddRange(ct.T2CalcRoute.Select(i => i.TPoint));
+
+                        trk.TruckTaskType = FTLTruck.eTruckTaskType.Planned;
+                        if (trk.CurrTPoints.Count > 0)
+                        {
+                            trk.CurrLat = trk.CurrTPoints.Last().Lat;
+                            trk.CurrLng = trk.CurrTPoints.Last().Lng;
+                            trk.CurrTime = ct.T2End;
+                        }
                         res.Add(trk);
                     }
                 }

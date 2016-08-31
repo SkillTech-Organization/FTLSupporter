@@ -42,7 +42,7 @@ namespace PMap.Common
 
         }
 
-        public class CRouteDepots 
+        public class CRouteDepots
         {
             public boDepot Depot { get; set; }
             public int RouteSectionTypeInt { get { return (int)RouteSectionType; } }
@@ -56,7 +56,7 @@ namespace PMap.Common
             }
         }
 
-        
+
         public class CRouteVis
         {
 
@@ -78,10 +78,10 @@ namespace PMap.Common
                 SumDurationEmpty = 0;
 
                 SumTollLoaded = 0;
-                SumDistanceLoaded= 0;
+                SumDistanceLoaded = 0;
                 SumDurationLoaded = 0;
 
-           }
+            }
 
 
 
@@ -103,36 +103,29 @@ namespace PMap.Common
             public double SumDurationLoaded { get; set; }
         }
 
-        // private static readonly object padlock = new object();
-        private static volatile object padlock = new object();
 
+        //Lazy objects are thread safe, double checked and they have better performance than locks.
+        //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
+        private static readonly Lazy<RouteVisCommonVars> m_instance = new Lazy<RouteVisCommonVars>(() => new RouteVisCommonVars(), true);
 
-
-        //Singleton technika...
-        static private RouteVisCommonVars instance = null;        //Mivel statikus tag a program indulásakor 
         static public RouteVisCommonVars Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new RouteVisCommonVars();
-                        instance.GetRouteWithTruckSpeeds = true;
-                        instance.lstRouteDepots = new List<CRouteDepots>();
-                        instance.lstDetails= new List<CRouteVis>();
-                        instance.SelectedType = TY_SHORTEST;
-                        instance.TooltipMode = MarkerTooltipMode.OnMouseOver;
-
-                    }
-                }
-                return instance;
-
+                return m_instance.Value;            //It's thread safe!
             }
 
         }
 
+        private RouteVisCommonVars()
+        {
+            GetRouteWithTruckSpeeds = true;
+            lstRouteDepots = new List<CRouteDepots>();
+            lstDetails = new List<CRouteVis>();
+            SelectedType = TY_SHORTEST;
+            TooltipMode = MarkerTooltipMode.OnMouseOver;
+
+        }
         public bool GetRouteWithTruckSpeeds { get; set; }     //true esetén a leggyorsabb út számolásához használt, ini fileban tárolt ideális sebességprofilt vesszük figyelembe a megjelenítésnél (SWH specifikum)
         public MarkerTooltipMode TooltipMode { get; set; }
         public int Zoom { get; set; }
@@ -143,9 +136,5 @@ namespace PMap.Common
         public List<CRouteVis> lstDetails { get; set; }
         public int SelectedType { get; set; }
         public int SelectedDepID { get; set; }
-
-
     }
-
-
 }
