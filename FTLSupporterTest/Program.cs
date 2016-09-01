@@ -179,7 +179,7 @@ namespace FTLSupporterTest
                 Lng = 18.952474,
                 RealArrival = DateTime.MinValue
             };
-            
+
 
             FTLPoint tp13 = new FTLPoint()
             {
@@ -299,7 +299,7 @@ namespace FTLSupporterTest
             tsk7.TPoints.Add(tp13.ShallowCopy());
             tsk7.TPoints.Add(tp12.ShallowCopy());
             tsk7.TPoints.Add(tp11.ShallowCopy());
-            
+
             FTLTask tskX = new FTLTask()
             {
                 TaskID = "TSKX",
@@ -536,18 +536,20 @@ namespace FTLSupporterTest
 
 
             DateTime dtStart = DateTime.Now;
-           /*
-            PMapIniParams.Instance.ReadParams("", "DB0");
-            PMapCommonVars.Instance.ConnectToDB();
-            PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
-           */
-            res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
-            Console.WriteLine("FTLSupportX  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
+            /*
+             PMapIniParams.Instance.ReadParams("", "DB0");
+             PMapCommonVars.Instance.ConnectToDB();
+             PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
+            */
+            if (p_bestTruck)
+                res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
+            else
+                res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+            Console.WriteLine("FTLSupport  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
 
             int i = 1;
             foreach (var rr in res)
             {
-                bestTruckConsole(res.FirstOrDefault());
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("VISSZATÉRÉSI ÉRTÉK " + i++.ToString() + "/" + res.Count.ToString());
@@ -560,6 +562,9 @@ namespace FTLSupporterTest
 
                 if (rr.Status == FTLResult.FTLResultStatus.RESULT)
                 {
+                    if (p_bestTruck)
+                        bestTruckConsole(res.FirstOrDefault());
+
                     List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
@@ -576,51 +581,41 @@ namespace FTLSupporterTest
                             if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.OK)
                             {
                                 Console.ForegroundColor = ConsoleColor.Cyan;
-                                if (!p_bestTruck)
+                                //Részletező
+
+                                //Aktuális túra
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                                 {
-                                    Console.WriteLine("Átállás ktg:{0:#,#0.00}, visszatérés ktg:{1:#,#0.00}", clctour.RelCost, clctour.RetCost);
+                                    Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T1Start, clctour.T1End);
+                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1Duration);
 
-                                }
-                                else
-                                {
-                                    //Részletező
-
-                                    //Aktuális túra
-                                    Console.ForegroundColor = ConsoleColor.Cyan;
-                                    if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
+                                    foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
                                     {
-                                        Console.WriteLine("Aktuális túra kezd:{0},bef:{1}", clctour.T1Start, clctour.T1End);
-                                        Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1Duration);
-
-                                        foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
-                                        {
-                                            Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Aktuálsi poz.**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
-                                        }
-                                    }
-                                    //Átállás
-                                    Console.WriteLine("Átállás kezd:{0},bef:{1}", clctour.RelStart, clctour.RelEnd);
-                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelDuration);
-                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.Distance);
-
-                                    //Beosztandó túra
-                                    Console.WriteLine("Beosztandó túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
-                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2Duration);
-
-                                    foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
-                                    {
-                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
-                                    }
-
-                                    //Visszatérés
-                                    if (!clctour.Truck.CurrIsOneWay)
-                                    {
-                                        Console.WriteLine("Visszatérés kezd:{0},bef:{1}", clctour.RetStart, clctour.RetEnd);
-                                        Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetDuration);
-                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RetCalcRoute.Distance);
+                                        Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Aktuálsi poz.**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
                                     }
                                 }
+                                //Átállás
+                                Console.WriteLine("Átállás kezd:{0},bef:{1}", clctour.RelStart, clctour.RelEnd);
+                                Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelDuration);
+                                Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.Distance);
 
+                                //Beosztandó túra
+                                Console.WriteLine("Beosztandó túra kezd:{0},bef:{1}", clctour.T2Start, clctour.T2End);
+                                Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2Duration);
 
+                                foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
+                                {
+                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clcroute.TPoint != null ? clcroute.TPoint.Name : "**Nincs neve**", clcroute.Arrival, clcroute.Departure, clcroute.Distance);
+                                }
+
+                                //Visszatérés
+                                if (!clctour.Truck.CurrIsOneWay)
+                                {
+                                    Console.WriteLine("Visszatérés kezd:{0},bef:{1}", clctour.RetStart, clctour.RetEnd);
+                                    Console.WriteLine(" táv.:{0:#,#0.00},útdíj:{1:#,#0.00},ktg:{2:#,#0.00}, időtartam:{3:#,#0.00}", clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetDuration);
+                                    Console.WriteLine("{0} érk:{1},ind:{2},táv:{3:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RetCalcRoute.Distance);
+                                }
                             }
                             else
                             {
@@ -656,7 +651,7 @@ namespace FTLSupporterTest
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("");
                 Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o=>o.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
+                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o => o.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost);
@@ -664,7 +659,7 @@ namespace FTLSupporterTest
             }
         }
 
-   }
+    }
 
 }
 
