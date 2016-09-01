@@ -1,7 +1,9 @@
-﻿using PMap;
+﻿using GMap.NET;
+using PMap;
 using PMap.Common.Attrib;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -18,6 +20,27 @@ namespace FTLSupporter
             Running                     // Futó
         }
 
+        public FTLTruck()
+        {
+            m_currTPoints.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
+                delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+            {
+                if (RetPoint == null)
+                {
+                    FTLPoint firstPt = m_currTPoints.FirstOrDefault();
+                    if (firstPt != null)
+                        RetPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
+                }
+                /*
+                                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                                {
+                                    MessageBox.Show("Added value");
+                                }
+                */
+            }
+);
+
+        }
         public FTLTruck ShallowCopy()
         {
             return (FTLTruck)this.MemberwiseClone();
@@ -30,7 +53,7 @@ namespace FTLSupporter
         public string TruckID { get; set; }
 
         [DisplayNameAttributeX(Name = "Összsúly", Order = 2)]           /* gross vehicle weight rating */
-        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:GVWR")]              
+        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:GVWR")]
         public int GVWR { get; set; }
 
         [DisplayNameAttributeX(Name = "Kapacitás (súly)", Order = 3)]
@@ -39,7 +62,6 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Járműtípus", Order = 4)]
         [Required(ErrorMessage = "Kötelező mező:TruckType")]
         public string TruckType { get; set; }
-
 
         [DisplayNameAttributeX(Name = "Kiszolgálható szállítási feladattípusok", Order = 5)]
         [Required(ErrorMessage = "Kötelező mező:CargoTypes")]
@@ -84,7 +106,8 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime CurrTime
         {
-            get {
+            get
+            {
                 if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
                 {
                     FTLPoint firstPt = CurrTPoints.FirstOrDefault();
@@ -94,8 +117,8 @@ namespace FTLSupporter
                         return DateTime.MinValue;
                 }
                 else
-                    return m_CurrTime; 
-            
+                    return m_CurrTime;
+
             }
             set
             {
@@ -113,7 +136,7 @@ namespace FTLSupporter
         {
             get
             {
-                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
+                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás helye */
                 {
                     FTLPoint firstPt = CurrTPoints.FirstOrDefault();
                     if (firstPt != null)
@@ -130,6 +153,8 @@ namespace FTLSupporter
                 if (TruckTaskType != eTruckTaskType.Planned)
                 {
                     m_CurrLat = value;
+                    if (m_CurrLat != 0 && m_CurrLng != 0 && RetPoint == null)
+                        RetPoint = new PointLatLng(m_CurrLat, m_CurrLng);
                 }
             }
         }
@@ -141,7 +166,7 @@ namespace FTLSupporter
         {
             get
             {
-                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás időpontja */
+                if (TruckTaskType == eTruckTaskType.Planned)        /* tervezett túra esetén az első túrapont indulás helye */
                 {
                     FTLPoint firstPt = CurrTPoints.FirstOrDefault();
                     if (firstPt != null)
@@ -158,17 +183,28 @@ namespace FTLSupporter
                 if (TruckTaskType != eTruckTaskType.Planned)
                 {
                     m_CurrLng = value;
+                    if (m_CurrLat != 0 && m_CurrLng != 0 && RetPoint == null)
+                        RetPoint = new PointLatLng(m_CurrLat, m_CurrLng);
                 }
             }
         }
 
+        // private List<FTLPoint> m_currTPoints;
         [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 18)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
-        public List<FTLPoint> CurrTPoints { get; set; }
+        public List<FTLPoint> CurrTPoints           //az interface nem változik, oda List<> típus kell
+        {
+            get
+            { return m_currTPoints.ToList(); }
+            set
+            {
+                m_currTPoints = new ObservableCollection<FTLPoint>(value);
+            }
+        }
 
         [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 19)]
         public int TPointCompleted { get; set; }
-     
+
 
         internal int RST_ID                             //Összsúly alapján a behajtási övezet ID
         {
@@ -204,8 +240,22 @@ namespace FTLSupporter
             }
         }
 
+
+        internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
+
+
         internal string RZN_ID_LIST { get; set; }
         internal int NOD_ID_CURR { get; set; }
 
+        //A visszatérés koordinátája. A több körös túratervezés esetén, Available járművekkel számolunk. 
+        //Ebben az esetben csak a jármű utolsó túrájának kell visszatérést számolni, amit a legelső túra 
+        //megadásakor érvényes CurrLat/CurrLng-nek felel meg. Emiatt egy külön propertyben tároljuk a 
+        //visszatérési koordiátát, amit vagy a CurrTPoints vagy a Curr* koordináta set-elés tölt fel.
+        //pontot
+        //LAZY módon értékelődik ki. Az első használatkor értékeljük ki. Amikor a RetPoint-ot lekérdezzük, már minden 
+        //adat fel van töltve ahhoz, hogy korrekt módon megállapíjtsuk értékét. Nem akartem ObservatbleCollectionokat használni 
+        internal PointLatLng? RetPoint { get; private set; }
+
+        internal int RET_NOD_ID { get; set; }
     }
 }
