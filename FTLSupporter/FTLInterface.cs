@@ -901,12 +901,12 @@ namespace FTLSupporter
 
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-           /*
+          /*
                 List<FTLResult> res = FTLInterface.FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
                 
                                  FileInfo fi = new FileInfo( "res.res");
                                  BinarySerializer.Serialize(fi, res);
-            */
+          */
                                  FileInfo fi = new FileInfo("res.res");
                                  List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
 
@@ -919,7 +919,7 @@ namespace FTLSupporter
                 while (calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
                 {
                     List<FTLTask> lstTsk2 = new List<FTLTask>();
-                    var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(res);
+                    var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
                     lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
                     List<FTLResult> res2 = FTLInterface.FTLSupport(lstTsk2, lstTrk2, p_iniPath, p_dbConf, p_cacheRoutes);
 
@@ -977,6 +977,7 @@ namespace FTLSupporter
                             }
                         }
 
+return res;
 
 
 
@@ -1097,31 +1098,33 @@ namespace FTLSupporter
             }
         }
 
-        public static List<FTLTruck> FTLGenerateTrucksFromCalcTours(List<FTLResult> p_calcResult)
+        public static List<FTLTruck> FTLGenerateTrucksFromCalcTours(List<FTLTruck> p_TruckList, List<FTLCalcTask> p_calcTaskList)
         {
             List<FTLTruck> res = new List<FTLTruck>();
-            var calcResult = p_calcResult.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
-            if (calcResult != null)
+            List<FTLCalcTour> ctList = new List<FTLCalcTour>();
+            foreach( var ct in p_calcTaskList)
             {
-                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
-                foreach (var calcTask in calcTaskList)
-                {
-                    foreach (var ct in calcTask.CalcTours.Where( i=>i.Status == FTLCalcTour.FTLCalcTourStatus.OK))
-                    {
-                        FTLTruck trk = ct.Truck.ShallowCopy();
-                        //A túrapontokhoz hozzáadjuk a tervezett túrapontokat (a visszatérést nem!)
-                        trk.CurrTPoints.Add(ct.RelCalcRoute.TPoint);                    //átállás
-                        trk.CurrTPoints.AddRange(ct.T2CalcRoute.Select(i => i.TPoint));
+                ctList.AddRange(ct.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList());
+            }
 
-                        trk.TruckTaskType = FTLTruck.eTruckTaskType.Planned;
-                        if (trk.CurrTPoints.Count > 0)
-                        {
-                            trk.CurrLat = trk.CurrTPoints.Last().Lat;
-                            trk.CurrLng = trk.CurrTPoints.Last().Lng;
-                            trk.CurrTime = ct.T2End;
-                        }
-                        res.Add(trk);
-                    }
+            foreach ( var trk in p_TruckList)
+            {
+
+                var lastCalcTour = ctList.Where(w => w.Truck.TruckID == trk.TruckID).OrderByDescending(o => o.TimeComplete).FirstOrDefault();
+                if (lastCalcTour != null)
+                {
+                    FTLTruck trkNew = trk.ShallowCopy();
+                    trkNew.CurrTPoints.Clear();
+                    trkNew.TruckTaskType = FTLTruck.eTruckTaskType.Available;
+                    trkNew.CurrLat = lastCalcTour.T2CalcRoute.Last().TPoint.Lat;
+                    trkNew.CurrLng = lastCalcTour.T2CalcRoute.Last().TPoint.Lng;
+                    trkNew.CurrTime = lastCalcTour.T2End;
+                    res.Add(trkNew);
+
+                }
+                else
+                {
+                    res.Add( trk);
                 }
             }
             return res;

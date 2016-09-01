@@ -256,7 +256,7 @@ namespace FTLSupporterTest
                 CargoType = "Száraz",
                 TruckTypes = "Hűtős,Egyéb",
                 Weight = 100,
-                Client = "Cegléd pontos megérkezés - Kecskemét",
+                Client = "Cegléd pontos megérkezés - Szolnok",
                 TPoints = new List<FTLPoint>()
             };
             tsk4.TPoints.Add(tp10.ShallowCopy());
