@@ -88,6 +88,7 @@ namespace FTLSupporter
                                 pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach);
                             }
 
+                            
                             //nem találtun korlátozásokhoz NODE-t, nézünk egy korlátozás nélküli közeli pontot. 
                             //
                             if (pt.NOD_ID == 0)
@@ -99,6 +100,7 @@ namespace FTLSupporter
                                     result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
                                 }
                             }
+                            
                         }
                     }
                     else
@@ -478,9 +480,11 @@ namespace FTLSupporter
                                 FTLPMapRoute rtx2;
                                 //6.4.1  utolsó beosztott túrapont --> első beosztandó túrapont
                                 rtx2 = lstPMapRoutes.Where(x => x.fromNOD_ID == clctsk.Task.TPoints.Last().NOD_ID && x.toNOD_ID == trk.RET_NOD_ID && x.RZN_ID_LIST == trk.RZN_ID_LIST).FirstOrDefault();
+        if (rtx2 == null)
+            Console.WriteLine("HIBA !");
                                 clctour.RetCalcRoute = new FTLCalcRoute()
                                 {
-                                    TPoint = new FTLPoint() { Name = "Visszatérés", Lat = trk.RetPoint.Value.Lat, Lng = trk.RetPoint.Value.Lng },
+                                    TPoint = new FTLPoint() { Name = "Visszatérés", Lat = trk.RetPoint.Value.Lat, Lng = trk.RetPoint.Value.Lng, Open = DateTime.MinValue, Close = DateTime.MaxValue },
                                     Arrival = DateTime.MinValue,
                                     Departure = DateTime.MinValue,
                                     Completed = false,
@@ -896,16 +900,17 @@ namespace FTLSupporter
 
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-          
                 List<FTLResult> res = FTLInterface.FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
-                
-                                 FileInfo fi = new FileInfo( "res.res");
-                                 BinarySerializer.Serialize(fi, res);
-          /*
-                                 FileInfo fi = new FileInfo("res.res");
-                                 List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
-                                 */
-            var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
+                /*
+                                                     FileInfo fi = new FileInfo( "res.res");
+                                                     BinarySerializer.Serialize(fi, res);
+                            
+                FileInfo fi = new FileInfo("res.res");
+                            List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
+                  */
+
+
+                var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (calcResult != null)
             {
                 FTLInterface.FTLSetBestTruck(res);

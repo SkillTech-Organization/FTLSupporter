@@ -1,5 +1,6 @@
 ﻿using GMap.NET;
 using PMap;
+using PMap.Common;
 using PMap.Common.Attrib;
 using System;
 using System.Collections.Generic;
@@ -22,25 +23,20 @@ namespace FTLSupporter
 
         public FTLTruck()
         {
+            /* 
             m_currTPoints.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(
-                delegate (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            {
-                if (RetPoint == null)
+                delegate(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
                 {
-                    FTLPoint firstPt = m_currTPoints.FirstOrDefault();
-                    if (firstPt != null)
-                        RetPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
-                }
-                /*
-                                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                                {
-                                    MessageBox.Show("Added value");
-                                }
-                */
-            }
-);
-
+                    if (RetPoint == null)
+                    {
+                        FTLPoint firstPt = m_currTPoints.FirstOrDefault();
+                        if (firstPt != null)
+                            RetPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
+                    }
+                });
+             */
         }
+
         public FTLTruck ShallowCopy()
         {
             return (FTLTruck)this.MemberwiseClone();
@@ -153,9 +149,8 @@ namespace FTLSupporter
                 if (TruckTaskType != eTruckTaskType.Planned)
                 {
                     m_CurrLat = value;
-                    if (m_CurrLat != 0 && m_CurrLng != 0 && RetPoint == null)
-                        RetPoint = new PointLatLng(m_CurrLat, m_CurrLng);
                 }
+                SetRetPoint();
             }
         }
 
@@ -183,24 +178,16 @@ namespace FTLSupporter
                 if (TruckTaskType != eTruckTaskType.Planned)
                 {
                     m_CurrLng = value;
-                    if (m_CurrLat != 0 && m_CurrLng != 0 && RetPoint == null)
-                        RetPoint = new PointLatLng(m_CurrLat, m_CurrLng);
                 }
+                SetRetPoint();
             }
         }
 
-        // private List<FTLPoint> m_currTPoints;
+        //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
         [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 18)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
-        public List<FTLPoint> CurrTPoints           //az interface nem változik, oda List<> típus kell
-        {
-            get
-            { return m_currTPoints.ToList(); }
-            set
-            {
-                m_currTPoints = new ObservableCollection<FTLPoint>(value);
-            }
-        }
+        public List<FTLPoint> CurrTPoints { get; set; }
+
 
         [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 19)]
         public int TPointCompleted { get; set; }
@@ -241,21 +228,55 @@ namespace FTLSupporter
         }
 
 
-        internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
 
 
         internal string RZN_ID_LIST { get; set; }
         internal int NOD_ID_CURR { get; set; }
 
-        //A visszatérés koordinátája. A több körös túratervezés esetén, Available járművekkel számolunk. 
-        //Ebben az esetben csak a jármű utolsó túrájának kell visszatérést számolni, amit a legelső túra 
-        //megadásakor érvényes CurrLat/CurrLng-nek felel meg. Emiatt egy külön propertyben tároljuk a 
-        //visszatérési koordiátát, amit vagy a CurrTPoints vagy a Curr* koordináta set-elés tölt fel.
-        //pontot
-        //LAZY módon értékelődik ki. Az első használatkor értékeljük ki. Amikor a RetPoint-ot lekérdezzük, már minden 
-        //adat fel van töltve ahhoz, hogy korrekt módon megállapíjtsuk értékét. Nem akartem ObservatbleCollectionokat használni 
-        internal PointLatLng? RetPoint { get; private set; }
+        //A visszatérés koordinátája. A több körös túratervezés esetén, Available típusú járművekkel számolunk a 
+        //kimaradt szállítási feladatokra
+        //Ebben az esetben csak a jármű utolsó túrájának szabad visszatérést számolni, ami a legelső túra 
+        //megadásakor érvényes aktuális pozíció (CurrLat/CurrLng-nek) vagy legelső teljesítő túrapont koordinátára
+        //történik. Emiatt egy külön propertyben kell tárolni a visszatérési koordiátát.
+        //A property LAZY módon értékelődik ki. Az első használatkor értékeljük ki. Amikor a RetPoint-ot lekérdezzük, 
+        //már minden adat fel van töltve ahhoz, hogy korrekt módon megállapíjtsuk értékét. ObservatbleCollection -ra váltani a 
+        //List-ről az Interface miatt egyelőre nem lehet.
+        //
+        private PointLatLng? m_retPoint;
+        internal PointLatLng? RetPoint
+        {
+            get
+            {
+                SetRetPoint();
+                return m_retPoint;
+            }
+        }
 
+        private void SetRetPoint()
+        {
+            using (GlobalLocker lockObj = new GlobalLocker(Global.lockObject))
+            {
+                if (m_retPoint == null)
+                {
+                    switch (TruckTaskType)
+                    {
+                        case eTruckTaskType.Available:
+                            if (m_CurrLat != 0 && m_CurrLng != 0)
+                                m_retPoint = new PointLatLng(m_CurrLat, m_CurrLng);
+                            break;
+                        case eTruckTaskType.Planned:
+                        case eTruckTaskType.Running:
+                            FTLPoint firstPt = CurrTPoints.FirstOrDefault();
+                            if (firstPt != null)
+                                m_retPoint = new PointLatLng(firstPt.Lat, firstPt.Lng);
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
         internal int RET_NOD_ID { get; set; }
     }
 }
