@@ -31,7 +31,8 @@ namespace PMap.Common
             AppInstance = "???";
             CT_DB = null;
             MapProvider = GMapProviders.GoogleTerrainMap;
-            TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string>, int>();
+            TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string>, Tuple<int, int>>();
+            RZN_ID_LISTCahce = new Dictionary<int, string>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
@@ -82,7 +83,7 @@ namespace PMap.Common
 
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public Dictionary<Tuple<PointLatLng, string>, int> TruckNod_IDCahce = null;  //Jármű Node ID cache
+        public Dictionary<Tuple<PointLatLng, string>, Tuple<int, int>> TruckNod_IDCahce = null;  //Jármű Node ID cache
 
         public void ConnectToDB()
         {
@@ -91,6 +92,10 @@ namespace PMap.Common
 
             //TODO: ide kell rakni az automatikus updatert.
         }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute]
+        public Dictionary<int, string> RZN_ID_LISTCahce = null;  //Behajtási zóna ID cache
+
     }
 
 }

@@ -536,11 +536,11 @@ namespace FTLSupporterTest
 
 
             DateTime dtStart = DateTime.Now;
-            /*
+            
              PMapIniParams.Instance.ReadParams("", "DB0");
              PMapCommonVars.Instance.ConnectToDB();
              PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
-            */
+            
             if (p_bestTruck)
                 res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
             else

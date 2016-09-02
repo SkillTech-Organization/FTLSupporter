@@ -57,7 +57,6 @@ namespace FTLSupporter
                 //
 
 
-                //  int nn = route.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(47.4254452, 19.1494274), route.GetRestZonesByRST_ID(Global.RST_BIGGER12T), Global.NearestNOD_ID_Approach / 2);
 
                 foreach (FTLTask tsk in p_TaskList)
                 {
@@ -67,32 +66,34 @@ namespace FTLSupporter
                         //Koordináta feloldás és ellenőrzés
                         foreach (FTLPoint pt in tsk.TPoints)
                         {
-                            //A beosztandó szállíási feladat esetén olyan NOD_ID-t keresünk, 
-                            //amelyet egy távolságon belül lehetőleg minden járműtípus számára elérhető
-                            //
-                            // 
+                            //A beosztandó szállíási feladat esetén megkeressük a legközelebbi pontot
+
                             string sXRZN_ID_LIST;
                             pt.NOD_ID = 0;
-                            for (int iRST = Global.RST_BIGGER12T; iRST <= Global.RST_MAX75T && pt.NOD_ID == 0; iRST++)
-                            {
-                                sXRZN_ID_LIST = route.GetRestZonesByRST_ID(iRST);
-                                //Kicsit s
-                                pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach);
-                            }
+                            sXRZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_NORESTRICT);
+                            int diff = 0;
+                            int NOD_ID = 0;
+                            List<Tuple<int, int>> points = new List<Tuple<int, int>>(); //NOD_ID + diff
 
-
-                            //nem találtun korlátozásokhoz NODE-t, nézünk egy korlátozás nélküli közeli pontot. 
+                            //minden zónára keresünk koordinátát
+                            //Megj:a RST_MAX35T jármű mindenhova bemehet, ezért megfelel a RST_NORESTRICT-nek.
                             //
-                            if (pt.NOD_ID == 0)
+                            for (int iRST = Global.RST_NORESTRICT; iRST <= Global.RST_MAX75T; iRST++)
                             {
-                                sXRZN_ID_LIST = route.GetRestZonesByRST_ID(Global.RST_NORESTRICT);
-                                pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach);
-                                if (pt.NOD_ID == 0)
-                                {
-                                    result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
-                                }
+                                sXRZN_ID_LIST = FTLGetRestZonesByRST_ID(route, iRST);
+                                NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), sXRZN_ID_LIST, Global.NearestNOD_ID_Approach, out diff);
+                                points.Add(Tuple.Create(NOD_ID, diff));
                             }
 
+                            Tuple<int, int> OKPoint = points.Where(i => i.Item1 != 0).OrderBy(o => o.Item2).FirstOrDefault();
+                            if (OKPoint != null)
+                            {
+                                pt.NOD_ID = OKPoint.Item1;
+                            }
+                            else
+                            {
+                                result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                            }
                         }
                     }
                     else
@@ -107,7 +108,7 @@ namespace FTLSupporter
                 foreach (FTLTruck trk in p_TruckList)
                 {
                     //1.1 A járművek zónalistájának összeállítása
-                    trk.RZN_ID_LIST = route.GetRestZonesByRST_ID(trk.RST_ID);
+                    trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID( route, trk.RST_ID);
 
                     //Teljesített túrapont ellenőrzés
                     if ((trk.TruckTaskType == FTLTruck.eTruckTaskType.Planned || trk.TruckTaskType == FTLTruck.eTruckTaskType.Running) &&
@@ -1120,18 +1121,45 @@ namespace FTLSupporter
 
         private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach)
         {
+            int diff = 0;
+            return FTLGetNearestReachableNOD_IDForTruck(p_route, p_pt, p_RZN_ID_LIST, p_approach, out diff);
+
+        }
+
+        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach, out int r_diff)
+        {
             int NOD_ID = 0;
+            int diff = Int32.MaxValue;
             if (PMapCommonVars.Instance.TruckNod_IDCahce.ContainsKey(Tuple.Create(p_pt, p_RZN_ID_LIST)))
             {
-                NOD_ID = PMapCommonVars.Instance.TruckNod_IDCahce[Tuple.Create(p_pt, p_RZN_ID_LIST)];
+                Tuple<int,int> tp = PMapCommonVars.Instance.TruckNod_IDCahce[Tuple.Create(p_pt, p_RZN_ID_LIST)];
+                NOD_ID = tp.Item1;
+                diff = tp.Item2;
             }
             else
             {
-                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_approach);
+                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_approach, out diff);
                 if (NOD_ID != 0)
-                    PMapCommonVars.Instance.TruckNod_IDCahce.Add(Tuple.Create(p_pt, p_RZN_ID_LIST), NOD_ID);
+                    PMapCommonVars.Instance.TruckNod_IDCahce.Add(Tuple.Create(p_pt, p_RZN_ID_LIST), Tuple.Create(NOD_ID, diff));
             }
+            r_diff = diff;
             return NOD_ID;
+        }
+
+        private static string FTLGetRestZonesByRST_ID(bllRoute p_route, int p_RST)
+        {
+            string RZN_ID_LIST = "";
+            if (PMapCommonVars.Instance.RZN_ID_LISTCahce.ContainsKey( p_RST))
+            {
+                RZN_ID_LIST = PMapCommonVars.Instance.RZN_ID_LISTCahce[p_RST];
+            }
+            else
+            {
+                RZN_ID_LIST = p_route.GetRestZonesByRST_ID(p_RST);
+                PMapCommonVars.Instance.RZN_ID_LISTCahce.Add(p_RST, RZN_ID_LIST);
+            }
+            return RZN_ID_LIST;
+
         }
     }
 }
