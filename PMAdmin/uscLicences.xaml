@@ -7,7 +7,9 @@
              xmlns:DTPicker="clr-namespace:DTPicker;assembly=DTPicker" x:Class="PMAdmin.uscLicences"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500" >
-    converterNamespace:BooleanAndConverter x:Key="booleanAndConverter" />
+    <UserControl.Resources>
+        <local:BooleanAndConverter x:Key="AndConverter" />
+    </UserControl.Resources>
     <Grid ShowGridLines="false" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -44,13 +46,15 @@
                 <Label Content="Alkalmazáspéldány megnev." VerticalAlignment="Center" HorizontalAlignment="Right" />
                 <Label Content="Lejárati dátum" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" />
                 <Label Content="Megjegyzés" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,11,5,7" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
                          Text="{Binding Path=EditedItem.AppInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   
                          IsEnabled="{Binding Path=HasEditedItem}"/>
                 <DatePicker x:Name="dtpExpired" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,8,0" Grid.Row="1" VerticalAlignment="Center"
-                            Text="{Binding Path=EditedItem.Expired, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"  />
+                            Text="{Binding Path=EditedItem.Expired, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"   
+                            IsEnabled="{Binding Path=HasEditedItem}"/>
                 <TextBox x:Name="txtComment"  Grid.Column="1" Grid.Row="2" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
-                         Text="{Binding Path=EditedItem.Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   />
+                         Text="{Binding Path=EditedItem.Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   
+                          IsEnabled="{Binding Path=HasEditedItem}"/>
             </Grid>
 
             <Grid Grid.Column="1" ShowGridLines="false" >
@@ -62,12 +66,38 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button x:Name="btnNew" Content="Új" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="0" Click="btnNew_Click" />
-                <Button x:Name="btnReset" Content="Alaphelyzet" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="1" Click="btnReset_Click" IsEnabled="{Binding Path=IsChangedState}" >
-                    converterNamespace:BooleanAndConverter x:Key="booleanAndConverter" />
-                </>
-                        <Button x:Name="btnSave" Content="Mentés" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="2,0,2,2" Grid.Row="2" Click="btnSave_Click" IsEnabled="{Binding Path=IsChangedState}" Height="20" />
-                <Button x:Name="btnGen" Content="ID file generálása" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="3" Click="btnGen_Click" IsEnabled="{Binding Path=IsStoredState}" />
-                <Button x:Name="btnDel" Content="Törlés" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="4" Click="btnDel_Click" IsEnabled="{Binding Path=IsStoredState}" />
+                <Button x:Name="btnReset" Content="Alaphelyzet" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="1" Click="btnReset_Click" >
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AndConverter}" >
+                            <Binding Path="HasEditedItem" />
+                            <Binding Path="EditedItem.ChangedState" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <Button x:Name="btnSave" Content="Mentés" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="2,0,2,2" Grid.Row="2" Click="btnSave_Click" Height="20">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AndConverter}" >
+                            <Binding Path="HasEditedItem" />
+                            <Binding Path="EditedItem.ChangedState" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <Button x:Name="btnGen" Content="ID file generálása" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="3" Click="btnGen_Click" >
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AndConverter}" >
+                            <Binding Path="HasEditedItem" />
+                            <Binding Path="EditedItem.StoredState" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <Button x:Name="btnDel" Content="Törlés" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" Grid.Row="4" Click="btnDel_Click" >
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AndConverter}" >
+                            <Binding Path="HasEditedItem" />
+                            <Binding Path="EditedItem.StoredState" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
             </Grid>
         </Grid>
 

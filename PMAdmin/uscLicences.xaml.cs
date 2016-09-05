@@ -182,7 +182,7 @@ namespace PMAdmin
             }
             else
             {
-                m_dataContext.EditedItem = new PMapLicence();
+                m_dataContext.EditedItem = null;
                 dgrLicences.SelectedItem = null;
                 dgrLicences.CurrentItem = null;
             }

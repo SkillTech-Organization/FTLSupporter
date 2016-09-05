@@ -7,9 +7,6 @@ using System.Windows.Data;
 
 namespace PMAdmin
 {
-    class MultiBinding
-    {
-    }
     public class BooleanAndConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)

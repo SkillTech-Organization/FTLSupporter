@@ -19,13 +19,6 @@ namespace PMAdmin.Model
             set
             {
                 m_PMapLicenceList = value;
-                /*
-                PMapLicence first = m_PMapLicenceList.FirstOrDefault();
-                if (first != null)
-                    this.EditedItem = first;
-                else
-                    this.EditedItem = new PMapLicence();
-                */
                 NotifyPropertyChanged("PMapLicenceList");
             }
 
@@ -40,8 +33,6 @@ namespace PMAdmin.Model
                 m_editedItem = value;
                 NotifyPropertyChanged("EditedItem");
                 NotifyPropertyChanged("HasEditedItem");
-                NotifyPropertyChanged("IsStoredState");
-                NotifyPropertyChanged("IsUnSavedState");
             }
         }
         private PMapLicence m_selectedItem = new PMapLicence();
@@ -71,28 +62,6 @@ namespace PMAdmin.Model
                 return (EditedItem != null);
             }
         }
-
-        public bool IsStoredState
-        {
-
-            get
-            {
-                if (EditedItem != null)
-                    return EditedItem.StoredState;
-                return false;
-            }
-        }
-
-        public bool IsUnSavedState
-        {
-            get
-            {
-                if (EditedItem != null)
-                    return EditedItem.UnSavedState;
-                return false;
-            }
-        }
-
 
         /***************************/
         /*     Business logic      */
