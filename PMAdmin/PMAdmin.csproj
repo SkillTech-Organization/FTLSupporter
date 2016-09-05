@@ -124,6 +124,7 @@
     <Compile Include="Model\mdlLicences.cs" />
     <Compile Include="Model\mdlLicWarns.cs" />
     <Compile Include="Model\mdlLog.cs" />
+    <Compile Include="MultiBinding.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="uscLicences.xaml.cs">
       <DependentUpon>uscLicences.xaml</DependentUpon>

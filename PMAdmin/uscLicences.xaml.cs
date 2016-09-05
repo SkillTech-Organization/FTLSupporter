@@ -75,6 +75,7 @@ namespace PMAdmin
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             m_dataContext.EditedItem = new PMapLicence();
+            txtAppInstance.Focus();
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -96,7 +97,7 @@ namespace PMAdmin
             else
             {
 
-                AzureTableObjBase.enObjectState oriState = curr.ObjState;
+                AzureTableObjBase.enObjectState oriState = curr.State;
                 writeItem(curr);
                 if (oriState == AzureTableObjBase.enObjectState.New)
                     m_dataContext.AddNewItem(curr);
@@ -153,7 +154,7 @@ namespace PMAdmin
 
             //Azure művelet
             PMapLicence curr = m_dataContext.EditedItem;
-            curr.SetObjState(PMapLicence.enObjectState.Inactive);
+            curr.State =PMapLicence.enObjectState.Inactive;
             writeItem(curr);
 
             //Model művelet
@@ -201,7 +202,7 @@ namespace PMAdmin
 
         private void writeItem(PMapLicence p_item)
         {
-            switch (p_item.ObjState)
+            switch (p_item.State)
             {
                 case AzureTableObjBase.enObjectState.New:
                     AzureTableStore.Instance.Insert(p_item);

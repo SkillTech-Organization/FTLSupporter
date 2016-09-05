@@ -39,6 +39,9 @@ namespace PMAdmin.Model
             {
                 m_editedItem = value;
                 NotifyPropertyChanged("EditedItem");
+                NotifyPropertyChanged("HasEditedItem");
+                NotifyPropertyChanged("IsStoredState");
+                NotifyPropertyChanged("IsUnSavedState");
             }
         }
         private PMapLicence m_selectedItem = new PMapLicence();
@@ -61,6 +64,35 @@ namespace PMAdmin.Model
                 return false;
             }
         }
+        public bool HasEditedItem
+        {
+            get
+            {
+                return (EditedItem != null);
+            }
+        }
+
+        public bool IsStoredState
+        {
+
+            get
+            {
+                if (EditedItem != null)
+                    return EditedItem.StoredState;
+                return false;
+            }
+        }
+
+        public bool IsUnSavedState
+        {
+            get
+            {
+                if (EditedItem != null)
+                    return EditedItem.UnSavedState;
+                return false;
+            }
+        }
+
 
         /***************************/
         /*     Business logic      */

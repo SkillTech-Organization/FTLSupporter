@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PMap.Common.Attrib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -21,10 +22,14 @@ namespace PMap.Common.Azure
     {
         public enum enObjectState
         {
-            New = 'N',               //not saved
-            Stored = 'S',
-            Modified = 'M',         //not saved
-            Inactive = 'I'          //maybe saved but selected for deleting
+            [Description("N")]
+            New,               //not saved
+            [Description("S")]
+            Stored,
+            [Description("M")]
+            Modified,         //not saved
+            [Description("I")]
+            Inactive              //maybe saved but selected for deleting
         }
 
 
@@ -46,90 +51,77 @@ namespace PMap.Common.Azure
                 isDataMember = Attribute.IsDefined(pi, typeof(DataMemberAttribute));
 
             if (isDataMember && propertyName != "State" && this.m_State != enObjectState.Inactive && this.m_State != enObjectState.New)
-                    this.SetObjState( enObjectState.Modified);
+                State = enObjectState.Modified;
         }
 
         public AzureTableObjBase()
         {
-            m_State = enObjectState.New;
+            m_State= enObjectState.New;
         }
 
 
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public bool NewState
         {
             get { return m_State == enObjectState.New; }
         }
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public bool ActiveState
         {
             get { return m_State != enObjectState.Inactive; }
         }
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public bool StoredState
         {
             get { return m_State == enObjectState.Stored; }
         }
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public bool UnSavedState
         {
             get { return m_State != enObjectState.Stored; }
         }
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public bool ModifiedState
         {
             get { return m_State == enObjectState.Modified; }
         }
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public bool ChangedState
         {
             get { return m_State == enObjectState.Modified || m_State == enObjectState.New; }
         }
 
-        private enObjectState m_State;
+        [IgnoreDataMember]
+        private enObjectState m_State = enObjectState.New;
         [DataMember]
         [XmlElement(ElementName = "State")]
-        public string State
-        {
-            get { return m_State.ToString(); }
-            set {
-                SetObjState((enObjectState)Enum.Parse(typeof(enObjectState), value));
-            }
-        }
-
-        public enObjectState ObjState
+        [AzurePartitionAttr]
+        [IgnoreDataMember]
+        public enObjectState State
         {
             get { return m_State; }
-        }
-
-        public void SetObjState(enObjectState p_state)
-        {
-            m_State = p_state;
-            NotifyPropertyChanged("State");
-            NotifyPropertyChanged("NewState");
-            NotifyPropertyChanged("ActiveState");
-            NotifyPropertyChanged("StoredState");
-            NotifyPropertyChanged("UnSavedState");
-            NotifyPropertyChanged("ModifiedState");
-            NotifyPropertyChanged("ChangedState");
+            set
+            {
+                m_State = value;
+                NotifyPropertyChanged("State");
+                NotifyPropertyChanged("NewState");
+                NotifyPropertyChanged("ActiveState");
+                NotifyPropertyChanged("StoredState");
+                NotifyPropertyChanged("UnSavedState");
+                NotifyPropertyChanged("ModifiedState");
+                NotifyPropertyChanged("ChangedState");
+            }
         }
 
 
         #region IDataErrorInfo Members
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public string Error
         {
@@ -146,7 +138,6 @@ namespace PMap.Common.Azure
         /// </summary>
         /// <param name="name">The property that changed</param>
         /// <returns>a error message string</returns>
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public string this[string name]
         {
@@ -178,20 +169,39 @@ namespace PMap.Common.Azure
         }
         #endregion
 
-        [ScriptIgnoreAttribute]
         [IgnoreDataMember]
         public string LocalizedDateTimeFormat
         {
             get
             {
-                /* egyelőre nem kell
+                /*
                 if (CultureInfo.TwoLetterISOLanguageName == "fr")
                     return "MM/dd/yyyy HH:mm";
                 else if (CultureInfo.TwoLetterISOLanguageName == "en")
                     return "MM/dd/yyyy HH:mm";
-                */
+                    */
                 return "yyyy.MM.dd HH:mm";
             }
         }
+
+        [IgnoreDataMember]
+        public DateTime m_Created;
+
+        [DataMember]
+        [XmlElement(ElementName = "Created")]
+        [AzurePartitionAttr]
+        public DateTime Created { get { return m_Created; } set { m_Created = value; Updated = value; } }
+        [DataMember]
+        [XmlElement(ElementName = "Updated")]
+        [AzurePartitionAttr]
+        public DateTime Updated { get; set; }
+        [DataMember]
+        [XmlElement(ElementName = "Creator")]
+        [AzurePartitionAttr]
+        public string Creator { get; set; }
+        [DataMember]
+        [XmlElement(ElementName = "Updater")]
+        [AzurePartitionAttr]
+        public string Updater { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Web.Script.Serialization;
 
 namespace PMap.Common.Azure
 {
@@ -63,7 +64,7 @@ namespace PMap.Common.Azure
 
         private DynamicTableEntity cloneForWrite(object p_obj)
         {
-
+            var jsonSerialiser = new JavaScriptSerializer();
             DynamicTableEntity TableEntity = null;
             Type tp = p_obj.GetType();
             PropertyInfo PartitionKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
@@ -108,6 +109,13 @@ namespace PMap.Common.Azure
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty((long?)val));
                             else if (propInf.PropertyType == typeof(string))
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty((string)val));
+                            else if (propInf.PropertyType.IsEnum)
+                                TableEntity.Properties.Add(propInf.Name, new EntityProperty(val.ToString()));
+
+                            else if (propInf.PropertyType.IsGenericType && (propInf.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
+                                TableEntity.Properties.Add(propInf.Name, new EntityProperty(jsonSerialiser.Serialize(val)));
+
+
                         }
 
                     }
@@ -124,6 +132,8 @@ namespace PMap.Common.Azure
 
         private object getFromDynamic<T>(DynamicTableEntity p_obj)
         {
+            var jsonSerialiser = new JavaScriptSerializer();
+
             object result = Activator.CreateInstance(typeof(T));
             Type t = typeof(T);
             PropertyInfo PartitionKeyProp = typeof(T).GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
@@ -134,6 +144,8 @@ namespace PMap.Common.Azure
                 t.GetProperty(PartitionKeyProp.Name).SetValue(result, new Guid(p_obj.PartitionKey), null);
             else if (PartitionKeyProp.PropertyType == typeof(int?) || PartitionKeyProp.PropertyType == typeof(int))
                 t.GetProperty(PartitionKeyProp.Name).SetValue(result, int.Parse(p_obj.PartitionKey), null);
+            else if (PartitionKeyProp.PropertyType == typeof(Int64?) || PartitionKeyProp.PropertyType == typeof(Int64))
+                t.GetProperty(PartitionKeyProp.Name).SetValue(result, Int64.Parse(p_obj.PartitionKey), null);
             else
                 t.GetProperty(PartitionKeyProp.Name).SetValue(result, p_obj.PartitionKey, null);
 
@@ -143,6 +155,8 @@ namespace PMap.Common.Azure
             {
                 if (RowKeyProp.PropertyType == typeof(Guid?) || RowKeyProp.PropertyType == typeof(Guid))
                     t.GetProperty(RowKeyProp.Name).SetValue(result, new Guid(p_obj.RowKey), null);
+                else if (RowKeyProp.PropertyType == typeof(Int64?) || RowKeyProp.PropertyType == typeof(Int64))
+                    t.GetProperty(RowKeyProp.Name).SetValue(result, Int64.Parse(p_obj.RowKey), null);
                 else if (RowKeyProp.PropertyType == typeof(int?) || RowKeyProp.PropertyType == typeof(int))
                     t.GetProperty(RowKeyProp.Name).SetValue(result, int.Parse(p_obj.RowKey), null);
                 else
@@ -157,7 +171,15 @@ namespace PMap.Common.Azure
                 {
                     if (propInf.CanWrite && p_obj.Properties.ContainsKey(propInf.Name))
                     {
-                        if (p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
+                        //                                jsonSerialiser.ConvertToType(p_obj.Properties[propInf.Name].StringValue, propInf.PropertyType), null);
+                        if (propInf.PropertyType.IsEnum && p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
+                            t.GetProperty(propInf.Name).SetValue(result,
+                                Enum.Parse(propInf.PropertyType, p_obj.Properties[propInf.Name].StringValue), null);
+                        else if (propInf.PropertyType.IsGenericType && (propInf.PropertyType.GetGenericTypeDefinition() == typeof(List<>)) &&
+                            p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
+                            t.GetProperty(propInf.Name).SetValue(result,
+                                jsonSerialiser.Deserialize(p_obj.Properties[propInf.Name].StringValue, propInf.PropertyType), null);
+                        else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].StringValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Int64)
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].Int64Value, null);
@@ -173,6 +195,10 @@ namespace PMap.Common.Azure
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].DoubleValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Binary)
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].BinaryValue, null);
+
+
+
+
                     }
                 }
                 catch (Exception ex) { }     //szebben megoldani!
@@ -180,12 +206,7 @@ namespace PMap.Common.Azure
             return result;
         }
 
-        private void setPropFromDyn(Type t, DynamicTableEntity p_obj, PropertyInfo propInf, object result)
-        {
-        }
-
-
-
+ 
         public bool Insert(object p_obj)
         {
             try
@@ -196,8 +217,10 @@ namespace PMap.Common.Azure
                 if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    oriState = mb.ObjState;
-                    mb.SetObjState(AzureTableObjBase.enObjectState.Stored);
+                    oriState = mb.State;
+                    mb.State = AzureTableObjBase.enObjectState.Stored;
+                    mb.Created = DateTime.Now;
+                    mb.Creator = "";            //TODO: usert beimportálni !
                 }
 
 
@@ -207,11 +230,11 @@ namespace PMap.Common.Azure
                 table.CreateIfNotExists();
                 TableOperation insertOperation = TableOperation.InsertOrReplace(dynObj);
                 TableResult res = table.Execute(insertOperation);
-                bool bOK =  parseHttpStatus(res.HttpStatusCode);
+                bool bOK = parseHttpStatus(res.HttpStatusCode);
                 if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    mb.SetObjState(oriState);
+                    mb.State = oriState;
                 }
 
                 return bOK;
@@ -236,8 +259,10 @@ namespace PMap.Common.Azure
                 if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    oriState = mb.ObjState;
-                    mb.SetObjState(AzureTableObjBase.enObjectState.Stored);
+                    oriState = mb.State;
+                    mb.State = AzureTableObjBase.enObjectState.Stored;
+                    mb.Updated = DateTime.Now;
+                    mb.Updater = "";            //TODO: usert beimportálni !
                 }
 
 
@@ -252,7 +277,7 @@ namespace PMap.Common.Azure
                 if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    mb.SetObjState(oriState);
+                    mb.State = oriState;
                 }
 
                 return bOK;
@@ -278,8 +303,9 @@ namespace PMap.Common.Azure
                 if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    oriState = mb.ObjState;
-                    mb.SetObjState(AzureTableObjBase.enObjectState.Inactive);
+                    oriState = mb.State;
+
+                    mb.State = AzureTableObjBase.enObjectState.Inactive;
                 }
                 DynamicTableEntity dynObj = cloneForWrite(p_obj);
                 dynObj.ETag = "*";
@@ -293,7 +319,7 @@ namespace PMap.Common.Azure
                 if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    mb.SetObjState(oriState);
+                    mb.State = oriState;
                 }
                 return bOK;
             }
@@ -307,7 +333,7 @@ namespace PMap.Common.Azure
             }
         }
 
-        
+
         public T Retrieve<T>(T p_obj)
         {
             string partitionKey = "";
@@ -359,12 +385,12 @@ namespace PMap.Common.Azure
             return RetrieveList<T>("", "");
         }
 
-       public ObservableCollection<T> RetrieveList<T>(string p_where)
+        public ObservableCollection<T> RetrieveList<T>(string p_where)
         {
             return RetrieveList<T>(p_where, "");
         }
- 
-        public ObservableCollection<T> RetrieveList<T>(string p_where, string p_orderBy )
+
+        public ObservableCollection<T> RetrieveList<T>(string p_where, string p_orderBy)
         {
             List<T> lstResult = new List<T>();
             try
@@ -392,7 +418,7 @@ namespace PMap.Common.Azure
                     }
                 }
 
-                if( p_orderBy != "")
+                if (p_orderBy != "")
                 {
                     lstResult = lstResult.OrderBy(x => x.GetType().GetProperty(p_orderBy).GetValue(x, null)).ToList();
                 }
@@ -410,7 +436,7 @@ namespace PMap.Common.Azure
 
         public static string DateFilter(DateTime p_dt)
         {
-            return  "datetime'" + p_dt.ToString("yyyy-MM-ddTHH:mm:ss") + "'";
+            return "datetime'" + p_dt.ToString("yyyy-MM-ddTHH:mm:ss") + "'";
         }
 
         private static string FixTableStorageWhere(string p_where)

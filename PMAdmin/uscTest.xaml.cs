@@ -56,10 +56,10 @@ namespace PMAdmin
         public uscTest()
         {
             InitializeComponent();
-             var   pml = new PMapLicence();
-            pml.SetObjState(PMap.Common.Azure.AzureTableObjBase.enObjectState.Stored);
+            var pml = new PMapLicence();
+            pml.State = PMap.Common.Azure.AzureTableObjBase.enObjectState.Stored;
             var md = new mdlLicences();
-            md.EditedItem.SetObjState(PMap.Common.Azure.AzureTableObjBase.enObjectState.Stored);
+            md.EditedItem.State = PMap.Common.Azure.AzureTableObjBase.enObjectState.Stored;
             this.DataContext = md;
         }
     }
