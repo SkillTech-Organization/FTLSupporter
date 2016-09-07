@@ -147,6 +147,7 @@ namespace PMAdmin
 
         private void btnDel_Click(object sender, RoutedEventArgs e)
         {
+
             if (!UI.Confirm("Törölhető a tétel?"))
                 return;
             //Elem kiválasztása
@@ -154,17 +155,14 @@ namespace PMAdmin
 
             //Azure művelet
             PMapLicence curr = m_dataContext.EditedItem;
-            curr.State =PMapLicence.enObjectState.Inactive;
+            curr.State = PMapLicence.enObjectState.Inactive;
             writeItem(curr);
 
             //Model művelet
-
             m_dataContext.DeleteItem(curr);
             m_dataContext.SelectedItem = null;
             m_dataContext.EditedItem = null;
             dgrLicences.Focus();
-
-
         }
 
         private void dgrLicences_SelectionChanged(object sender, SelectionChangedEventArgs e)
