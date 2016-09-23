@@ -241,6 +241,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
+                Util.ExceptionLog(sex);
                 return false;
             }
             catch (Exception ex)
@@ -285,6 +286,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
+                Util.ExceptionLog(sex);
                 return false;
             }
             catch (Exception ex)
@@ -325,6 +327,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
+                Util.ExceptionLog(sex);
                 return false;
             }
             catch (Exception ex)
@@ -371,6 +374,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
+                Util.ExceptionLog( sex);
                 return default(T);
             }
             catch (Exception ex)
@@ -426,6 +430,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
+                Util.ExceptionLog(sex);
             }
             catch (Exception ex)
             {
