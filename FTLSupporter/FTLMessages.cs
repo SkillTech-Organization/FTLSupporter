@@ -16,7 +16,7 @@ namespace FTLSupporter
         public const string E_WRONGCOORD = "Helytelen koordináta!";
         public const string E_FEWPOINTS = "A beosztandó túrának minimum két túrapont szükésges!";
         public const string E_T1MISSROUTE = "Aktuális túra teljesítésénél hiányzó szakasz!";
-        public const string E_RELMISSROUTE = "Átálásnál hiányzó szakasz!";
+        public const string E_RELMISSROUTE = "Átállásnál hiányzó szakasz!";
         public const string E_T2MISSROUTE = "Beosztandó túra teljesítésénél hiányzó szakasz!";
         public const string E_RETMISSROUTE = "Visszatérés teljesítésénél hiányzó szakasz!";
         public const string E_MAXDURATION = "Teljesítés max. idő túllépés!";
