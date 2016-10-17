@@ -84,6 +84,14 @@ namespace FTLSupporter
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:EngineEuro")]
         public int EngineEuro { get; set; }                 // 1,2,3,4,.... ==> EURO I, EURO II, EURO III, EURO IV...
 
+
+        // MEGJ: Behajtási övezet ID != járműkategória 
+
+        [DisplayNameAttributeX(Name = "Útdíj járműkategória", Order = 11)]
+        [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:ETollCat")]
+        [ErrorIfConstAttrX(EvalMode.IsBigger, Global.ETOLLCAT_BIGGER12T, "EtollCat:Érték maximum túllépés!")]
+        public int ETollCat  { get; set; }                 // 1,2,3,4,.... ==> J1, J2, J3, J4         {                                               //A díjszámításnál használandó járműkategória. 
+ 
         /******************* Járműfeladat ******************************/
 
         [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 12)]
@@ -208,26 +216,6 @@ namespace FTLSupporter
                 return Global.RST_NORESTRICT;
             }
         }
-
-        // MEGJ: Behajtási övezet ID != járműkategória 
-
-        internal int ETollCat
-        {                                               //A díjszámításnál használandó járműkategória. 
-            get                                         //Az FTLSupport-ban a Behajtási övezet ID és járműkategória súlyfüggő, de nem célszerű összevonni a két mezőt,
-            {                                           //mert később ez változhat (spec. behajtási engedélyek, stb...)
-                if (GVWR <= 3500)
-                    return Global.ETOLLCAT_MAX35T;
-                else if (GVWR <= 7500)
-                    return Global.ETOLLCAT_MAX75T;
-                else if (GVWR <= 12000)
-                    return Global.ETOLLCAT_MAX12T;
-                else if (GVWR > 12000)
-                    return Global.ETOLLCAT_BIGGER12T;
-                return Global.ETOLLCAT_MAX35T;
-            }
-        }
-
-
 
 
         internal string RZN_ID_LIST { get; set; }

@@ -17,7 +17,7 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            Test(true);
+            Test(false);
         }
 
         static void Test(bool p_bestTruck = false)
@@ -326,6 +326,7 @@ namespace FTLSupporterTest
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz,Romlandó",
                 EngineEuro = 2,
+                ETollCat=3,
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -350,6 +351,7 @@ namespace FTLSupporterTest
                 Capacity = 2000,
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz",
+                ETollCat = 1,
                 EngineEuro = 2,
                 FixCost = 10000,
                 KMCost = 50,
@@ -383,6 +385,7 @@ namespace FTLSupporterTest
                 TruckType = "Hűtős",
                 CargoTypes = "Nemlétező típus",
                 EngineEuro = 2,
+                ETollCat = 1,
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -419,6 +422,7 @@ namespace FTLSupporterTest
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz",
                 EngineEuro = 2,
+                ETollCat = 2,
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,

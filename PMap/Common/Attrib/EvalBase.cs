@@ -23,7 +23,27 @@ namespace PMap.Common.Attrib
             else
             {
                 if (o != null)
-                    sStr = o.ToString();
+                {
+                    switch (Type.GetTypeCode(o.GetType()))
+                    {
+                        case TypeCode.Byte:
+                        case TypeCode.SByte:
+                        case TypeCode.UInt16:
+                        case TypeCode.UInt32:
+                        case TypeCode.UInt64:
+                        case TypeCode.Int16:
+                        case TypeCode.Int32:
+                        case TypeCode.Int64:
+                        case TypeCode.Decimal:
+                        case TypeCode.Double:
+                        case TypeCode.Single:
+                            sStr = String.Format("{0:#,#0.0000000000000}", o).PadLeft(35, ' ');
+                            break;
+                        default:
+                            sStr = o.ToString();
+                            break;
+                    }
+                }
                 else
                     sStr = "";
             }
