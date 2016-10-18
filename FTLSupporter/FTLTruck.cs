@@ -85,13 +85,16 @@ namespace FTLSupporter
         public int EngineEuro { get; set; }                 // 1,2,3,4,.... ==> EURO I, EURO II, EURO III, EURO IV...
 
 
-        // MEGJ: Behajtási övezet ID != járműkategória 
-
+        //A díjszámításnál használandó járműkategória. MEGJ: Behajtási övezet ID != járműkategória 
         [DisplayNameAttributeX(Name = "Útdíj járműkategória", Order = 11)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:ETollCat")]
         [ErrorIfConstAttrX(EvalMode.IsBigger, Global.ETOLLCAT_BIGGER12T, "EtollCat:Érték maximum túllépés!")]
-        public int ETollCat  { get; set; }                 // 1,2,3,4,.... ==> J1, J2, J3, J4         {                                               //A díjszámításnál használandó járműkategória. 
- 
+        public int ETollCat  { get; set; }                 // 1,2,3,4,.... ==> J1, J2, J3, J4        
+        
+        //Behajtási övezetek
+
+        public string RZones { get; set; }
+
         /******************* Járműfeladat ******************************/
 
         [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 12)]

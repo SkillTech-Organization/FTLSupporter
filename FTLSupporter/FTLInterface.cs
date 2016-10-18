@@ -1161,5 +1161,21 @@ namespace FTLSupporter
             return RZN_ID_LIST;
 
         }
+
+        private static string FTCheckRZonesList(bllRoute p_route, int p_RST)
+        {
+            string RZN_ID_LIST = "";
+            if (PMapCommonVars.Instance.RZN_ID_LISTCahce.ContainsKey(p_RST))
+            {
+                RZN_ID_LIST = PMapCommonVars.Instance.RZN_ID_LISTCahce[p_RST];
+            }
+            else
+            {
+                RZN_ID_LIST = p_route.GetRestZonesByRST_ID(p_RST);
+                PMapCommonVars.Instance.RZN_ID_LISTCahce.Add(p_RST, RZN_ID_LIST);
+            }
+            return RZN_ID_LIST;
+
+        }
     }
 }
