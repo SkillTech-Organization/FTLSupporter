@@ -323,6 +323,27 @@ namespace PMap.BLL
             return sRZN_ID_LIST;
         }
 
+        /// <summary>
+        /// Zónakód-ID átfordító dictionary visszaadása
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, int> GetAllRZones()
+        {
+            Dictionary<string, int> dicRZones = new Dictionary<string, int>();
+
+            string sSql = "select * from RZN_RESTRZONE order by RZN_ZoneCode";
+            DataTable dte = DBA.Query2DataTable(sSql);
+            foreach (DataRow dre in dte.Rows)
+            {
+                dicRZones.Add(Util.getFieldValue<string>(dre, "RZN_ZoneCode"),
+                                Util.getFieldValue<int>(dre, "ID"));
+            }
+
+            return dicRZones;
+        }
+
+
+
         public DataTable GetSpeedProfsToDT()
         {
             return DBA.Query2DataTable("select * from SPP_SPEEDPROF where SPP_DELETED = 0");
@@ -723,19 +744,27 @@ namespace PMap.BLL
                 return null;
         }
 
+        public int GetNearestNOD_ID(PointLatLng p_pt)
+        {
+            int diff = 0;
+            return GetNearestNOD_ID(p_pt, out diff);
+        }
+
         /// <summary>
         /// Egy térképi ponthoz legközelebb lévő NOD_ID visszaadása
         /// </summary>
         /// <param name="p_pt"></param>
         /// <returns></returns>
-        public int GetNearestNOD_ID(PointLatLng p_pt)
+        public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
         {
-            string sSql = "select top 1 ID, ZIP_NUM, abs( NOD_YPOS-?) as YD, abs( NOD_XPOS-?) as XD from NOD_NODE where NOD_DELETED=0 " +
+            r_diff = Int32.MaxValue;
+            string sSql = "select top 1 ID, ZIP_NUM, abs( NOD_YPOS-?) as YD, abs( NOD_XPOS-?) as XDIFF from NOD_NODE where NOD_DELETED=0 " +
                 "order by abs( NOD_YPOS-?) + abs( NOD_XPOS-?) asc";
             DataTable dt = DBA.Query2DataTable(sSql, p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider,
                   p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider);
             if (dt.Rows.Count > 0)
             {
+                r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
                 return Util.getFieldValue<int>(dt.Rows[0], "ID");
             }
             return 0;

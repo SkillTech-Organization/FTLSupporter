@@ -386,6 +386,7 @@ namespace FTLSupporterTest
                 CargoTypes = "Nemlétező típus",
                 EngineEuro = 2,
                 ETollCat = 1,
+                RZones = "ÉP1,P35",
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -423,6 +424,7 @@ namespace FTLSupporterTest
                 CargoTypes = "Száraz",
                 EngineEuro = 2,
                 ETollCat = 2,
+                RZones = "CS12,DB1,DP1,ÉB1,ÉP1,HB1,KP1",
                 FixCost = 10000,
                 KMCost = 50,
                 RelocateCost = 500,
@@ -450,12 +452,45 @@ namespace FTLSupporterTest
             tpx10.RealArrival = DateTime.Now.Date.AddHours(12);
             trk4.CurrTPoints.Add(tpx10);
 
+
+            FTLTruck trk5 = new FTLTruck()
+            {
+                TruckID = "TRK5 Szeged avail",
+                GVWR = 2000,
+                Capacity = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Száraz",
+                EngineEuro = 2,
+                ETollCat = 2,
+//                RZones = "P35,P75",
+                FixCost = 10000,
+                KMCost = 50,
+                RelocateCost = 500,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Available,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTPoints = new List<FTLPoint>(),
+                TPointCompleted = 1,                             
+                CurrTime = DateTime.Now.Date.AddHours(5),       
+                CurrLat = tp9.Lat,                          //Szeged
+                CurrLng = tp9.Lng
+            };
+
+
             #endregion
 
-            /* nagy teszt */
+
+            /* behajtási zóna teszt */
+            var lstTsk = new List<FTLTask> { tsk1};
+            var lstTrk = new List<FTLTruck> { trk5};
+              
+             
+            /* nagy teszt 
             var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5, tsk6, tsk7, tskX };
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
-
+            */
             /* egy elem teszt */
             //var lstTsk = new List<FTLTask> { tsk3 };
             //var lstTrk = new List<FTLTruck> { trk4 };
@@ -540,11 +575,11 @@ namespace FTLSupporterTest
 
 
             DateTime dtStart = DateTime.Now;
-            
+            /*
              PMapIniParams.Instance.ReadParams("", "DB0");
              PMapCommonVars.Instance.ConnectToDB();
              PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
-            
+            */
             if (p_bestTruck)
                 res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
             else

@@ -52,11 +52,8 @@ namespace FTLSupporter
                 }
 
 
-
-                //Validálás, koordináta feloldás: beosztandó szállítási feladat
+                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
-
-
 
                 foreach (FTLTask tsk in p_TaskList)
                 {
@@ -68,16 +65,19 @@ namespace FTLSupporter
                         {
                             //A beosztandó szállíási feladat esetén megkeressük a legközelebbi pontot
 
+
+                            /*Nem találtam jó módszert a geokódolásra, úgyhogy ez nem kell
+                             
                             string sXRZN_ID_LIST;
                             pt.NOD_ID = 0;
-                            sXRZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_NORESTRICT);
                             int diff = 0;
                             int NOD_ID = 0;
                             List<Tuple<int, int>> points = new List<Tuple<int, int>>(); //NOD_ID + diff
 
                             //minden zónára keresünk koordinátát
                             //Megj:a RST_MAX35T jármű mindenhova bemehet, ezért megfelel a RST_NORESTRICT-nek.
-                            //
+                            //Megj2:Itt az a lényeg, kogy különböző behajtási övezetekre találjunk koordinátát. Nem kell foglalkozni 
+                            //  a járművek egyedi engedélyeivel.
                             for (int iRST = Global.RST_NORESTRICT; iRST <= Global.RST_MAX75T; iRST++)
                             {
                                 sXRZN_ID_LIST = FTLGetRestZonesByRST_ID(route, iRST);
@@ -94,6 +94,18 @@ namespace FTLSupporter
                             {
                                 result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
                             }
+                             */
+                            int diff = 0;
+                            int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), out diff);
+                            if (NOD_ID == null || diff > Global.NearestNOD_ID_Approach)
+                            {
+                                result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                            }
+                            else
+                            {
+                                pt.NOD_ID = NOD_ID;
+
+                            }
                         }
                     }
                     else
@@ -105,10 +117,45 @@ namespace FTLSupporter
 
                 //Validálás, koordináta feloldás:jármű aktuális pozíció, szállítási feladat
                 //
+                Dictionary<string, int> allRZones = route.GetAllRZones();
                 foreach (FTLTruck trk in p_TruckList)
                 {
                     //1.1 A járművek zónalistájának összeállítása
-                    trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID( route, trk.RST_ID);
+                    if (trk.RZones != null && trk.RZones != "")
+                    {
+                        //van megadott zónalista
+                        trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, trk.RST_ID);
+
+                        trk.RZN_ID_LIST = "";
+                        String[] aRZones = trk.RZones.Replace(" ", "").Split(',');
+                        foreach (var zone in aRZones)
+                        {
+                            if (allRZones.ContainsKey(zone))
+                            {
+                                trk.RZN_ID_LIST += ("," + allRZones[zone].ToString());
+                            }
+                            else
+                            {
+                                result.Add(getValidationError(trk, "RZones", String.Format(FTLMessages.E_UNKOWNRZONE, zone)));
+                            }
+                        }
+                        if (trk.RZN_ID_LIST != "")
+                            trk.RZN_ID_LIST = trk.RZN_ID_LIST.Substring(1);
+                    }
+                    else
+                    {
+                        if (trk.GVWR <= 3500)
+                            trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_MAX35T);
+                        else if (trk.GVWR <= 7500)
+                            trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_MAX75T);
+                        else if (trk.GVWR <= 12000)
+                            trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_MAX12T);
+                        else if (trk.GVWR > 12000)
+                            trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_BIGGER12T);
+                        else
+                            trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_NORESTRICT);
+                    }
+
 
                     //Teljesített túrapont ellenőrzés
                     if ((trk.TruckTaskType == FTLTruck.eTruckTaskType.Planned || trk.TruckTaskType == FTLTruck.eTruckTaskType.Running) &&
@@ -136,6 +183,7 @@ namespace FTLSupporter
                         }
                     }
                 }
+
 
 
                 if (result.Count == 0)
@@ -1162,20 +1210,5 @@ namespace FTLSupporter
 
         }
 
-        private static string FTCheckRZonesList(bllRoute p_route, int p_RST)
-        {
-            string RZN_ID_LIST = "";
-            if (PMapCommonVars.Instance.RZN_ID_LISTCahce.ContainsKey(p_RST))
-            {
-                RZN_ID_LIST = PMapCommonVars.Instance.RZN_ID_LISTCahce[p_RST];
-            }
-            else
-            {
-                RZN_ID_LIST = p_route.GetRestZonesByRST_ID(p_RST);
-                PMapCommonVars.Instance.RZN_ID_LISTCahce.Add(p_RST, RZN_ID_LIST);
-            }
-            return RZN_ID_LIST;
-
-        }
-    }
+      }
 }
