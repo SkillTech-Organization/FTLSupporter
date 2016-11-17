@@ -315,11 +315,11 @@ namespace PMapTestApp
 
             List<boXDepot> depots = new List<boXDepot>();
 
-       //     dlgTestInput d = new dlgTestInput();
+            dlgTestInput d = new dlgTestInput();
             boXDepot dep = new boXDepot();
 
-            dep.DEP_CODE = "TEST12";
-            dep.DEP_NAME = "Lerakónév12";
+            dep.DEP_CODE = "TEST12x";
+            dep.DEP_NAME = "Lerakónév12x";
             dep.ZIP_NUM = 6726;
             dep.DEP_ADRSTREET = "vedres 1";
             dep.DEP_ADRNUM = "1";
@@ -334,10 +334,10 @@ namespace PMapTestApp
             dep.Lng = 0;
 
             dep.DEP_CODE = "25939";
-            dep.DEP_NAME = "HATÁR TOP KFT.";
+            dep.DEP_NAME = "HATÁR TOP KFTx.";
             dep.ZIP_NUM = 6422;
             dep.ZIP_CITY = "Tompa";
-            dep.DEP_ADRSTREET = "Alsósáskalapos";
+            dep.DEP_ADRSTREET = "Alsósáskalaposxx";
             dep.DEP_ADRNUM = "18/a";
             dep.DEP_OPEN = 0;
             dep.DEP_CLOSE = 1439;
@@ -349,9 +349,9 @@ namespace PMapTestApp
             dep.Lat = 0.0;
             dep.Lng = 0.0;
 
-     //       d.propertyGridCtrl1.SetObject(dep);
+            d.propertyGridCtrl1.SetObject(dep);
 
-     //       if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 depots.Add(dep);
                 List<dtXResult> res = (new PMapInterface()).ImportDepots("", dbConf, depots);
