@@ -485,8 +485,8 @@ namespace FTLSupporterTest
             /* behajtási zóna teszt */
             var lstTsk = new List<FTLTask> { tsk1};
             var lstTrk = new List<FTLTruck> { trk5};
-              
-             
+
+
             /* nagy teszt 
             var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5, tsk6, tsk7, tskX };
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
@@ -498,6 +498,34 @@ namespace FTLSupporterTest
             /* pontos megérkezés teszt            */
             //var lstTsk = new List<FTLTask> { tsk4 };
             //var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
+
+
+            /*hibakeresés */
+            FTLTruck trkErr1 = new FTLTruck()
+            {
+                TruckID = "MCC-863",
+                GVWR = 40135,
+                Capacity = 26259,
+                TruckType = "Száraz",
+                CargoTypes = "Száraz",
+                EngineEuro = 3,
+                ETollCat = 3,
+                FixCost = 0,
+                KMCost = 0,
+                RelocateCost = 0,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Available,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTime = DateTime.Now.Date.AddHours(7),
+                CurrLat = 47.647828,
+                CurrLng = 21.48993,
+                CurrTPoints = new List<FTLPoint>()
+            };
+            var lstTskx = new List<FTLTask> { tsk4 };
+            var lstTrkx = new List<FTLTruck> { trkErr1 };
+            var resx = FTLInterface.FTLSupportX(lstTskx, lstTrkx, "", "DB0", true);
 
 
             if (p_bestTruck)

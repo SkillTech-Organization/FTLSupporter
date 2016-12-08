@@ -34,6 +34,7 @@ namespace PMapTestApp
         private GMapOverlay m_routeLayer;
         private GMapOverlay m_directRouteLayer;
         private GMapOverlay m_boundaryLayer;
+        private GMapOverlay m_edgesLayer;
 
         private bool m_isMouseDown = false;
         private int m_currZoom = Global.DefZoom;
@@ -62,7 +63,7 @@ namespace PMapTestApp
                 {
 
                     PMapCommonVars.Instance.ConnectToDB();
-                    
+
                     m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
                     m_bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB);
 
@@ -84,6 +85,10 @@ namespace PMapTestApp
 
                     m_directRouteLayer = new GMapOverlay("directRoute");
                     gMapControl.Overlays.Add(m_directRouteLayer);
+
+                    m_edgesLayer = new GMapOverlay("Edges");
+                    gMapControl.Overlays.Add(m_edgesLayer);
+
 
                     MarkerTo = new GMarkerGoogle(gMapControl.Position, GMarkerGoogleType.red);
                     m_selectorLayer.Markers.Add(MarkerTo);
@@ -112,6 +117,7 @@ namespace PMapTestApp
 
                     rdbFrom.Checked = true;
                     rdbFastestPath.Checked = true;
+                    ckhShowEdges.Checked = false;
                     /*
                     numFromNOD_ID.Value =46087;
                     numToNOD_ID.Value = 15;
@@ -141,23 +147,23 @@ namespace PMapTestApp
             m_boundaryLayer.Polygons.Clear();
             if (chkBoundary.Checked && m_boundNodes.Count > 0)
             {
-                    List<int> nodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
-                    RectLatLng r = m_bllRoute.getBoundary(m_boundNodes);
+                List<int> nodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
+                RectLatLng r = m_bllRoute.getBoundary(m_boundNodes);
 
-                    List<PointLatLng> p = new PointLatLng[] { new PointLatLng( r.Top ,r.Left ),
+                List<PointLatLng> p = new PointLatLng[] { new PointLatLng( r.Top ,r.Left ),
                                                            new PointLatLng( r.Top, r.Right ),
                                                            new PointLatLng( r.Bottom, r.Right ),
                                                            new PointLatLng( r.Bottom, r.Left)
                                                            }.ToList();
 
-                    List<PointLatLng> p2 = new PointLatLng[] { new PointLatLng( (double)numLatFrom.Value, (double)numLngFrom.Value),
+                List<PointLatLng> p2 = new PointLatLng[] { new PointLatLng( (double)numLatFrom.Value, (double)numLngFrom.Value),
                                                            new PointLatLng( (double)numLatFrom.Value, (double)numLngTo.Value),
                                                            new PointLatLng( (double)numLatTo.Value, (double)numLngTo.Value),
                                                            new PointLatLng( (double)numLatTo.Value, (double)numLngFrom.Value)
                                                            }.ToList();
 
-                    m_boundaryLayer.Polygons.Add(new GMapPolygon(p, PMapMessages.S_PCHK_BOUNDARY));
-             //       m_boundaryLayer.Polygons.Add(new GMapPolygon(p2, "lehatárolás"));
+                m_boundaryLayer.Polygons.Add(new GMapPolygon(p, PMapMessages.S_PCHK_BOUNDARY));
+                //       m_boundaryLayer.Polygons.Add(new GMapPolygon(p2, "lehatárolás"));
             }
 
 
@@ -289,7 +295,7 @@ namespace PMapTestApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+
             if (m_routes == null)
                 CalcAndShowRoute();
 
@@ -299,7 +305,7 @@ namespace PMapTestApp
                 rd.ShowDialog(this);
 
             }
-            
+
 
         }
 
@@ -310,18 +316,18 @@ namespace PMapTestApp
             if (numFromNOD_ID.Value > 0 && numToNOD_ID.Value > 0)
             {
                 RectLatLng boundary = new RectLatLng();
-                List<int> nodes = new List<int>() { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value)};
+                List<int> nodes = new List<int>() { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) };
                 boundary = m_bllRoute.getBoundary(nodes);
 
                 DataTable dtRZN_ID_LIST = (DataTable)cmbRST_ID_LIST.DataSource;
-                List<string> aRZN_ID_LIST = dtRZN_ID_LIST.AsEnumerable().Select( x=>Util.getFieldValue<string>(x, "RESTZONE_IDS")).ToList();
+                List<string> aRZN_ID_LIST = dtRZN_ID_LIST.AsEnumerable().Select(x => Util.getFieldValue<string>(x, "RESTZONE_IDS")).ToList();
                 Dictionary<string, List<int>[]> NeighborsFull = null;
                 Dictionary<string, List<int>[]> NeighborsCut = null;
-                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out  NeighborsFull, out NeighborsCut, boundary);
-                
+                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);
+
                 //összes RZN_ID_LIST-ra elkérjük az útvonalakat
                 m_routes.Clear();
-                foreach ( string sRZN_ID_LIST in aRZN_ID_LIST)
+                foreach (string sRZN_ID_LIST in aRZN_ID_LIST)
                 {
                     boRoute result = provider.GetRoute(sRZN_ID_LIST, Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value),
                         NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
@@ -336,18 +342,18 @@ namespace PMapTestApp
 
         private void showRoute()
         {
-        
+
             if (m_routes != null)
             {
                 m_routeLayer.Routes.Clear();
                 m_routeLayer.Markers.Clear();
-                
-                
+
+
                 string sRZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue;
                 boRoute route;
-                
 
-                if (m_routes.TryGetValue( sRZN_ID_LIST, out route) && route.DST_DISTANCE > 0)
+
+                if (m_routes.TryGetValue(sRZN_ID_LIST, out route) && route.DST_DISTANCE > 0)
                 {
 
                     GMapRoute r = new GMapRoute(route.Route.Points, "");
@@ -384,14 +390,14 @@ namespace PMapTestApp
                 gMapControl.Refresh();
                 gMapControl.ZoomAndCenterMarkers(m_routeLayer.Id);
             }
-         
+
         }
 
 
         private void frmRouteCheck_Load(object sender, EventArgs e)
         {
             DataTable dt = m_bllRoute.GetRestZonesToDT();
-            cmbRST_ID_LIST.ValueMember= "RESTZONE_IDS";
+            cmbRST_ID_LIST.ValueMember = "RESTZONE_IDS";
             cmbRST_ID_LIST.DisplayMember = "RESTZONE_NAMES";
             cmbRST_ID_LIST.DataSource = dt;
 
@@ -400,8 +406,8 @@ namespace PMapTestApp
         private void numFromNOD_ID_ValueChanged(object sender, EventArgs e)
         {
             MarkerFrom.Position = m_bllRoute.GetPointLatLng(Convert.ToInt32(numFromNOD_ID.Value));
-            numLatFrom.Value = Convert.ToDecimal( MarkerFrom.Position.Lat);
-            numLngFrom.Value = Convert.ToDecimal( MarkerFrom.Position.Lng);
+            numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
+            numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
 
             if (numFromNOD_ID.Value > 0 && numToNOD_ID.Value > 0)
             {
@@ -435,7 +441,7 @@ namespace PMapTestApp
                 m_boundNodes.Clear();
                 foreach (string point in aRoute)
                 {
-                    m_boundNodes.Add( Convert.ToInt32( point));
+                    m_boundNodes.Add(Convert.ToInt32(point));
                     if (point.Length > 0)
                     {
                         PointLatLng pt = m_bllRoute.GetPointLatLng(Convert.ToInt32(point));
@@ -475,7 +481,7 @@ namespace PMapTestApp
         private void btnFrom_Click(object sender, EventArgs e)
         {
             dlgSelWHSDEP d = new dlgSelWHSDEP();
-            if( d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 lblFrom.Text = d.m_XNAME;
                 numFromNOD_ID.Value = d.m_NOD_ID;
@@ -518,5 +524,39 @@ namespace PMapTestApp
             showRoute();
         }
 
+        private void btnShowEdges_Click(object sender, EventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                ckhShowEdges.Checked = false;
+
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
+                m_edgesLayer.Routes.Clear();
+                m_edgesLayer.Markers.Clear();
+
+                foreach (var edg in RouteData.Instance.Edges)
+                {
+                    var edge = edg.Value;
+                    //   GMapMarker gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
+                    //    m_edgesLayer.Markers.Add(gm);
+                    Pen p = new Pen(Color.BlueViolet, 1);
+                    GMapRoute r = new GMapRoute(new List<PointLatLng> { edge.fromLatLng, edge.toLatLng }, "xx");
+                    r.Stroke = p;
+                    m_edgesLayer.Routes.Add(r);
+                }
+                ckhShowEdges.Checked = true;
+            }
+
+        }
+
+        private void ckhShowEdges_CheckedChanged(object sender, EventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                m_edgesLayer.IsVisibile = ckhShowEdges.Checked;
+                gMapControl.Refresh();
+            }
+        }
     }
 }
