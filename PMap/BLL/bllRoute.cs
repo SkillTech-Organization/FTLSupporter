@@ -750,6 +750,17 @@ namespace PMap.BLL
             return GetNearestNOD_ID(p_pt, out diff);
         }
 
+       
+
+        /* SQL implementation:
+        CREATE FUNCTION dbo.fnDistanceBetweenLineAndPoint( @ln1X FLOAT, @ln1Y FLOAT, @ln2X FLOAT, @ln2Y FLOAT, @ptX FLOAT, @ptY FLOAT)
+        RETURNS FLOAT AS 
+        BEGIN
+          RETURN Sin(Atn2(@ptY - @ln1Y, @ptX - @ln1X) -
+                        Atn2(@ln2Y - @ln1Y, @ln2X - @ln1X)) * Sqrt((@ptX - @ln1X) * (@ptX - @ln1X) + (@ptY - @ln1Y) * (@ptY - @ln1Y));
+        END
+        */
+
         /// <summary>
         /// Egy térképi ponthoz legközelebb lévő NOD_ID visszaadása
         /// </summary>
@@ -758,10 +769,24 @@ namespace PMap.BLL
         public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
         {
             r_diff = Int32.MaxValue;
-            string sSql = "select top 1 ID, ZIP_NUM, abs( NOD_YPOS-?) as YD, abs( NOD_XPOS-?) as XDIFF from NOD_NODE where NOD_DELETED=0 " +
-                "order by abs( NOD_YPOS-?) + abs( NOD_XPOS-?) asc";
-            DataTable dt = DBA.Query2DataTable(sSql, p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider,
-                  p_pt.Lat * Global.LatLngDivider, p_pt.Lng * Global.LatLngDivider);
+
+            string ptX = (Math.Round( p_pt.Lng * Global.LatLngDivider)).ToString();
+            string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
+
+
+            string sSql = " select top 1  " + Environment.NewLine +
+            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ID else NOD2.ID end as ID,  " + Environment.NewLine +
+            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ZIP_NUM else NOD2.ZIP_NUM end as ZIP_NUM,  " + Environment.NewLine +
+            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") else abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") end as XDIFF  " + Environment.NewLine +
+            "from EDG_EDGE EDG  " + Environment.NewLine +
+            "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM  " + Environment.NewLine +
+            "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2  " + Environment.NewLine +
+            "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and  " + Environment.NewLine +
+            "abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < " + Global.NearestNOD_ID_Approach.ToString() + "  and  " + Environment.NewLine +
+            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < " + Global.NearestNOD_ID_Approach.ToString() + "  " + Environment.NewLine +
+            "order by dbo.fnDistanceBetweenLineAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") desc ";
+
+            DataTable dt = DBA.Query2DataTable(sSql);
             if (dt.Rows.Count > 0)
             {
                 r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
@@ -770,6 +795,8 @@ namespace PMap.BLL
             return 0;
         }
         
+
+
         /// <summary>
         /// Egy térképi ponthoz a leközelebb eső, egy jármű által megközelíthető pont (p_RZN_ID_LIST tartalmazza a behajtási zónákat)
         /// </summary>

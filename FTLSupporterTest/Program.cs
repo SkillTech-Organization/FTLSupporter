@@ -1,5 +1,6 @@
 ﻿using FTLSupporter;
 using GMap.NET;
+using PMap.BLL;
 using PMap.Common;
 using PMap.Licence;
 using System;
@@ -498,7 +499,12 @@ namespace FTLSupporterTest
             /* pontos megérkezés teszt            */
             //var lstTsk = new List<FTLTask> { tsk4 };
             //var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
+            PMapIniParams.Instance.ReadParams("", "DB0");
 
+            PMapCommonVars.Instance.ConnectToDB();
+            bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            int diff = 0;
+            int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(47.647828, 21.48993), out diff);
 
             /*hibakeresés */
             FTLTruck trkErr1 = new FTLTruck()

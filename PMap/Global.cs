@@ -166,7 +166,7 @@ namespace PMap
 
         public const double ROUTE_APPROACH = 0.002;    // 
 
-        public const int NearestNOD_ID_Approach = 12000;         //A jármű GPS-pozíjciója alapján történő elérhető node keresésnek közelítő tűrése
+        public const int NearestNOD_ID_Approach = 20000;         //A jármű GPS-pozíjciója alapján történő elérhető node keresésnek közelítő tűrése
                                                                 //Lehet, hogy ini paraméter lesz
         
         public const int LatLngDivider = 1000000;               //Adatbázis koordináta -> GPS koordiánta osztó

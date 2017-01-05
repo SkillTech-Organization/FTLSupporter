@@ -575,7 +575,12 @@ namespace PMap.Common
             Random rnd = new Random((int)DateTime.Now.Millisecond);
             return Color.FromArgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
         }
-
+     public static double DistanceBetweenLineAndPointX(double ln1X, double ln1Y, double ln2X, double ln2Y, double ptX, double ptY)
+        {
+            double distance = Math.Sin(Math.Atan2(ptY - ln1Y, ptX - ln1X) -
+                Math.Atan2(ln2Y - ln1Y, ln2X - ln1X)) * Math.Sqrt((ptX - ln1X) * (ptX - ln1X) + (ptY - ln1Y) * (ptY - ln1Y));
+            return distance;
+        }
 
         public static double DistanceBetweenLineAndPoint(double Xa, double Ya, double Xb, double Yb, double Xp, double Yp)
         {

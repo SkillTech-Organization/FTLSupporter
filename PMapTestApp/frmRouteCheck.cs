@@ -182,45 +182,51 @@ namespace PMapTestApp
 
             if (rdbFrom.Checked)
             {
-                setFromNode(pt);
+                MarkerFrom.Position = pt;
             }
             else
             {
-                setToNode(pt);
+                MarkerTo.Position = pt;
             }
+
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
 
         }
 
-        private void setFromNode(PointLatLng p_pt)
+        private void setFromToMap()
         {
-            int NOD_ID = m_bllRoute.GetNearestNOD_ID(p_pt);
+            int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             if (NOD_ID > 0)
             {
                 this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
                 numFromNOD_ID.Value = NOD_ID;
-                MarkerFrom.Position = p_pt;
-                numLatFrom.Value = Convert.ToDecimal(p_pt.Lat);
-                numLngFrom.Value = Convert.ToDecimal(p_pt.Lng);
+
+                boNode nd = m_bllRoute.GetNode(NOD_ID);
+                MarkerFrom.Position = new PointLatLng(Math.Round( nd.NOD_YPOS/ Global.LatLngDivider), Math.Round(nd.NOD_XPOS / Global.LatLngDivider));
+
+                numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
+                numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
                 this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
                 UpdateControls();
             }
 
         }
-        private void setToNode(PointLatLng p_pt)
+        private void setToToMap()
         {
-            int NOD_ID = m_bllRoute.GetNearestNOD_ID(p_pt);
+            int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
             {
                 this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
                 this.numLngTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
-
                 numToNOD_ID.Value = NOD_ID;
-                MarkerTo.Position = p_pt;
-                numLatTo.Value = Convert.ToDecimal(p_pt.Lat);
-                numLngTo.Value = Convert.ToDecimal(p_pt.Lng);
+
+                boNode nd = m_bllRoute.GetNode(NOD_ID);
+                MarkerTo.Position = new PointLatLng(Math.Round(nd.NOD_YPOS / Global.LatLngDivider), Math.Round(nd.NOD_XPOS / Global.LatLngDivider));
+
+                numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
+                numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
                 this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
                 this.numLngTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
                 UpdateControls();
@@ -267,11 +273,14 @@ namespace PMapTestApp
         private void numLatFrom_ValueChanged(object sender, EventArgs e)
         {
             MarkerFrom.Position = new PointLatLng(Convert.ToDouble(numLatFrom.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngFrom.Value, CultureInfo.InvariantCulture));
+            numFromNOD_ID.Value = 0;
+            /*
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             if (NOD_ID > 0)
                 numFromNOD_ID.Value = NOD_ID;
             else
                 numFromNOD_ID.Value = 0;
+                */
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             UpdateControls();
         }
@@ -279,11 +288,15 @@ namespace PMapTestApp
         private void numLatTo_ValueChanged(object sender, EventArgs e)
         {
             MarkerTo.Position = new PointLatLng(Convert.ToDouble(numLatTo.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngTo.Value, CultureInfo.InvariantCulture));
+            numToNOD_ID.Value = 0;
+
+            /*
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
                 numToNOD_ID.Value = NOD_ID;
             else
                 numToNOD_ID.Value = 0;
+            */
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             UpdateControls();
         }
@@ -311,6 +324,9 @@ namespace PMapTestApp
 
         private void CalcAndShowRoute()
         {
+            setFromToMap();
+            setToToMap();
+
             PMapRoutingProvider provider = new PMapRoutingProvider();
             RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
             if (numFromNOD_ID.Value > 0 && numToNOD_ID.Value > 0)
@@ -557,6 +573,17 @@ namespace PMapTestApp
                 m_edgesLayer.IsVisibile = ckhShowEdges.Checked;
                 gMapControl.Refresh();
             }
+        }
+
+        private void gMapControl_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            setFromToMap();
+            setToToMap();
         }
     }
 }
