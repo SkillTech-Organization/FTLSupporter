@@ -748,16 +748,19 @@ namespace PMap.BLL
         {
             int diff = 0;
             return GetNearestNOD_ID(p_pt, out diff);
+
         }
 
-       
 
         /* SQL implementation:
-        CREATE FUNCTION dbo.fnDistanceBetweenLineAndPoint( @ln1X FLOAT, @ln1Y FLOAT, @ln2X FLOAT, @ln2Y FLOAT, @ptX FLOAT, @ptY FLOAT)
+        ALTER FUNCTION [dbo].[fnDistanceBetweenLineAndPoint]( @ln1X FLOAT, @ln1Y FLOAT, @ln2X FLOAT, @ln2Y FLOAT, @ptX FLOAT, @ptY FLOAT)
         RETURNS FLOAT AS 
         BEGIN
-          RETURN Sin(Atn2(@ptY - @ln1Y, @ptX - @ln1X) -
-                        Atn2(@ln2Y - @ln1Y, @ln2X - @ln1X)) * Sqrt((@ptX - @ln1X) * (@ptX - @ln1X) + (@ptY - @ln1Y) * (@ptY - @ln1Y));
+         --RETURN Sin(Atn2(@ptY - @ln1Y, @ptX - @ln1X) -
+         --               Atn2(@ln2Y - @ln1Y, @ln2X - @ln1X)) * Sqrt((@ptX - @ln1X) * (@ptX - @ln1X) + (@ptY - @ln1Y) * (@ptY - @ln1Y)) 
+        --	return sqrt( power( (@ln2Y-@ln1Y)*(@ptX-@ln1X) - (@ln2X-@ln1X)* (@ptY-@ln1Y), 2) / ( power(@ln2X-@ln1X,2) + power(@ln2Y-@ln1Y,2))) 
+
+	        return abs( (@ln2X-@ln1X)*(@ln1Y-@ptY) - (@ln1X-@ptX)* (@ln2Y-@ln1Y)) / sqrt(power(@ln2X-@ln1X,2) + power(@ln2Y-@ln1Y,2)) 
         END
         */
 
@@ -784,7 +787,7 @@ namespace PMap.BLL
             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and  " + Environment.NewLine +
             "abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < " + Global.NearestNOD_ID_Approach.ToString() + "  and  " + Environment.NewLine +
             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < " + Global.NearestNOD_ID_Approach.ToString() + "  " + Environment.NewLine +
-            "order by dbo.fnDistanceBetweenLineAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") desc ";
+            "order by dbo.fnDistanceBetweenLineAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptY + ", " + ptX + ") asc ";
 
             DataTable dt = DBA.Query2DataTable(sSql);
             if (dt.Rows.Count > 0)

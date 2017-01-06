@@ -203,7 +203,7 @@ namespace PMapTestApp
                 numFromNOD_ID.Value = NOD_ID;
 
                 boNode nd = m_bllRoute.GetNode(NOD_ID);
-                MarkerFrom.Position = new PointLatLng(Math.Round( nd.NOD_YPOS/ Global.LatLngDivider), Math.Round(nd.NOD_XPOS / Global.LatLngDivider));
+                MarkerFrom.Position = new PointLatLng(nd.NOD_YPOS/ Global.LatLngDivider, nd.NOD_XPOS / Global.LatLngDivider);
 
                 numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
                 numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
@@ -223,7 +223,7 @@ namespace PMapTestApp
                 numToNOD_ID.Value = NOD_ID;
 
                 boNode nd = m_bllRoute.GetNode(NOD_ID);
-                MarkerTo.Position = new PointLatLng(Math.Round(nd.NOD_YPOS / Global.LatLngDivider), Math.Round(nd.NOD_XPOS / Global.LatLngDivider));
+                MarkerTo.Position = new PointLatLng(nd.NOD_YPOS / Global.LatLngDivider, nd.NOD_XPOS / Global.LatLngDivider);
 
                 numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
                 numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
@@ -554,11 +554,16 @@ namespace PMapTestApp
                 foreach (var edg in RouteData.Instance.Edges)
                 {
                     var edge = edg.Value;
-                    //   GMapMarker gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
-                    //    m_edgesLayer.Markers.Add(gm);
+                    /*
+                    GMapMarker gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
+                    gm.ToolTipText = String.Format("ID:{0}, name:{0}", edge.ID, edge.EDG_NAME);
+                    m_edgesLayer.Markers.Add(gm);
+                    */
                     Pen p = new Pen(Color.BlueViolet, 1);
                     GMapRoute r = new GMapRoute(new List<PointLatLng> { edge.fromLatLng, edge.toLatLng }, "xx");
+                   
                     r.Stroke = p;
+                    
                     m_edgesLayer.Routes.Add(r);
                 }
                 ckhShowEdges.Checked = true;

@@ -59,6 +59,9 @@
             this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowEdges = new System.Windows.Forms.Button();
             this.ckhShowEdges = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkBoundary = new System.Windows.Forms.CheckBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.label8 = new System.Windows.Forms.Label();
@@ -84,9 +87,6 @@
             this.cmbRST_ID_LIST = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkBoundary = new System.Windows.Forms.CheckBox();
-            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -106,6 +106,7 @@
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
+            this.tableLayoutPanel13.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numLatTo)).BeginInit();
@@ -118,7 +119,6 @@
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
-            this.tableLayoutPanel13.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -138,7 +138,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
             this.splitContainer1.Size = new System.Drawing.Size(1303, 891);
-            this.splitContainer1.SplitterDistance = 642;
+            this.splitContainer1.SplitterDistance = 638;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -164,7 +164,7 @@
             this.gMapControl.RoutesEnabled = true;
             this.gMapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMapControl.ShowTileGridLines = false;
-            this.gMapControl.Size = new System.Drawing.Size(640, 889);
+            this.gMapControl.Size = new System.Drawing.Size(636, 889);
             this.gMapControl.TabIndex = 0;
             this.gMapControl.Zoom = 0D;
             this.gMapControl.Load += new System.EventHandler(this.gMapControl_Load);
@@ -204,7 +204,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 78.5124F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.4876F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(651, 889);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(655, 889);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // panel4
@@ -215,7 +215,7 @@
             this.panel4.Location = new System.Drawing.Point(4, 447);
             this.panel4.Margin = new System.Windows.Forms.Padding(4);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(643, 41);
+            this.panel4.Size = new System.Drawing.Size(647, 41);
             this.panel4.TabIndex = 49;
             // 
             // tableLayoutPanel10
@@ -231,13 +231,13 @@
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(641, 39);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(645, 39);
             this.tableLayoutPanel10.TabIndex = 1;
             // 
             // btnTo
             // 
             this.btnTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTo.Location = new System.Drawing.Point(538, 5);
+            this.btnTo.Location = new System.Drawing.Point(542, 5);
             this.btnTo.Margin = new System.Windows.Forms.Padding(4);
             this.btnTo.Name = "btnTo";
             this.btnTo.Size = new System.Drawing.Size(99, 28);
@@ -254,7 +254,7 @@
             this.lblTo.Location = new System.Drawing.Point(4, 10);
             this.lblTo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTo.Name = "lblTo";
-            this.lblTo.Size = new System.Drawing.Size(526, 19);
+            this.lblTo.Size = new System.Drawing.Size(530, 19);
             this.lblTo.TabIndex = 1;
             // 
             // groupBox1
@@ -265,7 +265,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(651, 59);
+            this.groupBox1.Size = new System.Drawing.Size(655, 59);
             this.groupBox1.TabIndex = 42;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Útvonaltípus";
@@ -284,14 +284,14 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(643, 36);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(647, 36);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // rdbFastestPath
             // 
             this.rdbFastestPath.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rdbFastestPath.AutoSize = true;
-            this.rdbFastestPath.Location = new System.Drawing.Point(418, 7);
+            this.rdbFastestPath.Location = new System.Drawing.Point(421, 7);
             this.rdbFastestPath.Margin = new System.Windows.Forms.Padding(4);
             this.rdbFastestPath.Name = "rdbFastestPath";
             this.rdbFastestPath.Size = new System.Drawing.Size(128, 21);
@@ -304,7 +304,7 @@
             // 
             this.rdShortestPath.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rdShortestPath.AutoSize = true;
-            this.rdShortestPath.Location = new System.Drawing.Point(98, 7);
+            this.rdShortestPath.Location = new System.Drawing.Point(99, 7);
             this.rdShortestPath.Margin = new System.Windows.Forms.Padding(4);
             this.rdShortestPath.Name = "rdShortestPath";
             this.rdShortestPath.Size = new System.Drawing.Size(124, 21);
@@ -330,7 +330,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(643, 49);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(647, 49);
             this.tableLayoutPanel8.TabIndex = 43;
             // 
             // label6
@@ -340,7 +340,7 @@
             this.label6.Location = new System.Drawing.Point(4, 28);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(177, 17);
+            this.label6.Size = new System.Drawing.Size(179, 17);
             this.label6.TabIndex = 2;
             this.label6.Text = "To ID";
             // 
@@ -351,14 +351,14 @@
             this.label3.Location = new System.Drawing.Point(4, 3);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(177, 17);
+            this.label3.Size = new System.Drawing.Size(179, 17);
             this.label3.TabIndex = 1;
             this.label3.Text = "From ID";
             // 
             // numFromNOD_ID
             // 
             this.numFromNOD_ID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.numFromNOD_ID.Location = new System.Drawing.Point(189, 4);
+            this.numFromNOD_ID.Location = new System.Drawing.Point(191, 4);
             this.numFromNOD_ID.Margin = new System.Windows.Forms.Padding(4);
             this.numFromNOD_ID.Maximum = new decimal(new int[] {
             99999999,
@@ -366,14 +366,14 @@
             0,
             0});
             this.numFromNOD_ID.Name = "numFromNOD_ID";
-            this.numFromNOD_ID.Size = new System.Drawing.Size(450, 22);
+            this.numFromNOD_ID.Size = new System.Drawing.Size(452, 22);
             this.numFromNOD_ID.TabIndex = 3;
             this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
             // 
             // numToNOD_ID
             // 
             this.numToNOD_ID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.numToNOD_ID.Location = new System.Drawing.Point(189, 28);
+            this.numToNOD_ID.Location = new System.Drawing.Point(191, 28);
             this.numToNOD_ID.Margin = new System.Windows.Forms.Padding(4);
             this.numToNOD_ID.Maximum = new decimal(new int[] {
             99999999,
@@ -381,7 +381,7 @@
             0,
             0});
             this.numToNOD_ID.Name = "numToNOD_ID";
-            this.numToNOD_ID.Size = new System.Drawing.Size(450, 22);
+            this.numToNOD_ID.Size = new System.Drawing.Size(452, 22);
             this.numToNOD_ID.TabIndex = 4;
             this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
             // 
@@ -393,7 +393,7 @@
             this.grpCurrPos.Margin = new System.Windows.Forms.Padding(4);
             this.grpCurrPos.Name = "grpCurrPos";
             this.grpCurrPos.Padding = new System.Windows.Forms.Padding(4);
-            this.grpCurrPos.Size = new System.Drawing.Size(643, 72);
+            this.grpCurrPos.Size = new System.Drawing.Size(647, 72);
             this.grpCurrPos.TabIndex = 3;
             this.grpCurrPos.TabStop = false;
             this.grpCurrPos.Text = "Aktuális pozíció";
@@ -414,7 +414,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(635, 49);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(639, 49);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // lblCurrLng
@@ -422,10 +422,10 @@
             this.lblCurrLng.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrLng.AutoSize = true;
             this.lblCurrLng.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCurrLng.Location = new System.Drawing.Point(186, 27);
+            this.lblCurrLng.Location = new System.Drawing.Point(187, 27);
             this.lblCurrLng.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCurrLng.Name = "lblCurrLng";
-            this.lblCurrLng.Size = new System.Drawing.Size(445, 19);
+            this.lblCurrLng.Size = new System.Drawing.Size(448, 19);
             this.lblCurrLng.TabIndex = 3;
             this.lblCurrLng.Text = "lblCurrLng";
             this.lblCurrLng.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -437,7 +437,7 @@
             this.label1.Location = new System.Drawing.Point(4, 3);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(174, 17);
+            this.label1.Size = new System.Drawing.Size(175, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Lat:";
             // 
@@ -448,7 +448,7 @@
             this.label2.Location = new System.Drawing.Point(4, 28);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(174, 17);
+            this.label2.Size = new System.Drawing.Size(175, 17);
             this.label2.TabIndex = 1;
             this.label2.Text = "Lng:";
             // 
@@ -457,10 +457,10 @@
             this.lblCurrLat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrLat.AutoSize = true;
             this.lblCurrLat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCurrLat.Location = new System.Drawing.Point(186, 2);
+            this.lblCurrLat.Location = new System.Drawing.Point(187, 2);
             this.lblCurrLat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCurrLat.Name = "lblCurrLat";
-            this.lblCurrLat.Size = new System.Drawing.Size(445, 19);
+            this.lblCurrLat.Size = new System.Drawing.Size(448, 19);
             this.lblCurrLat.TabIndex = 2;
             this.lblCurrLat.Text = "lblCurrLat";
             this.lblCurrLat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -473,7 +473,7 @@
             this.pZoom.Margin = new System.Windows.Forms.Padding(4);
             this.pZoom.Name = "pZoom";
             this.pZoom.Padding = new System.Windows.Forms.Padding(4);
-            this.pZoom.Size = new System.Drawing.Size(643, 60);
+            this.pZoom.Size = new System.Drawing.Size(647, 60);
             this.pZoom.TabIndex = 32;
             this.pZoom.TabStop = false;
             this.pZoom.Text = "Nagyítás";
@@ -486,7 +486,7 @@
             this.tbZoom.Margin = new System.Windows.Forms.Padding(4);
             this.tbZoom.Maximum = 25;
             this.tbZoom.Name = "tbZoom";
-            this.tbZoom.Size = new System.Drawing.Size(635, 37);
+            this.tbZoom.Size = new System.Drawing.Size(639, 37);
             this.tbZoom.TabIndex = 0;
             this.tbZoom.Value = 2;
             this.tbZoom.Scroll += new System.EventHandler(this.tbZoom_Scroll);
@@ -499,7 +499,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(643, 84);
+            this.groupBox2.Size = new System.Drawing.Size(647, 84);
             this.groupBox2.TabIndex = 41;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Kijelölés";
@@ -520,7 +520,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(635, 61);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(639, 61);
             this.tableLayoutPanel4.TabIndex = 1;
             // 
             // rdbTo
@@ -530,7 +530,7 @@
             this.rdbTo.Location = new System.Drawing.Point(4, 35);
             this.rdbTo.Margin = new System.Windows.Forms.Padding(4);
             this.rdbTo.Name = "rdbTo";
-            this.rdbTo.Size = new System.Drawing.Size(309, 21);
+            this.rdbTo.Size = new System.Drawing.Size(311, 21);
             this.rdbTo.TabIndex = 1;
             this.rdbTo.TabStop = true;
             this.rdbTo.Text = "Végpont";
@@ -543,7 +543,7 @@
             this.rdbFrom.Location = new System.Drawing.Point(4, 4);
             this.rdbFrom.Margin = new System.Windows.Forms.Padding(4);
             this.rdbFrom.Name = "rdbFrom";
-            this.rdbFrom.Size = new System.Drawing.Size(309, 21);
+            this.rdbFrom.Size = new System.Drawing.Size(311, 21);
             this.rdbFrom.TabIndex = 0;
             this.rdbFrom.TabStop = true;
             this.rdbFrom.Text = "Kezdőpont";
@@ -558,13 +558,13 @@
             this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel12.Controls.Add(this.btnShowEdges, 0, 0);
             this.tableLayoutPanel12.Controls.Add(this.ckhShowEdges, 1, 0);
-            this.tableLayoutPanel12.Location = new System.Drawing.Point(317, 30);
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(319, 30);
             this.tableLayoutPanel12.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.RowCount = 1;
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(318, 31);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(320, 31);
             this.tableLayoutPanel12.TabIndex = 3;
             // 
             // btnShowEdges
@@ -573,7 +573,7 @@
             this.btnShowEdges.Location = new System.Drawing.Point(1, 4);
             this.btnShowEdges.Margin = new System.Windows.Forms.Padding(0);
             this.btnShowEdges.Name = "btnShowEdges";
-            this.btnShowEdges.Size = new System.Drawing.Size(157, 23);
+            this.btnShowEdges.Size = new System.Drawing.Size(158, 23);
             this.btnShowEdges.TabIndex = 3;
             this.btnShowEdges.Text = "Élek felolvasása";
             this.btnShowEdges.UseVisualStyleBackColor = true;
@@ -582,13 +582,52 @@
             // ckhShowEdges
             // 
             this.ckhShowEdges.AutoSize = true;
-            this.ckhShowEdges.Location = new System.Drawing.Point(162, 4);
+            this.ckhShowEdges.Location = new System.Drawing.Point(163, 4);
             this.ckhShowEdges.Name = "ckhShowEdges";
             this.ckhShowEdges.Size = new System.Drawing.Size(109, 21);
             this.ckhShowEdges.TabIndex = 4;
             this.ckhShowEdges.Text = "Megjelenítés";
             this.ckhShowEdges.UseVisualStyleBackColor = true;
             this.ckhShowEdges.CheckedChanged += new System.EventHandler(this.ckhShowEdges_CheckedChanged);
+            // 
+            // tableLayoutPanel13
+            // 
+            this.tableLayoutPanel13.ColumnCount = 2;
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.Controls.Add(this.chkBoundary, 0, 0);
+            this.tableLayoutPanel13.Controls.Add(this.button4, 1, 0);
+            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(319, 0);
+            this.tableLayoutPanel13.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
+            this.tableLayoutPanel13.RowCount = 1;
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(320, 30);
+            this.tableLayoutPanel13.TabIndex = 4;
+            // 
+            // chkBoundary
+            // 
+            this.chkBoundary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBoundary.AutoSize = true;
+            this.chkBoundary.Location = new System.Drawing.Point(4, 4);
+            this.chkBoundary.Margin = new System.Windows.Forms.Padding(4);
+            this.chkBoundary.Name = "chkBoundary";
+            this.chkBoundary.Size = new System.Drawing.Size(152, 21);
+            this.chkBoundary.TabIndex = 3;
+            this.chkBoundary.Text = "Lehatárolás ell.";
+            this.chkBoundary.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.Location = new System.Drawing.Point(163, 3);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(154, 23);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "Térképre igazítás";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // tableLayoutPanel9
             // 
@@ -603,7 +642,7 @@
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(643, 97);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(647, 97);
             this.tableLayoutPanel9.TabIndex = 42;
             // 
             // tableLayoutPanel7
@@ -622,7 +661,7 @@
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.93617F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.06383F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(643, 49);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(647, 49);
             this.tableLayoutPanel7.TabIndex = 3;
             // 
             // label8
@@ -632,7 +671,7 @@
             this.label8.Location = new System.Drawing.Point(4, 3);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(176, 17);
+            this.label8.Size = new System.Drawing.Size(177, 17);
             this.label8.TabIndex = 0;
             this.label8.Text = "Lat:";
             // 
@@ -643,7 +682,7 @@
             this.label9.Location = new System.Drawing.Point(4, 27);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(176, 17);
+            this.label9.Size = new System.Drawing.Size(177, 17);
             this.label9.TabIndex = 1;
             this.label9.Text = "Lng:";
             // 
@@ -651,7 +690,7 @@
             // 
             this.numLatTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numLatTo.DecimalPlaces = 7;
-            this.numLatTo.Location = new System.Drawing.Point(188, 4);
+            this.numLatTo.Location = new System.Drawing.Point(189, 4);
             this.numLatTo.Margin = new System.Windows.Forms.Padding(4);
             this.numLatTo.Maximum = new decimal(new int[] {
             99999999,
@@ -659,14 +698,14 @@
             0,
             0});
             this.numLatTo.Name = "numLatTo";
-            this.numLatTo.Size = new System.Drawing.Size(451, 22);
+            this.numLatTo.Size = new System.Drawing.Size(454, 22);
             this.numLatTo.TabIndex = 2;
             // 
             // numLngTo
             // 
             this.numLngTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numLngTo.DecimalPlaces = 7;
-            this.numLngTo.Location = new System.Drawing.Point(188, 27);
+            this.numLngTo.Location = new System.Drawing.Point(189, 27);
             this.numLngTo.Margin = new System.Windows.Forms.Padding(4);
             this.numLngTo.Maximum = new decimal(new int[] {
             99999999,
@@ -674,7 +713,7 @@
             0,
             0});
             this.numLngTo.Name = "numLngTo";
-            this.numLngTo.Size = new System.Drawing.Size(451, 22);
+            this.numLngTo.Size = new System.Drawing.Size(454, 22);
             this.numLngTo.TabIndex = 3;
             // 
             // tableLayoutPanel6
@@ -693,7 +732,7 @@
             this.tableLayoutPanel6.RowCount = 2;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(643, 48);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(647, 48);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
             // label5
@@ -703,7 +742,7 @@
             this.label5.Location = new System.Drawing.Point(4, 27);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(176, 17);
+            this.label5.Size = new System.Drawing.Size(177, 17);
             this.label5.TabIndex = 1;
             this.label5.Text = "Lng:";
             // 
@@ -711,7 +750,7 @@
             // 
             this.numLatFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numLatFrom.DecimalPlaces = 7;
-            this.numLatFrom.Location = new System.Drawing.Point(188, 4);
+            this.numLatFrom.Location = new System.Drawing.Point(189, 4);
             this.numLatFrom.Margin = new System.Windows.Forms.Padding(4);
             this.numLatFrom.Maximum = new decimal(new int[] {
             99999999,
@@ -719,14 +758,14 @@
             0,
             0});
             this.numLatFrom.Name = "numLatFrom";
-            this.numLatFrom.Size = new System.Drawing.Size(451, 22);
+            this.numLatFrom.Size = new System.Drawing.Size(454, 22);
             this.numLatFrom.TabIndex = 2;
             // 
             // numLngFrom
             // 
             this.numLngFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numLngFrom.DecimalPlaces = 7;
-            this.numLngFrom.Location = new System.Drawing.Point(188, 28);
+            this.numLngFrom.Location = new System.Drawing.Point(189, 28);
             this.numLngFrom.Margin = new System.Windows.Forms.Padding(4);
             this.numLngFrom.Maximum = new decimal(new int[] {
             99999999,
@@ -734,7 +773,7 @@
             0,
             0});
             this.numLngFrom.Name = "numLngFrom";
-            this.numLngFrom.Size = new System.Drawing.Size(451, 22);
+            this.numLngFrom.Size = new System.Drawing.Size(454, 22);
             this.numLngFrom.TabIndex = 3;
             // 
             // label4
@@ -744,7 +783,7 @@
             this.label4.Location = new System.Drawing.Point(4, 3);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(176, 17);
+            this.label4.Size = new System.Drawing.Size(177, 17);
             this.label4.TabIndex = 0;
             this.label4.Text = "Lat:";
             // 
@@ -756,7 +795,7 @@
             this.panel1.Location = new System.Drawing.Point(4, 398);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(643, 41);
+            this.panel1.Size = new System.Drawing.Size(647, 41);
             this.panel1.TabIndex = 46;
             // 
             // tableLayoutPanel5
@@ -772,7 +811,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(641, 39);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(645, 39);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // lblFrom
@@ -783,14 +822,14 @@
             this.lblFrom.Location = new System.Drawing.Point(4, 10);
             this.lblFrom.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFrom.Name = "lblFrom";
-            this.lblFrom.Size = new System.Drawing.Size(526, 19);
+            this.lblFrom.Size = new System.Drawing.Size(530, 19);
             this.lblFrom.TabIndex = 0;
             this.lblFrom.Click += new System.EventHandler(this.lblFrom_Click);
             // 
             // btnFrom
             // 
             this.btnFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFrom.Location = new System.Drawing.Point(538, 5);
+            this.btnFrom.Location = new System.Drawing.Point(542, 5);
             this.btnFrom.Margin = new System.Windows.Forms.Padding(4);
             this.btnFrom.Name = "btnFrom";
             this.btnFrom.Size = new System.Drawing.Size(99, 28);
@@ -806,7 +845,7 @@
             this.btnOK.Location = new System.Drawing.Point(4, 852);
             this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(643, 25);
+            this.btnOK.Size = new System.Drawing.Size(647, 25);
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "Bezár";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -820,7 +859,7 @@
             this.panel3.Location = new System.Drawing.Point(4, 669);
             this.panel3.Margin = new System.Windows.Forms.Padding(4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(643, 167);
+            this.panel3.Size = new System.Drawing.Size(647, 167);
             this.panel3.TabIndex = 48;
             // 
             // txtDierctRoute
@@ -830,7 +869,7 @@
             this.txtDierctRoute.Margin = new System.Windows.Forms.Padding(4);
             this.txtDierctRoute.Multiline = true;
             this.txtDierctRoute.Name = "txtDierctRoute";
-            this.txtDierctRoute.Size = new System.Drawing.Size(641, 140);
+            this.txtDierctRoute.Size = new System.Drawing.Size(645, 140);
             this.txtDierctRoute.TabIndex = 0;
             this.txtDierctRoute.TextChanged += new System.EventHandler(this.txtDierctRoute_TextChanged);
             // 
@@ -840,7 +879,7 @@
             this.button3.Location = new System.Drawing.Point(0, 140);
             this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(641, 25);
+            this.button3.Size = new System.Drawing.Size(645, 25);
             this.button3.TabIndex = 1;
             this.button3.Text = "Beírt útvonal megjelenítése";
             this.button3.UseVisualStyleBackColor = true;
@@ -854,7 +893,7 @@
             this.panel2.Location = new System.Drawing.Point(4, 589);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(643, 36);
+            this.panel2.Size = new System.Drawing.Size(647, 36);
             this.panel2.TabIndex = 47;
             // 
             // tableLayoutPanel11
@@ -870,7 +909,7 @@
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(641, 34);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(645, 34);
             this.tableLayoutPanel11.TabIndex = 0;
             // 
             // label7
@@ -889,10 +928,10 @@
             this.cmbRST_ID_LIST.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRST_ID_LIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRST_ID_LIST.FormattingEnabled = true;
-            this.cmbRST_ID_LIST.Location = new System.Drawing.Point(71, 5);
+            this.cmbRST_ID_LIST.Location = new System.Drawing.Point(71, 4);
             this.cmbRST_ID_LIST.Margin = new System.Windows.Forms.Padding(4);
             this.cmbRST_ID_LIST.Name = "cmbRST_ID_LIST";
-            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(566, 24);
+            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(570, 24);
             this.cmbRST_ID_LIST.TabIndex = 4;
             this.cmbRST_ID_LIST.SelectedIndexChanged += new System.EventHandler(this.cmbRST_ID_LIST_SelectedIndexChanged);
             // 
@@ -902,7 +941,7 @@
             this.button2.Location = new System.Drawing.Point(4, 634);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(643, 26);
+            this.button2.Size = new System.Drawing.Size(647, 26);
             this.button2.TabIndex = 45;
             this.button2.Text = "Útvonal részletező";
             this.button2.UseVisualStyleBackColor = true;
@@ -914,50 +953,11 @@
             this.button1.Location = new System.Drawing.Point(4, 555);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(643, 26);
+            this.button1.Size = new System.Drawing.Size(647, 26);
             this.button1.TabIndex = 44;
             this.button1.Text = "Útvonal számítása";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // tableLayoutPanel13
-            // 
-            this.tableLayoutPanel13.ColumnCount = 2;
-            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel13.Controls.Add(this.chkBoundary, 0, 0);
-            this.tableLayoutPanel13.Controls.Add(this.button4, 1, 0);
-            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel13.Location = new System.Drawing.Point(317, 0);
-            this.tableLayoutPanel13.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
-            this.tableLayoutPanel13.RowCount = 1;
-            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(318, 30);
-            this.tableLayoutPanel13.TabIndex = 4;
-            // 
-            // chkBoundary
-            // 
-            this.chkBoundary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkBoundary.AutoSize = true;
-            this.chkBoundary.Location = new System.Drawing.Point(4, 4);
-            this.chkBoundary.Margin = new System.Windows.Forms.Padding(4);
-            this.chkBoundary.Name = "chkBoundary";
-            this.chkBoundary.Size = new System.Drawing.Size(151, 21);
-            this.chkBoundary.TabIndex = 3;
-            this.chkBoundary.Text = "Lehatárolás ell.";
-            this.chkBoundary.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(162, 3);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(153, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Térképre igazítás";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // frmRouteCheck
             // 
@@ -996,6 +996,8 @@
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel12.ResumeLayout(false);
             this.tableLayoutPanel12.PerformLayout();
+            this.tableLayoutPanel13.ResumeLayout(false);
+            this.tableLayoutPanel13.PerformLayout();
             this.tableLayoutPanel9.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
@@ -1013,8 +1015,6 @@
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel11.ResumeLayout(false);
             this.tableLayoutPanel11.PerformLayout();
-            this.tableLayoutPanel13.ResumeLayout(false);
-            this.tableLayoutPanel13.PerformLayout();
             this.ResumeLayout(false);
 
         }
