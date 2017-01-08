@@ -704,7 +704,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         {
                             for (int i = 0; i < rTourPoint.Route.Points.Count - 2; i++)
                             {
-                                double dst = Util.DistanceBetweenLineAndPoint(rTourPoint.Route.Points[i].Lat, rTourPoint.Route.Points[i].Lng,
+                                double dst = Util.DistanceBetweenSegmentAndPoint(rTourPoint.Route.Points[i].Lat, rTourPoint.Route.Points[i].Lng,
                                                                                 rTourPoint.Route.Points[i + 1].Lat, rTourPoint.Route.Points[i + 1].Lng,
                                                                                 p_point.Lat, p_point.Lng);
                                 if (dst <= p_nearbyDistance)

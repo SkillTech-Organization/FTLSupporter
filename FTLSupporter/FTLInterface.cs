@@ -97,7 +97,7 @@ namespace FTLSupporter
                              */
                             int diff = 0;
                             int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), out diff);
-                            if (NOD_ID == null || diff > Global.NearestNOD_ID_Approach)
+                            if (NOD_ID == 0 )
                             {
                                 result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
                             }
@@ -166,17 +166,18 @@ namespace FTLSupporter
 
                     //Koordináta feloldás és ellenőrzés
                     //
-                    trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
+                    trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST);
                     if (trk.NOD_ID_CURR == 0)
                         result.Add(getValidationError(trk, "CurrLat,CurrLng", FTLMessages.E_WRONGCOORD));
 
-                    trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, trk.RetPoint.Value, trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
+                    trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, trk.RetPoint.Value, trk.RZN_ID_LIST);
                     if (trk.RET_NOD_ID == 0)
                         result.Add(getValidationError(trk, "RetPoint ", FTLMessages.E_WRONGCOORD));
 
                     foreach (FTLPoint pt in trk.CurrTPoints)
                     {
-                        pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), trk.RZN_ID_LIST, Global.NearestNOD_ID_Approach);
+//                        pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), trk.RZN_ID_LIST);
+                        pt.NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                         if (pt.NOD_ID == 0)
                         {
                             result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
@@ -1167,14 +1168,14 @@ namespace FTLSupporter
             return res;
         }
 
-        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach)
+        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST)
         {
             int diff = 0;
-            return FTLGetNearestReachableNOD_IDForTruck(p_route, p_pt, p_RZN_ID_LIST, p_approach, out diff);
+            return FTLGetNearestReachableNOD_IDForTruck(p_route, p_pt, p_RZN_ID_LIST,out diff);
 
         }
 
-        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_approach, out int r_diff)
+        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, out int r_diff)
         {
             int NOD_ID = 0;
             int diff = Int32.MaxValue;
@@ -1186,7 +1187,7 @@ namespace FTLSupporter
             }
             else
             {
-                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_approach, out diff);
+                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, out diff);
                 if (NOD_ID != 0)
                     PMapCommonVars.Instance.TruckNod_IDCahce.Add(Tuple.Create(p_pt, p_RZN_ID_LIST), Tuple.Create(NOD_ID, diff));
             }

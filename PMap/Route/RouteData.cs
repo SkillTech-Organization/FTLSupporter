@@ -105,26 +105,32 @@ namespace PMap.Route
                             string keyTo = Destination.ToString() + "," + Source.ToString();
 
                             boEdge edgeFrom = new boEdge
-                              {
-                                  ID = Util.getFieldValue<int>(dr, "ID"),
-                                  NOD_ID_FROM = Source,
-                                  NOD_ID_TO = Destination,
-                                  EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
-                                  EDG_LENGTH = Util.getFieldValue<float>(dr, "EDG_LENGTH"),
-                                  RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
-                                  RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
-                                  RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
-                                  EDG_ONEWAY = OneWay,
-                                  EDG_DESTTRAFFIC = DestTraffic,
-                                  WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
-                                  CalcSpeed = PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")],
-                                  CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
-                                  EDG_ETLCODE = Util.getFieldValue<string>(dr, "EDG_ETLCODE"),
-                                  Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
-                                  fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
-                                  toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider)
+                            {
+                                ID = Util.getFieldValue<int>(dr, "ID"),
+                                NOD_ID_FROM = Source,
+                                NOD_ID_TO = Destination,
+                                EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
+                                EDG_LENGTH = Util.getFieldValue<float>(dr, "EDG_LENGTH"),
+                                RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
+                                RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
+                                RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
+                                EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
+                                EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
+                                EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
+                                EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
+                                ZIP_NUM_FROM = Util.getFieldValue<int>(dr, "ZIP_NUM_FROM"),
+                                ZIP_NUM_TO = Util.getFieldValue<int>(dr, "ZIP_NUM_TO"),
+                                EDG_ONEWAY = OneWay,
+                                EDG_DESTTRAFFIC = DestTraffic,
+                                WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
+                                CalcSpeed = PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")],
+                                CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
+                                EDG_ETLCODE = Util.getFieldValue<string>(dr, "EDG_ETLCODE"),
+                                Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
+                                fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
+                                toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider)
 
-                              };
+                            };
 
 
                             if (!Edges.ContainsKey(keyFrom))
@@ -149,6 +155,10 @@ namespace PMap.Route
                                     RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
                                     RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
                                     RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
+                                    EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
+                                    EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
+                                    EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
+                                    EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
                                     EDG_ONEWAY = OneWay,
                                     EDG_DESTTRAFFIC = DestTraffic,
                                     WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),

@@ -35,6 +35,7 @@ namespace PMapTestApp
         private GMapOverlay m_directRouteLayer;
         private GMapOverlay m_boundaryLayer;
         private GMapOverlay m_edgesLayer;
+        private GMapOverlay m_edgesMarkerLayer;
 
         private bool m_isMouseDown = false;
         private int m_currZoom = Global.DefZoom;
@@ -88,6 +89,9 @@ namespace PMapTestApp
 
                     m_edgesLayer = new GMapOverlay("Edges");
                     gMapControl.Overlays.Add(m_edgesLayer);
+
+                    m_edgesMarkerLayer = new GMapOverlay("EdgesMarker");
+                    gMapControl.Overlays.Add(m_edgesMarkerLayer);
 
 
                     MarkerTo = new GMarkerGoogle(gMapControl.Position, GMarkerGoogleType.red);
@@ -195,7 +199,9 @@ namespace PMapTestApp
 
         private void setFromToMap()
         {
-            int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
+            //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
+            int diff = 0;
+            int NOD_ID = m_bllRoute.GetNearestReachableNOD_IDForTruck(MarkerFrom.Position,"1,2,3,4,5", out diff );
             if (NOD_ID > 0)
             {
                 this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
@@ -272,6 +278,8 @@ namespace PMapTestApp
 
         private void numLatFrom_ValueChanged(object sender, EventArgs e)
         {
+            this.numFromNOD_ID.ValueChanged -= new System.EventHandler(this.numFromNOD_ID_ValueChanged);
+
             MarkerFrom.Position = new PointLatLng(Convert.ToDouble(numLatFrom.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngFrom.Value, CultureInfo.InvariantCulture));
             numFromNOD_ID.Value = 0;
             /*
@@ -281,12 +289,14 @@ namespace PMapTestApp
             else
                 numFromNOD_ID.Value = 0;
                 */
+            this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             UpdateControls();
         }
 
         private void numLatTo_ValueChanged(object sender, EventArgs e)
         {
+            this.numToNOD_ID.ValueChanged -= new System.EventHandler(this.numToNOD_ID_ValueChanged);
             MarkerTo.Position = new PointLatLng(Convert.ToDouble(numLatTo.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngTo.Value, CultureInfo.InvariantCulture));
             numToNOD_ID.Value = 0;
 
@@ -297,6 +307,7 @@ namespace PMapTestApp
             else
                 numToNOD_ID.Value = 0;
             */
+            this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             UpdateControls();
         }
@@ -421,6 +432,7 @@ namespace PMapTestApp
 
         private void numFromNOD_ID_ValueChanged(object sender, EventArgs e)
         {
+            this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
             MarkerFrom.Position = m_bllRoute.GetPointLatLng(Convert.ToInt32(numFromNOD_ID.Value));
             numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
             numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
@@ -429,12 +441,14 @@ namespace PMapTestApp
             {
                 m_boundNodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
             }
+            this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
 
             UpdateControls();
         }
 
         private void numToNOD_ID_ValueChanged(object sender, EventArgs e)
         {
+            this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
             MarkerTo.Position = m_bllRoute.GetPointLatLng(Convert.ToInt32(numToNOD_ID.Value));
             numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
             numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
@@ -442,6 +456,7 @@ namespace PMapTestApp
             {
                 m_boundNodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
             }
+            this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
             UpdateControls();
         }
 
@@ -550,20 +565,43 @@ namespace PMapTestApp
 
                 m_edgesLayer.Routes.Clear();
                 m_edgesLayer.Markers.Clear();
+                m_edgesMarkerLayer.Markers.Clear();
+                ckhShowMarkers.Checked = false;
 
-                foreach (var edg in RouteData.Instance.Edges)
-                {
-                    var edge = edg.Value;
-                    /*
-                    GMapMarker gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
-                    gm.ToolTipText = String.Format("ID:{0}, name:{0}", edge.ID, edge.EDG_NAME);
-                    m_edgesLayer.Markers.Add(gm);
-                    */
+                m_edgesMarkerLayer.IsVisibile = false;
+
+                HashSet<PointLatLng> markersPts = new HashSet<PointLatLng>();
+
+                //              foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 164376, 164124, 144379, 164287, 164276, 164303, 164148 }.Contains(x.Value.ID)))
+                //               foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 383360 }.Contains(x.Value.ID)))
+                //              foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE >= 3 && x.Value.EDG_ETLCODE == ""))
+                foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
+                        (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
+                        /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
+
+                    //       foreach (var edg in RouteData.Instance.Edges)
+                    {
+                        var edge = edg.Value;
+
+                    GMapMarker gm = null;
+                    if (markersPts.Contains(edge.fromLatLng))
+                    {
+                        gm = m_edgesMarkerLayer.Markers.FirstOrDefault(x => x.Position == edge.fromLatLng);
+                        gm.ToolTipText += "\n";
+
+                    }
+                    else
+                    {
+                        gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
+                        m_edgesMarkerLayer.Markers.Add(gm);
+                    }
+                    gm.ToolTipText += String.Format("ID:{0}, name:{1}, fromNOD:{2}, toNOD:{3}", edge.ID, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
+
                     Pen p = new Pen(Color.BlueViolet, 1);
                     GMapRoute r = new GMapRoute(new List<PointLatLng> { edge.fromLatLng, edge.toLatLng }, "xx");
-                   
+
                     r.Stroke = p;
-                    
+
                     m_edgesLayer.Routes.Add(r);
                 }
                 ckhShowEdges.Checked = true;
@@ -590,5 +628,16 @@ namespace PMapTestApp
             setFromToMap();
             setToToMap();
         }
+
+        private void ckhShowMarkers_CheckedChanged(object sender, EventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                m_edgesMarkerLayer.IsVisibile = ckhShowMarkers.Checked;
+                gMapControl.Refresh();
+            }
+
+        }
+
     }
 }

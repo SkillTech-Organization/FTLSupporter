@@ -18,6 +18,10 @@ namespace PMap.BO
         public float EDG_LENGTH { get; set; }                       //futásidő miatt float
         public bool EDG_ONEWAY { get; set; }
         public bool EDG_DESTTRAFFIC { get; set; }
+        public string EDG_STRNUM1 { get; set; }
+        public string EDG_STRNUM2 { get; set; }
+        public string EDG_STRNUM3 { get; set; }
+        public string EDG_STRNUM4 { get; set; }
         public int RZN_ID { get; set; }
         public int RST_ID { get; set; }
         public string WZONE { get; set; }
@@ -30,7 +34,9 @@ namespace PMap.BO
         public PointLatLng fromLatLng { get; set; }                //LatLng kiemelése, hogy gyors lehessen a térképkivágás útvonalszámításnál
         [ScriptIgnore]
         public PointLatLng toLatLng { get; set; }
+        public int ZIP_NUM_FROM { get; set; }
+        public int ZIP_NUM_TO { get; set; }
     }
-  
+
 
 }
