@@ -482,16 +482,28 @@ namespace FTLSupporterTest
 
             #endregion
 
+            /* PROPS-EXCLPROPS teszt */
+            tsk1.InclTruckProps = "PROP1,PROP2,PROP3";
+            tsk1.ExclTruckProps = "EX1,EX2,EX2";
+            trk1.TruckProps = "PROP1";
+            trk2.TruckProps = "EX1";
+            trk3.TruckProps = "xxx";
+
+
+            var lstTsk = new List<FTLTask> { tsk1};
+            var lstTrk = new List<FTLTruck> { trk1, trk2, trk3};
+
 
             /* behajtási zóna teszt */
-            var lstTsk = new List<FTLTask> { tsk1};
-            var lstTrk = new List<FTLTruck> { trk5};
+            //var lstTsk = new List<FTLTask> { tsk1};
+            //var lstTrk = new List<FTLTruck> { trk5};
 
 
             /* nagy teszt 
             var lstTsk = new List<FTLTask> { tsk1, tsk2, tsk3, tsk4, tsk5, tsk6, tsk7, tskX };
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3, trk4 };
             */
+
             /* egy elem teszt */
             //var lstTsk = new List<FTLTask> { tsk3 };
             //var lstTrk = new List<FTLTruck> { trk4 };
@@ -499,39 +511,42 @@ namespace FTLSupporterTest
             /* pontos megérkezés teszt            */
             //var lstTsk = new List<FTLTask> { tsk4 };
             //var lstTrk = new List<FTLTruck> { trk2 }; /*Szeged-Kecskemét-Budapest tervezett  Indulás 7:00, KKMét:9:00, Bp:11:00 */
-            PMapIniParams.Instance.ReadParams("", "DB0");
 
-            PMapCommonVars.Instance.ConnectToDB();
-            bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
-            int diff = 0;
-            int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(47.647828, 21.48993), out diff);
+            /* Térképre igazítás teszt +hibakeresés */
 
-            /*hibakeresés */
-            FTLTruck trkErr1 = new FTLTruck()
-            {
-                TruckID = "MCC-863",
-                GVWR = 40135,
-                Capacity = 26259,
-                TruckType = "Száraz",
-                CargoTypes = "Száraz",
-                EngineEuro = 3,
-                ETollCat = 3,
-                FixCost = 0,
-                KMCost = 0,
-                RelocateCost = 0,
-                MaxKM = 9999,
-                MaxDuration = 9999,
-                TruckTaskType = FTLTruck.eTruckTaskType.Available,
-                RunningTaskID = "",
-                CurrIsOneWay = false,
-                CurrTime = DateTime.Now.Date.AddHours(7),
-                CurrLat = 47.647828,
-                CurrLng = 21.48993,
-                CurrTPoints = new List<FTLPoint>()
-            };
-            var lstTskx = new List<FTLTask> { tsk4 };
-            var lstTrkx = new List<FTLTruck> { trkErr1 };
-            var resx = FTLInterface.FTLSupportX(lstTskx, lstTrkx, "", "DB0", true);
+            //PMapIniParams.Instance.ReadParams("", "DB0");
+            //PMapCommonVars.Instance.ConnectToDB();
+            //bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            //int diff = 0;
+            //int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(47.647828, 21.48993), out diff);
+            //
+            //FTLTruck trkErr1 = new FTLTruck()
+            //{
+            //	TruckID = "MCC-863",
+            //	GVWR = 40135,
+            //	Capacity = 26259,
+            //	TruckType = "Száraz",
+            //	CargoTypes = "Száraz",
+            //	EngineEuro = 3,
+            //	ETollCat = 3,
+            //	FixCost = 0,
+            //	KMCost = 0,
+            //	RelocateCost = 0,
+            //	MaxKM = 9999,
+            //	MaxDuration = 9999,
+            //	TruckTaskType = FTLTruck.eTruckTaskType.Available,
+            //	RunningTaskID = "",
+            //	CurrIsOneWay = false,
+            //	CurrTime = DateTime.Now.Date.AddHours(7),
+            //	CurrLat = 47.647828,
+            //	CurrLng = 21.48993,
+            //	CurrTPoints = new List<FTLPoint>()
+            //};
+            //
+            //var dd = route.GetNearestReachableNOD_IDForTruck(new PointLatLng(47.647828, 21.48993), "", out diff);
+            //var lstTskx = new List<FTLTask> { tsk4 };
+            //var lstTrkx = new List<FTLTruck> { trkErr1 };
+            //var resx = FTLInterface.FTLSupportX(lstTskx, lstTrkx, "", "DB0", true);
 
 
             if (p_bestTruck)

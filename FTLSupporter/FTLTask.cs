@@ -38,6 +38,11 @@ namespace FTLSupporter
         [Required(ErrorMessage = "Kötelező mező:TPoints")]
         public List<FTLPoint> TPoints { get; set; }
 
-        
+        [DisplayNameAttributeX(Name = "Engedélyező járműtulajdonságok", Order = 7)]
+        public string InclTruckProps { get; set; }
+
+        [DisplayNameAttributeX(Name = "Kizáró járműtulajdonságok", Order = 8)]
+        public string ExclTruckProps { get; set; }
+
     }
 }

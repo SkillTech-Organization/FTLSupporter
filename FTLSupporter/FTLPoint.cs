@@ -34,24 +34,29 @@ namespace FTLSupporter
         [ErrorIfConstAttrX(EvalMode.IsSmaller, 0, "Kötelező mező:Lng")]
         public int SrvDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Hosszúsági koordináta (lat)", Order = 7)]
+        [DisplayNameAttributeX(Name = "Türelmi idő", Order = 7)]
+        [ErrorIfConstAttrX(EvalMode.IsSmaller, 0, "Nullánál nem lehet kisebb az értéke!")]
+        public int ExtraPeriod { get; set; }
+
+        [DisplayNameAttributeX(Name = "Hosszúsági koordináta (lat)", Order = 8)]
         [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqualr, 0, "Kötelező mező:Lat")]
         public double Lat { get; set; }
 
-        [DisplayNameAttributeX(Name = "Szélességi koordináta (lng)", Order = 8)]
+        [DisplayNameAttributeX(Name = "Szélességi koordináta (lng)", Order = 9)]
         [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqualr, 0, "Kötelező mező:Lng")]
         public double Lng { get; set; }
 
-        [DisplayNameAttributeX(Name = "Érkezés", Order = 9)]
-//        [Required(ErrorMessage = "Kötelező mező:Arrival")]
+        [DisplayNameAttributeX(Name = "Érkezés", Order = 10)]
+        //        [Required(ErrorMessage = "Kötelező mező:Arrival")]
         public DateTime RealArrival { get; set; }
 
-        [DisplayNameAttributeX(Name = "Indulás", Order = 10)]
+        [DisplayNameAttributeX(Name = "Indulás", Order = 11)]
         public DateTime RealDeparture { get { return RealArrival.AddMinutes(SrvDuration); } }
 
 
         /* local members */
         internal int NOD_ID { get; set; }
+        internal DateTime RealClose { get { return Close.AddMinutes(ExtraPeriod); } }
 
         public FTLPoint ShallowCopy()
         {

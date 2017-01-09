@@ -103,6 +103,12 @@ namespace PMap.Common
             return final;
         }
 
+        public static bool IntersectOfTwoLists(string p_list1, string p_list2)
+        {
+            return p_list1.Split(',').Intersect(p_list2.Split(',')).Any();
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -577,7 +583,7 @@ namespace PMap.Common
         }
 
         /// <summary>
-        /// http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
+        ///  http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
         /// </summary>
         /// <param name="ln1X"></param>
         /// <param name="ln1Y"></param>
@@ -592,6 +598,15 @@ namespace PMap.Common
             return Math.Abs((ln2X - ln1X) * (ln1Y - ptY) - (ln1X - ptX) * (ln2Y - ln1Y)) / Math.Sqrt(Math.Pow(ln2X - ln1X, 2) + Math.Pow(ln2Y - ln1Y, 2));
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="Xa"></param>
+        /// <param name="Ya"></param>
+        /// <param name="Xb"></param>
+        /// <param name="Yb"></param>
+        /// <param name="Xp"></param>
+        /// <param name="Yp"></param>
+        /// <returns></returns>
         public static double DistanceBetweenLineAndPoint(double Xa, double Ya, double Xb, double Yb, double Xp, double Yp)
         {
             // Psuedocode for returning the absolute distance to a line segment from a point.

@@ -95,21 +95,25 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Behajtási övezetek kódok", Order = 13)]
         public string RZones { get; set; }
 
+        [DisplayNameAttributeX(Name = "Egyéb járműtulajdonságok", Order = 14)]
+        public string TruckProps { get; set; }
+
+
         /******************* Járműfeladat ******************************/
 
-        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 14)]
+        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 15)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
         public eTruckTaskType TruckTaskType { get; set; }
 
-        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 15)]
+        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 16)]
         public string RunningTaskID { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 16)]
+        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 17)]
         public bool CurrIsOneWay { get; set; }
 
         private DateTime m_CurrTime;
-        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 17)]
+        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 18)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime CurrTime
         {
@@ -137,7 +141,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLat;
-        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 18)]
+        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 19)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLat")]
         public double CurrLat
         {
@@ -166,7 +170,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLng;
-        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 19)]
+        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 20)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLng")]
         public double CurrLng
         {
@@ -195,12 +199,12 @@ namespace FTLSupporter
         }
 
         //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
-        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 20)]
+        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 21)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
         public List<FTLPoint> CurrTPoints { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 21)]
+        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 22)]
         public int TPointCompleted { get; set; }
 
 

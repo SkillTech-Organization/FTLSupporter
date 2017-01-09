@@ -278,6 +278,11 @@ namespace PMapTestApp
 
         private void numLatFrom_ValueChanged(object sender, EventArgs e)
         {
+            chgFrom();
+          }
+
+        private void chgFrom ()
+        {
             this.numFromNOD_ID.ValueChanged -= new System.EventHandler(this.numFromNOD_ID_ValueChanged);
 
             MarkerFrom.Position = new PointLatLng(Convert.ToDouble(numLatFrom.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngFrom.Value, CultureInfo.InvariantCulture));
@@ -292,9 +297,14 @@ namespace PMapTestApp
             this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             UpdateControls();
+
         }
 
         private void numLatTo_ValueChanged(object sender, EventArgs e)
+        {
+            chgTo();
+        }
+        private void chgTo()
         {
             this.numToNOD_ID.ValueChanged -= new System.EventHandler(this.numToNOD_ID_ValueChanged);
             MarkerTo.Position = new PointLatLng(Convert.ToDouble(numLatTo.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngTo.Value, CultureInfo.InvariantCulture));
@@ -572,7 +582,7 @@ namespace PMapTestApp
 
                 HashSet<PointLatLng> markersPts = new HashSet<PointLatLng>();
 
-                //              foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 164376, 164124, 144379, 164287, 164276, 164303, 164148 }.Contains(x.Value.ID)))
+      //                        foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 413679 }.Contains(x.Value.ID)))
                 //               foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 383360 }.Contains(x.Value.ID)))
                 //              foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE >= 3 && x.Value.EDG_ETLCODE == ""))
            //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
@@ -671,5 +681,15 @@ namespace PMapTestApp
 
         }
 
+        private void numLngFrom_ValueChanged(object sender, EventArgs e)
+        {
+            chgFrom();
+         }
+
+        private void numLngTo_ValueChanged(object sender, EventArgs e)
+        {
+            chgTo();
+
+        }
     }
 }
