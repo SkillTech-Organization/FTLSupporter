@@ -52,17 +52,7 @@ namespace PMap.BLL
 
         public DataTable GetEdgesToDT()
         {
-            /*
-            String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
-                          "select EDG.*, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
-                          "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName " + Environment.NewLine +
-                          "from EDG_EDGE EDG " + Environment.NewLine +
-                          "inner join NOD_NODE NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
-                          "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-                          "left outer join RZN_RESTRZONE RZN on EDG.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine + 
-                          "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0";
-            */
-            String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
+             String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                           "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETLCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
                           "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
                           "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
@@ -848,7 +838,7 @@ namespace PMap.BLL
             "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG.EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
             " ) and  " + Environment.NewLine +
             " dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
-            "  (case when EDG.RDT_VALUE >= 3 and EDG.EDG_ETLCODE = '' then {1}  else {2} end) " + Environment.NewLine +
+            "  (case when (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0) then {1}  else {2} end) " + Environment.NewLine +
             "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") asc ";
 
             DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway));

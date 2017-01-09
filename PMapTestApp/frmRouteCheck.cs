@@ -575,13 +575,17 @@ namespace PMapTestApp
                 //              foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 164376, 164124, 144379, 164287, 164276, 164303, 164148 }.Contains(x.Value.ID)))
                 //               foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 383360 }.Contains(x.Value.ID)))
                 //              foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE >= 3 && x.Value.EDG_ETLCODE == ""))
-                foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
-                        (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
-                        /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
+           //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
+          //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
+          //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-                    //       foreach (var edg in RouteData.Instance.Edges)
-                    {
-                        var edge = edg.Value;
+                           foreach (var edg in RouteData.Instance.Edges)
+
+                //                    foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6))
+                //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
+                //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
+                {
+                    var edge = edg.Value;
 
                     GMapMarker gm = null;
                     if (markersPts.Contains(edge.fromLatLng))
@@ -597,7 +601,35 @@ namespace PMapTestApp
                     }
                     gm.ToolTipText += String.Format("ID:{0}, name:{1}, fromNOD:{2}, toNOD:{3}", edge.ID, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
 
-                    Pen p = new Pen(Color.BlueViolet, 1);
+                    Pen p;
+                    switch ( edge.RDT_VALUE)
+                    {
+                        case 1:
+                            p = new Pen(Color.Red, 1);
+                            break;
+                        case 2:
+                            p = new Pen(Color.Yellow, 1);
+                            break;
+                        case 3:
+                            p = new Pen(Color.Green, 1);
+                            break;
+                        case 4:
+                            p = new Pen(Color.Blue, 1);
+                            break;
+                        case 5:
+                            p = new Pen(Color.Orange, 1);
+                            break;
+                        case 6:
+                            p = new Pen(Color.Brown, 1);
+                            break;
+                        case 7:
+                            p = new Pen(Color.HotPink, 1);
+                            break;
+                        default:
+                            p = new Pen(Color.Black, 1);
+                            break;
+                    }
+
                     GMapRoute r = new GMapRoute(new List<PointLatLng> { edge.fromLatLng, edge.toLatLng }, "xx");
 
                     r.Stroke = p;
