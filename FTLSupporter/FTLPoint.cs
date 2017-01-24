@@ -53,6 +53,9 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Indulás", Order = 11)]
         public DateTime RealDeparture { get { return RealArrival.AddMinutes(SrvDuration); } }
 
+        [DisplayNameAttributeX(Name = "Türelmi időben történt megérkezés?", Order = 12)]
+        public bool ArrInExtraPeriod  { get { return Close < RealDeparture; } }
+
 
         /* local members */
         internal int NOD_ID { get; set; }
