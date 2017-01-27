@@ -35,7 +35,7 @@ namespace PMap.Common.Attrib
         [Description("IsSmallerAndNotNull")]    //kétoperandusú
         IsSmallerAndNotNull,
         [Description("IsSmallerOrEqual")]       //kétoperandusú
-        IsSmallerOrEqualr,
+        IsSmallerOrEqual,
         [Description("IsBiggerOrEqual")]        //kétoperandusú
         IsBiggerOrEqual,
         [Description("EvalIsInArray")]
@@ -109,7 +109,7 @@ namespace PMap.Common.Attrib
                 case EvalMode.IsSmallerAndNotNull:
                     evalField = new EvalIsSmallerThanAnother(m_constValue, true);
                     break;
-                case EvalMode.IsSmallerOrEqualr:
+                case EvalMode.IsSmallerOrEqual:
                     evalField = new EvalIsSmallerThanOrEqualAnother(m_constValue);
                     break;
                 case EvalMode.IsBiggerOrEqual:
@@ -193,7 +193,7 @@ namespace PMap.Common.Attrib
                 case EvalMode.IsSmallerAndNotNull:
                     evalField = new EvalIsSmallerThanAnother(currAnotherPropValue, true);
                     break;
-                case EvalMode.IsSmallerOrEqualr:
+                case EvalMode.IsSmallerOrEqual:
                     evalField = new EvalIsSmallerThanOrEqualAnother(currAnotherPropValue);
                     break;
                 case EvalMode.IsBiggerOrEqual:

@@ -39,11 +39,11 @@ namespace FTLSupporter
         public int ExtraPeriod { get; set; }
 
         [DisplayNameAttributeX(Name = "Hosszúsági koordináta (lat)", Order = 8)]
-        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqualr, 0, "Kötelező mező:Lat")]
+        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqual, 0, "Kötelező mező:Lat")]
         public double Lat { get; set; }
 
         [DisplayNameAttributeX(Name = "Szélességi koordináta (lng)", Order = 9)]
-        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqualr, 0, "Kötelező mező:Lng")]
+        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqual, 0, "Kötelező mező:Lng")]
         public double Lng { get; set; }
 
         [DisplayNameAttributeX(Name = "Érkezés", Order = 10)]

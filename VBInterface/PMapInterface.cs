@@ -645,6 +645,16 @@ namespace VBInterface
             return result;
         }
 
+        /// <summary>
+        /// Menetlevél ellenőrzés
+        /// </summary>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <param name="p_lstRouteSection"></param>
+        /// <param name="p_TRK_ID"></param>
+        /// <param name="p_GetRouteWithTruckSpeeds"></param>
+        /// <param name="p_CalcTRK_ETOLLCAT"></param>
+        /// <returns></returns>
         public List<dtXResult> RouteVisualization(string p_iniPath, string p_dbConf, List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
         {
             DateTime dt = DateTime.Now;
@@ -700,6 +710,16 @@ namespace VBInterface
             return resArr;
         }
 
+        /// <summary>
+        /// Menetlevél ellenőrzés BATCH
+        /// </summary>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <param name="p_lstRouteSection"></param>
+        /// <param name="p_TRK_ID"></param>
+        /// <param name="p_GetRouteWithTruckSpeeds"></param>
+        /// <param name="p_CalcTRK_ETOLLCAT"></param>
+        /// <returns></returns>
         public List<dtXResult> RouteVisualizationCalc(string p_iniPath, string p_dbConf, List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
         {
             DateTime dt = DateTime.Now;
@@ -746,6 +766,10 @@ namespace VBInterface
             return resArr;
         }
 
+        /// <summary>
+        /// Menetlevél ellenőrzés eredmény felépítése
+        /// </summary>
+        /// <returns></returns>
         private boXRouteSummary fillSummary()
         {
             boXRouteSummary ret = new boXRouteSummary();
@@ -772,6 +796,20 @@ namespace VBInterface
 
         }
 
+        /// <summary>
+        /// Új terv létrehozása
+        /// </summary>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <param name="p_PLN_NAME"></param>
+        /// <param name="p_WHS_ID"></param>
+        /// <param name="p_PLN_DATE_B"></param>
+        /// <param name="p_PLN_DATE_E"></param>
+        /// <param name="p_PLN_USEINTERVAL"></param>
+        /// <param name="p_PLN_INTERVAL_B"></param>
+        /// <param name="p_PLN_INTERVAL_E"></param>
+        /// <param name="p_enabledTruckList"></param>
+        /// <returns></returns>
         public List<dtXResult> CreateNewPlan(string p_iniPath, string p_dbConf, String p_PLN_NAME, int p_WHS_ID, DateTime p_PLN_DATE_B, DateTime p_PLN_DATE_E, bool p_PLN_USEINTERVAL, DateTime p_PLN_INTERVAL_B, DateTime p_PLN_INTERVAL_E, List<PlanParams.CEnabledTruck> p_enabledTruckList = null)
         {
             DateTime dt = DateTime.Now;
@@ -963,15 +1001,126 @@ namespace VBInterface
             return resArr;
         }
 
-/*
-        private void logVersion()
-        {
 
-            Util.Log2File(String.Format("Product:{0} Ver.:{1}", ApplicationInfo.Title, ApplicationInfo.Version));
+        public List<boXChkRes> CheckRoutes(string p_iniPath, string p_dbConf, List<boXChkRoute> p_lstRoutes)
+        {
+            DateTime dt = DateTime.Now;
+            List<boXChkRes> res = new List<boXChkRes>();
+
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
+
+            PMapCommonVars.Instance.ConnectToDB();
+            bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            PMapRoutingProvider provider = new PMapRoutingProvider();
+            Dictionary<string, int> allRZones = route.GetAllRZones();
+
+            foreach (var chkRoute in p_lstRoutes)
+            {
+                boXChkRes itemRes = new boXChkRes();
+                itemRes.Status = boXChkRes.ResultStatus.OK;
+                try
+                {
+
+                    List<ObjectValidator.ValidationError> tskErros = ObjectValidator.ValidateObject(chkRoute);
+                    if (tskErros.Count != 0)
+                    {
+                        itemRes.Status = boXChkRes.ResultStatus.VALIDATIONERROR;
+                        foreach (var err in tskErros)
+                        {
+                            itemRes.ErrMsg += err.Message + " ";
+                        }
+                        continue;
+                    }
+
+
+
+                    int diff = 0;
+                    int fromNOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(chkRoute.FromLat, chkRoute.FromLng), out diff);
+                    if(fromNOD_ID==0)
+                    {
+                        itemRes.Status = boXChkRes.ResultStatus.VALIDATIONERROR;
+                        itemRes.ErrMsg = "Helytelen kezdőkoordináta";
+                        continue;
+                    }
+                    boNode fromNode = route.GetNode(fromNOD_ID);
+                    itemRes.fromLat = fromNode.NOD_YPOS / Global.LatLngDivider;
+                    itemRes.fromLng = fromNode.NOD_XPOS / Global.LatLngDivider;
+
+                    int toNOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(chkRoute.ToLat, chkRoute.ToLng), out diff);
+                    if (fromNOD_ID == 0)
+                    {
+                        itemRes.Status = boXChkRes.ResultStatus.VALIDATIONERROR;
+                        itemRes.ErrMsg = "Helytelen végkoordináta";
+                        continue;
+                    }
+
+                    boNode toNode = route.GetNode(toNOD_ID);
+                    itemRes.toLat = toNode.NOD_YPOS / Global.LatLngDivider;
+                    itemRes.toLng = toNode.NOD_XPOS / Global.LatLngDivider;
+
+                    //Behajtási-övezet kódok lemapolása
+                    string sRZN_ID_LIST = "";
+                    String[] aRZones = chkRoute.RZones.Replace(" ", "").Split(',');
+                    foreach (var zone in aRZones)
+                    {
+                        if (allRZones.ContainsKey(zone))
+                        {
+                            sRZN_ID_LIST += ("," + allRZones[zone].ToString());
+                        }
+                        else
+                        {
+                            itemRes.Status = boXChkRes.ResultStatus.VALIDATIONERROR;
+                            itemRes.ErrMsg += "Helytelen behajtási övezet:"+ zone + " ";
+                        }
+                    }
+                    if(itemRes.Status != boXChkRes.ResultStatus.OK)
+                    {
+                        continue;
+                    }
+
+                    if (sRZN_ID_LIST != "")
+                        sRZN_ID_LIST = sRZN_ID_LIST.Substring(1);
+
+                    Dictionary<string, List<int>[]> NeighborsFull = null;
+                    Dictionary<string, List<int>[]> NeighborsCut = null;
+                    RectLatLng boundary = route.getBoundary(itemRes.fromLat, itemRes.fromLng, itemRes.toLat, itemRes.toLng);
+
+                    RouteData.Instance.getNeigboursByBound(sRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);
+
+     
+                    boRoute result = provider.GetRoute(sRZN_ID_LIST, fromNOD_ID, toNOD_ID,
+                        NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
+                         PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
+
+
+
+
+                    //logVersion();
+                    Util.Log2File(">>START:CheckRoutes( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstRoutes.<count>='" + p_lstRoutes.Count.ToString());
+                    PMapCommonVars.Instance.ConnectToDB();
+                }
+                catch (Exception e)
+                {
+                    Util.ExceptionLog(e);
+                    itemRes.Status = boXChkRes.ResultStatus.EXCEPTION;
+                    itemRes.ErrMsg = e.Message;
+                }
+                res.Add(itemRes);
+            }
+            return res;
         }
- */
+
+
+        /*
+                private void logVersion()
+                {
+
+                    Util.Log2File(String.Format("Product:{0} Ver.:{1}", ApplicationInfo.Title, ApplicationInfo.Version));
+                }
+         */
         #endregion
     }
 
 
- }
+}

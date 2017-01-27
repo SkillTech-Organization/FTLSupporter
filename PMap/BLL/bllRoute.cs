@@ -434,33 +434,47 @@ namespace PMap.BLL
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
             string sSql = "select * from NOD_NODE where id in (" + sNODE_IDs + ")";
             DataTable dt = DBA.Query2DataTable(sSql);
-            RectLatLng boundary = new RectLatLng();
+            //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
+            //tételnél biztosan kapjanak értéket
+            double dLat1 = Util.getFieldValue<double>(dt.Rows[0], "NOD_YPOS") / Global.LatLngDivider;
+            double dLng1 = Util.getFieldValue<double>(dt.Rows[0], "NOD_XPOS") / Global.LatLngDivider;
+            double dLat2 = Util.getFieldValue<double>(dt.Rows[1], "NOD_YPOS") / Global.LatLngDivider;
+            double dLng2 = Util.getFieldValue<double>(dt.Rows[1], "NOD_XPOS") / Global.LatLngDivider;
+            return getBoundary(dLat1, dLng1, dLat2, dLng2);
+
+        }
+        public RectLatLng getBoundary(double dLat1, double dLng1, double dLat2, double dLng2)
+        {
             //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
             //tételnél biztosan kapjanak értéket
             double dTop = -180;
             double dLeft = 180;
             double dBottom = 180;
             double dRight = -180;
-            foreach (DataRow dr in dt.Rows)
-            {
-                double dLat = Util.getFieldValue<double>(dr, "NOD_YPOS") / Global.LatLngDivider;
-                double dLng = Util.getFieldValue<double>(dr, "NOD_XPOS") / Global.LatLngDivider;
-                if (dLng < dLeft)
-                    dLeft = dLng;
-                if (dLat > dTop)
-                    dTop = dLat;
-                if (dLng > dRight)
-                    dRight = dLng;
-                if (dLat < dBottom)
-                    dBottom = dLat;
 
-            }
+            if (dLng1 < dLeft)
+                dLeft = dLng1;
+            if (dLat1 > dTop)
+                dTop = dLat1;
+            if (dLng1 > dRight)
+                dRight = dLng1;
+            if (dLat1 < dBottom)
+                dBottom = dLat1;
+
+            if (dLng2 < dLeft)
+                dLeft = dLng2;
+            if (dLat2 > dTop)
+                dTop = dLat2;
+            if (dLng2 > dRight)
+                dRight = dLng2;
+            if (dLat2 < dBottom)
+                dBottom = dLat2;
 
             dLeft -= PMapIniParams.Instance.CutExtDegree;
             dTop += PMapIniParams.Instance.CutExtDegree;
             dRight += PMapIniParams.Instance.CutExtDegree;
             dBottom -= PMapIniParams.Instance.CutExtDegree;
-            boundary = RectLatLng.FromLTRB(dLeft, dTop, dRight, dBottom);
+            RectLatLng boundary = RectLatLng.FromLTRB(dLeft, dTop, dRight, dBottom);
             return boundary;
 
         }

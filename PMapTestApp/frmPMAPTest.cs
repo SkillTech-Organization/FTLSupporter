@@ -538,7 +538,7 @@ namespace PMapTestApp
                 int i = 1;
                 foreach (var rr in res)
                 {
-                    ir.Text = "VISSZATERESI ERTEK " + i.ToString() + "/" + res.Count.ToString();
+                    ir.Text = "VISSZATÉRÉSI ÉRTÉK " + i.ToString() + "/" + res.Count.ToString();
                     i++;
                     ir.propertyGridCtrl1.SetObject(rr);
                     ir.ShowDialog();
@@ -606,5 +606,21 @@ namespace PMapTestApp
             string sRes = (new PMapInterface()).CheckLicence("", dbConf);
             MessageBox.Show("Licence eredmény:" + sRes);
         }
-    }
+
+        private void button27_Click(object sender, EventArgs e)
+        {
+            List<boXChkRoute> lstRoutes = new List<boXChkRoute>();
+            lstRoutes.Add(new boXChkRoute() { FromLat = 46.232789, FromLng = 20.1404686, ToLat = 47.492975, ToLng = 19.1200849, RZones = "B35,CS12,CS7,DB1,DP1,DP3,DP7,ÉB1,ÉB7,ÉP1,HB1,KP1,KV3,P35,P75" });
+            List<boXChkRes> res = (new PMapInterface()).CheckRoutes("", dbConf, lstRoutes);
+            dlgImportResult ir = new dlgImportResult();
+            int i = 1;
+            foreach (var rr in res)
+            {
+                ir.Text = "VISSZATERESI ERTEK " + i.ToString() + "/" + res.Count.ToString();
+                i++;
+                ir.propertyGridCtrl1.SetObject(rr);
+                ir.ShowDialog();
+            }
+        }
+}
 }

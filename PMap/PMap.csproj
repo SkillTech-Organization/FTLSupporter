@@ -227,6 +227,8 @@
     <Compile Include="BLL\Base\bllBase.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
+    <Compile Include="BO\DataXChange\boXChkRes.cs" />
+    <Compile Include="BO\DataXChange\boXChkRoute.cs" />
     <Compile Include="Common\Attrib\WriteFieldAttribute.cs" />
     <Compile Include="BLL\bllApp.cs" />
     <Compile Include="BLL\bllCapacityProf.cs" />
