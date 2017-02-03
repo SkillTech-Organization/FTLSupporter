@@ -49,7 +49,6 @@ namespace PMapTestApp
         public frmRouteCheck()
         {
             InitializeComponent();
-            gMapControl.Position = new PointLatLng(46.3, 20.1);
             init();
             UpdateControls();
         }
@@ -65,7 +64,9 @@ namespace PMapTestApp
 
                     PMapCommonVars.Instance.ConnectToDB();
 
-                    m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
+
+
+                     m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
                     m_bllDepot = new bllDepot(PMapCommonVars.Instance.CT_DB);
 
 
@@ -73,7 +74,7 @@ namespace PMapTestApp
                     tbZoom.Maximum = Global.DefMaxZoom;
                     tbZoom.Value = m_currZoom;
 
-
+                    gMapControl.CacheLocation = PMapIniParams.Instance.MapCacheDB;
                     gMapControl.MapProvider = PMapCommonVars.Instance.MapProvider;
                     gMapControl.MinZoom = Global.DefMinZoom;
                     gMapControl.MaxZoom = Global.DefMaxZoom;
@@ -122,6 +123,16 @@ namespace PMapTestApp
                     rdbFrom.Checked = true;
                     rdbFastestPath.Checked = true;
                     ckhShowEdges.Checked = false;
+
+                   var from = new PointLatLng(46.2416455, 20.1600394);
+                    var to  = new PointLatLng(46.2425501, 20.2815699);
+                    numLatFrom.Value = Convert.ToDecimal(from.Lat);
+                    numLngFrom.Value = Convert.ToDecimal(from.Lng);
+                    numLatTo.Value = Convert.ToDecimal(to.Lat);
+                    numLngTo.Value = Convert.ToDecimal(to.Lng);
+                    chgFrom();
+                    chgTo();
+
                     /*
                     numFromNOD_ID.Value =46087;
                     numToNOD_ID.Value = 15;
@@ -187,10 +198,15 @@ namespace PMapTestApp
             if (rdbFrom.Checked)
             {
                 MarkerFrom.Position = pt;
+
+                numLatFrom.Value = Convert.ToDecimal(pt.Lat);
+                numLngFrom.Value = Convert.ToDecimal(pt.Lng);
             }
             else
             {
                 MarkerTo.Position = pt;
+                numLatTo.Value = Convert.ToDecimal(pt.Lat);
+                numLngTo.Value = Convert.ToDecimal(pt.Lng);
             }
 
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
@@ -201,10 +217,9 @@ namespace PMapTestApp
         {
             //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             int diff = 0;
-            int NOD_ID = m_bllRoute.GetNearestReachableNOD_IDForTruck(MarkerFrom.Position,"1,2,3,4,5", out diff );
+            int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             if (NOD_ID > 0)
             {
-                this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
                 numFromNOD_ID.Value = NOD_ID;
 
@@ -213,7 +228,6 @@ namespace PMapTestApp
 
                 numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
                 numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
-                this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
                 UpdateControls();
             }
@@ -224,7 +238,6 @@ namespace PMapTestApp
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
             {
-                this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
                 this.numLngTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
                 numToNOD_ID.Value = NOD_ID;
 
@@ -233,7 +246,6 @@ namespace PMapTestApp
 
                 numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
                 numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
-                this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
                 this.numLngTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
                 UpdateControls();
             }
@@ -688,6 +700,13 @@ namespace PMapTestApp
 
         private void numLngTo_ValueChanged(object sender, EventArgs e)
         {
+            chgTo();
+
+        }
+
+        private void frmRouteCheck_Shown(object sender, EventArgs e)
+        {
+            chgFrom();
             chgTo();
 
         }

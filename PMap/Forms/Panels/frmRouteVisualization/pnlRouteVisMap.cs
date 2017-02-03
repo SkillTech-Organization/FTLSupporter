@@ -41,6 +41,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
         public pnlRouteVisMap(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
+            gMapControl.CacheLocation = PMapIniParams.Instance.MapCacheDB;
             m_PPlanCommonVars = p_PPlanCommonVars;
             m_Route = new bllRoute(PMapCommonVars.Instance.CT_DB);
 
