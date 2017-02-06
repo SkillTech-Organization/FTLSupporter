@@ -212,7 +212,7 @@ namespace GMap.NET.CacheProviders
 
             lock(this)
             {
-               using(var dbf = File.Open(db, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+               using(var dbf = File.Open(db, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
                {
                   dbf.Seek(16, SeekOrigin.Begin);
 

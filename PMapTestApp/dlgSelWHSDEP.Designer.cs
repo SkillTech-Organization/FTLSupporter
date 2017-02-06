@@ -31,6 +31,7 @@
             this.gridWHSDEP = new DevExpress.XtraGrid.GridControl();
             this.gridViewWHSDEP = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colID = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colXCODE = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colXNAME = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colXADDR = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colNOD_ID = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -39,7 +40,6 @@
             this.tblDlgButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.colXCODE = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridWHSDEP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewWHSDEP)).BeginInit();
             this.tblDlgButtons.SuspendLayout();
@@ -51,7 +51,7 @@
             this.gridWHSDEP.Location = new System.Drawing.Point(0, 0);
             this.gridWHSDEP.MainView = this.gridViewWHSDEP;
             this.gridWHSDEP.Name = "gridWHSDEP";
-            this.gridWHSDEP.Size = new System.Drawing.Size(652, 239);
+            this.gridWHSDEP.Size = new System.Drawing.Size(666, 263);
             this.gridWHSDEP.TabIndex = 1006;
             this.gridWHSDEP.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewWHSDEP});
@@ -85,6 +85,14 @@
             this.colID.Visible = true;
             this.colID.VisibleIndex = 0;
             this.colID.Width = 45;
+            // 
+            // colXCODE
+            // 
+            this.colXCODE.Caption = "Kód";
+            this.colXCODE.FieldName = "XCODE";
+            this.colXCODE.Name = "colXCODE";
+            this.colXCODE.Visible = true;
+            this.colXCODE.VisibleIndex = 1;
             // 
             // colXNAME
             // 
@@ -147,7 +155,7 @@
             this.tblDlgButtons.Controls.Add(this.buttonOK, 0, 0);
             this.tblDlgButtons.Controls.Add(this.buttonCancel, 1, 0);
             this.tblDlgButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tblDlgButtons.Location = new System.Drawing.Point(0, 239);
+            this.tblDlgButtons.Location = new System.Drawing.Point(0, 263);
             this.tblDlgButtons.Name = "tblDlgButtons";
             this.tblDlgButtons.RowCount = 1;
             this.tblDlgButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -160,14 +168,14 @@
             this.tblDlgButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tblDlgButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tblDlgButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tblDlgButtons.Size = new System.Drawing.Size(652, 40);
+            this.tblDlgButtons.Size = new System.Drawing.Size(666, 40);
             this.tblDlgButtons.TabIndex = 1005;
             // 
             // buttonOK
             // 
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonOK.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonOK.Location = new System.Drawing.Point(233, 3);
+            this.buttonOK.Location = new System.Drawing.Point(240, 3);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(90, 34);
             this.buttonOK.TabIndex = 0;
@@ -179,26 +187,18 @@
             // 
             this.buttonCancel.CausesValidation = false;
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(329, 3);
+            this.buttonCancel.Location = new System.Drawing.Point(336, 3);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(90, 34);
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "&Mégsem";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
-            // colXCODE
-            // 
-            this.colXCODE.Caption = "Kód";
-            this.colXCODE.FieldName = "XCODE";
-            this.colXCODE.Name = "colXCODE";
-            this.colXCODE.Visible = true;
-            this.colXCODE.VisibleIndex = 1;
-            // 
             // dlgSelWHSDEP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(652, 279);
+            this.ClientSize = new System.Drawing.Size(666, 303);
             this.Controls.Add(this.gridWHSDEP);
             this.Controls.Add(this.tblDlgButtons);
             this.Name = "dlgSelWHSDEP";

@@ -130,9 +130,21 @@ namespace PMapTestApp
                     numLngFrom.Value = Convert.ToDecimal(from.Lng);
                     numLatTo.Value = Convert.ToDecimal(to.Lat);
                     numLngTo.Value = Convert.ToDecimal(to.Lng);
-                    chgFrom();
-                    chgTo();
+                    //chgFrom();
+                    //chgTo();
 
+                    CurrentPos.Position = from;
+                    lblCurrLat.Text = CurrentPos.Position.Lat.ToString("0.0000000");
+                    lblCurrLng.Text = CurrentPos.Position.Lng.ToString("0.0000000");
+
+                    MarkerFrom.Position = from;
+                    MarkerTo.Position = to;
+                    numFromNOD_ID.Value = 0;
+                    numToNOD_ID.Value = 0;
+
+                    gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
+
+                    UpdateControls();
                     /*
                     numFromNOD_ID.Value =46087;
                     numToNOD_ID.Value = 15;
@@ -149,8 +161,6 @@ namespace PMapTestApp
 
         private void UpdateControls()
         {
-            lblCurrLat.Text = CurrentPos.Position.Lat.ToString("0.0000000");
-            lblCurrLng.Text = CurrentPos.Position.Lng.ToString("0.0000000");
             tbZoom.ValueChanged -= new EventHandler(tbZoom_ValueChanged);
             if (tbZoom.Value != m_currZoom)
                 tbZoom.Value = m_currZoom;
@@ -195,6 +205,10 @@ namespace PMapTestApp
         {
             PointLatLng pt = gMapControl.FromLocalToLatLng(e.X, e.Y);
 
+            this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
+            this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+            this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
+            this.numLngTo.ValueChanged -= new System.EventHandler(this.numLngTo_ValueChanged);
             if (rdbFrom.Checked)
             {
                 MarkerFrom.Position = pt;
@@ -209,7 +223,11 @@ namespace PMapTestApp
                 numLngTo.Value = Convert.ToDecimal(pt.Lng);
             }
 
-            gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
+            this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
+            this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
+            this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
+            this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
+            //    gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
 
         }
 
@@ -220,7 +238,9 @@ namespace PMapTestApp
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             if (NOD_ID > 0)
             {
-                this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
+                this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
+                this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
+                this.numFromNOD_ID.ValueChanged -= new System.EventHandler(this.numFromNOD_ID_ValueChanged);
                 numFromNOD_ID.Value = NOD_ID;
 
                 boNode nd = m_bllRoute.GetNode(NOD_ID);
@@ -228,7 +248,9 @@ namespace PMapTestApp
 
                 numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
                 numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
-                this.numLngFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
+                this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
+                this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
+                this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
                 UpdateControls();
             }
 
@@ -238,7 +260,9 @@ namespace PMapTestApp
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
             {
-                this.numLngTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+                this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+                this.numLngTo.ValueChanged -= new System.EventHandler(this.numLngTo_ValueChanged);
+                this.numToNOD_ID.ValueChanged -= new System.EventHandler(this.numToNOD_ID_ValueChanged);
                 numToNOD_ID.Value = NOD_ID;
 
                 boNode nd = m_bllRoute.GetNode(NOD_ID);
@@ -246,7 +270,10 @@ namespace PMapTestApp
 
                 numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
                 numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
-                this.numLngTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
+
+                this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
+                this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
+                this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
                 UpdateControls();
             }
 
@@ -272,9 +299,13 @@ namespace PMapTestApp
 
         void gMapControl_MouseMove(object sender, MouseEventArgs e)
         {
+            CurrentPos.Position = gMapControl.FromLocalToLatLng(e.X, e.Y);
+
+            lblCurrLat.Text = CurrentPos.Position.Lat.ToString("0.0000000");
+            lblCurrLng.Text = CurrentPos.Position.Lng.ToString("0.0000000");
+
             if (e.Button == MouseButtons.Left && m_isMouseDown)
             {
-                CurrentPos.Position = gMapControl.FromLocalToLatLng(e.X, e.Y);
                 UpdateControls();
             }
         }
@@ -455,6 +486,8 @@ namespace PMapTestApp
         private void numFromNOD_ID_ValueChanged(object sender, EventArgs e)
         {
             this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
+            this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
+
             MarkerFrom.Position = m_bllRoute.GetPointLatLng(Convert.ToInt32(numFromNOD_ID.Value));
             numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
             numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
@@ -464,6 +497,7 @@ namespace PMapTestApp
                 m_boundNodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
             }
             this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
+            this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
 
             UpdateControls();
         }
@@ -471,6 +505,7 @@ namespace PMapTestApp
         private void numToNOD_ID_ValueChanged(object sender, EventArgs e)
         {
             this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+            this.numLngTo.ValueChanged -= new System.EventHandler(this.numLngTo_ValueChanged);
             MarkerTo.Position = m_bllRoute.GetPointLatLng(Convert.ToInt32(numToNOD_ID.Value));
             numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
             numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
@@ -479,6 +514,7 @@ namespace PMapTestApp
                 m_boundNodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
             }
             this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
+            this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
             UpdateControls();
         }
 
@@ -536,14 +572,29 @@ namespace PMapTestApp
             dlgSelWHSDEP d = new dlgSelWHSDEP();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
                 lblFrom.Text = d.m_XNAME;
                 numFromNOD_ID.Value = d.m_NOD_ID;
-                numLatFrom.Value = d.m_NOD_XPOS;
-                numLngFrom.Value = d.m_NOD_YPOS;
+                numLatFrom.Value = d.m_NOD_XPOS/Global.LatLngDivider;
+                numLngFrom.Value = d.m_NOD_YPOS / Global.LatLngDivider;
+                this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
 
             }
         }
+        private void btnTo_Click(object sender, EventArgs e)
+        {
+            dlgSelWHSDEP d = new dlgSelWHSDEP();
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+                lblTo.Text = d.m_XNAME;
+                numToNOD_ID.Value = d.m_NOD_ID / Global.LatLngDivider;
+                numLatTo.Value = d.m_NOD_XPOS / Global.LatLngDivider;
+                numLngTo.Value = d.m_NOD_YPOS / Global.LatLngDivider;
+                this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
 
+            }
+        }
         private void chkBoundary_CheckedChanged(object sender, EventArgs e)
         {
             UpdateControls();
@@ -559,18 +610,7 @@ namespace PMapTestApp
 
         }
 
-        private void btnTo_Click(object sender, EventArgs e)
-        {
-            dlgSelWHSDEP d = new dlgSelWHSDEP();
-            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                lblTo.Text = d.m_XNAME;
-                numToNOD_ID.Value = d.m_NOD_ID;
-                numLatTo.Value = d.m_NOD_XPOS;
-                numLngTo.Value = d.m_NOD_YPOS;
-
-            }
-        }
+  
 
         private void cmbRST_ID_LIST_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -597,13 +637,13 @@ namespace PMapTestApp
       //                        foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 413679 }.Contains(x.Value.ID)))
                 //               foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 383360 }.Contains(x.Value.ID)))
                 //              foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE >= 3 && x.Value.EDG_ETLCODE == ""))
-           //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
+                // foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
           //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
           //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-                           foreach (var edg in RouteData.Instance.Edges)
+                          foreach (var edg in RouteData.Instance.Edges)
 
-                //                    foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6))
+            //                        foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE ==1))
                 //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 {
@@ -672,11 +712,6 @@ namespace PMapTestApp
             }
         }
 
-        private void gMapControl_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button4_Click(object sender, EventArgs e)
         {
             setFromToMap();
@@ -710,5 +745,7 @@ namespace PMapTestApp
             chgTo();
 
         }
+
+    
     }
 }

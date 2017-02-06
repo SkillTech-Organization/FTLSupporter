@@ -189,6 +189,9 @@
     <Reference Include="System.Net">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -443,6 +446,7 @@
     <Compile Include="LongProcess\GetTourDetailsProcess.cs" />
     <Compile Include="LongProcess\CalcPMapRouteProcess.cs" />
     <Compile Include="LongProcess\InitRouteDataProcess.cs" />
+    <Compile Include="LongProcess\OCAddrProcess.cs" />
     <Compile Include="LongProcess\StartPMapRoutesByOrders.cs" />
     <Compile Include="LongProcess\TollExportProcess.cs" />
     <Compile Include="LongProcess\TourOptimizerProcess.cs" />

@@ -19,7 +19,10 @@ using PMap.Common;
 using PMap.BLL.DataXChange;
 using PMap.Common.PPlan;
 using PMap.BO.DataXChange;
-
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using OpenCage.Geocode;
 
 namespace PMapTestApp
 {
@@ -462,7 +465,7 @@ namespace PMapTestApp
             dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
             var pp = res.First();
             dd.propertyGridCtrl1.SetObject(pp);
-            if( pp.Status == dtXResult.EStatus.OK)
+            if (pp.Status == dtXResult.EStatus.OK)
                 dd.propertyGridCtrl2.SetObject(((boXNewPlan)(pp.Data)).lstDepWithoutGeoCoding);
 
             dd.ShowDialog();
@@ -476,10 +479,10 @@ namespace PMapTestApp
                 List<string> lstDepotID = new List<string>(d.txtDEPID.Text.Split(','));
                 List<dtXResult> res = (new PMapInterface()).RouteVisualizationCalc("", dbConf,
                     lstDepotID.Select(i => new boXRouteSection()
-                                {
-                                    Start_DEP_ID = Convert.ToInt32(i.Split(';')[0]),
-                                    RouteSectionType = (boXRouteSection.ERouteSectionType)Enum.Parse(typeof(boXRouteSection.ERouteSectionType), i.Split(';')[1])
-                                }).ToList(), Convert.ToInt32(d.txtTRKID.Text), false, 1);
+                    {
+                        Start_DEP_ID = Convert.ToInt32(i.Split(';')[0]),
+                        RouteSectionType = (boXRouteSection.ERouteSectionType)Enum.Parse(typeof(boXRouteSection.ERouteSectionType), i.Split(';')[1])
+                    }).ToList(), Convert.ToInt32(d.txtTRKID.Text), false, 1);
                 dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
 
                 dd.propertyGridCtrl1.SetObject(res.First());
@@ -576,7 +579,7 @@ namespace PMapTestApp
                 dlgRouteVisCalcRes ir = new dlgRouteVisCalcRes();
                 dtXResult rr = res.First();
                 ir.propertyGridCtrl1.SetObject(rr);
-                if( rr.Data != null)
+                if (rr.Data != null)
                     ir.propertyGridCtrl2.SetObject(rr.Data);
                 ir.ShowDialog();
             }
@@ -586,13 +589,13 @@ namespace PMapTestApp
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
 
-                List<dtXResult> res = (new PMapInterface()).GetPlans("", dbConf, 0, DateTime.MinValue, DateTime.MinValue);
-                dlgRouteVisCalcRes ir = new dlgRouteVisCalcRes();
-                dtXResult rr = res.First();
-                ir.propertyGridCtrl1.SetObject(rr);
-                if (rr.Data != null)
-                    ir.propertyGridCtrl2.SetObject(rr.Data);
-                ir.ShowDialog();
+            List<dtXResult> res = (new PMapInterface()).GetPlans("", dbConf, 0, DateTime.MinValue, DateTime.MinValue);
+            dlgRouteVisCalcRes ir = new dlgRouteVisCalcRes();
+            dtXResult rr = res.First();
+            ir.propertyGridCtrl1.SetObject(rr);
+            if (rr.Data != null)
+                ir.propertyGridCtrl2.SetObject(rr.Data);
+            ir.ShowDialog();
 
         }
 
@@ -622,5 +625,67 @@ namespace PMapTestApp
                 ir.ShowDialog();
             }
         }
-}
+
+
+
+        private async void btnReverseGeocoding_Click(object sender, EventArgs e)
+        {
+            PMapIniParams.Instance.ReadParams("", dbConf);
+
+            dlgTestReverseGeocoding d = new dlgTestReverseGeocoding();
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+
+                var gc = new Geocoder("e0f24ed22a53d63a9e2d7c3ba72ff7fd");
+                var result = gc.Geocode("82 Clerkenwell Road, London");
+
+                var reserveresult = gc.ReverseGeocode(Convert.ToDouble( d.numLat.Value), Convert.ToDouble(d.numLng.Value));
+                var address = await GetAddressForCoordinates(d.numLat.Value, d.numLng.Value);
+                MessageBox.Show("Cím:" + address);
+
+            }
+        }
+        /*
+        https://api.opencagedata.com/geocode/v1/json?q=-23.5373732,-46.8374628&pretty=1&key=YOUR-API-KEY'
+
+        https://api.opencagedata.com/geocode/v1/json?q=41.40139%2C2.12870&pretty=1&key=
+        */
+        private async Task<string> GetAddressForCoordinates(decimal latitude, decimal longitude)
+        { 
+            HttpClient httpClient = new HttpClient { BaseAddress = new Uri(@"https://api.opencagedata.com/geocode/v1/") };
+            HttpResponseMessage httpResult = await httpClient.GetAsync(
+                String.Format("json?q={0},{1}&pretty=1&key={2}",
+                latitude.ToString().Replace(",", "."), longitude.ToString().Replace(",", "."), 
+                "e0f24ed22a53d63a9e2d7c3ba72ff7fd"));
+   //         String.Format("json?format=json&lat={0:00.00000000}&lon={1:00.00000000}", latitude, longitude).Replace(",", "."));
+            var lf = await httpResult.Content.ReadAsStringAsync();
+            JObject jObject = Newtonsoft.Json.Linq.JObject.Parse(lf);
+            // var Album album = jalbum.ToObject<Album>();
+            var bb = jObject["results"][0]["components"]["city"];
+
+            var formattedAddress = jObject["results"][0]["formatted"];
+            return formattedAddress.ToString();
+            /*
+            string house = jObject.GetNamedObject("addressparts").GetNamedString("house");
+            string road = jsonObject.GetNamedObject("addressparts").GetNamedString("road");
+            string city = jsonObject.GetNamedObject("addressparts").GetNamedString("city");
+            string state = jsonObject.GetNamedObject("addressparts").GetNamedString("state");
+            string postcode = jsonObject.GetNamedObject("addressparts").GetNamedString("postcode");
+            string country = jsonObject.GetNamedObject("addressparts").GetNamedString("country");
+            return string.Format("{0} {1}, {2}, {3} {4} ({5})", house, road, city, state, postcode, country);
+            */
+        }
+
+        private void btnBatchReverseGeoc_Click(object sender, EventArgs e)
+        {
+            PMapIniParams.Instance.ReadParams("", dbConf);
+            //Egy külön szálban, háttérben futkorászik
+            BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, 2500, "Útvonal részletező", true);
+            OCAddrProcess OCAproc = new OCAddrProcess(pd);
+            OCAproc.Run();
+            pd.ShowDialog();
+
+        }
+    }
+   
 }
