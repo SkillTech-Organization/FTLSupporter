@@ -58,14 +58,14 @@ namespace VBInterface
         public string SelectPosition(string p_lat, string p_lng, string p_sHint, string p_iniPath, string p_dbConf)
         {
             string sRetStatus = retOK;
-            PMapIniParams.Instance.ReadParams( p_iniPath, p_dbConf);
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
                 return retErr;
 
 
             DateTime dt = DateTime.Now;
-            
-       //     logVersion();
+
+            //     logVersion();
             Util.Log2File(">>START:SelectPosition(p_lat=" + p_lat + ", p_lng=" + p_lng + ", p_sHint=" + p_sHint + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
 
             try
@@ -85,10 +85,101 @@ namespace VBInterface
                 UI.Error(e.Message);
                 sRetStatus = retErr;
             }
-       //   Util.Log2File(">>END:SelectPosition()-->" + sRet, false);
+            //   Util.Log2File(">>END:SelectPosition()-->" + sRet, false);
 
-            if( !PMapIniParams.Instance.TestMode)
-                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now-dt);
+            if (!PMapIniParams.Instance.TestMode)
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
+            return sRetStatus;
+        }
+
+        public string Geocoding(string p_addr, string p_iniPath, string p_dbConf)
+        {
+            Util.Log2File(">>START:Geocoding(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
+            string sRetStatus = retOK;
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+
+
+            DateTime dt = DateTime.Now;
+
+            //     logVersion();
+            Util.Log2File(">>START:Geocoding(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
+
+            try
+            {
+                PMapCommonVars.Instance.ConnectToDB();
+
+                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
+                int ZIP_ID = 0;
+                int NOD_ID = 0;
+                int EDG_ID = 0;
+                bool bFound = route.GeocodingByAddr(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT);
+                if (bFound && DEP_IMPADDRSTAT != boDepot.EIMPADDRSTAT.MISSADDR)
+                {
+                    boEdge edg = route.GetEdgeByID(EDG_ID);
+                    return String.Format("{0}|{1}|{2}|{3}", ZIP_ID, NOD_ID, EDG_ID, (edg != null ? edg.EDG_NAME : "???"));
+                }
+                else
+                {
+                    return boDepot.EIMPADDRSTAT.MISSADDR.ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                Util.ExceptionLog(e);
+                UI.Error(e.Message);
+                sRetStatus = retErr;
+            }
+            //   Util.Log2File(">>END:SelectPosition()-->" + sRet, false);
+
+            if (!PMapIniParams.Instance.TestMode)
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
+            return sRetStatus;
+        }
+        public string GeocodingByGoogle(string p_addr, string p_iniPath, string p_dbConf)
+        {
+            Util.Log2File(">>START:GeocodingByGoogle(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
+            string sRetStatus = retOK;
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+
+
+            DateTime dt = DateTime.Now;
+
+            //     logVersion();
+            Util.Log2File(">>START:GeocodingByGoogle(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
+
+            try
+            {
+                PMapCommonVars.Instance.ConnectToDB();
+
+                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                int ZIP_ID = 0;
+                int NOD_ID = 0;
+                int EDG_ID = 0;
+                bool bFound = route.GeocodingByGoogle(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID);
+                if (bFound)
+                {
+                    boEdge edg = route.GetEdgeByID(EDG_ID);
+                    return String.Format("{0}|{1}|{2}|{3}", ZIP_ID, NOD_ID, EDG_ID, (edg != null ? edg.EDG_NAME : "???"));
+                }
+                else
+                {
+                    return boDepot.EIMPADDRSTAT.MISSADDR.ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                Util.ExceptionLog(e);
+                UI.Error(e.Message);
+                sRetStatus = retErr;
+            }
+
+            if (!PMapIniParams.Instance.TestMode)
+                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
             return sRetStatus;
         }
 
@@ -133,7 +224,7 @@ namespace VBInterface
             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
                 return retErr;
 
-//            logVersion();
+            //            logVersion();
             Util.Log2File(">>START:ShowRoute( p_routeList=" + p_routeList + "p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
 
             try
@@ -151,7 +242,7 @@ namespace VBInterface
                 UI.Error(e.Message);
                 sRetStatus = retErr;
             }
-//            Util.Log2File(">>END:ShowRoute()-->" + sRet);
+            //            Util.Log2File(">>END:ShowRoute()-->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
                 ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_routeList);
@@ -165,7 +256,7 @@ namespace VBInterface
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
                 return retErr;
-            
+
             //            logVersion();
             Util.Log2File(">>START:ShowDepots( p_DepotList=" + p_DepotList + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")");
 
@@ -184,7 +275,7 @@ namespace VBInterface
                 UI.Error(e.Message);
                 sRetStatus = retErr;
             }
-//            Util.Log2File(">>END:ShowDepots()-->" + sRet);
+            //            Util.Log2File(">>END:ShowDepots()-->" + sRet);
 
             if (!PMapIniParams.Instance.TestMode)
                 ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_DepotList);
@@ -271,7 +362,7 @@ namespace VBInterface
             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
                 return "0";
             List<dtXResult> res = PlanTours(p_iniPath, p_dbConf, p_PLN_ID, p_USR_ID, p_planParams);
-            return (bool)(res.First().Status == dtXResult.EStatus.OK ) ?  "1" : "0";
+            return (bool)(res.First().Status == dtXResult.EStatus.OK) ? "1" : "0";
         }
 
 
@@ -333,11 +424,11 @@ namespace VBInterface
                             //logVersion();
                             Util.Log2File(">>START:CalcPMapRoutesByPlan( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_PLN_ID=" + p_PLN_ID.ToString() + ")");
 
-                            PMapCommonVars.Instance.ConnectToDB();                            
+                            PMapCommonVars.Instance.ConnectToDB();
 
-                            sRetStatus = calculatePMapRoutesByPlan( p_PLN_ID, p_savePoints) ? retOK : retFailed;
+                            sRetStatus = calculatePMapRoutesByPlan(p_PLN_ID, p_savePoints) ? retOK : retFailed;
 
-                            
+
                             break;
                         }
                         else
@@ -497,7 +588,7 @@ namespace VBInterface
                 //logVersion();
                 Util.Log2File(">>START:RecalcPlTours( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_TPL_ID_List='" + p_TPL_ID_List + "')");
                 PMapCommonVars.Instance.ConnectToDB();
-                
+
                 bllPlanEdit bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
                 string[] TPL_IDArr = p_TPL_ID_List.Split(',');
@@ -562,7 +653,7 @@ namespace VBInterface
                 //logVersion();
                 Util.Log2File(">>START:ImportDepots( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_depots.<count>='" + p_depots.Count.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
-                
+
 
                 dtXDepot xdep = new dtXDepot(PMapCommonVars.Instance.CT_DB);
                 result = xdep.ImportDepots(p_depots);
@@ -572,7 +663,7 @@ namespace VBInterface
                 Util.ExceptionLog(e);
                 UI.Error(e.Message);
                 sRetStatus = retErr;
-                
+
             }
 
             //Util.Log2File(">>END:ImportDepots()");
@@ -595,7 +686,7 @@ namespace VBInterface
                 //logVersion();
                 Util.Log2File(">>START:ImportTrucks( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_truck.<count>='" + p_truck.Count.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
-                
+
 
                 dtXTruck xtrk = new dtXTruck(PMapCommonVars.Instance.CT_DB);
                 result = xtrk.ImportTrucks(p_truck);
@@ -628,7 +719,7 @@ namespace VBInterface
                 //logVersion();
                 Util.Log2File(">>START:ImportOrders( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_orders.<count>='" + p_orders.Count.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
-                
+
 
                 dtXOrder xord = new dtXOrder(PMapCommonVars.Instance.CT_DB);
                 result = xord.ImportOrders(p_orders);
@@ -659,7 +750,7 @@ namespace VBInterface
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
-            
+
             dtXResult res = new dtXResult();
             boXRouteSummary rSummary = new boXRouteSummary();
             try
@@ -670,7 +761,7 @@ namespace VBInterface
                 //logVersion();
                 Util.Log2File(">>START:RouteVisualization( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_TRK_ID=" + p_TRK_ID.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
-                
+
 
                 string sErr;
                 if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, true, out sErr))
@@ -700,7 +791,7 @@ namespace VBInterface
                 res.ErrMessage = e.Message;
                 sRetStatus = retErr;
             }
-            
+
             //Util.Log2File(">>END:RouteVisualization()");
             List<dtXResult> resArr = new List<dtXResult>();
             resArr.Add(res);
@@ -820,7 +911,7 @@ namespace VBInterface
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
                 //logVersion();
-                
+
                 Util.Log2File(">>START:CreateNewPlan( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_PLN_NAME='" + p_PLN_NAME + "',p_WHS_ID=" + p_WHS_ID.ToString() +
                     ",p_PLN_DATE_B=" + p_PLN_DATE_B.ToString(Global.DATETIMEFORMAT) +
                     ",p_PLN_DATE_E=" + p_PLN_DATE_E.ToString(Global.DATETIMEFORMAT) +
@@ -830,7 +921,7 @@ namespace VBInterface
                     ",p_enabledTruckList (cnt)=" + (p_enabledTruckList == null ? "null" : p_enabledTruckList.Count.ToString()) +
                     ")");
                 PMapCommonVars.Instance.ConnectToDB();
-                
+
 
                 bllPlanEdit pe = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
@@ -842,7 +933,7 @@ namespace VBInterface
                 }
                 else
                 {
-                    res.Data= null;
+                    res.Data = null;
                     res.Status = (dtXResult.EStatus)Enum.Parse(typeof(dtXResult.EStatus), np.Status.ToString());
                     res.ErrMessage = np.ErrMessage;
                     sRetStatus = retErr;
@@ -920,7 +1011,7 @@ namespace VBInterface
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
-            
+
             dtXResult res = new dtXResult();
 
             boXFullPlan XPlan = new boXFullPlan();
@@ -937,7 +1028,7 @@ namespace VBInterface
                 dtXGetPlan xGetPlan = new dtXGetPlan(PMapCommonVars.Instance.CT_DB);
                 res.Data = xGetPlan.GetPlan(p_PLN_ID);
                 res.Status = dtXResult.EStatus.OK;
-   
+
 
             }
             catch (Exception e)
@@ -969,13 +1060,13 @@ namespace VBInterface
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
-                
+
                 //logVersion();
                 Util.Log2File(">>START:GetPlans( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf +
                         ",p_WHS_ID=" + p_WHS_ID.ToString() +
                         ",p_PLN_DATE_B=" + p_PLN_DATE_B.ToString(Global.DATETIMEFORMAT_PLAN) +
                         ",p_PLN_DATE_E=" + p_PLN_DATE_E.ToString(Global.DATETIMEFORMAT_PLAN) + ")");
-                
+
                 PMapCommonVars.Instance.ConnectToDB();
 
 
@@ -1037,7 +1128,7 @@ namespace VBInterface
 
                     int diff = 0;
                     int fromNOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(chkRoute.FromLat, chkRoute.FromLng), out diff);
-                    if(fromNOD_ID==0)
+                    if (fromNOD_ID == 0)
                     {
                         itemRes.Status = boXChkRes.ResultStatus.VALIDATIONERROR;
                         itemRes.ErrMsg = "Helytelen kezdőkoordináta";
@@ -1071,10 +1162,10 @@ namespace VBInterface
                         else
                         {
                             itemRes.Status = boXChkRes.ResultStatus.VALIDATIONERROR;
-                            itemRes.ErrMsg += "Helytelen behajtási övezet:"+ zone + " ";
+                            itemRes.ErrMsg += "Helytelen behajtási övezet:" + zone + " ";
                         }
                     }
-                    if(itemRes.Status != boXChkRes.ResultStatus.OK)
+                    if (itemRes.Status != boXChkRes.ResultStatus.OK)
                     {
                         continue;
                     }
@@ -1088,7 +1179,7 @@ namespace VBInterface
 
                     RouteData.Instance.getNeigboursByBound(sRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);
 
-     
+
                     boRoute result = provider.GetRoute(sRZN_ID_LIST, fromNOD_ID, toNOD_ID,
                         NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
                          PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
@@ -1123,6 +1214,5 @@ namespace VBInterface
          */
         #endregion
     }
-
 
 }

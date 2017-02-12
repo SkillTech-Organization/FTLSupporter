@@ -15,6 +15,7 @@ using System.Data.Common;
 using System.Net;
 using System.Xml.Linq;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace PMap.BLL
 {
@@ -681,6 +682,16 @@ namespace PMap.BLL
             return string.Join(Global.SEP_POINT, p_Points.Select(x => x.Lat.ToString() + Global.SEP_COORD + x.Lng.ToString()).ToArray());
         }
 
+        public boEdge GetEdgeByID(int p_ID)
+        {
+            string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
+              "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
+              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME from EDG_EDGE  EDG " + Environment.NewLine +
+              "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
+              " where EDG.ID = ?  ";
+
+            return fillEdgeFromDt( DBA.Query2DataTable(sSql, p_ID));
+        }
 
         public boEdge GetEdgeByNOD_ID(int p_NOD_ID)
         {
@@ -690,8 +701,11 @@ namespace PMap.BLL
                    "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME from EDG_EDGE  EDG " + Environment.NewLine +
                    "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                    " where EDG.NOD_NUM = ? or EDG.NOD_NUM2 = ? ";
+            return fillEdgeFromDt(DBA.Query2DataTable(sSql, p_NOD_ID, p_NOD_ID));
+        }
 
-            DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID, p_NOD_ID);
+        private boEdge fillEdgeFromDt(DataTable dt)
+        {
             if (dt.Rows.Count > 0)
             {
                 boEdge res = new boEdge
@@ -711,11 +725,11 @@ namespace PMap.BLL
 
                 };
                 return res;
+                
             }
             else
                 return null;
         }
-        
         /// <summary>
         /// NODE üzleti objektum visszaadása ID alapján
         /// </summary>
@@ -921,6 +935,12 @@ namespace PMap.BLL
             string sStreet = "";
             string sStreetType = "";
             int nAddrNum = 0;
+
+
+            RegexOptions options = RegexOptions.None;
+            Regex regex = new Regex("[ ]{2,}", options);
+            p_addr = regex.Replace(p_addr, " ");
+
             string[] parts = p_addr.Split(' ');
             int nCurrPart = 0;
 

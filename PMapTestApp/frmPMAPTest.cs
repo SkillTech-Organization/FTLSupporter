@@ -19,10 +19,10 @@ using PMap.Common;
 using PMap.BLL.DataXChange;
 using PMap.Common.PPlan;
 using PMap.BO.DataXChange;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using OpenCage.Geocode;
+using System.Net.Http;
 
 namespace PMapTestApp
 {
@@ -267,9 +267,18 @@ namespace PMapTestApp
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
 
+
             dlgTestGeoCoding d = new dlgTestGeoCoding();
+            d.txtAddr.Text = "1027 budapest petőfi utca 333";
+            d.txtAddr.Text = "Ivanka pri Dunaji Cintorínska, Ivanka pri Dunaji";
+
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                var vbintf = new VBInterface.PMapInterface();
+
+                UI.Message("Geocoding->" + vbintf.GeocodingByGoogle(d.txtAddr.Text,"", dbConf));
+
+
                 PMapCommonVars.Instance.ConnectToDB();
 
 
@@ -649,7 +658,7 @@ namespace PMapTestApp
         https://api.opencagedata.com/geocode/v1/json?q=-23.5373732,-46.8374628&pretty=1&key=YOUR-API-KEY'
 
         https://api.opencagedata.com/geocode/v1/json?q=41.40139%2C2.12870&pretty=1&key=
-        */
+    */
         private async Task<string> GetAddressForCoordinates(decimal latitude, decimal longitude)
         { 
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(@"https://api.opencagedata.com/geocode/v1/") };
@@ -665,8 +674,8 @@ namespace PMapTestApp
 
             var formattedAddress = jObject["results"][0]["formatted"];
             return formattedAddress.ToString();
-            /*
-            string house = jObject.GetNamedObject("addressparts").GetNamedString("house");
+/*
+        string house = jObject.GetNamedObject("addressparts").GetNamedString("house");
             string road = jsonObject.GetNamedObject("addressparts").GetNamedString("road");
             string city = jsonObject.GetNamedObject("addressparts").GetNamedString("city");
             string state = jsonObject.GetNamedObject("addressparts").GetNamedString("state");
@@ -675,7 +684,7 @@ namespace PMapTestApp
             return string.Format("{0} {1}, {2}, {3} {4} ({5})", house, road, city, state, postcode, country);
             */
         }
-
+        
         private void btnBatchReverseGeoc_Click(object sender, EventArgs e)
         {
             PMapIniParams.Instance.ReadParams("", dbConf);

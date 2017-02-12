@@ -14,7 +14,6 @@ namespace PMapTestApp
         public dlgTestGeoCoding()
         {
             InitializeComponent();
-            this.txtAddr.Text = "1027 budapest petőfi utca 333";
         }
 
         private void dlgTestGeoCoding_Load(object sender, EventArgs e)
