@@ -164,9 +164,10 @@ namespace PMap.Common
             string sMsg = String.Format("{0}: {1}", DateTime.Now.ToString(Global.DATETIMEFORMAT), p_msg);
             Console.WriteLine(sMsg);
             String2File(sMsg + Environment.NewLine, LogFileName, true);
-
+            /* ez már nem kell 
             if (p_sendToCloud && PMapIniParams.Instance.ParseLog)
                 ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
+            */
             if (p_sendToCloud && PMapIniParams.Instance.ALog)
                 AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
 

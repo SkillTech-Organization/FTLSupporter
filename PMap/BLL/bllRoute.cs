@@ -693,7 +693,7 @@ namespace PMap.BLL
             return fillEdgeFromDt( DBA.Query2DataTable(sSql, p_ID));
         }
 
-        public boEdge GetEdgeByNOD_ID(int p_NOD_ID)
+        public boEdge GetEdgeByNOD_ID(int p_NOD_ID, string p_street = "")
         {
 
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
@@ -701,6 +701,8 @@ namespace PMap.BLL
                    "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME from EDG_EDGE  EDG " + Environment.NewLine +
                    "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                    " where EDG.NOD_NUM = ? or EDG.NOD_NUM2 = ? ";
+            if (p_street != "")
+                sSql += " and UPPER(convert(varchar(max),decryptbykey(EDG_NAME_ENC))) like '%" + p_street.ToUpper() + "%' ";
             return fillEdgeFromDt(DBA.Query2DataTable(sSql, p_NOD_ID, p_NOD_ID));
         }
 
@@ -1174,7 +1176,7 @@ namespace PMap.BLL
 
             var response = request.GetResponse();
             var xdoc = XDocument.Load(response.GetResponseStream());
-
+            string street_name = "";
             var xElement = xdoc.Element("GeocodeResponse");
             if (xElement != null)
             {
@@ -1198,6 +1200,27 @@ namespace PMap.BLL
                                     ResultPt.Lng = Convert.ToDouble(xElementLng.Value.Replace(',', '.'), CultureInfo.InvariantCulture);
                             }
                         }
+
+                        var xx = result.Elements("address_component").ToList();
+                        foreach( var nd in xx)
+                        {
+                           
+                            var t = nd.Element("type");
+                            if (t != null)
+                            {
+                                if( t.Value == "route")
+                                {
+                                    var ln = nd.Element("long_name");
+                                    if( ln != null)
+                                    {
+                                        var names = ln.Value.Split(' ');
+                                        if (names.Length > 0)
+                                            street_name = names[0];
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 else
@@ -1214,7 +1237,11 @@ namespace PMap.BLL
                     return false;
                 ZIP_ID = nod.ZIP_ID;
 
-                boEdge edg = GetEdgeByNOD_ID(NOD_ID);
+                boEdge edg = GetEdgeByNOD_ID(NOD_ID, street_name);
+                if (edg == null && street_name != "")
+                    edg = GetEdgeByNOD_ID(NOD_ID);
+
+
                 if (edg == null)
                     return false;
 

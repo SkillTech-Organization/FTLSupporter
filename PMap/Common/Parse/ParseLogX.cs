@@ -16,6 +16,7 @@ namespace PMap.Common.Parse
 
         public static void LogToParse(string p_type, DateTime p_timestamp, string p_text)
         {
+          
             PMapLog pl = new PMapLog()
                                 {
                                     AppInstance = PMapCommonVars.Instance.AppInstance,
@@ -29,6 +30,9 @@ namespace PMap.Common.Parse
 
         public static void CallsToParse(string p_function, string p_result, TimeSpan p_duration, params  object[] p_values)
         {
+            //kikötjük...
+            //
+            return;
             PMapCalls pc = new PMapCalls()
             {
                 PMC_LICENCE = "***",

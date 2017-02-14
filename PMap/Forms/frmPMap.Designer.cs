@@ -84,7 +84,7 @@ namespace PMap.Forms
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
             this.splitContainer1.Size = new System.Drawing.Size(862, 582);
-            this.splitContainer1.SplitterDistance = 439;
+            this.splitContainer1.SplitterDistance = 437;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -109,7 +109,7 @@ namespace PMap.Forms
             this.gMapControl.RoutesEnabled = true;
             this.gMapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMapControl.ShowTileGridLines = false;
-            this.gMapControl.Size = new System.Drawing.Size(437, 580);
+            this.gMapControl.Size = new System.Drawing.Size(435, 580);
             this.gMapControl.TabIndex = 0;
             this.gMapControl.Zoom = 0D;
             // 
@@ -132,7 +132,7 @@ namespace PMap.Forms
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(415, 580);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(417, 580);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel9
@@ -147,7 +147,7 @@ namespace PMap.Forms
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(409, 69);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(411, 69);
             this.tableLayoutPanel9.TabIndex = 35;
             // 
             // btnOK
@@ -156,7 +156,7 @@ namespace PMap.Forms
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(3, 39);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(403, 25);
+            this.btnOK.Size = new System.Drawing.Size(405, 25);
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -167,7 +167,7 @@ namespace PMap.Forms
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(3, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(403, 25);
+            this.btnCancel.Size = new System.Drawing.Size(405, 25);
             this.btnCancel.TabIndex = 0;
             this.btnCancel.Text = "Vissza";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -178,7 +178,7 @@ namespace PMap.Forms
             this.grpCurrPos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpCurrPos.Location = new System.Drawing.Point(3, 3);
             this.grpCurrPos.Name = "grpCurrPos";
-            this.grpCurrPos.Size = new System.Drawing.Size(409, 69);
+            this.grpCurrPos.Size = new System.Drawing.Size(411, 69);
             this.grpCurrPos.TabIndex = 2;
             this.grpCurrPos.TabStop = false;
             this.grpCurrPos.Text = "Aktuális pozíció";
@@ -199,7 +199,7 @@ namespace PMap.Forms
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(403, 49);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(405, 49);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // lblCurrLng
@@ -207,9 +207,9 @@ namespace PMap.Forms
             this.lblCurrLng.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrLng.AutoSize = true;
             this.lblCurrLng.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCurrLng.Location = new System.Drawing.Point(118, 29);
+            this.lblCurrLng.Location = new System.Drawing.Point(119, 29);
             this.lblCurrLng.Name = "lblCurrLng";
-            this.lblCurrLng.Size = new System.Drawing.Size(282, 15);
+            this.lblCurrLng.Size = new System.Drawing.Size(283, 15);
             this.lblCurrLng.TabIndex = 3;
             this.lblCurrLng.Text = "lblCurrLng";
             this.lblCurrLng.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -220,7 +220,7 @@ namespace PMap.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 13);
+            this.label1.Size = new System.Drawing.Size(110, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Lat:";
             // 
@@ -230,7 +230,7 @@ namespace PMap.Forms
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 13);
+            this.label2.Size = new System.Drawing.Size(110, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Lng:";
             // 
@@ -239,9 +239,9 @@ namespace PMap.Forms
             this.lblCurrLat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrLat.AutoSize = true;
             this.lblCurrLat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCurrLat.Location = new System.Drawing.Point(118, 4);
+            this.lblCurrLat.Location = new System.Drawing.Point(119, 4);
             this.lblCurrLat.Name = "lblCurrLat";
-            this.lblCurrLat.Size = new System.Drawing.Size(282, 15);
+            this.lblCurrLat.Size = new System.Drawing.Size(283, 15);
             this.lblCurrLat.TabIndex = 2;
             this.lblCurrLat.Text = "lblCurrLat";
             this.lblCurrLat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -252,7 +252,7 @@ namespace PMap.Forms
             this.pZoom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pZoom.Location = new System.Drawing.Point(3, 78);
             this.pZoom.Name = "pZoom";
-            this.pZoom.Size = new System.Drawing.Size(409, 69);
+            this.pZoom.Size = new System.Drawing.Size(411, 69);
             this.pZoom.TabIndex = 31;
             this.pZoom.TabStop = false;
             this.pZoom.Text = "Nagyítás";
@@ -262,10 +262,10 @@ namespace PMap.Forms
             this.tbZoom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbZoom.LargeChange = 1;
             this.tbZoom.Location = new System.Drawing.Point(3, 17);
-            this.tbZoom.Maximum = 20;
-            this.tbZoom.Minimum = 2;
+            this.tbZoom.Maximum = 22;
+            this.tbZoom.Minimum = 1;
             this.tbZoom.Name = "tbZoom";
-            this.tbZoom.Size = new System.Drawing.Size(403, 49);
+            this.tbZoom.Size = new System.Drawing.Size(405, 49);
             this.tbZoom.TabIndex = 0;
             this.tbZoom.Value = 2;
             this.tbZoom.ValueChanged += new System.EventHandler(this.tbZoom_ValueChanged);
@@ -277,7 +277,7 @@ namespace PMap.Forms
             this.grpDepots.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpDepots.Location = new System.Drawing.Point(3, 153);
             this.grpDepots.Name = "grpDepots";
-            this.grpDepots.Size = new System.Drawing.Size(409, 52);
+            this.grpDepots.Size = new System.Drawing.Size(411, 52);
             this.grpDepots.TabIndex = 36;
             this.grpDepots.TabStop = false;
             this.grpDepots.Text = "Helyek megjelenítése";
@@ -288,7 +288,7 @@ namespace PMap.Forms
             this.chkShowDepots.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkShowDepots.Location = new System.Drawing.Point(3, 34);
             this.chkShowDepots.Name = "chkShowDepots";
-            this.chkShowDepots.Size = new System.Drawing.Size(403, 17);
+            this.chkShowDepots.Size = new System.Drawing.Size(405, 17);
             this.chkShowDepots.TabIndex = 1;
             this.chkShowDepots.Text = "Lerakók";
             this.chkShowDepots.UseVisualStyleBackColor = true;
@@ -300,7 +300,7 @@ namespace PMap.Forms
             this.chkShowRouteDepots.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkShowRouteDepots.Location = new System.Drawing.Point(3, 17);
             this.chkShowRouteDepots.Name = "chkShowRouteDepots";
-            this.chkShowRouteDepots.Size = new System.Drawing.Size(403, 17);
+            this.chkShowRouteDepots.Size = new System.Drawing.Size(405, 17);
             this.chkShowRouteDepots.TabIndex = 0;
             this.chkShowRouteDepots.Text = "Útvonal";
             this.chkShowRouteDepots.UseVisualStyleBackColor = true;
@@ -312,7 +312,7 @@ namespace PMap.Forms
             this.grpMarkerTooltipMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpMarkerTooltipMode.Location = new System.Drawing.Point(3, 211);
             this.grpMarkerTooltipMode.Name = "grpMarkerTooltipMode";
-            this.grpMarkerTooltipMode.Size = new System.Drawing.Size(409, 94);
+            this.grpMarkerTooltipMode.Size = new System.Drawing.Size(411, 94);
             this.grpMarkerTooltipMode.TabIndex = 34;
             this.grpMarkerTooltipMode.TabStop = false;
             this.grpMarkerTooltipMode.Text = "Címke megjelenítés";
@@ -332,7 +332,7 @@ namespace PMap.Forms
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(403, 74);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(405, 74);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // rdbNever
@@ -341,7 +341,7 @@ namespace PMap.Forms
             this.rdbNever.AutoSize = true;
             this.rdbNever.Location = new System.Drawing.Point(3, 3);
             this.rdbNever.Name = "rdbNever";
-            this.rdbNever.Size = new System.Drawing.Size(397, 17);
+            this.rdbNever.Size = new System.Drawing.Size(399, 17);
             this.rdbNever.TabIndex = 0;
             this.rdbNever.TabStop = true;
             this.rdbNever.Text = "Nincs ";
@@ -354,7 +354,7 @@ namespace PMap.Forms
             this.rdbOnMouseOver.AutoSize = true;
             this.rdbOnMouseOver.Location = new System.Drawing.Point(3, 27);
             this.rdbOnMouseOver.Name = "rdbOnMouseOver";
-            this.rdbOnMouseOver.Size = new System.Drawing.Size(397, 17);
+            this.rdbOnMouseOver.Size = new System.Drawing.Size(399, 17);
             this.rdbOnMouseOver.TabIndex = 1;
             this.rdbOnMouseOver.TabStop = true;
             this.rdbOnMouseOver.Text = "Egérpozícionállással";
@@ -367,7 +367,7 @@ namespace PMap.Forms
             this.rdbAlways.AutoSize = true;
             this.rdbAlways.Location = new System.Drawing.Point(3, 52);
             this.rdbAlways.Name = "rdbAlways";
-            this.rdbAlways.Size = new System.Drawing.Size(397, 17);
+            this.rdbAlways.Size = new System.Drawing.Size(399, 17);
             this.rdbAlways.TabIndex = 2;
             this.rdbAlways.TabStop = true;
             this.rdbAlways.Text = "Állandó megjelenítés";

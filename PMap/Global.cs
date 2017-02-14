@@ -108,7 +108,7 @@ namespace PMap
 
         public const int DefZoom = 10;
         public const int DefMinZoom = 7;
-        public const int DefMaxZoom = 15;
+        public const int DefMaxZoom = 18;
 
         public const double DefPosLat = 47.49194;
         public const double DefPosLng = 19.14414;

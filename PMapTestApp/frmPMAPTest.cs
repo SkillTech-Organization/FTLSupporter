@@ -108,6 +108,7 @@ namespace PMapTestApp
             try
             {
                 PMapIniParams.Instance.ReadParams("", dbConf);
+                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
 
                 dlgSelPlan d = new dlgSelPlan();
                 if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -117,6 +118,7 @@ namespace PMapTestApp
                     //db.ExecuteNonQuery("truncate table DST_DISTANCE");
                     //db.ExecuteNonQuery("delete DST_DISTANCE where NOD_ID_FROM = 13 or NOD_ID_TO = 13");
                     db.Close();
+
                     (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, d.m_PLN_ID, true);
                 }
 
@@ -271,6 +273,7 @@ namespace PMapTestApp
             dlgTestGeoCoding d = new dlgTestGeoCoding();
             d.txtAddr.Text = "1027 budapest petőfi utca 333";
             d.txtAddr.Text = "Ivanka pri Dunaji Cintorínska, Ivanka pri Dunaji";
+            d.txtAddr.Text = "Jászberény Kossuth u 80";
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
