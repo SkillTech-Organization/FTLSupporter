@@ -16,8 +16,8 @@ namespace PMap.Licence
     {
         public const string pw = "01EF1AEA0F433DE23F9C5BBB2A222100";
         public const string iv = "01EE23F9C5BBB2A2";
-
-        internal static void Check(string p_IDFile)
+        //TODO:Internal!
+        public static void Check(string p_IDFile)
         {
             byte[] buffer;
 

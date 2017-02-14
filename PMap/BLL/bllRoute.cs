@@ -85,8 +85,11 @@ namespace PMap.BLL
                     try
                     {
                         DateTime dtStart = DateTime.Now;
+                        var sqlConn = DBA.Conn as SqlConnection;
+                        var sqlTrans = DBA.Tran as SqlTransaction;
 
-                        SqlCommand command = new SqlCommand(null, DBA.Conn);
+ //                       SqlCommand command = new SqlCommand(null, DBA.Conn);
+                        SqlCommand command = new SqlCommand(null, sqlConn);
                         command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
 
                         command.Parameters.Add(new SqlParameter("@NOD_ID_FROM", SqlDbType.Int, 0));
@@ -96,9 +99,9 @@ namespace PMap.BLL
                         command.Parameters.Add(new SqlParameter("@DST_EDGES", SqlDbType.VarBinary, Int32.MaxValue));
                         command.Parameters.Add(new SqlParameter("@DST_POINTS", SqlDbType.VarBinary, Int32.MaxValue));
 
-                        command.Transaction = DBA.Tran;
+  //                      command.Transaction = DBA.Tran;
+                        command.Transaction = sqlTrans;
                         command.Prepare();
-
 
 
                         foreach (var route in p_Routes)
@@ -121,8 +124,9 @@ namespace PMap.BLL
                                 command.Parameters["@DST_POINTS"].Value = new byte[0];
                             }
                             command.ExecuteNonQuery();
-
+    //                        Util.Log2File(route.NOD_ID_FROM.ToString() + "->" + route.NOD_ID_TO.ToString() + ", dst:"+ route.DST_DISTANCE.ToString(), "\\Temp\\ct\\dst.xx", false);
                         }
+
                         Console.WriteLine("WriteDistance " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
                     }
                     catch (Exception e)

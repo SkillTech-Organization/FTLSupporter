@@ -108,7 +108,8 @@ namespace PMapTestApp
             try
             {
                 PMapIniParams.Instance.ReadParams("", dbConf);
-                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
+  //              (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
+                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 2, true);
 
                 dlgSelPlan d = new dlgSelPlan();
                 if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -274,7 +275,7 @@ namespace PMapTestApp
             d.txtAddr.Text = "1027 budapest petőfi utca 333";
             d.txtAddr.Text = "Ivanka pri Dunaji Cintorínska, Ivanka pri Dunaji";
             d.txtAddr.Text = "Jászberény Kossuth u 80";
-
+            d.txtAddr.Text = "Jászberény KOSSUTH U. 23.";
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();

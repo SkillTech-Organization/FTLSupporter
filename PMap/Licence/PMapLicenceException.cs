@@ -5,8 +5,9 @@ using System.Text;
 
 namespace PMap.Licence
 {
-    internal class PMapLicenceException : Exception
+    public class PMapLicenceException : Exception
     {
+        //TODO:Internal!
         public PMapLicenceException( string p_msg)
             :base( p_msg)
         {
