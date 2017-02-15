@@ -183,14 +183,14 @@ namespace PMapTestApp
             PMapIniParams.Instance.ReadParams("", dbConf);
 
             dlgSelPlan d = new dlgSelPlan();
-            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+//            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 PMapCommonVars.Instance.ConnectToDB();
 
-
                 BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, PMapIniParams.Instance.OptimizeTimeOutSec, "Túraoptimalizálás", true);
                 //TourOptimizerProcess top = new TourOptimizerProcess(pd, d.m_PLN_ID, 12405);
-                TourOptimizerProcess top = new TourOptimizerProcess(pd, d.m_PLN_ID, 0, true, false);
+                //TourOptimizerProcess top = new TourOptimizerProcess(pd, d.m_PLN_ID, 0, true, false);
+                TourOptimizerProcess top = new TourOptimizerProcess(pd, 12, 0, false, false);
                 top.Run();
                 pd.ShowDialog();
 
@@ -206,11 +206,12 @@ namespace PMapTestApp
             PMapIniParams.Instance.ReadParams("", dbConf);
 
             dlgSelPlan d = new dlgSelPlan();
-            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+  //          if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 PMapCommonVars.Instance.ConnectToDB();
 
-                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, d.m_PLN_ID, 0, true);
+//                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, d.m_PLN_ID, 0, true);
+                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, 12, 0, true);
 
                 opt.FillOptimize(null);
                 opt.ProcessResult(PMapIniParams.Instance.PlanResultFile, null);

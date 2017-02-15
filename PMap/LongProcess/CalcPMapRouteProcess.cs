@@ -100,7 +100,6 @@ namespace PMap.LongProcess
                 {
 
                     dtStart = DateTime.Now;
-          //          Util.Log2File(item.Key.NOD_ID_FROM.ToString() + " nx$", "\\Temp\\ct\\dst.xx", false);
                     i++;
                     List<boRoute> results = provider.GetAllRoutes(item.Key.RZN_ID_LIST, item.Key.NOD_ID_FROM, item.Value, 
                                         NeighborsArrFull[item.Key.RZN_ID_LIST], NeighborsArrCut[item.Key.RZN_ID_LIST], 

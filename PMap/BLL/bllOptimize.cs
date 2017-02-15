@@ -310,7 +310,7 @@ namespace PMap.BLL
                              innerID = innerID++,
                              ID = Util.getFieldValue<int>(r, "ID"),
                              cap1 = Convert.ToInt32(Math.Ceiling(Util.getFieldValue<double>(r, "CPP_LOADQTY") * Global.csQTY_DEC)),
-                             cap2 = Util.getFieldValue<int>(r, "CPP_LOADVOL"),              //m3-ban értendő, nem szorozzuk fel
+                             cap2 = Util.getFieldValue<int>(r, "CPP_LOADVOL"),              //dm3-ban értendő, nem szorozzuk fel
                              cap3 = 0,
                              cap4 = 0,
                              cap5 = 0
@@ -1015,6 +1015,7 @@ namespace PMap.BLL
 
                     while ((line = file.ReadLine()) != null)
                     {
+
                         string[] aFn = line.Split('(');
                         if (aFn[0] == getRouteNodesCount)
                         {
@@ -1071,13 +1072,48 @@ namespace PMap.BLL
                                     double dQty4 = Math.Ceiling(ord.dQty4 * ord.orLoad1 / dLoad1);
                                     double dQty5 = Math.Ceiling(ord.dQty5 * ord.orLoad1 / dLoad1);
                                     */
-
                                     double dQty = Math.Round(ord.dQty * ord.orLoad1 / dLoad1, 2);
                                     double dQty1 = Math.Round(ord.dQty1 * ord.orLoad1 / dLoad1, 2);
                                     double dQty2 = Math.Round(ord.dQty2 * ord.orLoad1 / dLoad1, 2);
                                     double dQty3 = Math.Round(ord.dQty3 * ord.orLoad1 / dLoad1, 2);
                                     double dQty4 = Math.Round(ord.dQty4 * ord.orLoad1 / dLoad1, 2);
                                     double dQty5 = Math.Round(ord.dQty5 * ord.orLoad1 / dLoad1, 2);
+
+                                    if (double.IsNaN(dQty))
+                                    {
+                                        Util.Log2File("dQty NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dQty = 0;
+                                    }
+                                    if (double.IsNaN(dQty1))
+                                    {
+                                        Util.Log2File("dQty1 NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dQty1 = 0;
+                                    }
+                                    if (double.IsNaN(dQty2))
+                                    {
+                                        Util.Log2File("dQty2 NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dQty2 = 0;
+                                    }
+                                    if (double.IsNaN(dQty3))
+                                    {
+                                        Util.Log2File("dQty3 NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dQty3 = 0;
+                                    }
+                                    if (double.IsNaN(dQty4))
+                                    {
+                                        Util.Log2File("dQty4 NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dQty4 = 0;
+                                    }
+                                    if (double.IsNaN(dQty5))
+                                    {
+                                        Util.Log2File("dQty5 NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dQty5 = 0;
+                                    }
+                                    if (double.IsNaN(dVolume))
+                                    {
+                                        Util.Log2File("dVolume NaN keletkezett TOD.ID=" + ord.TOD_ID.ToString());
+                                        dVolume = 0;
+                                    }
 
                                     int TOD_ID = ple.CreatePlanOrder(boOpt.PLN_ID, ord.ID,
                                                     dQty, dQty1, dQty2, dQty3, dQty4, dQty5, dVolume,

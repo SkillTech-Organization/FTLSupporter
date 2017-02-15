@@ -29,9 +29,10 @@ namespace PMap.Route
         public static void StartPMRouteInitProcess()
         {
             DateTime dtStart = DateTime.Now;
-
+/* 
             PMapIniParams.Instance.ReadParams("", "DB0");
             ChkLic.Check(PMapIniParams.Instance.IDFile);
+*/
             try
             {
 
@@ -63,76 +64,77 @@ namespace PMap.Route
 
 
             Util.Log2File("GetPMapRoutes SingleThread START " + Util.GetSysInfo());
+/* EZ NEM KELL 
 
-            PMapIniParams.Instance.ReadParams("", "DB0");
-            ChkLic.Check(PMapIniParams.Instance.IDFile);
+                        PMapIniParams.Instance.ReadParams("", "DB0");
+                        ChkLic.Check(PMapIniParams.Instance.IDFile);
+*/
+                        try
+                        {
 
-            try
-            {
+                            string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_TH, p_CalcInfo);
+                            CalcPMapRouteProcess cpp = null;
+                            BaseSilngleProgressDialog pd = null;
+                            ProcessNotifyIcon ni = null;
 
-                string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_TH, p_CalcInfo);
-                CalcPMapRouteProcess cpp = null;
-                BaseSilngleProgressDialog pd = null;
-                ProcessNotifyIcon ni = null;
-
-                if (p_NotifyForm)
-                {
-                    pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST }).Count() - 1, sTitle, true);
-                    cpp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
-                }
-                else
-                {
-                    ni = new ProcessNotifyIcon();
-                    cpp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
-                }
-
-
-                if (p_NotifyForm)
-                {
-                    cpp.Run();
-                    pd.ShowDialog();
-                }
-                else
-                {
-                    cpp.RunWait();
-                }
+                            if (p_NotifyForm)
+                            {
+                                pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST }).Count() - 1, sTitle, true);
+                                cpp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
+                            }
+                            else
+                            {
+                                ni = new ProcessNotifyIcon();
+                                cpp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
+                            }
 
 
-                bCompleted = cpp.Completed;
-
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            tspDiff = DateTime.Now - dtStart;
-            Util.Log2File("GetPMapRoutes SingleThread END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
-            return bCompleted;
-        }
+                            if (p_NotifyForm)
+                            {
+                                cpp.Run();
+                                pd.ShowDialog();
+                            }
+                            else
+                            {
+                                cpp.RunWait();
+                            }
 
 
-        /// <summary>
-        /// Útvonalszámítás több szálon
-        /// </summary>
-        /// <param name="p_CalcNodes"></param>
-        /// <param name="p_boundary"></param>
-        /// <param name="p_CalcInfo"></param>
-        /// <param name="p_ThreadPriority"></param>
-        /// <param name="p_NotifyForm"></param>
-        /// <returns></returns>
-        public static bool GetPMapRoutesMulti(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
-        {
-            bool bCompleted = true;
+                            bCompleted = cpp.Completed;
 
-            DateTime dtStart = DateTime.Now;
-            TimeSpan tspDiff;
+                        }
+                        catch (Exception e)
+                        {
+                            throw e;
+                        }
+                        tspDiff = DateTime.Now - dtStart;
+                        Util.Log2File("GetPMapRoutes SingleThread END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
+                        return bCompleted;
+                    }
 
 
-            Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
+                    /// <summary>
+                    /// Útvonalszámítás több szálon
+                    /// </summary>
+                    /// <param name="p_CalcNodes"></param>
+                    /// <param name="p_boundary"></param>
+                    /// <param name="p_CalcInfo"></param>
+                    /// <param name="p_ThreadPriority"></param>
+                    /// <param name="p_NotifyForm"></param>
+                    /// <returns></returns>
+                    public static bool GetPMapRoutesMulti(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
+                    {
+                        bool bCompleted = true;
 
-            PMapIniParams.Instance.ReadParams("", "DB0");
-            ChkLic.Check(PMapIniParams.Instance.IDFile);
-            
+                        DateTime dtStart = DateTime.Now;
+                        TimeSpan tspDiff;
+
+
+                        Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
+            /* EZ NEM KELL 
+                        PMapIniParams.Instance.ReadParams("", "DB0");
+                        ChkLic.Check(PMapIniParams.Instance.IDFile);
+            */
             bool bUseRouteCache = GMaps.Instance.UseRouteCache;
             GMaps.Instance.UseRouteCache = false;
 

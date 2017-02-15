@@ -16,6 +16,9 @@ namespace PMap.Common.Parse
 
         public static void LogToParse(string p_type, DateTime p_timestamp, string p_text)
         {
+            //kikötve
+            return;
+           
           
             PMapLog pl = new PMapLog()
                                 {
@@ -58,7 +61,9 @@ namespace PMap.Common.Parse
 
         private static void sendToParse(string p_url, object p_obj)
         {
-            //return;
+            //kikötve...
+            return;
+
             //*****************
             //*      írás     *
             //*****************

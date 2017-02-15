@@ -90,6 +90,8 @@ namespace PMap.MapProvider
                     //kivágott térképen nem találtunk útvonalat, próbálkozunk a teljessel
                     if (optimizedPath.Count() <= 1 && PMapIniParams.Instance.CutMapForRouting)
                     {
+//LETESZTELNI !!
+//nem megy bele ebbe ágba...  PMapIniParams.Instance.CutMapForRouting be van állítva és nincs útvonal....
                         //ha még nem számoltunk útvonalat a teljes térképpel, megtesszük
                         if (optimizedPathsForAllDestNOCUT == null)
                         {
