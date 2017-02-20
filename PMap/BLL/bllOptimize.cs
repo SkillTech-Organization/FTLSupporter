@@ -593,6 +593,9 @@ namespace PMap.BLL
             }
         }
 
+        /// <summary>
+        /// Járművek által teljesíthető megrendelések 
+        /// </summary>
         private void fillOrderTruck()
         {
             DataTable dt;
@@ -639,7 +642,11 @@ namespace PMap.BLL
 
             foreach (DataRow dr in dt.Rows)
             {
-                boOpt.dicOrder[Util.getFieldValue<int>(dr, "ORD_ID")].lstOrderTruck.Add(boOpt.dicTruck[Util.getFieldValue<int>(dr, "TRK_ID")]);
+                //Lock-olt túrák megrendelései nincsenek a dicOrder-ben, ezért kell egy ellenőrzés 
+                if (boOpt.dicOrder.ContainsKey(Util.getFieldValue<int>(dr, "ORD_ID")))
+                {
+                    boOpt.dicOrder[Util.getFieldValue<int>(dr, "ORD_ID")].lstOrderTruck.Add(boOpt.dicTruck[Util.getFieldValue<int>(dr, "TRK_ID")]);
+                }
             }
         }
 

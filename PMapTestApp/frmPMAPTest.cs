@@ -205,12 +205,19 @@ namespace PMapTestApp
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
 
+
+            
+
             dlgSelPlan d = new dlgSelPlan();
   //          if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 PMapCommonVars.Instance.ConnectToDB();
+                bllPlanEdit pe = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+                pe.RecalcTour(0,115, Global.defWeather);
 
-//                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, d.m_PLN_ID, 0, true);
+
+
+                //                bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, d.m_PLN_ID, 0, true);
                 bllOptimize opt = new bllOptimize(PMapCommonVars.Instance.CT_DB, 12, 0, true);
 
                 opt.FillOptimize(null);

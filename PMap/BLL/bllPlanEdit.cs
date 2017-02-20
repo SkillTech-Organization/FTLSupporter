@@ -962,11 +962,18 @@ namespace PMap.BLL
                                 dtPTP_SERVTIME = Util.getFieldValue<DateTime>(dr, "TOD_DATE").AddMinutes(Util.getFieldValue<double>(dr, "TOD_SERVS"));
                                 if (dtPTP_SERVTIME < dtPTP_ARRTIME)
                                     dtPTP_SERVTIME = dtPTP_ARRTIME;
-                                //A DREHERnél minden megrenddelésre rá kell számítani a DEP_SRVTIME-t
+
+//TODO:paraméterbe kivezetni ezt a működést
+                                //A DREHERnél minden megrendelésre rá kell számítani a DEP_SRVTIME-t
                                 //                            if (LastDepot != dr.Field<int>("DEP_ID"))
-                                dtPTP_DEPTIME = dtPTP_SERVTIME.AddMinutes((int)Math.Max(Util.getFieldValue<int>(dr, "DEP_SRVTIME") + Util.getFieldValue<double>(dr, "TOD_QTY") / Global.csQTYSRVDivider * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME"), 1));
-                                //                            else
-                                //                                dtPTP_DEPTIME = dtPTP_SERVTIME.AddMinutes(dr.Field<double>("TOD_QTY") / 10 * dr.Field<double>("DEP_QTYSRVTIME"));
+
+                                int DEP_SRVTIME = 0;
+                                if (LastDepot != dr.Field<int>("DEP_ID"))
+                                {
+                                    DEP_SRVTIME = Util.getFieldValue<int>(dr, "DEP_SRVTIME");
+                                }
+
+                                dtPTP_DEPTIME = dtPTP_SERVTIME.AddMinutes((int)Math.Max(DEP_SRVTIME + Util.getFieldValue<double>(dr, "TOD_QTY") / Global.csQTYSRVDivider * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME"), 0));
                             }
                             else if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_WHSOUT)
                             {
