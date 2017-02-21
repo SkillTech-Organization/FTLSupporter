@@ -20,6 +20,7 @@ namespace PMap.LongProcess.Base
         protected delegate void SetParDelegate(int p_min, int p_max, string p_caption);
         protected delegate void SetCaptionDelegate(string p_caption);
         protected delegate void SetInfoTextDelegate(string p_infoText);
+        protected delegate void SetVisibleDelegate( bool p_visible);
 
         private bool m_closeable = false;
         protected bool m_canAbort = false;
@@ -167,7 +168,17 @@ namespace PMap.LongProcess.Base
             
             }
         }
+        public void SetVisible( bool p_visible)
+        {
+            try
+            {
+                Invoke(new SetVisibleDelegate(this._setVisible), p_visible);
+            }
+            catch (Exception e)
+            {
+                Util.ExceptionLog(e);
+            }
+        }
 
-    
     }
 }

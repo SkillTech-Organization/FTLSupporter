@@ -190,7 +190,7 @@ namespace PMapTestApp
                 BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, PMapIniParams.Instance.OptimizeTimeOutSec, "Túraoptimalizálás", true);
                 //TourOptimizerProcess top = new TourOptimizerProcess(pd, d.m_PLN_ID, 12405);
                 //TourOptimizerProcess top = new TourOptimizerProcess(pd, d.m_PLN_ID, 0, true, false);
-                TourOptimizerProcess top = new TourOptimizerProcess(pd, 12, 0, false, false);
+                TourOptimizerProcess top = new TourOptimizerProcess(pd, 12, 0, true, false);
                 top.Run();
                 pd.ShowDialog();
 

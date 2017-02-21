@@ -29,6 +29,10 @@ namespace PMap.Localize
         public const string Q_PEDIT_DELPLAN = "Törölhető a megnyitott terv?";
         public const string Q_PEDIT_CALCDST = "Elinduljon a tervben hiányzó távolságadatok generálása?";
         public const string M_PEDIT_CALCDST_END = "A távolságadatok generálása rendben lefutott";
+        public const string E_PVRP_ERR= "Tervezőmotor hibaüzenet:{0}";
+
+
+
 
         public const string E_PPLAN_FATALERRINSTART = "PPlan - Végzetes hiba programindulásnál!";
         public const string E_PPLAN_NOINTERNETCONN = "PPlan - Nincs Internetkapcsolat!";

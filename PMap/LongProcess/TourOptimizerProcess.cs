@@ -98,12 +98,14 @@ namespace PMap.LongProcess
                     }
                     if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
                     {
-                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr);
+                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding("iso-8859-1"));
                         string content = file.ReadToEnd();
                         if (content.CompareTo("Errors that occured during the computation:\r\n") != 0)
                         {
                             m_optimize = null;
                             finalize(eOptResult.Error);
+                            ProcessForm.SetVisible( false);
+                            UI.Error( String.Format( PMapMessages.E_PVRP_ERR,  content));
                             return;
                         }
                     }
@@ -142,7 +144,7 @@ namespace PMap.LongProcess
                 Util.Log2File(String.Format(PMapMessages.M_OPT_OPTRESULT, m_procOptimizer.StandardOutput.ReadToEnd()));
 
             if (p_result == eOptResult.OK && m_optimize != null)
-                m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile, ProcessForm);
+                m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile,ProcessForm);
             Result = p_result;
             
             return;
