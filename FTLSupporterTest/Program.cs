@@ -339,8 +339,18 @@ namespace FTLSupporterTest
                 CurrTime = DateTime.Now.Date.AddHours(7),
                 CurrLat = 47.3844618,
                 CurrLng = 19.2114830,
-                CurrTPoints = new List<FTLPoint>()
-            };
+                CurrTPoints = new List<FTLPoint>(),
+                RemainingDriveTime = 2*60*60,                                   //120 perc
+                RemainingRestTime = 30 * 60 ,                                   // 30 perc
+                RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
+                RemainingDailyDriveTime = 4 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 45 * 60,                               // 45 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 3 * 60 * 60,                          //180 perc
+                RemainingTwoWeeklyDriveTime = 7 * 60 * 60,                      //360 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+             };
 
 
             /*Szeged-Kecskemét-Budapest tervezett */

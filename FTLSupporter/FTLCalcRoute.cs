@@ -19,6 +19,7 @@ namespace FTLSupporter
             Completed = false;
             PMapRoute = null;
             RouteDuration = 0;
+            RestDuration = 0;
             WaitingDuration = 0;
             SrvDuration = 0;
             Distance = 0;
@@ -39,25 +40,28 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Teljesítve", Order = 4)]
         public bool Completed { get; set; }
 
-        [DisplayNameAttributeX(Name = "Utazás időtartama", Order = 5)]
+        [DisplayNameAttributeX(Name = "Vezetés időtartama", Order = 5)]
         public int RouteDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Várakozási idő", Order = 6)]
+        [DisplayNameAttributeX(Name = "Pihenőidő", Order = 6)]
+        public int RestDuration { get; set; }
+
+        [DisplayNameAttributeX(Name = "Várakozási idő", Order = 7)]
         public int WaitingDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Kiszolgálási idő", Order = 7)]
+        [DisplayNameAttributeX(Name = "Kiszolgálási idő", Order = 8)]
         public int SrvDuration { get; set; }
 
-        [DisplayNameAttributeX(Name = "Távolság (m)", Order = 8)]
+        [DisplayNameAttributeX(Name = "Távolság (m)", Order = 9)]
         public double Distance { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíj", Order = 9)]
+        [DisplayNameAttributeX(Name = "Útdíj", Order = 10)]
         public double Toll { get; set; }
 
-        [DisplayNameAttributeX(Name = "Aktuális pont?", Order = 10)]
+        [DisplayNameAttributeX(Name = "Aktuális pont?", Order = 11)]
         public bool Current { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útvonal pontok", Order = 11)]
+        [DisplayNameAttributeX(Name = "Útvonal pontok", Order = 12)]
         public string RoutePoints { get; set; }
 
         /* munkamező */

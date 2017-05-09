@@ -98,22 +98,53 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Egyéb járműtulajdonságok", Order = 14)]
         public string TruckProps { get; set; }
 
+        /******************* AETR adatok ******************************/
+        [DisplayNameAttributeX(Name = "Maradék vezetési idő", Order = 15)]
+        [Required(ErrorMessage = "Kötelező mező:RemainingDriveTime")]
+        public int RemainingDriveTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Maradék pihenőidő", Order = 16)]
+        public int RemainingRestTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "A pihenőig hátralévő munkaidő", Order = 17)]
+        public int RemainingTimeToStartDailyRest { get; set; }
+
+        [DisplayNameAttributeX(Name = "Maradék napi vezetési idő", Order = 18)]
+        public int RemainingDailyDriveTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Maradék napi pihenőidő", Order = 19)]
+        public int RemainingDailyRestTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő heti vezetési ideje", Order = 20)]
+        public int RemainingWeeklyDriveTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő heti pihenőideje", Order = 21)]
+        public int RemainingWeeklyRestTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti vezetési ideje", Order = 22)]
+        public int RemainingTwoWeeklyDriveTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti pihenőideje", Order = 23)]
+        public int RemainingTwoWeeklyRestTime { get; set; }
+
+        [DisplayNameAttributeX(Name = "Kompenzációként adandó pihenőidő ", Order = 24)]
+        public int RemainingRestTimeToCompensate { get; set; }
 
         /******************* Járműfeladat ******************************/
 
-        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 15)]
+        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 25)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
         public eTruckTaskType TruckTaskType { get; set; }
 
-        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 16)]
+        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 26)]
         public string RunningTaskID { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 17)]
+        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 27)]
         public bool CurrIsOneWay { get; set; }
 
         private DateTime m_CurrTime;
-        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 18)]
+        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 28)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime CurrTime
         {
@@ -141,7 +172,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLat;
-        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 19)]
+        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 29)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLat")]
         public double CurrLat
         {
@@ -170,7 +201,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLng;
-        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 20)]
+        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 30)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLng")]
         public double CurrLng
         {
@@ -199,12 +230,12 @@ namespace FTLSupporter
         }
 
         //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
-        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 21)]
+        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 31)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
         public List<FTLPoint> CurrTPoints { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 22)]
+        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 32)]
         public int TPointCompleted { get; set; }
 
 
