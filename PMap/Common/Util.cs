@@ -823,6 +823,27 @@ namespace PMap.Common
             y = x;
             x = t;
         }
+
+        public static T Min<T>(params T[] p_paramList) where T : IComparable<T>
+        {
+            T minValue = p_paramList[0];
+            for (int i = 1; i < p_paramList.Length; i++)
+            {
+                minValue = (p_paramList[i].CompareTo(minValue) > 0 ? minValue : p_paramList[i]);
+            }
+            return minValue;
+
+
+        }
+        public static T Max<T>(params T[] p_paramList) where T : IComparable<T>
+        {
+            T maxValue = p_paramList[0];
+            for (int i = 1; i < p_paramList.Length; i++)
+            {
+                maxValue = (p_paramList[i].CompareTo(maxValue) > 0 ? p_paramList[i] : maxValue);
+            }
+            return maxValue;
+        }
     }
 }
 

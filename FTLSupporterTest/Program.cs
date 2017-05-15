@@ -340,6 +340,7 @@ namespace FTLSupporterTest
                 CurrLat = 47.3844618,
                 CurrLng = 19.2114830,
                 CurrTPoints = new List<FTLPoint>(),
+
                 RemainingDriveTime = 2*60*60,                                   //120 perc
                 RemainingRestTime = 30 * 60 ,                                   // 30 perc
                 RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
@@ -372,7 +373,19 @@ namespace FTLSupporterTest
                 TruckTaskType = FTLTruck.eTruckTaskType.Planned,
                 RunningTaskID = "",
                 CurrIsOneWay = false,
-                CurrTPoints = new List<FTLPoint>()
+                CurrTPoints = new List<FTLPoint>(),
+
+                RemainingDriveTime = 3 * 60 * 60,                               //180 perc
+                RemainingRestTime = 45 * 60,                                    // 45 perc
+                RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
+                RemainingDailyDriveTime = 4 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 45 * 60,                               // 45 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 3 * 60 * 60,                          //180 perc
+                RemainingTwoWeeklyDriveTime = 7 * 60 * 60,                      //360 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+
             };
 
             var tpx1 = tp9.ShallowCopy();
@@ -411,6 +424,18 @@ namespace FTLSupporterTest
                 CurrTime = DateTime.Now.Date.AddHours(9),       //9:00-kor tart itt
                 CurrLat = 47.047533,
                 CurrLng = 19.557893,
+
+                RemainingDriveTime = 3 * 60 * 60,                               //180 perc
+                RemainingRestTime = 45 * 60,                                    // 45 perc
+                RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
+                RemainingDailyDriveTime = 4 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 45 * 60,                               // 45 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 3 * 60 * 60,                          //180 perc
+                RemainingTwoWeeklyDriveTime = 7 * 60 * 60,                      //360 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+
             };
 
             var tpx5 = tp8.ShallowCopy();
@@ -449,6 +474,18 @@ namespace FTLSupporterTest
                 CurrTime = DateTime.Now.Date.AddHours(5),       //05:00-kor tart Szeged határában
                 CurrLat = 46.2737422,
                 CurrLng = 20.0910293,
+
+                RemainingDriveTime = 3 * 60 * 60,                               //180 perc
+                RemainingRestTime = 45 * 60,                                    // 45 perc
+                RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
+                RemainingDailyDriveTime = 4 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 45 * 60,                               // 45 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 3 * 60 * 60,                          //180 perc
+                RemainingTwoWeeklyDriveTime = 7 * 60 * 60,                      //360 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+
             };
 
             var tpx8 = tp8.ShallowCopy();                       //Kecskemét
@@ -486,7 +523,19 @@ namespace FTLSupporterTest
                 TPointCompleted = 1,                             
                 CurrTime = DateTime.Now.Date.AddHours(5),       
                 CurrLat = tp9.Lat,                          //Szeged
-                CurrLng = tp9.Lng
+                CurrLng = tp9.Lng,
+
+                RemainingDriveTime = 3 * 60 * 60,                               //180 perc
+                RemainingRestTime = 45 * 60,                                    // 45 perc
+                RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
+                RemainingDailyDriveTime = 4 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 45 * 60,                               // 45 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 3 * 60 * 60,                          //180 perc
+                RemainingTwoWeeklyDriveTime = 7 * 60 * 60,                      //360 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+
             };
 
 
@@ -755,7 +804,7 @@ namespace FTLSupporterTest
                     Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost);
                 }
             }
-        }
+        }  
 
     }
 

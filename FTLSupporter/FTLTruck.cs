@@ -108,7 +108,7 @@ namespace FTLSupporter
 
         [DisplayNameAttributeX(Name = "A pihenőig hátralévő munkaidő", Order = 17)]
         public int RemainingTimeToStartDailyRest { get; set; }
-
+                   
         [DisplayNameAttributeX(Name = "Maradék napi vezetési idő", Order = 18)]
         public int RemainingDailyDriveTime { get; set; }
 

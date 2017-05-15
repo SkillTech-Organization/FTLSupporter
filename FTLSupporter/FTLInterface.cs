@@ -378,11 +378,15 @@ namespace FTLSupporter
                     */
 
                     //6.eredmény összeállítása
-
+                    int workCycle = 1;
+                    int workTime = 0;
+                    int restTime = 0;
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
                         foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK))
                         {
+                            workCycle = 1;
+                            fillWorkTimes(clctour.Truck, workCycle, out workTime, out restTime);
 
                             FTLTruck trk = clctour.Truck;
                             // Útvonal összeállítása
@@ -392,6 +396,7 @@ namespace FTLSupporter
                             /***********/
                             if (trk.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                             {
+Itt tartok...
 
                                 //6.1.1 : legelső pont:
                                 clctour.T1CalcRoute.Add(new FTLCalcRoute()
@@ -1205,5 +1210,50 @@ namespace FTLSupporter
 
         }
 
-      }
+        /*
+        Az input adatok alapján két vezetés-pihenés ciklussal tudunk számolni.
+        1.ciklus:
+        vezetési idő: MIN(RemainingDriveTime, RemainingTimeToStartDailyRes,RemainingWeeklyDriveTime,RemainingTwoWeeklyDriveTime)
+        pihenőidő :MIN(  RemainingRestTime, RemainingDailyRestTime, RemainingWeeklyRestTime, RemainingTwoWeeklyRestTime)+RemainingRestTimeToCompensate
+        2.ciklus
+        vezetési idő: MIN( (RemainingDailyDriveTime- 1.ciklus vezetési idő), RemainingWeeklyDriveTime, RemainingTwoWeeklyDriveTime, RemainingTimeToStartDailyRes)
+        pihenőidő : IF RemainingDailyRestTime-1.ciklus pihenőidő >0  THEN  RemainingDailyRestTime-1.ciklus pihenőidő ELSE MIN( RemainingWeeklyRestTime, RemainingTwoWeeklyRestTime) A RemainingRestTime nem számít bele a RemainingDailyRestTime időbe.
+        3.maradék vezetési idő
+        vezetési idő: MIN( RemainingWeeklyDriveTime, RemainingTwoWeeklyDriveTime)-2.ciklus vezetési idő
+        pihenőidő : nem számolható
+        Fontos megjegyzések:
+        1. minden változót csak akkor veszünk figyelembe, ha értéke nagyobb, mint nulla. Ha pl a RemainingTwoWeeklyDriveTime értéke nulla, akkor az nem vesz részt a számításokban)
+        2.Az FTLSupport percben számol. A kapott másodperekbők minden megkezdett perc számít.
+        */
+        static void fillWorkTimes(FTLTruck trk, int workCycle, out int workTime, out int restTime)
+        {
+            workTime = 0;
+            restTime = 0;
+            switch (workCycle)
+            {
+                case 1:
+                    workTime = Util.Min<int>(trk.RemainingDriveTime, trk.RemainingTimeToStartDailyRest, trk.RemainingWeeklyDriveTime, trk.RemainingTwoWeeklyDriveTime) / 60;
+                    restTime = (Util.Min<int>(trk.RemainingRestTime, trk.RemainingDailyRestTime, trk.RemainingWeeklyRestTime, trk.RemainingTwoWeeklyRestTime) + trk.RemainingRestTimeToCompensate)/60;
+                    break;
+                case 2:
+                    var prevWorkTime = Util.Min<int>(trk.RemainingDriveTime, trk.RemainingTimeToStartDailyRest, trk.RemainingWeeklyDriveTime, trk.RemainingTwoWeeklyDriveTime);
+                    var prevRestTime = (Util.Min<int>(trk.RemainingRestTime, trk.RemainingDailyRestTime, trk.RemainingWeeklyRestTime, trk.RemainingTwoWeeklyRestTime) + trk.RemainingRestTimeToCompensate);
+
+                    workTime = Util.Min<int>((trk.RemainingDailyDriveTime - prevWorkTime), trk.RemainingWeeklyDriveTime, trk.RemainingTwoWeeklyDriveTime, trk.RemainingTimeToStartDailyRest) / 60;
+                    restTime = (trk.RemainingDailyRestTime - prevRestTime > 0 ? (trk.RemainingDailyRestTime - prevRestTime) : Util.Min<int>(trk.RemainingWeeklyRestTime, trk.RemainingTwoWeeklyRestTime)) / 60;
+                    break;
+                default:
+                    //2. ciklus idejét újra kiszámitjuk
+                    var prevWorkTime2 = Util.Min<int>(trk.RemainingDriveTime, trk.RemainingTimeToStartDailyRest, trk.RemainingWeeklyDriveTime, trk.RemainingTwoWeeklyDriveTime);
+                    prevWorkTime2 = Util.Min<int>((trk.RemainingDailyDriveTime - prevWorkTime2), trk.RemainingWeeklyDriveTime, trk.RemainingTwoWeeklyDriveTime, trk.RemainingTimeToStartDailyRest);
+                    workTime = (Util.Min < int > ( trk.RemainingWeeklyDriveTime, trk.RemainingTwoWeeklyDriveTime) - prevWorkTime2)/ 60;
+                    restTime = 0;
+                    break;
+            }
+            workTime = Util.Max(0, workTime);
+            restTime = Util.Max(0, restTime);
+        }
+
+
+    }
 }
