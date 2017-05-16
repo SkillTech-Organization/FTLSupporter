@@ -18,7 +18,7 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            Test(false);
+            Test(true);
         }
 
         static void Test(bool p_bestTruck = false)
@@ -541,7 +541,12 @@ namespace FTLSupporterTest
 
             #endregion
 
-            /* PROPS-EXCLPROPS teszt */
+            //vezetési idő teszt
+            var lstTsk = new List<FTLTask> { tsk1 };
+            var lstTrk = new List<FTLTruck> { trk1};
+
+
+            /* PROPS-EXCLPROPS teszt 
             tsk1.InclTruckProps = "PROP1,PROP2,PROP3";
             tsk1.ExclTruckProps = "EX1,EX2,EX2";
             trk1.TruckProps = "PROP1";
@@ -551,6 +556,8 @@ namespace FTLSupporterTest
 
             var lstTsk = new List<FTLTask> { tsk1};
             var lstTrk = new List<FTLTruck> { trk1, trk2, trk3};
+            */
+
 
 
             /* behajtási zóna teszt */
@@ -617,6 +624,8 @@ namespace FTLSupporterTest
                     t.Capacity = 2000;
                     t.TruckType = "T1";
                     t.CargoTypes = "C1";
+                    t.RZones = "B35,CS12,CS7,DB1,DP1,DP3,DP7,ÉB1,ÉB7,ÉP1,HB1,KP1,KV3,P35,P75";
+                    
                     foreach (var tp in t.CurrTPoints)
                     {
                         tp.Open = DateTime.Now.Date.AddHours(0);

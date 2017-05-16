@@ -66,6 +66,7 @@ namespace FTLSupporter
 
         /* munkamező */
         internal FTLPMapRoute PMapRoute { get; set; }
-    
+        internal bool ErrDriveTime { get; set; } = false;
+
     }
 }

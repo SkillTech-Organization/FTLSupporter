@@ -28,6 +28,7 @@ namespace FTLSupporter
         public const string E_ERRINSECONDPHASE = "Hiba a kimaradt szállítási feladatok tervezésében ! (lásd a többi FTLResult tételt)";
         public const string E_TRKNOINCLTYPES = "A járműnek nincs olyan tulajdonsága ami a túrapont teljesítéséhez szükésges! (TruckProps)";
         public const string E_TRKEXCLTYPES = "A jármű tulajdonsága alapján nem teljesítheti a túrapontot (TruckProps)";
+        public const string E_MAXDRIVETIME = "Vezetési idő túllépés!";
 
 
     }
