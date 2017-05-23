@@ -829,7 +829,9 @@ namespace PMap.Common
             T minValue = p_paramList[0];
             for (int i = 1; i < p_paramList.Length; i++)
             {
-                if(Double.Parse(p_paramList[i].ToString()) > 0)
+                if(Double.Parse(minValue.ToString()) == 0)
+                    minValue = p_paramList[i];
+                else if (Double.Parse(p_paramList[i].ToString()) > 0 )
                     minValue = (p_paramList[i].CompareTo(minValue) > 0 ? minValue : p_paramList[i]);
             }
             return minValue;
@@ -841,7 +843,9 @@ namespace PMap.Common
             T maxValue = p_paramList[0];
             for (int i = 1; i < p_paramList.Length; i++)
             {
-                if (Double.Parse(p_paramList[i].ToString()) > 0)
+                if (Double.Parse(maxValue.ToString()) == 0)
+                    maxValue = p_paramList[i];
+                else if (Double.Parse(p_paramList[i].ToString()) > 0 )
                     maxValue = (p_paramList[i].CompareTo(maxValue) > 0 ? p_paramList[i] : maxValue);
             }
             return maxValue;

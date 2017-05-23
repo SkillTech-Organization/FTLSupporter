@@ -803,15 +803,39 @@ namespace FTLSupporter
                             clctsk.CalcTours.Where(x => lstTrucksErrDuration.Contains(x.Truck)).ToList()
                                             .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDURATION); });
 
-                        //Vezetési idő ellenőrzés
+                        //Vezetési idő ellenőrzés T1
                         List<FTLTruck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
-                                                                               x.T1CalcRoute.Where(xT1 => xT1.ErrDriveTime).FirstOrDefault() != null ||
-                                                                               x.RelCalcRoute.ErrDriveTime ||
-                                                                               x.T2CalcRoute.Where(xT2 => xT2.ErrDriveTime).FirstOrDefault() != null ||
-                                                                               x.RetCalcRoute.ErrDriveTime).Select(s => s.Truck).ToList();
+                                                                               x.T1CalcRoute.Where(xT1 => xT1.ErrDriveTime).FirstOrDefault() != null )
+                                                                               .Select(s => s.Truck).ToList();
                         if (lstTrucksErrDriveTime.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrDriveTime.Contains(x.Truck)).ToList()
-                                            .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME); });
+                                            .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME_T1); });
+
+                        //Vezetési idő ellenőrzés REL
+                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                                                                               x.RelCalcRoute.ErrDriveTime)
+                                                                               .Select(s => s.Truck).ToList();
+                        if (lstTrucksErrDriveTime.Count > 0)
+                            clctsk.CalcTours.Where(x => lstTrucksErrDriveTime.Contains(x.Truck)).ToList()
+                                            .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME_REL); });
+
+
+                        //Vezetési idő ellenőrzés T2
+                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                                                                               x.T2CalcRoute.Where(xT2 => xT2.ErrDriveTime).FirstOrDefault() != null)
+                                                                               .Select(s => s.Truck).ToList();
+                        if (lstTrucksErrDriveTime.Count > 0)
+                            clctsk.CalcTours.Where(x => lstTrucksErrDriveTime.Contains(x.Truck)).ToList()
+                                            .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME_T2); });
+
+                        //Vezetési idő ellenőrzés RET
+                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                                                                               x.RetCalcRoute.ErrDriveTime)
+                                                                               .Select(s => s.Truck).ToList();
+                        if (lstTrucksErrDriveTime.Count > 0)
+                            clctsk.CalcTours.Where(x => lstTrucksErrDriveTime.Contains(x.Truck)).ToList()
+                                            .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME_RET); });
+
 
                         //Túra hossz (távolság
                         List<FTLTruck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
@@ -1271,10 +1295,11 @@ namespace FTLSupporter
                     break;
                 case 2:
                     var prevWorkTime = Util.MinNotZero<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime);
-                    var prevRestTime = (Util.MinNotZero<int>(p_trk.RemainingRestTime, p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) + p_trk.RemainingRestTimeToCompensate);
+  //                  var prevRestTime = (Util.MinNotZero<int>(p_trk.RemainingRestTime, p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) + p_trk.RemainingRestTimeToCompensate);
 
                     o_driveTime = Util.MinNotZero<int>((p_trk.RemainingDailyDriveTime - prevWorkTime), p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime, p_trk.RemainingTimeToStartDailyRest) / 60;
-                    o_restTime = (p_trk.RemainingDailyRestTime - prevRestTime > 0 ? (p_trk.RemainingDailyRestTime - prevRestTime) : Util.MinNotZero<int>(p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime)) / 60;
+ //                   o_restTime = (p_trk.RemainingDailyRestTime - prevRestTime > 0 ? (p_trk.RemainingDailyRestTime - prevRestTime) : Util.MinNotZero<int>(p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime)) / 60;
+                    o_restTime = Util.MinNotZero<int>(p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) / 60;
                     break;
                 default:
                     //2. ciklus idejét újra kiszámitjuk
@@ -1286,6 +1311,7 @@ namespace FTLSupporter
             }
             o_driveTime = Util.MaxNotZero(0, o_driveTime);
             o_restTime = Util.MaxNotZero(0, o_restTime);
+            Console.WriteLine("workCycle:{0}, o_driveTime:{1}, o_restTime:{2}", workCycle, o_driveTime, o_restTime);
         }
 
         private static int calcDriveTimes(FTLTruck p_trk, FTLCalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
