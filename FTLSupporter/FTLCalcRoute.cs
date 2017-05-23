@@ -18,7 +18,7 @@ namespace FTLSupporter
             Departure = DateTime.MinValue;
             Completed = false;
             PMapRoute = null;
-            RouteDuration = 0;
+            DrivingDuration = 0;
             RestDuration = 0;
             WaitingDuration = 0;
             SrvDuration = 0;
@@ -41,7 +41,7 @@ namespace FTLSupporter
         public bool Completed { get; set; }
 
         [DisplayNameAttributeX(Name = "Vezetés időtartama", Order = 5)]
-        public int RouteDuration { get; set; }
+        public int DrivingDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "Pihenőidő", Order = 6)]
         public int RestDuration { get; set; }

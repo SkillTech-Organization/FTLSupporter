@@ -107,8 +107,17 @@ namespace FTLSupporter
                                 result.Add(getValidationError(trk, "RZones", String.Format(FTLMessages.E_UNKOWNRZONE, zone)));
                             }
                         }
+
                         if (trk.RZN_ID_LIST != "")
+                        {
                             trk.RZN_ID_LIST = trk.RZN_ID_LIST.Substring(1);
+
+                            //az RZN_ID_LIST-t ID sorrendben be kell rendezni
+                            //
+                            trk.RZN_ID_LIST = String.Join(",", trk.RZN_ID_LIST.Split(',')
+                                                .Select(x => int.Parse(x))
+                                                .OrderBy(x => x));
+                        }
                     }
                     else
                     {
@@ -608,7 +617,7 @@ namespace FTLSupporter
                                     if (clr.Completed)
                                     {
                                         // ha teljesítve van a felrakás, a tényadatokat vesszük
-                                        clr.RouteDuration = 0;
+                                        clr.DrivingDuration = 0;
                                         clr.WaitingDuration = 0;
                                         clr.SrvDuration = Convert.ToInt32((clr.TPoint.RealDeparture - clr.TPoint.RealArrival).TotalMinutes);
                                         clr.Arrival = clr.TPoint.RealArrival;
@@ -617,7 +626,7 @@ namespace FTLSupporter
                                     else
                                     {
                                         //Ha nincs teljesítve a felrakás, a clr.Arrival-t vesszük első időpontnak
-                                        clr.RouteDuration = 0;
+                                        clr.DrivingDuration = 0;
                                         clr.WaitingDuration = 0;
                                         clr.SrvDuration = clr.TPoint.SrvDuration;
                                         clr.Arrival = clr.TPoint.RealArrival;
@@ -637,7 +646,7 @@ namespace FTLSupporter
                                         if (clr.Current)
                                         {
                                             //akutális pozíció mindig teljesített
-                                            clr.RouteDuration = Convert.ToInt32((trk.CurrTime - dtPrevTime).TotalMinutes);
+                                            clr.DrivingDuration = Convert.ToInt32((trk.CurrTime - dtPrevTime).TotalMinutes);
                                             clr.WaitingDuration = 0;
                                             clr.SrvDuration = 0;    // ez egy köztes pont, itt nincs kiszolgálási idő
                                             clr.Arrival = trk.CurrTime;
@@ -646,7 +655,7 @@ namespace FTLSupporter
                                         else
                                         {
                                             //teljesített túrapont esetén a tényadatokat olvassuk ki.
-                                            clr.RouteDuration = Convert.ToInt32((clr.TPoint.RealArrival - dtPrevTime).TotalMinutes);
+                                            clr.DrivingDuration = Convert.ToInt32((clr.TPoint.RealArrival - dtPrevTime).TotalMinutes);
                                             clr.WaitingDuration = 0;            //nem tudjuk meghatározni, a menetidő vagy a rakodás a várakozást is tartalmazza-e
                                             clr.SrvDuration = Convert.ToInt32((clr.TPoint.RealDeparture - clr.TPoint.RealArrival).TotalMinutes);
                                             clr.Arrival = clr.TPoint.RealArrival;
@@ -657,9 +666,9 @@ namespace FTLSupporter
                                     {
 
 
-                                        clr.RouteDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                        clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                         clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
-                                        clr.Arrival = dtPrevTime.AddMinutes(clr.RouteDuration + clr.RestDuration);
+                                        clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
                                         if (clr.Arrival < clr.TPoint.Open)
                                             clr.WaitingDuration = Convert.ToInt32((clr.TPoint.Open - clr.Arrival).TotalMinutes);        ////Ha hamarabb érkezünk, mint a nyitva tartás kezdete, várunk
                                         else
@@ -667,11 +676,12 @@ namespace FTLSupporter
 
                                         clr.SrvDuration = clr.TPoint.SrvDuration;
 
-                                        clr.Departure = dtPrevTime.AddMinutes(clr.RouteDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration);
+                                        clr.Departure = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration);
                                     }
                                 }
                                 dtPrevTime = clr.Departure;
-                                clctour.T1Duration += clr.RouteDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration;
+                                clctour.T1FullDuration += clr.DrivingDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration;
+                                clctour.T1Rest += clr.RestDuration;
                                 clctour.T1M += clr.Distance;
                                 clctour.T1Toll += clr.Toll;
                                 clctour.T1Cost += trk.KMCost * clr.Distance / 1000;
@@ -691,20 +701,21 @@ namespace FTLSupporter
                             relclr.Distance = relclr.PMapRoute.route.DST_DISTANCE;
                             relclr.Toll = bllPlanEdit.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
 
-                            relclr.RouteDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                            relclr.DrivingDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                             relclr.RestDuration = calcDriveTimes(trk, relclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
 
-                            relclr.Arrival = dtPrevTime.AddMinutes(relclr.RouteDuration + relclr.RestDuration);
+                            relclr.Arrival = dtPrevTime.AddMinutes(relclr.DrivingDuration + relclr.RestDuration);
                             if (relclr.Arrival < relclr.TPoint.Open)
                                 relclr.WaitingDuration = Convert.ToInt32((relclr.TPoint.Open - relclr.Arrival).TotalMinutes);        ////Ha hamarabb érkezünk, mint a nyitva tartás kezdete, várunk
                             else
                                 relclr.WaitingDuration = 0;
 
                             relclr.SrvDuration = relclr.TPoint.SrvDuration;
-                            relclr.Departure = dtPrevTime.AddMinutes(relclr.RouteDuration + relclr.WaitingDuration + relclr.SrvDuration + relclr.RestDuration);
+                            relclr.Departure = dtPrevTime.AddMinutes(relclr.DrivingDuration + relclr.WaitingDuration + relclr.SrvDuration + relclr.RestDuration);
 
                             dtPrevTime = relclr.Departure;
-                            clctour.RelDuration = relclr.RouteDuration + relclr.WaitingDuration + relclr.SrvDuration + relclr.RestDuration;
+                            clctour.RelFullDuration = relclr.DrivingDuration + relclr.WaitingDuration + relclr.SrvDuration + relclr.RestDuration;
+                            clctour.RelRest += relclr.RestDuration;
                             clctour.RelM = relclr.Distance;
                             clctour.RelToll = relclr.Toll;
                             clctour.RelCost = trk.RelocateCost * relclr.Distance / 1000;
@@ -724,18 +735,19 @@ namespace FTLSupporter
                             {
                                 clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
                                 clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                                clr.RouteDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                 clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
-                                clr.Arrival = dtPrevTime.AddMinutes(clr.RouteDuration + clr.RestDuration);
+                                clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
                                 if (clr.Arrival < clr.TPoint.Open)
                                     clr.WaitingDuration = Convert.ToInt32((clr.TPoint.Open - clr.Arrival).TotalMinutes);        ////Ha hamarabb érkezünk, mint a nyitva tartás kezdete, várunk
                                 else
                                     clr.WaitingDuration = 0;
                                 clr.SrvDuration = clr.TPoint.SrvDuration;
-                                clr.Departure = dtPrevTime.AddMinutes(clr.RouteDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration);
+                                clr.Departure = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration);
 
                                 dtPrevTime = clr.Departure;
-                                clctour.T2Duration += clr.RouteDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration;
+                                clctour.T2FullDuration += clr.DrivingDuration + clr.WaitingDuration + clr.SrvDuration + clr.RestDuration;
+                                clctour.T2Rest += clr.RestDuration;
                                 clctour.T2M += clr.Distance;
                                 clctour.T2Toll = clr.Toll;
                                 clctour.T2Cost = trk.KMCost * clr.Distance / 1000;
@@ -753,19 +765,20 @@ namespace FTLSupporter
                                 var retclr = clctour.RetCalcRoute;      //csak hogy ne kelljen a clctour.RetCalcRoute válozónevet használni
                                 retclr.Distance = retclr.PMapRoute.route.DST_DISTANCE;
                                 retclr.Toll = bllPlanEdit.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                                retclr.RouteDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                 retclr.RestDuration = calcDriveTimes(trk, retclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
-                                retclr.Arrival = dtPrevTime.AddMinutes(retclr.RouteDuration + retclr.RestDuration);
+                                retclr.Arrival = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.RestDuration);
                                 if (retclr.TPoint != null && retclr.Arrival < retclr.TPoint.Open)       //Ha a visszatérés túrapontra történik és hamarabb érkezünk vissza, mint a nyitva tartás kezdete, várunk 
                                     retclr.WaitingDuration = Convert.ToInt32((retclr.TPoint.Open - retclr.Arrival).TotalMinutes);
                                 else
                                     retclr.WaitingDuration = 0;
 
                                 retclr.SrvDuration = 0;                             //visszatérés esetén nincs kiszolgálás 
-                                retclr.Departure = dtPrevTime.AddMinutes(retclr.RouteDuration + retclr.WaitingDuration + retclr.SrvDuration + retclr.RestDuration);
+                                retclr.Departure = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.WaitingDuration + retclr.SrvDuration + retclr.RestDuration);
 
                                 dtPrevTime = retclr.Departure;
-                                clctour.RetDuration = retclr.RouteDuration + retclr.WaitingDuration + retclr.SrvDuration + retclr.RestDuration;
+                                clctour.RetFullDuration = retclr.DrivingDuration + retclr.WaitingDuration + retclr.SrvDuration + retclr.RestDuration;
+                                clctour.RetRest += retclr.RestDuration;
                                 clctour.RetM = retclr.Distance;
                                 clctour.RetToll = retclr.Toll;
                                 clctour.RetCost = trk.KMCost * retclr.Distance / 1000;
@@ -1023,7 +1036,7 @@ namespace FTLSupporter
                                             OriCalcTour.RetM = 0;
                                             OriCalcTour.RetToll = 0;
                                             OriCalcTour.RetCost = 0;
-                                            OriCalcTour.RetDuration = 0;
+                                            OriCalcTour.RetFullDuration = 0;
                                             OriCalcTour.RetStart = OriCalcTour.T2End;
                                             OriCalcTour.RetEnd = OriCalcTour.T2End;
                                             OriCalcTour.RetCalcRoute = new FTLCalcRoute();
@@ -1253,32 +1266,32 @@ namespace FTLSupporter
             switch (workCycle)
             {
                 case 1:
-                    o_driveTime = Util.Min<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime) / 60;
-                    o_restTime = (Util.Min<int>(p_trk.RemainingRestTime, p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) + p_trk.RemainingRestTimeToCompensate) / 60;
+                    o_driveTime = Util.MinNotZero<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime) / 60;
+                    o_restTime = (Util.MinNotZero<int>(p_trk.RemainingRestTime, p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) + p_trk.RemainingRestTimeToCompensate) / 60;
                     break;
                 case 2:
-                    var prevWorkTime = Util.Min<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime);
-                    var prevRestTime = (Util.Min<int>(p_trk.RemainingRestTime, p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) + p_trk.RemainingRestTimeToCompensate);
+                    var prevWorkTime = Util.MinNotZero<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime);
+                    var prevRestTime = (Util.MinNotZero<int>(p_trk.RemainingRestTime, p_trk.RemainingDailyRestTime, p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime) + p_trk.RemainingRestTimeToCompensate);
 
-                    o_driveTime = Util.Min<int>((p_trk.RemainingDailyDriveTime - prevWorkTime), p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime, p_trk.RemainingTimeToStartDailyRest) / 60;
-                    o_restTime = (p_trk.RemainingDailyRestTime - prevRestTime > 0 ? (p_trk.RemainingDailyRestTime - prevRestTime) : Util.Min<int>(p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime)) / 60;
+                    o_driveTime = Util.MinNotZero<int>((p_trk.RemainingDailyDriveTime - prevWorkTime), p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime, p_trk.RemainingTimeToStartDailyRest) / 60;
+                    o_restTime = (p_trk.RemainingDailyRestTime - prevRestTime > 0 ? (p_trk.RemainingDailyRestTime - prevRestTime) : Util.MinNotZero<int>(p_trk.RemainingWeeklyRestTime, p_trk.RemainingTwoWeeklyRestTime)) / 60;
                     break;
                 default:
                     //2. ciklus idejét újra kiszámitjuk
-                    var prevWorkTime2 = Util.Min<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime);
-                    prevWorkTime2 = Util.Min<int>((p_trk.RemainingDailyDriveTime - prevWorkTime2), p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime, p_trk.RemainingTimeToStartDailyRest);
-                    o_driveTime = (Util.Min<int>(p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime) - prevWorkTime2) / 60;
+                    var prevWorkTime2 = Util.MinNotZero<int>(p_trk.RemainingDriveTime, p_trk.RemainingTimeToStartDailyRest, p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime);
+                    prevWorkTime2 = Util.MinNotZero<int>((p_trk.RemainingDailyDriveTime - prevWorkTime2), p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime, p_trk.RemainingTimeToStartDailyRest);
+                    o_driveTime = (Util.MinNotZero<int>(p_trk.RemainingWeeklyDriveTime, p_trk.RemainingTwoWeeklyDriveTime) - prevWorkTime2) / 60;
                     o_restTime = 0;
                     break;
             }
-            o_driveTime = Util.Max(0, o_driveTime);
-            o_restTime = Util.Max(0, o_restTime);
+            o_driveTime = Util.MaxNotZero(0, o_driveTime);
+            o_restTime = Util.MaxNotZero(0, o_restTime);
         }
 
         private static int calcDriveTimes(FTLTruck p_trk, FTLCalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
         {
             int retRestTime = 0;
-            if (usedDriveTime + clr.RouteDuration >= driveTime)
+            if (usedDriveTime + clr.DrivingDuration >= driveTime)
             {
                 if (workCycle <= 2)
                 {
@@ -1293,7 +1306,7 @@ namespace FTLSupporter
                 }
  
             }
-            usedDriveTime += clr.RouteDuration;
+            usedDriveTime += clr.DrivingDuration;
             return retRestTime;
         }
     }

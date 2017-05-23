@@ -31,7 +31,7 @@ namespace FTLSupporter
             T1Toll = 0;
             T1Cost = 0;
             T1Rest = 0;
-            T1Duration = 0;
+            T1FullDuration = 0;
             T1Start = DateTime.MinValue;
             T1End = DateTime.MinValue;
             T1CalcRoute = new List<FTLCalcRoute>();
@@ -40,7 +40,7 @@ namespace FTLSupporter
             RelToll = 0;
             RelCost = 0;
             RelRest = 0;
-            RelDuration = 0;
+            RelFullDuration = 0;
             RelStart = DateTime.MinValue;
             RelEnd = DateTime.MinValue;
             RelCalcRoute = new FTLCalcRoute();
@@ -49,7 +49,7 @@ namespace FTLSupporter
             T2Toll = 0;
             T2Cost = 0;
             T2Rest = 0;
-            T2Duration = 0;
+            T2FullDuration = 0;
             T2Start = DateTime.MinValue;
             T2End = DateTime.MinValue;
             T2CalcRoute = new List<FTLCalcRoute>();
@@ -58,7 +58,7 @@ namespace FTLSupporter
             RetToll = 0;
             RetCost = 0;
             RetRest = 0;
-            RetDuration = 0;
+            RetFullDuration = 0;
             RetStart = DateTime.MinValue;
             RetEnd = DateTime.MinValue;
             RetCalcRoute = new FTLCalcRoute();
@@ -90,7 +90,7 @@ namespace FTLSupporter
         public double T1Rest { get; set; }
 
         [DisplayNameAttributeX(Name = "I.túra időtartam", Order = 9)]
-        public double T1Duration { get; set; }
+        public double T1FullDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "I.túra kezdete", Order = 10)]
         public DateTime T1Start { get; set; }
@@ -114,7 +114,7 @@ namespace FTLSupporter
         public double RelRest { get; set; }
 
         [DisplayNameAttributeX(Name = "Átállás időtartam", Order = 17)]
-        public double RelDuration { get; set; }
+        public double RelFullDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "Átállás kezdete", Order = 18)]
         public DateTime RelStart { get; set; }
@@ -138,7 +138,7 @@ namespace FTLSupporter
         public double T2Rest { get; set; }
 
         [DisplayNameAttributeX(Name = "II.túra időtartam", Order = 25)]
-        public double T2Duration { get; set; }
+        public double T2FullDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "II.túra kezdete", Order = 26)]
         public DateTime T2Start { get; set; }
@@ -162,7 +162,7 @@ namespace FTLSupporter
         public double RetRest { get; set; }
 
         [DisplayNameAttributeX(Name = "Visszatérés időtartam", Order = 33)]
-        public double RetDuration { get; set; }
+        public double RetFullDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "Visszatérés kezdete", Order = 34)]
         public DateTime RetStart { get; set; }
@@ -188,7 +188,7 @@ namespace FTLSupporter
         public double FullM { get { return T1M + RelM + T2M + RetM; } }
 
         [DisplayNameAttributeX(Name = "Teljes időtartam", Order = 41)]
-        public double FullDuration { get { return T1Duration + RelDuration + T2Duration + RetDuration; } }
+        public double FullDuration { get { return T1FullDuration + RelFullDuration + T2FullDuration + RetFullDuration; } }
 
     }
 }

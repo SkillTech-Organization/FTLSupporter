@@ -824,6 +824,30 @@ namespace PMap.Common
             x = t;
         }
 
+        public static T MinNotZero<T>(params T[] p_paramList) where T : IComparable<T>
+        {
+            T minValue = p_paramList[0];
+            for (int i = 1; i < p_paramList.Length; i++)
+            {
+                if(Double.Parse(p_paramList[i].ToString()) > 0)
+                    minValue = (p_paramList[i].CompareTo(minValue) > 0 ? minValue : p_paramList[i]);
+            }
+            return minValue;
+
+
+        }
+        public static T MaxNotZero<T>(params T[] p_paramList) where T : IComparable<T>
+        {
+            T maxValue = p_paramList[0];
+            for (int i = 1; i < p_paramList.Length; i++)
+            {
+                if (Double.Parse(p_paramList[i].ToString()) > 0)
+                    maxValue = (p_paramList[i].CompareTo(maxValue) > 0 ? p_paramList[i] : maxValue);
+            }
+            return maxValue;
+        }
+
+
         public static T Min<T>(params T[] p_paramList) where T : IComparable<T>
         {
             T minValue = p_paramList[0];

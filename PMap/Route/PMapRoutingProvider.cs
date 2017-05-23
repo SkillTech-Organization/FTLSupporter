@@ -75,7 +75,6 @@ namespace PMap.MapProvider
                 m_computedNeighborsArr = p_neighborsArrCut;
             else
                 m_computedNeighborsArr = p_neighborsArrFull;
-
             optimizedPathsForAllDest = calcEngine.CalcAllOptimizedPaths(p_NOD_ID_FROM, IsComputeAllRoutesFinish);
 
 
@@ -86,29 +85,24 @@ namespace PMap.MapProvider
                 if (optimizedPathsForAllDest != null)
                 {
                     optimizedPath = calcEngine.GetOptimizedPath(p_NOD_ID_FROM, NOD_ID_TO, optimizedPathsForAllDest.MinimumPath);
-                    
-                    //kivágott térképen nem találtunk útvonalat, próbálkozunk a teljessel
-                    if (optimizedPath.Count() <= 1 && PMapIniParams.Instance.CutMapForRouting)
-                    {
-//LETESZTELNI !!
-//nem megy bele ebbe ágba...  PMapIniParams.Instance.CutMapForRouting be van állítva és nincs útvonal....
-                        //ha még nem számoltunk útvonalat a teljes térképpel, megtesszük
-                        if (optimizedPathsForAllDestNOCUT == null)
-                        {
-                            m_computedNeighborsArr = p_neighborsArrFull;
-                            m_targetNodes = new HashSet<int>(p_ListNOD_ID_TO);
-                            optimizedPathsForAllDestNOCUT = calcEngine.CalcAllOptimizedPaths(p_NOD_ID_FROM, IsComputeAllRoutesFinish);
-                        }
+                }
 
+                //kivágott térképen nem találtunk útvonalat, próbálkozunk a teljessel
+                if (optimizedPath.Count() <= 1 && PMapIniParams.Instance.CutMapForRouting)
+                {
+                    if (optimizedPathsForAllDestNOCUT == null)      //teljes térkép path-ok legenerálása, amennyiben szükésges
+                    {
+                        m_computedNeighborsArr = p_neighborsArrFull;
+                        m_targetNodes = new HashSet<int>(p_ListNOD_ID_TO);
+                        optimizedPathsForAllDestNOCUT = calcEngine.CalcAllOptimizedPaths(p_NOD_ID_FROM, IsComputeAllRoutesFinish);
+                    }
+                    if (optimizedPathsForAllDestNOCUT != null)
+                    {
                         //lekérdezzük 
                         optimizedPath = calcEngine.GetOptimizedPath(p_NOD_ID_FROM, NOD_ID_TO, optimizedPathsForAllDestNOCUT.MinimumPath);
-
                     }
                 }
-                else
-                {
-             //       Util.Log2File("Null optimizedPaths NOD_ID_FROM=" + p_NOD_ID_FROM.ToString() + ", NOD_ID_TO=" + NOD_ID_TO.ToString() + ", RZN_ID_LIST=" + p_RZN_ID_LIST);
-                }
+
                 result.Add(getRouteInfo(p_RZN_ID_LIST, p_NOD_ID_FROM, NOD_ID_TO, optimizedPath));
             }
             Console.WriteLine("GetAllRoutes " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
