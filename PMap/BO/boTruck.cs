@@ -81,11 +81,11 @@ namespace PMap.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double TRK_LENGTH { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]
+        public double TRK_WEIGHT { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
         public double TRK_WIDTH { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double TRK_HEIGHT { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double TRK_WEIGHT { get; set; }
 
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int TRK_AXLENUM { get; set; }

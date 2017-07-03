@@ -36,6 +36,11 @@ namespace PMap.BO
         public PointLatLng toLatLng { get; set; }
         public int ZIP_NUM_FROM { get; set; }
         public int ZIP_NUM_TO { get; set; }
+        public int EDG_MAXWEIGHT { get; set; }
+        public int EDG_MAXWIDTH { get; set; }
+        public int EDG_MAXHEIGHT { get; set; }
+
+
     }
 
 

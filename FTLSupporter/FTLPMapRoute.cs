@@ -23,14 +23,29 @@ namespace FTLSupporter
         public int fromNOD_ID { get; set; }
         public int toNOD_ID { get; set; }
         public string RZN_ID_LIST { get; set; }
+
+        public int GVWR { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+
         public boRoute route { get; set; }
 
         public string NODEList
         {
-            get {
-                return fromNOD_ID.ToString() + "," + string.Join(",", route.Edges.Select(x => x.NOD_ID_TO.ToString()).ToArray()); 
+            get
+            {
+                return fromNOD_ID.ToString() + "," + string.Join(",", route.Edges.Select(x => x.NOD_ID_TO.ToString()).ToArray());
 
             }
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null) return false;
+            FTLPMapRoute rk = (FTLPMapRoute)obj;
+            return (this.fromNOD_ID == rk.fromNOD_ID && this.toNOD_ID == rk.toNOD_ID &&
+                this.RZN_ID_LIST == rk.RZN_ID_LIST && this.GVWR == rk.GVWR && this.Width == rk.Width && this.Height == rk.Height);
         }
 
     }

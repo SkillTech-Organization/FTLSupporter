@@ -786,7 +786,7 @@ namespace PMap.BLL
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
-                                boRoute dst = m_bllRoute.GetRouteFromDB(RZN_ID_LIST, lastNOD_ID, NOD_ID);
+                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST);
                                 if (dst != null)
                                 {
                                     foreach (boEdge edge in dst.Edges)
@@ -915,7 +915,7 @@ namespace PMap.BLL
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
-                                boRoute dst = m_bllRoute.GetRouteFromDB(RZN_ID_LIST, lastNOD_ID, NOD_ID);
+                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST);
                                 if (dst != null)
                                 {
                                     foreach (boEdge edge in dst.Edges)

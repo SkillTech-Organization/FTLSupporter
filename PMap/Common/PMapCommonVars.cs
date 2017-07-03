@@ -31,7 +31,7 @@ namespace PMap.Common
             AppInstance = "???";
             CT_DB = null;
             MapProvider = GMapProviders.GoogleTerrainMap;
-            TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string>, Tuple<int, int>>();
+            TruckNod_IDCahce = new Dictionary<Tuple<PointLatLng, string, int, int, int>, Tuple<int, int>>();
             RZN_ID_LISTCahce = new Dictionary<int, string>();
         }
 
@@ -83,7 +83,7 @@ namespace PMap.Common
 
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public Dictionary<Tuple<PointLatLng, string>, Tuple<int, int>> TruckNod_IDCahce = null;  //Jármű Node ID cache
+        public Dictionary<Tuple<PointLatLng, string, int, int, int>, Tuple<int, int>> TruckNod_IDCahce = null;  //Jármű Node ID cache
 
         public void ConnectToDB()
         {

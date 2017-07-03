@@ -95,56 +95,62 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Behajtási övezetek kódok", Order = 13)]
         public string RZones { get; set; }
 
-        [DisplayNameAttributeX(Name = "Egyéb járműtulajdonságok", Order = 14)]
+        [DisplayNameAttributeX(Name = "Szélesség", Order = 14)]
+        public int Width { get; set; }
+
+        [DisplayNameAttributeX(Name = "Magasság", Order = 15)]
+        public int Height { get; set; }
+
+        [DisplayNameAttributeX(Name = "Egyéb járműtulajdonságok", Order = 16)]
         public string TruckProps { get; set; }
 
         /******************* AETR adatok ******************************/
-        [DisplayNameAttributeX(Name = "Maradék vezetési idő", Order = 15)]
+        [DisplayNameAttributeX(Name = "Maradék vezetési idő", Order = 17)]
         [Required(ErrorMessage = "Kötelező mező:RemainingDriveTime")]
         public int RemainingDriveTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Maradék pihenőidő", Order = 16)]
+        [DisplayNameAttributeX(Name = "Maradék pihenőidő", Order = 18)]
         public int RemainingRestTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "A pihenőig hátralévő munkaidő", Order = 17)]
+        [DisplayNameAttributeX(Name = "A pihenőig hátralévő munkaidő", Order = 19)]
         public int RemainingTimeToStartDailyRest { get; set; }
                    
-        [DisplayNameAttributeX(Name = "Maradék napi vezetési idő", Order = 18)]
+        [DisplayNameAttributeX(Name = "Maradék napi vezetési idő", Order = 20)]
         public int RemainingDailyDriveTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Maradék napi pihenőidő", Order = 19)]
+        [DisplayNameAttributeX(Name = "Maradék napi pihenőidő", Order = 11)]
         public int RemainingDailyRestTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Sofőr hátralevő heti vezetési ideje", Order = 20)]
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő heti vezetési ideje", Order = 22)]
         public int RemainingWeeklyDriveTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Sofőr hátralevő heti pihenőideje", Order = 21)]
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő heti pihenőideje", Order = 23)]
         public int RemainingWeeklyRestTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti vezetési ideje", Order = 22)]
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti vezetési ideje", Order = 24)]
         public int RemainingTwoWeeklyDriveTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti pihenőideje", Order = 23)]
+        [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti pihenőideje", Order = 25)]
         public int RemainingTwoWeeklyRestTime { get; set; }
 
-        [DisplayNameAttributeX(Name = "Kompenzációként adandó pihenőidő ", Order = 24)]
+        [DisplayNameAttributeX(Name = "Kompenzációként adandó pihenőidő ", Order = 26)]
         public int RemainingRestTimeToCompensate { get; set; }
 
         /******************* Járműfeladat ******************************/
 
-        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 25)]
+        [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 27)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
         public eTruckTaskType TruckTaskType { get; set; }
 
-        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 26)]
+        [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 28)]
         public string RunningTaskID { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 27)]
+        [DisplayNameAttributeX(Name = "Irányos túra?", Order = 29)]
         public bool CurrIsOneWay { get; set; }
 
         private DateTime m_CurrTime;
-        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 28)]
+        [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 30)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
         public DateTime CurrTime
         {
@@ -172,7 +178,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLat;
-        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 29)]
+        [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 31)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLat")]
         public double CurrLat
         {
@@ -201,7 +207,7 @@ namespace FTLSupporter
         }
 
         private double m_CurrLng;
-        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 30)]
+        [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 32)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLng")]
         public double CurrLng
         {
@@ -230,12 +236,12 @@ namespace FTLSupporter
         }
 
         //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
-        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 31)]
+        [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 33)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
         public List<FTLPoint> CurrTPoints { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 32)]
+        [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 34)]
         public int TPointCompleted { get; set; }
 
 

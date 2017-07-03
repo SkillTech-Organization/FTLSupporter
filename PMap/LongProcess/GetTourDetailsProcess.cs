@@ -63,7 +63,7 @@ namespace PMap.LongProcess
                     Dictionary<string, List<int>[]> neighborsFull = null;
                     Dictionary<string, List<int>[]> neighborsCut = null;
 
-                    result = m_bllRoute.GetRouteFromDB(m_Tour.RZN_ID_LIST, m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID);
+                    result = m_bllRoute.GetRouteFromDB( m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, m_Tour.RZN_ID_LIST);
                     if (result == null)
                     {
 

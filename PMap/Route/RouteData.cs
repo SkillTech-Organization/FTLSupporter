@@ -128,7 +128,10 @@ namespace PMap.Route
                                 EDG_ETLCODE = Util.getFieldValue<string>(dr, "EDG_ETLCODE"),
                                 Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
                                 fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
-                                toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider)
+                                toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
+                                EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
+                                EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH"),
+                                EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT")
 
                             };
 
@@ -167,7 +170,10 @@ namespace PMap.Route
                                     EDG_ETLCODE = Util.getFieldValue<string>(dr, "EDG_ETLCODE"),
                                     Tolls = dicAllTolls[Util.getFieldValue<string>(dr, "EDG_ETLCODE")],
                                     fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
-                                    toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider)
+                                    toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
+                                    EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
+                                    EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH"),
+                                    EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT")
                                 };
 
                                 if (!Edges.ContainsKey(keyTo))

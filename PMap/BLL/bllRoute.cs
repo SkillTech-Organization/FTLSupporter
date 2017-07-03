@@ -143,7 +143,7 @@ namespace PMap.BLL
 
 
 
-        public boRoute GetRouteFromDB(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
+        public boRoute GetRouteFromDB( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
@@ -868,7 +868,7 @@ namespace PMap.BLL
         /// <param name="p_pt"></param>
         /// <param name="p_RZN_ID_LIST"></param>
         /// <returns></returns>
-        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, out int r_diff)
+        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_width, int p_height, out int r_diff)
         {
             string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
@@ -905,7 +905,8 @@ namespace PMap.BLL
             "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   OR " + Environment.NewLine +    //itt nem AND
-            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
+            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0}) " + Environment.NewLine +
+            "and (EDG.EDG_MAXWEIGHT=0 or EDG.EDG_MAXWEIGHT>={3}) and (EDG.EDG_MAXWIDTH=0 or EDG.EDG_MAXWIDTH={4}) and (EDG.EDG_MAXHEIGHT=0 or EDG.EDG_MAXHEIGHT={5}) )" + Environment.NewLine +
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
@@ -919,7 +920,7 @@ namespace PMap.BLL
             "  (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
             "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") asc";
 
-            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway));
+            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway, p_weight, p_width, p_height));
             if (dt.Rows.Count > 0)
             {
                 r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
