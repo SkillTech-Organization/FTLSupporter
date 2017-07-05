@@ -147,7 +147,7 @@ namespace PMap.LongProcess
                                 RouteData.Instance.getNeigboursByBound(p_tour.RZN_ID_LIST, out neighborsFull, out neighborsCut, boundary);
                             }
 
-                            boRoute routeInf = provider.GetRoute(p_tour.RZN_ID_LIST, p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID,
+                            boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, p_tour.RZN_ID_LIST,
                                 neighborsFull[p_tour.RZN_ID_LIST], neighborsCut[p_tour.RZN_ID_LIST],
                                 PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                             result = routeInf.Route;

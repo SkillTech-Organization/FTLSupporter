@@ -63,7 +63,7 @@ namespace PMap.LongProcess
                     Dictionary<string, List<int>[]> neighborsFull = null;
                     Dictionary<string, List<int>[]> neighborsCut = null;
 
-                    result = m_bllRoute.GetRouteFromDB( m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, m_Tour.RZN_ID_LIST);
+                    result = m_bllRoute.GetRouteFromDB( m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, m_Tour.RZN_ID_LIST, m_Tour.TRK_WEIGHT, m_Tour.TRK_WIDTH, m_Tour.TRK_HEIGHT);
                     if (result == null)
                     {
 
@@ -78,7 +78,7 @@ namespace PMap.LongProcess
                             RouteData.Instance.getNeigboursByBound(m_Tour.RZN_ID_LIST, out neighborsFull, out neighborsCut, boundary);
                         }
 
-                        result = provider.GetRoute(m_Tour.RZN_ID_LIST, m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID,
+                        result = provider.GetRoute(m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, m_Tour.RZN_ID_LIST,
                                         neighborsFull[m_Tour.RZN_ID_LIST], neighborsCut[m_Tour.RZN_ID_LIST],
                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                         m_bllRoute.WriteOneRoute(result);

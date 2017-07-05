@@ -363,7 +363,7 @@ namespace FTLSupporter
                     {
                         foreach (FTLPMapRoute r in lstPMapRoutes)
                         {
-                            boRoute rt = route.GetRouteFromDB( r.fromNOD_ID, r.toNOD_ID, r.RZN_ID_LIST);
+                            boRoute rt = route.GetRouteFromDB( r.fromNOD_ID, r.toNOD_ID, r.RZN_ID_LIST, r.GVWR, r.Width, r.Height);
                             if (rt != null)
                             {
                                 r.route = rt;
@@ -380,7 +380,7 @@ namespace FTLSupporter
                         lstCalcPMapRoutes = lstPMapRoutes;
                         lstPMapRoutes.Clear();
                     }
-
+itt tartok
                     if (lstCalcPMapRoutes.Count > 0)
                     {
                         ProcessNotifyIcon ni = new ProcessNotifyIcon();

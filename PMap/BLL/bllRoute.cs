@@ -143,15 +143,15 @@ namespace PMap.BLL
 
 
 
-        public boRoute GetRouteFromDB( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST)
+        public boRoute GetRouteFromDB( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Width, int p_Height)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
 
             boRoute result = null;
             string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
-                           "where RZN_ID_LIST=? and NOD_ID_FROM = ? and NOD_ID_TO = ? ";
-            DataTable dt = DBA.Query2DataTable(sSql, p_RZN_ID_LIST, p_NOD_ID_FROM, p_NOD_ID_TO);
+                           "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and  DST_WEIGHT = ? and DST_WIDTH = ? and DST_HEIGHT = ? ";
+            DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight,  p_Width,  p_Height);
 
             if (dt.Rows.Count == 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
             {
@@ -159,6 +159,12 @@ namespace PMap.BLL
 
                 result = new boRoute();
                 result.DST_DISTANCE = Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE");
+                result.RZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
+                result.DST_WEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_WEIGHT");
+                result.DST_WIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_WIDTH");
+                result.DST_HEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_HEIGHT");
+
+
                 byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
                 String points = Util.UnZipStr(buff);
                 String[] aPoints = points.Split(Global.SEP_POINTC);
@@ -200,7 +206,10 @@ namespace PMap.BLL
                                         EDG_DESTTRAFFIC = Util.getFieldValue<bool>(r, "EDG_DESTTRAFFIC"),
                                         EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),
                                         Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
-                                               .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
+                                               .DefaultIfEmpty(new boEtoll()).First().TollsToDict(),
+                                        EDG_MAXWEIGHT = Util.getFieldValue<int>(r, "EDG_MAXWEIGHT"),
+                                        EDG_MAXWIDTH = Util.getFieldValue<int>(r, "EDG_MAXWIDTH"),
+                                        EDG_MAXHEIGHT = Util.getFieldValue<int>(r, "EDG_MAXHEIGHT")
 
                                     }
                                 }).ToDictionary(n => n.Key, n => n.Value);
@@ -420,7 +429,10 @@ namespace PMap.BLL
                     {
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
-                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES")
+                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
+                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
+                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
+                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
                     }).ToList();
         }
 
@@ -531,7 +543,10 @@ namespace PMap.BLL
                     {
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
-                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES")
+                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
+                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
+                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
+                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
                     }).ToList();
 
         }
@@ -577,7 +592,10 @@ namespace PMap.BLL
                     {
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
-                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES")
+                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
+                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
+                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
+                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
                     }).ToList();
 
         }
@@ -618,7 +636,10 @@ namespace PMap.BLL
                     {
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
-                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES")
+                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
+                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
+                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
+                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
                     }).ToList();
 
 

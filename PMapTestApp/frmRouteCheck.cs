@@ -409,7 +409,7 @@ namespace PMapTestApp
                 m_routes.Clear();
                 foreach (string sRZN_ID_LIST in aRZN_ID_LIST)
                 {
-                    boRoute result = provider.GetRoute(sRZN_ID_LIST, Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value),
+                    boRoute result = provider.GetRoute(Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value), sRZN_ID_LIST,
                         NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
                         rdShortestPath.Checked ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
                     m_routes.Add(sRZN_ID_LIST, result);

@@ -83,7 +83,7 @@ namespace Map.LongProcess
                     ProcessForm.SetInfoText(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.DEP_NAME + " --> " + RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.DEP_NAME);
 
                     //Legrövidebb út
-                    boRoute routeS = provider.GetRoute(Truck.RZN_ID_LIST, RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID,
+                    boRoute routeS = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, Truck.RZN_ID_LIST,
                                     NeighborsFull[Truck.RZN_ID_LIST], NeighborsCut[Truck.RZN_ID_LIST],
                                     ECalcMode.ShortestPath);
                     if (routeS != null)
@@ -96,7 +96,7 @@ namespace Map.LongProcess
                     }
 
                     //Leggyorsabb út
-                    boRoute routeF = provider.GetRoute(Truck.RZN_ID_LIST, RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID,
+                    boRoute routeF = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, Truck.RZN_ID_LIST,
                                     NeighborsFull[Truck.RZN_ID_LIST], NeighborsCut[Truck.RZN_ID_LIST],
                                     ECalcMode.FastestPath);
 

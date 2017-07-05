@@ -1180,7 +1180,7 @@ namespace VBInterface
                     RouteData.Instance.getNeigboursByBound(sRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);
 
 
-                    boRoute result = provider.GetRoute(sRZN_ID_LIST, fromNOD_ID, toNOD_ID,
+                    boRoute result = provider.GetRoute( fromNOD_ID, toNOD_ID, sRZN_ID_LIST,
                         NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
                          PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
 

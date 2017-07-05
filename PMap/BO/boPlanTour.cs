@@ -116,13 +116,13 @@ namespace PMap.BO
         public double TRK_LENGTH { get; set; }
 
         [DisplayNameAttributeX(Name = "Raktér szélessége", Order = 29)]
-        public double TRK_WIDTH { get; set; }
+        public int TRK_WIDTH { get; set; }
 
         [DisplayNameAttributeX(Name = "Raktér magassága", Order = 30)]
-        public double TRK_HEIGHT { get; set; }
+        public int TRK_HEIGHT { get; set; }
 
         [DisplayNameAttributeX(Name = "Összsúly", Order = 31)]
-        public double TRK_WEIGHT { get; set; }
+        public int TRK_WEIGHT { get; set; }
 
         [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 32)]
         public int TRK_ETOLLCAT { get; set; }                               //0: nincs útdíj
