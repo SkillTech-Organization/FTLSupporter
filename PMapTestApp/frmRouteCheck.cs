@@ -27,7 +27,7 @@ namespace PMapTestApp
         private GMapMarker CurrentPos;
         private GMapMarker MarkerFrom;
         private GMapMarker MarkerTo;
-        private Dictionary<string, boRoute> m_routes = new Dictionary<string, boRoute>();
+        private Dictionary<CRoutePars, boRoute> m_routes = new Dictionary<CRoutePars, boRoute>();
 
         // layers
         private GMapOverlay m_selectorLayer;
@@ -400,19 +400,23 @@ namespace PMapTestApp
                 boundary = m_bllRoute.getBoundary(nodes);
 
                 DataTable dtRZN_ID_LIST = (DataTable)cmbRST_ID_LIST.DataSource;
-                List<string> aRZN_ID_LIST = dtRZN_ID_LIST.AsEnumerable().Select(x => Util.getFieldValue<string>(x, "RESTZONE_IDS")).ToList();
-                Dictionary<string, List<int>[]> NeighborsFull = null;
-                Dictionary<string, List<int>[]> NeighborsCut = null;
-                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);
+
+                //A TestApp-ban egyelőre nem foglalkozunk a súly- és méretkorlátozásokkal
+                //
+                List<CRoutePars> lstRoutePars = dtRZN_ID_LIST.AsEnumerable().Select(x => new CRoutePars() { RZN_ID_LIST = Util.getFieldValue<string>(x, "RESTZONE_IDS") }).ToList();
+
+                Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
+                Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
+                RouteData.Instance.getNeigboursByBound(lstRoutePars, out NeighborsFull, out NeighborsCut, boundary);
 
                 //összes RZN_ID_LIST-ra elkérjük az útvonalakat
                 m_routes.Clear();
-                foreach (string sRZN_ID_LIST in aRZN_ID_LIST)
+                foreach (var routePar in lstRoutePars)
                 {
-                    boRoute result = provider.GetRoute(Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value), sRZN_ID_LIST,
-                        NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
+                    boRoute result = provider.GetRoute(Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value), routePar,
+                        NeighborsFull[routePar], NeighborsCut[routePar],
                         rdShortestPath.Checked ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
-                    m_routes.Add(sRZN_ID_LIST, result);
+                    m_routes.Add(routePar, result);
                 }
                 UpdateControls();
                 showRoute();
@@ -428,12 +432,14 @@ namespace PMapTestApp
                 m_routeLayer.Routes.Clear();
                 m_routeLayer.Markers.Clear();
 
+                //A TestApp-ban egyelőre nem foglalkozunk a súly- és méretkorlátozásokkal
+                //
+                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue };
 
-                string sRZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue;
-                boRoute route;
+                 boRoute route;
 
 
-                if (m_routes.TryGetValue(sRZN_ID_LIST, out route) && route.DST_DISTANCE > 0)
+                if (m_routes.TryGetValue(routePar, out route) && route.DST_DISTANCE > 0)
                 {
 
                     GMapRoute r = new GMapRoute(route.Route.Points, "");

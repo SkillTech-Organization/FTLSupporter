@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AnimatedNotifyIconNS;
+using PMap.Localize;
 
 namespace PMap.LongProcess.Base
 {
@@ -44,7 +45,7 @@ namespace PMap.LongProcess.Base
  
             m_CancelAct.Name = "CancelAct";
             m_CancelAct.Size = new System.Drawing.Size(152, 22);
-            m_CancelAct.Text = "Leállít";
+            m_CancelAct.Text = PMapMessages.M_PROC_STOP;
             m_CancelAct.Click += new System.EventHandler(this.CancelAct_Click);
  
             this.ContextMenuStrip = m_menu;
@@ -55,7 +56,7 @@ namespace PMap.LongProcess.Base
                                 Properties.Resources._11, Properties.Resources._13 };
 
             this.SetAnimationFrames(_icons);
-            this.Text = "** Inicializálás **";
+            this.Text = PMapMessages.M_PROC_INIT;
             this.FrameRate = 0.5;
             this.Visible = false;
 

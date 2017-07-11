@@ -116,6 +116,8 @@ namespace PMap.LongProcess
             ProcessForm.SetInfoText("");
 
 
+            //Ez egy PMApTestApp funkció, ezért itt nem kell foglalkozni a súly-és méretkorlátozásokkal
+            //
             string sSql = "select DEP_FROM.ID as DEP_FROM_ID, DEP_FROM.DEP_NAME as DEP_NAME_FROM, ZIP_FROM.ZIP_NUM as ZIP_NUM_FROM, ZIP_FROM.ZIP_CITY as ZIP_CITY_FROM, DEP_FROM.DEP_ADRSTREET as DEP_ADRSTREET_FROM, DEP_FROM.NOD_ID as NOD_ID_FROM, " + Environment.NewLine +
                "DEP_TO.ID as DEP_TO_ID, DEP_TO.DEP_NAME as DEP_NAME_TO, ZIP_TO.ZIP_NUM as ZIP_NUM_TO, ZIP_TO.ZIP_CITY as ZIP_CITY_TO, DEP_TO.DEP_ADRSTREET as DEP_ADRSTREET_TO, DEP_TO.NOD_ID as NOD_ID_TO, " + Environment.NewLine +
                "DST.DST_DISTANCE, DST.DST_EDGES, NOD_FROM.NOD_XPOS as NOD_XPOS_FROM, NOD_FROM.NOD_YPOS as NOD_YPOS_FROM, NOD_TO.NOD_XPOS as NOD_XPOS_TO, NOD_TO.NOD_YPOS as NOD_YPOS_TO   " + Environment.NewLine +

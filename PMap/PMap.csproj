@@ -420,6 +420,7 @@
     <Compile Include="Localize\PMapMessages.cs" />
     <Compile Include="Common\PMapCommonVars.cs" />
     <Compile Include="ProcessUtils.cs" />
+    <Compile Include="Route\CRoutePars.cs" />
     <Compile Include="Route\RouteData.cs" />
     <Compile Include="Route\PMapRoutingProvider.cs" />
     <Compile Include="Markers\PPlanMarkerUnPlanned.cs" />

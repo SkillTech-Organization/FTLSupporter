@@ -63,7 +63,7 @@ namespace PMap.LongProcess
             try
             {
                 Completed = true;
- 
+
                 int i = 0;
                 DateTime dtStart = DateTime.Now;
                 TimeSpan tspDiff;
@@ -73,7 +73,7 @@ namespace PMap.LongProcess
                     ProcessForm.SetInfoText(m_Hint.Trim() + " Inicializálás");
                 }
 
-                
+
                 PMapRoutingProvider provider = new PMapRoutingProvider();
                 RouteData.Instance.Init(m_DB, null);
                 RectLatLng boundary = new RectLatLng();
@@ -86,23 +86,35 @@ namespace PMap.LongProcess
                     boundary = m_bllRoute.getBoundary(allNodes);
                 }
 
-                List<string> aRZN_ID_LIST = m_CalcDistances.GroupBy(grp => grp.RZN_ID_LIST).Select(grp => grp.Key).ToList();
-                Dictionary<string, List<int>[]> NeighborsArrFull = null;
-                Dictionary<string, List<int>[]> NeighborsArrCut = null;
 
-                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out NeighborsArrFull, out NeighborsArrCut, boundary);
+                Dictionary<CRoutePars, List<int>[]> NeighborsArrFull = null;
+                Dictionary<CRoutePars, List<int>[]> NeighborsArrCut = null;
+                List<CRoutePars> routePars = m_CalcDistances.GroupBy(g => new { g.RZN_ID_LIST, g.DST_WEIGHT, g.DST_HEIGHT, g.DST_WIDTH })
+                    .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.DST_WEIGHT, Height = s.Key.DST_HEIGHT, Width = s.Key.DST_WIDTH }).ToList();
+
+                RouteData.Instance.getNeigboursByBound(routePars, out NeighborsArrFull, out NeighborsArrCut, boundary);
 
                 DateTime dtStartX2 = DateTime.Now;
 
-                var calcNode = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
+                var lstCalcNodes = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_WEIGHT, gr.DST_HEIGHT, gr.DST_WIDTH }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
 
-                foreach (var item in calcNode.AsEnumerable())
+
+                foreach (var calcNode in lstCalcNodes.AsEnumerable())
                 {
 
                     dtStart = DateTime.Now;
                     i++;
-                    List<boRoute> results = provider.GetAllRoutes(item.Key.RZN_ID_LIST, item.Key.NOD_ID_FROM, item.Value, 
-                                        NeighborsArrFull[item.Key.RZN_ID_LIST], NeighborsArrCut[item.Key.RZN_ID_LIST], 
+
+                    var routePar = routePars.Where(w => w.RZN_ID_LIST == calcNode.Key.RZN_ID_LIST &&
+                                                        w.Weight == calcNode.Key.DST_WEIGHT &&
+                                                        w.Height == calcNode.Key.DST_HEIGHT &&
+                                                        w.Width == calcNode.Key.DST_WIDTH).FirstOrDefault();
+                    List<int> lstToNodes = calcNode.Value;
+
+                    //megj: nins routePar null ellenőrzés, hogy szálljon el, ha valami probléma van
+                    //
+                    List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.NOD_ID_FROM, lstToNodes,
+                                        NeighborsArrFull[routePar], NeighborsArrCut[routePar],
                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 
                     //Eredmény adatbázisba írása minden csomópont kiszámolása után
@@ -111,7 +123,7 @@ namespace PMap.LongProcess
                     //Eredmény ellenőrzése Google-al
                     foreach (var ri in results)
                     {
-                    
+
                         PointLatLng PositionFrom = m_bllRoute.GetPointLatLng(ri.Value.NOD_ID_FROM, m_conn.DB);
                         PointLatLng PositionTo = m_bllRoute.GetPointLatLng(ri.Value.NOD_ID_TO, m_conn.DB);
                         double duration = 0;
@@ -146,9 +158,9 @@ namespace PMap.LongProcess
                             String sMsg = "{0}=>{1} [{2},{3}] távolság PMap:{4}, Google:{5}";
 
                             Util.Log2File(String.Format(sMsg, ri.Value.NOD_ID_FROM, ri.Value.NOD_ID_TO, PositionFrom, PositionTo, ri.Value.RouteDetail.First().Value.Distance / 1000, route.Distance));
- 
+
                         }
-                  
+
                     }
                     */
 
@@ -164,7 +176,7 @@ namespace PMap.LongProcess
 
 
                     tspDiff = DateTime.Now - dtStart;
-                    string infoText1 = i.ToString() + "/" + calcNode.Count();
+                    string infoText1 = i.ToString() + "/" + lstCalcNodes.Count();
                     if (PMapIniParams.Instance.TestMode)
                         infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
                     //                ProcessForm.SetInfoText(m_Hint.Trim() + "=>" + Util.GetSysInfo().PadRight(15) + " " + infoText1.PadRight(25) + " NODE_ID:" + item.Key.ToString());
@@ -175,6 +187,7 @@ namespace PMap.LongProcess
                     }
                     this.SetNotifyIconText(m_Hint.Trim() + infoText1);
                 }
+
 
                 //Eredmény adatbázisba írása
                 //            m_bllRoute.WriteRoutes(results, m_conn.DB);

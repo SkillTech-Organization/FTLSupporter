@@ -20,8 +20,6 @@ namespace PMap.Route
         public int NOD_ID_FROM { get; set; }
         public string RZN_ID_LIST { get; set; }
     }
-
-
     /// <summary>
     /// </summary>
     public class RouteData
@@ -222,13 +220,9 @@ namespace PMap.Route
             }
         }
 
-        public void getNeigboursByBound(string p_RZN_ID_LIST, out Dictionary<string, List<int>[]> o_neighborsFull, out Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
+        public void getNeigboursByBound(CRoutePars p_RoutePar, out Dictionary<CRoutePars, List<int>[]> o_neighborsFull, out Dictionary<CRoutePars, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
         {
-            if (p_RZN_ID_LIST == null)
-                p_RZN_ID_LIST = "";
-            List<string> arr = new List<string>();
-            arr.Add(p_RZN_ID_LIST);
-            getNeigboursByBound(arr, out o_neighborsFull, out o_neighborsCut, p_cutBoundary);
+               getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), out o_neighborsFull, out o_neighborsCut, p_cutBoundary);
         }
 
         /// <summary>
@@ -237,31 +231,36 @@ namespace PMap.Route
         /// <param name="p_boundary"></param>
         /// <param name="aRZN_ID_LIST">Behajtásiövezet-lista</param>
         /// <returns></returns>
-        public void getNeigboursByBound(List<string> aRZN_ID_LIST, out Dictionary<string, List<int>[]> o_neighborsFull, out Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
+        public void getNeigboursByBound(List<CRoutePars> p_RoutePars, out Dictionary<CRoutePars, List<int>[]> o_neighborsFull, out Dictionary<CRoutePars, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
         {
             DateTime dtStart = DateTime.Now;
-            o_neighborsFull = new Dictionary<string, List<int>[]>();  //csomópont szomszédok korlátozás-zónatípusonként
-            o_neighborsCut = new Dictionary<string, List<int>[]>();  //csomópont szomszédok korlátozás-zónatípusonként (vágott térkép)
+            o_neighborsFull = new Dictionary<CRoutePars, List<int>[]>();    //csomópont szomszédok korlátozás-route paraméterenként
+            o_neighborsCut = new Dictionary<CRoutePars, List<int>[]>();     //csomópont szomszédok korlátozás-route paraméterenként (vágott térkép)
 
             //Térkép készítése minden behajtásiövezet-listára. Csak akkora méretű térképet használunk,
             //amelybe beleférnek (kis ráhagyással persze) a lerakók.
-            foreach (string sRZN_ID_LIST in aRZN_ID_LIST)
+            foreach (var routePar in p_RoutePars)
             {
                 int nEdgCnt = 0;
                 List<int>[] neighboursFull = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
                 List<int>[] neighboursCut = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
 
-                string[] aRZN = aRZN = sRZN_ID_LIST.Split(',');
+                string[] aRZN = aRZN = routePar.RZN_ID_LIST.Split(',');
 
+                //Az adott feletételeknek megfelelő élek beválogatása
                 foreach (KeyValuePair<string, boEdge> item in RouteData.Instance.Edges)
                 {
                     boEdge edg = (boEdge)item.Value;
 
-                    if ( /*sRZN_ID_LIST == ""                                                 /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
-                        || */ edg.RZN_ID == 0                                                  /// Védett övezet-e
-                        || (edg.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)               /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
-                        /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
-                        || aRZN.Contains(edg.RZN_ID.ToString()))                           /// Az él szerepel-e a zónalistában?
+                    if ( /*sRZN_ID_LIST == ""                                               /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
+                        || */ edg.RZN_ID == 0                                               /// Védett övezet-e
+                        || (edg.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
+                                                                                            /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
+                        || aRZN.Contains(edg.RZN_ID.ToString())                             /// Az él szerepel-e a zónalistában?
+                        || (routePar.Weight == 0 || routePar.Weight <= edg.EDG_MAXWEIGHT)   /// Súlykorlátozás
+                        || (routePar.Width == 0 || routePar.Width <= edg.EDG_MAXWIDTH)      /// Szélességlátozás
+                        || (routePar.Height == 0 || routePar.Height <= edg.EDG_MAXHEIGHT)   /// Magasságkorlátozás
+                       )
                     /// 
                     {
                         neighboursFull[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO);
@@ -273,9 +272,9 @@ namespace PMap.Route
                         }
                     }
                 }
-                Console.WriteLine("RZN_ID_LIST:" + sRZN_ID_LIST + " edgcnt:" + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
-                o_neighborsFull.Add(sRZN_ID_LIST, neighboursFull);
-                o_neighborsCut.Add(sRZN_ID_LIST, neighboursCut);
+                Console.WriteLine("CRoutePars:" + routePar.ToString() + " edgcnt:" + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
+                o_neighborsFull.Add(routePar, neighboursFull);
+                o_neighborsCut.Add(routePar, neighboursCut);
             }
             Console.WriteLine("getNeigboursByBound " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
         }

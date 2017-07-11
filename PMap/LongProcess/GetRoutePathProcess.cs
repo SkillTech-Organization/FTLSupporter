@@ -126,29 +126,30 @@ namespace PMap.LongProcess
                     PointLatLng start = new PointLatLng(p_tour.TourPoints[i].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i].NOD_XPOS / Global.LatLngDivider);
                     PointLatLng end = new PointLatLng(p_tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
 
-                    Dictionary<string, List<int>[]> neighborsFull = null;
-                    Dictionary<string, List<int>[]> neighborsCut = null;
+                    Dictionary<CRoutePars, List<int>[]> neighborsFull = null;
+                    Dictionary<CRoutePars, List<int>[]> neighborsCut = null;
 
                     MapRoute result = null;
                     if (p_tour.TourPoints[i].NOD_ID != p_tour.TourPoints[i + 1].NOD_ID)
                     {
 
-                        result = m_bllRoute.GetMapRouteFromDB(p_tour.RZN_ID_LIST, p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID);
+                        result = m_bllRoute.GetMapRouteFromDB(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, p_tour.RZN_ID_LIST, p_tour.TRK_WEIGHT, p_tour.TRK_HEIGHT, p_tour.TRK_WIDTH);
                         if (result == null)
                         {
                             RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
+                            var routePar = new CRoutePars() { RZN_ID_LIST = p_tour.RZN_ID_LIST, Weight = p_tour.TRK_WEIGHT, Height = p_tour.TRK_HEIGHT, Width = p_tour.TRK_WIDTH };
                             //TODO:lehet, hogy nem kellene térkép kivágást végeznni itt
                             if (neighborsFull == null || neighborsCut == null)
                             {
                                 RectLatLng boundary = new RectLatLng();
                                 List<int> nodes = new List<int>() { p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID };
                                 boundary = m_bllRoute.getBoundary(nodes);
-                                RouteData.Instance.getNeigboursByBound(p_tour.RZN_ID_LIST, out neighborsFull, out neighborsCut, boundary);
+                                RouteData.Instance.getNeigboursByBound(routePar, out neighborsFull, out neighborsCut, boundary);
                             }
 
-                            boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, p_tour.RZN_ID_LIST,
-                                neighborsFull[p_tour.RZN_ID_LIST], neighborsCut[p_tour.RZN_ID_LIST],
+                            boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, routePar,
+                                neighborsFull[routePar], neighborsCut[routePar],
                                 PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                             result = routeInf.Route;
                             m_bllRoute.WriteOneRoute(routeInf);

@@ -72,17 +72,17 @@ namespace PMap.BO.DataXChange
         public string TRK_TRAILER { get; set; }
 
         [DisplayNameAttributeX(Name = "Hosszúság", Order = 4)]
-        public double TRK_LENGTH { get; set; }
+        public int TRK_LENGTH { get; set; }
 
         [DisplayNameAttributeX(Name = "Szélesség", Order = 5)]
-        public double TRK_WIDTH { get; set; }
+        public int TRK_WIDTH { get; set; }
 
         [DisplayNameAttributeX(Name = "Magasság", Order = 6)]
-        public double TRK_HEIGHT { get; set; }
+        public int TRK_HEIGHT { get; set; }
 
         [DisplayNameAttributeX(Name = "Összsúly (kg)", Order = 7)]
         [Required(ErrorMessage = DXMessages.RQ_TRK_WEIGHT)]
-        public double TRK_WEIGHT { get; set; }
+        public int TRK_WEIGHT { get; set; }
 
         [DisplayNameAttributeX(Name = "Szín", Order = 8)]
         public Color TRK_COLOR { get; set; }

@@ -1092,7 +1092,13 @@ namespace VBInterface
             return resArr;
         }
 
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="p_iniPath"></param>
+/// <param name="p_dbConf"></param>
+/// <param name="p_lstRoutes"></param>
+/// <returns></returns>
         public List<boXChkRes> CheckRoutes(string p_iniPath, string p_dbConf, List<boXChkRoute> p_lstRoutes)
         {
             DateTime dt = DateTime.Now;
@@ -1173,8 +1179,8 @@ namespace VBInterface
                     if (sRZN_ID_LIST != "")
                         sRZN_ID_LIST = sRZN_ID_LIST.Substring(1);
 
-                    Dictionary<string, List<int>[]> NeighborsFull = null;
-                    Dictionary<string, List<int>[]> NeighborsCut = null;
+                    Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
+                    Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
                     RectLatLng boundary = route.getBoundary(itemRes.fromLat, itemRes.fromLng, itemRes.toLat, itemRes.toLng);
 
                     RouteData.Instance.getNeigboursByBound(sRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);

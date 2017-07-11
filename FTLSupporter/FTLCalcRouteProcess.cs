@@ -64,48 +64,49 @@ namespace FTLSupporter
                 boundary = m_bllRoute.getBoundary(allNodes);
 
  
-                List<string> aRZN_ID_LIST = m_lstRoutes.GroupBy(g => g.RZN_ID_LIST).Select(x => x.Key).ToList();
-                Dictionary<string, List<int>[]> NeighborsArrFull = null;
-                Dictionary<string, List<int>[]> NeighborsArrCut = null;
+                Dictionary<CRoutePars, List<int>[]> NeighborsArrFull = null;
+                Dictionary<CRoutePars, List<int>[]> NeighborsArrCut = null;
+                List<CRoutePars> routePars = m_lstRoutes.GroupBy(g => new { g.RZN_ID_LIST, g.GVWR, g.Height, g.Width })
+                      .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.GVWR, Height = s.Key.Height, Width = s.Key.Width }).ToList();
 
-                RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out NeighborsArrFull, out NeighborsArrCut, boundary);
+                RouteData.Instance.getNeigboursByBound(routePars, out NeighborsArrFull, out NeighborsArrCut, boundary);
 
+                var lstCalcNodes = m_lstRoutes.GroupBy(gr => new { gr.fromNOD_ID, gr.RZN_ID_LIST, gr.GVWR, gr.Height, gr.Width }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.toNOD_ID).ToList());
 
                 DateTime dtStartX2 = DateTime.Now;
-                foreach (int NOD_ID_FROM in fromNodes)
+                foreach (var calcNode in lstCalcNodes.AsEnumerable())
                 {
-                    //Az FTL esetén csak a megadott pontpárokra kell a számítást elvégezni
-                    List<int> toNodesX = m_lstRoutes.Where(w=>w.fromNOD_ID==NOD_ID_FROM).GroupBy(g => g.toNOD_ID).Select(x => x.Key).ToList();
 
+                    var routePar = routePars.Where(w => w.RZN_ID_LIST == calcNode.Key.RZN_ID_LIST &&
+                                                    w.Weight == calcNode.Key.GVWR &&
+                                                    w.Height == calcNode.Key.Height &&
+                                                    w.Width == calcNode.Key.Width).FirstOrDefault();
                     i++;
                     dtStart = DateTime.Now;
 
-                    foreach (var xRZN in aRZN_ID_LIST)
-                    {
-                        List<boRoute> results = provider.GetAllRoutes(xRZN, NOD_ID_FROM, toNodesX,
-                                            NeighborsArrFull[xRZN], NeighborsArrCut[xRZN],
+                    List<int> lstToNodes = calcNode.Value;
+                    List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.fromNOD_ID, lstToNodes,
+                                            NeighborsArrFull[routePar], NeighborsArrCut[routePar],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 
-
-                        //A kiszámolt eredmények 'bedolgozása'
-                        foreach (boRoute route in results)
+                    //A kiszámolt eredmények 'bedolgozása'
+                    foreach (boRoute route in results)
+                    {
+                        //leválogatjuk, mely útvonalakra tartozik a számítás
+                        List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO 
+                                                                    && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR==routePar.Weight && x.Height==routePar.Height && x.Width==routePar.Width).ToList();
+                        foreach (FTLPMapRoute ftr in lstFTLR)
                         {
-                            //leválogatjuk, mely útvonalakra tartozik a számítás
-                            List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO && x.RZN_ID_LIST == xRZN).ToList();
-                            foreach (FTLPMapRoute ftr in lstFTLR)
+
+                            if (m_cacheRoutes)
                             {
+                                List<boRoute> rtl = new List<boRoute>();
+                                rtl.Add(route);
+                                m_bllRoute.WriteRoutes(rtl, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
+                            }
 
-                                if (m_cacheRoutes)
-                                {
-                                    List<boRoute> rtl = new List<boRoute>();
-                                    rtl.Add(route);
-                                    m_bllRoute.WriteRoutes(rtl, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
-                                }
-
-                                ftr.route = route;
-            //                    ftr.duration_nemkell = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
-                           }
-
+                            ftr.route = route;
+                            //                    ftr.duration_nemkell = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                         }
 
                     }
@@ -117,7 +118,7 @@ namespace FTLSupporter
                         Completed = false;
                         break;
                     }
-
+                
                     tspDiff = DateTime.Now - dtStart;
                     string infoText1 = i.ToString() + "/" + fromNodes.Count();
                     if (PMapIniParams.Instance.TestMode)

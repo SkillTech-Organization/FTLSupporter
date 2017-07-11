@@ -417,7 +417,7 @@ namespace PMap.Forms
                         PointLatLng end = new PointLatLng(tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
 
                         MapRoute result = null;
-                        result = m_bllRoute.GetMapRouteFromDB(tour.RZN_ID_LIST, tour.TourPoints[i].NOD_ID, tour.TourPoints[i + 1].NOD_ID);
+                        result = m_bllRoute.GetMapRouteFromDB(tour.TourPoints[i].NOD_ID, tour.TourPoints[i + 1].NOD_ID, tour.RZN_ID_LIST, tour.TRK_WEIGHT, tour.TRK_HEIGHT, tour.TRK_WIDTH);
                         if (result != null)
                         {
                             // add route

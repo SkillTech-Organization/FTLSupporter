@@ -55,20 +55,19 @@ namespace Map.LongProcess
             boundary = m_bllRoute.getBoundary(nodes);
 
 
-            Dictionary<string, List<int>[]> NeighborsFull = null;
-            Dictionary<string, List<int>[]> NeighborsCut = null;
+            Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
+            Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
 
+            boTruck Truck = RouteVisCommonVars.Instance.Truck;
+            var routePar = new CRoutePars() { RZN_ID_LIST = Truck.RZN_ID_LIST, Weight = Truck.TRK_WEIGHT, Height = Truck.TRK_HEIGHT, Width = Truck.TRK_WIDTH };
 
-            List<string> aRZN_ID_LIST = new List<string>();
-            aRZN_ID_LIST.Add(RouteVisCommonVars.Instance.Truck.RZN_ID_LIST);
-            RouteData.Instance.getNeigboursByBound(aRZN_ID_LIST, out  NeighborsFull, out NeighborsCut, boundary);
+            RouteData.Instance.getNeigboursByBound(routePar, out  NeighborsFull, out NeighborsCut, boundary);
 
             PMapRoutingProvider provider = new PMapRoutingProvider();
 
             string lastETLCODE_S = "";
             string lastETLCODE_F = "";
 
-            boTruck Truck = RouteVisCommonVars.Instance.Truck;
             double dTollMultiplier = bllPlanEdit.GetTollMultiplier(RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT, Truck.TRK_ENGINEEURO);
             RouteVisCommonVars.CRouteVis RouteVisS = new RouteVisCommonVars.CRouteVis(RouteVisCommonVars.TY_SHORTEST, PMapMessages.M_ROUTVIS_SHORTEST);
             RouteVisCommonVars.CRouteVis RouteVisF = new RouteVisCommonVars.CRouteVis(RouteVisCommonVars.TY_FASTEST, PMapMessages.M_ROUTVIS_FASTEST);
@@ -83,8 +82,8 @@ namespace Map.LongProcess
                     ProcessForm.SetInfoText(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.DEP_NAME + " --> " + RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.DEP_NAME);
 
                     //Legrövidebb út
-                    boRoute routeS = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, Truck.RZN_ID_LIST,
-                                    NeighborsFull[Truck.RZN_ID_LIST], NeighborsCut[Truck.RZN_ID_LIST],
+                    boRoute routeS = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, routePar,
+                                    NeighborsFull[routePar], NeighborsCut[routePar],
                                     ECalcMode.ShortestPath);
                     if (routeS != null)
                     {
@@ -96,8 +95,8 @@ namespace Map.LongProcess
                     }
 
                     //Leggyorsabb út
-                    boRoute routeF = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, Truck.RZN_ID_LIST,
-                                    NeighborsFull[Truck.RZN_ID_LIST], NeighborsCut[Truck.RZN_ID_LIST],
+                    boRoute routeF = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, routePar,
+                                    NeighborsFull[routePar], NeighborsCut[routePar],
                                     ECalcMode.FastestPath);
 
                     if (routeF != null)

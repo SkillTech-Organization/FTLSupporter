@@ -36,14 +36,14 @@ namespace PMapTestApp
         }
 
         private List<CCheckRouteDetails> m_listItems = new List<CCheckRouteDetails>();
-        private Dictionary<string, boRoute> m_route = null;
+        private Dictionary<CRoutePars, boRoute> m_route = null;
         private Dictionary<string, boSpeedProfValues> m_sp = null;
         private Dictionary<int, string> m_rdt = null;
 
         private bllRoute m_bllRoute;
         private bllSpeedProf m_bllSpeedProf;
 
-        public dlgCheckRouteDetails(Dictionary<string, boRoute> p_route)
+        public dlgCheckRouteDetails(Dictionary<CRoutePars, boRoute> p_route)
         {
             InitializeComponent();
             m_route = p_route;
@@ -110,10 +110,13 @@ namespace PMapTestApp
             m_listItems.Clear();
             int SPP_ID = (int)cmbSpeedProfile.SelectedValue;
             string sRZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue;
-            if (m_route[sRZN_ID_LIST].Route != null)
+
+
+            var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = 0, Height = 0, Width = 0 };  //A tesztben egyelőre nem foglalkozunk az útvonalkorátozásokkal
+            if (m_route[routePar].Route != null)
             {
                 double dDuration = 0;
-                foreach (boEdge edge in m_route[sRZN_ID_LIST].Edges)
+                foreach (boEdge edge in m_route[routePar].Edges)
                 {
                     double fSpeed = m_sp[edge.RDT_VALUE.ToString() + Global.SEP_COORD + SPP_ID.ToString()].SPV_VALUE;
 
@@ -138,7 +141,7 @@ namespace PMapTestApp
                     m_listItems.Add(item);
                     dDuration += (edge.EDG_LENGTH / (fSpeed / 3.6 * 60));
                 }
-                lblDistance.Text = m_route[sRZN_ID_LIST].DST_DISTANCE.ToString();
+                lblDistance.Text = m_route[routePar].DST_DISTANCE.ToString();
                 lblDuration.Text = dDuration.ToString();
                 gridRouteDetails.RefreshDataSource();
             }

@@ -45,12 +45,10 @@ namespace PMap.MapProvider
         ///
         /// Egy p_NOD_ID_FROM pontból az összes p_ListNOD_ID_TO pontba számított legrövidebb út számítása
         //
-        public List<boRoute> GetAllRoutes(string p_RZN_ID_LIST, int p_NOD_ID_FROM, List<int> p_ListNOD_ID_TO, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
+        public List<boRoute> GetAllRoutes(CRoutePars p_RoutePars, int p_NOD_ID_FROM, List<int> p_ListNOD_ID_TO, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
         {
 
-            if (p_RZN_ID_LIST == null)
-                p_RZN_ID_LIST = "";
-
+ 
             List<boRoute> result = new List<boRoute>();         //útvonal leíró az összes target-re
             DateTime dtStart = DateTime.Now;
             RouteCalculator calcEngine;
@@ -103,7 +101,7 @@ namespace PMap.MapProvider
                     }
                 }
 
-                result.Add(getRouteInfo(p_NOD_ID_FROM, NOD_ID_TO, p_RZN_ID_LIST, optimizedPath));
+                result.Add(getRouteInfo(p_NOD_ID_FROM, NOD_ID_TO, p_RoutePars, optimizedPath));
             }
             Console.WriteLine("GetAllRoutes " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
             return result;
@@ -126,11 +124,9 @@ namespace PMap.MapProvider
         /// <param name="p_NOD_ID_FROM"></param>
         /// <param name="p_NOD_ID_TO"></param>
         /// <returns></returns>
-        public boRoute GetRoute( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
+        public boRoute GetRoute( int p_NOD_ID_FROM, int p_NOD_ID_TO, CRoutePars p_routePar, List<int>[] p_neighborsArrFull, List<int>[] p_neighborsArrCut, ECalcMode p_calcMode)
         {
-            if (p_RZN_ID_LIST == null)
-                p_RZN_ID_LIST = "";
-
+  
             DateTime dtStart = DateTime.Now;
             RouteCalculator calcEngine;
 
@@ -158,7 +154,7 @@ namespace PMap.MapProvider
                 m_computedNeighborsArr = p_neighborsArrFull;
                 optimizedPath = calcEngine.CalcOneOptimizedPath(p_NOD_ID_FROM, p_NOD_ID_TO);
             }
-            var result = getRouteInfo(p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, optimizedPath);
+            var result = getRouteInfo(p_NOD_ID_FROM, p_NOD_ID_TO, p_routePar, optimizedPath);
             Console.WriteLine("GetRoute " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
 
 
@@ -183,16 +179,17 @@ namespace PMap.MapProvider
             return new MapRoute(pathPoints, "");
         }
 
-        private boRoute getRouteInfo( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int[] p_optimizedPath)
+        private boRoute getRouteInfo( int p_NOD_ID_FROM, int p_NOD_ID_TO, CRoutePars p_routePar, int[] p_optimizedPath)
         {
-            if (p_RZN_ID_LIST == null)
-                p_RZN_ID_LIST = "";
-
+   
             boRoute routeInfo = new boRoute()
             {
                 NOD_ID_FROM = p_NOD_ID_FROM,
-                RZN_ID_LIST = p_RZN_ID_LIST,
                 NOD_ID_TO = p_NOD_ID_TO,
+                RZN_ID_LIST = p_routePar.RZN_ID_LIST,
+                DST_WEIGHT = p_routePar.Weight,
+                DST_HEIGHT = p_routePar.Height,
+                DST_WIDTH = p_routePar.Width,
                 Route = getMapRoute(p_optimizedPath, p_NOD_ID_FROM),
                 Edges = new List<boEdge>()
             };

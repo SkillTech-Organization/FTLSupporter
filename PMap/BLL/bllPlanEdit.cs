@@ -789,7 +789,7 @@ namespace PMap.BLL
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
-                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_WIDTH, TRK_HEIGHT);
+                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_HEIGHT, TRK_WIDTH);
                                 if (dst != null)
                                 {
                                     foreach (boEdge edge in dst.Edges)
@@ -922,7 +922,7 @@ namespace PMap.BLL
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
-                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_WIDTH, TRK_HEIGHT);
+                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_HEIGHT, TRK_WIDTH);
                                 if (dst != null)
                                 {
                                     foreach (boEdge edge in dst.Edges)

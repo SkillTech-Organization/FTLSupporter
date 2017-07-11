@@ -7,7 +7,7 @@ using System.Text;
 namespace FTLSupporter
 {
     [Serializable]
-    internal class FTLPMapRoute
+    internal class FTLPMapRoute 
     {
         public class FTLToll
         {
@@ -47,6 +47,11 @@ namespace FTLSupporter
             return (this.fromNOD_ID == rk.fromNOD_ID && this.toNOD_ID == rk.toNOD_ID &&
                 this.RZN_ID_LIST == rk.RZN_ID_LIST && this.GVWR == rk.GVWR && this.Width == rk.Width && this.Height == rk.Height);
         }
+        public override int GetHashCode()
+        {
+            return string.Format("{0}_{1}_{2}_{3}_{4}_{5}", this.fromNOD_ID, this.toNOD_ID, this.RZN_ID_LIST, this.GVWR, this.Width, this.Height).GetHashCode();
+        }
+
 
     }
 }

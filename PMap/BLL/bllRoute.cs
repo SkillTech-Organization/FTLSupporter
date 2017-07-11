@@ -87,11 +87,14 @@ namespace PMap.BLL
                         DateTime dtStart = DateTime.Now;
 
                         SqlCommand command = new SqlCommand(null, DBA.Conn);
-                        command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
+                        command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_WEIGHT, DST_HEIGHT, DST_WIDTH, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_WEIGHT, @DST_HEIGHT, @DST_WIDTH, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
 
                         command.Parameters.Add(new SqlParameter("@NOD_ID_FROM", SqlDbType.Int, 0));
                         command.Parameters.Add(new SqlParameter("@NOD_ID_TO", SqlDbType.Int, 0));
                         command.Parameters.Add(new SqlParameter("@RZN_ID_LIST", SqlDbType.VarChar, Int32.MaxValue));
+                        command.Parameters.Add(new SqlParameter("@DST_WEIGHT", SqlDbType.Float, 0));
+                        command.Parameters.Add(new SqlParameter("@DST_HEIGHT", SqlDbType.Float, 0));
+                        command.Parameters.Add(new SqlParameter("@DST_WIDTH", SqlDbType.Float, 0));
                         command.Parameters.Add(new SqlParameter("@DST_DISTANCE", SqlDbType.Float, 0));
                         command.Parameters.Add(new SqlParameter("@DST_EDGES", SqlDbType.VarBinary, Int32.MaxValue));
                         command.Parameters.Add(new SqlParameter("@DST_POINTS", SqlDbType.VarBinary, Int32.MaxValue));
@@ -105,6 +108,10 @@ namespace PMap.BLL
                             command.Parameters["@NOD_ID_FROM"].Value = route.NOD_ID_FROM;
                             command.Parameters["@NOD_ID_TO"].Value = route.NOD_ID_TO;
                             command.Parameters["@RZN_ID_LIST"].Value = route.RZN_ID_LIST;
+                            command.Parameters["@DST_WEIGHT"].Value = route.DST_WEIGHT;
+                            command.Parameters["@DST_HEIGHT"].Value = route.DST_HEIGHT;
+                            command.Parameters["@DST_WIDTH"].Value = route.DST_WIDTH;
+
                             command.Parameters["@DST_DISTANCE"].Value = route.DST_DISTANCE;
                             if (route.Edges != null && route.Route != null)
                             {
@@ -143,15 +150,15 @@ namespace PMap.BLL
 
 
 
-        public boRoute GetRouteFromDB( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Width, int p_Height)
+        public boRoute GetRouteFromDB( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
 
             boRoute result = null;
             string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
-                           "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and  DST_WEIGHT = ? and DST_WIDTH = ? and DST_HEIGHT = ? ";
-            DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight,  p_Width,  p_Height);
+                           "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_WEIGHT = ? and DST_HEIGHT = ? and DST_WIDTH = ?  ";
+            DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
             if (dt.Rows.Count == 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
             {
@@ -161,8 +168,8 @@ namespace PMap.BLL
                 result.DST_DISTANCE = Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE");
                 result.RZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
                 result.DST_WEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_WEIGHT");
-                result.DST_WIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_WIDTH");
                 result.DST_HEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_HEIGHT");
+                result.DST_WIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_WIDTH");
 
 
                 byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
@@ -184,7 +191,8 @@ namespace PMap.BLL
                 {
                     sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                            "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                           "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME from EDG_EDGE  EDG " + Environment.NewLine +
+                           "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXWIDTH,EDG_MAXHEIGHT " + Environment.NewLine + 
+                           " from EDG_EDGE  EDG " + Environment.NewLine +
                            "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                            " where EDG.ID in (" + edges + ")";
 
@@ -225,15 +233,15 @@ namespace PMap.BLL
         }
 
 
-        public MapRoute GetMapRouteFromDB(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
+        public MapRoute GetMapRouteFromDB(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
 
             MapRoute result = null;
             string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
-                           "where RZN_ID_LIST=? and NOD_ID_FROM = ? and NOD_ID_TO = ? ";
-            DataTable dt = DBA.Query2DataTable(sSql, p_RZN_ID_LIST, p_NOD_ID_FROM, p_NOD_ID_TO);
+                           "where NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST=? and DST_WEIGHT = ? and DST_HEIGHT = ? and DST_WIDTH = ?";
+            DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
             if (dt.Rows.Count == 1)
             {
@@ -390,38 +398,39 @@ namespace PMap.BLL
         /// <returns></returns>
         public List<boRoute> GetDistancelessPlanNodes(int pPLN_ID)
         {
-            string sSQL = "--Meghatározzuk, milyen távolságrekordokra van szükésgünk  a tervben: " + Environment.NewLine +
-            "--    A tervben szereplő lerakók között képezünk NOD_ID_FROM NOD_ID_TO távolságokat.  " + Environment.NewLine +
-            "--    Ezekhez hozzárakjuk a tervben lévő járművek övezetlistáit (RESTZONE -it.)  " + Environment.NewLine +
-            " select  * from  " + Environment.NewLine +
-            "	(select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO   " + Environment.NewLine +
-            "	 from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
-            "		   union  " + Environment.NewLine +
-            "		   select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
-            "		   inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ?  " + Environment.NewLine +
-            "		   ) NOD_FROM  " + Environment.NewLine +
-            "	inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS   " + Environment.NewLine +
-            "	       union  " + Environment.NewLine +
-            "	      select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
-            "	      inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ?  " + Environment.NewLine +
-            "	      ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
-            "	) ALLNODES, " + Environment.NewLine +
-            "	(select distinct " + Environment.NewLine +
-            "	  isnull(stuff(  " + Environment.NewLine +
-            "	  (  " + Environment.NewLine +
-            "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
-            "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
-            "		  where TRZX.TRK_ID = TPL.TRK_ID " + Environment.NewLine +
-            "		  order by TRZX.RZN_ID   " + Environment.NewLine +
-            "		  FOR XML PATH('')  " + Environment.NewLine +
-            "	  ), 1, 1, ''), '') as RESTZONES  " + Environment.NewLine +
-            "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
-            "	  where TPL.PLN_ID = ?  " + Environment.NewLine +
-            "	) ALLRSTZ " + Environment.NewLine +
-            "--kivonjuk a létező távolságokat  " + Environment.NewLine +
-            "EXCEPT  " + Environment.NewLine +
-            "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES from DST_DISTANCE DST  " + Environment.NewLine +
-            "order by 1,2,3";
+
+           string sSQL = "; WITH CTE_TPL as (" + Environment.NewLine +
+                    "select distinct " + Environment.NewLine +
+                    "	  isnull(stuff(  " + Environment.NewLine +
+                    "	  (  " + Environment.NewLine +
+                    "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
+                    "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
+                    "		  where TRZX.TRK_ID = TPL.TRK_ID " + Environment.NewLine +
+                    "		  order by TRZX.RZN_ID " + Environment.NewLine +
+                    "		  FOR XML PATH('') " + Environment.NewLine +
+                    "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
+                    "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
+                    "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                    "	  where TPL.PLN_ID = ? " + Environment.NewLine +
+                    ") " + Environment.NewLine +
+                    "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_HEIGHT, CTE_TPL.TRK_HEIGHT as DST_WIDTH, CTE_TPL.TRK_WIDTH as DST_WIDTH " + Environment.NewLine +
+                    "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
+                    "		union  " + Environment.NewLine +
+                    "		select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
+                    "		inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "		) NOD_FROM  " + Environment.NewLine +
+                    "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                    "	    union  " + Environment.NewLine +
+                    "	    select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
+                    "	    inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = " + Environment.NewLine +
+                    "	    ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
+                    "inner join CTE_TPL on 1=1 " + Environment.NewLine +
+                    "EXCEPT  " + Environment.NewLine +
+                    "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_WEIGHT, DST_HEIGHT, DST_WIDTH from DST_DISTANCE DST " + Environment.NewLine +
+                    "order by 1,2,3,4,5,6";
+
+
+
 
             DataTable dt = DBA.Query2DataTable(sSQL, pPLN_ID, pPLN_ID, pPLN_ID);
             return (from row in dt.AsEnumerable()
@@ -501,40 +510,36 @@ namespace PMap.BLL
         public List<boRoute> GetDistancelessOrderNodes(DateTime p_ORD_DATE_S, DateTime p_ORD_DATE_E)
         {
 
-
-            string sSQL = "select * from " + Environment.NewLine +
-                          "  ( " + Environment.NewLine +
-                          "      --Összegyűjtjük a megrednelésekben szereplő NODE-ID-ket " + Environment.NewLine +
-                          "      select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO " + Environment.NewLine +
-                          "      from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
-                          "          union " + Environment.NewLine +
-                          "          select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
-                          "          inner join ORD_ORDER ORD on ORD.DEP_ID = DEP.ID and ORD_DATE >= ? and ORD_DATE <= ? " + Environment.NewLine +
-                          "          ) NOD_FROM  " + Environment.NewLine +
-                          "      inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
-                          "          union " + Environment.NewLine +
-                          "          select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
-                          "          inner join ORD_ORDER ORD on ORD.DEP_ID = DEP.ID and ORD_DATE >= ? and ORD_DATE <= ? " + Environment.NewLine +
-                          "          ) NOD_TO on NOD_TO.ID <> NOD_FROM.ID " + Environment.NewLine +
-                          "      where NOD_FROM.ID <> 0 and  NOD_TO.ID <> 0 " + Environment.NewLine +
-                          "  )ALLNODES, " + Environment.NewLine +
-                          "  --Hozzárakjuk a rendszerben előforduló, járművekhez rendelt összes övezet-lista kiosztást  " + Environment.NewLine +
-                          "  (select distinct  " + Environment.NewLine +
-                          "    isnull( stuff(  " + Environment.NewLine +
-                          "    (  " + Environment.NewLine +
-                          "        select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
-                          "        from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
-                          "        where TRZX.TRK_ID = TRK.ID " + Environment.NewLine +
-                          "        order by TRZX.RZN_ID   " + Environment.NewLine +
-                          "        FOR XML PATH('')  " + Environment.NewLine +
-                          "    ), 1, 1, ''), '') as RESTZONES  " + Environment.NewLine +
-                          "    from TRK_TRUCK TRK " + Environment.NewLine +
-                          "    where TRK.TRK_DELETED = 0  " + Environment.NewLine +
-                          "  ) ALLRSTZ " + Environment.NewLine +
-                          "  --kivonjuk a létező távolságokat  " + Environment.NewLine +
-                          "  EXCEPT  " + Environment.NewLine +
-                          "  select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES from DST_DISTANCE DST  " + Environment.NewLine +
-                          "  order by 1,2,3";
+            string sSQL = "; WITH CTE_TRK as (" + Environment.NewLine +
+                            "select distinct " + Environment.NewLine +
+                            "	  isnull(stuff(  " + Environment.NewLine +
+                            "	  (  " + Environment.NewLine +
+                            "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
+                            "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
+                            "		  where TRZX.TRK_ID = TRK.ID " + Environment.NewLine +
+                            "		  order by TRZX.RZN_ID   " + Environment.NewLine +
+                            "		  FOR XML PATH('')  " + Environment.NewLine +
+                            "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
+                            "	  from TRK_TRUCK TRK " + Environment.NewLine +
+                            "	  where TRK_ACTIVE = 1 " + Environment.NewLine +
+                            ") " + Environment.NewLine +
+                            "--Összegy√jtjük a megrednelésekben szereplo NODE-ID-ket  " + Environment.NewLine +
+                            "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TRK.RESTZONES, CTE_TRK.TRK_WEIGHT as DST_WEIGHT, CTE_TRK.TRK_HEIGHT as DST_HEIGHT, CTE_TRK.TRK_WIDTH  as DST_WIDTH " + Environment.NewLine +
+                            "from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                            "union " + Environment.NewLine +
+                            "select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
+                            "inner join ORD_ORDER ORD on ORD.DEP_ID = DEP.ID and ORD_DATE >= ? and ORD_DATE <= ? " + Environment.NewLine +
+                            ") NOD_FROM  " + Environment.NewLine +
+                            "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                            "union " + Environment.NewLine +
+                            "select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
+                            "inner join ORD_ORDER ORD on ORD.DEP_ID = DEP.ID and ORD_DATE >= ? and ORD_DATE <= ? " + Environment.NewLine +
+                            ") NOD_TO on NOD_TO.ID <> NOD_FROM.ID " + Environment.NewLine +
+                            "inner join CTE_TRK on 1=1 " + Environment.NewLine +
+                            "where NOD_FROM.ID <> 0 and  NOD_TO.ID <> 0 " + Environment.NewLine +
+                            "EXCEPT  " + Environment.NewLine +
+                            "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_WEIGHT, DST_HEIGHT, DST_WIDTH from DST_DISTANCE DST  " + Environment.NewLine +
+                            "order by 1,2,3,4,5,6";
 
 
             DataTable dt = DBA.Query2DataTable(sSQL, p_ORD_DATE_S, p_ORD_DATE_E, p_ORD_DATE_S, p_ORD_DATE_E);
