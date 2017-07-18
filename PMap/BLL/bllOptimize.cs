@@ -626,8 +626,8 @@ namespace PMap.BLL
                  "where TOD.PLN_ID = ? and TPL.TPL_AVAIL_S <= PLN_DATE_E  " + Environment.NewLine +
                  " and  isnull( TPL.TPL_NOREPLAN, 0) = 0 and isnull( TPL.TPL_LOCKED,0) = 0 and ORD.CTP_ID in ( select CTP_ID from TCP_TRUCKCARGOTYPE TCP where TCP.TRK_ID = TRK.ID) " + Environment.NewLine +
                  " and (TRK_LENGTH is null OR TRK_LENGTH=0 or TRK_LENGTH>=ORD_LENGTH) " + Environment.NewLine +
-                 " and (TRK_WIDTH is null  OR TRK_WIDTH =0 or TRK_WIDTH >=ORD_WIDTH)  " + Environment.NewLine +
-                 " and (TRK_HEIGHT is null OR TRK_HEIGHT=0 or TRK_HEIGHT>=ORD_HEIGHT) ";
+                 " and (TRK_XWIDTH is null  OR TRK_XWIDTH =0 or TRK_XWIDTH >=ORD_WIDTH)  " + Environment.NewLine +
+                 " and (TRK_XHEIGHT is null OR TRK_XHEIGHT=0 or TRK_XHEIGHT>=ORD_HEIGHT) ";
 
             if (boOpt.TPL_ID <= 0)
             {

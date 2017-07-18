@@ -202,7 +202,7 @@ namespace PMap.BLL
 
 
         /// <summary>
-        /// 
+        /// Járműraktér-méretr ellenőrzés
         /// </summary>
         /// <param name="p_TOD_ID"></param>
         /// <param name="p_TPL_ID"></param>

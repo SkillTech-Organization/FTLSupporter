@@ -59,7 +59,7 @@ namespace Map.LongProcess
             Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
 
             boTruck Truck = RouteVisCommonVars.Instance.Truck;
-            var routePar = new CRoutePars() { RZN_ID_LIST = Truck.RZN_ID_LIST, Weight = Truck.TRK_WEIGHT, Height = Truck.TRK_HEIGHT, Width = Truck.TRK_WIDTH };
+            var routePar = new CRoutePars() { RZN_ID_LIST = Truck.RZN_ID_LIST, Weight = Truck.TRK_WEIGHT, Height = Truck.TRK_XHEIGHT, Width = Truck.TRK_XWIDTH };
 
             RouteData.Instance.getNeigboursByBound(routePar, out  NeighborsFull, out NeighborsCut, boundary);
 

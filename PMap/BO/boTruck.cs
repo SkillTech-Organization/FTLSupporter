@@ -76,16 +76,20 @@ namespace PMap.BO
 
         [WriteFieldAttribute(Insert = false, Update = false)]
         public Color TRK_COLOR { get; set; }
-        
-        
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public int TRK_LENGTH { get; set; }
+
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int TRK_WEIGHT { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public int TRK_WIDTH { get; set; }
+        public int TRK_XHEIGHT { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int TRK_XWIDTH { get; set; }
+
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int TRK_HEIGHT { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int TRK_WIDTH { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int TRK_LENGTH { get; set; }
 
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int TRK_AXLENUM { get; set; }

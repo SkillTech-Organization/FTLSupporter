@@ -57,7 +57,8 @@ namespace PMap.BLL
                           "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETLCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
                           "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
                           "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
-                          "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, NOD1.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO " + Environment.NewLine +
+                          "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, NOD1.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
+                          "EDG_MAXWEIGHT, EDG_MAXWIDTH, EDG_MAXHEIGHT " + Environment.NewLine +
                           "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
                           "inner join NOD_NODE (NOLOCK) NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
                           "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
@@ -408,12 +409,12 @@ namespace PMap.BLL
                     "		  where TRZX.TRK_ID = TPL.TRK_ID " + Environment.NewLine +
                     "		  order by TRZX.RZN_ID " + Environment.NewLine +
                     "		  FOR XML PATH('') " + Environment.NewLine +
-                    "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
+                    "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
                     "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
                     "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                     "	  where TPL.PLN_ID = ? " + Environment.NewLine +
                     ") " + Environment.NewLine +
-                    "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_HEIGHT, CTE_TPL.TRK_HEIGHT as DST_WIDTH, CTE_TPL.TRK_WIDTH as DST_WIDTH " + Environment.NewLine +
+                    "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_WEIGHT, CTE_TPL.TRK_XHEIGHT as DST_HEIGHT, CTE_TPL.TRK_XWIDTH as DST_WIDTH " + Environment.NewLine +
                     "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
                     "		union  " + Environment.NewLine +
                     "		select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
@@ -519,12 +520,12 @@ namespace PMap.BLL
                             "		  where TRZX.TRK_ID = TRK.ID " + Environment.NewLine +
                             "		  order by TRZX.RZN_ID   " + Environment.NewLine +
                             "		  FOR XML PATH('')  " + Environment.NewLine +
-                            "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
+                            "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
                             "	  from TRK_TRUCK TRK " + Environment.NewLine +
                             "	  where TRK_ACTIVE = 1 " + Environment.NewLine +
                             ") " + Environment.NewLine +
                             "--Összegy√jtjük a megrednelésekben szereplo NODE-ID-ket  " + Environment.NewLine +
-                            "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TRK.RESTZONES, CTE_TRK.TRK_WEIGHT as DST_WEIGHT, CTE_TRK.TRK_HEIGHT as DST_HEIGHT, CTE_TRK.TRK_WIDTH  as DST_WIDTH " + Environment.NewLine +
+                            "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TRK.RESTZONES, CTE_TRK.TRK_WEIGHT as DST_WEIGHT, CTE_TRK.TRK_XHEIGHT as DST_HEIGHT, CTE_TRK.TRK_XWIDTH  as DST_WIDTH " + Environment.NewLine +
                             "from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
                             "union " + Environment.NewLine +
                             "select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
@@ -561,7 +562,7 @@ namespace PMap.BLL
         /// </summary>
         /// <param name="p_maxRecCount"></param>
         /// <returns></returns>
-        public List<boRoute> GetDistancelessNodesForAllZones(int p_maxRecCount)
+        public List<boRoute> GetDistancelessNodesForAllZones__NEMKELL(int p_maxRecCount)
         {
             string sSQL = "select top " + p_maxRecCount.ToString() + " * from ( select * from " + Environment.NewLine +
                           "  ( " + Environment.NewLine +
@@ -611,7 +612,7 @@ namespace PMap.BLL
         /// </summary>
         /// <param name="p_lstDEP_ID"></param>
         /// <returns></returns>
-        public List<boRoute> GetDistancelessNodesForAllZonesByDepList(List<int> p_lstDEP_ID)
+        public List<boRoute> GetDistancelessNodesForAllZonesByDepList__NEMKELL(List<int> p_lstDEP_ID)
         {
             string sDepIDList = string.Join(",", p_lstDEP_ID.Select(x => x.ToString()).ToArray());
 
@@ -657,8 +658,8 @@ namespace PMap.BLL
             {
                 try
                 {
-                    DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and NOD_ID_FROM=? and NOD_ID_TO=?", p_Route.RZN_ID_LIST, p_Route.NOD_ID_FROM, p_Route.NOD_ID_TO);
-                    String sSql = "insert into DST_DISTANCE ( RZN_ID_LIST, NOD_ID_FROM, NOD_ID_TO, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(?, ?, ?, ?, ?, ?)";
+                    DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and NOD_ID_FROM=? and NOD_ID_TO=? and DST_WEIGHT=? and DST_HEIGHT=? and DST_WIDTH=? ", p_Route.RZN_ID_LIST, p_Route.NOD_ID_FROM, p_Route.NOD_ID_TO, p_Route.DST_WEIGHT, p_Route.DST_HEIGHT, p_Route.DST_WIDTH);
+                    String sSql = "insert into DST_DISTANCE ( RZN_ID_LIST, NOD_ID_FROM, NOD_ID_TO, DST_WEIGHT, DST_HEIGHT, DST_WIDTH, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     byte[] bEdges = null;
                     byte[] bPoints = null;
 
@@ -678,6 +679,9 @@ namespace PMap.BLL
                         p_Route.RZN_ID_LIST,
                         p_Route.NOD_ID_FROM,
                         p_Route.NOD_ID_TO,
+                        p_Route.DST_WEIGHT,
+                        p_Route.DST_HEIGHT,
+                        p_Route.DST_WIDTH,
                         p_Route.DST_DISTANCE,
                         bEdges,
                         bPoints
@@ -711,7 +715,7 @@ namespace PMap.BLL
         {
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
               "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME from EDG_EDGE  EDG " + Environment.NewLine +
+              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH from EDG_EDGE  EDG " + Environment.NewLine +
               "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
               " where EDG.ID = ?  ";
 
@@ -723,7 +727,7 @@ namespace PMap.BLL
 
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                    "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME from EDG_EDGE  EDG " + Environment.NewLine +
+                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH from EDG_EDGE  EDG " + Environment.NewLine +
                    "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                    " where EDG.NOD_NUM = ? or EDG.NOD_NUM2 = ? ";
             if (p_street != "")
@@ -747,6 +751,9 @@ namespace PMap.BLL
                     EDG_ONEWAY = Util.getFieldValue<bool>(dt.Rows[0], "EDG_ONEWAY"),
                     EDG_DESTTRAFFIC = Util.getFieldValue<bool>(dt.Rows[0], "EDG_DESTTRAFFIC"),
                     EDG_ETLCODE = Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"),
+                    EDG_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXWEIGHT"),
+                    EDG_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXHEIGHT"),
+                    EDG_MAXWIDTH = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXWIDTH"),
                     Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"))
                            .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
 
@@ -824,25 +831,10 @@ namespace PMap.BLL
             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
 
 
-            /*
-             *             string sSql2 = " select top 1  " + Environment.NewLine +
-            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ID else NOD2.ID end as ID,  " + Environment.NewLine +
-            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ZIP_NUM else NOD2.ZIP_NUM end as ZIP_NUM,  " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") as XDIFF  " + Environment.NewLine +
-            "from EDG_EDGE EDG  " + Environment.NewLine +
-            "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM  " + Environment.NewLine +
-            "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2  " + Environment.NewLine +
-            "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and  " + Environment.NewLine +
-            "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   and  " + Environment.NewLine +
-            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0} ) and " + Environment.NewLine +
-            " dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
-            "  (case when (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0) then {1}  else {2} end) " + Environment.NewLine +
-            "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") asc ";
-
-            */
             string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
             "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
-            "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4 " + Environment.NewLine +
+            "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
+            "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH " + Environment.NewLine +
             "from EDG_EDGE EDG " + Environment.NewLine +
             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
@@ -939,7 +931,7 @@ namespace PMap.BLL
             "dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF" + Environment.NewLine +
             "from CTE " + Environment.NewLine +
             "where ( RZN_ID is null  " + Environment.NewLine +
-            "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN_ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN_ID,0)), '," + p_RZN_ID_LIST + "') > 0) " : "") + Environment.NewLine +
+            "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN_ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN_ID,0))+',', '," + p_RZN_ID_LIST + ",') > 0) " : "") + Environment.NewLine +
             "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG_EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
             " ) and  " + Environment.NewLine +
             "dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +

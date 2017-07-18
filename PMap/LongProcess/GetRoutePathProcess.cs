@@ -133,12 +133,12 @@ namespace PMap.LongProcess
                     if (p_tour.TourPoints[i].NOD_ID != p_tour.TourPoints[i + 1].NOD_ID)
                     {
 
-                        result = m_bllRoute.GetMapRouteFromDB(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, p_tour.RZN_ID_LIST, p_tour.TRK_WEIGHT, p_tour.TRK_HEIGHT, p_tour.TRK_WIDTH);
+                        result = m_bllRoute.GetMapRouteFromDB(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, p_tour.RZN_ID_LIST, p_tour.TRK_WEIGHT, p_tour.TRK_XHEIGHT, p_tour.TRK_XWIDTH);
                         if (result == null)
                         {
                             RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
-                            var routePar = new CRoutePars() { RZN_ID_LIST = p_tour.RZN_ID_LIST, Weight = p_tour.TRK_WEIGHT, Height = p_tour.TRK_HEIGHT, Width = p_tour.TRK_WIDTH };
+                            var routePar = new CRoutePars() { RZN_ID_LIST = p_tour.RZN_ID_LIST, Weight = p_tour.TRK_WEIGHT, Height = p_tour.TRK_XHEIGHT, Width = p_tour.TRK_XWIDTH };
                             //TODO:lehet, hogy nem kellene térkép kivágást végeznni itt
                             if (neighborsFull == null || neighborsCut == null)
                             {

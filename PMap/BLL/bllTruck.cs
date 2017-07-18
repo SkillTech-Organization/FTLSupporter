@@ -47,41 +47,44 @@ namespace PMap.BLL
             var linq = (from rec in dt.AsEnumerable()
                         orderby rec.Field<int>("ID")
                         select new boTruck
-            {
+                        {
 
-                ID = Util.getFieldValue<int>(rec, "ID"),
-                CRR_ID = Util.getFieldValue<int>(rec, "CRR_ID"),
-                SPP_ID = Util.getFieldValue<int>(rec, "SPP_ID"),
-                WHS_ID = Util.getFieldValue<int>(rec, "WHS_ID"),
-                CPP_ID = Util.getFieldValue<int>(rec, "CPP_ID"),
-                TFP_ID = Util.getFieldValue<int>(rec, "TFP_ID"),
-                RZN_ID_LIST = Util.getFieldValue<string>(rec, "RZN_ID_LIST"),
-                TFP_ID_INC = Util.getFieldValue<int>(rec, "TFP_ID_INC"),
-                TFP_ID_OUT = Util.getFieldValue<int>(rec, "TFP_ID_OUT"),
-                TRK_CODE = Util.getFieldValue<string>(rec, "TRK_CODE"),
-                TRK_REG_NUM = Util.getFieldValue<string>(rec, "TRK_REG_NUM"),
-                TRK_TRAILER = Util.getFieldValue<string>(rec, "TRK_TRAILER"),
+                            ID = Util.getFieldValue<int>(rec, "ID"),
+                            CRR_ID = Util.getFieldValue<int>(rec, "CRR_ID"),
+                            SPP_ID = Util.getFieldValue<int>(rec, "SPP_ID"),
+                            WHS_ID = Util.getFieldValue<int>(rec, "WHS_ID"),
+                            CPP_ID = Util.getFieldValue<int>(rec, "CPP_ID"),
+                            TFP_ID = Util.getFieldValue<int>(rec, "TFP_ID"),
+                            RZN_ID_LIST = Util.getFieldValue<string>(rec, "RZN_ID_LIST"),
+                            TFP_ID_INC = Util.getFieldValue<int>(rec, "TFP_ID_INC"),
+                            TFP_ID_OUT = Util.getFieldValue<int>(rec, "TFP_ID_OUT"),
+                            TRK_CODE = Util.getFieldValue<string>(rec, "TRK_CODE"),
+                            TRK_REG_NUM = Util.getFieldValue<string>(rec, "TRK_REG_NUM"),
+                            TRK_TRAILER = Util.getFieldValue<string>(rec, "TRK_TRAILER"),
 
-                TRK_ACTIVE = Util.getFieldValue<bool>(rec, "TRK_ACTIVE"),
-                TRK_GPS = Util.getFieldValue<bool>(rec, "TRK_GPS"),
-                TRK_BACKPANEL = Util.getFieldValue<bool>(rec, "TRK_BACKPANEL"),
-                TRK_LOGO = Util.getFieldValue<bool>(rec, "TRK_LOGO"),
+                            TRK_ACTIVE = Util.getFieldValue<bool>(rec, "TRK_ACTIVE"),
+                            TRK_GPS = Util.getFieldValue<bool>(rec, "TRK_GPS"),
+                            TRK_BACKPANEL = Util.getFieldValue<bool>(rec, "TRK_BACKPANEL"),
+                            TRK_LOGO = Util.getFieldValue<bool>(rec, "TRK_LOGO"),
 
-                TRK_IDLETIME = Util.getFieldValue<int>(rec, "TRK_IDLETIME"),
-                TRK_BUNDTIME = Util.getFieldValue<double>(rec, "TRK_BUNDTIME"),
-                TRK_BUNDPOINT = Util.getFieldValue<double>(rec, "TRK_BUNDPOINT"),
-                TRK_BUNDDATE = Util.getFieldValue<DateTime>(rec, "TRK_BUNDDATE"),
-                TRK_COLOR = Util.ConvertWindowsRGBToColour(Util.getFieldValue<int>(rec, "TRK_COLOR")),
-                TRK_LENGTH = Util.getFieldValue<int>(rec, "TRK_LENGTH"),
-                TRK_WIDTH = Util.getFieldValue<int>(rec, "TRK_WIDTH"),
-                TRK_HEIGHT = Util.getFieldValue<int>(rec, "TRK_HEIGHT"),
-                TRK_AXLENUM = Util.getFieldValue<int>(rec, "TRK_AXLENUM"),
-                TRK_ETOLLCAT = Util.getFieldValue<int>(rec, "TRK_ETOLLCAT"),
-                TRK_ENGINEEURO = Util.getFieldValue<int>(rec, "TRK_ENGINEEURO"),
-                TRK_COMMENT = Util.getFieldValue<string>(rec, "TRK_COMMENT"),
-                TRK_DELETED = Util.getFieldValue<bool>(rec, "TRK_DELETED"),
-                LASTDATE = Util.getFieldValue<DateTime>(rec, "LASTDATE")
-            });
+                            TRK_IDLETIME = Util.getFieldValue<int>(rec, "TRK_IDLETIME"),
+                            TRK_BUNDTIME = Util.getFieldValue<double>(rec, "TRK_BUNDTIME"),
+                            TRK_BUNDPOINT = Util.getFieldValue<double>(rec, "TRK_BUNDPOINT"),
+                            TRK_BUNDDATE = Util.getFieldValue<DateTime>(rec, "TRK_BUNDDATE"),
+                            TRK_COLOR = Util.ConvertWindowsRGBToColour(Util.getFieldValue<int>(rec, "TRK_COLOR")),
+                            TRK_WEIGHT = Util.getFieldValue<int>(rec, "TRK_WEIGHT"),
+                            TRK_XHEIGHT = Util.getFieldValue<int>(rec, "TRK_XHEIGHT"),
+                            TRK_XWIDTH = Util.getFieldValue<int>(rec, "TRK_XWIDTH"),
+                            TRK_LENGTH = Util.getFieldValue<int>(rec, "TRK_LENGTH"),
+                            TRK_WIDTH = Util.getFieldValue<int>(rec, "TRK_WIDTH"),
+                            TRK_HEIGHT = Util.getFieldValue<int>(rec, "TRK_HEIGHT"),
+                            TRK_AXLENUM = Util.getFieldValue<int>(rec, "TRK_AXLENUM"),
+                            TRK_ETOLLCAT = Util.getFieldValue<int>(rec, "TRK_ETOLLCAT"),
+                            TRK_ENGINEEURO = Util.getFieldValue<int>(rec, "TRK_ENGINEEURO"),
+                            TRK_COMMENT = Util.getFieldValue<string>(rec, "TRK_COMMENT"),
+                            TRK_DELETED = Util.getFieldValue<bool>(rec, "TRK_DELETED"),
+                            LASTDATE = Util.getFieldValue<DateTime>(rec, "LASTDATE")
+                        });
             return linq.ToList();
         }
 

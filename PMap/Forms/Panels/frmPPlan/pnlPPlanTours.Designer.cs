@@ -65,6 +65,9 @@
             this.gridColTRK_ETOLLCAT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColTollMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTOURPOINTCNT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_WEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_XHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_XWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTours)).BeginInit();
@@ -92,7 +95,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(496, 445);
+            this.panel1.Size = new System.Drawing.Size(1511, 445);
             this.panel1.TabIndex = 0;
             // 
             // gridTours
@@ -105,7 +108,7 @@
             this.reChkSelect,
             this.repositoryItemColorEdit1,
             this.repositoryItemLockedEdit});
-            this.gridTours.Size = new System.Drawing.Size(494, 443);
+            this.gridTours.Size = new System.Drawing.Size(1509, 443);
             this.gridTours.TabIndex = 0;
             this.gridTours.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewTours});
@@ -133,9 +136,12 @@
             this.gridColumnCPP_LOADVOL,
             this.gridColumnVOLErr,
             this.gridColumnQTYErr,
-            this.gridColumnTRK_LENGTH,
-            this.gridColumnTRK_WIDTH,
+            this.gridColumnTRK_WEIGHT,
+            this.gridColumnTRK_XHEIGHT,
+            this.gridColumnTRK_XWIDTH,
             this.gridColumnTRK_HEIGHT,
+            this.gridColumnTRK_WIDTH,
+            this.gridColumnTRK_LENGTH,
             this.gridColumnSelect,
             this.gridColumnLOCKED,
             this.gridColTRK_ENGINEEURO,
@@ -184,6 +190,7 @@
             this.gridColumnCOLOR.MaxWidth = 45;
             this.gridColumnCOLOR.MinWidth = 45;
             this.gridColumnCOLOR.Name = "gridColumnCOLOR";
+            this.gridColumnCOLOR.OptionsColumn.AllowEdit = false;
             this.gridColumnCOLOR.Visible = true;
             this.gridColumnCOLOR.VisibleIndex = 1;
             this.gridColumnCOLOR.Width = 45;
@@ -213,7 +220,7 @@
             this.gridColumnTRUCK.OptionsColumn.AllowEdit = false;
             this.gridColumnTRUCK.Visible = true;
             this.gridColumnTRUCK.VisibleIndex = 2;
-            this.gridColumnTRUCK.Width = 20;
+            this.gridColumnTRUCK.Width = 58;
             // 
             // gridColumnSTART
             // 
@@ -225,7 +232,7 @@
             this.gridColumnSTART.OptionsColumn.AllowEdit = false;
             this.gridColumnSTART.Visible = true;
             this.gridColumnSTART.VisibleIndex = 3;
-            this.gridColumnSTART.Width = 20;
+            this.gridColumnSTART.Width = 58;
             // 
             // gridColumnEND
             // 
@@ -237,7 +244,7 @@
             this.gridColumnEND.OptionsColumn.AllowEdit = false;
             this.gridColumnEND.Visible = true;
             this.gridColumnEND.VisibleIndex = 4;
-            this.gridColumnEND.Width = 20;
+            this.gridColumnEND.Width = 58;
             // 
             // gridColumnTDURATION
             // 
@@ -248,8 +255,8 @@
             this.gridColumnTDURATION.Name = "gridColumnTDURATION";
             this.gridColumnTDURATION.OptionsColumn.AllowEdit = false;
             this.gridColumnTDURATION.Visible = true;
-            this.gridColumnTDURATION.VisibleIndex = 17;
-            this.gridColumnTDURATION.Width = 20;
+            this.gridColumnTDURATION.VisibleIndex = 20;
+            this.gridColumnTDURATION.Width = 49;
             // 
             // gridColumnQTY
             // 
@@ -261,7 +268,7 @@
             this.gridColumnQTY.OptionsColumn.AllowEdit = false;
             this.gridColumnQTY.Visible = true;
             this.gridColumnQTY.VisibleIndex = 5;
-            this.gridColumnQTY.Width = 20;
+            this.gridColumnQTY.Width = 58;
             // 
             // gridColumnVOL
             // 
@@ -273,7 +280,7 @@
             this.gridColumnVOL.OptionsColumn.AllowEdit = false;
             this.gridColumnVOL.Visible = true;
             this.gridColumnVOL.VisibleIndex = 6;
-            this.gridColumnVOL.Width = 20;
+            this.gridColumnVOL.Width = 58;
             // 
             // gridColumnDST
             // 
@@ -285,7 +292,7 @@
             this.gridColumnDST.OptionsColumn.AllowEdit = false;
             this.gridColumnDST.Visible = true;
             this.gridColumnDST.VisibleIndex = 7;
-            this.gridColumnDST.Width = 20;
+            this.gridColumnDST.Width = 58;
             // 
             // gridColumnTOLL
             // 
@@ -297,7 +304,7 @@
             this.gridColumnTOLL.OptionsColumn.AllowEdit = false;
             this.gridColumnTOLL.Visible = true;
             this.gridColumnTOLL.VisibleIndex = 8;
-            this.gridColumnTOLL.Width = 20;
+            this.gridColumnTOLL.Width = 58;
             // 
             // gridColumnQTYDETAILS
             // 
@@ -307,7 +314,7 @@
             this.gridColumnQTYDETAILS.OptionsColumn.AllowEdit = false;
             this.gridColumnQTYDETAILS.Visible = true;
             this.gridColumnQTYDETAILS.VisibleIndex = 9;
-            this.gridColumnQTYDETAILS.Width = 20;
+            this.gridColumnQTYDETAILS.Width = 58;
             // 
             // gridColumnVOLDETAILS
             // 
@@ -317,7 +324,7 @@
             this.gridColumnVOLDETAILS.OptionsColumn.AllowEdit = false;
             this.gridColumnVOLDETAILS.Visible = true;
             this.gridColumnVOLDETAILS.VisibleIndex = 12;
-            this.gridColumnVOLDETAILS.Width = 20;
+            this.gridColumnVOLDETAILS.Width = 56;
             // 
             // gridColumnTOLLDETAILS
             // 
@@ -326,8 +333,8 @@
             this.gridColumnTOLLDETAILS.Name = "gridColumnTOLLDETAILS";
             this.gridColumnTOLLDETAILS.OptionsColumn.AllowEdit = false;
             this.gridColumnTOLLDETAILS.Visible = true;
-            this.gridColumnTOLLDETAILS.VisibleIndex = 22;
-            this.gridColumnTOLLDETAILS.Width = 20;
+            this.gridColumnTOLLDETAILS.VisibleIndex = 25;
+            this.gridColumnTOLLDETAILS.Width = 127;
             // 
             // gridColumnCNTDETAILS
             // 
@@ -337,7 +344,7 @@
             this.gridColumnCNTDETAILS.OptionsColumn.AllowEdit = false;
             this.gridColumnCNTDETAILS.Visible = true;
             this.gridColumnCNTDETAILS.VisibleIndex = 13;
-            this.gridColumnCNTDETAILS.Width = 20;
+            this.gridColumnCNTDETAILS.Width = 56;
             // 
             // gridColumnCPP_LOADQTY
             // 
@@ -349,7 +356,7 @@
             this.gridColumnCPP_LOADQTY.OptionsColumn.AllowEdit = false;
             this.gridColumnCPP_LOADQTY.Visible = true;
             this.gridColumnCPP_LOADQTY.VisibleIndex = 10;
-            this.gridColumnCPP_LOADQTY.Width = 20;
+            this.gridColumnCPP_LOADQTY.Width = 58;
             // 
             // gridColumnCPP_LOADVOL
             // 
@@ -361,49 +368,50 @@
             this.gridColumnCPP_LOADVOL.OptionsColumn.AllowEdit = false;
             this.gridColumnCPP_LOADVOL.Visible = true;
             this.gridColumnCPP_LOADVOL.VisibleIndex = 11;
-            this.gridColumnCPP_LOADVOL.Width = 20;
+            this.gridColumnCPP_LOADVOL.Width = 57;
             // 
             // gridColumnTRK_LENGTH
             // 
-            this.gridColumnTRK_LENGTH.Caption = "Hosszúság";
+            this.gridColumnTRK_LENGTH.Caption = "Rakt.hossz";
             this.gridColumnTRK_LENGTH.DisplayFormat.FormatString = "#,#0.00";
             this.gridColumnTRK_LENGTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnTRK_LENGTH.FieldName = "TRK_LENGTH";
             this.gridColumnTRK_LENGTH.Name = "gridColumnTRK_LENGTH";
             this.gridColumnTRK_LENGTH.OptionsColumn.AllowEdit = false;
             this.gridColumnTRK_LENGTH.Visible = true;
-            this.gridColumnTRK_LENGTH.VisibleIndex = 14;
-            this.gridColumnTRK_LENGTH.Width = 20;
+            this.gridColumnTRK_LENGTH.VisibleIndex = 17;
+            this.gridColumnTRK_LENGTH.Width = 60;
             // 
             // gridColumnTRK_WIDTH
             // 
-            this.gridColumnTRK_WIDTH.Caption = "Szélesség";
+            this.gridColumnTRK_WIDTH.Caption = "Rakt.széles";
             this.gridColumnTRK_WIDTH.DisplayFormat.FormatString = "#,#0.00";
             this.gridColumnTRK_WIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnTRK_WIDTH.FieldName = "TRK_WIDTH";
             this.gridColumnTRK_WIDTH.Name = "gridColumnTRK_WIDTH";
             this.gridColumnTRK_WIDTH.OptionsColumn.AllowEdit = false;
             this.gridColumnTRK_WIDTH.Visible = true;
-            this.gridColumnTRK_WIDTH.VisibleIndex = 15;
-            this.gridColumnTRK_WIDTH.Width = 20;
+            this.gridColumnTRK_WIDTH.VisibleIndex = 18;
+            this.gridColumnTRK_WIDTH.Width = 43;
             // 
             // gridColumnTRK_HEIGHT
             // 
-            this.gridColumnTRK_HEIGHT.Caption = "Magasság";
+            this.gridColumnTRK_HEIGHT.Caption = "Rakt.magasság";
             this.gridColumnTRK_HEIGHT.DisplayFormat.FormatString = "#,#0.00";
             this.gridColumnTRK_HEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnTRK_HEIGHT.FieldName = "TRK_HEIGHT";
             this.gridColumnTRK_HEIGHT.Name = "gridColumnTRK_HEIGHT";
             this.gridColumnTRK_HEIGHT.OptionsColumn.AllowEdit = false;
             this.gridColumnTRK_HEIGHT.Visible = true;
-            this.gridColumnTRK_HEIGHT.VisibleIndex = 16;
-            this.gridColumnTRK_HEIGHT.Width = 20;
+            this.gridColumnTRK_HEIGHT.VisibleIndex = 19;
+            this.gridColumnTRK_HEIGHT.Width = 43;
             // 
             // gridColumnSelect
             // 
             this.gridColumnSelect.ColumnEdit = this.reChkSelect;
             this.gridColumnSelect.FieldName = "PSelect";
             this.gridColumnSelect.Name = "gridColumnSelect";
+            this.gridColumnSelect.OptionsColumn.AllowEdit = false;
             this.gridColumnSelect.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
             this.gridColumnSelect.OptionsColumn.FixedWidth = true;
             this.gridColumnSelect.OptionsColumn.ShowCaption = false;
@@ -427,8 +435,8 @@
             this.gridColumnLOCKED.Name = "gridColumnLOCKED";
             this.gridColumnLOCKED.OptionsColumn.AllowEdit = false;
             this.gridColumnLOCKED.Visible = true;
-            this.gridColumnLOCKED.VisibleIndex = 18;
-            this.gridColumnLOCKED.Width = 20;
+            this.gridColumnLOCKED.VisibleIndex = 21;
+            this.gridColumnLOCKED.Width = 49;
             // 
             // repositoryItemLockedEdit
             // 
@@ -445,8 +453,8 @@
             this.gridColTRK_ENGINEEURO.Name = "gridColTRK_ENGINEEURO";
             this.gridColTRK_ENGINEEURO.OptionsColumn.AllowEdit = false;
             this.gridColTRK_ENGINEEURO.Visible = true;
-            this.gridColTRK_ENGINEEURO.VisibleIndex = 19;
-            this.gridColTRK_ENGINEEURO.Width = 20;
+            this.gridColTRK_ENGINEEURO.VisibleIndex = 22;
+            this.gridColTRK_ENGINEEURO.Width = 49;
             // 
             // gridColTRK_ETOLLCAT
             // 
@@ -455,8 +463,8 @@
             this.gridColTRK_ETOLLCAT.Name = "gridColTRK_ETOLLCAT";
             this.gridColTRK_ETOLLCAT.OptionsColumn.AllowEdit = false;
             this.gridColTRK_ETOLLCAT.Visible = true;
-            this.gridColTRK_ETOLLCAT.VisibleIndex = 20;
-            this.gridColTRK_ETOLLCAT.Width = 20;
+            this.gridColTRK_ETOLLCAT.VisibleIndex = 23;
+            this.gridColTRK_ETOLLCAT.Width = 49;
             // 
             // gridColTollMultiplier
             // 
@@ -467,8 +475,8 @@
             this.gridColTollMultiplier.Name = "gridColTollMultiplier";
             this.gridColTollMultiplier.OptionsColumn.AllowEdit = false;
             this.gridColTollMultiplier.Visible = true;
-            this.gridColTollMultiplier.VisibleIndex = 21;
-            this.gridColTollMultiplier.Width = 35;
+            this.gridColTollMultiplier.VisibleIndex = 24;
+            this.gridColTollMultiplier.Width = 97;
             // 
             // gridColumnTOURPOINTCNT
             // 
@@ -476,6 +484,43 @@
             this.gridColumnTOURPOINTCNT.CustomizationCaption = "TOURPOINTCNT";
             this.gridColumnTOURPOINTCNT.FieldName = "TOURPOINTCNT";
             this.gridColumnTOURPOINTCNT.Name = "gridColumnTOURPOINTCNT";
+            this.gridColumnTOURPOINTCNT.OptionsColumn.AllowEdit = false;
+            // 
+            // gridColumnTRK_WEIGHT
+            // 
+            this.gridColumnTRK_WEIGHT.Caption = "Összsúly";
+            this.gridColumnTRK_WEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_WEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_WEIGHT.FieldName = "TRK_WEIGHT";
+            this.gridColumnTRK_WEIGHT.Name = "gridColumnTRK_WEIGHT";
+            this.gridColumnTRK_WEIGHT.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_WEIGHT.Visible = true;
+            this.gridColumnTRK_WEIGHT.VisibleIndex = 14;
+            this.gridColumnTRK_WEIGHT.Width = 27;
+            // 
+            // gridColumnTRK_XHEIGHT
+            // 
+            this.gridColumnTRK_XHEIGHT.Caption = "Telj.magasság";
+            this.gridColumnTRK_XHEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_XHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_XHEIGHT.FieldName = "TRK_XHEIGHT";
+            this.gridColumnTRK_XHEIGHT.Name = "gridColumnTRK_XHEIGHT";
+            this.gridColumnTRK_XHEIGHT.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_XHEIGHT.Visible = true;
+            this.gridColumnTRK_XHEIGHT.VisibleIndex = 15;
+            this.gridColumnTRK_XHEIGHT.Width = 26;
+            // 
+            // gridColumnTRK_XWIDTH
+            // 
+            this.gridColumnTRK_XWIDTH.Caption = "Telj.széles";
+            this.gridColumnTRK_XWIDTH.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_XWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_XWIDTH.FieldName = "TRK_XWIDTH";
+            this.gridColumnTRK_XWIDTH.Name = "gridColumnTRK_XWIDTH";
+            this.gridColumnTRK_XWIDTH.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_XWIDTH.Visible = true;
+            this.gridColumnTRK_XWIDTH.VisibleIndex = 16;
+            this.gridColumnTRK_XWIDTH.Width = 117;
             // 
             // pnlPPlanTours
             // 
@@ -483,7 +528,7 @@
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 445);
+            this.ClientSize = new System.Drawing.Size(1511, 445);
             this.Controls.Add(this.panel1);
             this.Name = "pnlPPlanTours";
             this.Text = "Túrák";
@@ -533,5 +578,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColTRK_ETOLLCAT;
         private DevExpress.XtraGrid.Columns.GridColumn gridColTollMultiplier;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTOURPOINTCNT;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_WEIGHT;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_XHEIGHT;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_XWIDTH;
     }
 }

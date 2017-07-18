@@ -403,8 +403,10 @@ namespace PMapTestApp
             trk.TRK_REG_NUM = "TRK_REG_NUM1";
             trk.TRK_TRAILER = "TRK_TRAILER1";
             trk.TRK_LENGTH = 10;
-            trk.TRK_WIDTH = 4;
-            trk.TRK_HEIGHT = 3;
+            trk.TRK_WIDTH = 300;
+            trk.TRK_HEIGHT = 320;
+            trk.TRK_WIDTH = 300;
+            trk.TRK_HEIGHT = 400;
             trk.TRK_COLOR = Color.Azure;
             trk.TRK_GPS = true;
             trk.TRK_BACKPANEL = false;

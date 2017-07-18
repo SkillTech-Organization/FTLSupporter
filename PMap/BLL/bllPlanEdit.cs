@@ -757,7 +757,7 @@ namespace PMap.BLL
                 try
                 {
 
-                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_WIDTH, TRK.TRK_HEIGHT " + Environment.NewLine +
+                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT,  TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH" + Environment.NewLine +
                                    "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                                    "left outer join WHS_WAREHOUSE WHS on WHS.ID = PTP.WHS_ID " + Environment.NewLine +
                                    "inner join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
@@ -773,8 +773,8 @@ namespace PMap.BLL
                     {
                         int TRK_ETOLLCAT = Util.getFieldValue<int>(dr, "TRK_ETOLLCAT");
                         int TRK_WEIGHT = Util.getFieldValue<int>(dr, "TRK_WEIGHT");
-                        int TRK_WIDTH = Util.getFieldValue<int>(dr, "TRK_WIDTH");
-                        int TRK_HEIGHT = Util.getFieldValue<int>(dr, "TRK_HEIGHT");
+                        int TRK_XHEIGHT = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
+                        int TRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XWIDTH");
                         if (TRK_ETOLLCAT > 1)
                         {
                             int TRK_ENGINEEURO = Util.getFieldValue<int>(dr, "TRK_ENGINEEURO");
@@ -789,7 +789,7 @@ namespace PMap.BLL
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
-                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_HEIGHT, TRK_WIDTH);
+                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH);
                                 if (dst != null)
                                 {
                                     foreach (boEdge edge in dst.Edges)
@@ -867,7 +867,7 @@ namespace PMap.BLL
             //Kiszedem a módosítandó rekordokat
             sSQLStr = "select PTP_ARRTIME, PTP_SERVTIME, PTP_DEPTIME, PTP.ID, PTP.NOD_ID, PTP_ORDER, WHS_BNDTIME, DEP_QTYSRVTIME, " + Environment.NewLine +
                       "TOD.DEP_ID, TOD_QTY, TOD_DATE, TOD.PLN_ID, DEP_SRVTIME, PTP_TYPE, WHS_SRVTIME, PTP_SRVTIME_UNLOAD, TOD_SERVS, " + Environment.NewLine +
-                      "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_WIDTH, TRK.TRK_HEIGHT  " + Environment.NewLine +
+                      "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
                       "from PTP_PLANTOURPOINT  PTP " + Environment.NewLine +
                       "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
                       "left join ORD_ORDER     ORD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
@@ -905,8 +905,8 @@ namespace PMap.BLL
 
                         int TRK_ETOLLCAT = Util.getFieldValue<int>(dr, "TRK_ETOLLCAT");
                         int TRK_WEIGHT = Util.getFieldValue<int>(dr, "TRK_WEIGHT");
-                        int TRK_WIDTH = Util.getFieldValue<int>(dr, "TRK_WIDTH");
-                        int TRK_HEIGHT = Util.getFieldValue<int>(dr, "TRK_HEIGHT");
+                        int TRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XWIDTH");
+                        int TRK_XHEIGHT = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
 
                         if (TRK_ETOLLCAT > 1)
                         {
@@ -922,7 +922,7 @@ namespace PMap.BLL
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
-                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_HEIGHT, TRK_WIDTH);
+                                boRoute dst = m_bllRoute.GetRouteFromDB(lastNOD_ID, NOD_ID, RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH);
                                 if (dst != null)
                                 {
                                     foreach (boEdge edge in dst.Edges)

@@ -81,24 +81,30 @@ namespace PMap.BO.DataXChange
         [DisplayNameAttributeX(Name = "Kapacitástúllépés? (térfogat)", Order = 21)]
         public bool VOLErr { get; set; }
 
+        [DisplayNameAttributeX(Name = "Összsúly", Order = 22)]
+        public double TRK_WEIGHT { get; set; }
+        [DisplayNameAttributeX(Name = "Teljes magasság", Order = 23)]
+        public double TRK_XHEIGHT { get; set; }
+        [DisplayNameAttributeX(Name = "Teljes szélesség", Order = 24)]
+        public double TRK_XWIDTH { get; set; }
 
-        [DisplayNameAttributeX(Name = "Raktér hossza", Order = 22)]
-        public double TRK_LENGTH { get; set; }
 
-        [DisplayNameAttributeX(Name = "Raktér szélessége", Order = 23)]
-        public double TRK_WIDTH { get; set; }
-
-        [DisplayNameAttributeX(Name = "Raktér magassága", Order = 24)]
+        [DisplayNameAttributeX(Name = "Raktér magassága", Order = 25)]
         public double TRK_HEIGHT { get; set; }
 
+        [DisplayNameAttributeX(Name = "Raktér szélessége", Order = 26)]
+        public double TRK_WIDTH { get; set; }
 
-        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 25)]
+        [DisplayNameAttributeX(Name = "Raktér hossza", Order = 27)]
+        public double TRK_LENGTH { get; set; }
+
+        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 28)]
         public int TRK_ETOLLCAT { get; set; }
 
-        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 26)]
+        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 29)]
         public int TRK_ENGINEEURO { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 27)]
+        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 30)]
         public double TollMultiplier { get; set; }
 
         internal int NOD_ID_FROM { get; set; }
