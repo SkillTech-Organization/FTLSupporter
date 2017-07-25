@@ -249,7 +249,7 @@ namespace PMap.BLL
 
         private void fillWarehouse()
         {
-            string sSql = "select ID, WHS_NAME, WHS_OPEN, WHS_CLOSE, WHS_SRVTIME from WHS_WAREHOUSE order by ID ";
+            string sSql = "select ID, WHS_NAME, WHS_OPEN, WHS_CLOSE, WHS_SRVTIME, WHS_SRVTIME_UNLOAD from WHS_WAREHOUSE order by ID ";
             DataTable dt = DBA.Query2DataTable(sSql);
             int innerID = 1;
             boOpt.dicDepot =

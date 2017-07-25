@@ -648,7 +648,7 @@ namespace PMap.BLL
                         "PTP_ARRTIME", p_PTP_ARRTIME,
                         "PTP_SERVTIME", p_PTP_SERVTIME,
                         "PTP_DEPTIME", p_PTP_DEPTIME,
-                        "PTP_SRVTIME_UNLOAD", -1,
+                        "PTP_SRVTIME_UNLOAD", -1,           //Egyelőre nincs kezelve !!
                         "PTP_BUNDLE", 0,                    //TODO:a bundle kezelés nincs végigvezetve!!
                         "DRV_ID", p_DRV_ID,
                         "WHS_ID", p_WHS_ID,
@@ -866,7 +866,7 @@ namespace PMap.BLL
 
             //Kiszedem a módosítandó rekordokat
             sSQLStr = "select PTP_ARRTIME, PTP_SERVTIME, PTP_DEPTIME, PTP.ID, PTP.NOD_ID, PTP_ORDER, WHS_BNDTIME, DEP_QTYSRVTIME, " + Environment.NewLine +
-                      "TOD.DEP_ID, TOD_QTY, TOD_DATE, TOD.PLN_ID, DEP_SRVTIME, PTP_TYPE, WHS_SRVTIME, PTP_SRVTIME_UNLOAD, TOD_SERVS, " + Environment.NewLine +
+                      "TOD.DEP_ID, TOD_QTY, TOD_DATE, TOD.PLN_ID, DEP_SRVTIME, PTP_TYPE, WHS_SRVTIME, WHS_SRVTIME_UNLOAD, PTP_SRVTIME_UNLOAD, TOD_SERVS, " + Environment.NewLine +
                       "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
                       "from PTP_PLANTOURPOINT  PTP " + Environment.NewLine +
                       "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -991,7 +991,7 @@ namespace PMap.BLL
                             {
 
                                 dtPTP_SERVTIME = dtPTP_ARRTIME;
-                                double WHSTime = Util.getFieldValue<int>(dr, "PTP_SRVTIME_UNLOAD");
+                                double WHSTime = Util.getFieldValue<int>(dr, "WHS_SRVTIME_UNLOAD");
                                 if (IsBundleInTour(p_TPL_ID, Util.getFieldValue<int>(dr, "PTP_ORDER")))
                                     WHSTime += Util.getFieldValue<int>(dr, "WHS_BNDTIME");
                                 dtPTP_DEPTIME = dtPTP_SERVTIME.AddMinutes(WHSTime);

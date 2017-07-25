@@ -140,6 +140,7 @@ namespace VBInterface
         }
         public string GeocodingByGoogle(string p_addr, string p_iniPath, string p_dbConf)
         {
+            p_addr = p_addr.Replace('%', ' ').Replace('&', ' ');
             Util.Log2File(">>START:GeocodingByGoogle(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
