@@ -562,7 +562,7 @@ namespace PMap.BLL
         /// </summary>
         /// <param name="p_maxRecCount"></param>
         /// <returns></returns>
-        public List<boRoute> GetDistancelessNodesForAllZones__NEMKELL(int p_maxRecCount)
+        public List<boRoute> GetDistancelessNodesForAllZones__ONLYFORTEST(int p_maxRecCount)
         {
             string sSQL = "select top " + p_maxRecCount.ToString() + " * from ( select * from " + Environment.NewLine +
                           "  ( " + Environment.NewLine +

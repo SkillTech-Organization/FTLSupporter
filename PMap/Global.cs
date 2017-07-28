@@ -131,14 +131,9 @@ namespace PMap
         public const int OTP_UNLOAD = 3;   //Lerakás
 
         //Túraponttípusok
-        public const int PTP_WHSOUT = 0;    //0.Raktárból ki
-        public const int PTP_WHSIN = 1;     //1.Raktárba vissza
-        public const int PTP_TPOINT = 2;    //2.Normál túrapont, le/felrakás 
-
-        //Tevezés alatt álló túrapont típusok
-        public const int PTP_TYPE_WHS_S = 0;     //Raktári felrakás (túra kezdete)
-        public const int PTP_TYPE_WHS_E = 1;     //Raktári lerakás (túra vége)
-        public const int PTP_TYPE_DEP = 2;       //Túrapont
+        public const int PTP_TYPE_WHS_S = 0;     //Raktári felrakás (túra kezdete) Raktárból ki
+        public const int PTP_TYPE_WHS_E = 1;     //Raktári lerakás (túra vége) Raktárba vissza
+        public const int PTP_TYPE_DEP = 2;       //Túrapont, le/felrakás 
 
         public const int TPS_VALUE_NOTEXEC = 0;
         public const int TPS_VALUE_OK = 1;

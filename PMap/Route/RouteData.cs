@@ -70,6 +70,7 @@ namespace PMap.Route
                     Edges = new Dictionary<string, boEdge>();
                     NodePositions = null;
 
+
                     if (p_form != null)
                     {
                         p_form.SetInfoText(PMapMessages.M_ROUTEDT_EDGES); //TODO:Message/be
@@ -94,6 +95,8 @@ namespace PMap.Route
                         foreach (DataRow dr in dt.Rows)
                         {
 
+                            if (Edges.Count > 996970)
+                                Console.WriteLine("d");
                             int Source = Util.getFieldValue<int>(dr, "NOD_NUM");
                             int Destination = Util.getFieldValue<int>(dr, "NOD_NUM2");
                             bool OneWay = Util.getFieldValue<bool>(dr, "EDG_ONEWAY");
@@ -132,7 +135,6 @@ namespace PMap.Route
                                 EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT")
 
                             };
-
 
                             if (!Edges.ContainsKey(keyFrom))
                             {
@@ -252,15 +254,17 @@ namespace PMap.Route
                 {
                     boEdge edg = (boEdge)item.Value;
 
-                    if ( /*sRZN_ID_LIST == ""                                               /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
+                    if (( /*sRZN_ID_LIST == ""                                               /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
                         || */ edg.RZN_ID == 0                                               /// Védett övezet-e
                         || (edg.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
                                                                                             /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
-                        || aRZN.Contains(edg.RZN_ID.ToString())                             /// Az él szerepel-e a zónalistában?
-                        || (routePar.Weight == 0 || routePar.Weight <= edg.EDG_MAXWEIGHT)   /// Súlykorlátozás
-                        || (routePar.Width == 0 || routePar.Width <= edg.EDG_MAXWIDTH)      /// Szélességlátozás
-                        || (routePar.Height == 0 || routePar.Height <= edg.EDG_MAXHEIGHT)   /// Magasságkorlátozás
-                       )
+                        || aRZN.Contains(edg.RZN_ID.ToString()))                            /// Az él szerepel-e a zónalistában?
+
+                        //Korlátozás feltételek
+                        && ((edg.EDG_MAXWEIGHT == 0 || routePar.Weight == 0 || routePar.Weight <= edg.EDG_MAXWEIGHT)   /// Súlykorlátozás
+                         && (edg.EDG_MAXWIDTH == 0 || routePar.Width == 0 || routePar.Width <= edg.EDG_MAXWIDTH)      /// Szélességlátozás
+                         && (edg.EDG_MAXHEIGHT == 0 || routePar.Height == 0 || routePar.Height <= edg.EDG_MAXHEIGHT)   /// Magasságkorlátozás
+                       ))
                     /// 
                     {
                         neighboursFull[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO);
@@ -275,6 +279,7 @@ namespace PMap.Route
                 Console.WriteLine("CRoutePars:" + routePar.ToString() + " edgcnt:" + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
                 o_neighborsFull.Add(routePar, neighboursFull);
                 o_neighborsCut.Add(routePar, neighboursCut);
+
             }
             Console.WriteLine("getNeigboursByBound " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
         }

@@ -378,7 +378,7 @@ namespace PMapTestApp
 
             if (m_routes != null)
             {
-                dlgCheckRouteDetails rd = new dlgCheckRouteDetails(m_routes);
+                dlgCheckRouteDetails rd = new dlgCheckRouteDetails(m_routes, (int)numWeigtht.Value);
                 rd.ShowDialog(this);
 
             }
@@ -401,9 +401,11 @@ namespace PMapTestApp
 
                 DataTable dtRZN_ID_LIST = (DataTable)cmbRST_ID_LIST.DataSource;
 
-                //A TestApp-ban egyelőre nem foglalkozunk a súly- és méretkorlátozásokkal
+                //A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
                 //
                 List<CRoutePars> lstRoutePars = dtRZN_ID_LIST.AsEnumerable().Select(x => new CRoutePars() { RZN_ID_LIST = Util.getFieldValue<string>(x, "RESTZONE_IDS") }).ToList();
+                lstRoutePars[0].Weight = (int)numWeigtht.Value;
+                lstRoutePars[1].Weight = (int)numWeigtht.Value;
 
                 Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
                 Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
@@ -427,14 +429,14 @@ namespace PMapTestApp
         private void showRoute()
         {
 
-            if (m_routes != null)
+            if (m_routes != null && m_routes.Count > 0)
             {
                 m_routeLayer.Routes.Clear();
                 m_routeLayer.Markers.Clear();
 
-                //A TestApp-ban egyelőre nem foglalkozunk a súly- és méretkorlátozásokkal
+                //A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
                 //
-                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue };
+                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue, Weight= (int)numWeigtht.Value };
 
                  boRoute route;
 
@@ -475,6 +477,11 @@ namespace PMapTestApp
                 }
                 gMapControl.Refresh();
                 gMapControl.ZoomAndCenterMarkers(m_routeLayer.Id);
+            }
+            else
+            {
+                m_routeLayer.Routes.Clear();
+                m_routeLayer.Markers.Clear();
             }
 
         }
@@ -647,9 +654,9 @@ namespace PMapTestApp
           //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
           //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-                          foreach (var edg in RouteData.Instance.Edges)
+//FULL                          foreach (var edg in RouteData.Instance.Edges)
 
-            //                        foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE ==1))
+                                    foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.EDG_MAXWEIGHT > 0))
                 //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 {

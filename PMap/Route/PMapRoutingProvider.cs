@@ -223,7 +223,7 @@ namespace PMap.MapProvider
                     else
                     {
                         //az p_optimizedPath mindig tartalmazza a végelemet. 
-                        //Ha nincs útvonal a két pont közözz, akkor p_optimizedPath értéke 1,
+                        //Ha nincs útvonal a két pont között, akkor p_optimizedPath értéke 1,
                         //Ha 1-nél nagyobb a p_optimizedPath mérete és nem találunk edge-t, gebasz van
                         if (p_optimizedPath.Count() > 1)
                             throw new NullReferenceException("null edge!");

@@ -178,7 +178,7 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             if (e.RowHandle == gridViewTourPoints.FocusedRowHandle && e.Column != gridViewTourPoints.FocusedColumn) return;
 
-            if ((int)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_TYPE) == Global.PTP_TPOINT && (e.Column == gridColumnPTP_ARRTIME || e.Column == gridColumnPTP_SERVTIME || e.Column == gridColumnPTP_DEPTIME))
+            if ((int)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_TYPE) == Global.PTP_TYPE_DEP && (e.Column == gridColumnPTP_ARRTIME || e.Column == gridColumnPTP_SERVTIME || e.Column == gridColumnPTP_DEPTIME))
             {
                 DateTime OPEN = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnOPEN);
                 DateTime CLOSE = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnCLOSE);

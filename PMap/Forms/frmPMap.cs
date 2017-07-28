@@ -432,7 +432,7 @@ namespace PMap.Forms
                             {
 
                                 PPlanMarkerFlag mrkFlag;
-                                if (tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSOUT)
+                                if (tour.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_WHS_S)
                                 {
                                     mrkFlag = new PPlanMarkerFlag(start, tour.TourPoints[i]);
                                     mrkFlag.ToolTipMode = m_PPlanCommonVars.TooltipMode;
@@ -443,7 +443,7 @@ namespace PMap.Forms
                                     m_routeLayer.Markers.Add(mrkFlag);
                                 }
 
-                                if (tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSIN)
+                                if (tour.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_WHS_E)
                                 {
                                     //ide csak multit]ra esetén futhat a program !!!
                                     //
@@ -453,7 +453,7 @@ namespace PMap.Forms
 
                                 }
 
-                                if (tour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TPOINT)
+                                if (tour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TYPE_DEP)
                                 {
                                     PPlanMarker mrkTourPoint = new PPlanMarker(end, tour.PCOLOR, tour.TourPoints[i]);
                                     mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;

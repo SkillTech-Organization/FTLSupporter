@@ -278,7 +278,7 @@ namespace PMap.BLL
                       "inner join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " +
                       "where ORD_ID = ?  and TPL_ID = ?  and PTP_TYPE = ?";
 
-            dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lORD_ID, p_TPL_ID, Global.PTP_TPOINT);
+            dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lORD_ID, p_TPL_ID, Global.PTP_TYPE_DEP);
 
             if (dt.Rows.Count == 0)
             {

@@ -183,7 +183,7 @@ namespace PMap.LongProcess
                         {
 
                             PPlanMarkerFlag mrkFlag;
-                            if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSOUT)
+                            if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_WHS_S)
                             {
                                 mrkFlag = new PPlanMarkerFlag(start, p_tour.TourPoints[i]);
                                 mrkFlag.ToolTipMode = m_PPlanCommonVars.TooltipMode;
@@ -195,7 +195,7 @@ namespace PMap.LongProcess
                                 m_baseLayer.Markers.Add(mrkFlag);
                             }
 
-                            if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_WHSIN)
+                            if (p_tour.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_WHS_E)
                             {
                                 //ide csak multit]ra esetén futhat a program !!!
                                 //
@@ -207,7 +207,7 @@ namespace PMap.LongProcess
 
                             }
 
-                            if (p_tour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TPOINT)
+                            if (p_tour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TYPE_DEP)
                             {
                                 PPlanMarker mrkTourPoint = new PPlanMarker(end, p_tour.PCOLOR, p_tour.TourPoints[i]);
                                 mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;

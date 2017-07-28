@@ -42,11 +42,12 @@ namespace PMapTestApp
 
         private bllRoute m_bllRoute;
         private bllSpeedProf m_bllSpeedProf;
-
-        public dlgCheckRouteDetails(Dictionary<CRoutePars, boRoute> p_route)
+        private int m_weight = 0;
+        public dlgCheckRouteDetails(Dictionary<CRoutePars, boRoute> p_route, int p_weight)
         {
             InitializeComponent();
             m_route = p_route;
+            m_weight = p_weight;
             m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
             m_bllSpeedProf = new bllSpeedProf(PMapCommonVars.Instance.CT_DB);
             m_sp = m_bllSpeedProf.GetSpeedValuesToDict();
@@ -112,7 +113,7 @@ namespace PMapTestApp
             string sRZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue;
 
 
-            var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = 0, Height = 0, Width = 0 };  //A tesztben egyelőre nem foglalkozunk az útvonalkorátozásokkal
+            var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = m_weight, Height = 0, Width = 0 };  ///A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
             if (m_route[routePar].Route != null)
             {
                 double dDuration = 0;
@@ -143,6 +144,7 @@ namespace PMapTestApp
                 }
                 lblDistance.Text = m_route[routePar].DST_DISTANCE.ToString();
                 lblDuration.Text = dDuration.ToString();
+                lblWeight.Text = m_weight.ToString();
                 gridRouteDetails.RefreshDataSource();
             }
             else

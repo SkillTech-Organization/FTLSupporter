@@ -63,6 +63,8 @@
             this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.excelToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
+            this.lblWeight = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.layoutDialog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridRouteDetails)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewRouteDetails)).BeginInit();
@@ -82,7 +84,7 @@
             this.layoutDialog.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.9924F));
             this.layoutDialog.Controls.Add(this.buttonClose, 0, 0);
             this.layoutDialog.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.layoutDialog.Location = new System.Drawing.Point(0, 462);
+            this.layoutDialog.Location = new System.Drawing.Point(0, 508);
             this.layoutDialog.Name = "layoutDialog";
             this.layoutDialog.RowCount = 1;
             this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -95,7 +97,7 @@
             this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.layoutDialog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.layoutDialog.Size = new System.Drawing.Size(905, 40);
+            this.layoutDialog.Size = new System.Drawing.Size(1011, 40);
             this.layoutDialog.TabIndex = 3;
             // 
             // buttonClose
@@ -103,7 +105,7 @@
             this.buttonClose.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonClose.CausesValidation = false;
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonClose.Location = new System.Drawing.Point(410, 4);
+            this.buttonClose.Location = new System.Drawing.Point(463, 4);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(84, 33);
             this.buttonClose.TabIndex = 2;
@@ -124,7 +126,7 @@
             this.repositoryItemImageComboBox1,
             this.repositoryItemCheckEdit1,
             this.repositoryItemCheckEdit2});
-            this.gridRouteDetails.Size = new System.Drawing.Size(905, 395);
+            this.gridRouteDetails.Size = new System.Drawing.Size(1011, 441);
             this.gridRouteDetails.TabIndex = 7;
             this.gridRouteDetails.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewRouteDetails});
@@ -308,6 +310,8 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.lblWeight);
+            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.cmbRST_ID_LIST);
             this.panel1.Controls.Add(this.lblDistance);
@@ -319,14 +323,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(905, 40);
+            this.panel1.Size = new System.Drawing.Size(1011, 40);
             this.panel1.TabIndex = 8;
             // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(266, 13);
+            this.label7.Location = new System.Drawing.Point(241, 15);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(84, 13);
             this.label7.TabIndex = 7;
@@ -337,16 +341,16 @@
             this.cmbRST_ID_LIST.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRST_ID_LIST.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRST_ID_LIST.FormattingEnabled = true;
-            this.cmbRST_ID_LIST.Location = new System.Drawing.Point(357, 9);
+            this.cmbRST_ID_LIST.Location = new System.Drawing.Point(329, 11);
             this.cmbRST_ID_LIST.Name = "cmbRST_ID_LIST";
-            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(250, 21);
+            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(282, 21);
             this.cmbRST_ID_LIST.TabIndex = 6;
             this.cmbRST_ID_LIST.SelectedIndexChanged += new System.EventHandler(this.cmbRST_ID_LIST_SelectedIndexChanged);
             // 
             // lblDistance
             // 
             this.lblDistance.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblDistance.Location = new System.Drawing.Point(671, 10);
+            this.lblDistance.Location = new System.Drawing.Point(783, 12);
             this.lblDistance.Name = "lblDistance";
             this.lblDistance.Size = new System.Drawing.Size(78, 18);
             this.lblDistance.TabIndex = 5;
@@ -355,7 +359,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(613, 13);
+            this.label4.Location = new System.Drawing.Point(728, 15);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(51, 13);
             this.label4.TabIndex = 4;
@@ -364,7 +368,7 @@
             // lblDuration
             // 
             this.lblDuration.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblDuration.Location = new System.Drawing.Point(814, 10);
+            this.lblDuration.Location = new System.Drawing.Point(920, 12);
             this.lblDuration.Name = "lblDuration";
             this.lblDuration.Size = new System.Drawing.Size(78, 18);
             this.lblDuration.TabIndex = 3;
@@ -373,7 +377,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(756, 13);
+            this.label2.Location = new System.Drawing.Point(865, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 2;
@@ -382,7 +386,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 13);
+            this.label1.Location = new System.Drawing.Point(20, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(79, 13);
             this.label1.TabIndex = 1;
@@ -392,9 +396,9 @@
             // 
             this.cmbSpeedProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSpeedProfile.FormattingEnabled = true;
-            this.cmbSpeedProfile.Location = new System.Drawing.Point(89, 9);
+            this.cmbSpeedProfile.Location = new System.Drawing.Point(103, 11);
             this.cmbSpeedProfile.Name = "cmbSpeedProfile";
-            this.cmbSpeedProfile.Size = new System.Drawing.Size(170, 21);
+            this.cmbSpeedProfile.Size = new System.Drawing.Size(134, 21);
             this.cmbSpeedProfile.TabIndex = 0;
             this.cmbSpeedProfile.SelectedIndexChanged += new System.EventHandler(this.cmbSpeedProfile_SelectedIndexChanged);
             this.cmbSpeedProfile.TextChanged += new System.EventHandler(this.cmbSpeedProfile_TextChanged);
@@ -408,7 +412,7 @@
             this.excelToolStripButton});
             this.toolMain.Location = new System.Drawing.Point(0, 0);
             this.toolMain.Name = "toolMain";
-            this.toolMain.Size = new System.Drawing.Size(905, 27);
+            this.toolMain.Size = new System.Drawing.Size(1011, 27);
             this.toolMain.TabIndex = 9;
             this.toolMain.Text = "toolStrip1";
             // 
@@ -438,11 +442,29 @@
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xls|*.xls";
             // 
+            // lblWeight
+            // 
+            this.lblWeight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblWeight.Location = new System.Drawing.Point(646, 12);
+            this.lblWeight.Name = "lblWeight";
+            this.lblWeight.Size = new System.Drawing.Size(78, 18);
+            this.lblWeight.TabIndex = 9;
+            this.lblWeight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(615, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(27, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Súly";
+            // 
             // dlgCheckRouteDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 502);
+            this.ClientSize = new System.Drawing.Size(1011, 548);
             this.Controls.Add(this.gridRouteDetails);
             this.Controls.Add(this.layoutDialog);
             this.Controls.Add(this.panel1);
@@ -505,5 +527,7 @@
         private System.Windows.Forms.OpenFileDialog openExcel;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbRST_ID_LIST;
+        private System.Windows.Forms.Label lblWeight;
+        private System.Windows.Forms.Label label5;
     }
 }

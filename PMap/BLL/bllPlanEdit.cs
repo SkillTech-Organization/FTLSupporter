@@ -65,7 +65,7 @@ namespace PMap.BLL
                             "PTP_BUNDLE", 0,
                             "DRV_ID", 0,
                             "WHS_ID", -1,
-                            "PTP_TYPE", Global.PTP_TPOINT);
+                            "PTP_TYPE", Global.PTP_TYPE_DEP);
 
                         bllHistory.WriteHistory(0, "PTP_PLANTOURPOINT", newPTP_ID, bllHistory.EMsgCodes.ADD, p_UpOrder);
 
@@ -511,14 +511,14 @@ namespace PMap.BLL
                         int ID = dr.Field<int>("ID");
                         double PTP_ORDER = dr.Field<double>("PTP_ORDER");
                         double PTP_TYPE = dr.Field<double>("PTP_TYPE");
-                        if (PTP_TYPE == Global.PTP_TPOINT)
+                        if (PTP_TYPE == Global.PTP_TYPE_DEP)
                         {
                             String sSql = "update PTP_PLANTOURPOINT " + Environment.NewLine +
                                   "set PTP_ORDER = (select MAX(PTP_ORDER) from PTP_PLANTOURPOINT PTP where PTP.TPL_ID = ? and PTP.PTP_ORDER<? and PTP.PTP_TYPE=?) + " + Environment.NewLine +
                                   "                (select MIN(PTP_ORDER) from PTP_PLANTOURPOINT PTP where PTP.TPL_ID = ? and PTP.PTP_ORDER>? and PTP.PTP_TYPE=?) - PTP_ORDER  " + Environment.NewLine +
                                   "WHERE ID = ? ";
 
-                            DBA.ExecuteNonQuery(sSql, p_TPL_ID, PTP_ORDER, Global.PTP_WHSOUT, p_TPL_ID, PTP_ORDER, Global.PTP_WHSIN, ID);
+                            DBA.ExecuteNonQuery(sSql, p_TPL_ID, PTP_ORDER, Global.PTP_TYPE_WHS_S, p_TPL_ID, PTP_ORDER, Global.PTP_TYPE_WHS_E, ID);
                         }
 
                     }
@@ -962,7 +962,7 @@ namespace PMap.BLL
 
                             //megérkezés (előző távozás+menetidő)
                             dtPTP_ARRTIME = dtPTP_DEPTIME.AddMinutes(Time);
-                            if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TPOINT)
+                            if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_DEP)
                             {
                                 //Kiszolgálási idő
                                 //Hozzáadom a megrendelés dátumához a nyitási időt
@@ -982,12 +982,12 @@ namespace PMap.BLL
 
                                 dtPTP_DEPTIME = dtPTP_SERVTIME.AddMinutes((int)Math.Max(DEP_SRVTIME + Util.getFieldValue<double>(dr, "TOD_QTY") / Global.csQTYSRVDivider * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME"), 0));
                             }
-                            else if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_WHSOUT)
+                            else if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_WHS_S)
                             {
                                 dtPTP_SERVTIME = dtPTP_ARRTIME;
                                 dtPTP_DEPTIME = dtPTP_SERVTIME.AddMinutes(Util.getFieldValue<int>(dr, "WHS_SRVTIME"));
                             }
-                            else if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_WHSIN)
+                            else if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_WHS_E)
                             {
 
                                 dtPTP_SERVTIME = dtPTP_ARRTIME;

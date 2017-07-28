@@ -186,7 +186,7 @@ namespace PMap.BLL
         private string getOpenClose(DataRow p_dr, bool p_noChkType)
         {
             string result = "";
-            if (p_noChkType || Util.getFieldValue<int>(p_dr, "PTP_TYPE") == Global.PTP_TPOINT)
+            if (p_noChkType || Util.getFieldValue<int>(p_dr, "PTP_TYPE") == Global.PTP_TYPE_DEP)
             {
                 int iOpen = Util.getFieldValue<int>(p_dr, "TOD_SERVS");
                 string sHour = "0" + Math.Truncate((double)(iOpen / 60)).ToString();

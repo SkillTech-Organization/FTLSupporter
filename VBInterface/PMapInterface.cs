@@ -1093,13 +1093,14 @@ namespace VBInterface
             return resArr;
         }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="p_iniPath"></param>
-/// <param name="p_dbConf"></param>
-/// <param name="p_lstRoutes"></param>
-/// <returns></returns>
+        /// <summary>
+        /// Menetlevél ellenőrzés 
+        /// MEGJ.:A menetlevél ellenőrzés nem használ súly- és méretkorlátozásokat !
+        /// </summary>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <param name="p_lstRoutes"></param>
+        /// <returns></returns>
         public List<boXChkRes> CheckRoutes(string p_iniPath, string p_dbConf, List<boXChkRoute> p_lstRoutes)
         {
             DateTime dt = DateTime.Now;
@@ -1177,21 +1178,23 @@ namespace VBInterface
                         continue;
                     }
 
-                    if (sRZN_ID_LIST != "")
-                        sRZN_ID_LIST = sRZN_ID_LIST.Substring(1);
 
                     Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
                     Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
                     RectLatLng boundary = route.getBoundary(itemRes.fromLat, itemRes.fromLng, itemRes.toLat, itemRes.toLng);
 
-                    RouteData.Instance.getNeigboursByBound(sRZN_ID_LIST, out NeighborsFull, out NeighborsCut, boundary);
+                    if (sRZN_ID_LIST != "")
+                        sRZN_ID_LIST = sRZN_ID_LIST.Substring(1);
+
+                    var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = 0, Height = 0, Width = 0};
+                    
+                    //A menetlevél ellenőrzés nem használ súly- és méretkorlátozásokat !
+                    RouteData.Instance.getNeigboursByBound(routePar, out NeighborsFull, out NeighborsCut, boundary);
 
 
-                    boRoute result = provider.GetRoute( fromNOD_ID, toNOD_ID, sRZN_ID_LIST,
-                        NeighborsFull[sRZN_ID_LIST], NeighborsCut[sRZN_ID_LIST],
+                    boRoute result = provider.GetRoute( fromNOD_ID, toNOD_ID, routePar,
+                        NeighborsFull[routePar], NeighborsCut[routePar],
                          PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
-
-
 
 
                     //logVersion();

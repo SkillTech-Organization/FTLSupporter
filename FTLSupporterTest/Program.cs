@@ -208,6 +208,34 @@ namespace FTLSupporterTest
                 RealArrival = DateTime.MinValue
             };
 
+
+
+            FTLPoint tp15 = new FTLPoint()
+            {
+                TPID = "TP015",
+                Name = "Tisszacsege (12t korlát)",
+                Addr = "",
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(22),
+                SrvDuration = 10,
+                Lat = 47.6948850,
+                Lng = 21.0788340,
+                RealArrival = DateTime.MinValue
+            };
+
+            FTLPoint tp16 = new FTLPoint()
+            {
+                TPID = "TP016",
+                Name = "Balmazújváros (12t korlát)",
+                Addr = "",
+                Open = DateTime.Now.Date.AddHours(6),
+                Close = DateTime.Now.Date.AddHours(22),
+                SrvDuration = 10,
+                Lat = 47.6137500,
+                Lng = 21.3450290,
+                RealArrival = DateTime.MinValue
+            };
+
             #endregion
 
             #region beosztandó szállítási feladatok
@@ -297,9 +325,22 @@ namespace FTLSupporterTest
                 Client = "Pécs-Baja-Szolnok",
                 TPoints = new List<FTLPoint>()
             };
-            tsk7.TPoints.Add(tp13.ShallowCopy());
-            tsk7.TPoints.Add(tp12.ShallowCopy());
-            tsk7.TPoints.Add(tp11.ShallowCopy());
+            tsk7.TPoints.Add(tp15.ShallowCopy());
+            tsk7.TPoints.Add(tp16.ShallowCopy());
+
+
+            FTLTask tsk8 = new FTLTask()
+            {
+                TaskID = "TSK8",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Tiszacsege-Balmazújváros (12T teszt)",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk8.TPoints.Add(tp15.ShallowCopy());
+            tsk8.TPoints.Add(tp16.ShallowCopy());
+
 
             FTLTask tskX = new FTLTask()
             {
@@ -541,9 +582,14 @@ namespace FTLSupporterTest
 
             #endregion
 
-            //vezetési idő teszt
+            /*//vezetési idő teszt
             var lstTsk = new List<FTLTask> { tsk1 };
             var lstTrk = new List<FTLTruck> { trk2 };
+            */
+
+            //12t korlát teszt
+            var lstTsk = new List<FTLTask> { tsk8 };
+            var lstTrk = new List<FTLTruck> { trk1, trk2 };   /*trk1:20T, távolság:59463,trk2:10T, távolság:23596*/
 
 
             /* PROPS-EXCLPROPS teszt 
@@ -645,6 +691,9 @@ namespace FTLSupporterTest
                 tskX.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
             }
             List<FTLResult> res;
+
+            /*besttruck eredmény */
+
             /*
             res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
             bestTruckConsole(res.FirstOrDefault());

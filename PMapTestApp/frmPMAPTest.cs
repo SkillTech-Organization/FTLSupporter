@@ -256,7 +256,7 @@ namespace PMapTestApp
                 while (bOK)
                 {
                     //hiányzó távolságok kiszámítása
-                    List<boRoute> res = route.GetDistancelessNodesForAllZones(1000000);
+                    List<boRoute> res = route.GetDistancelessNodesForAllZones__ONLYFORTEST(1000000);
                     if (res.Count == 0)
                         break;
                     bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, false);

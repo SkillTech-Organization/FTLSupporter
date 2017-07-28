@@ -700,7 +700,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         //FONTOS !!!
                         //A túrák mindig visszatérnek a kiindulási raktárba, ezért a legutolsó túrapontra (PTP_TYPE == 1) nem készítünk markert.
                         //emiatt vizsgálni kell, van-e marker
-                        if (rTourPoint.PTP_TYPE != Global.PTP_WHSIN && rTourPoint.Route != null)
+                        if (rTourPoint.PTP_TYPE != Global.PTP_TYPE_WHS_E && rTourPoint.Route != null)
                         {
                             for (int i = 0; i < rTourPoint.Route.Points.Count - 2; i++)
                             {
@@ -821,10 +821,10 @@ namespace PMap.Forms.Panels.frmPPlan
                                         //2. szerkesztőmódban nem kattinthatunk raktárra
                                         //                            if (rTourPoint.PTP_TYPE == Global.PTP_TPOINT && rTourPoint.Marker.Position == marker.Position)
 
-                                        if (rTourPoint.Marker != null && rTourPoint.Marker.Position == marker.Position && (!m_EditMode || rTourPoint.PTP_TYPE == Global.PTP_TPOINT))
+                                        if (rTourPoint.Marker != null && rTourPoint.Marker.Position == marker.Position && (!m_EditMode || rTourPoint.PTP_TYPE == Global.PTP_TYPE_DEP))
                                         {
                                             boPlanTourPoint focusedPt = null;
-                                            if (rTourPoint.PTP_TYPE == Global.PTP_TPOINT)
+                                            if (rTourPoint.PTP_TYPE == Global.PTP_TYPE_DEP)
                                             {
                                                 focusedPt = rTourPoint;        //Túrapont esetén
                                                 setFocusedTour(rTourPoint.Tour);
@@ -967,7 +967,7 @@ namespace PMap.Forms.Panels.frmPPlan
                                     for (int i = 0; i < rTour.TourPoints.Count - 1; i++)
                                     {
                                         boPlanTourPoint rTourPoint = rTour.TourPoints[i];
-                                        if (rTourPoint.Marker != null && rTourPoint.Marker.Position == marker.Position && rTourPoint.PTP_TYPE == Global.PTP_WHSOUT && rTour.TourPoints[i + 1].PTP_TYPE == Global.PTP_WHSIN)
+                                        if (rTourPoint.Marker != null && rTourPoint.Marker.Position == marker.Position && rTourPoint.PTP_TYPE == Global.PTP_TYPE_WHS_S && rTour.TourPoints[i + 1].PTP_TYPE == Global.PTP_TYPE_WHS_E)
                                         {
                                             eroute = new EditedRoute();
                                             eroute.Tour = rTour;
@@ -1028,7 +1028,7 @@ namespace PMap.Forms.Panels.frmPPlan
                             return;
                         }
 
-                        if (m_EditedRoute.TpRouteStart.PTP_TYPE != Global.PTP_WHSIN)
+                        if (m_EditedRoute.TpRouteStart.PTP_TYPE != Global.PTP_TYPE_WHS_E)
                         {
 
                             if (m_EditedRoute.TpRouteStart != m_EditedTourPoint && m_EditedRoute.TpRouteStart.NextTourPoint != m_EditedTourPoint)

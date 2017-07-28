@@ -521,7 +521,7 @@ namespace PMap.BLL
                         "left join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
                         "where TOD.PLN_ID = ? and isnull(TPL.TPL_LOCKED,0) = 0 and (isnull(PUB.PUBQTY, 0) + isnull(LCK.LCKQTY, 0) < ORD_QTY) and OTP_VALUE <> ? " + Environment.NewLine +
                         "order by ORD.ORD_NUM";
-                dt = DBA.Query2DataTable(sSql, Global.TPS_VALUE_DEL, Global.PTP_TPOINT, boOpt.PLN_ID, Global.OTP_UNLOAD);
+                dt = DBA.Query2DataTable(sSql, Global.TPS_VALUE_DEL, Global.PTP_TYPE_DEP, boOpt.PLN_ID, Global.OTP_UNLOAD);
             }
             else
             {
@@ -1018,6 +1018,7 @@ namespace PMap.BLL
                     System.IO.StreamReader file = new System.IO.StreamReader(p_resultFile);
                     boOptimize.CTruck currTrk = null;
                     int PTP_ORDER = 0;
+                    int PTP_TYPE_WHS = Global.PTP_TYPE_WHS_S;
 
 
                     while ((line = file.ReadLine()) != null)
@@ -1128,7 +1129,7 @@ namespace PMap.BLL
 
 
                                     m_bllPlanEdit.CreateTourPoint(currTrk.TPL_ID, TOD_ID, ord.NOD_ID, PTP_ORDER, 0, 0,
-                                        DateTime.Now, DateTime.Now, DateTime.Now, -1, Global.PTP_TPOINT, 0, 0);
+                                        DateTime.Now, DateTime.Now, DateTime.Now, -1, Global.PTP_TYPE_DEP, 0, 0);
 
                                     PTP_ORDER++;
                                 }
@@ -1143,14 +1144,14 @@ namespace PMap.BLL
                                         DateTime dtSrv = dtArr;
                                         DateTime dtDep = boOpt.PLN_DATE_B.Date.AddMinutes(Convert.ToInt32(aArgs[par_DepTime]));
                                         m_bllPlanEdit.CreateTourPoint(currTrk.TPL_ID, 0, m_boWarehouse.NOD_ID, PTP_ORDER, 0, 0,
-                                            dtArr, dtSrv, dtDep, boOpt.WHS_ID, Global.PTP_TYPE_WHS_S, 0, 0);
+                                            dtArr, dtSrv, dtDep, boOpt.WHS_ID, PTP_TYPE_WHS, 0, 0);
                                     }
                                     else
                                     {
                                         m_bllPlanEdit.CreateTourPoint(currTrk.TPL_ID, 0, m_boWarehouse.NOD_ID, PTP_ORDER, 0, 0,
-                                            DateTime.Now, DateTime.Now, DateTime.Now, boOpt.WHS_ID, Global.PTP_TYPE_WHS_E, 0, 0);
+                                            DateTime.Now, DateTime.Now, DateTime.Now, boOpt.WHS_ID, PTP_TYPE_WHS, 0, 0);
                                     }
-
+                                    PTP_TYPE_WHS = Global.PTP_TYPE_WHS_E - PTP_TYPE_WHS;
                                     PTP_ORDER++;
                                 }
                                 else if (Convert.ToInt32(aArgs[par_OrId]) >= 1000)
