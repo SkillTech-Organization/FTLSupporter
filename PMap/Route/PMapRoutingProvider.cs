@@ -187,9 +187,9 @@ namespace PMap.MapProvider
                 NOD_ID_FROM = p_NOD_ID_FROM,
                 NOD_ID_TO = p_NOD_ID_TO,
                 RZN_ID_LIST = p_routePar.RZN_ID_LIST,
-                DST_WEIGHT = p_routePar.Weight,
-                DST_HEIGHT = p_routePar.Height,
-                DST_WIDTH = p_routePar.Width,
+                DST_MAXWEIGHT = p_routePar.Weight,
+                DST_MAXHEIGHT = p_routePar.Height,
+                DST_MAXWIDTH = p_routePar.Width,
                 Route = getMapRoute(p_optimizedPath, p_NOD_ID_FROM),
                 Edges = new List<boEdge>()
             };

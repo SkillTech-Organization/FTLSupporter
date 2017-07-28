@@ -89,14 +89,14 @@ namespace PMap.LongProcess
 
                 Dictionary<CRoutePars, List<int>[]> NeighborsArrFull = null;
                 Dictionary<CRoutePars, List<int>[]> NeighborsArrCut = null;
-                List<CRoutePars> routePars = m_CalcDistances.GroupBy(g => new { g.RZN_ID_LIST, g.DST_WEIGHT, g.DST_HEIGHT, g.DST_WIDTH })
-                    .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.DST_WEIGHT, Height = s.Key.DST_HEIGHT, Width = s.Key.DST_WIDTH }).ToList();
+                List<CRoutePars> routePars = m_CalcDistances.GroupBy(g => new { g.RZN_ID_LIST, g.DST_MAXWEIGHT, g.DST_MAXHEIGHT, g.DST_MAXWIDTH })
+                    .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.DST_MAXWEIGHT, Height = s.Key.DST_MAXHEIGHT, Width = s.Key.DST_MAXWIDTH }).ToList();
 
                 RouteData.Instance.getNeigboursByBound(routePars, out NeighborsArrFull, out NeighborsArrCut, boundary);
 
                 DateTime dtStartX2 = DateTime.Now;
 
-                var lstCalcNodes = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_WEIGHT, gr.DST_HEIGHT, gr.DST_WIDTH }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
+                var lstCalcNodes = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
 
 
                 foreach (var calcNode in lstCalcNodes.AsEnumerable())
@@ -106,9 +106,9 @@ namespace PMap.LongProcess
                     i++;
 
                     var routePar = routePars.Where(w => w.RZN_ID_LIST == calcNode.Key.RZN_ID_LIST &&
-                                                        w.Weight == calcNode.Key.DST_WEIGHT &&
-                                                        w.Height == calcNode.Key.DST_HEIGHT &&
-                                                        w.Width == calcNode.Key.DST_WIDTH).FirstOrDefault();
+                                                        w.Weight == calcNode.Key.DST_MAXWEIGHT &&
+                                                        w.Height == calcNode.Key.DST_MAXHEIGHT &&
+                                                        w.Width == calcNode.Key.DST_MAXWIDTH).FirstOrDefault();
                     List<int> lstToNodes = calcNode.Value;
 
                     //megj: nins routePar null ellenőrzés, hogy szálljon el, ha valami probléma van

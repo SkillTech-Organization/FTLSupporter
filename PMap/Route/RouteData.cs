@@ -95,8 +95,6 @@ namespace PMap.Route
                         foreach (DataRow dr in dt.Rows)
                         {
 
-                            if (Edges.Count > 996970)
-                                Console.WriteLine("d");
                             int Source = Util.getFieldValue<int>(dr, "NOD_NUM");
                             int Destination = Util.getFieldValue<int>(dr, "NOD_NUM2");
                             bool OneWay = Util.getFieldValue<bool>(dr, "EDG_ONEWAY");

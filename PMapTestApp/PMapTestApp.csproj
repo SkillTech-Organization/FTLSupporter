@@ -302,10 +302,6 @@
       <Project>{50AA2C7B-A6DA-4EB7-8316-9D87CAEBA9B7}</Project>
       <Name>VBInterface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WinFormsUI\WinFormsUI.csproj">
-      <Project>{c75532c4-765b-418e-b09b-46d36b2abdb1}</Project>
-      <Name>WinFormsUI</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="map.ico" />

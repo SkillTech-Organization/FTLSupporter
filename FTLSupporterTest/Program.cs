@@ -18,7 +18,7 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            Test(true);
+            Test(false);
         }
 
         static void Test(bool p_bestTruck = false)
@@ -363,7 +363,7 @@ namespace FTLSupporterTest
             FTLTruck trk1 = new FTLTruck()
             {
                 TruckID = "TRK1 Gyál",
-                GVWR = 20000,
+                GVWR = 12000,
                 Capacity = 2000,
                 TruckType = "Hűtős",
                 CargoTypes = "Száraz,Romlandó",
@@ -579,7 +579,42 @@ namespace FTLSupporterTest
 
             };
 
+            FTLTruck trk6 = new FTLTruck()
+            {
+                TruckID = "TRK6 Debrecen avail",
+                GVWR = 20000,
+                Capacity = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Száraz",
+                EngineEuro = 2,
+                ETollCat = 2,
+                //                RZones = "P35,P75",
+                FixCost = 10000,
+                KMCost = 50,
+                RelocateCost = 500,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Available,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTPoints = new List<FTLPoint>(),
+                TPointCompleted = 1,
+                CurrTime = DateTime.Now.Date.AddHours(5),
+                CurrLat = tp6.Lat,                          //Debrecen
+                CurrLng = tp6.Lng,
 
+                RemainingDriveTime = 3 * 60 * 60,                               //180 perc
+                RemainingRestTime = 45 * 60,                                    // 45 perc
+                RemainingTimeToStartDailyRest = (int)(1.5 * 60 * 60),           // 90 perc
+                RemainingDailyDriveTime = 4 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 45 * 60,                               // 45 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 3 * 60 * 60,                          //180 perc
+                RemainingTwoWeeklyDriveTime = 7 * 60 * 60,                      //360 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+
+            };
             #endregion
 
             /*//vezetési idő teszt
@@ -589,7 +624,7 @@ namespace FTLSupporterTest
 
             //12t korlát teszt
             var lstTsk = new List<FTLTask> { tsk8 };
-            var lstTrk = new List<FTLTruck> { trk1, trk2 };   /*trk1:20T, távolság:59463,trk2:10T, távolság:23596*/
+            var lstTrk = new List<FTLTruck> { trk1, trk6 };   /*trk1:12T, távolság:23596,trk6:20T, távolság:59463*/
 
 
             /* PROPS-EXCLPROPS teszt 
@@ -803,7 +838,7 @@ namespace FTLSupporterTest
                             Console.ForegroundColor = ConsoleColor.Cyan;
                             if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                             {
-                                Console.WriteLine("T1  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, xIdő:{5:#,#0.00}, pih:{6:#,#0.00}"
+                                Console.WriteLine("T1  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                     , clctour.T1Start, clctour.T1End, clctour.T1M, clctour.T1Toll, clctour.T1Cost, clctour.T1FullDuration, clctour.T1Rest);
 
                                 foreach (FTLCalcRoute clcroute in clctour.T1CalcRoute)
@@ -812,12 +847,12 @@ namespace FTLSupporterTest
                                 }
                             }
                             //Átállás
-                            Console.WriteLine("REL kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, xIdő:{5:#,#0.00}, pih:{6:#,#0.00}"
+                            Console.WriteLine("REL kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                 , clctour.RelStart, clctour.RelEnd, clctour.RelM, clctour.RelToll, clctour.RelCost, clctour.RelFullDuration, clctour.RelRest);
                             Console.WriteLine("\t{0} érk:{1:yyyy.MM.dd HH:mm}, ind:{2:yyyy.MM.dd HH:mm}, táv:{3:#,#0.00}, vez:{4:#,#0.00}, pih:{5:#,#0.00}", clctour.RelCalcRoute.TPoint.Name, clctour.RelCalcRoute.Arrival, clctour.RelCalcRoute.Departure, clctour.RelCalcRoute.Distance, clctour.RelCalcRoute.DrivingDuration, clctour.RelCalcRoute.RestDuration);
 
                             //Beosztandó túra
-                            Console.WriteLine("T2  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, xIdő:{5:#,#0.00}, pih:{6:#,#0.00}"
+                            Console.WriteLine("T2  kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                 , clctour.T2Start, clctour.T2End, clctour.T2M, clctour.T2Toll, clctour.T2Cost, clctour.T2FullDuration, clctour.T2Rest);
 
                             foreach (FTLCalcRoute clcroute in clctour.T2CalcRoute)
@@ -828,7 +863,7 @@ namespace FTLSupporterTest
                             //Visszatérés
                             if (!clctour.Truck.CurrIsOneWay)
                             {
-                                Console.WriteLine("RET kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, xIdő:{5:#,#0.00}, pih:{6:#,#0.00}"
+                                Console.WriteLine("RET kezd:{0:yyyy.MM.dd HH:mm}, bef:{1:yyyy.MM.dd HH:mm}, táv.:{2:#,#0.00}, útdíj:{3:#,#0.00}, ktg:{4:#,#0.00}, Idő:{5:#,#0.00}, pih:{6:#,#0.00}"
                                     , clctour.RetStart, clctour.RetEnd, clctour.RetM, clctour.RetToll, clctour.RetCost, clctour.RetFullDuration, clctour.RetRest);
                                 Console.WriteLine("\t{0} érk:{1:yyyy.MM.dd HH:mm}, ind:{2:yyyy.MM.dd HH:mm}, táv:{3:#,#0.00}, vez:{4:#,#0.00}, pih:{5:#,#0.00}", clctour.RetCalcRoute.TPoint != null ? clctour.RetCalcRoute.TPoint.Name : "**Nincs neve**", clctour.RetCalcRoute.Arrival, clctour.RetCalcRoute.Departure, clctour.RetCalcRoute.Distance, clctour.RetCalcRoute.DrivingDuration, clctour.RetCalcRoute.RestDuration);
                             }

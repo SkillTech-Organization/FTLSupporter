@@ -88,14 +88,14 @@ namespace PMap.BLL
                         DateTime dtStart = DateTime.Now;
 
                         SqlCommand command = new SqlCommand(null, DBA.Conn);
-                        command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_WEIGHT, DST_HEIGHT, DST_WIDTH, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_WEIGHT, @DST_HEIGHT, @DST_WIDTH, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
+                        command.CommandText = "insert into DST_DISTANCE ( NOD_ID_FROM, NOD_ID_TO, RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(@NOD_ID_FROM, @NOD_ID_TO, @RZN_ID_LIST, @DST_MAXWEIGHT, @DST_MAXHEIGHT, @DST_MAXWIDTH, @DST_DISTANCE, @DST_EDGES, @DST_POINTS)";
 
                         command.Parameters.Add(new SqlParameter("@NOD_ID_FROM", SqlDbType.Int, 0));
                         command.Parameters.Add(new SqlParameter("@NOD_ID_TO", SqlDbType.Int, 0));
                         command.Parameters.Add(new SqlParameter("@RZN_ID_LIST", SqlDbType.VarChar, Int32.MaxValue));
-                        command.Parameters.Add(new SqlParameter("@DST_WEIGHT", SqlDbType.Float, 0));
-                        command.Parameters.Add(new SqlParameter("@DST_HEIGHT", SqlDbType.Float, 0));
-                        command.Parameters.Add(new SqlParameter("@DST_WIDTH", SqlDbType.Float, 0));
+                        command.Parameters.Add(new SqlParameter("@DST_MAXWEIGHT", SqlDbType.Float, 0));
+                        command.Parameters.Add(new SqlParameter("@DST_MAXHEIGHT", SqlDbType.Float, 0));
+                        command.Parameters.Add(new SqlParameter("@DST_MAXWIDTH", SqlDbType.Float, 0));
                         command.Parameters.Add(new SqlParameter("@DST_DISTANCE", SqlDbType.Float, 0));
                         command.Parameters.Add(new SqlParameter("@DST_EDGES", SqlDbType.VarBinary, Int32.MaxValue));
                         command.Parameters.Add(new SqlParameter("@DST_POINTS", SqlDbType.VarBinary, Int32.MaxValue));
@@ -109,9 +109,9 @@ namespace PMap.BLL
                             command.Parameters["@NOD_ID_FROM"].Value = route.NOD_ID_FROM;
                             command.Parameters["@NOD_ID_TO"].Value = route.NOD_ID_TO;
                             command.Parameters["@RZN_ID_LIST"].Value = route.RZN_ID_LIST;
-                            command.Parameters["@DST_WEIGHT"].Value = route.DST_WEIGHT;
-                            command.Parameters["@DST_HEIGHT"].Value = route.DST_HEIGHT;
-                            command.Parameters["@DST_WIDTH"].Value = route.DST_WIDTH;
+                            command.Parameters["@DST_MAXWEIGHT"].Value = route.DST_MAXWEIGHT;
+                            command.Parameters["@DST_MAXHEIGHT"].Value = route.DST_MAXHEIGHT;
+                            command.Parameters["@DST_MAXWIDTH"].Value = route.DST_MAXWIDTH;
 
                             command.Parameters["@DST_DISTANCE"].Value = route.DST_DISTANCE;
                             if (route.Edges != null && route.Route != null)
@@ -158,7 +158,7 @@ namespace PMap.BLL
 
             boRoute result = null;
             string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
-                           "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_WEIGHT = ? and DST_HEIGHT = ? and DST_WIDTH = ?  ";
+                           "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?  ";
             DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
             if (dt.Rows.Count == 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
@@ -168,9 +168,9 @@ namespace PMap.BLL
                 result = new boRoute();
                 result.DST_DISTANCE = Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE");
                 result.RZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
-                result.DST_WEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_WEIGHT");
-                result.DST_HEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_HEIGHT");
-                result.DST_WIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_WIDTH");
+                result.DST_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWEIGHT");
+                result.DST_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXHEIGHT");
+                result.DST_MAXWIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWIDTH");
 
 
                 byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
@@ -241,7 +241,7 @@ namespace PMap.BLL
 
             MapRoute result = null;
             string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
-                           "where NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST=? and DST_WEIGHT = ? and DST_HEIGHT = ? and DST_WIDTH = ?";
+                           "where NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST=? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?";
             DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
             if (dt.Rows.Count == 1)
@@ -414,7 +414,7 @@ namespace PMap.BLL
                     "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                     "	  where TPL.PLN_ID = ? " + Environment.NewLine +
                     ") " + Environment.NewLine +
-                    "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_WEIGHT, CTE_TPL.TRK_XHEIGHT as DST_HEIGHT, CTE_TPL.TRK_XWIDTH as DST_WIDTH " + Environment.NewLine +
+                    "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_MAXWEIGHT, CTE_TPL.TRK_XHEIGHT as DST_MAXHEIGHT, CTE_TPL.TRK_XWIDTH as DST_MAXWIDTH " + Environment.NewLine +
                     "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
                     "		union  " + Environment.NewLine +
                     "		select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
@@ -427,7 +427,7 @@ namespace PMap.BLL
                     "	    ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
                     "inner join CTE_TPL on 1=1 " + Environment.NewLine +
                     "EXCEPT  " + Environment.NewLine +
-                    "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_WEIGHT, DST_HEIGHT, DST_WIDTH from DST_DISTANCE DST " + Environment.NewLine +
+                    "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH from DST_DISTANCE DST " + Environment.NewLine +
                     "order by 1,2,3,4,5,6";
 
 
@@ -440,9 +440,9 @@ namespace PMap.BLL
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
-                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
-                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
-                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
+                        DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
                     }).ToList();
         }
 
@@ -525,7 +525,7 @@ namespace PMap.BLL
                             "	  where TRK_ACTIVE = 1 " + Environment.NewLine +
                             ") " + Environment.NewLine +
                             "--Összegy√jtjük a megrednelésekben szereplo NODE-ID-ket  " + Environment.NewLine +
-                            "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TRK.RESTZONES, CTE_TRK.TRK_WEIGHT as DST_WEIGHT, CTE_TRK.TRK_XHEIGHT as DST_HEIGHT, CTE_TRK.TRK_XWIDTH  as DST_WIDTH " + Environment.NewLine +
+                            "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TRK.RESTZONES, CTE_TRK.TRK_WEIGHT as DST_MAXWEIGHT, CTE_TRK.TRK_XHEIGHT as DST_MAXHEIGHT, CTE_TRK.TRK_XWIDTH  as DST_MAXWIDTH " + Environment.NewLine +
                             "from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
                             "union " + Environment.NewLine +
                             "select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
@@ -539,7 +539,7 @@ namespace PMap.BLL
                             "inner join CTE_TRK on 1=1 " + Environment.NewLine +
                             "where NOD_FROM.ID <> 0 and  NOD_TO.ID <> 0 " + Environment.NewLine +
                             "EXCEPT  " + Environment.NewLine +
-                            "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_WEIGHT, DST_HEIGHT, DST_WIDTH from DST_DISTANCE DST  " + Environment.NewLine +
+                            "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH from DST_DISTANCE DST  " + Environment.NewLine +
                             "order by 1,2,3,4,5,6";
 
 
@@ -550,9 +550,9 @@ namespace PMap.BLL
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
-                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
-                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
-                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
+                        DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
                     }).ToList();
 
         }
@@ -599,9 +599,9 @@ namespace PMap.BLL
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
-                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
-                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
-                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
+                        DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
                     }).ToList();
 
         }
@@ -643,9 +643,9 @@ namespace PMap.BLL
                         NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
-                        DST_WEIGHT = Util.getFieldValue<int>(row, "DST_WEIGHT"),
-                        DST_WIDTH = Util.getFieldValue<int>(row, "DST_WIDTH"),
-                        DST_HEIGHT = Util.getFieldValue<int>(row, "DST_HEIGHT")
+                        DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
                     }).ToList();
 
 
@@ -658,8 +658,8 @@ namespace PMap.BLL
             {
                 try
                 {
-                    DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and NOD_ID_FROM=? and NOD_ID_TO=? and DST_WEIGHT=? and DST_HEIGHT=? and DST_WIDTH=? ", p_Route.RZN_ID_LIST, p_Route.NOD_ID_FROM, p_Route.NOD_ID_TO, p_Route.DST_WEIGHT, p_Route.DST_HEIGHT, p_Route.DST_WIDTH);
-                    String sSql = "insert into DST_DISTANCE ( RZN_ID_LIST, NOD_ID_FROM, NOD_ID_TO, DST_WEIGHT, DST_HEIGHT, DST_WIDTH, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and NOD_ID_FROM=? and NOD_ID_TO=? and DST_MAXWEIGHT=? and DST_MAXHEIGHT=? and DST_MAXWIDTH=? ", p_Route.RZN_ID_LIST, p_Route.NOD_ID_FROM, p_Route.NOD_ID_TO, p_Route.DST_MAXWEIGHT, p_Route.DST_MAXHEIGHT, p_Route.DST_MAXWIDTH);
+                    String sSql = "insert into DST_DISTANCE ( RZN_ID_LIST, NOD_ID_FROM, NOD_ID_TO, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, DST_DISTANCE, DST_EDGES, DST_POINTS) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     byte[] bEdges = null;
                     byte[] bPoints = null;
 
@@ -679,9 +679,9 @@ namespace PMap.BLL
                         p_Route.RZN_ID_LIST,
                         p_Route.NOD_ID_FROM,
                         p_Route.NOD_ID_TO,
-                        p_Route.DST_WEIGHT,
-                        p_Route.DST_HEIGHT,
-                        p_Route.DST_WIDTH,
+                        p_Route.DST_MAXWEIGHT,
+                        p_Route.DST_MAXHEIGHT,
+                        p_Route.DST_MAXWIDTH,
                         p_Route.DST_DISTANCE,
                         bEdges,
                         bPoints

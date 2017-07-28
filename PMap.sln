@@ -16,8 +16,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VBInterface", "VBInterface\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMapTestApp", "PMapTestApp\PMapTestApp.csproj", "{61561FB5-F3E2-49C5-9A7D-66C80E8CE0B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsUI", "WinFormsUI\WinFormsUI.csproj", "{C75532C4-765B-418E-B09B-46D36B2ABDB1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrcNumericTextBox", "FrcNumericTextBox\FrcNumericTextBox.csproj", "{FF4CD9F3-DB53-4FD9-8541-5777947745E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animated Notify Icon", "Animated Notify Icon\Animated Notify Icon.csproj", "{735B55E9-0BB8-43E9-B3B7-959029EDE369}"
@@ -61,6 +59,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMAdmin", "PMAdmin\PMAdmin.csproj", "{15132AAF-C9BC-49DE-AE91-33AE21C04138}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DTPicker", "DTPicker\DTPicker.vbproj", "{05DC0418-566F-47F1-AA53-190009DD01F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsUI", "WinFormsUI\WinFormsUI.csproj", "{C75532C4-765B-418E-B09B-46D36B2ABDB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,22 +150,6 @@ Global
 		{61561FB5-F3E2-49C5-9A7D-66C80E8CE0B6}.Release|x64.Build.0 = Release|x64
 		{61561FB5-F3E2-49C5-9A7D-66C80E8CE0B6}.Release|x86.ActiveCfg = Release|x86
 		{61561FB5-F3E2-49C5-9A7D-66C80E8CE0B6}.Release|x86.Build.0 = Release|x86
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x64.ActiveCfg = Debug|x64
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x64.Build.0 = Debug|x64
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x86.Build.0 = Debug|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x64.ActiveCfg = Release|x64
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x64.Build.0 = Release|x64
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x86.ActiveCfg = Release|Any CPU
-		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x86.Build.0 = Release|Any CPU
 		{FF4CD9F3-DB53-4FD9-8541-5777947745E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF4CD9F3-DB53-4FD9-8541-5777947745E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF4CD9F3-DB53-4FD9-8541-5777947745E9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -261,6 +245,22 @@ Global
 		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|x64.ActiveCfg = Release|Any CPU
 		{05DC0418-566F-47F1-AA53-190009DD01F7}.Release|x86.ActiveCfg = Release|Any CPU
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x64.ActiveCfg = Debug|x64
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x64.Build.0 = Debug|x64
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x86.ActiveCfg = Debug|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|x86.Build.0 = Debug|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x64.ActiveCfg = Release|x64
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x64.Build.0 = Release|x64
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x86.ActiveCfg = Release|x86
+		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -294,20 +294,20 @@ Global
 		SccProjectUniqueName8 = VBInterface\\VBInterface.csproj
 		SccProjectName8 = VBInterface
 		SccLocalPath8 = VBInterface
-		SccProjectUniqueName9 = WinFormsUI\\WinFormsUI.csproj
-		SccProjectName9 = WinFormsUI
-		SccLocalPath9 = WinFormsUI
-		SccProjectUniqueName10 = FTLSupporter\\FTLSupporter.csproj
-		SccProjectName10 = FTLSupporter
-		SccLocalPath10 = FTLSupporter
-		SccProjectUniqueName11 = FTLSupporterTest\\FTLSupporterTest.csproj
-		SccProjectName11 = FTLSupporterTest
-		SccLocalPath11 = FTLSupporterTest
-		SccProjectUniqueName12 = PMAdmin\\PMAdmin.csproj
-		SccProjectName12 = PMAdmin
-		SccLocalPath12 = PMAdmin
-		SccProjectUniqueName13 = DTPicker\\DTPicker.vbproj
-		SccProjectName13 = DTPicker
-		SccLocalPath13 = DTPicker
+		SccProjectUniqueName9 = FTLSupporter\\FTLSupporter.csproj
+		SccProjectName9 = FTLSupporter
+		SccLocalPath9 = FTLSupporter
+		SccProjectUniqueName10 = FTLSupporterTest\\FTLSupporterTest.csproj
+		SccProjectName10 = FTLSupporterTest
+		SccLocalPath10 = FTLSupporterTest
+		SccProjectUniqueName11 = PMAdmin\\PMAdmin.csproj
+		SccProjectName11 = PMAdmin
+		SccLocalPath11 = PMAdmin
+		SccProjectUniqueName12 = DTPicker\\DTPicker.vbproj
+		SccProjectName12 = DTPicker
+		SccLocalPath12 = DTPicker
+		SccProjectUniqueName13 = WinFormsUI\\WinFormsUI.csproj
+		SccProjectName13 = WinFormsUI
+		SccLocalPath13 = WinFormsUI
 	EndGlobalSection
 EndGlobal
