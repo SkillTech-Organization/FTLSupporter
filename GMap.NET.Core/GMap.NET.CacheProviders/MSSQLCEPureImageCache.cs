@@ -100,7 +100,7 @@ namespace GMap.NET.CacheProviders
                      {
                      }
 
-                     throw ex;
+                     throw;
                   }
                }
 

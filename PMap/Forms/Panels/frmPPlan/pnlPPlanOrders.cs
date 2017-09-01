@@ -47,7 +47,7 @@ namespace PMap.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
 
         }

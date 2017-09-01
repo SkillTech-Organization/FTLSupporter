@@ -130,7 +130,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 return TRK_ID;
@@ -148,7 +148,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -174,7 +174,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 finally
@@ -206,7 +206,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 finally
@@ -236,7 +236,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 finally
@@ -280,7 +280,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 finally

@@ -108,7 +108,7 @@ namespace PMap.BLL.Base
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
                 finally
                 {
@@ -142,7 +142,7 @@ namespace PMap.BLL.Base
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
                 finally
                 {

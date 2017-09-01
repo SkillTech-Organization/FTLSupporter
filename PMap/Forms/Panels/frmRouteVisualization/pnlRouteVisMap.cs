@@ -147,7 +147,7 @@ namespace PMap.Forms.Panels.frmRouteVisualization
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
 
         }

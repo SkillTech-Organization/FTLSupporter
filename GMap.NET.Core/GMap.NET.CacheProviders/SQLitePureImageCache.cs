@@ -424,7 +424,7 @@ namespace GMap.NET.CacheProviders
                            }
                            else
                            {
-                              throw ex;
+                              throw;
                            }
                         }
 

@@ -61,7 +61,7 @@ namespace PMap
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 

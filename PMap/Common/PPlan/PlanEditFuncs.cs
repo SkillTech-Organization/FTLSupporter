@@ -207,7 +207,7 @@ namespace PMap.Common.PPlan
                 {
                     PMapCommonVars.Instance.CT_DB.Rollback();
                     Util.ExceptionLog(exc);
-                    throw new Exception(exc.Message);
+                    throw;
                 }
 
             }

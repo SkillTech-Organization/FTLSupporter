@@ -84,7 +84,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
             return newPTP_ID;
@@ -157,7 +157,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
             return true;
@@ -459,7 +459,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -477,7 +477,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -493,7 +493,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -529,7 +529,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -555,7 +555,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
             return newID;
@@ -593,7 +593,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -624,7 +624,7 @@ namespace PMap.BLL
                 catch (Exception exc)
                 {
                     PMapCommonVars.Instance.CT_DB.Rollback();
-                    throw exc;
+                    throw;
                 }
             }
         }
@@ -659,7 +659,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
             return newPTP_ID;
@@ -677,7 +677,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -692,7 +692,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -709,7 +709,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -745,7 +745,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -821,7 +821,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -1024,7 +1024,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
             }
@@ -1347,7 +1347,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
             return ret;
@@ -1367,7 +1367,7 @@ namespace PMap.BLL
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -1407,7 +1407,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
             return true;

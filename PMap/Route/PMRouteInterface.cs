@@ -43,7 +43,7 @@ namespace PMap.Route
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -79,7 +79,7 @@ namespace PMap.Route
 
                             if (p_NotifyForm)
                             {
-                                pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST }).Count() - 1, sTitle, true);
+                                pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).Count() - 1, sTitle, true);
                                 cpp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
                             }
                             else
@@ -105,7 +105,7 @@ namespace PMap.Route
                         }
                         catch (Exception e)
                         {
-                            throw e;
+                            throw;
                         }
                         tspDiff = DateTime.Now - dtStart;
                         Util.Log2File("GetPMapRoutes SingleThread END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
@@ -219,7 +219,7 @@ namespace PMap.Route
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             finally
             {

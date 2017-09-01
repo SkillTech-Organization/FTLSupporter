@@ -351,7 +351,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -372,7 +372,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -626,8 +626,8 @@ namespace PMap.BLL
                  "where TOD.PLN_ID = ? and TPL.TPL_AVAIL_S <= PLN_DATE_E  " + Environment.NewLine +
                  " and  isnull( TPL.TPL_NOREPLAN, 0) = 0 and isnull( TPL.TPL_LOCKED,0) = 0 and ORD.CTP_ID in ( select CTP_ID from TCP_TRUCKCARGOTYPE TCP where TCP.TRK_ID = TRK.ID) " + Environment.NewLine +
                  " and (TRK_LENGTH is null OR TRK_LENGTH=0 or TRK_LENGTH>=ORD_LENGTH) " + Environment.NewLine +
-                 " and (TRK_XWIDTH is null  OR TRK_XWIDTH =0 or TRK_XWIDTH >=ORD_WIDTH)  " + Environment.NewLine +
-                 " and (TRK_XHEIGHT is null OR TRK_XHEIGHT=0 or TRK_XHEIGHT>=ORD_HEIGHT) ";
+                 " and (TRK_WIDTH is null  OR TRK_WIDTH =0 or TRK_WIDTH >=ORD_WIDTH)  " + Environment.NewLine +
+                 " and (TRK_HEIGHT is null OR TRK_HEIGHT=0 or TRK_HEIGHT>=ORD_HEIGHT) ";
 
             if (boOpt.TPL_ID <= 0)
             {
@@ -707,13 +707,14 @@ namespace PMap.BLL
                         "				  inner join TOD_TOURORDER (NOLOCK) TOD on TOD.PLN_ID = ? and TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                         "				  ) NOD_TO on NOD_TO.NOD_ID <> NOD_FROM.NOD_ID  " + Environment.NewLine +
                         "			) Q1, " + Environment.NewLine +
-                        "			(select distinct RZN.RZN_ID_LIST, TRK.SPP_ID " + Environment.NewLine +
+                        "			(select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XWIDTH, TRK.TRK_XHEIGHT  " + Environment.NewLine +
                         "			  from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
                         "			  inner join v_trk_RZN_ID_LIST (NOLOCK) RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                         "			  inner join TRK_TRUCK (NOLOCK) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "			  where TPL.PLN_ID = ? and isnull(TPL.TPL_LOCKED,0) = 0 " + Environment.NewLine +
                         "			  ) Q2) NODES " + Environment.NewLine +
-                        "	inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST=NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and DST.NOD_ID_TO=NODES.NOD_ID_TO " + Environment.NewLine +
+                        "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
+                        "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT  " + Environment.NewLine +
                         "order by NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST,  DST.DST_EDGES ";
 
                 dt = DBA.Query2DataTable(sSql, boOpt.PLN_ID, boOpt.PLN_ID, boOpt.PLN_ID);
@@ -740,13 +741,14 @@ namespace PMap.BLL
                         "					left outer join DEP_DEPOT (NOLOCK) DEP on DEP.ID = TOD.DEP_ID " + Environment.NewLine +
                         "					where TPL_ID = ?) NOD_TO on NOD_TO.NOD_ID <> NOD_FROM.NOD_ID " + Environment.NewLine +
                         "	) Q1, " + Environment.NewLine +
-                        "	(select distinct RZN.RZN_ID_LIST, TRK.SPP_ID " + Environment.NewLine +
+                        "   (select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XWIDTH, TRK.TRK_XHEIGHT  " + Environment.NewLine +
                         "	 from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
                         "	 inner join v_trk_RZN_ID_LIST (NOLOCK) RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                         "	 inner join TRK_TRUCK (NOLOCK) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "	 where TPL.ID = ? " + Environment.NewLine +
                         "	 ) Q2 ) NODES " + Environment.NewLine +
                         "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
+                        "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT  " + Environment.NewLine +
                         "order by ID_FROM,ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST,  DST.DST_EDGES ";
 
                 dt = DBA.Query2DataTable(sSql, boOpt.TPL_ID, boOpt.TPL_ID, boOpt.TPL_ID);
@@ -1207,7 +1209,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }

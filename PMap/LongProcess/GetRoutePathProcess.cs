@@ -236,7 +236,7 @@ namespace PMap.LongProcess
             }
             catch (Exception e)
             {
-                //throw e;
+                //throw;
                 Util.ExceptionLog(e);
             }
             finally

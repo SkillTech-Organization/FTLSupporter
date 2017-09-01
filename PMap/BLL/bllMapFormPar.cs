@@ -42,7 +42,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     PMapCommonVars.Instance.CT_DB.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace PMap.BLL
             catch (Exception e)
             {
                 PMapCommonVars.Instance.CT_DB.Rollback();
-                throw e;
+                throw;
             }
         }
 

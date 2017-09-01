@@ -239,7 +239,7 @@ namespace PMap.MapProvider
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -276,7 +276,7 @@ namespace PMap.MapProvider
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             return float.MaxValue;
         }

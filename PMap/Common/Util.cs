@@ -564,7 +564,7 @@ namespace PMap.Common
 
                 Util.ExceptionLog(e);
                 return "Exception has been thrown (see PMap.exc). Unable to read performance categories.";
-                //throw e;
+                //throw;
             }
         }
 

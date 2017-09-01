@@ -126,7 +126,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
 
         }
@@ -204,7 +204,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             return res;
         }
@@ -238,7 +238,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             return true;
        }
@@ -314,7 +314,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             return true;
         }
@@ -373,7 +373,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -399,7 +399,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -476,7 +476,7 @@ namespace PMap.Forms
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 

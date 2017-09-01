@@ -191,7 +191,7 @@ namespace PMap.BLL.DataXChange
                                 catch (Exception e)
                                 {
                                     DBA.Rollback();
-                                    throw e;
+                                    throw;
                                 }
                             }
                         }

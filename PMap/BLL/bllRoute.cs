@@ -135,7 +135,7 @@ namespace PMap.BLL
                     catch (Exception e)
                     {
                         DBA.Rollback();
-                        throw e;
+                        throw;
                     }
 
                     finally
@@ -423,7 +423,7 @@ namespace PMap.BLL
                     "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
                     "	    union  " + Environment.NewLine +
                     "	    select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
-                    "	    inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = " + Environment.NewLine +
+                    "	    inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
                     "	    ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
                     "inner join CTE_TPL on 1=1 " + Environment.NewLine +
                     "EXCEPT  " + Environment.NewLine +
@@ -692,7 +692,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 finally

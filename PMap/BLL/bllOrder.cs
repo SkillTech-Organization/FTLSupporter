@@ -106,7 +106,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
 
                 return ORD_ID;
@@ -124,7 +124,7 @@ namespace PMap.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
-                    throw e;
+                    throw;
                 }
             }
         }

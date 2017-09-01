@@ -484,7 +484,7 @@ namespace PMapTestApp
             SQLServerAccess db = new SQLServerAccess();
             db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
-            List<dtXResult> res = (new PMapInterface()).CreateNewPlan("", dbConf, "Xtest1", 1, new DateTime(2013, 04, 11), new DateTime(2013, 04, 12), false, new DateTime(2013, 04, 11), new DateTime(2013, 04, 12));
+            List<dtXResult> res = (new PMapInterface()).CreateNewPlan("", dbConf, "2X20170828", 1, new DateTime(2017, 08, 29), new DateTime(2017, 08, 30), false, new DateTime(2017, 08, 29), new DateTime(2017, 08, 30));
             dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
             var pp = res.First();
             dd.propertyGridCtrl1.SetObject(pp);

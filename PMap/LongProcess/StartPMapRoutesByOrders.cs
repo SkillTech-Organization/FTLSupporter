@@ -80,7 +80,7 @@ namespace PMap.LongProcess
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
 
             finally

@@ -74,7 +74,7 @@ namespace PMap.Forms
 
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             finally
             {

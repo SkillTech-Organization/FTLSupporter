@@ -175,7 +175,7 @@ namespace PMap.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
 
         }
@@ -275,7 +275,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 gMapControl.ResumeLayout();
                 gMapControl.Refresh();
 
-                throw e;
+                throw;
             }
             return CreateCompleted;
         }
@@ -313,7 +313,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 gMapControl.ResumeLayout();
                 gMapControl.Refresh();
 
-                throw e;
+                throw;
             }
 
         }
@@ -548,7 +548,7 @@ namespace PMap.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -580,7 +580,7 @@ namespace PMap.Forms.Panels.frmPPlan
             catch (Exception e)
             {
                 gMapControl.HoldInvalidation = false;
-                throw e;
+                throw;
             }
         }
 
@@ -597,7 +597,7 @@ namespace PMap.Forms.Panels.frmPPlan
             catch (Exception e)
             {
                 gMapControl.HoldInvalidation = false;
-                throw e;
+                throw;
             }
         }
 
@@ -989,7 +989,7 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 Util.ExceptionLog(ex);
                 exitEditMode(true);
-                //throw new Exception(ex.Message);
+                //throw;
             }
         }
 
@@ -1079,7 +1079,7 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 Util.ExceptionLog(ex);
                 exitEditMode(true);
-                //throw new Exception(ex.Message);
+                //throw;
             }
 
         }
@@ -1103,7 +1103,7 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 Util.ExceptionLog(ex);
                 exitEditMode(true);
-                //throw new Exception(ex.Message);
+                //throw;
             }
 
         }
@@ -1261,7 +1261,7 @@ namespace PMap.Forms.Panels.frmPPlan
             catch (Exception ex)
             {
                 Util.ExceptionLog(ex);
-                throw new Exception(ex.Message);
+                throw;
             }
 
         }
@@ -1546,7 +1546,7 @@ namespace PMap.Forms.Panels.frmPPlan
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
         }

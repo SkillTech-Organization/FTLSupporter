@@ -135,7 +135,7 @@ namespace FTLSupporter
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
             finally
             {

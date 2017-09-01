@@ -53,7 +53,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -124,7 +124,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
 
             }     //szebben megoldani!
             return TableEntity;
@@ -246,7 +246,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -291,7 +291,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -332,7 +332,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -379,7 +379,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
         }
@@ -434,7 +434,7 @@ namespace PMap.Common.Azure
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
             return new ObservableCollection<T>(lstResult);
         }
