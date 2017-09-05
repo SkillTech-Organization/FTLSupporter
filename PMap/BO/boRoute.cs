@@ -21,8 +21,8 @@ namespace PMap.BO
         public int NOD_ID_TO { get; set; }
         public string RZN_ID_LIST { get; set; }
         public int DST_MAXWEIGHT { get; set; }
-        public int DST_MAXWIDTH { get; set; }
         public int DST_MAXHEIGHT { get; set; }
+        public int DST_MAXWIDTH { get; set; }
         public double DST_DISTANCE { get; set; }
         public double CalcDistance                  //lehet, hogy nem hasznaljuk
         {

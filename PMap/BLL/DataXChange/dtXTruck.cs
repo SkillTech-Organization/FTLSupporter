@@ -152,8 +152,8 @@ namespace PMap.BLL.DataXChange
                                     truck.TRK_BUNDDATE = DateTime.Now;
                                     truck.TRK_COLOR = xTruck.TRK_COLOR;
                                     truck.TRK_WEIGHT = xTruck.TRK_WEIGHT;
-                                    truck.TRK_XWIDTH = xTruck.TRK_XWIDTH;
                                     truck.TRK_XHEIGHT = xTruck.TRK_XHEIGHT;
+                                    truck.TRK_XWIDTH = xTruck.TRK_XWIDTH;
                                     truck.TRK_WIDTH = xTruck.TRK_WIDTH;
                                     truck.TRK_HEIGHT = xTruck.TRK_HEIGHT;
                                     truck.TRK_LENGTH = xTruck.TRK_LENGTH;

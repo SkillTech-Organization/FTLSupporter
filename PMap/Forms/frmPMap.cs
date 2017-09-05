@@ -436,7 +436,10 @@ namespace PMap.Forms
                                 {
                                     mrkFlag = new PPlanMarkerFlag(start, tour.TourPoints[i]);
                                     mrkFlag.ToolTipMode = m_PPlanCommonVars.TooltipMode;
-                                    tour.TourPoints[i].ToolTipText = tour.TourPoints[i].TIME_AND_NAME;
+
+                                    tour.TourPoints[i].ToolTipText = PMapIniParams.Instance.OrdCommentInTooltip ?
+                                                                        tour.TourPoints[i].ORD_COMMENT :
+                                                                        tour.TourPoints[i].TIME_AND_NAME;
                                     //                            mrkFlag.Size = new System.Drawing.Size(20, 20);
 
                                     tour.TourPoints[i].Marker = mrkFlag;
@@ -459,9 +462,15 @@ namespace PMap.Forms
                                     mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                     mrkTourPoint.Size = new System.Drawing.Size(20, 20);
 
-                                    tour.TourPoints[i + 1].ToolTipText = tour.TourPoints[i + 1].DEP_CODE + "  ";
-                                    tour.TourPoints[i + 1].ToolTipText += tour.TourPoints[i + 1].TIME_AND_NAME;
-
+                                    if (PMapIniParams.Instance.OrdCommentInTooltip)
+                                    {
+                                        tour.TourPoints[i + 1].ToolTipText = tour.TourPoints[i + 1].ORD_COMMENT;
+                                    }
+                                    else
+                                    {
+                                        tour.TourPoints[i + 1].ToolTipText = tour.TourPoints[i + 1].DEP_CODE + "  ";
+                                        tour.TourPoints[i + 1].ToolTipText += tour.TourPoints[i + 1].TIME_AND_NAME;
+                                    }
                                     tour.TourPoints[i + 1].Marker = mrkTourPoint;
                                     m_routeLayer.Markers.Add(mrkTourPoint);
 

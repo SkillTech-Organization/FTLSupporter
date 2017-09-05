@@ -757,7 +757,7 @@ namespace PMap.BLL
                 try
                 {
 
-                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT,  TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH" + Environment.NewLine +
+                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH" + Environment.NewLine +
                                    "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                                    "left outer join WHS_WAREHOUSE WHS on WHS.ID = PTP.WHS_ID " + Environment.NewLine +
                                    "inner join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
@@ -905,8 +905,8 @@ namespace PMap.BLL
 
                         int TRK_ETOLLCAT = Util.getFieldValue<int>(dr, "TRK_ETOLLCAT");
                         int TRK_WEIGHT = Util.getFieldValue<int>(dr, "TRK_WEIGHT");
-                        int TRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XWIDTH");
                         int TRK_XHEIGHT = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
+                        int TRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XWIDTH");
 
                         if (TRK_ETOLLCAT > 1)
                         {

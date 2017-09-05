@@ -44,6 +44,8 @@ namespace PMap.Forms
             txtPLN_DATE_B.Text = m_boPlan.PLN_DATE_B.ToString(Global.DATETIMEFORMAT);
             txtPLN_DATE_E.Text = m_boPlan.PLN_DATE_E.ToString(Global.DATETIMEFORMAT);
             InitDialog();
+            AskOnExit = false;
+
         }
 
         public override bool OKPressed()

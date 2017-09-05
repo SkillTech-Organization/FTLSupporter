@@ -29,6 +29,9 @@ namespace PMap.Forms
             public bool OneWay { get; set; }
             public bool DestTraffic { get; set; }
             public string EDG_ETLCODE { get; set; }
+            public int EDG_MAXWEIGHT { get; set; }
+            public int EDG_MAXHEIGHT { get; set; }
+            public int EDG_MAXWIDTH { get; set; }
             public double OrigToll { get; set; }
             public double Toll { get; set; }
         }
@@ -41,6 +44,8 @@ namespace PMap.Forms
         {
             InitializeComponent();
             InitDialog();
+            AskOnExit = false;
+
         }
 
         public dlgTourDetails(boPlanTour p_selTour, List<CTourDetails> p_tourDetails)
@@ -54,6 +59,8 @@ namespace PMap.Forms
                 this.Text = string.Format("{0} jármű útvonala. Kezdés:{1}", m_selTour.TRUCK, m_selTour.START.ToString(Global.DATETIMEFORMAT));
 
             gridTourDetails.DataSource = m_tourDetails;
+            AskOnExit = false;
+
         }
 
         private void printToolStripButton_Click(object sender, EventArgs e)

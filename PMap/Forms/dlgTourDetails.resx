@@ -121,17 +121,17 @@
     <value>17, 17</value>
   </metadata>
   <metadata name="tabSchemeProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>123, 17</value>
+    <value>129, 17</value>
   </metadata>
   <metadata name="imlTypes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>363, 17</value>
+    <value>387, 17</value>
   </metadata>
   <data name="imlTypes.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACM
-        CAAAAk1TRnQBSQFMAgEBAgEAARQBAAEUAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        CAAAAk1TRnQBSQFMAgEBAgEAARwBAAEcAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAARADAAEBAQABCAYAAQQYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -171,7 +171,7 @@
 </value>
   </data>
   <metadata name="toolMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>270, 17</value>
+    <value>286, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="printToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -192,23 +192,23 @@
   <data name="excelToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAL3SURBVDhPhZLdS1NhHMd3lX9CWBddClFaKRV1US61WYG9
-        WVmZTucUTW3owiBTp5FphiYqVIhSdFFRVnNqU2vO5UYzelmm5st8jU2Xez1Hd8769pyz1QyEfvDhuXjO
-        98P5fc8RcBN7VZN6pFqvTril/xlXpqfISfPUcKeBTqgeoA/d1Jn2yrV1mxMfr+NDqyf+er/W6qQXZyw2
-        1uZehs0VZNHJQePbvBPFL6dx9tawR5SrCglE/XO4Umf9sbDEDpi9MEwxMEwz0JsZ6CZXoPm+jM4hN5YZ
-        QDlMobhtCul3TNQ/krgSNeXwrGBwhsWHGYacDN7zkhX0jS3j9ZCHCHwYnGdhmPOiQjUN4ZXeR3z4TE30
-        xKmyxF/SxhNIbziJhq5WlD+rgbAkHNEEUcUexCp2olZZy6/iohlYljyILehjeMHpauHT3i/taB+9jwZ9
-        IS9JqT+EwofJyGtNgqTpKNKa0qD8ZEG7yYVXnx2wk57iFP00LxDViUJEpfmsfuQtHnxRoEqTy0tSGw+T
-        8DFk3c2EdszNr9IzSkFNelhyexFX/s4v4Ca+so+WNYthHNOhyXAZN7oLcKbmAFLrE2E0e2AkxXIFa8f9
-        ndiIIFaxSrDvWol3V9EmJNeJMDg+gIq32VCoZEi6HYNWzQt8nGVgJMUOTHrxjmB1eiEsDQh2yEOlkfKN
-        yGs5h/ON8ThXe5CXyFTJkD/LJG8SA+5+cJrFe+4TE5ykyCiZzi+IlK+fjZRvIA+FIrIwFMerYpBzTwzt
-        kBoV6iJkPxFD0ngaRiIwkH9DTwS014dt+ZrgCvtl/fS8ncanWZanb2QOl5qzkEGC0qYkFLRc/HvH4Vlh
-        EZGvDAq2E9uMLSj4H26yQkRmW1CwW/bGYzJbf6318FrY7E7f1hSlKxAnRWZ1T0w5PE7T1KJvYoHChJXC
-        WIAFl5eHa95Fs7DYHD6KouxhFzq+BuICQVRWV06EpLN7u1Rti5A+p/+S4Sf8D5LndJikY2lLWkdPuFiV
-        LhAIBL8ByxmhJDO9TtAAAAAASUVORK5CYII=
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAL3SURBVDhPhZJZTxNRGIZ7pT/BoBdekhgFtUaNXijIUsAE
+        NwSiKEspBGQTajARIQUjshiQAIkaAtF4oQZUoCwFpJRCG4oRQQRkLUugtCxdZqAz5fXMtFpNSPySJ+fi
+        zPtkvndGwI3/A2X0xWKNIrREsxaQp6HISfOUcqeWDi3up4OfqEfOSlXlh8Le7uFDf0/Qo16VwUwb9ctG
+        1mTdgsnixmjmoPFjyYycT3pElozZRCnyva6oc0IK1YYlwxrbP2uHdo6BVs9AM8tAPbMN5c8ttI5ascUA
+        TWMUcj7MIe7ZCPWPJCC3ndq0bWNwnsWXeYacDAZ4yTZ6JrfQPmojAgcGl1hoF+0okOvhe7/rDR+OKPWZ
+        vp4XtiOpuoq4ymuobKtDfn0pfHO94EMQFZyBv+wkyprK+FUsNIOVdRv87/YwvCC82Pd913AzmideolKT
+        xUtuVwQj63UUUusiIa6+hNjqWDQNraB5xILGb5vYID0FyHppXiAqF+0NzE1jNePdeDUsQ5EyhZdEV4WQ
+        8GUkPk+AatLKr9I5QUFBeli32hGQ3+cUcBNU2ENn1MRAN6lGtfYeHndkIqL0AqIrwqCbtUFHiuUKVk05
+        OzERgb/sL8G5h7n2U9kHEVUuwuBUPwq6kyCTZyDyqR/qlB/xdYGBjhTbP2NHH8FgtsM3zyU4LvWQCKUH
+        kFp7AzergnCjLJCXZMijIK1PIG/iB+5+UM9igPvEBDMpUpiudgqE0n0LQul+8pAHhFkeuFLkh+QXMVCN
+        KlCgyEbSuxiIq8KhIwIt+Tc0REDbHfBOU7pXOJ/eSy9t0BhaYHl6xheRXpOIeBKUVEcis/bOnzsO2zZL
+        BI1uwVFimze5Bf/DSlbwTmhwC05nfLYNz6zs7PbwbhjXNx1HbjdZXHFSZGLH9NymzTw8u+qYXqUwbaAw
+        6WLVYufhmrfQLJaNGw6KojY8b7V8d8UFghOJbcne4taOYxKFyVvSQP8h3onXb8QNtKe4Zf1wbEunV4w8
+        TiAQCH4BkPChBKRJ4EwAAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="openExcel.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>458, 17</value>
+    <value>487, 17</value>
   </metadata>
 </root>

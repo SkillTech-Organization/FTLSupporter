@@ -23,6 +23,7 @@ namespace PMap.Forms
             gridDepots.DataSource = p_lstDepot;
             this.Text += "<<<" + p_caption + ">>>";
             InitDialog();
+            AskOnExit = false;
 
         }
 

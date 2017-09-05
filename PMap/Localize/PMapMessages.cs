@@ -17,10 +17,10 @@ namespace PMap.Localize
 
         public const string M_FRMPMAP_SELPOS = "Kiválasztott pozíció";
 
-        public const string E_PEDIT_NOINSPOINT = "A túrapont a zónakorlátozások miatt nem illeszthető a tervbe!";
+        public const string E_PEDIT_NOINSPOINT = "A túrapont a jármű tulajdonságai miatt nem illeszthető a tervbe!";
         public const string E_PEDIT_NOMOVEPOINT = "A {0} jármű {1} túrapontja nincs másik útszakaszra mozgatva!";
         public const string E_PEDIT_NOMOVEAFTERWHS = "A {0} jármű {1} túrapontot raktárba érkezés után nem lehet beszúrni!";
-        public const string E_PEDIT_NOTFITTEDDEP = "A túrapont a zónakorlátozások miatt nem illeszthető a tervbe!";
+        public const string E_PEDIT_NOTFITTEDDEP = "A túrapont a jármű tulajdonságai miatt nem illeszthető a tervbe!";
         public const string E_PEDIT_WRONGARR = "A távozás időpontja korábbi az érkezésnél!";
         public const string E_PEDIT_WRONTIME = "Túl nagy vagy túl kicsi időpont megadása! (Minimum:{0}, maximum {1})";
         public const string E_PEDIT_OPTISNFINISHED = "A tervezés nem futott le!";

@@ -88,7 +88,9 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Rendszám", Order = 25)]
         public string TRK_REG_NUM { get; set; } //"" esetén a megrendelés nics túrába szervezve
 
-        
+        [DisplayNameAttributeX(Name = "Megjegyzés", Order = 26)]
+        public string ORD_COMMENT { get; set; }
+
         //Technikai mezők
         [ScriptIgnore]
         public PPlanMarkerUnPlanned Marker { get; set; }

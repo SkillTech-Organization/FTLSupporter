@@ -73,6 +73,7 @@ namespace PMap
         public const string iniOptimizeTimeOutSec = "OptimizeTimeOutSec";
         public const string iniTrkMaxWorkTime = "TrkMaxWorkTime";
         public const string iniOrdVolumeMultiplier = "OrdVolumeMultiplier";
+        public const string iniOrdCommentInTooltip = "OrdCommentInTooltip";
 
         public const string iniProxy = "Proxy";
         public const string UseProxy = "UseProxy";

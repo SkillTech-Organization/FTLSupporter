@@ -213,6 +213,9 @@ namespace Map.LongProcess
                     detail.OneWay = edge.EDG_ONEWAY;
                     detail.DestTraffic = edge.EDG_DESTTRAFFIC;
                     detail.EDG_ETLCODE = edge.EDG_ETLCODE;
+                    detail.EDG_MAXWEIGHT = edge.EDG_MAXWEIGHT;
+                    detail.EDG_MAXHEIGHT = edge.EDG_MAXHEIGHT;
+                    detail.EDG_MAXWIDTH = edge.EDG_MAXWIDTH;
                     detail.Dist = 0;
                     detail.Duration = 0;
                     detail.Toll = 0;

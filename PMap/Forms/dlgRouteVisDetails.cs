@@ -27,6 +27,8 @@ namespace PMap.Forms
             m_details = p_details;
             gridRouteDetails.DataSource = p_details;
             this.Text += "<<<" + p_caption + ">>>";
+            AskOnExit = false;
+
         }
 
         private void printToolStripButton_Click(object sender, EventArgs e)

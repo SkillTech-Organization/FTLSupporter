@@ -48,6 +48,7 @@
             this.gridColumnTPL_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnPTP_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.reChkVisible = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.gridColumnORD_COMMENT = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridPlanOrders)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPlanOrders)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).BeginInit();
@@ -89,6 +90,7 @@
             this.gridColumnTRK_ID,
             this.gridColumnTRK_CODE,
             this.gridColumnTRK_REG_NUM,
+            this.gridColumnORD_COMMENT,
             this.gridColumnTPL_ID,
             this.gridColumnPTP_ID});
             this.gridViewPlanOrders.GridControl = this.gridPlanOrders;
@@ -256,6 +258,15 @@
             this.reChkVisible.AutoHeight = false;
             this.reChkVisible.Name = "reChkVisible";
             // 
+            // gridColumnORD_COMMENT
+            // 
+            this.gridColumnORD_COMMENT.Caption = "Megjegyzés";
+            this.gridColumnORD_COMMENT.FieldName = "ORD_COMMENT";
+            this.gridColumnORD_COMMENT.Name = "gridColumnORD_COMMENT";
+            this.gridColumnORD_COMMENT.OptionsColumn.AllowEdit = false;
+            this.gridColumnORD_COMMENT.Visible = true;
+            this.gridColumnORD_COMMENT.VisibleIndex = 13;
+            // 
             // pnlPPlanOrders
             // 
             this.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -295,6 +306,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_REG_NUM;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTPL_ID;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnPTP_ID;
-
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnORD_COMMENT;
     }
 }

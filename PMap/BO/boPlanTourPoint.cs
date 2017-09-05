@@ -56,6 +56,7 @@ namespace PMap.BO
         public double ORD_WIDTH { get; set; }
         public double ORD_HEIGHT { get; set; }
         public double ORD_VOLUME { get; set; }
+        public string ORD_COMMENT { get; set; }
         [ScriptIgnore]
         public boPlanTour Tour { get; set; }
         public string ToolTipText { get; set; }

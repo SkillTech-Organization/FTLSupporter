@@ -58,7 +58,7 @@ namespace PMap.BLL
                           "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
                           "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
                           "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, NOD1.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
-                          "EDG_MAXWEIGHT, EDG_MAXWIDTH, EDG_MAXHEIGHT " + Environment.NewLine +
+                          "EDG_MAXWEIGHT, EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
                           "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
                           "inner join NOD_NODE (NOLOCK) NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
                           "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
@@ -192,7 +192,7 @@ namespace PMap.BLL
                 {
                     sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                            "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                           "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXWIDTH,EDG_MAXHEIGHT " + Environment.NewLine + 
+                           "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine + 
                            " from EDG_EDGE  EDG " + Environment.NewLine +
                            "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                            " where EDG.ID in (" + edges + ")";
@@ -217,8 +217,8 @@ namespace PMap.BLL
                                         Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
                                                .DefaultIfEmpty(new boEtoll()).First().TollsToDict(),
                                         EDG_MAXWEIGHT = Util.getFieldValue<int>(r, "EDG_MAXWEIGHT"),
-                                        EDG_MAXWIDTH = Util.getFieldValue<int>(r, "EDG_MAXWIDTH"),
-                                        EDG_MAXHEIGHT = Util.getFieldValue<int>(r, "EDG_MAXHEIGHT")
+                                        EDG_MAXHEIGHT = Util.getFieldValue<int>(r, "EDG_MAXHEIGHT"),
+                                        EDG_MAXWIDTH = Util.getFieldValue<int>(r, "EDG_MAXWIDTH")
 
                                     }
                                 }).ToDictionary(n => n.Key, n => n.Value);
@@ -441,8 +441,8 @@ namespace PMap.BLL
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
                         DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
-                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
-                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH")
                     }).ToList();
         }
 
@@ -551,8 +551,8 @@ namespace PMap.BLL
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
                         DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
-                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
-                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH")
                     }).ToList();
 
         }
@@ -600,8 +600,8 @@ namespace PMap.BLL
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
                         DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
-                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
-                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH")
                     }).ToList();
 
         }
@@ -644,8 +644,8 @@ namespace PMap.BLL
                         NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
                         RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
                         DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
-                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH"),
-                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT")
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH")
                     }).ToList();
 
 
@@ -886,7 +886,7 @@ namespace PMap.BLL
         /// <param name="p_pt"></param>
         /// <param name="p_RZN_ID_LIST"></param>
         /// <returns></returns>
-        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_width, int p_height, out int r_diff)
+        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width, out int r_diff)
         {
             string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
@@ -924,7 +924,7 @@ namespace PMap.BLL
             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   OR " + Environment.NewLine +    //itt nem AND
             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0}) " + Environment.NewLine +
-            "and (EDG.EDG_MAXWEIGHT=0 or EDG.EDG_MAXWEIGHT>={3}) and (EDG.EDG_MAXWIDTH=0 or EDG.EDG_MAXWIDTH={4}) and (EDG.EDG_MAXHEIGHT=0 or EDG.EDG_MAXHEIGHT={5}) )" + Environment.NewLine +
+            "and (EDG.EDG_MAXWEIGHT=0 or EDG.EDG_MAXWEIGHT>={3}) and (EDG.EDG_MAXHEIGHT=0 or EDG.EDG_MAXHEIGHT={4}) and (EDG.EDG_MAXWIDTH=0 or EDG.EDG_MAXWIDTH={5}))" + Environment.NewLine +
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
@@ -938,7 +938,7 @@ namespace PMap.BLL
             "  (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
             "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") asc";
 
-            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway, p_weight, p_width, p_height));
+            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway, p_weight, p_height, p_width));
             if (dt.Rows.Count > 0)
             {
                 r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");

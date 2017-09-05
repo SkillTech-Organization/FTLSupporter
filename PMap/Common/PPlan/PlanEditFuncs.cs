@@ -65,7 +65,7 @@ namespace PMap.Common.PPlan
                 res = bllPlanCheck.checkOrderResult.OK;
 
                 //MEGJ:a m_EditedTourPoint.Tour t
-                if (!checkInsertionPoint(p_ReorganizedTourPoint.Tour.RZN_ID_LIST, p_InsertionPoint.NOD_ID, p_ReorganizedTourPoint.NOD_ID, p_InsertionPoint.NextTourPoint.NOD_ID))
+                if (!checkInsertionPoint(p_ReorganizedTourPoint.Tour.RZN_ID_LIST, p_ReorganizedTourPoint.Tour.TRK_WEIGHT, p_ReorganizedTourPoint.Tour.TRK_XHEIGHT, p_ReorganizedTourPoint.Tour.TRK_XWIDTH, p_InsertionPoint.NOD_ID, p_ReorganizedTourPoint.NOD_ID, p_InsertionPoint.NextTourPoint.NOD_ID))
                 {
                     //Megj.:Egyelőre nem kezeljük azt a helyzetet, amikor nincs távolaág számítva
                     //(ez esetben pl. egy távolságszámítást indíthatnánk a két pontra)
@@ -138,7 +138,7 @@ namespace PMap.Common.PPlan
                 if (res == bllPlanCheck.checkOrderResult.OK)
                 {
 
-                    if (!checkInsertionPoint(p_Tour.RZN_ID_LIST, p_InsertionPoint.NOD_ID, p_planOrder.NOD_ID, p_InsertionPoint.NextTourPoint.NOD_ID))
+                    if (!checkInsertionPoint(p_Tour.RZN_ID_LIST, p_Tour.TRK_WEIGHT, p_Tour.TRK_XHEIGHT, p_Tour.TRK_XWIDTH, p_InsertionPoint.NOD_ID, p_planOrder.NOD_ID, p_InsertionPoint.NextTourPoint.NOD_ID))
                     {
                         //Megj.:Egyelőre nem kezeljük azt a helyzetet, amikor nincs távolaág számítva
                         //(ez esetben pl. egy távolságszámítást indíthatnánk a két pontra)
@@ -275,16 +275,16 @@ namespace PMap.Common.PPlan
         }
 
    
-        private bool checkInsertionPoint(string p_RZN_ID_LIST, int p_NOD_ID_START, int p_NOD_ID_INS, int p_NOD_ID_END)
+        private bool checkInsertionPoint(string p_RZN_ID_LIST, int DST_MAXWEIGHT, int DST_MAXHEIGHT, int DST_MAXWIDTH, int p_NOD_ID_START, int p_NOD_ID_INS, int p_NOD_ID_END)
         {
 
 
             //Ellenőrizni, találunk-e útvonalat a beszúrási pont és a beszúrt lerakó között
             bllPlanCheck.checkDistanceResult dresultStart =
-                    bllPlanCheck.CheckDistance(p_RZN_ID_LIST, p_NOD_ID_START, p_NOD_ID_INS);
+                    bllPlanCheck.CheckDistance(p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, p_NOD_ID_START, p_NOD_ID_INS);
             //Ellenőrizzük, van-e útvonal a lerakó és a beszúrás érkezési pontja között
             bllPlanCheck.checkDistanceResult dresultEnd =
-                    bllPlanCheck.CheckDistance(p_RZN_ID_LIST, p_NOD_ID_INS, p_NOD_ID_END);
+                    bllPlanCheck.CheckDistance(p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, p_NOD_ID_INS, p_NOD_ID_END);
 
             return (dresultStart == bllPlanCheck.checkDistanceResult.OK &&
                     dresultEnd == bllPlanCheck.checkDistanceResult.OK);

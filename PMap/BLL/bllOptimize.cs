@@ -707,14 +707,14 @@ namespace PMap.BLL
                         "				  inner join TOD_TOURORDER (NOLOCK) TOD on TOD.PLN_ID = ? and TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                         "				  ) NOD_TO on NOD_TO.NOD_ID <> NOD_FROM.NOD_ID  " + Environment.NewLine +
                         "			) Q1, " + Environment.NewLine +
-                        "			(select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XWIDTH, TRK.TRK_XHEIGHT  " + Environment.NewLine +
+                        "			(select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH  " + Environment.NewLine +
                         "			  from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
                         "			  inner join v_trk_RZN_ID_LIST (NOLOCK) RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                         "			  inner join TRK_TRUCK (NOLOCK) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "			  where TPL.PLN_ID = ? and isnull(TPL.TPL_LOCKED,0) = 0 " + Environment.NewLine +
                         "			  ) Q2) NODES " + Environment.NewLine +
                         "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
-                        "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT  " + Environment.NewLine +
+                        "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH  " + Environment.NewLine +
                         "order by NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST,  DST.DST_EDGES ";
 
                 dt = DBA.Query2DataTable(sSql, boOpt.PLN_ID, boOpt.PLN_ID, boOpt.PLN_ID);
@@ -741,14 +741,14 @@ namespace PMap.BLL
                         "					left outer join DEP_DEPOT (NOLOCK) DEP on DEP.ID = TOD.DEP_ID " + Environment.NewLine +
                         "					where TPL_ID = ?) NOD_TO on NOD_TO.NOD_ID <> NOD_FROM.NOD_ID " + Environment.NewLine +
                         "	) Q1, " + Environment.NewLine +
-                        "   (select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XWIDTH, TRK.TRK_XHEIGHT  " + Environment.NewLine +
+                        "   (select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT,  TRK.TRK_XWIDTH" + Environment.NewLine +
                         "	 from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
                         "	 inner join v_trk_RZN_ID_LIST (NOLOCK) RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                         "	 inner join TRK_TRUCK (NOLOCK) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "	 where TPL.ID = ? " + Environment.NewLine +
                         "	 ) Q2 ) NODES " + Environment.NewLine +
                         "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
-                        "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT  " + Environment.NewLine +
+                        "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH " + Environment.NewLine +
                         "order by ID_FROM,ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST,  DST.DST_EDGES ";
 
                 dt = DBA.Query2DataTable(sSql, boOpt.TPL_ID, boOpt.TPL_ID, boOpt.TPL_ID);

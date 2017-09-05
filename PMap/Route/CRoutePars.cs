@@ -27,8 +27,8 @@ namespace PMap.Route
 
         /* ha a CT-t súly- és méretkorlátozások nélkül akarjuk használni, itt kell a korlátozásokat 0-ra venni */
         public int Weight { get; set; } = 0;
-        public int Width { get; set; } = 0;
         public int Height { get; set; } = 0;
+        public int Width { get; set; } = 0;
 
         public override string ToString()
         {

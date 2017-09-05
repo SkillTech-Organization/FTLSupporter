@@ -54,9 +54,12 @@
             this.gridColumnCNTDETAILS = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnCPP_LOADQTY = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnCPP_LOADVOL = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTRK_LENGTH = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTRK_WIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_WEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_XHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_XWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTRK_HEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_WIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnTRK_LENGTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnSelect = new DevExpress.XtraGrid.Columns.GridColumn();
             this.reChkSelect = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.gridColumnLOCKED = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -65,9 +68,6 @@
             this.gridColTRK_ETOLLCAT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColTollMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTOURPOINTCNT = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTRK_WEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTRK_XHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnTRK_XWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTours)).BeginInit();
@@ -117,6 +117,7 @@
             // gridViewTours
             // 
             this.gridViewTours.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gridColumnSelect,
             this.gridColumnID,
             this.gridColumnCOLOR,
             this.gridColumnTRK_ID,
@@ -142,7 +143,6 @@
             this.gridColumnTRK_HEIGHT,
             this.gridColumnTRK_WIDTH,
             this.gridColumnTRK_LENGTH,
-            this.gridColumnSelect,
             this.gridColumnLOCKED,
             this.gridColTRK_ENGINEEURO,
             this.gridColTRK_ETOLLCAT,
@@ -370,29 +370,41 @@
             this.gridColumnCPP_LOADVOL.VisibleIndex = 11;
             this.gridColumnCPP_LOADVOL.Width = 57;
             // 
-            // gridColumnTRK_LENGTH
+            // gridColumnTRK_WEIGHT
             // 
-            this.gridColumnTRK_LENGTH.Caption = "Rakt.hossz";
-            this.gridColumnTRK_LENGTH.DisplayFormat.FormatString = "#,#0.00";
-            this.gridColumnTRK_LENGTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.gridColumnTRK_LENGTH.FieldName = "TRK_LENGTH";
-            this.gridColumnTRK_LENGTH.Name = "gridColumnTRK_LENGTH";
-            this.gridColumnTRK_LENGTH.OptionsColumn.AllowEdit = false;
-            this.gridColumnTRK_LENGTH.Visible = true;
-            this.gridColumnTRK_LENGTH.VisibleIndex = 17;
-            this.gridColumnTRK_LENGTH.Width = 60;
+            this.gridColumnTRK_WEIGHT.Caption = "Összsúly";
+            this.gridColumnTRK_WEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_WEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_WEIGHT.FieldName = "TRK_WEIGHT";
+            this.gridColumnTRK_WEIGHT.Name = "gridColumnTRK_WEIGHT";
+            this.gridColumnTRK_WEIGHT.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_WEIGHT.Visible = true;
+            this.gridColumnTRK_WEIGHT.VisibleIndex = 14;
+            this.gridColumnTRK_WEIGHT.Width = 27;
             // 
-            // gridColumnTRK_WIDTH
+            // gridColumnTRK_XHEIGHT
             // 
-            this.gridColumnTRK_WIDTH.Caption = "Rakt.széles";
-            this.gridColumnTRK_WIDTH.DisplayFormat.FormatString = "#,#0.00";
-            this.gridColumnTRK_WIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.gridColumnTRK_WIDTH.FieldName = "TRK_WIDTH";
-            this.gridColumnTRK_WIDTH.Name = "gridColumnTRK_WIDTH";
-            this.gridColumnTRK_WIDTH.OptionsColumn.AllowEdit = false;
-            this.gridColumnTRK_WIDTH.Visible = true;
-            this.gridColumnTRK_WIDTH.VisibleIndex = 18;
-            this.gridColumnTRK_WIDTH.Width = 43;
+            this.gridColumnTRK_XHEIGHT.Caption = "Telj.magasság";
+            this.gridColumnTRK_XHEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_XHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_XHEIGHT.FieldName = "TRK_XHEIGHT";
+            this.gridColumnTRK_XHEIGHT.Name = "gridColumnTRK_XHEIGHT";
+            this.gridColumnTRK_XHEIGHT.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_XHEIGHT.Visible = true;
+            this.gridColumnTRK_XHEIGHT.VisibleIndex = 15;
+            this.gridColumnTRK_XHEIGHT.Width = 26;
+            // 
+            // gridColumnTRK_XWIDTH
+            // 
+            this.gridColumnTRK_XWIDTH.Caption = "Telj.széles";
+            this.gridColumnTRK_XWIDTH.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_XWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_XWIDTH.FieldName = "TRK_XWIDTH";
+            this.gridColumnTRK_XWIDTH.Name = "gridColumnTRK_XWIDTH";
+            this.gridColumnTRK_XWIDTH.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_XWIDTH.Visible = true;
+            this.gridColumnTRK_XWIDTH.VisibleIndex = 16;
+            this.gridColumnTRK_XWIDTH.Width = 117;
             // 
             // gridColumnTRK_HEIGHT
             // 
@@ -406,12 +418,35 @@
             this.gridColumnTRK_HEIGHT.VisibleIndex = 19;
             this.gridColumnTRK_HEIGHT.Width = 43;
             // 
+            // gridColumnTRK_WIDTH
+            // 
+            this.gridColumnTRK_WIDTH.Caption = "Rakt.széles";
+            this.gridColumnTRK_WIDTH.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_WIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_WIDTH.FieldName = "TRK_WIDTH";
+            this.gridColumnTRK_WIDTH.Name = "gridColumnTRK_WIDTH";
+            this.gridColumnTRK_WIDTH.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_WIDTH.Visible = true;
+            this.gridColumnTRK_WIDTH.VisibleIndex = 18;
+            this.gridColumnTRK_WIDTH.Width = 43;
+            // 
+            // gridColumnTRK_LENGTH
+            // 
+            this.gridColumnTRK_LENGTH.Caption = "Rakt.hossz";
+            this.gridColumnTRK_LENGTH.DisplayFormat.FormatString = "#,#0.00";
+            this.gridColumnTRK_LENGTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.gridColumnTRK_LENGTH.FieldName = "TRK_LENGTH";
+            this.gridColumnTRK_LENGTH.Name = "gridColumnTRK_LENGTH";
+            this.gridColumnTRK_LENGTH.OptionsColumn.AllowEdit = false;
+            this.gridColumnTRK_LENGTH.Visible = true;
+            this.gridColumnTRK_LENGTH.VisibleIndex = 17;
+            this.gridColumnTRK_LENGTH.Width = 60;
+            // 
             // gridColumnSelect
             // 
             this.gridColumnSelect.ColumnEdit = this.reChkSelect;
             this.gridColumnSelect.FieldName = "PSelect";
             this.gridColumnSelect.Name = "gridColumnSelect";
-            this.gridColumnSelect.OptionsColumn.AllowEdit = false;
             this.gridColumnSelect.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
             this.gridColumnSelect.OptionsColumn.FixedWidth = true;
             this.gridColumnSelect.OptionsColumn.ShowCaption = false;
@@ -485,42 +520,6 @@
             this.gridColumnTOURPOINTCNT.FieldName = "TOURPOINTCNT";
             this.gridColumnTOURPOINTCNT.Name = "gridColumnTOURPOINTCNT";
             this.gridColumnTOURPOINTCNT.OptionsColumn.AllowEdit = false;
-            // 
-            // gridColumnTRK_WEIGHT
-            // 
-            this.gridColumnTRK_WEIGHT.Caption = "Összsúly";
-            this.gridColumnTRK_WEIGHT.DisplayFormat.FormatString = "#,#0.00";
-            this.gridColumnTRK_WEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.gridColumnTRK_WEIGHT.FieldName = "TRK_WEIGHT";
-            this.gridColumnTRK_WEIGHT.Name = "gridColumnTRK_WEIGHT";
-            this.gridColumnTRK_WEIGHT.OptionsColumn.AllowEdit = false;
-            this.gridColumnTRK_WEIGHT.Visible = true;
-            this.gridColumnTRK_WEIGHT.VisibleIndex = 14;
-            this.gridColumnTRK_WEIGHT.Width = 27;
-            // 
-            // gridColumnTRK_XHEIGHT
-            // 
-            this.gridColumnTRK_XHEIGHT.Caption = "Telj.magasság";
-            this.gridColumnTRK_XHEIGHT.DisplayFormat.FormatString = "#,#0.00";
-            this.gridColumnTRK_XHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.gridColumnTRK_XHEIGHT.FieldName = "TRK_XHEIGHT";
-            this.gridColumnTRK_XHEIGHT.Name = "gridColumnTRK_XHEIGHT";
-            this.gridColumnTRK_XHEIGHT.OptionsColumn.AllowEdit = false;
-            this.gridColumnTRK_XHEIGHT.Visible = true;
-            this.gridColumnTRK_XHEIGHT.VisibleIndex = 15;
-            this.gridColumnTRK_XHEIGHT.Width = 26;
-            // 
-            // gridColumnTRK_XWIDTH
-            // 
-            this.gridColumnTRK_XWIDTH.Caption = "Telj.széles";
-            this.gridColumnTRK_XWIDTH.DisplayFormat.FormatString = "#,#0.00";
-            this.gridColumnTRK_XWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.gridColumnTRK_XWIDTH.FieldName = "TRK_XWIDTH";
-            this.gridColumnTRK_XWIDTH.Name = "gridColumnTRK_XWIDTH";
-            this.gridColumnTRK_XWIDTH.OptionsColumn.AllowEdit = false;
-            this.gridColumnTRK_XWIDTH.Visible = true;
-            this.gridColumnTRK_XWIDTH.VisibleIndex = 16;
-            this.gridColumnTRK_XWIDTH.Width = 117;
             // 
             // pnlPPlanTours
             // 

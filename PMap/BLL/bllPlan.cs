@@ -120,7 +120,7 @@ namespace PMap.BLL
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_ADRSTREET ELSE WHS.WHS_ADRSTREET END as ADRSTREET, " + Environment.NewLine +
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as CLT_NAME, " + Environment.NewLine +
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
-                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT " + Environment.NewLine +
+                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT " + Environment.NewLine +
                     "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                     "INNER JOIN TPL_TRUCKPLAN TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
                     "LEFT JOIN TOD_TOURORDER TOD ON PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -175,7 +175,8 @@ namespace PMap.BLL
                             ORD_NUM = Util.getFieldValue<string>(o, "ORD_NUM"),
                             ORD_LENGTH = Util.getFieldValue<double>(o, "ORD_LENGTH"),
                             ORD_WIDTH = Util.getFieldValue<double>(o, "ORD_WIDTH"),
-                            ORD_HEIGHT = Util.getFieldValue<double>(o, "ORD_HEIGHT")
+                            ORD_HEIGHT = Util.getFieldValue<double>(o, "ORD_HEIGHT"),
+                            ORD_COMMENT = Util.getFieldValue<string>(o, "ORD_COMMENT")
                         }
                         );
             return linq.ToList();
@@ -211,7 +212,7 @@ namespace PMap.BLL
 
         public List<boPlanTour> GetPlanTours(int p_PLN_ID)
         {
-            string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_XWIDTH, TRK_XHEIGHT, TRK_WEIGHT, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
+            string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
                           " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK " + Environment.NewLine +
@@ -227,7 +228,7 @@ namespace PMap.BLL
                           "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.PLN_ID = ? " + Environment.NewLine +
-                          "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_XWIDTH, TRK_XHEIGHT, TRK_WEIGHT, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
+                          "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL " + Environment.NewLine +
                           "order by TRK_REG_NUM, TRK_TRAILER ";
 
@@ -246,7 +247,7 @@ namespace PMap.BLL
         {
             boPlanTour retVal = null;
 
-            string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_XWIDTH, TRK_XHEIGHT, TRK_WEIGHT, " + Environment.NewLine +
+            string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
                           "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, " + Environment.NewLine +
                           "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
@@ -263,7 +264,7 @@ namespace PMap.BLL
                           "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.ID = ? " + Environment.NewLine +
-                          "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_XWIDTH, TRK_XHEIGHT, TRK_WEIGHT, " + Environment.NewLine +
+                          "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME),  " + Environment.NewLine +
                           "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST    ";
 
@@ -289,9 +290,9 @@ namespace PMap.BLL
                 TRK_LENGTH = Util.getFieldValue<double>(p_dr, "TRK_LENGTH"),
                 TRK_WIDTH = Util.getFieldValue<int>(p_dr, "TRK_WIDTH"),
                 TRK_HEIGHT = Util.getFieldValue<int>(p_dr, "TRK_HEIGHT"),
-                TRK_XWIDTH = Util.getFieldValue<int>(p_dr, "TRK_XWIDTH"),
-                TRK_XHEIGHT = Util.getFieldValue<int>(p_dr, "TRK_XHEIGHT"),
                 TRK_WEIGHT = Util.getFieldValue<int>(p_dr, "TRK_WEIGHT"),
+                TRK_XHEIGHT = Util.getFieldValue<int>(p_dr, "TRK_XHEIGHT"),
+                TRK_XWIDTH = Util.getFieldValue<int>(p_dr, "TRK_XWIDTH"),
                 TRK_ETOLLCAT = Util.getFieldValue<int>(p_dr, "TRK_ETOLLCAT"),
                 TRK_ENGINEEURO = Util.getFieldValue<int>(p_dr, "TRK_ENGINEEURO"),
                 TollMultiplier = bllPlanEdit.GetTollMultiplier(Util.getFieldValue<int>(p_dr, "TRK_ETOLLCAT"), Util.getFieldValue<int>(p_dr, "TRK_ENGINEEURO")),
@@ -368,7 +369,7 @@ namespace PMap.BLL
             string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
-                          "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
+                          "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
                           "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM " + Environment.NewLine +
                           "from TOD_TOURORDER TOD " + Environment.NewLine +
                           "   inner join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
@@ -398,7 +399,7 @@ namespace PMap.BLL
             string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
-                          "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
+                          "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
                           "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM " + Environment.NewLine +
                           "from TOD_TOURORDER TOD " + Environment.NewLine +
                           "   inner join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
@@ -443,6 +444,7 @@ namespace PMap.BLL
                     ORD_LENGTH = Util.getFieldValue<double>(p_dr, "ORD_LENGTH"),
                     ORD_WIDTH = Util.getFieldValue<double>(p_dr, "ORD_WIDTH"),
                     ORD_HEIGHT = Util.getFieldValue<double>(p_dr, "ORD_HEIGHT"),
+                    ORD_COMMENT = Util.getFieldValue<string>(p_dr, "ORD_COMMENT"),
                     OPENCLOSE = getOpenClose(p_dr, true),
                     ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
 

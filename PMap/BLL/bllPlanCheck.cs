@@ -294,7 +294,7 @@ namespace PMap.BLL
             }
         }
 
-        public static checkDistanceResult CheckDistance(string p_RZN_ID_LIST, int p_NOD_ID_FROM, int p_NOD_ID_TO)
+        public static checkDistanceResult CheckDistance(string p_RZN_ID_LIST, int DST_MAXWEIGHT, int DST_MAXHEIGHT, int DST_MAXWIDTH, int p_NOD_ID_FROM, int p_NOD_ID_TO)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
@@ -305,8 +305,8 @@ namespace PMap.BLL
             checkDistanceResult res = checkDistanceResult.NoCoumputedDist;
 
             string sSql = "select DST_DISTANCE,DST_EDGES from DST_DISTANCE DST " +
-                           "where RZN_ID_LIST=? and NOD_ID_FROM = ? and NOD_ID_TO = ? ";
-            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql, p_RZN_ID_LIST, p_NOD_ID_FROM, p_NOD_ID_TO);
+                           "where RZN_ID_LIST=? and DST_MAXWEIGHT=? and DST_MAXHEIGHT=? and DST_MAXWIDTH=? and NOD_ID_FROM = ? and NOD_ID_TO = ? ";
+            DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql, p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, p_NOD_ID_FROM, p_NOD_ID_TO);
 
             if (dt.Rows.Count == 1)
             {

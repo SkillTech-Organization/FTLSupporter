@@ -28,13 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dlgTourDetails));
             this.gridTourDetails = new DevExpress.XtraGrid.GridControl();
             this.gridViewTourDetails = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemImageComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
-            this.imlTypes = new System.Windows.Forms.ImageList(this.components);
+            this.imlTypes = new System.Windows.Forms.ImageList();
             this.colText = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDist = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colSpeed = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -55,6 +54,9 @@
             this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.excelToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
+            this.colEDG_MAXWEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridTourDetails)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTourDetails)).BeginInit();
@@ -99,7 +101,10 @@
             this.colDestTaffic,
             this.gridColEDG_ETLCODE,
             this.gridColOrigToll,
-            this.gridColToll});
+            this.gridColToll,
+            this.colEDG_MAXWEIGHT,
+            this.colEDG_MAXHEIGHT,
+            this.colEDG_MAXWIDTH});
             this.gridViewTourDetails.GridControl = this.gridTourDetails;
             this.gridViewTourDetails.Name = "gridViewTourDetails";
             this.gridViewTourDetails.OptionsBehavior.Editable = false;
@@ -204,7 +209,7 @@
             // 
             // colWZone
             // 
-            this.colWZone.Caption = "Súlykorlátozás";
+            this.colWZone.Caption = "Behajtási övezet";
             this.colWZone.FieldName = "WZone";
             this.colWZone.Name = "colWZone";
             this.colWZone.OptionsColumn.AllowEdit = false;
@@ -333,6 +338,42 @@
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xls|*.xls";
             // 
+            // colEDG_MAXWEIGHT
+            // 
+            this.colEDG_MAXWEIGHT.Caption = "Súlykorlát";
+            this.colEDG_MAXWEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.colEDG_MAXWEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXWEIGHT.FieldName = "EDG_MAXWEIGHT";
+            this.colEDG_MAXWEIGHT.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.colEDG_MAXWEIGHT.Name = "colEDG_MAXWEIGHT";
+            this.colEDG_MAXWEIGHT.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXWEIGHT.Visible = true;
+            this.colEDG_MAXWEIGHT.VisibleIndex = 12;
+            // 
+            // colEDG_MAXHEIGHT
+            // 
+            this.colEDG_MAXHEIGHT.Caption = "Magasságkorlát";
+            this.colEDG_MAXHEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.colEDG_MAXHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXHEIGHT.FieldName = "EDG_MAXHEIGHT";
+            this.colEDG_MAXHEIGHT.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.colEDG_MAXHEIGHT.Name = "colEDG_MAXHEIGHT";
+            this.colEDG_MAXHEIGHT.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXHEIGHT.Visible = true;
+            this.colEDG_MAXHEIGHT.VisibleIndex = 13;
+            // 
+            // colEDG_MAXWIDTH
+            // 
+            this.colEDG_MAXWIDTH.Caption = "Szélességkorlát";
+            this.colEDG_MAXWIDTH.DisplayFormat.FormatString = "#,#0.00";
+            this.colEDG_MAXWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXWIDTH.FieldName = "EDG_MAXWIDTH";
+            this.colEDG_MAXWIDTH.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.colEDG_MAXWIDTH.Name = "colEDG_MAXWIDTH";
+            this.colEDG_MAXWIDTH.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXWIDTH.Visible = true;
+            this.colEDG_MAXWIDTH.VisibleIndex = 14;
+            // 
             // dlgTourDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -389,5 +430,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColToll;
         private System.Windows.Forms.ToolStripButton excelToolStripButton;
         private System.Windows.Forms.OpenFileDialog openExcel;
+        private DevExpress.XtraGrid.Columns.GridColumn colEDG_MAXWEIGHT;
+        private DevExpress.XtraGrid.Columns.GridColumn colEDG_MAXHEIGHT;
+        private DevExpress.XtraGrid.Columns.GridColumn colEDG_MAXWIDTH;
     }
 }

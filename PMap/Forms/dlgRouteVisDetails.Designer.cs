@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dlgRouteVisDetails));
             this.toolMain = new System.Windows.Forms.ToolStrip();
             this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -37,7 +36,7 @@
             this.gridViewRouteDetails = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumnRouteSectionType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemImageComboBox2 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
-            this.imlRouteSectionType = new System.Windows.Forms.ImageList(this.components);
+            this.imlRouteSectionType = new System.Windows.Forms.ImageList();
             this.colRoadType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colText = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colDist = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -53,6 +52,9 @@
             this.colEDG_ETLCODE = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colToll = new DevExpress.XtraGrid.Columns.GridColumn();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
+            this.colEDG_MAXWEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             this.toolMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridRouteDetails)).BeginInit();
@@ -125,7 +127,10 @@
             this.colWZone,
             this.colDestTraffic,
             this.colEDG_ETLCODE,
-            this.colToll});
+            this.colToll,
+            this.colEDG_MAXWEIGHT,
+            this.colEDG_MAXHEIGHT,
+            this.colEDG_MAXWIDTH});
             this.gridViewRouteDetails.GridControl = this.gridRouteDetails;
             this.gridViewRouteDetails.Images = this.imlRouteSectionType;
             this.gridViewRouteDetails.Name = "gridViewRouteDetails";
@@ -262,7 +267,7 @@
             // 
             // colWZone
             // 
-            this.colWZone.Caption = "Súlykorlátozás zóna";
+            this.colWZone.Caption = "Behajtási övezet";
             this.colWZone.FieldName = "WZone";
             this.colWZone.Name = "colWZone";
             this.colWZone.OptionsColumn.AllowEdit = false;
@@ -315,6 +320,39 @@
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xls|*.xls";
             // 
+            // colEDG_MAXWEIGHT
+            // 
+            this.colEDG_MAXWEIGHT.Caption = "Súlykorlát";
+            this.colEDG_MAXWEIGHT.DisplayFormat.FormatString = "Numeric \"#,#0.00\"";
+            this.colEDG_MAXWEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXWEIGHT.FieldName = "EDG_MAXWEIGHT";
+            this.colEDG_MAXWEIGHT.Name = "colEDG_MAXWEIGHT";
+            this.colEDG_MAXWEIGHT.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXWEIGHT.Visible = true;
+            this.colEDG_MAXWEIGHT.VisibleIndex = 11;
+            // 
+            // colEDG_MAXHEIGHT
+            // 
+            this.colEDG_MAXHEIGHT.Caption = "Magasságkorlát";
+            this.colEDG_MAXHEIGHT.DisplayFormat.FormatString = "Numeric \"#,#0.00\"";
+            this.colEDG_MAXHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXHEIGHT.FieldName = "EDG_MAXHEIGHT";
+            this.colEDG_MAXHEIGHT.Name = "colEDG_MAXHEIGHT";
+            this.colEDG_MAXHEIGHT.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXHEIGHT.Visible = true;
+            this.colEDG_MAXHEIGHT.VisibleIndex = 12;
+            // 
+            // colEDG_MAXWIDTH
+            // 
+            this.colEDG_MAXWIDTH.Caption = "Szélességkorlát";
+            this.colEDG_MAXWIDTH.DisplayFormat.FormatString = "Numeric \"#,#0.00\"";
+            this.colEDG_MAXWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXWIDTH.FieldName = "EDG_MAXWIDTH";
+            this.colEDG_MAXWIDTH.Name = "colEDG_MAXWIDTH";
+            this.colEDG_MAXWIDTH.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXWIDTH.Visible = true;
+            this.colEDG_MAXWIDTH.VisibleIndex = 13;
+            // 
             // dlgRouteVisDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -365,5 +403,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnRouteSectionType;
         private System.Windows.Forms.ImageList imlRouteSectionType;
         private DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox repositoryItemImageComboBox2;
+        private DevExpress.XtraGrid.Columns.GridColumn colEDG_MAXWEIGHT;
+        private DevExpress.XtraGrid.Columns.GridColumn colEDG_MAXHEIGHT;
+        private DevExpress.XtraGrid.Columns.GridColumn colEDG_MAXWIDTH;
     }
 }

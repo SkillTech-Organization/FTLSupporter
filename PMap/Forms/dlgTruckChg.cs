@@ -96,7 +96,7 @@ namespace PMap.Forms
 
                 }
                 if (prevTourPoint != null &&
-                    bllPlanCheck.CheckDistance(newTour.RZN_ID_LIST, prevTourPoint.NOD_ID, rTourPoint.NOD_ID) != bllPlanCheck.checkDistanceResult.OK)
+                    bllPlanCheck.CheckDistance(newTour.RZN_ID_LIST,  newTour.TRK_WEIGHT, newTour.TRK_XHEIGHT, newTour.TRK_XWIDTH, prevTourPoint.NOD_ID, rTourPoint.NOD_ID) != bllPlanCheck.checkDistanceResult.OK)
                 {
                     UI.Error(PMapMessages.E_CHGTRK_NOTFITTEDDEP, prevTourPoint.TIME_AND_NAME.Trim(), rTourPoint.TIME_AND_NAME.Trim());
                     return cmbTruck;

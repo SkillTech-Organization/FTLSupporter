@@ -62,6 +62,8 @@ namespace PMap.Forms
                 m_ActivePlanInfo.CLOSE :  m_ActivePlanInfo.OPEN.AddMinutes(Convert.ToInt32(m_ActivePlanInfo.WHS_SRVTIME));
 
             InitDialog();
+            AskOnExit = false;
+
 
         }
 

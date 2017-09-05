@@ -80,6 +80,7 @@ namespace PMap.Common
         public int OptimizeTimeOutSec { get; private set; }
         public int TrkMaxWorkTime { get; private set; }
         public double OrdVolumeMultiplier { get; private set; }
+        public bool OrdCommentInTooltip { get; private set; } = false;
 
 
 
@@ -328,6 +329,8 @@ namespace PMap.Common
             if (OrdVolumeMultiplier == 0)
                 OrdVolumeMultiplier = 0.001;         //alapértelmezés 0.001 a dm3 --> m3 konverzióhoz
 
+            string sOrdCommentInTooltip = ini.ReadString(Global.iniPMap, Global.iniOrdCommentInTooltip);
+            OrdCommentInTooltip = (sOrdCommentInTooltip == "1" || sOrdCommentInTooltip.ToLower() == "true");
 
             string sUseProxy = ini.ReadString(Global.iniProxy, Global.UseProxy);
             UseProxy = (sUseProxy == "1" || sUseProxy.ToLower() == "true");

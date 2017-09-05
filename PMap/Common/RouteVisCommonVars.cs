@@ -30,6 +30,9 @@ namespace PMap.Common
             public bool OneWay { get; set; }
             public bool DestTraffic { get; set; }
             public string EDG_ETLCODE { get; set; }
+            public int EDG_MAXWEIGHT { get; set; }
+            public int EDG_MAXHEIGHT { get; set; }
+            public int EDG_MAXWIDTH { get; set; }
             public double Toll { get; set; }
             public boRoute Route { get; private set; }
             public boXRouteSection.ERouteSectionType RouteSectionType { get; private set; }

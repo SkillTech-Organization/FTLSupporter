@@ -124,7 +124,10 @@ namespace PMap.LongProcess
                                     OneWay = xedge.EDG_ONEWAY,
                                     DestTraffic = xedge.EDG_DESTTRAFFIC,
                                     WZone = xedge.WZONE,
-                                    EDG_ETLCODE = xedge.EDG_ETLCODE
+                                    EDG_ETLCODE = xedge.EDG_ETLCODE,
+                                    EDG_MAXWEIGHT = xedge.EDG_MAXWEIGHT,
+                                    EDG_MAXHEIGHT = xedge.EDG_MAXHEIGHT,
+                                    EDG_MAXWIDTH = xedge.EDG_MAXWIDTH
                                 };
                                 if (td.Type == 1)
                                 {
@@ -169,7 +172,10 @@ namespace PMap.LongProcess
                             OneWay = xedge.EDG_ONEWAY,
                             DestTraffic = xedge.EDG_DESTTRAFFIC,
                             WZone = xedge.WZONE,
-                            EDG_ETLCODE = xedge.EDG_ETLCODE
+                            EDG_ETLCODE = xedge.EDG_ETLCODE,
+                            EDG_MAXWEIGHT = xedge.EDG_MAXWEIGHT,
+                            EDG_MAXHEIGHT = xedge.EDG_MAXHEIGHT,
+                            EDG_MAXWIDTH = xedge.EDG_MAXWIDTH
                         };
 
                         TourDetails.Add(td2);

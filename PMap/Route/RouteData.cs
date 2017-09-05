@@ -129,8 +129,8 @@ namespace PMap.Route
                                 fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
                                 toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
                                 EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
-                                EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH"),
-                                EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT")
+                                EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT"),
+                                EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH")
 
                             };
 
@@ -170,8 +170,8 @@ namespace PMap.Route
                                     fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
                                     toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
                                     EDG_MAXWEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXWEIGHT"),
-                                    EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH"),
-                                    EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT")
+                                    EDG_MAXHEIGHT = Util.getFieldValue<int>(dr, "EDG_MAXHEIGHT"),
+                                    EDG_MAXWIDTH = Util.getFieldValue<int>(dr, "EDG_MAXWIDTH")
                                 };
 
                                 if (!Edges.ContainsKey(keyTo))
@@ -260,9 +260,9 @@ namespace PMap.Route
 
                         //Korlátozás feltételek
                         && ((edg.EDG_MAXWEIGHT == 0 || routePar.Weight == 0 || routePar.Weight <= edg.EDG_MAXWEIGHT)   /// Súlykorlátozás
-                         && (edg.EDG_MAXWIDTH == 0 || routePar.Width == 0 || routePar.Width <= edg.EDG_MAXWIDTH)      /// Szélességlátozás
-                         && (edg.EDG_MAXHEIGHT == 0 || routePar.Height == 0 || routePar.Height <= edg.EDG_MAXHEIGHT)   /// Magasságkorlátozás
-                       ))
+                          && (edg.EDG_MAXHEIGHT == 0 || routePar.Height == 0 || routePar.Height <= edg.EDG_MAXHEIGHT)   /// Magasságkorlátozás
+                          && (edg.EDG_MAXWIDTH == 0 || routePar.Width == 0 || routePar.Width <= edg.EDG_MAXWIDTH)      /// Szélességlátozás
+                     ))
                     /// 
                     {
                         neighboursFull[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO);

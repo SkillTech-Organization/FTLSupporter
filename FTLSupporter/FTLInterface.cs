@@ -144,11 +144,11 @@ namespace FTLSupporter
 
                     //Koordináta feloldás és ellenőrzés
                     //
-                    trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Width, trk.Height);
+                    trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.NOD_ID_CURR == 0)
                         result.Add(getValidationError(trk, "CurrLat,CurrLng", FTLMessages.E_WRONGCOORD));
 
-                    trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Width, trk.Height);
+                    trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.RET_NOD_ID == 0)
                         result.Add(getValidationError(trk, "RetPoint ", FTLMessages.E_WRONGCOORD));
 
@@ -273,8 +273,8 @@ namespace FTLSupporter
                                     toNOD_ID = clctsk.Task.TPoints[i + 1].NOD_ID,
                                     RZN_ID_LIST = grpTrk.Key.RZN_ID_LIST,
                                     GVWR = grpTrk.Key.GVWR,
-                                    Width = grpTrk.Key.Width,
-                                    Height = grpTrk.Key.Height
+                                    Height = grpTrk.Key.Height,
+                                    Width = grpTrk.Key.Width
                                 };
 
                                 if (lstPMapRoutes.IndexOf(pmr) < 0)
@@ -290,7 +290,7 @@ namespace FTLSupporter
                                 //4.2 futó túrapontok közötti távolságok
                                 for (int i = 0; i < trk.CurrTPoints.Count - 1; i++)
                                 {
-                                    var pmr1 = new FTLPMapRoute { fromNOD_ID = trk.CurrTPoints[i].NOD_ID, toNOD_ID = trk.CurrTPoints[i + 1].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR= trk.GVWR, Width=trk.Width, Height = trk.Height };
+                                    var pmr1 = new FTLPMapRoute { fromNOD_ID = trk.CurrTPoints[i].NOD_ID, toNOD_ID = trk.CurrTPoints[i + 1].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR= trk.GVWR, Height = trk.Height, Width=trk.Width };
                                     if (lstPMapRoutes.IndexOf( pmr1) < 0)
                                         lstPMapRoutes.Add(pmr1);
                                 }
@@ -298,25 +298,25 @@ namespace FTLSupporter
                                 //4.3 Utolsó teljesített túrapont --> aktuális járműpozíció
                                 if (trk.TPointCompleted > 0)
                                 {
-                                    var pmr2 = new FTLPMapRoute { fromNOD_ID = trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID, toNOD_ID = trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Width = trk.Width, Height = trk.Height };
+                                    var pmr2 = new FTLPMapRoute { fromNOD_ID = trk.CurrTPoints[trk.TPointCompleted - 1].NOD_ID, toNOD_ID = trk.NOD_ID_CURR, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                     if (lstPMapRoutes.IndexOf(pmr2) < 0)
                                         lstPMapRoutes.Add(pmr2);
                                 }
 
                                 //4.4 Aktuális járműpozíció --> első nem teljesített túrapont
-                                var pmr3 = new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.CurrTPoints[trk.TPointCompleted].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Width = trk.Width, Height = trk.Height };
+                                var pmr3 = new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = trk.CurrTPoints[trk.TPointCompleted].NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                 if (lstPMapRoutes.IndexOf(pmr3) < 0)
                                     lstPMapRoutes.Add(pmr3);
 
                                 //4.5 Teljesített utolsó túrapont -> beosztandó első túrapont (átállás)
-                                var pmr4 = new FTLPMapRoute { fromNOD_ID = trk.CurrTPoints.Last().NOD_ID, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Width = trk.Width, Height = trk.Height };
+                                var pmr4 = new FTLPMapRoute { fromNOD_ID = trk.CurrTPoints.Last().NOD_ID, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                 if (lstPMapRoutes.IndexOf(pmr4) < 0)
                                     lstPMapRoutes.Add(pmr4);
 
                                 //4.6 Beosztandó túrapont utolsó --> visszatérés túrapont (csak NEM irányos túra esetén !!)
                                 if (!trk.CurrIsOneWay)
                                 {
-                                    var pmr5 = new FTLPMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Width = trk.Width, Height = trk.Height };
+                                    var pmr5 = new FTLPMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                     if (lstPMapRoutes.IndexOf(pmr5) < 0)
                                         lstPMapRoutes.Add(pmr5);
                                 }
@@ -330,14 +330,14 @@ namespace FTLSupporter
                                 /********************************************/
     
                                 //4.5 Aktuális pozíció -> beosztandó első túrapont (átállás)
-                                var pmr6 = new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Width = trk.Width, Height = trk.Height };
+                                var pmr6 = new FTLPMapRoute { fromNOD_ID = trk.NOD_ID_CURR, toNOD_ID = clctsk.Task.TPoints.First().NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                 if (lstPMapRoutes.IndexOf(pmr6) < 0)
                                     lstPMapRoutes.Add(pmr6);
 
                                 //4.6 Beosztandó túrapont utolsó --> visszatérési pozíció (csak NEM irányos túra esetén !!)
                                 if (!trk.CurrIsOneWay)
                                 {
-                                    var pmr7 = new FTLPMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Width = trk.Width, Height = trk.Height };
+                                    var pmr7 = new FTLPMapRoute { fromNOD_ID = clctsk.Task.TPoints.Last().NOD_ID, toNOD_ID = trk.RET_NOD_ID, RZN_ID_LIST = trk.RZN_ID_LIST, GVWR = trk.GVWR, Height = trk.Height, Width = trk.Width};
                                     if (lstPMapRoutes.IndexOf(pmr7) < 0)
                                         lstPMapRoutes.Add(pmr7);
                                 }
@@ -1236,28 +1236,28 @@ namespace FTLSupporter
             return res;
         }
 
-        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_width, int p_height)
+        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST,int p_weight, int p_height, int p_width)
         {
             int diff = 0;
-            return FTLGetNearestReachableNOD_IDForTruck(p_route, p_pt, p_RZN_ID_LIST, p_weight, p_width, p_height, out diff);
+            return FTLGetNearestReachableNOD_IDForTruck(p_route, p_pt, p_RZN_ID_LIST, p_weight, p_height, p_width, out diff);
 
         }
 
-        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_width, int p_height, out int r_diff)
+        private static int FTLGetNearestReachableNOD_IDForTruck(bllRoute p_route, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width,  out int r_diff)
         {
             int NOD_ID = 0;
             int diff = Int32.MaxValue;
-            if (PMapCommonVars.Instance.TruckNod_IDCahce.ContainsKey(Tuple.Create(p_pt, p_RZN_ID_LIST, p_weight, p_width, p_height)))
+            if (PMapCommonVars.Instance.TruckNod_IDCahce.ContainsKey(Tuple.Create(p_pt, p_RZN_ID_LIST, p_weight, p_height, p_width)))
             {
-                Tuple<int, int> tp = PMapCommonVars.Instance.TruckNod_IDCahce[Tuple.Create(p_pt, p_RZN_ID_LIST, p_weight, p_width, p_height)];
+                Tuple<int, int> tp = PMapCommonVars.Instance.TruckNod_IDCahce[Tuple.Create(p_pt, p_RZN_ID_LIST, p_weight, p_height, p_width)];
                 NOD_ID = tp.Item1;
                 diff = tp.Item2;
             }
             else
             {
-                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_weight, p_width, p_height, out diff);
+                NOD_ID = p_route.GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_weight, p_height, p_width, out diff);
                 if (NOD_ID != 0)
-                    PMapCommonVars.Instance.TruckNod_IDCahce.Add(Tuple.Create(p_pt, p_RZN_ID_LIST, p_weight, p_width, p_height), Tuple.Create(NOD_ID, diff));
+                    PMapCommonVars.Instance.TruckNod_IDCahce.Add(Tuple.Create(p_pt, p_RZN_ID_LIST, p_weight, p_height, p_width), Tuple.Create(NOD_ID, diff));
             }
             r_diff = diff;
             return NOD_ID;

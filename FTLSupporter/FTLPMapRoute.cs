@@ -25,8 +25,8 @@ namespace FTLSupporter
         public string RZN_ID_LIST { get; set; }
 
         public int GVWR { get; set; }
-        public int Width { get; set; }
         public int Height { get; set; }
+        public int Width { get; set; }
 
 
         public boRoute route { get; set; }
@@ -45,11 +45,11 @@ namespace FTLSupporter
             if (obj == null) return false;
             FTLPMapRoute rk = (FTLPMapRoute)obj;
             return (this.fromNOD_ID == rk.fromNOD_ID && this.toNOD_ID == rk.toNOD_ID &&
-                this.RZN_ID_LIST == rk.RZN_ID_LIST && this.GVWR == rk.GVWR && this.Width == rk.Width && this.Height == rk.Height);
+                this.RZN_ID_LIST == rk.RZN_ID_LIST && this.GVWR == rk.GVWR && this.Height == rk.Height && this.Width == rk.Width );
         }
         public override int GetHashCode()
         {
-            return string.Format("{0}_{1}_{2}_{3}_{4}_{5}", this.fromNOD_ID, this.toNOD_ID, this.RZN_ID_LIST, this.GVWR, this.Width, this.Height).GetHashCode();
+            return string.Format("{0}_{1}_{2}_{3}_{4}_{5}", this.fromNOD_ID, this.toNOD_ID, this.RZN_ID_LIST, this.GVWR, this.Height, this.Width).GetHashCode();
         }
 
 
