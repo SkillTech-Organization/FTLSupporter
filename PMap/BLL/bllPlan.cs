@@ -423,37 +423,39 @@ namespace PMap.BLL
         private boPlanOrder getPlanOrderRec(DataRow p_dr)
         {
             boPlanOrder ret = new boPlanOrder
-                {
-                    ID = Util.getFieldValue<int>(p_dr, "ID"),
-                    //                            DEP_NAME = Util.getFieldValue<int>(p_dr, "ID").ToString() + "*" + Util.GetStringField(p_dr, "DEP_NAME"),
-                    DEP_NAME = Util.getFieldValue<string>(p_dr, "DEP_NAME"),
-                    DEP_ADRSTREET = Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
-                    ZIP_NUM = Util.getFieldValue<int>(p_dr, "ZIP_NUM"),
-                    ZIP_CITY = Util.getFieldValue<string>(p_dr, "ZIP_CITY"),
-                    DEP_ADDR = Util.getFieldValue<int>(p_dr, "ZIP_NUM").ToString() + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
-                    NOD_ID = Util.getFieldValue<int>(p_dr, "NOD_ID"),
-                    NOD_XPOS = Util.getFieldValue<double>(p_dr, "NOD_XPOS"),
-                    NOD_YPOS = Util.getFieldValue<double>(p_dr, "NOD_YPOS"),
-                    TOD_QTY = Util.getFieldValue<double>(p_dr, "TOD_QTY"),
-                    TOD_QTY_INC = Util.getFieldValue<double>(p_dr, "TOD_QTY_INC"),
-                    TOD_VOLUME = Util.getFieldValue<double>(p_dr, "TOD_VOLUME"),
-                    DEP_CODE = Util.getFieldValue<string>(p_dr, "DEP_CODE"),
-                    ORD_NUM = Util.getFieldValue<string>(p_dr, "ORD_NUM"),
-                    ORD_QTY = Util.getFieldValue<double>(p_dr, "ORD_QTY"),
-                    ORD_VOLUME = Util.getFieldValue<double>(p_dr, "ORD_VOLUME"),
-                    ORD_LENGTH = Util.getFieldValue<double>(p_dr, "ORD_LENGTH"),
-                    ORD_WIDTH = Util.getFieldValue<double>(p_dr, "ORD_WIDTH"),
-                    ORD_HEIGHT = Util.getFieldValue<double>(p_dr, "ORD_HEIGHT"),
-                    ORD_COMMENT = Util.getFieldValue<string>(p_dr, "ORD_COMMENT"),
-                    OPENCLOSE = getOpenClose(p_dr, true),
-                    ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
+            {
+                ID = Util.getFieldValue<int>(p_dr, "ID"),
+                //                            DEP_NAME = Util.getFieldValue<int>(p_dr, "ID").ToString() + "*" + Util.GetStringField(p_dr, "DEP_NAME"),
+                DEP_NAME = Util.getFieldValue<string>(p_dr, "DEP_NAME"),
+                DEP_ADRSTREET = Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
+                ZIP_NUM = Util.getFieldValue<int>(p_dr, "ZIP_NUM"),
+                ZIP_CITY = Util.getFieldValue<string>(p_dr, "ZIP_CITY"),
+                DEP_ADDR = Util.getFieldValue<int>(p_dr, "ZIP_NUM").ToString() + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
+                NOD_ID = Util.getFieldValue<int>(p_dr, "NOD_ID"),
+                NOD_XPOS = Util.getFieldValue<double>(p_dr, "NOD_XPOS"),
+                NOD_YPOS = Util.getFieldValue<double>(p_dr, "NOD_YPOS"),
+                TOD_QTY = Util.getFieldValue<double>(p_dr, "TOD_QTY"),
+                TOD_QTY_INC = Util.getFieldValue<double>(p_dr, "TOD_QTY_INC"),
+                TOD_VOLUME = Util.getFieldValue<double>(p_dr, "TOD_VOLUME"),
+                DEP_CODE = Util.getFieldValue<string>(p_dr, "DEP_CODE"),
+                ORD_NUM = Util.getFieldValue<string>(p_dr, "ORD_NUM"),
+                ORD_QTY = Util.getFieldValue<double>(p_dr, "ORD_QTY"),
+                ORD_VOLUME = Util.getFieldValue<double>(p_dr, "ORD_VOLUME"),
+                ORD_LENGTH = Util.getFieldValue<double>(p_dr, "ORD_LENGTH"),
+                ORD_WIDTH = Util.getFieldValue<double>(p_dr, "ORD_WIDTH"),
+                ORD_HEIGHT = Util.getFieldValue<double>(p_dr, "ORD_HEIGHT"),
+                ORD_COMMENT = Util.getFieldValue<string>(p_dr, "ORD_COMMENT"),
+                OPENCLOSE = getOpenClose(p_dr, true),
+                ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
 
-                    PTP_ID = Util.getFieldValue<int>(p_dr, "PTP_ID"),
-                    TPL_ID = Util.getFieldValue<int>(p_dr, "TPL_ID"),
-                    TRK_ID = Util.getFieldValue<int>(p_dr, "TRK_ID"),
-                    TRK_CODE = Util.getFieldValue<string>(p_dr, "TRK_CODE"),
-                    TRK_REG_NUM = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM")
-                };
+                PTP_ID = Util.getFieldValue<int>(p_dr, "PTP_ID"),
+                TPL_ID = Util.getFieldValue<int>(p_dr, "TPL_ID"),
+                TRK_ID = Util.getFieldValue<int>(p_dr, "TRK_ID"),
+                TRK_CODE = Util.getFieldValue<string>(p_dr, "TRK_CODE"),
+                TRK_REG_NUM = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM")
+            };
+            if (PMapIniParams.Instance.OrdCommentInTooltip)
+                ret.ToolTipText += "\n" + ret.ORD_COMMENT;
             return ret;
         }
 

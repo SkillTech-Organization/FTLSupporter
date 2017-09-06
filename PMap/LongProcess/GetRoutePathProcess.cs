@@ -188,8 +188,7 @@ namespace PMap.LongProcess
                                 mrkFlag = new PPlanMarkerFlag(start, p_tour.TourPoints[i]);
                                 mrkFlag.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                 p_tour.TourPoints[i].ToolTipText = p_tour.TourPoints[i].TIME_AND_NAME;
-                                //                            mrkFlag.Size = new System.Drawing.Size(20, 20);
-
+                                    //                            mrkFlag.Size = new System.Drawing.Size(20, 20);
                                 p_tour.Layer.Markers.Add(mrkFlag);
                                 p_tour.TourPoints[i].Marker = mrkFlag;
                                 m_baseLayer.Markers.Add(mrkFlag);
@@ -215,8 +214,14 @@ namespace PMap.LongProcess
 
                                 if (PMapIniParams.Instance.DepCodeInToolTip)
                                     p_tour.TourPoints[i + 1].ToolTipText = p_tour.TourPoints[i + 1].DEP_CODE + "  ";
-                                p_tour.TourPoints[i + 1].ToolTipText += p_tour.TourPoints[i + 1].TIME_AND_NAME;
 
+                                p_tour.TourPoints[i + 1].ToolTipText += p_tour.TourPoints[i + 1].TIME_AND_NAME ;
+
+                                if (PMapIniParams.Instance.OrdCommentInTooltip)
+                                {
+                                    p_tour.TourPoints[i + 1].ToolTipText += "\n" + p_tour.TourPoints[i + 1].ORD_COMMENT;
+                                }
+                              
                                 p_tour.Layer.Markers.Add(mrkTourPoint);
                                 p_tour.TourPoints[i + 1].Marker = mrkTourPoint;
                                 m_baseLayer.Markers.Add(mrkTourPoint);
