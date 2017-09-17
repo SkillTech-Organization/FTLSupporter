@@ -3,16 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web.Script.Serialization;
-using System.Windows;
 using System.Xml.Serialization;
 
 namespace PMap.Common.Azure
@@ -56,12 +53,10 @@ namespace PMap.Common.Azure
 
         public AzureTableObjBase()
         {
-            m_State= enObjectState.New;
+            m_State = enObjectState.New;
         }
 
-
-
-        [IgnoreDataMember]
+         [IgnoreDataMember]
         public bool NewState
         {
             get { return m_State == enObjectState.New; }
@@ -101,13 +96,10 @@ namespace PMap.Common.Azure
         private enObjectState m_State = enObjectState.New;
         [DataMember]
         [XmlElement(ElementName = "State")]
-        [AzurePartitionAttr]
         [IgnoreDataMember]
-        public enObjectState State
-        {
+        public enObjectState State {
             get { return m_State; }
-            set
-            {
+            set {
                 m_State = value;
                 NotifyPropertyChanged("State");
                 NotifyPropertyChanged("NewState");
@@ -189,19 +181,59 @@ namespace PMap.Common.Azure
 
         [DataMember]
         [XmlElement(ElementName = "Created")]
-        [AzurePartitionAttr]
         public DateTime Created { get { return m_Created; } set { m_Created = value; Updated = value; } }
+
         [DataMember]
         [XmlElement(ElementName = "Updated")]
-        [AzurePartitionAttr]
         public DateTime Updated { get; set; }
         [DataMember]
         [XmlElement(ElementName = "Creator")]
-        [AzurePartitionAttr]
         public string Creator { get; set; }
         [DataMember]
         [XmlElement(ElementName = "Updater")]
-        [AzurePartitionAttr]
         public string Updater { get; set; }
+
+        protected static Dictionary<string, string> GetEnumToDictionary<T>(T[] p_banned = null)
+        {
+            var dic = Enum.GetValues(typeof(T))
+               .Cast<T>().Where(w => p_banned == null || !p_banned.Contains(w))
+       
+               .ToDictionary(k => k.ToString(), v => GetEnumDescription(v as Enum));
+            return dic;
+        }
+        protected static string GetEnumDescription(Enum p_value)
+        {
+            FieldInfo fi = p_value.GetType().GetField(p_value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return p_value.ToString();
+        }
+    }
+
+    public class HeaderInfo
+    {
+        public string HeaderName { get; set; }
+        public int startColumn { get; set; }
+        public int endColumn { get; set; }
+        public List<HeaderDetail> headerDetails { get; set; }
+
+        public HeaderInfo()
+        {
+            this.headerDetails = new List<HeaderDetail>();
+        }
+    }
+
+    public class HeaderDetail
+    {
+        public string HeaderDetailName { get; set; }
+        public int HeaderDetailColumn { get; set; }
     }
 }

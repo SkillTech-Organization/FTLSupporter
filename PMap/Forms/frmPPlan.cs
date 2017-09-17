@@ -337,6 +337,7 @@ namespace PMap.Forms
                     m_PPlanCommonVars.TooltipMode = p.TooltipMode;
                     m_PPlanCommonVars.ZoomToSelectedPlan = p.ZoomToSelectedPlan;
                     m_PPlanCommonVars.ShowAllOrdersInGrid = p.ShowAllOrdersInGrid;
+                    m_PPlanCommonVars.ZoomToSelectedUnPlanned = p.ZoomToSelectedUnPlanned;
 
                     m_pnlPPlanSettings.Init();
                 }

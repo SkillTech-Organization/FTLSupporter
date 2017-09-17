@@ -52,13 +52,13 @@ namespace PMap.Licence
                                   NewMachineID = sMachineID,
                                   PMapTimestamp = DateTime.Now.ToString(Global.DATETIMEFORMAT)
                                 };
-                        AzureTableStore.Instance.Insert(warn);
+                        AzureTableStore.Instance.Insert(warn, Environment.MachineName);
                         
                     }
                     if (pl.MachineID != sMachineID)
                     {
                         pl.MachineID = sMachineID;
-                        AzureTableStore.Instance.Modify(pl);
+                        AzureTableStore.Instance.Modify(pl, Environment.MachineName);
                     }
                 }
             }

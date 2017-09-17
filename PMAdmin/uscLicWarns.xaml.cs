@@ -34,7 +34,8 @@ namespace PMAdmin
         {
             InitializeComponent();
             this.DataContext = m_dataContext;
-            m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>("", "AppInstance");
+            int total;
+            m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>( "", "AppInstance", out total);
             m_dataContext.SelLicence = m_dataContext.PMapLicenceList.FirstOrDefault();
             m_dataContext.DateS = DateTime.Now.AddDays(-7).Date;
             m_dataContext.DateE = DateTime.Now.Date;

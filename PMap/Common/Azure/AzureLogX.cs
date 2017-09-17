@@ -18,7 +18,7 @@ namespace PMap.Common.Azure
                 Value = ""
             
             };
-            AzureTableStore.Instance.Insert(pl);
+            AzureTableStore.Instance.Insert(pl, Environment.MachineName);
         }
 
     }

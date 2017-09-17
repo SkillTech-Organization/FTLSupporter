@@ -654,9 +654,9 @@ namespace PMapTestApp
           //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
           //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-                          foreach (var edg in RouteData.Instance.Edges)
+       //                   foreach (var edg in RouteData.Instance.Edges)
 
-   //                                 foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.EDG_MAXWEIGHT > 0))
+                                   foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.EDG_MAXWEIGHT > 0))
                 //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 {

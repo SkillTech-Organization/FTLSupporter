@@ -203,13 +203,13 @@ namespace PMAdmin
             switch (p_item.State)
             {
                 case AzureTableObjBase.enObjectState.New:
-                    AzureTableStore.Instance.Insert(p_item);
+                    AzureTableStore.Instance.Insert(p_item, Environment.MachineName);
                     break;
                 case AzureTableObjBase.enObjectState.Stored:
 
                     break;
                 case AzureTableObjBase.enObjectState.Modified:
-                    AzureTableStore.Instance.Modify(p_item);
+                    AzureTableStore.Instance.Modify(p_item, Environment.MachineName);
 
                     break;
                 case AzureTableObjBase.enObjectState.Inactive:
