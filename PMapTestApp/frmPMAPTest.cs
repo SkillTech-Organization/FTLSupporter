@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using OpenCage.Geocode;
 using System.Net.Http;
+using PMap.WebTrace;
 
 namespace PMapTestApp
 {
@@ -709,6 +710,74 @@ namespace PMapTestApp
             pd.ShowDialog();
 
         }
+
+        private void button25_Click_1(object sender, EventArgs e)
+        {
+            PMapIniParams.Instance.ReadParams("", dbConf);
+
+            dlgSelPlan d = new dlgSelPlan();
+
+
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                SQLServerAccess db = new SQLServerAccess();
+                db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+                List<boPlanTour> TourList;
+                bllPlan m_bllPlan = new bllPlan(db);
+                TourList = m_bllPlan.GetPlanTours(d.m_PLN_ID);
+                List<wtTour> xTourList = new List<wtTour>();
+                foreach (var tr in TourList.Where( w=>w.TOURPOINTCNT > 0).ToList())
+                {
+                    wtTour xTr = new wtTour()
+                    {
+                        ID = tr.ID.ToString(),
+                        Carrier = "Carrier1",
+                        TruckRegNo = tr.TRK_ID.ToString(),      //Bővíteni a boPlanTour-t
+                        TruckWeight = tr.TRK_WEIGHT,
+                        TruckHeight = tr.TRK_XHEIGHT,
+                        TruckWidth = tr.TRK_XWIDTH,
+                        Start = tr.START,
+                        End = tr.END,
+                        TourLength = tr.DST,
+                        Qty = tr.QTY,
+                        Vol = tr.VOL,
+                        Toll = tr.TOLL,
+                        TourPointCnt = tr.TOURPOINTCNT,
+                        TourColor = tr.PCOLOR.ToString(),
+                        TruckColor = tr.TRK_COLOR.ToString()
+                    };
+                    foreach (var tp in tr.TourPoints)
+                    {
+                        List<wtMapPoint> mpList = new List<wtMapPoint>();
+                        if (tp.Route != null)
+                            mpList = tp.Route.Points.Select(i => new wtMapPoint() { Lat = i.Lat, Lng = i.Lng }).ToList();
+                        var xtp = new wtTourPoint()
+                        {
+                            Order = tp.PTP_ORDER,
+                            Distance = tp.PTP_DISTANCE,
+                            ArrTime = tp.PTP_ARRTIME,
+                            ServTime = tp.PTP_SERVTIME,
+                            DepTime = tp.PTP_DEPTIME,
+                            DepCode = tp.DEP_CODE,
+                            DepName = tp.DEP_NAME,
+                            DepAddr = tp.ZIP_CITY + " " + tp.ADDR,
+                            OrdNum = tp.ORD_NUM,
+                            MapPoints = mpList
+
+                        };
+                        xTr.TourPoints.Add(xtp);
+                    }
+
+                    xTourList.Add(xTr);
+
+                }
+                db.Close();
+                abllWebTrace bllWebTrace = new abllWebTrace(Environment.MachineName);
+                foreach (var xTr in xTourList)
+                {
+                    bllWebTrace.MaintainItem(xTr);
+                }
+            }
+        }
     }
-   
 }

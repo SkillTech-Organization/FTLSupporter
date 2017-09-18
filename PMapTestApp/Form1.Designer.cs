@@ -61,6 +61,7 @@
             this.button27 = new System.Windows.Forms.Button();
             this.btnReverseGeocoding = new System.Windows.Forms.Button();
             this.btnBatchReverseGeoc = new System.Windows.Forms.Button();
+            this.button25 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
@@ -370,11 +371,22 @@
             this.btnBatchReverseGeoc.UseVisualStyleBackColor = true;
             this.btnBatchReverseGeoc.Click += new System.EventHandler(this.btnBatchReverseGeoc_Click);
             // 
+            // button25
+            // 
+            this.button25.Location = new System.Drawing.Point(499, 225);
+            this.button25.Name = "button25";
+            this.button25.Size = new System.Drawing.Size(223, 34);
+            this.button25.TabIndex = 32;
+            this.button25.Text = "MPWeb teszt generálás";
+            this.button25.UseVisualStyleBackColor = true;
+            this.button25.Click += new System.EventHandler(this.button25_Click_1);
+            // 
             // frmPMapTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(748, 446);
+            this.Controls.Add(this.button25);
             this.Controls.Add(this.btnBatchReverseGeoc);
             this.Controls.Add(this.btnReverseGeocoding);
             this.Controls.Add(this.button27);
@@ -451,6 +463,7 @@
         private System.Windows.Forms.Button button27;
         private System.Windows.Forms.Button btnReverseGeocoding;
         private System.Windows.Forms.Button btnBatchReverseGeoc;
+        private System.Windows.Forms.Button button25;
     }
 }
 
