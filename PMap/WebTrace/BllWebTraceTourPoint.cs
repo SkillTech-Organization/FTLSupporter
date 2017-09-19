@@ -6,10 +6,10 @@ using System.Text;
 
 namespace PMap.WebTrace
 {
-    public class abllWebTrace : AzureBllBase< wtTour>
+    public class BllWebTraceTourPoint : AzureBllBase< TourPoint>
     {
 
-        public abllWebTrace(string p_user) : base(p_user)
+        public BllWebTraceTourPoint(string p_user) : base(p_user)
         {
         }
 

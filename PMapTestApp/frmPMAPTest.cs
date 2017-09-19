@@ -24,6 +24,7 @@ using Newtonsoft.Json.Linq;
 using OpenCage.Geocode;
 using System.Net.Http;
 using PMap.WebTrace;
+using System.Web.Script.Serialization;
 
 namespace PMapTestApp
 {
@@ -109,7 +110,7 @@ namespace PMapTestApp
             try
             {
                 PMapIniParams.Instance.ReadParams("", dbConf);
-  //              (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
+                //              (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
                 (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 754, true);
 
                 dlgSelPlan d = new dlgSelPlan();
@@ -184,7 +185,7 @@ namespace PMapTestApp
             PMapIniParams.Instance.ReadParams("", dbConf);
 
             dlgSelPlan d = new dlgSelPlan();
-//            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 PMapCommonVars.Instance.ConnectToDB();
 
@@ -207,14 +208,14 @@ namespace PMapTestApp
             PMapIniParams.Instance.ReadParams("", dbConf);
 
 
-            
+
 
             dlgSelPlan d = new dlgSelPlan();
-  //          if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //          if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 PMapCommonVars.Instance.ConnectToDB();
                 bllPlanEdit pe = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
-                pe.RecalcTour(0,115, Global.defWeather);
+                pe.RecalcTour(0, 115, Global.defWeather);
 
 
 
@@ -289,7 +290,7 @@ namespace PMapTestApp
             {
                 var vbintf = new VBInterface.PMapInterface();
 
-                UI.Message("Geocoding->" + vbintf.GeocodingByGoogle(d.txtAddr.Text,"", dbConf));
+                UI.Message("Geocoding->" + vbintf.GeocodingByGoogle(d.txtAddr.Text, "", dbConf));
 
 
                 PMapCommonVars.Instance.ConnectToDB();
@@ -663,7 +664,7 @@ namespace PMapTestApp
                 var gc = new Geocoder("e0f24ed22a53d63a9e2d7c3ba72ff7fd");
                 var result = gc.Geocode("82 Clerkenwell Road, London");
 
-                var reserveresult = gc.ReverseGeocode(Convert.ToDouble( d.numLat.Value), Convert.ToDouble(d.numLng.Value));
+                var reserveresult = gc.ReverseGeocode(Convert.ToDouble(d.numLat.Value), Convert.ToDouble(d.numLng.Value));
                 var address = await GetAddressForCoordinates(d.numLat.Value, d.numLng.Value);
                 MessageBox.Show("Cím:" + address);
 
@@ -675,13 +676,13 @@ namespace PMapTestApp
         https://api.opencagedata.com/geocode/v1/json?q=41.40139%2C2.12870&pretty=1&key=
     */
         private async Task<string> GetAddressForCoordinates(decimal latitude, decimal longitude)
-        { 
+        {
             HttpClient httpClient = new HttpClient { BaseAddress = new Uri(@"https://api.opencagedata.com/geocode/v1/") };
             HttpResponseMessage httpResult = await httpClient.GetAsync(
                 String.Format("json?q={0},{1}&pretty=1&key={2}",
-                latitude.ToString().Replace(",", "."), longitude.ToString().Replace(",", "."), 
+                latitude.ToString().Replace(",", "."), longitude.ToString().Replace(",", "."),
                 "e0f24ed22a53d63a9e2d7c3ba72ff7fd"));
-   //         String.Format("json?format=json&lat={0:00.00000000}&lon={1:00.00000000}", latitude, longitude).Replace(",", "."));
+            //         String.Format("json?format=json&lat={0:00.00000000}&lon={1:00.00000000}", latitude, longitude).Replace(",", "."));
             var lf = await httpResult.Content.ReadAsStringAsync();
             JObject jObject = Newtonsoft.Json.Linq.JObject.Parse(lf);
             // var Album album = jalbum.ToObject<Album>();
@@ -689,17 +690,17 @@ namespace PMapTestApp
 
             var formattedAddress = jObject["results"][0]["formatted"];
             return formattedAddress.ToString();
-/*
-        string house = jObject.GetNamedObject("addressparts").GetNamedString("house");
-            string road = jsonObject.GetNamedObject("addressparts").GetNamedString("road");
-            string city = jsonObject.GetNamedObject("addressparts").GetNamedString("city");
-            string state = jsonObject.GetNamedObject("addressparts").GetNamedString("state");
-            string postcode = jsonObject.GetNamedObject("addressparts").GetNamedString("postcode");
-            string country = jsonObject.GetNamedObject("addressparts").GetNamedString("country");
-            return string.Format("{0} {1}, {2}, {3} {4} ({5})", house, road, city, state, postcode, country);
-            */
+            /*
+                    string house = jObject.GetNamedObject("addressparts").GetNamedString("house");
+                        string road = jsonObject.GetNamedObject("addressparts").GetNamedString("road");
+                        string city = jsonObject.GetNamedObject("addressparts").GetNamedString("city");
+                        string state = jsonObject.GetNamedObject("addressparts").GetNamedString("state");
+                        string postcode = jsonObject.GetNamedObject("addressparts").GetNamedString("postcode");
+                        string country = jsonObject.GetNamedObject("addressparts").GetNamedString("country");
+                        return string.Format("{0} {1}, {2}, {3} {4} ({5})", house, road, city, state, postcode, country);
+                        */
         }
-        
+
         private void btnBatchReverseGeoc_Click(object sender, EventArgs e)
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
@@ -720,15 +721,17 @@ namespace PMapTestApp
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+ 
                 SQLServerAccess db = new SQLServerAccess();
                 db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
                 List<boPlanTour> TourList;
+                bllRoute m_bllRoute = new bllRoute(db);
                 bllPlan m_bllPlan = new bllPlan(db);
                 TourList = m_bllPlan.GetPlanTours(d.m_PLN_ID);
-                List<wtTour> xTourList = new List<wtTour>();
-                foreach (var tr in TourList.Where( w=>w.TOURPOINTCNT > 0).ToList())
+                List<Tour> xTourList = new List<Tour>();
+                foreach (var tr in TourList.Where(w => w.TOURPOINTCNT > 0).ToList())
                 {
-                    wtTour xTr = new wtTour()
+                    Tour xTr = new Tour()
                     {
                         ID = tr.ID.ToString(),
                         Carrier = "Carrier1",
@@ -742,26 +745,32 @@ namespace PMapTestApp
                         Qty = tr.QTY,
                         Vol = tr.VOL,
                         Toll = tr.TOLL,
-                        TourPointCnt = tr.TOURPOINTCNT,
-                        TourColor = tr.PCOLOR.ToString(),
-                        TruckColor = tr.TRK_COLOR.ToString()
+                        TourColor = ColorTranslator.ToHtml(Color.FromArgb(tr.PCOLOR.ToArgb())),
+                        TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb()))
                     };
-                    foreach (var tp in tr.TourPoints)
+                    for (int i = 0; i < tr.TourPoints.Count; i++)
                     {
-                        List<wtMapPoint> mpList = new List<wtMapPoint>();
-                        if (tp.Route != null)
-                            mpList = tp.Route.Points.Select(i => new wtMapPoint() { Lat = i.Lat, Lng = i.Lng }).ToList();
-                        var xtp = new wtTourPoint()
+
+                        List<MapPoint> mpList = new List<MapPoint>();
+                        if (i < tr.TourPoints.Count - 1)
                         {
-                            Order = tp.PTP_ORDER,
-                            Distance = tp.PTP_DISTANCE,
-                            ArrTime = tp.PTP_ARRTIME,
-                            ServTime = tp.PTP_SERVTIME,
-                            DepTime = tp.PTP_DEPTIME,
-                            DepCode = tp.DEP_CODE,
-                            DepName = tp.DEP_NAME,
-                            DepAddr = tp.ZIP_CITY + " " + tp.ADDR,
-                            OrdNum = tp.ORD_NUM,
+                            var route = m_bllRoute.GetMapRouteFromDB(tr.TourPoints[i].NOD_ID, tr.TourPoints[i + 1].NOD_ID, tr.RZN_ID_LIST, tr.TRK_WEIGHT, tr.TRK_XHEIGHT, tr.TRK_XWIDTH);
+
+                            if (route != null)
+                                mpList = route.Points.Select(s => new MapPoint() { Lat = s.Lat, Lng = s.Lng }).ToList();
+                        }
+                        var xtp = new TourPoint()
+                        {
+                            TourID = tr.ID,
+                            Order = tr.TourPoints[i].PTP_ORDER,
+                            Distance = tr.TourPoints[i].PTP_DISTANCE,
+                            ArrTime = tr.TourPoints[i].PTP_ARRTIME,
+                            ServTime = tr.TourPoints[i].PTP_SERVTIME,
+                            DepTime = tr.TourPoints[i].PTP_DEPTIME,
+                            DepCode = tr.TourPoints[i].DEP_CODE,
+                            DepName = tr.TourPoints[i].DEP_NAME,
+                            DepAddr = tr.TourPoints[i].ZIP_CITY + " " + tr.TourPoints[i].ADDR,
+                            OrdNum = tr.TourPoints[i].ORD_NUM ,
                             MapPoints = mpList
 
                         };
@@ -772,12 +781,25 @@ namespace PMapTestApp
 
                 }
                 db.Close();
-                abllWebTrace bllWebTrace = new abllWebTrace(Environment.MachineName);
+                BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+                BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
                 foreach (var xTr in xTourList)
                 {
                     bllWebTrace.MaintainItem(xTr);
+                    foreach( var xTp in xTr.TourPoints)
+                    {
+                        bllWebTraceTourPoint.MaintainItem(xTp);
+                    }
                 }
             }
+        }
+
+        private void button28_Click(object sender, EventArgs e)
+        {
+            BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+            int total;
+            var ll = bllWebTrace.RetrieveList(out total);
+
         }
     }
 }

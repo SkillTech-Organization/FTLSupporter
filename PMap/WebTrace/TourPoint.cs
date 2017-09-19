@@ -7,18 +7,29 @@ using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
 using PMap.Common.Attrib;
+using Newtonsoft.Json;
+using PMap.Common.Azure;
 
 namespace PMap.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "TourPoint")]
-    public class wtTourPoint
+    public class TourPoint : AzureTableObjBase
     {
-  
+
         [DataMember]
+        [DisplayNameAttributeX(Name = "Túra azonosítója")]
+        [AzureTablePartitionKeyAttr]
+        public int TourID { get; set; }
+
+
+        [DataMember]
+        [AzureTableRowKeyAttr]
         [DisplayNameAttributeX(Name = "Túrapont sorszáma")]
         public int Order { get; set; }
 
+
+    
         [DataMember]
         [DisplayNameAttributeX(Name = "Távolság az előző túraponttól")]
         public double Distance { get; set; }
@@ -50,7 +61,12 @@ namespace PMap.WebTrace
 
         [DataMember]
         [DisplayNameAttributeX(Name = "Útvonal-pontok")]
-        public List<wtMapPoint> MapPoints { get; set; } = new List<wtMapPoint>();
+        public List<MapPoint> MapPoints { get; set; } = new List<MapPoint>();
+
+
+
+
+
     }
 
 }

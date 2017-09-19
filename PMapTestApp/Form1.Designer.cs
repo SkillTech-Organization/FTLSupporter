@@ -62,6 +62,7 @@
             this.btnReverseGeocoding = new System.Windows.Forms.Button();
             this.btnBatchReverseGeoc = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
+            this.button28 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
@@ -381,11 +382,22 @@
             this.button25.UseVisualStyleBackColor = true;
             this.button25.Click += new System.EventHandler(this.button25_Click_1);
             // 
+            // button28
+            // 
+            this.button28.Location = new System.Drawing.Point(728, 225);
+            this.button28.Name = "button28";
+            this.button28.Size = new System.Drawing.Size(223, 34);
+            this.button28.TabIndex = 33;
+            this.button28.Text = "MPWeb teszt generálás";
+            this.button28.UseVisualStyleBackColor = true;
+            this.button28.Click += new System.EventHandler(this.button28_Click);
+            // 
             // frmPMapTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(748, 446);
+            this.ClientSize = new System.Drawing.Size(989, 446);
+            this.Controls.Add(this.button28);
             this.Controls.Add(this.button25);
             this.Controls.Add(this.btnBatchReverseGeoc);
             this.Controls.Add(this.btnReverseGeocoding);
@@ -464,6 +476,7 @@
         private System.Windows.Forms.Button btnReverseGeocoding;
         private System.Windows.Forms.Button btnBatchReverseGeoc;
         private System.Windows.Forms.Button button25;
+        private System.Windows.Forms.Button button28;
     }
 }
 

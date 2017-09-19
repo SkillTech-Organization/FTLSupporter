@@ -207,11 +207,12 @@
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
-    <Compile Include="WebTrace\abllWebTrace.cs" />
-    <Compile Include="WebTrace\wtMapPoint.cs" />
-    <Compile Include="WebTrace\wtTourPoint.cs" />
+    <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
+    <Compile Include="WebTrace\BllWebTraceTour.cs" />
+    <Compile Include="WebTrace\MapPoint.cs" />
+    <Compile Include="WebTrace\TourPoint.cs" />
     <Compile Include="Common\Attrib\AzureTableFieldAttr.cs" />
-    <Compile Include="WebTrace\wtTour.cs" />
+    <Compile Include="WebTrace\Tour.cs" />
     <Compile Include="BO\DataXChange\boXChkRes.cs" />
     <Compile Include="BO\DataXChange\boXChkRoute.cs" />
     <Compile Include="Common\Attrib\WriteFieldAttribute.cs" />

@@ -14,7 +14,7 @@ namespace PMap.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "Tour")]
-    public class wtTour : AzureTableObjBase
+    public class Tour : AzureTableObjBase
     {
 
         public const string PartitonConst = "TOUR";
@@ -26,7 +26,6 @@ namespace PMap.WebTrace
         private string m_ID { get; set; }
         [DataMember]
         [AzureTableRowKeyAttr]
-        [AzureTableFieldAttr(FieldName = "RowKey")]
         public string ID
         {
             get { return m_ID; }
@@ -82,9 +81,15 @@ namespace PMap.WebTrace
         [DisplayNameAttributeX(Name = "Összútdíj")]
         public double Toll { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
+        [JsonProperty("TourPointCnt")]
         [DisplayNameAttributeX(Name = "Túrapontok száma")]
-        public int TourPointCnt { get; set; }               //0 esetén nincs a járműnek túrája
+        public int TourPointCnt {
+            get
+            {
+                return TourPoints.Count();
+            }
+        }          
 
         [DataMember]
         [DisplayNameAttributeX(Name = "Túra szinezése")]
@@ -94,9 +99,10 @@ namespace PMap.WebTrace
         [DisplayNameAttributeX(Name = "Jármű szinezése")]
         public string TruckColor { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
+        [JsonProperty("TourPoints")]
         [DisplayNameAttributeX(Name = "Túrapontok listája")]
-        public List<wtTourPoint> TourPoints { get; set; } = new List<wtTourPoint>();
+        public List<TourPoint> TourPoints { get; set; } = new List<TourPoint>();
 
 
     }
