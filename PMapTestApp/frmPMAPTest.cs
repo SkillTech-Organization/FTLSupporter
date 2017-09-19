@@ -110,7 +110,7 @@ namespace PMapTestApp
             {
                 PMapIniParams.Instance.ReadParams("", dbConf);
   //              (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
-                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 2, true);
+                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 754, true);
 
                 dlgSelPlan d = new dlgSelPlan();
                 if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)

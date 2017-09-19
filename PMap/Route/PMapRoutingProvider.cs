@@ -233,7 +233,7 @@ namespace PMap.MapProvider
                 }
 
                 //Távolság kiszámolása
-                routeInfo.DST_DISTANCE= routeInfo.Edges.Sum(e => e.EDG_LENGTH);
+                routeInfo.DST_DISTANCE= routeInfo.Edges.Sum(e => (int)e.EDG_LENGTH);
     
                 return routeInfo;
             }

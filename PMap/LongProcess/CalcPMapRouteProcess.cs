@@ -98,7 +98,7 @@ namespace PMap.LongProcess
 
                 var lstCalcNodes = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
 
-
+                List<boRoute> results = new List<boRoute>();
                 foreach (var calcNode in lstCalcNodes.AsEnumerable())
                 {
 
@@ -113,12 +113,13 @@ namespace PMap.LongProcess
 
                     //megj: nins routePar null ellenőrzés, hogy szálljon el, ha valami probléma van
                     //
-                    List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.NOD_ID_FROM, lstToNodes,
+                    results.AddRange(provider.GetAllRoutes(routePar, calcNode.Key.NOD_ID_FROM, lstToNodes,
                                         NeighborsArrFull[routePar], NeighborsArrCut[routePar],
-                                        PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                                        PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 
-                    //Eredmény adatbázisba írása minden csomópont kiszámolása után
-                    m_bllRoute.WriteRoutes(results, m_savePoints);
+                    //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!
+                    //m_bllRoute.WriteRoutes(results, m_savePoints);
+
                     /*
                     //Eredmény ellenőrzése Google-al
                     foreach (var ri in results)
@@ -190,7 +191,7 @@ namespace PMap.LongProcess
 
 
                 //Eredmény adatbázisba írása
-                //            m_bllRoute.WriteRoutes(results, m_conn.DB);
+                m_bllRoute.WriteRoutesBulk(results, m_savePoints);
                 Completed = true;
                 m_DB.Close();
             }

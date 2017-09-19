@@ -16,6 +16,7 @@ using System.Net;
 using System.Xml.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using FastMember;
 
 namespace PMap.BLL
 {
@@ -53,17 +54,17 @@ namespace PMap.BLL
 
         public DataTable GetEdgesToDT()
         {
-             String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
-                          "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETLCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
-                          "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
-                          "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
-                          "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, NOD1.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
-                          "EDG_MAXWEIGHT, EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
-                          "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
-                          "inner join NOD_NODE (NOLOCK) NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
-                          "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-                          "left outer join RZN_RESTRZONE (NOLOCK) RZN on EDG.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
-                          "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0";
+            String sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
+                         "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETLCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
+                         "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
+                         "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
+                         "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, NOD1.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
+                         "EDG_MAXWEIGHT, EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
+                         "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
+                         "inner join NOD_NODE (NOLOCK) NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
+                         "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+                         "left outer join RZN_RESTRZONE (NOLOCK) RZN on EDG.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
+                         "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0";
 
             return DBA.Query2DataTable(sSql);
         }
@@ -146,7 +147,96 @@ namespace PMap.BLL
             }
         }
 
+        private class boRouteX : boRoute
+        {
+            bool m_savePoints = true;
+            public boRouteX(bool p_savePoints)
+            {
+                m_savePoints = p_savePoints;
+            }
 
+            public byte[] DST_EDGES
+            {
+                get
+                {
+                    if (Edges != null && Route != null)
+                    {
+                        return Util.ZipStr(string.Join(Global.SEP_EDGE, Edges.Select(x => (x.ID).ToString()).ToArray()));
+                    }
+                    return new byte[0];
+                }
+            }
+            public byte[] DST_POINTS
+            {
+                get
+                {
+                    if (Edges != null && Route != null)
+                    {
+                        if (m_savePoints)
+                            return Util.ZipStr(string.Join(Global.SEP_POINT, Route.Points.Select(x => x.Lat.ToString() + Global.SEP_COORD + x.Lng.ToString()).ToArray()));
+                        else
+                            return new byte[0];
+                    }
+                    return new byte[0];
+                }
+            }
+        }
+
+        public void WriteRoutesBulk(List<boRoute> p_Routes, bool p_savePoints)
+        {
+            DataTable dt;
+            DataTable table = new DataTable();
+
+            List<boRouteX> rtX = p_Routes.Select(i => new boRouteX(p_savePoints)
+            {
+                NOD_ID_FROM = i.NOD_ID_FROM,
+                NOD_ID_TO = i.NOD_ID_TO,
+                RZN_ID_LIST = i.RZN_ID_LIST,
+                DST_MAXWEIGHT = i.DST_MAXWEIGHT,
+                DST_MAXHEIGHT = i.DST_MAXHEIGHT,
+                DST_MAXWIDTH = i.DST_MAXWIDTH,
+                DST_DISTANCE = i.DST_DISTANCE,
+                Route = i.Route,
+                Edges = i.Edges
+
+            }
+            ).ToList();
+
+
+
+            using (var reader = ObjectReader.Create(rtX,
+                "NOD_ID_FROM", "NOD_ID_TO", "RZN_ID_LIST", "DST_MAXWEIGHT", "DST_MAXHEIGHT", "DST_MAXWIDTH", "DST_DISTANCE", "DST_EDGES", "DST_POINTS"))
+            {
+                table.Load(reader);
+            }
+            // more on triggers in next post
+            SqlBulkCopy bulkCopy =
+                new SqlBulkCopy
+                (
+                DBA.Conn,
+                SqlBulkCopyOptions.TableLock |
+                SqlBulkCopyOptions.FireTriggers |
+                SqlBulkCopyOptions.UseInternalTransaction,
+                null
+                );
+
+            // set the destination table name
+            bulkCopy.DestinationTableName = "DST_DISTANCE";
+            bulkCopy.ColumnMappings.Add("NOD_ID_FROM", "NOD_ID_FROM");
+            bulkCopy.ColumnMappings.Add("NOD_ID_TO", "NOD_ID_TO");
+            bulkCopy.ColumnMappings.Add("RZN_ID_LIST", "RZN_ID_LIST");
+            bulkCopy.ColumnMappings.Add("DST_MAXWEIGHT", "DST_MAXWEIGHT");
+            bulkCopy.ColumnMappings.Add("DST_MAXHEIGHT", "DST_MAXHEIGHT");
+            bulkCopy.ColumnMappings.Add("DST_MAXWIDTH", "DST_MAXWIDTH");
+            bulkCopy.ColumnMappings.Add("DST_DISTANCE", "DST_DISTANCE");
+            bulkCopy.ColumnMappings.Add("DST_EDGES", "DST_EDGES");
+            bulkCopy.ColumnMappings.Add("DST_POINTS", "DST_POINTS");
+
+            // write the data in the "dataTable"
+            bulkCopy.WriteToServer(table, DataRowState.Unchanged);
+
+        }
+    
 
 
 
@@ -166,7 +256,7 @@ namespace PMap.BLL
 
 
                 result = new boRoute();
-                result.DST_DISTANCE = Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE");
+                result.DST_DISTANCE = Util.getFieldValue<int>(dt.Rows[0], "DST_DISTANCE");
                 result.RZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
                 result.DST_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWEIGHT");
                 result.DST_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXHEIGHT");
@@ -834,7 +924,8 @@ namespace PMap.BLL
             string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
             "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
             "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
-            "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH " + Environment.NewLine +
+            "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, " + Environment.NewLine +
+            "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF " + Environment.NewLine +
             "from EDG_EDGE EDG " + Environment.NewLine +
             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
@@ -844,11 +935,10 @@ namespace PMap.BLL
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF" + Environment.NewLine +
+            "XDIFF " + Environment.NewLine +
             "from CTE " + Environment.NewLine +
-            "where dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
-            "  (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
-            "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") asc";
+            "where  CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
+            "order by CTE.XDIFF asc";
 
 
 
@@ -916,7 +1006,8 @@ namespace PMap.BLL
             string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
             "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
             "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
-            "RZN.ID as RZN_ID,EDG.EDG_DESTTRAFFIC as EDG_EDG_DESTTRAFFIC " + Environment.NewLine +
+            "RZN.ID as RZN_ID,EDG.EDG_DESTTRAFFIC as EDG_EDG_DESTTRAFFIC, " + Environment.NewLine +
+            "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF" + Environment.NewLine +
             "from EDG_EDGE EDG " + Environment.NewLine +
             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
@@ -928,15 +1019,14 @@ namespace PMap.BLL
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF" + Environment.NewLine +
+            "CTE.XDIFF" + Environment.NewLine +
             "from CTE " + Environment.NewLine +
             "where ( RZN_ID is null  " + Environment.NewLine +
             "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN_ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN_ID,0))+',', '," + p_RZN_ID_LIST + ",') > 0) " : "") + Environment.NewLine +
             "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG_EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
             " ) and  " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
-            "  (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
-            "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD_NOD_XPOS, NOD_NOD_YPOS, NOD2_NOD_XPOS, NOD2_NOD_YPOS, " + ptX + ", " + ptY + ") asc";
+            "CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
+            "order by CTE.XDIFF  asc";
 
             DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway, p_weight, p_height, p_width));
             if (dt.Rows.Count > 0)

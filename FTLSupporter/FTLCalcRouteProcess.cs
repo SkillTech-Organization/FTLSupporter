@@ -74,6 +74,7 @@ namespace FTLSupporter
                 var lstCalcNodes = m_lstRoutes.GroupBy(gr => new { gr.fromNOD_ID, gr.RZN_ID_LIST, gr.GVWR, gr.Height, gr.Width }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.toNOD_ID).ToList());
 
                 DateTime dtStartX2 = DateTime.Now;
+                List<boRoute> writeRoute = new List<boRoute>();
                 foreach (var calcNode in lstCalcNodes.AsEnumerable())
                 {
 
@@ -95,14 +96,13 @@ namespace FTLSupporter
                         //leválogatjuk, mely útvonalakra tartozik a számítás
                         List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO 
                                                                     && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR==routePar.Weight && x.Height==routePar.Height && x.Width==routePar.Width).ToList();
+
                         foreach (FTLPMapRoute ftr in lstFTLR)
                         {
 
                             if (m_cacheRoutes)
                             {
-                                List<boRoute> rtl = new List<boRoute>();
-                                rtl.Add(route);
-                                m_bllRoute.WriteRoutes(rtl, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
+                                writeRoute.Add(route);
                             }
 
                             ftr.route = route;
@@ -110,6 +110,7 @@ namespace FTLSupporter
                         }
 
                     }
+
 
                     if (EventStop != null && EventStop.WaitOne(0, true))
                     {
@@ -130,6 +131,9 @@ namespace FTLSupporter
                     }
                     this.SetNotifyIconText(infoText1);
                 }
+
+                m_bllRoute.WriteRoutesBulk(writeRoute, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
+
                 Completed = true;
                 m_DB.Close();
             }
