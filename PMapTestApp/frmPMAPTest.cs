@@ -25,6 +25,7 @@ using OpenCage.Geocode;
 using System.Net.Http;
 using PMap.WebTrace;
 using System.Web.Script.Serialization;
+using PMap.Common.Azure;
 
 namespace PMapTestApp
 {
@@ -781,7 +782,12 @@ namespace PMapTestApp
 
                 }
                 db.Close();
-                BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+
+                //connectionString = "DefaultEndpointsProtocol=https;AccountName=petawebdbtest;AccountKey=ucXUpxndw4j+73Ygjk7Cg3I93voioqGC5PCCelVr4g8aSpub+AEfk99YG6c/8768Exzv9wXDcQQd/o7xenoxzQ==;EndpointSuffix=core.windows.net" />
+
+                AzureTableStore.Instance.AzureAccount = "petawebdbtest";
+                AzureTableStore.Instance.AzureKey = "ucXUpxndw4j+73Ygjk7Cg3I93voioqGC5PCCelVr4g8aSpub+AEfk99YG6c/8768Exzv9wXDcQQd/o7xenoxzQ==";
+                      BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                 BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
                 foreach (var xTr in xTourList)
                 {
@@ -797,8 +803,11 @@ namespace PMapTestApp
         private void button28_Click(object sender, EventArgs e)
         {
             BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+            //egy elem
+            var l1 = bllWebTrace.Retrieve(Tour.PartitonConst, "12780");
+            //összes elem (van where paraméter is!)
             int total;
-            var ll = bllWebTrace.RetrieveList(out total);
+            var l2 = bllWebTrace.RetrieveList(out total);
 
         }
     }

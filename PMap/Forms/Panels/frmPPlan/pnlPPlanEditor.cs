@@ -1444,6 +1444,7 @@ namespace PMap.Forms.Panels.frmPPlan
                                     if (sToolTipText != "")
                                         sToolTipText += "\n\n";
                                     sToolTipText += rup.ToolTipText;
+                                    sToolTipText = sToolTipText.Replace("\\n", "\n");
                                 }
                             }
                         }

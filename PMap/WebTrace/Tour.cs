@@ -21,7 +21,7 @@ namespace PMap.WebTrace
 
         [DataMember]
         [AzureTablePartitionKeyAttr]
-        public string PartitionKey { get;  } = PartitonConst;
+        public string PartitionKey { get; set; } = PartitonConst;
 
         private string m_ID { get; set; }
         [DataMember]
