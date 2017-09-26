@@ -281,5 +281,77 @@ namespace PMap.Route
             }
             Console.WriteLine("getNeigboursByBound " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
         }
+
+
+        public int GetNearestNOD_ID(PointLatLng p_pt)
+        {
+            int diff;
+            return GetNearestNOD_ID(p_pt, out diff);
+        }
+
+        /// <summary>
+        /// Egy térképi ponthoz legközelebb lévő NOD_ID visszaadása
+        /// </summary>
+        /// <param name="p_pt"></param>
+        /// <param name="r_diff"></param>
+        /// <returns></returns>
+        public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
+        {
+            r_diff = Int32.MaxValue;
+ 
+            //Legyünk következetesek, a PMAp-os térkép esetében:
+            //X --> lng, Y --> lat
+
+            var nearest = RouteData.Instance.Edges/*.Where(
+                w => Util.DistanceBetweenSegmentAndPoint(w.Value.fromLatLng.Lng, w.Value.fromLatLng.Lat,
+                w.Value.toLatLng.Lng, w.Value.toLatLng.Lat, ptX, ptY) <=
+                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                 Global.NearestNOD_ID_Approach : Global.EdgeApproachCity))*/
+                 .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
+                o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s=>s.Value).FirstOrDefault();
+            if (nearest != null)
+            {
+                r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
+                nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat)* Global.LatLngDivider);
+
+
+                return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
+                    Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
+            }
+            return 0;
+        }
+        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
+        {
+            int diff;
+            return GetNearestReachableNOD_IDForTruck(p_pt, p_RZN_ID_LIST, p_weight, p_height, p_width, out diff);
+        }
+
+
+        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width, out int r_diff)
+        {
+            r_diff = Int32.MaxValue;
+
+            //Legyünk következetesek, a PMAp-os térkép esetében:
+            //X --> lng, Y --> lat
+            var lstRZN = p_RZN_ID_LIST.Split(',');
+            var nearest = RouteData.Instance.Edges.Where(
+                w => (p_RZN_ID_LIST == "" || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
+                    (w.Value.EDG_MAXWEIGHT == 0 || p_weight == 0 || w.Value.EDG_MAXWEIGHT <= p_weight) &&
+                    (w.Value.EDG_MAXWEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&
+                    (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width))
+                 .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
+                o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
+            if (nearest != null)
+            {
+                r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
+                nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat) * Global.LatLngDivider);
+
+
+                return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
+                    Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
+            }
+            return 0;
+        }
+
     }
 }

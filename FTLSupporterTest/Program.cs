@@ -236,6 +236,19 @@ namespace FTLSupporterTest
                 RealArrival = DateTime.MinValue
             };
 
+
+            FTLPoint tp17 = new FTLPoint()
+            {
+                TPID = "TP004",
+                Name = "Budapest belváros másnapi 0:30 nyitva tartás",
+                Addr = "Városház u.",
+                Open = DateTime.Now.Date.AddDays(1).AddMinutes(30),
+                Close = DateTime.Now.Date.AddDays(1).AddMinutes(30),
+                SrvDuration = 10,
+                Lat = 47.4937477,
+                Lng = 19.0563869,
+                RealArrival = DateTime.MinValue
+            };
             #endregion
 
             #region beosztandó szállítási feladatok
@@ -340,6 +353,19 @@ namespace FTLSupporterTest
             };
             tsk8.TPoints.Add(tp15.ShallowCopy());
             tsk8.TPoints.Add(tp16.ShallowCopy());
+
+            FTLTask tsk9 = new FTLTask()
+            {
+                TaskID = "TSK9 0:30 nyitva tartás teszt",
+                CargoType = "Száraz",
+                TruckTypes = "Hűtős,Egyéb",
+                Weight = 100,
+                Client = "Budapest belváros-Baja",
+                TPoints = new List<FTLPoint>()
+            };
+            tsk9.TPoints.Add(tp17.ShallowCopy());
+            tsk9.TPoints.Add(tp12.ShallowCopy());
+
 
 
             FTLTask tskX = new FTLTask()
@@ -615,6 +641,46 @@ namespace FTLSupporterTest
                 RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
 
             };
+
+
+
+
+            /*Szabad jármű, Gyáli tartózkodással */
+            FTLTruck trk7 = new FTLTruck()
+            {
+                TruckID = "TRK7 Gyál 3,5t",
+                GVWR = 3500,
+                Capacity = 2000,
+                TruckType = "Hűtős",
+                CargoTypes = "Száraz,Romlandó",
+                EngineEuro = 2,
+                ETollCat = 3,
+                FixCost = 10000,
+                KMCost = 50,
+                RelocateCost = 500,
+                MaxKM = 9999,
+                MaxDuration = 9999,
+                TruckTaskType = FTLTruck.eTruckTaskType.Available,
+                RunningTaskID = "",
+                CurrIsOneWay = false,
+                CurrTime = DateTime.Now.Date.AddHours(7),
+                CurrLat = 47.3844618,
+                CurrLng = 19.2114830,
+                CurrTPoints = new List<FTLPoint>(),
+
+                RemainingDriveTime = 5 * 60 * 60,                                   //300 perc
+                RemainingRestTime = 30 * 60,                                   // 30 perc
+                RemainingTimeToStartDailyRest = (int)(6 * 60 * 60),             //360 perc
+                RemainingDailyDriveTime = 6 * 60 * 60,                          //240 perc
+                RemainingDailyRestTime = 60 * 60,                               // 60 perc
+                RemainingWeeklyDriveTime = 6 * 60 * 60,                         //360 perc
+                RemainingWeeklyRestTime = 9 * 60 * 60,                          //540 perc
+                RemainingTwoWeeklyDriveTime = 9 * 60 * 60,                      //540 perc
+                RemainingTwoWeeklyRestTime = 4 * 60 * 60,                       //180 perc
+                RemainingRestTimeToCompensate = 20 * 60                         // 20 perc
+            };
+
+
             #endregion
 
             /*//vezetési idő teszt
@@ -623,9 +689,12 @@ namespace FTLSupporterTest
             */
 
             //12t korlát teszt
-            var lstTsk = new List<FTLTask> { tsk8 };
-            var lstTrk = new List<FTLTruck> { trk1, trk6 };   /*trk1:12T, távolság:23596,trk6:20T, távolság:59463*/
+            //   var lstTsk = new List<FTLTask> { tsk8 };
+            //   var lstTrk = new List<FTLTruck> { trk1, trk6 };   /*trk1:12T, távolság:23596,trk6:20T, távolság:59463*/
 
+            //0:30 nyitva tartás hiba teszt
+            var lstTsk = new List<FTLTask> { tsk9};
+            var lstTrk = new List<FTLTruck> { trk7 };   /*trk1:12T, távolság:23596,trk6:20T, távolság:59463*/
 
             /* PROPS-EXCLPROPS teszt 
             tsk1.InclTruckProps = "PROP1,PROP2,PROP3";
@@ -776,11 +845,11 @@ namespace FTLSupporterTest
 
 
             DateTime dtStart = DateTime.Now;
-            
+       /*     
              PMapIniParams.Instance.ReadParams("", "DB0");
              PMapCommonVars.Instance.ConnectToDB();
              PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
-            
+        */    
 
             Console.BufferHeight = 300;
             if (p_bestTruck)

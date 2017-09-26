@@ -233,9 +233,12 @@ namespace PMapTestApp
 
         private void setFromToMap()
         {
+
+            RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
             //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             int diff = 0;
-            int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
+            int NOD_ID = RouteData.Instance.GetNearestNOD_ID(MarkerFrom.Position, out diff);
             if (NOD_ID > 0)
             {
                 this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
@@ -404,8 +407,13 @@ namespace PMapTestApp
                 //A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
                 //
                 List<CRoutePars> lstRoutePars = dtRZN_ID_LIST.AsEnumerable().Select(x => new CRoutePars() { RZN_ID_LIST = Util.getFieldValue<string>(x, "RESTZONE_IDS") }).ToList();
-                lstRoutePars[0].Weight = (int)numWeigtht.Value;
-                lstRoutePars[1].Weight = (int)numWeigtht.Value;
+
+                foreach (var rp in lstRoutePars)
+                {
+
+                    rp.Weight = (int)numWeigtht.Value;
+                    rp.Height = 450;
+                }
 
                 Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
                 Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
@@ -436,7 +444,7 @@ namespace PMapTestApp
 
                 //A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
                 //
-                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue, Weight= (int)numWeigtht.Value };
+                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue, Weight= (int)numWeigtht.Value, Height=450 };
 
                  boRoute route;
 
@@ -654,9 +662,9 @@ namespace PMapTestApp
           //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
           //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-       //                   foreach (var edg in RouteData.Instance.Edges)
+         //                foreach (var edg in RouteData.Instance.Edges)
 
-                                   foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.EDG_MAXWEIGHT > 0))
+                                   foreach (var edg in RouteData.Instance.Edges.Where(x => /* x.Value.EDG_MAXWEIGHT > 0 || */ x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
                 //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 {
@@ -674,7 +682,7 @@ namespace PMapTestApp
                         gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
                         m_edgesMarkerLayer.Markers.Add(gm);
                     }
-                    gm.ToolTipText += String.Format("ID:{0}, name:{1}, fromNOD:{2}, toNOD:{3}", edge.ID, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
+                    gm.ToolTipText += String.Format("ID:{0} weight{1}, height:{2}, width:{3}\nname:{4}, fromNOD:{5}, toNOD:{6}", edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
 
                     Pen p;
                     switch ( edge.RDT_VALUE)

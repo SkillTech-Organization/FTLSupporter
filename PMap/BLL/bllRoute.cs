@@ -895,18 +895,10 @@ namespace PMap.BLL
         }
 
 
-        /* SQL implementation:
-        --http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
-        ALTER FUNCTION [dbo].[fnDistanceBetweenLineAndPoint]( @ln1X FLOAT, @ln1Y FLOAT, @ln2X FLOAT, @ln2Y FLOAT, @ptX FLOAT, @ptY FLOAT)
-        RETURNS FLOAT AS 
-        BEGIN
-         --RETURN Sin(Atn2(@ptY - @ln1Y, @ptX - @ln1X) -
-         --               Atn2(@ln2Y - @ln1Y, @ln2X - @ln1X)) * Sqrt((@ptX - @ln1X) * (@ptX - @ln1X) + (@ptY - @ln1Y) * (@ptY - @ln1Y)) 
-        --	return sqrt( power( (@ln2Y-@ln1Y)*(@ptX-@ln1X) - (@ln2X-@ln1X)* (@ptY-@ln1Y), 2) / ( power(@ln2X-@ln1X,2) + power(@ln2Y-@ln1Y,2))) 
-
-	        return abs( (@ln2X-@ln1X)*(@ln1Y-@ptY) - (@ln1X-@ptX)* (@ln2Y-@ln1Y)) / sqrt(power(@ln2X-@ln1X,2) + power(@ln2Y-@ln1Y,2)) 
-        END
-        */
+        /*****************************************************************/
+        /* kivezetni a metódust, helyette a                             */
+        /* RouteData.Instance.GetNearestNOD_ID -t kell használni !!!    */
+        /*****************************************************************/
 
         /// <summary>
         /// Egy térképi ponthoz legközelebb lévő NOD_ID visszaadása
@@ -914,57 +906,62 @@ namespace PMap.BLL
         /// <param name="p_pt"></param>
         /// <returns></returns>
         public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
-        {
-            r_diff = Int32.MaxValue;
+         {
+             r_diff = Int32.MaxValue;
 
-            string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
-            string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
-
-
-            string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
-            "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
-            "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
-            "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF " + Environment.NewLine +
-            "from EDG_EDGE EDG " + Environment.NewLine +
-            "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
-            "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-            "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
-            "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   AND " + Environment.NewLine +
-            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
-            "select top 1 " + Environment.NewLine +
-            "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
-            "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
-            "XDIFF " + Environment.NewLine +
-            "from CTE " + Environment.NewLine +
-            "where  CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
-            "order by CTE.XDIFF asc";
+             string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
+             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
 
 
-
-            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_Approach, Global.EdgeApproachCity, Global.EdgeApproachHighway));
-
-
-            //Extrém esetben előfordulhat, hogy az eredeti közelítéssel (Global.NearestNOD_ID_Approach) nem találunk élt, mert az adott pozíciótol
-            //nagyon messze vannak a végpontok. Ebben az esetben egy újabb lekérdezést indítunk 3 szoros közelítési távolsággal. 
-            //Futásidőre optimalizálás miatt van így megoldva.
-            if (dt.Rows.Count == 0)
-            {
-                dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway));
-            }
+             string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
+             "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
+             "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
+             "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, " + Environment.NewLine +
+             "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF " + Environment.NewLine +
+             "from EDG_EDGE EDG " + Environment.NewLine +
+             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
+             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
+             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   AND " + Environment.NewLine +
+             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
+             "select top 1 " + Environment.NewLine +
+             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
+             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
+             "XDIFF " + Environment.NewLine +
+             "from CTE " + Environment.NewLine +
+             "where  CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
+             "order by CTE.XDIFF asc";
 
 
 
-            if (dt.Rows.Count > 0)
-            {
-                r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
-                return Util.getFieldValue<int>(dt.Rows[0], "ID");
-            }
-            return 0;
-        }
+             DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_Approach, Global.EdgeApproachCity, Global.EdgeApproachHighway));
+
+
+             //Extrém esetben előfordulhat, hogy az eredeti közelítéssel (Global.NearestNOD_ID_Approach) nem találunk élt, mert az adott pozíciótol
+             //nagyon messze vannak a végpontok. Ebben az esetben egy újabb lekérdezést indítunk 3 szoros közelítési távolsággal. 
+             //Futásidőre optimalizálás miatt van így megoldva.
+             if (dt.Rows.Count == 0)
+             {
+                 dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway));
+             }
 
 
 
+             if (dt.Rows.Count > 0)
+             {
+                 r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
+                 return Util.getFieldValue<int>(dt.Rows[0], "ID");
+             }
+             return 0;
+         }
+
+
+
+
+        /********************************************************************************/
+        /* kivezetni a metódust, helyette a                                             */
+        /* RouteData.Instance.GetNearestReachableNOD_IDForTruck -t kell használni !!!   */
+        /********************************************************************************/
         /// <summary>
         /// Egy térképi ponthoz a leközelebb eső, egy jármű által megközelíthető pont (p_RZN_ID_LIST tartalmazza a behajtási zónákat)
         /// Globális paraméterek:
@@ -977,33 +974,33 @@ namespace PMap.BLL
         /// <param name="p_RZN_ID_LIST"></param>
         /// <returns></returns>
         public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width, out int r_diff)
-        {
-            string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
-            string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
-            r_diff = -1;
+         {
+             string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
+             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
+             r_diff = -1;
 
-            /*
-            string sSql = " select top 1  " + Environment.NewLine +
-            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ID else NOD2.ID end as ID,  " + Environment.NewLine +
-            "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ZIP_NUM else NOD2.ZIP_NUM end as ZIP_NUM,  " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") as XDIFF  " + Environment.NewLine +
-            "from EDG_EDGE EDG  " + Environment.NewLine +
-            "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM  " + Environment.NewLine +
-            "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2  " + Environment.NewLine +
-            "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
-            "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and  " + Environment.NewLine +
-            "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   OR  " + Environment.NewLine +
-            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0} ) and " + Environment.NewLine +
-            "( RZN.ID is null  " + Environment.NewLine +
-            "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN.ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN.ID,0)), '," + p_RZN_ID_LIST + "') > 0) " : "") + Environment.NewLine +
-            "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG.EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
-            " ) and  " + Environment.NewLine +
-            " dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
-            "  (case when (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0) then {1}  else {2} end) " + Environment.NewLine +
-            "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") asc ";
-            */
+             /*
+             string sSql = " select top 1  " + Environment.NewLine +
+             "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ID else NOD2.ID end as ID,  " + Environment.NewLine +
+             "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ZIP_NUM else NOD2.ZIP_NUM end as ZIP_NUM,  " + Environment.NewLine +
+             "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") as XDIFF  " + Environment.NewLine +
+             "from EDG_EDGE EDG  " + Environment.NewLine +
+             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM  " + Environment.NewLine +
+             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2  " + Environment.NewLine +
+             "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
+             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and  " + Environment.NewLine +
+             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   OR  " + Environment.NewLine +
+             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0} ) and " + Environment.NewLine +
+             "( RZN.ID is null  " + Environment.NewLine +
+             "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN.ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN.ID,0)), '," + p_RZN_ID_LIST + "') > 0) " : "") + Environment.NewLine +
+             "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG.EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
+             " ) and  " + Environment.NewLine +
+             " dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
+             "  (case when (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0) then {1}  else {2} end) " + Environment.NewLine +
+             "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") asc ";
+             */
 
-            string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
+        string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
             "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
             "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
             "RZN.ID as RZN_ID,EDG.EDG_DESTTRAFFIC as EDG_EDG_DESTTRAFFIC, " + Environment.NewLine +

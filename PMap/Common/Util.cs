@@ -593,7 +593,7 @@ namespace PMap.Common
         /// <param name="ptX"></param>
         /// <param name="ptY"></param>
         /// <returns></returns>
-        public static double DistanceBetweenSegmentAndPoint(double ln1X, double ln1Y, double ln2X, double ln2Y, double ptX, double ptY)
+        public static double DistanceBetweenLineAndPoint(double ln1X, double ln1Y, double ln2X, double ln2Y, double ptX, double ptY)
         {
 
             return Math.Abs((ln2X - ln1X) * (ln1Y - ptY) - (ln1X - ptX) * (ln2Y - ln1Y)) / Math.Sqrt(Math.Pow(ln2X - ln1X, 2) + Math.Pow(ln2Y - ln1Y, 2));
@@ -608,7 +608,7 @@ namespace PMap.Common
         /// <param name="Xp"></param>
         /// <param name="Yp"></param>
         /// <returns></returns>
-        public static double DistanceBetweenLineAndPoint(double Xa, double Ya, double Xb, double Yb, double Xp, double Yp)
+        public static double DistanceBetweenSegmentAndPoint(double Xa, double Ya, double Xb, double Yb, double Xp, double Yp)
         {
             // Psuedocode for returning the absolute distance to a line segment from a point.
             //Xa,Ya is point 1 on the line segment.
@@ -629,8 +629,11 @@ namespace PMap.Common
             if (xu * xv + yu * yv < 0)
                 return Math.Sqrt(Math.Pow(Xp - Xb, 2) + Math.Pow(Yp - Yb, 2));
 
+            var div = Math.Sqrt(Math.Pow(Xb - Xa, 2) + Math.Pow(Yb - Ya, 2));
+            if (div == 0) return 999999999999;
+
             return Math.Abs((Xp * (Ya - Yb) + Yp * (Xb - Xa) + (Xa * Yb - Xb * Ya))
-                    / Math.Sqrt(Math.Pow(Xb - Xa, 2) + Math.Pow(Yb - Ya, 2)));
+                    / div);
         }
 
         public static Color GetSemiTransparentColor(Color p_color)
