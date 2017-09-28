@@ -763,14 +763,16 @@ namespace PMapTestApp
                         var xtp = new TourPoint()
                         {
                             TourID = tr.ID,
+                            Type = tr.TourPoints[i].PTP_TYPE == 1 ? TourPoint.enTourPointTypes.DEP.ToString() : TourPoint.enTourPointTypes.WHS.ToString(),
                             Order = tr.TourPoints[i].PTP_ORDER,
                             Distance = tr.TourPoints[i].PTP_DISTANCE,
                             ArrTime = tr.TourPoints[i].PTP_ARRTIME,
                             ServTime = tr.TourPoints[i].PTP_SERVTIME,
                             DepTime = tr.TourPoints[i].PTP_DEPTIME,
-                            DepCode = tr.TourPoints[i].DEP_CODE,
-                            DepName = tr.TourPoints[i].DEP_NAME,
-                            DepAddr = tr.TourPoints[i].ZIP_CITY + " " + tr.TourPoints[i].ADDR,
+                            Code = tr.TourPoints[i].CLT_CODE,
+                            Name = tr.TourPoints[i].CLT_NAME,
+                            Addr = tr.TourPoints[i].ADDR,
+                            Position = new JavaScriptSerializer().Serialize(new MapPoint() { Lat = tr.TourPoints[i].NOD_YPOS/Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
                             OrdNum = tr.TourPoints[i].ORD_NUM ,
                             MapPoints = mpList
 

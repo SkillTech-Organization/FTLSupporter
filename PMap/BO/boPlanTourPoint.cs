@@ -34,8 +34,9 @@ namespace PMap.BO
         public DateTime PTP_SERVTIME_T { get; set; }
         public DateTime PTP_DEPTIME_T { get; set; }
         public string TIME_AND_NAME { get; set; }
-        public string ADDR { get; set; }
         public string CLT_NAME { get; set; }
+        public string CLT_CODE { get; set; }
+        public string ADDR { get; set; }
         public int PTP_TYPE { get; set; }
         public string ZIP_CITY { get; set; }
         public double NOD_XPOS { get; set; }

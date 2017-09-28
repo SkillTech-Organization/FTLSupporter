@@ -1094,6 +1094,10 @@ namespace PMap.BLL
             if (dt.Rows.Count == 1)
             {
                 DataRow dr = dt.Rows[0];
+                if (p_ORD_NUM == "KÜ-17/030246")
+                    Console.WriteLine("c");
+
+
                 int newTOD_ID = DBA.InsertPar("TOD_TOURORDER",
                     "DEP_ID", Util.getFieldValue<int>(dr, "DEPID"),
                     "ORD_ID", Util.getFieldValue<int>(dr, "ORDID"),

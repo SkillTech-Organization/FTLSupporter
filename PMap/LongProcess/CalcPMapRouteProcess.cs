@@ -120,6 +120,12 @@ namespace PMap.LongProcess
                     //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!
                     //m_bllRoute.WriteRoutes(results, m_savePoints);
 
+                    if (results.Count() >= 10000)
+                    {
+                        ProcessForm.SetInfoText("Kiírás...");
+                        m_bllRoute.WriteRoutesBulk(results, m_savePoints);
+                        results = new List<boRoute>();
+                    }
                     /*
                     //Eredmény ellenőrzése Google-al
                     foreach (var ri in results)
@@ -191,6 +197,7 @@ namespace PMap.LongProcess
 
 
                 //Eredmény adatbázisba írása
+                ProcessForm.SetInfoText("Kiírás...");
                 m_bllRoute.WriteRoutesBulk(results, m_savePoints);
                 Completed = true;
                 m_DB.Close();

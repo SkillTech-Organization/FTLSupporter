@@ -1065,14 +1065,15 @@ namespace PMap.BLL
                                     boOptimize.COrder ord = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[par_OrId])).First().Value;
 
                                     //Mennyiség-térfogat
-                                    //a felszorzott értet visszaosztjuk. (mivel a mennyiségeket 2 tizedesjegyűek is lehetnek,
+                                    //a felszorzott értéket visszaosztjuk. (mivel a mennyiségeket 2 tizedesjegyűek is lehetnek,
                                     //de csak egész számok adtahóak át a PVRP-nek.)
-                                    double dLoad1 = Math.Max(Convert.ToDouble(aArgs[par_quantity].Replace(',', '.'), CultureInfo.InvariantCulture), 0); //Mivel csak az szétdarabolás arányok 
+                                    double dLoad1 = Convert.ToDouble(aArgs[par_quantity].Replace(',', '.'), CultureInfo.InvariantCulture); //Mivel csak az szétdarabolás arányok 
                                     //meghatározására használjuk a dLoad1-et, nem osztunk vissza
-
                                     //megrendelés feleosztás esetén arányosítunk
 
-                                    double dVolume = Math.Round(ord.dVolume * ord.orLoad1 / dLoad1, 2); // A térfogat 2 dec. jegyig értelmezett
+                                    var divider = ord.orLoad1 / dLoad1;
+
+                                    double dVolume = Math.Round(ord.dVolume * divider, 2); // A térfogat 2 dec. jegyig értelmezett
 
                                     /*
                                     double dQty = Math.Ceiling(ord.dQty * ord.orLoad1 / dLoad1);
@@ -1082,12 +1083,12 @@ namespace PMap.BLL
                                     double dQty4 = Math.Ceiling(ord.dQty4 * ord.orLoad1 / dLoad1);
                                     double dQty5 = Math.Ceiling(ord.dQty5 * ord.orLoad1 / dLoad1);
                                     */
-                                    double dQty = Math.Round(ord.dQty * ord.orLoad1 / dLoad1, 2);
-                                    double dQty1 = Math.Round(ord.dQty1 * ord.orLoad1 / dLoad1, 2);
-                                    double dQty2 = Math.Round(ord.dQty2 * ord.orLoad1 / dLoad1, 2);
-                                    double dQty3 = Math.Round(ord.dQty3 * ord.orLoad1 / dLoad1, 2);
-                                    double dQty4 = Math.Round(ord.dQty4 * ord.orLoad1 / dLoad1, 2);
-                                    double dQty5 = Math.Round(ord.dQty5 * ord.orLoad1 / dLoad1, 2);
+                                    double dQty = Math.Round(ord.dQty * divider, 2);
+                                    double dQty1 = Math.Round(ord.dQty1 * divider, 2);
+                                    double dQty2 = Math.Round(ord.dQty2 * divider, 2);
+                                    double dQty3 = Math.Round(ord.dQty3 * divider, 2);
+                                    double dQty4 = Math.Round(ord.dQty4 * divider, 2);
+                                    double dQty5 = Math.Round(ord.dQty5 * divider, 2);
 
                                     if (double.IsNaN(dQty))
                                     {

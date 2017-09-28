@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="input\Tasks_dump.bin" />
+    <None Include="input\Trucks_dump.bin" />
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>

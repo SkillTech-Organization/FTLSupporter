@@ -184,6 +184,9 @@ namespace PMap.BLL
 
         public void WriteRoutesBulk(List<boRoute> p_Routes, bool p_savePoints)
         {
+            if( p_Routes.Count() == 0)
+		return;
+
             DataTable dt;
             DataTable table = new DataTable();
 

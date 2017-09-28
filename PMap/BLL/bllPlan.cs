@@ -115,10 +115,12 @@ namespace PMap.BLL
                     "TOD_VOLUME,CTP_NAME1,PTP.TOD_ID, PTP_ARRTIME AS PTP_ARRTIME_T, PTP_SERVTIME AS PTP_SERVTIME_T, PTP_DEPTIME AS PTP_DEPTIME_T, " + Environment.NewLine +
                     "REPLACE(SUBSTRING(CONVERT(char, PTP_ARRTIME, 120),1,17), '-', '.') + ' ' + CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME ELSE WHS.WHS_NAME END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP.PTP_TOLL, " + Environment.NewLine +
-                    "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as TIME_AND_NAME, " + Environment.NewLine +
-                    "CASE WHEN TOD.ID IS NOT NULL THEN ZIP.ZIP_CITY      ELSE ZIP2.ZIP_CITY     END as ADRZIP, " + Environment.NewLine +
-                    "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_ADRSTREET ELSE WHS.WHS_ADRSTREET END as ADRSTREET, " + Environment.NewLine +
+                    "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_CODE      ELSE WHS.WHS_CODE      END as CLT_CODE, " + Environment.NewLine +
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as CLT_NAME, " + Environment.NewLine +
+                    "CASE WHEN TOD.ID IS NOT NULL THEN ZIP.ZIP_NUM       ELSE ZIP2.ZIP_NUM      END as ADRZIPNUM, " + Environment.NewLine +
+                    "CASE WHEN TOD.ID IS NOT NULL THEN ZIP.ZIP_CITY      ELSE ZIP2.ZIP_CITY     END as ADRCITY, " + Environment.NewLine +
+                    "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_ADRSTREET ELSE WHS.WHS_ADRSTREET END as ADRSTREET, " + Environment.NewLine +
+                    "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
                     "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT " + Environment.NewLine +
                     "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
@@ -160,9 +162,10 @@ namespace PMap.BLL
                             PTP_SERVTIME_T = Util.getFieldValue<DateTime>(o, "PTP_SERVTIME_T"),
                             PTP_DEPTIME_T = Util.getFieldValue<DateTime>(o, "PTP_DEPTIME_T"),
                             //                            TIME_AND_NAME = Util.getFieldValue<int>(o, "ID").ToString() + "*" + Util.GetStringField(o, "TIME_AND_NAME"),
-                            TIME_AND_NAME = Util.getFieldValue<string>(o, "TIME_AND_NAME") + '\n' + Util.getFieldValue<string>(o, "ADRZIP") + " " + Util.getFieldValue<string>(o, "ADRSTREET"),
-                            ADDR = Util.getFieldValue<string>(o, "ADRZIP") + " " + Util.getFieldValue<string>(o, "ADRSTREET"),
+                            TIME_AND_NAME = Util.getFieldValue<string>(o, "TIME_AND_NAME") + '\n' + (Util.getFieldValue<string>(o, "ADRZIPNUM") + " " + Util.getFieldValue<string>(o, "ADRCITY") + " " + Util.getFieldValue<string>(o, "ADRSTREET")).Trim(),
+                            CLT_CODE = Util.getFieldValue<string>(o, "CLT_CODE"),
                             CLT_NAME = Util.getFieldValue<string>(o, "CLT_NAME"),
+                            ADDR = (Util.getFieldValue<string>(o, "ADRZIPNUM") + " " + Util.getFieldValue<string>(o, "ADRCITY") + " " + Util.getFieldValue<string>(o, "ADRSTREET")).Trim(),
                             PTP_TYPE = Util.getFieldValue<int>(o, "PTP_TYPE"),
                             ZIP_CITY = Util.getFieldValue<string>(o, "ZIP_CITY"),
                             NOD_XPOS = Util.getFieldValue<double>(o, "NOD_XPOS"),

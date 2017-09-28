@@ -20,27 +20,51 @@ namespace FTLSupporter
 {
     public class FTLInterface
     {
-
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
+        {
+            DateTime dtStart = DateTime.Now;
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            PMapCommonVars.Instance.ConnectToDB();
+
+            Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
+
+            var res = FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+
+            Util.Log2File(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString()));
+
+            return res;
+        }
+
+        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
+        {
+            DateTime dtStart = DateTime.Now;
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            PMapCommonVars.Instance.ConnectToDB();
+
+            Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
+
+            var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+
+            Util.Log2File(String.Format("FTLSupportX Időtartam:{0}", (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString()));
+
+            return res;
+        }
+
+        private static List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
 
             List<FTLResult> result = new List<FTLResult>();
 
-
             try
             {
 
-
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Init" ));
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
 
-
-                PMapCommonVars.Instance.ConnectToDB();
                 RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
-
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
 
-
+                Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Validálás"));
 
                 //Paraméterek validálása
                 result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
@@ -59,6 +83,7 @@ namespace FTLSupporter
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
 
+                Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Koordináta feloldás"));
                 foreach (FTLTask tsk in p_TaskList)
                 {
                     if (tsk.TPoints.Count >= 2)
@@ -178,6 +203,8 @@ namespace FTLSupporter
 
                 if (result.Count == 0)
                 {
+                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Előkészítés"));
+
                     /********************************/
                     /* Eredmény objektum felépítése */
                     /********************************/
@@ -204,6 +231,7 @@ namespace FTLSupporter
                     /************************************************************************************/
                     /*Járművek előszűrése, NOD_ID meghatározás és visszatérési érték objektum felépítése*/
                     /************************************************************************************/
+                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás"));
 
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
@@ -270,6 +298,7 @@ namespace FTLSupporter
                                             {
                                                 x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKEXCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.ExclTruckProps);
                                             });
+
 
                         //4. Kiszámolandó útvonalak összegyűjtése
                         //4.1 Beosztandó szállítási feladatok összes pontjára minden szóbejöhető jármű zónalistájával
@@ -407,6 +436,8 @@ namespace FTLSupporter
                     foreach (FTLPMapRoute r in lstPMapRoutes.OrderBy(o => o.fromNOD_ID.ToString() + o.toNOD_ID.ToString() + o.RZN_ID_LIST))
                         Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString());
                     */
+
+                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Eredmény összeállítása"));
 
                     //6.eredmény összeállítása
                     foreach (FTLCalcTask clctsk in tskResult)
@@ -560,6 +591,7 @@ namespace FTLSupporter
                     }
 
 
+                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Hibák beállítása"));
 
                     /**************************************************************************************************************/
                     /* Hiba beállítása járművekre amelyek nem tudják teljesíteni a túrákat, mert nem találtunk útvonalat hozzájuk */
@@ -600,6 +632,7 @@ namespace FTLSupporter
                     /***************/
                     /* Számítások  */
                     /***************/
+                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Időpontok számítása"));
 
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
@@ -615,6 +648,7 @@ namespace FTLSupporter
                             fillDriveTimes(trk, workCycle, out driveTime, out restTime);
 
 
+                            trk.CurrTime = trk.CurrTime.AddSeconds(-trk.CurrTime.Second).AddMilliseconds(-trk.CurrTime.Millisecond);
 
                             string sLastETLCode = "";
                             DateTime dtPrevTime = DateTime.MinValue;
@@ -924,6 +958,7 @@ namespace FTLSupporter
                     /****************************/
                     /* Eredmények véglegesítése */
                     /****************************/
+                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Eredmények véglegesítése"));
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
                         //Útvonalpontok 
@@ -1017,9 +1052,9 @@ namespace FTLSupporter
             return itemRes;
         }
 
-        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
+        private static List<FTLResult> FTLSupportX_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes)
         {
-            List<FTLResult> res = FTLInterface.FTLSupport(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
+            List<FTLResult> res = FTLInterface.FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
             /*
                                                  FileInfo fi = new FileInfo( "res.res");
                                                  BinarySerializer.Serialize(fi, res);
@@ -1040,7 +1075,7 @@ namespace FTLSupporter
                     List<FTLTask> lstTsk2 = new List<FTLTask>();
                     var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
                     lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
-                    List<FTLResult> res2 = FTLInterface.FTLSupport(lstTsk2, lstTrk2, p_iniPath, p_dbConf, p_cacheRoutes);
+                    List<FTLResult> res2 = FTLInterface.FTLSupport_inner(lstTsk2, lstTrk2, p_iniPath, p_dbConf, p_cacheRoutes);
 
                     var calcResult2 = res2.Where(x => x.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
                     if (calcResult2 != null)
@@ -1128,6 +1163,8 @@ namespace FTLSupporter
 
         public static void FTLSetBestTruck(List<FTLResult> p_calcResult)
         {
+
+            Util.Log2File(String.Format("{0} {1}", "FTLSupportX", "FTLSetBestTruck"));
             //1. kiszámoljuk az teljesitéseket
 
             //Eredmény megállapítása

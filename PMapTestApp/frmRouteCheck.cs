@@ -238,7 +238,8 @@ namespace PMapTestApp
 
             //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             int diff = 0;
-            int NOD_ID = RouteData.Instance.GetNearestNOD_ID(MarkerFrom.Position, out diff);
+         //   int NOD_ID = RouteData.Instance.GetNearestNOD_ID(MarkerFrom.Position, out diff);
+            int NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(MarkerFrom.Position, (string)cmbRST_ID_LIST.SelectedValue,  (int)numWeigtht.Value, 0, 0);
             if (NOD_ID > 0)
             {
                 this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
@@ -260,7 +261,8 @@ namespace PMapTestApp
         }
         private void setToToMap()
         {
-            int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
+            int NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(MarkerTo.Position, (string)cmbRST_ID_LIST.SelectedValue, (int)numWeigtht.Value, 0, 0);
+      //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
             {
                 this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
@@ -412,7 +414,6 @@ namespace PMapTestApp
                 {
 
                     rp.Weight = (int)numWeigtht.Value;
-                    rp.Height = 450;
                 }
 
                 Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
@@ -444,7 +445,7 @@ namespace PMapTestApp
 
                 //A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
                 //
-                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue, Weight= (int)numWeigtht.Value, Height=450 };
+                var routePar = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue, Weight= (int)numWeigtht.Value};
 
                  boRoute route;
 
@@ -662,9 +663,9 @@ namespace PMapTestApp
           //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
           //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-         //                foreach (var edg in RouteData.Instance.Edges)
+                         foreach (var edg in RouteData.Instance.Edges)
 
-                                   foreach (var edg in RouteData.Instance.Edges.Where(x => /* x.Value.EDG_MAXWEIGHT > 0 || */ x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
+                   //                foreach (var edg in RouteData.Instance.Edges.Where(x => /* x.Value.EDG_MAXWEIGHT > 0 || */ x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
                 //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 {
@@ -691,22 +692,22 @@ namespace PMapTestApp
                             p = new Pen(Color.Red, 1);
                             break;
                         case 2:
-                            p = new Pen(Color.Yellow, 1);
+                            p = new Pen(Color.Orange, 1);
                             break;
                         case 3:
-                            p = new Pen(Color.Green, 1);
+                            p = new Pen(Color.HotPink, 1);
                             break;
                         case 4:
                             p = new Pen(Color.Blue, 1);
                             break;
                         case 5:
-                            p = new Pen(Color.Orange, 1);
+                            p = new Pen(Color.Green, 1);
                             break;
                         case 6:
                             p = new Pen(Color.Brown, 1);
                             break;
                         case 7:
-                            p = new Pen(Color.HotPink, 1);
+                            p = new Pen(Color.Yellow, 1);
                             break;
                         default:
                             p = new Pen(Color.Black, 1);
