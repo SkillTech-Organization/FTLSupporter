@@ -315,8 +315,7 @@ namespace PMap.BLL
             DBA.ExecuteNonQuery(sSQLStr, Global.SQLMINDATE, Global.SQLMINDATE, Global.SQLMINDATE, p_TPL_ID, p_Order);
         }
 
-
-        public void GetDistanceAndDuration(string p_RZN_ID_LIST, int p_FromID, int p_ToID, int p_SPP_ID, int p_Weather, out int o_Dist, out int o_Duration)
+        public void GetDistanceAndDuration(string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width, int p_FromID, int p_ToID, int p_SPP_ID, int p_Weather, out int o_Dist, out int o_Duration)
         {
             o_Dist = 0;
             o_Duration = 0;
@@ -325,11 +324,10 @@ namespace PMap.BLL
 
             if (p_FromID != p_ToID)
             {
-
                 string sSQLStr = "select DST_DISTANCE, DST_EDGES from DST_DISTANCE " + Environment.NewLine +
-                          "where RZN_ID_LIST = ? and NOD_ID_FROM=?  and  NOD_ID_TO=? ";
+                          "where RZN_ID_LIST = ? and DST_MAXWEIGHT=? and DST_MAXHEIGHT=? and DST_MAXWIDTH=? and NOD_ID_FROM=?  and  NOD_ID_TO=? ";
 
-                DataTable dt = DBA.Query2DataTable(sSQLStr, p_RZN_ID_LIST, p_FromID, p_ToID);
+                DataTable dt = DBA.Query2DataTable(sSQLStr, p_RZN_ID_LIST, p_Weight, p_Height, p_Width, p_FromID, p_ToID);
                 if (dt.Rows.Count > 0)
                 {
                     o_Dist = Util.getFieldValue<int>(dt.Rows[0], "DST_DISTANCE");
@@ -958,7 +956,8 @@ namespace PMap.BLL
                             //Kiszedem  a távolság és időadatot
                             Dist = 0;
                             Time = 0;
-                            GetDistanceAndDuration(Util.getFieldValue<string>(drPrev, "RZN_ID_LIST"), Util.getFieldValue<int>(drPrev, "NOD_ID"), Util.getFieldValue<int>(dr, "NOD_ID"), Util.getFieldValue<int>(dr, "SPP_ID"), p_Weather, out Dist, out Time);
+
+                            GetDistanceAndDuration(Util.getFieldValue<string>(drPrev, "RZN_ID_LIST"), TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, Util.getFieldValue<int>(drPrev, "NOD_ID"), Util.getFieldValue<int>(dr, "NOD_ID"), Util.getFieldValue<int>(dr, "SPP_ID"), p_Weather, out Dist, out Time);
 
                             //megérkezés (előző távozás+menetidő)
                             dtPTP_ARRTIME = dtPTP_DEPTIME.AddMinutes(Time);

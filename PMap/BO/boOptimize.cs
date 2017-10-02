@@ -36,7 +36,10 @@ namespace PMap.BO
         {
             public int innerID { get; set; }            //a létrehozás sorrendjében osztjuk ki az ID-ket! (kezdőérték:1)
             public string RZN_ID_LIST { get; set; }
-            public string ttName { get { return RZN_ID_LIST; } }
+            public int TRK_WEIGHT { get; set; }
+            public int TRK_XHEIGHT { get; set; }
+            public int TRK_XWIDTH { get; set; }
+            public string ttName { get { return String.Format( "{0}_{1}_{2}_{3}", RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH); } }
             public int SPP_ID { get; set; }
             public Dictionary<int, int> SpeedValues { get; set; }
         }

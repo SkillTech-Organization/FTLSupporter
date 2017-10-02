@@ -98,11 +98,16 @@ namespace PMap.LongProcess
                         if (i == 0)                             //útdíj szelvényszámot csak a legelső túrapontnál kell inicializálni
                             LastETLCODE = xedge.EDG_ETLCODE;
 
-                        float SumDuration = (float)(xedge.EDG_LENGTH / (LastSpeed / 3.6 * 60));
-                        float SumDist = xedge.EDG_LENGTH;
+         //               float SumDuration = (float)(xedge.EDG_LENGTH / (LastSpeed / 3.6 * 60));
+         //               float SumDist = xedge.EDG_LENGTH;
+                        float SumDuration = 0;
+                        float SumDist = 0;
                         foreach (boEdge edge in result.Edges)
                         {
                             double fSpeed = sp[edge.RDT_VALUE.ToString() + Global.SEP_COORD + m_Tour.SPP_ID.ToString()].SPV_VALUE;
+
+                            SumDuration += (float)(edge.EDG_LENGTH / (fSpeed / 3.6 * 60));
+                            SumDist += edge.EDG_LENGTH;
 
 
                             if (LastEdgeName != edge.EDG_NAME ||
@@ -156,9 +161,6 @@ namespace PMap.LongProcess
                                 SumDuration = 0;
                                 SumDist = 0;
                             }
-                            SumDuration += (float)(edge.EDG_LENGTH / (fSpeed / 3.6 * 60));
-                            SumDist += edge.EDG_LENGTH;
-
                         }
 
                         dlgTourDetails.CTourDetails td2 = new dlgTourDetails.CTourDetails

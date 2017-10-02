@@ -214,18 +214,29 @@ namespace PMap.BLL
 
         private void fillTruckType()
         {
-            string sSql = "select distinct RZN_ID_LIST, SPP.ID as SPP_ID from v_trk_RZN_ID_LIST, SPP_SPEEDPROF SPP order by RZN_ID_LIST ";
+            string sSql = "select distinct RZN_ID_LIST, SPP.ID as SPP_ID, " + Environment.NewLine +
+                          "TRKX.TRK_WEIGHT, TRKX.TRK_XHEIGHT, TRKX.TRK_XWIDTH " + Environment.NewLine +
+                          "from v_trk_RZN_ID_LIST, SPP_SPEEDPROF SPP, " + Environment.NewLine +
+                          "(select TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH from TRK_TRUCK group by TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH) TRKX " + Environment.NewLine +
+                          "order by RZN_ID_LIST, TRKX.TRK_WEIGHT, TRKX.TRK_XHEIGHT, TRKX.TRK_XWIDTH";
             int innerID = 1;
             DataTable dt = DBA.Query2DataTable(sSql);
             boOpt.dicTruckType =
                     (from r in dt.AsEnumerable()
                      select new
                      {
-                         Key = Util.getFieldValue<string>(r, "RZN_ID_LIST") + Global.SEP_POINT + Util.getFieldValue<string>(r, "SPP_ID"),
+                         Key = String.Format("{0}_{1}_{2}_{3}", Util.getFieldValue<string>(r, "RZN_ID_LIST"),
+                          Util.getFieldValue<string>(r, "TRK_WEIGHT"),
+                           Util.getFieldValue<string>(r, "TRK_XHEIGHT"),
+                            Util.getFieldValue<string>(r, "TRK_XWIDTH"))
+                         + Global.SEP_POINT + Util.getFieldValue<string>(r, "SPP_ID"),
                          Value = new boOptimize.CTruckType
                          {
                              innerID = innerID++,
                              RZN_ID_LIST = Util.getFieldValue<string>(r, "RZN_ID_LIST"),
+                             TRK_WEIGHT = Util.getFieldValue<int>(r, "TRK_WEIGHT"),
+                             TRK_XHEIGHT = Util.getFieldValue<int>(r, "TRK_XHEIGHT"),
+                             TRK_XWIDTH = Util.getFieldValue<int>(r, "TRK_XWIDTH"),
                              SPP_ID = Util.getFieldValue<int>(r, "SPP_ID"),
                              SpeedValues = getSpeedValues(Util.getFieldValue<int>(r, "SPP_ID"))
                          }
@@ -381,7 +392,7 @@ namespace PMap.BLL
         {
             string sSql = "select TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK_REG_NUM, CRR_OWN, TFP_ID, CPP_ID, PLN_DATE_B, PLN_DATE_E, TPL_LOCKED, " + Environment.NewLine +
                         "isnull(TMX.MAXTIME, isnull(DATEADD(n, TPL.TPL_IDLETIME, AV.AVAIL), PLN.PLN_DATE_B)) AS AVAIL, TPL.TPL_MAXSCORE AS TPL_ORIGSCORE,  " + Environment.NewLine +
-                        "TPL.TPL_AVAIL_S, RPS.START, TRK.TRK_BUNDPOINT, TRK.TRK_BUNDTIME, TRK.WHS_ID, TPL.ARR_WHS_ID, RESTZ.RZN_ID_LIST, TRK.SPP_ID  " + Environment.NewLine +
+                        "TPL.TPL_AVAIL_S, RPS.START, TRK.TRK_BUNDPOINT, TRK.TRK_BUNDTIME, TRK.WHS_ID, TPL.ARR_WHS_ID, RESTZ.RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK.SPP_ID  " + Environment.NewLine +
                         "from TPL_TRUCKPLAN TPL  " + Environment.NewLine +
                         "inner join TRK_TRUCK TRK ON TPL.TRK_ID = TRK.ID  " + Environment.NewLine +
                         "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID  " + Environment.NewLine +
@@ -424,7 +435,12 @@ namespace PMap.BLL
                              ID = Util.getFieldValue<int>(r, "TRK_ID"),
                              TPL_ID = Util.getFieldValue<int>(r, "TPL_ID"),
 
-                             ttId = boOpt.dicTruckType[Util.getFieldValue<string>(r, "RZN_ID_LIST") + Global.SEP_POINT + Util.getFieldValue<string>(r, "SPP_ID")].innerID,
+                             ttId = boOpt.dicTruckType[String.Format("{0}_{1}_{2}_{3}", Util.getFieldValue<string>(r, "RZN_ID_LIST"),
+                                Util.getFieldValue<string>(r, "TRK_WEIGHT"),
+                                Util.getFieldValue<string>(r, "TRK_XHEIGHT"),
+                                Util.getFieldValue<string>(r, "TRK_XWIDTH"))
+                                + Global.SEP_POINT + Util.getFieldValue<string>(r, "SPP_ID")].innerID,
+
                              tkName = Util.getFieldValue<string>(r, "TRK_REG_NUM"),
                              depotStart = boOpt.dicDepot[Util.getFieldValue<int>(r, "WHS_ID")].innerID,
                              depotArr = boOpt.dicDepot[Util.getFieldValue<int>(r, "ARR_WHS_ID")].innerID,
@@ -434,7 +450,7 @@ namespace PMap.BLL
                              tOwned = (Util.getFieldValue<int>(r, "CRR_OWN") != 0 ? 1 : 0),
                              maxDistance = 10000000,
                              capId = boOpt.dicCapacityProfile[Util.getFieldValue<int>(r, "CPP_ID")].innerID,
-                             maxWorktime = PMapIniParams.Instance.TrkMaxWorkTime, 
+                             maxWorktime = PMapIniParams.Instance.TrkMaxWorkTime,
                              earliestStart = (int)Math.Max(Util.getFieldValue<DateTime>(r, "AVAIL").TimeOfDay.TotalMinutes - boOpt.PLN_DATE_B.Date.Subtract(Util.getFieldValue<DateTime>(r, "AVAIL").Date).TotalMinutes, boOpt.PLN_DATE_B.TimeOfDay.TotalMinutes),
                              latestStart = (int)Math.Max(Math.Max(Util.getFieldValue<DateTime>(r, "AVAIL").TimeOfDay.TotalMinutes - boOpt.PLN_DATE_B.Date.Subtract(Util.getFieldValue<DateTime>(r, "AVAIL").Date).TotalMinutes, boOpt.PLN_DATE_B.TimeOfDay.TotalMinutes),
                                             boOpt.PLN_DATE_E.TimeOfDay.TotalMinutes + boOpt.PLN_DATE_E.Date.Subtract(boOpt.PLN_DATE_B.Date).TotalMinutes),
@@ -615,8 +631,6 @@ namespace PMap.BLL
 
             }
 
-            //"inner join DST_DISTANCE DST on DST.RZN_ID_LIST = RZN.RZN_ID_LIST and (DST.NOD_ID_FROM=DEP.NOD_ID or DST.NOD_ID_TO=DEP.NOD_ID) and (DST.NOD_ID_FROM=WHS.NOD_ID or DST.NOD_ID_TO=WHS.NOD_ID) and DST.DST_DISTANCE >= 0 " + Environment.NewLine +
-
             sSql += "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                  "inner join v_trk_RZN_ID_LIST RZN on RZN.TRK_ID=TRK.ID " + Environment.NewLine +
                  "inner join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +
@@ -650,6 +664,8 @@ namespace PMap.BLL
             }
         }
 
+
+
         private void fillRelationAccess(BaseProgressDialog p_notify)
         {
 
@@ -659,10 +675,12 @@ namespace PMap.BLL
             else
                 Console.WriteLine(PMapMessages.M_OPT_DST_QUERY);
 
-            Dictionary<int, boEdge> lstAllEdges = new Dictionary<int, boEdge>();
-
             DataTable dt;
             string sSql = "";
+            RouteData.Instance.Init(DBA, null);
+            Dictionary<int, boEdge> lstAllEdges = RouteData.Instance.Edges.GroupBy( g=>g.Value.ID)
+                        .Select(s=>s.First()).ToDictionary(i => i.Value.ID, i => i.Value);
+
             if (boOpt.TPL_ID <= 0)
             {
                 if (p_notify != null)
@@ -670,25 +688,6 @@ namespace PMap.BLL
                 else
                     Console.WriteLine(PMapMessages.M_OPT_QEDGES);
 
-                DataTable dtEdg = m_bllRoute.GetEdgesToDT();
-                lstAllEdges = (from r in dtEdg.AsEnumerable()
-                               select new
-                               {
-                                   Key = Util.getFieldValue<int>(r, "ID"),
-                                   Value = new boEdge()
-                                   {
-                                       ID = Util.getFieldValue<int>(r, "ID"),
-                                       NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
-                                       NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                       EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME"),
-                                       EDG_LENGTH = Util.getFieldValue<float>(r, "EDG_LENGTH"),
-                                       RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE")
-                                   }
-                               }).ToDictionary(n => n.Key, n => n.Value);
-
-                if (PMapIniParams.Instance.LogVerbose >= PMapIniParams.eLogVerbose.debug)
-                    Util.Log2File(" lstAllEdges: " + (DateTime.Now - dtStart).TotalSeconds.ToString() + " s");
-                dtStart = DateTime.Now;
 
 
                 //teljes tervezés
@@ -715,7 +714,7 @@ namespace PMap.BLL
                         "			  ) Q2) NODES " + Environment.NewLine +
                         "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
                         "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH  " + Environment.NewLine +
-                        "order by NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST,  DST.DST_EDGES ";
+                        "order by NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST, NODES.TRK_WEIGHT, NODES.TRK_XHEIGHT, NODES.TRK_XWIDTH, DST.DST_EDGES ";
 
                 dt = DBA.Query2DataTable(sSql, boOpt.PLN_ID, boOpt.PLN_ID, boOpt.PLN_ID);
             }
@@ -749,7 +748,7 @@ namespace PMap.BLL
                         "	 ) Q2 ) NODES " + Environment.NewLine +
                         "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
                         "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH " + Environment.NewLine +
-                        "order by ID_FROM,ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST,  DST.DST_EDGES ";
+                        "order by ID_FROM, ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST, NODES.TRK_WEIGHT, NODES.TRK_XHEIGHT, NODES.TRK_XWIDTH, DST.DST_EDGES ";
 
                 dt = DBA.Query2DataTable(sSql, boOpt.TPL_ID, boOpt.TPL_ID, boOpt.TPL_ID);
             }
@@ -760,6 +759,11 @@ namespace PMap.BLL
 
             int lastNOD_ID_FROM = 0;
             int lastNOD_ID_TO = 0;
+            string lastRZN_ID_LIST = "";
+            int lastTRK_WEIGHT = 0;
+            int lastTRK_XHEIGHT = 0;
+            int lastTRK_XWIDTH = 0;
+
 
             int lastSPP_ID = 0;
             int lastDuration = 0;
@@ -778,47 +782,39 @@ namespace PMap.BLL
 
                 int duration = lastDuration;
                 if (lastNOD_ID_FROM != Util.getFieldValue<int>(dr, "NOD_ID_FROM") ||
-                     lastNOD_ID_TO != Util.getFieldValue<int>(dr, "NOD_ID_TO") ||
-                     lastDistance != Util.getFieldValue<int>(dr, "DST_DISTANCE"))
+                    lastNOD_ID_TO != Util.getFieldValue<int>(dr, "NOD_ID_TO") ||
+                    lastRZN_ID_LIST != Util.getFieldValue<string>(dr, "RZN_ID_LIST") ||
+                    lastTRK_WEIGHT != Util.getFieldValue<int>(dr, "TRK_WEIGHT") ||
+                    lastTRK_XHEIGHT != Util.getFieldValue<int>(dr, "TRK_XHEIGHT") ||
+                    lastTRK_XWIDTH != Util.getFieldValue<int>(dr, "TRK_XHEIGHT") ||
+                    lastDistance != Util.getFieldValue<int>(dr, "DST_DISTANCE"))
                 {
                     lastNOD_ID_FROM = Util.getFieldValue<int>(dr, "NOD_ID_FROM");
                     lastNOD_ID_TO = Util.getFieldValue<int>(dr, "NOD_ID_TO");
+                    lastRZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
+                    lastTRK_WEIGHT = Util.getFieldValue<int>(dr, "TRK_WEIGHT");
+                    lastTRK_XHEIGHT = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
+                    lastTRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
+
+
                     lastSPP_ID = -1;
                     lstSelEdges.Clear();
 
                     if (Util.getFieldValue<int>(dr, "DST_DISTANCE") > 0)
                     {
 
+                        //A duration miatt össze kell vadászni a DST_DISTANCE -t alkozó élekből
+                        //a különböző EDG úttipusokra vonatkozó átlagsebességgel számolt menetidőket.
+                        //
                         byte[] buff = Util.getFieldValue<byte[]>(dr, "DST_EDGES");
                         if (buff.Length > 0)
                         {
+
                             String edges = Util.UnZipStr(buff);
-                            if (boOpt.TPL_ID <= 0)
-                            {
 
-                                List<int> IDs = edges.Split(',').Select(s => int.Parse(s)).ToList();
-                                foreach (int id in IDs)
-                                    lstSelEdges.Add(lstAllEdges[id]);
-                            }
-                            else
-                            {
-                                sSql = String.Format("select * from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
-                                                    "where EDG.ID in ({0}) ", edges);
-
-                                DataTable dtEdg2 = DBA.Query2DataTable(sSql);
-                                lstSelEdges = (from r in dtEdg2.AsEnumerable()
-                                               select new boEdge()
-                                                   {
-                                                       ID = Util.getFieldValue<int>(r, "ID"),
-                                                       NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
-                                                       NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                                       EDG_NAME = "",
-                                                       EDG_LENGTH = Util.getFieldValue<float>(r, "EDG_LENGTH"),
-                                                       RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
-                                                   }
-                                               ).ToList();
-                            }
-
+                            List<int> IDs = edges.Split(',').Select(s => int.Parse(s)).ToList();
+                            foreach (int id in IDs)
+                                lstSelEdges.Add(lstAllEdges[id]);
                         }
                     }
                     else
@@ -848,12 +844,20 @@ namespace PMap.BLL
                     lastDuration = 1440 * 2;
                 }
 
-                boOptimize.CTruckType ttype = boOpt.dicTruckType[Util.getFieldValue<string>(dr, "RZN_ID_LIST") + Global.SEP_POINT + Util.getFieldValue<string>(dr, "SPP_ID")];
+                var ttKey = String.Format("{0}_{1}_{2}_{3}", Util.getFieldValue<string>(dr, "RZN_ID_LIST"),
+                          Util.getFieldValue<string>(dr, "TRK_WEIGHT"),
+                           Util.getFieldValue<string>(dr, "TRK_XHEIGHT"),
+                            Util.getFieldValue<string>(dr, "TRK_XWIDTH"))
+                         + Global.SEP_POINT + Util.getFieldValue<string>(dr, "SPP_ID");
+
+                boOptimize.CTruckType ttype = boOpt.dicTruckType[ttKey];
+
+
                 string sKey = ttype.innerID.ToString() + Global.SEP_POINT + Util.getFieldValue<int>(dr, "ID_FROM").ToString() + Global.SEP_POINT + Util.getFieldValue<int>(dr, "ID_TO").ToString();
 
                 boOpt.lstRelationAccess.Add(new boOptimize.CRelationAccess()
                 {
-                    ttId = boOpt.dicTruckType[Util.getFieldValue<string>(dr, "RZN_ID_LIST") + Global.SEP_POINT + Util.getFieldValue<string>(dr, "SPP_ID")].innerID,
+                    ttId = boOpt.dicTruckType[ttKey].innerID,
                     clIdStart = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID,
                     clIdEnd = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID,
                     clDistance = lastDistance,

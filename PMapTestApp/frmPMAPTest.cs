@@ -763,7 +763,7 @@ namespace PMapTestApp
                         var xtp = new TourPoint()
                         {
                             TourID = tr.ID,
-                            Type = tr.TourPoints[i].PTP_TYPE == 1 ? TourPoint.enTourPointTypes.DEP.ToString() : TourPoint.enTourPointTypes.WHS.ToString(),
+                            Type = tr.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_DEP ? TourPoint.enTourPointTypes.DEP.ToString() : TourPoint.enTourPointTypes.WHS.ToString(),
                             Order = tr.TourPoints[i].PTP_ORDER,
                             Distance = tr.TourPoints[i].PTP_DISTANCE,
                             ArrTime = tr.TourPoints[i].PTP_ARRTIME,
