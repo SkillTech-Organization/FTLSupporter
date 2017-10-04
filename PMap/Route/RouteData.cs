@@ -307,6 +307,8 @@ namespace PMap.Route
                 w.Value.toLatLng.Lng, w.Value.toLatLng.Lat, ptX, ptY) <=
                  (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
                  Global.NearestNOD_ID_Approach : Global.EdgeApproachCity))*/
+                  .Where(w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
+                    Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider))
                  .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
                 o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s=>s.Value).FirstOrDefault();
             if (nearest != null)
@@ -335,10 +337,12 @@ namespace PMap.Route
             //X --> lng, Y --> lat
             var lstRZN = p_RZN_ID_LIST.Split(',');
             var nearest = RouteData.Instance.Edges.Where(
-                w => (p_RZN_ID_LIST == "" || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
+                w => (p_RZN_ID_LIST == "" || w.Value.RZN_ID==0 || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
                     (w.Value.EDG_MAXWEIGHT == 0 || p_weight == 0 || w.Value.EDG_MAXWEIGHT <= p_weight) &&
-                    (w.Value.EDG_MAXWEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&
-                    (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width))
+                    (w.Value.EDG_MAXHEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&
+                    (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width) &&
+                    Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) < ((double) Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
+                    Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat)  < ((double) Global.NearestNOD_ID_Approach / Global.LatLngDivider) )
                  .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
                 o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
             if (nearest != null)

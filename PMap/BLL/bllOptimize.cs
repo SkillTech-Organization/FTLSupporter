@@ -571,6 +571,7 @@ namespace PMap.BLL
                 if (Util.getFieldValue<int>(dr, "OTP_VALUE") == Global.OTP_INPUT || Util.getFieldValue<int>(dr, "OTP_VALUE") == Global.OTP_UNLOAD)
                 {
                     ord.dQty *= -1;
+                    ord.dVolume *= -1;
                 }
 
                 ord.mb = 0;

@@ -38,8 +38,24 @@ namespace PMap.Common.Azure
         private long m_lastID = -1;
 
 
-        public string AzureAccount { get { return m_accountName; } set { m_accountName = value; } }
-        public string AzureKey { get { return m_accountKey; } set { m_accountKey = value; } }
+        public string AzureAccount {
+            get { return m_accountName; }
+            set {
+                m_accountName = value;
+                m_creds = null;
+                m_account = null;
+                m_client = null;
+            }
+        }
+        public string AzureKey {
+            get { return m_accountKey; }
+            set {
+                m_accountKey = value;
+                m_creds = null;
+                m_account = null;
+                m_client = null;
+            }
+        }
 
 
 
