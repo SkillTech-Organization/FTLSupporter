@@ -26,7 +26,7 @@ namespace FTLSupporter
         List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
         internal FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
-            : base(p_NotifyIcon, System.Threading.ThreadPriority.Normal)
+            : base(p_NotifyIcon, System.Threading.ThreadPriority.Highest)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);

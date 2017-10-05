@@ -860,7 +860,7 @@ namespace FTLSupporterTest
             FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
             //    lstTrk.RemoveRange(1, lstTrk.Count-1);
-           // lstTrk = lstTrk.Where( w=>w.TruckID == "NAT-351").ToList();
+            lstTsk = lstTsk.Where( w=>w.TaskID  != "2143461").ToList();
             
             List<FTLResult> res;
             Console.BufferHeight = 300;

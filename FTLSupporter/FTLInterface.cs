@@ -30,7 +30,7 @@ namespace FTLSupporter
 
             var res = FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
 
-            Util.Log2File(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString()));
+            Util.Log2File(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
 
             return res;
         }
@@ -45,7 +45,7 @@ namespace FTLSupporter
 
             var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes);
 
-            Util.Log2File(String.Format("FTLSupportX Időtartam:{0}", (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString()));
+            Util.Log2File(String.Format("FTLSupportX Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
 
             return res;
         }
@@ -64,7 +64,7 @@ namespace FTLSupporter
                 RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
 
-                Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Validálás"));
+                DateTime dtPhaseStart = DateTime.Now;
 
                 //Paraméterek validálása
                 result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
@@ -79,11 +79,12 @@ namespace FTLSupporter
 
                 }
 
+                Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Validálás", (DateTime.Now - dtPhaseStart).ToString()));
+                dtPhaseStart = DateTime.Now;
 
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
 
-                Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Koordináta feloldás"));
                 foreach (FTLTask tsk in p_TaskList)
                 {
                     if (tsk.TPoints.Count >= 2)
@@ -99,7 +100,9 @@ namespace FTLSupporter
                             int NOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                             if (NOD_ID == 0)
                             {
-                                result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                                result.Add(getValidationError(pt, 
+                                    String.Format("TSK Point:{0}, név:{1}, cím:{2}",
+                                   new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString(), pt.Name, pt.Addr), FTLMessages.E_WRONGCOORD));
                             }
                             else
                             {
@@ -180,12 +183,16 @@ namespace FTLSupporter
                     //trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     trk.NOD_ID_CURR = RouteData.Instance.GetNearestReachableNOD_IDForTruck( new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.NOD_ID_CURR == 0)
-                        result.Add(getValidationError(trk, "CurrLat,CurrLng", FTLMessages.E_WRONGCOORD));
+                        result.Add(getValidationError(trk, 
+                            String.Format( "Jármű:{0}, aktuális poz:{1}", trk.TruckID,
+                            new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), FTLMessages.E_WRONGCOORD));
 
                     //trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     trk.RET_NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck( trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.RET_NOD_ID == 0)
-                        result.Add(getValidationError(trk, "RetPoint ", FTLMessages.E_WRONGCOORD));
+                        result.Add(getValidationError(trk,
+                            String.Format("Jármű:{0}, visszetérés poz:{1}", trk.TruckID,
+                            trk.RetPoint.Value.ToString()), FTLMessages.E_WRONGCOORD));
 
                     foreach (FTLPoint pt in trk.CurrTPoints)
                     {
@@ -194,16 +201,19 @@ namespace FTLSupporter
                         pt.NOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                         if (pt.NOD_ID == 0)
                         {
-                            result.Add(getValidationError(pt, "Lat,Lng", FTLMessages.E_WRONGCOORD));
+                            result.Add(getValidationError(pt,
+                                String.Format("Jármű:{0}, Teljesítés alatt álló túrapont poz:{1}", trk.TruckID,
+                                new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString()), FTLMessages.E_WRONGCOORD));
                         }
                     }
                 }
 
+                Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Koordináta feloldás", (DateTime.Now - dtPhaseStart).ToString()));
+                dtPhaseStart = DateTime.Now;
 
 
                 if (result.Count == 0)
                 {
-                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Előkészítés"));
 
                     /********************************/
                     /* Eredmény objektum felépítése */
@@ -222,6 +232,8 @@ namespace FTLSupporter
                         }
                     }
 
+                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Előkészítés", (DateTime.Now - dtPhaseStart).ToString()));
+                    dtPhaseStart = DateTime.Now;
 
                     //1. Előkészítés:
 
@@ -231,7 +243,6 @@ namespace FTLSupporter
                     /************************************************************************************/
                     /*Járművek előszűrése, NOD_ID meghatározás és visszatérési érték objektum felépítése*/
                     /************************************************************************************/
-                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás"));
 
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
@@ -430,6 +441,9 @@ namespace FTLSupporter
 
                     lstPMapRoutes.AddRange(lstCalcPMapRoutes);
 
+                    Util.Log2File(String.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.Now - dtPhaseStart).ToString()));
+                    dtPhaseStart = DateTime.Now;
+
                     //
                     //debug info
                     /*
@@ -437,7 +451,6 @@ namespace FTLSupporter
                         Console.WriteLine(r.fromNOD_ID.ToString() + " -> " + r.toNOD_ID.ToString() + " zónák:" + r.RZN_ID_LIST + " dist:" + r.route.DST_DISTANCE.ToString());
                     */
 
-                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Eredmény összeállítása"));
 
                     //6.eredmény összeállítása
                     foreach (FTLCalcTask clctsk in tskResult)
@@ -590,8 +603,8 @@ namespace FTLSupporter
                         }
                     }
 
-
-                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Hibák beállítása"));
+                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmény összeállítása", (DateTime.Now - dtPhaseStart).ToString()));
+                    dtPhaseStart = DateTime.Now;
 
                     /**************************************************************************************************************/
                     /* Hiba beállítása járművekre amelyek nem tudják teljesíteni a túrákat, mert nem találtunk útvonalat hozzájuk */
@@ -628,11 +641,12 @@ namespace FTLSupporter
                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_RETMISSROUTE); });
                     }
 
+                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.Now - dtPhaseStart).ToString()));
+                    dtPhaseStart = DateTime.Now;
 
                     /***************/
                     /* Számítások  */
                     /***************/
-                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Időpontok számítása"));
 
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
@@ -955,10 +969,12 @@ namespace FTLSupporter
 
                     }
 
+                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Időpontok számítása", (DateTime.Now - dtPhaseStart).ToString()));
+                    dtPhaseStart = DateTime.Now;
+
                     /****************************/
                     /* Eredmények véglegesítése */
                     /****************************/
-                    Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Eredmények véglegesítése"));
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
                         //Útvonalpontok 
@@ -982,6 +998,8 @@ namespace FTLSupporter
                         clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
                     }
 
+                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.Now - dtPhaseStart).ToString()));
+                    dtPhaseStart = DateTime.Now;
 
                     FTLResult res = new FTLResult()
                     {

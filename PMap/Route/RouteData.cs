@@ -336,13 +336,14 @@ namespace PMap.Route
             //Legyünk következetesek, a PMAp-os térkép esetében:
             //X --> lng, Y --> lat
             var lstRZN = p_RZN_ID_LIST.Split(',');
+
             var nearest = RouteData.Instance.Edges.Where(
-                w => (p_RZN_ID_LIST == "" || w.Value.RZN_ID==0 || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
+                w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
+                    Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
+                    (p_RZN_ID_LIST == "" || w.Value.RZN_ID == 0 || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
                     (w.Value.EDG_MAXWEIGHT == 0 || p_weight == 0 || w.Value.EDG_MAXWEIGHT <= p_weight) &&
                     (w.Value.EDG_MAXHEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&
-                    (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width) &&
-                    Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) < ((double) Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
-                    Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat)  < ((double) Global.NearestNOD_ID_Approach / Global.LatLngDivider) )
+                    (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width))
                  .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
                 o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
             if (nearest != null)
