@@ -239,9 +239,10 @@ namespace PMapTestApp
             //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             int diff = 0;
          //   int NOD_ID = RouteData.Instance.GetNearestNOD_ID(MarkerFrom.Position, out diff);
-            int NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(MarkerFrom.Position, (string)cmbRST_ID_LIST.SelectedValue,  (int)numWeigtht.Value, 0, 0);
+            int NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(MarkerFrom.Position, (string)cmbRST_ID_LIST.SelectedValue,  (int)numWeigtht.Value, 0, 0, out diff);
             if (NOD_ID > 0)
             {
+
                 this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
                 this.numFromNOD_ID.ValueChanged -= new System.EventHandler(this.numFromNOD_ID_ValueChanged);
@@ -256,6 +257,12 @@ namespace PMapTestApp
                 this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
                 UpdateControls();
+                UI.Message("Diff:"+ diff.ToString());
+
+            }
+            else
+            {
+                UI.Message("Nincs igazítás !");
             }
 
         }
@@ -656,17 +663,31 @@ namespace PMapTestApp
 
                 HashSet<PointLatLng> markersPts = new HashSet<PointLatLng>();
 
-      //                        foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 413679 }.Contains(x.Value.ID)))
+                //                        foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 413679 }.Contains(x.Value.ID)))
                 //               foreach (var edg in RouteData.Instance.Edges.Where(x => new int[] { 383360 }.Contains(x.Value.ID)))
                 //              foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE >= 3 && x.Value.EDG_ETLCODE == ""))
                 // foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 5 && 
-          //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
-          //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
+                //              (x.Value.EDG_STRNUM1 == "0" && x.Value.EDG_STRNUM2 == "0" && x.Value.EDG_STRNUM3 == "0" && x.Value.EDG_STRNUM4 == "0")
+                //              /*&& (x.Value.ZIP_NUM_FROM == 0  && x.Value.ZIP_NUM_TO == 0)*/ ))
 
-                         foreach (var edg in RouteData.Instance.Edges)
+                //                   foreach (var edg in RouteData.Instance.Edges)
 
-                   //                foreach (var edg in RouteData.Instance.Edges.Where(x => /* x.Value.EDG_MAXWEIGHT > 0 || */ x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
-                //     foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.RDT_VALUE == 6 ||
+                //                foreach (var edg in RouteData.Instance.Edges.Where(x => /* x.Value.EDG_MAXWEIGHT > 0 || */ x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
+                // foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.ID == 507536 && x.Value.EDG_LENGTH > 15000))
+                var p_pt = MarkerFrom.Position;
+
+                foreach (var edg in RouteData.Instance.Edges.Where(
+                            w => /* w.Value.ID == 507536 && */
+                                (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
+                                (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                                ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) ||
+                                Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
+                                (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                                ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
+
+                                )
+                                )
+
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 {
                     var edge = edg.Value;
@@ -736,8 +757,9 @@ namespace PMapTestApp
 
         private void button4_Click(object sender, EventArgs e)
         {
+
             setFromToMap();
-            setToToMap();
+     //       setToToMap();
         }
 
         private void ckhShowMarkers_CheckedChanged(object sender, EventArgs e)

@@ -97,17 +97,20 @@ namespace FTLSupporter
 
                             //int diff = 0;
                             //int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), out diff);
-                            int NOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
-                            if (NOD_ID == 0)
+                            if (pt.NOD_ID == 0)
                             {
-                                result.Add(getValidationError(pt, 
-                                    String.Format("TSK Point:{0}, név:{1}, cím:{2}",
-                                   new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString(), pt.Name, pt.Addr), FTLMessages.E_WRONGCOORD));
-                            }
-                            else
-                            {
-                                pt.NOD_ID = NOD_ID;
+                                int NOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
+                                if (NOD_ID == 0)
+                                {
+                                    result.Add(getValidationError(pt,
+                                        String.Format("TSK Point:{0}, név:{1}, cím:{2}",
+                                       new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString(), pt.Name, pt.Addr), FTLMessages.E_WRONGCOORD));
+                                }
+                                else
+                                {
+                                    pt.NOD_ID = NOD_ID;
 
+                                }
                             }
                         }
                     }
@@ -180,30 +183,38 @@ namespace FTLSupporter
 
                     //Koordináta feloldás és ellenőrzés
                     //
-                    //trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
-                    trk.NOD_ID_CURR = RouteData.Instance.GetNearestReachableNOD_IDForTruck( new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                     if (trk.NOD_ID_CURR == 0)
-                        result.Add(getValidationError(trk, 
-                            String.Format( "Jármű:{0}, aktuális poz:{1}", trk.TruckID,
-                            new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), FTLMessages.E_WRONGCOORD));
+                    {
 
-                    //trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
-                    trk.RET_NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck( trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
+                        trk.NOD_ID_CURR = RouteData.Instance.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
+                        if (trk.NOD_ID_CURR == 0)
+                            result.Add(getValidationError(trk,
+                                String.Format("Jármű:{0}, aktuális poz:{1}", trk.TruckID,
+                                new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), FTLMessages.E_WRONGCOORD));
+                    }
+
                     if (trk.RET_NOD_ID == 0)
-                        result.Add(getValidationError(trk,
-                            String.Format("Jármű:{0}, visszetérés poz:{1}", trk.TruckID,
-                            trk.RetPoint.Value.ToString()), FTLMessages.E_WRONGCOORD));
+                    {
+                        trk.RET_NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
+                        if (trk.RET_NOD_ID == 0)
+                            result.Add(getValidationError(trk,
+                                String.Format("Jármű:{0}, visszetérés poz:{1}", trk.TruckID,
+                                trk.RetPoint.Value.ToString()), FTLMessages.E_WRONGCOORD));
+                    }
 
                     foreach (FTLPoint pt in trk.CurrTPoints)
                     {
                         //                        pt.NOD_ID = FTLGetNearestReachableNOD_IDForTruck(route, new GMap.NET.PointLatLng(pt.Lat, pt.Lng), trk.RZN_ID_LIST);
                         //pt.NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
-                        pt.NOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                         if (pt.NOD_ID == 0)
                         {
-                            result.Add(getValidationError(pt,
-                                String.Format("Jármű:{0}, Teljesítés alatt álló túrapont poz:{1}", trk.TruckID,
-                                new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString()), FTLMessages.E_WRONGCOORD));
+                            pt.NOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
+                            if (pt.NOD_ID == 0)
+                            {
+                                result.Add(getValidationError(pt,
+                                    String.Format("Jármű:{0}, Teljesítés alatt álló túrapont poz:{1}", trk.TruckID,
+                                    new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString()), FTLMessages.E_WRONGCOORD));
+                            }
                         }
                     }
                 }

@@ -222,7 +222,7 @@ namespace PMap.Route
 
         public void getNeigboursByBound(CRoutePars p_RoutePar, out Dictionary<CRoutePars, List<int>[]> o_neighborsFull, out Dictionary<CRoutePars, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
         {
-               getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), out o_neighborsFull, out o_neighborsCut, p_cutBoundary);
+            getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), out o_neighborsFull, out o_neighborsCut, p_cutBoundary);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace PMap.Route
         public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
         {
             r_diff = Int32.MaxValue;
- 
+
             //Legyünk következetesek, a PMAp-os térkép esetében:
             //X --> lng, Y --> lat
 
@@ -307,14 +307,19 @@ namespace PMap.Route
                 w.Value.toLatLng.Lng, w.Value.toLatLng.Lat, ptX, ptY) <=
                  (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
                  Global.NearestNOD_ID_Approach : Global.EdgeApproachCity))*/
-                  .Where(w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
-                    Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider))
+                  .Where(
+                w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
+                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) ||
+                    Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
+                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
                  .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
-                o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s=>s.Value).FirstOrDefault();
+                o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
             if (nearest != null)
             {
                 r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
-                nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat)* Global.LatLngDivider);
+                nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat) * Global.LatLngDivider);
 
 
                 return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
@@ -337,9 +342,14 @@ namespace PMap.Route
             //X --> lng, Y --> lat
             var lstRZN = p_RZN_ID_LIST.Split(',');
 
+          
             var nearest = RouteData.Instance.Edges.Where(
-                w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
-                    Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) < ((double)Global.NearestNOD_ID_Approach / Global.LatLngDivider) &&
+                w => (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
+                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) ||
+                    Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
+                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))) &&
                     (p_RZN_ID_LIST == "" || w.Value.RZN_ID == 0 || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
                     (w.Value.EDG_MAXWEIGHT == 0 || p_weight == 0 || w.Value.EDG_MAXWEIGHT <= p_weight) &&
                     (w.Value.EDG_MAXHEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&

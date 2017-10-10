@@ -610,6 +610,7 @@ namespace PMap.Common
         /// <returns></returns>
         public static double DistanceBetweenSegmentAndPoint(double Xa, double Ya, double Xb, double Yb, double Xp, double Yp)
         {
+ //           return LineToPointDistance2D(new double[] { Xa, Ya }, new double[] { Xb, Yb }, new double[] { Xp, Yp }, true);
             // Psuedocode for returning the absolute distance to a line segment from a point.
             //Xa,Ya is point 1 on the line segment.
             //Xb,Yb is point 2 on the line segment.
@@ -635,6 +636,106 @@ namespace PMap.Common
             return Math.Abs((Xp * (Ya - Yb) + Yp * (Xb - Xa) + (Xa * Yb - Xb * Ya))
                     / div);
         }
+
+        private static double FindDistanceToSegment(
+    PointF pt, PointF p1, PointF p2, out PointF closest)
+        {
+            float dx = p2.X - p1.X;
+            float dy = p2.Y - p1.Y;
+            if ((dx == 0) && (dy == 0))
+            {
+                // It's a point not a line segment.
+                closest = p1;
+                dx = pt.X - p1.X;
+                dy = pt.Y - p1.Y;
+                return Math.Sqrt(dx * dx + dy * dy);
+            }
+
+            // Calculate the t that minimizes the distance.
+            float t = ((pt.X - p1.X) * dx + (pt.Y - p1.Y) * dy) /
+                (dx * dx + dy * dy);
+
+            // See if this represents one of the segment's
+            // end points or a point in the middle.
+            if (t < 0)
+            {
+                closest = new PointF(p1.X, p1.Y);
+                dx = pt.X - p1.X;
+                dy = pt.Y - p1.Y;
+            }
+            else if (t > 1)
+            {
+                closest = new PointF(p2.X, p2.Y);
+                dx = pt.X - p2.X;
+                dy = pt.Y - p2.Y;
+            }
+            else
+            {
+                closest = new PointF(p1.X + t * dx, p1.Y + t * dy);
+                dx = pt.X - closest.X;
+                dy = pt.Y - closest.Y;
+            }
+
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+        /* 
+        //Compute the dot product AB . AC
+        private static double DotProduct(double[] pointA, double[] pointB, double[] pointC)
+        {
+            double[] AB = new double[2];
+            double[] BC = new double[2];
+            AB[0] = pointB[0] - pointA[0];
+            AB[1] = pointB[1] - pointA[1];
+            BC[0] = pointC[0] - pointB[0];
+            BC[1] = pointC[1] - pointB[1];
+            double dot = AB[0] * BC[0] + AB[1] * BC[1];
+
+            return dot;
+        }
+
+        //Compute the cross product AB x AC
+        private static double CrossProduct(double[] pointA, double[] pointB, double[] pointC)
+        {
+            double[] AB = new double[2];
+            double[] AC = new double[2];
+            AB[0] = pointB[0] - pointA[0];
+            AB[1] = pointB[1] - pointA[1];
+            AC[0] = pointC[0] - pointA[0];
+            AC[1] = pointC[1] - pointA[1];
+            double cross = AB[0] * AC[1] - AB[1] * AC[0];
+
+            return cross;
+        }
+
+        //Compute the distance from A to B
+        private static double Distance(double[] pointA, double[] pointB)
+        {
+            double d1 = pointA[0] - pointB[0];
+            double d2 = pointA[1] - pointB[1];
+
+            return Math.Sqrt(d1 * d1 + d2 * d2);
+        }
+
+        //Compute the distance from AB to C
+        //if isSegment is true, AB is a segment, not a line.
+        private static double LineToPointDistance2D(double[] pointA, double[] pointB, double[] pointC,
+            bool isSegment)
+        {
+            double dist = CrossProduct(pointA, pointB, pointC) / Distance(pointA, pointB);
+            if (isSegment)
+            {
+                double dot1 = DotProduct(pointA, pointB, pointC);
+                if (dot1 > 0)
+                    return Distance(pointB, pointC);
+
+                double dot2 = DotProduct(pointB, pointA, pointC);
+                if (dot2 > 0)
+                    return Distance(pointA, pointC);
+            }
+            return Math.Abs(dist);
+        }
+
+*/
 
         public static Color GetSemiTransparentColor(Color p_color)
         {
