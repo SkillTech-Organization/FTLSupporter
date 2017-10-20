@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PMap.WebTrace
 {
-    public class MapPoint
+    public class PMMapPoint
     {
         public double Lat { get; set; }
         public double Lng { get; set; }

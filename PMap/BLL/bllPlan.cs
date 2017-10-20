@@ -9,13 +9,16 @@ using PMap.BLL;
 using PMap.BLL.Base;
 using PMap.Common;
 using PMap.Common.PPlan;
+using PMap.WebTrace;
+using System.Drawing;
+using System.Web.Script.Serialization;
 
 namespace PMap.BLL
 {
 
     public class bllPlan : bllBase
     {
-
+        
         public bllPlan(SQLServerAccess p_DBA)
             : base(p_DBA, "PLN_PUBLICATEDPLAN")
         {
@@ -217,7 +220,7 @@ namespace PMap.BLL
         {
             string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
-                          " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
+                          " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join v_TPLANQTY TPQ ON TPQ.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -230,9 +233,10 @@ namespace PMap.BLL
                           "           group by  TPL_ID) PTP_DST on PTP_DST.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
+                          "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.PLN_ID = ? " + Environment.NewLine +
                           "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
-                          " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL " + Environment.NewLine +
+                          " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME " + Environment.NewLine +
                           "order by TRK_REG_NUM, TRK_TRAILER ";
 
 
@@ -252,7 +256,7 @@ namespace PMap.BLL
 
             string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, " + Environment.NewLine +
+                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME " + Environment.NewLine +
                           "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK  " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
@@ -266,10 +270,11 @@ namespace PMap.BLL
                           "           group by  TPL_ID) PTP_DST on PTP_DST.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
+                          "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.ID = ? " + Environment.NewLine +
                           "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME),  " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST    ";
+                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST, CRR_NAME    ";
 
 
             Random rnd = new Random((int)DateTime.Now.Millisecond);
@@ -319,7 +324,8 @@ namespace PMap.BLL
                 CPP_LOADVOL = Util.getFieldValue<double>(p_dr, "CPP_LOADVOL"),
                 QTYErr = false,
                 VOLErr = false,
-                TDURATION = new DateTime(0).AddMinutes(Util.getFieldValue<int>(p_dr, "TDURATION"))
+                TDURATION = new DateTime(0).AddMinutes(Util.getFieldValue<int>(p_dr, "TDURATION")),
+                CRR_NAME = Util.getFieldValue<string>(p_dr, "CRR_NAME")
             };
 
             foreach (boPlanTourPoint tp in ret.TourPoints)
@@ -506,6 +512,69 @@ namespace PMap.BLL
             }
             return retVal;
         }
+        public List<PMTour> GetToursForAzure(int p_PLN_ID)
+        {
+            var bllRoute = new bllRoute(DBA);
+
+            var TourList = GetPlanTours(p_PLN_ID);
+            List<PMTour> xTourList = new List<PMTour>();
+            foreach (var tr in TourList.Where(w => w.TOURPOINTCNT > 0).ToList())
+            {
+                PMTour xTr = new PMTour()
+                {
+                    ID = tr.ID.ToString(),
+                    Carrier = tr.CRR_NAME,
+                    TruckRegNo = tr.TRK_ID.ToString(),      //Bővíteni a boPlanTour-t
+                    TruckWeight = tr.TRK_WEIGHT,
+                    TruckHeight = tr.TRK_XHEIGHT,
+                    TruckWidth = tr.TRK_XWIDTH,
+                    Start = tr.START,
+                    End = tr.END,
+                    TourLength = tr.DST,
+                    Qty = tr.QTY,
+                    Vol = tr.VOL,
+                    Toll = tr.TOLL,
+                    TourColor = ColorTranslator.ToHtml(Color.FromArgb(tr.PCOLOR.ToArgb())),
+                    TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb()))
+                };
+                for (int i = 0; i < tr.TourPoints.Count; i++)
+                {
+
+                    List<PMMapPoint> mpList = new List<PMMapPoint>();
+                    if (i < tr.TourPoints.Count - 1)
+                    {
+                        var route = bllRoute.GetMapRouteFromDB(tr.TourPoints[i].NOD_ID, tr.TourPoints[i + 1].NOD_ID, tr.RZN_ID_LIST, tr.TRK_WEIGHT, tr.TRK_XHEIGHT, tr.TRK_XWIDTH);
+
+                        if (route != null)
+                            mpList = route.Points.Select(s => new PMMapPoint() { Lat = s.Lat, Lng = s.Lng }).ToList();
+                    }
+                    var xtp = new PMTourPoint()
+                    {
+                        TourID = tr.ID,
+                        Type = tr.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_DEP ? PMTourPoint.enTourPointTypes.DEP.ToString() : PMTourPoint.enTourPointTypes.WHS.ToString(),
+                        Order = tr.TourPoints[i].PTP_ORDER,
+                        Distance = tr.TourPoints[i].PTP_DISTANCE,
+                        ArrTime = tr.TourPoints[i].PTP_ARRTIME,
+                        ServTime = tr.TourPoints[i].PTP_SERVTIME,
+                        DepTime = tr.TourPoints[i].PTP_DEPTIME,
+                        Code = tr.TourPoints[i].CLT_CODE,
+                        Name = tr.TourPoints[i].CLT_NAME,
+                        Addr = tr.TourPoints[i].ADDR,
+                        Position = new JavaScriptSerializer().Serialize(new PMMapPoint() { Lat = tr.TourPoints[i].NOD_YPOS / Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
+                        OrdNum = tr.TourPoints[i].ORD_NUM,
+                        MapPoints = mpList
+
+                    };
+                    xTr.TourPoints.Add(xtp);
+                }
+
+                xTourList.Add(xTr);
+
+            }
+
+            return xTourList;
+        }
+
 
     }
 }

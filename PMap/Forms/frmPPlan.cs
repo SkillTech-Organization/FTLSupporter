@@ -28,6 +28,8 @@ using PMap.Common;
 using PMap.Forms.Base;
 using PMap.Common.PPlan;
 using PMap.Route;
+using PMap.WebTrace;
+using PMap.Common.Azure;
 
 namespace PMap.Forms
 {
@@ -42,13 +44,13 @@ namespace PMap.Forms
 
         private PlanParams m_planParams;
 
-   //     private boPlanTour m_selTour = null;
+        //     private boPlanTour m_selTour = null;
         private bool m_firsActivate = true;
 
         private bllPlanEdit m_bllPlanEdit;
         private bllPlan m_bllPlan;
         private bllSemaphore m_bllSemaphore;
-        
+
         private int m_USR_ID = 0;
         private bool m_IsEnablePlanManage = false;
         private PlanEditFuncs m_PlanEditFuncs;
@@ -92,7 +94,7 @@ namespace PMap.Forms
         {
             InitializeComponent();
             InitForm();
-            
+
             startForm();
 
             m_USR_ID = p_USR_ID;
@@ -112,7 +114,7 @@ namespace PMap.Forms
 
         }
 
-    
+
         private void startForm()
         {
             try
@@ -132,7 +134,7 @@ namespace PMap.Forms
                     m_PPlanCommonVars.ShowPlannedDepots = true;
 
                     PMapCommonVars.Instance.ConnectToDB();
-                    
+
 
                 }
             }
@@ -162,8 +164,8 @@ namespace PMap.Forms
             tbSepPlan.Visible = m_IsEnablePlanManage;
 
             if (m_IsEnablePlanManage)
-            { 
-                cmbPlans.SelectedIndexChanged -=new EventHandler(cmbPlans_SelectedIndexChanged);
+            {
+                cmbPlans.SelectedIndexChanged -= new EventHandler(cmbPlans_SelectedIndexChanged);
                 cmbPlans.ComboBox.DataSource = m_bllPlan.GetAllPlans();
                 if (p_PLN_ID > 0)
                     cmbPlans.ComboBox.SelectedValue = p_PLN_ID;
@@ -227,13 +229,13 @@ namespace PMap.Forms
                 btnTurnTour.Enabled = e.Tour != null && m_pnlPPlanEditor.EditMode && bVisible;
                 btnDelTourPoint.Enabled = m_pnlPPlanTourPoints.IsFocusedItemExist() && m_pnlPPlanEditor.EditMode && bVisible;
 
-             }
+            }
 
 
 
             if (e.EventMode == ePlanEventMode.EditorMode)
                 SetEditMode(false);
-            
+
             if (e.EventMode == ePlanEventMode.ViewerMode)
                 SetViewMode(false);
 
@@ -241,7 +243,7 @@ namespace PMap.Forms
 
         void m_pnlPPlanTourPoints_NotifyDataChanged(object sender, EventArgs e)
         {
-            RefreshAll( (PlanEventArgs)e);
+            RefreshAll((PlanEventArgs)e);
         }
 
         void m_pnlUnplannedOrders_NotifyDataChanged(object sender, EventArgs e)
@@ -310,12 +312,12 @@ namespace PMap.Forms
                     bllMapFormPar.RemoveParameters(m_PPlanCommonVars.PLN_ID, PMapCommonVars.Instance.USR_ID);
 
                 bllMapFormPar.RestoreParameters(m_PPlanCommonVars.PLN_ID, PMapCommonVars.Instance.USR_ID, out MPP_WINDOW, out MPP_DOCK, out MPP_PARAM, out MPP_TGRID, out MPP_PGRID, out MPP_UGRID);
-                
+
                 dockPanel.SuspendLayout(true);
 
                 CreatePanels(false);
 
-                if( MPP_WINDOW != "")
+                if (MPP_WINDOW != "")
                 {
                     FormSerializeHelper fs = (FormSerializeHelper)XMLSerializator.DeserializeObject(MPP_WINDOW, typeof(FormSerializeHelper));
 
@@ -373,11 +375,11 @@ namespace PMap.Forms
 
                 dockPanel.Refresh();
 
-                if( MPP_TGRID != "")
+                if (MPP_TGRID != "")
                     Util.RestoreGridLayoutFromString(m_pnlPPlanTours.gridViewTours, MPP_TGRID);
-                if (MPP_PGRID != "") 
+                if (MPP_PGRID != "")
                     Util.RestoreGridLayoutFromString(m_pnlPPlanTourPoints.gridViewTourPoints, MPP_PGRID);
-                if(MPP_UGRID != "")
+                if (MPP_UGRID != "")
                     Util.RestoreGridLayoutFromString(m_pnlPlanOrders.gridViewPlanOrders, MPP_UGRID);
 
                 //befrissítjük a túra és túrapont grideket (a layout betöltéssel megváltozott a rendezettség)
@@ -487,7 +489,7 @@ namespace PMap.Forms
                 m_pnlPlanOrders.NotifyDataChanged += new EventHandler<EventArgs>(m_pnlUnplannedOrders_NotifyDataChanged);
 
                 //letároljuk a default beállítást
-                m_defaultMPP_UGRID = Util.SaveGridLayoutToString( m_pnlPlanOrders.gridViewPlanOrders);
+                m_defaultMPP_UGRID = Util.SaveGridLayoutToString(m_pnlPlanOrders.gridViewPlanOrders);
 
             }
 
@@ -508,7 +510,7 @@ namespace PMap.Forms
 
                 //letároljuk a default beállítást
                 m_defaultMPP_TGRID = Util.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
-            
+
             }
 
             if (bForce || m_pnlPPlanTourPoints == null || m_pnlPPlanTourPoints.IsDisposed)
@@ -534,7 +536,7 @@ namespace PMap.Forms
             }
 
             m_PlanEditFuncs = new PlanEditFuncs(m_pnlPPlanEditor, m_PPlanCommonVars);
-            
+
         }
 
         private void btnTourDetails_Click(object sender, EventArgs e)
@@ -572,7 +574,7 @@ namespace PMap.Forms
             {
                 if (m_PPlanCommonVars.FocusedTour.LOCKED)
                 {
-                    UI.Message( PMapMessages.E_PEDIT_LOCKEDTRUCK);
+                    UI.Message(PMapMessages.E_PEDIT_LOCKEDTRUCK);
                     return;
                 }
                 dlgOptimize dOpt = new dlgOptimize(m_PPlanCommonVars.PLN_ID, m_PPlanCommonVars.FocusedTour.ID);
@@ -597,7 +599,7 @@ namespace PMap.Forms
 
         private void btnDelTour_Click(object sender, EventArgs e)
         {
-            if (m_PPlanCommonVars.FocusedTour != null )
+            if (m_PPlanCommonVars.FocusedTour != null)
             {
                 m_PlanEditFuncs.DelTour(m_PPlanCommonVars.FocusedTour);
             }
@@ -708,7 +710,7 @@ namespace PMap.Forms
             dlgFindORD_NUM dlg = new dlgFindORD_NUM();
             if (dlg.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
             {
-                                if (!m_PlanEditFuncs.SetPositionByOrd_NUM(dlg.txtORD_NUM.Text))
+                if (!m_PlanEditFuncs.SetPositionByOrd_NUM(dlg.txtORD_NUM.Text))
                     UI.Message(PMapMessages.M_PEDIT_ORDNOTFOUND);
             }
         }
@@ -787,7 +789,7 @@ namespace PMap.Forms
 
                 if (bOK)
                 {
-//                    UI.Message(PMapMessages.M_PEDIT_CALCDST_END);
+                    //                    UI.Message(PMapMessages.M_PEDIT_CALCDST_END);
                 }
 
             }
@@ -799,10 +801,28 @@ namespace PMap.Forms
 
         }
 
+        private void btnToCloud_Click(object sender, EventArgs e)
+        {
+            if (UI.Confirm(PMapMessages.Q_PEDIT_UPLOAD))
+            {
+                var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID);
 
-   
+                BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+                BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
+
+                AzureTableStore.Instance.DeleteTable("PMTour");
+                AzureTableStore.Instance.DeleteTable("PMMapPoint");
+
+                foreach (var xTr in tourList)
+                {
+                    bllWebTrace.MaintainItem(xTr);
+                    foreach (var xTp in xTr.TourPoints)
+                    {
+                        bllWebTraceTourPoint.MaintainItem(xTp);
+                    }
+                }
+            }
+        }
     }
-
-    /*****************/
-        #endregion
+    #endregion
 }

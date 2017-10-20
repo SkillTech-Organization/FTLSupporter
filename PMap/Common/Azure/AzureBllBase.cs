@@ -80,7 +80,7 @@ namespace PMap.Common.Azure
 
         public virtual ObservableCollection<T> RetrieveList(out int Total, string p_where = "", string p_orderBy = "", int pageSize = 0, int page = 1)
         {
-            var res = AzureTableStore.Instance.RetrieveList<T>(p_where, p_orderBy, out Total, pageSize, page);
+            var res = AzureTableStore.Instance.RetrieveObservableList<T>(p_where, p_orderBy, out Total, pageSize, page);
             return res;
         }
 

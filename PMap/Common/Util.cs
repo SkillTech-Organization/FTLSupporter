@@ -976,6 +976,12 @@ namespace PMap.Common
             }
             return maxValue;
         }
+
+        public static IEnumerable<string> ChunkString(string str, int maxChunkSize)
+        {
+            for (int i = 0; i < str.Length; i += maxChunkSize)
+                yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
+        }
     }
 }
 

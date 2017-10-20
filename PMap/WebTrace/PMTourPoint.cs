@@ -15,7 +15,7 @@ namespace PMap.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "TourPoint")]
-    public class TourPoint : AzureTableObjBase
+    public class PMTourPoint : AzureTableObjBase
     {
         public enum enTourPointTypes
         {
@@ -73,7 +73,7 @@ namespace PMap.WebTrace
 
         [DataMember]
         [DisplayNameAttributeX(Name = "Útvonal-pontok")]
-        public List<MapPoint> MapPoints { get; set; } = new List<MapPoint>();
+        public List<PMMapPoint> MapPoints { get; set; } = new List<PMMapPoint>();
 
 
         [DisplayNameAttributeX(Name = "Túrapont típus")]

@@ -140,6 +140,9 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 36)]
         public double TollMultiplier { get; set; }
 
+        [DisplayNameAttributeX(Name = "Szállító neve", Order = 37)]
+        public string CRR_NAME { get; set; }
+
 
         //Technikai mezők
         //

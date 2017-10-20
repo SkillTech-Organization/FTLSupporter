@@ -14,7 +14,7 @@ namespace PMap.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "Tour")]
-    public class Tour : AzureTableObjBase
+    public class PMTour : AzureTableObjBase
     {
 
         public const string PartitonConst = "TOUR";
@@ -102,7 +102,7 @@ namespace PMap.WebTrace
         [IgnoreDataMember]
         [JsonProperty("TourPoints")]
         [DisplayNameAttributeX(Name = "Túrapontok listája")]
-        public List<TourPoint> TourPoints { get; set; } = new List<TourPoint>();
+        public List<PMTourPoint> TourPoints { get; set; } = new List<PMTourPoint>();
 
 
     }

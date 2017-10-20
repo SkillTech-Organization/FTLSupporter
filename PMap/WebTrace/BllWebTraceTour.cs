@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PMap.WebTrace
 {
-    public class BllWebTraceTour : AzureBllBase< Tour>
+    public class BllWebTraceTour : AzureBllBase< PMTour>
     {
 
         BllWebTraceTourPoint m_bllWebTraceTourPoint;
@@ -16,7 +16,7 @@ namespace PMap.WebTrace
         {
             m_bllWebTraceTourPoint = new BllWebTraceTourPoint(p_user);
         }
-        public override Tour Retrieve(object p_partitionKey, object p_rowKey)
+        public override PMTour Retrieve(object p_partitionKey, object p_rowKey)
         {
             
             var tour = base.Retrieve(p_partitionKey, p_rowKey);
@@ -33,7 +33,7 @@ namespace PMap.WebTrace
         }
 
         
-        public override ObservableCollection<Tour> RetrieveList(out int Total, string p_where = "", string p_orderBy = "", int pageSize = 0, int page = 1)
+        public override ObservableCollection<PMTour> RetrieveList(out int Total, string p_where = "", string p_orderBy = "", int pageSize = 0, int page = 1)
         {
             var tourList = base.RetrieveList(out Total, p_where, p_orderBy);
             foreach( var tour in tourList)

@@ -725,64 +725,8 @@ namespace PMapTestApp
  
                 SQLServerAccess db = new SQLServerAccess();
                 db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-                List<boPlanTour> TourList;
-                bllRoute m_bllRoute = new bllRoute(db);
-                bllPlan m_bllPlan = new bllPlan(db);
-                TourList = m_bllPlan.GetPlanTours(d.m_PLN_ID);
-                List<Tour> xTourList = new List<Tour>();
-                foreach (var tr in TourList.Where(w => w.TOURPOINTCNT > 0).ToList())
-                {
-                    Tour xTr = new Tour()
-                    {
-                        ID = tr.ID.ToString(),
-                        Carrier = "Carrier1",
-                        TruckRegNo = tr.TRK_ID.ToString(),      //Bővíteni a boPlanTour-t
-                        TruckWeight = tr.TRK_WEIGHT,
-                        TruckHeight = tr.TRK_XHEIGHT,
-                        TruckWidth = tr.TRK_XWIDTH,
-                        Start = tr.START,
-                        End = tr.END,
-                        TourLength = tr.DST,
-                        Qty = tr.QTY,
-                        Vol = tr.VOL,
-                        Toll = tr.TOLL,
-                        TourColor = ColorTranslator.ToHtml(Color.FromArgb(tr.PCOLOR.ToArgb())),
-                        TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb()))
-                    };
-                    for (int i = 0; i < tr.TourPoints.Count; i++)
-                    {
-
-                        List<MapPoint> mpList = new List<MapPoint>();
-                        if (i < tr.TourPoints.Count - 1)
-                        {
-                            var route = m_bllRoute.GetMapRouteFromDB(tr.TourPoints[i].NOD_ID, tr.TourPoints[i + 1].NOD_ID, tr.RZN_ID_LIST, tr.TRK_WEIGHT, tr.TRK_XHEIGHT, tr.TRK_XWIDTH);
-
-                            if (route != null)
-                                mpList = route.Points.Select(s => new MapPoint() { Lat = s.Lat, Lng = s.Lng }).ToList();
-                        }
-                        var xtp = new TourPoint()
-                        {
-                            TourID = tr.ID,
-                            Type = tr.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_DEP ? TourPoint.enTourPointTypes.DEP.ToString() : TourPoint.enTourPointTypes.WHS.ToString(),
-                            Order = tr.TourPoints[i].PTP_ORDER,
-                            Distance = tr.TourPoints[i].PTP_DISTANCE,
-                            ArrTime = tr.TourPoints[i].PTP_ARRTIME,
-                            ServTime = tr.TourPoints[i].PTP_SERVTIME,
-                            DepTime = tr.TourPoints[i].PTP_DEPTIME,
-                            Code = tr.TourPoints[i].CLT_CODE,
-                            Name = tr.TourPoints[i].CLT_NAME,
-                            Addr = tr.TourPoints[i].ADDR,
-                            Position = new JavaScriptSerializer().Serialize(new MapPoint() { Lat = tr.TourPoints[i].NOD_YPOS/Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
-                            OrdNum = tr.TourPoints[i].ORD_NUM ,
-                            MapPoints = mpList
-
-                        };
-                        xTr.TourPoints.Add(xtp);
-                    }
-
-                    xTourList.Add(xTr);
-
-                }
+                bllPlan bllPlan = new bllPlan(db);
+                var TourList = bllPlan.GetToursForAzure(d.m_PLN_ID);
                 db.Close();
 
                 //connectionString = "DefaultEndpointsProtocol=https;AccountName=petawebdbtest;AccountKey=ucXUpxndw4j+73Ygjk7Cg3I93voioqGC5PCCelVr4g8aSpub+AEfk99YG6c/8768Exzv9wXDcQQd/o7xenoxzQ==;EndpointSuffix=core.windows.net" />
@@ -791,7 +735,10 @@ namespace PMapTestApp
                 AzureTableStore.Instance.AzureKey = "ucXUpxndw4j+73Ygjk7Cg3I93voioqGC5PCCelVr4g8aSpub+AEfk99YG6c/8768Exzv9wXDcQQd/o7xenoxzQ==";
                       BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                 BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
-                foreach (var xTr in xTourList)
+
+                AzureTableStore.Instance.DeleteTable("PMTour");
+                AzureTableStore.Instance.DeleteTable("PMMapPoint");
+                foreach (var xTr in TourList)
                 {
                     bllWebTrace.MaintainItem(xTr);
                     foreach( var xTp in xTr.TourPoints)
@@ -806,7 +753,7 @@ namespace PMapTestApp
         {
             BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
             //egy elem
-            var l1 = bllWebTrace.Retrieve(Tour.PartitonConst, "12780");
+            var l1 = bllWebTrace.Retrieve(PMTour.PartitonConst, "12780");
             //összes elem (van where paraméter is!)
             int total;
             var l2 = bllWebTrace.RetrieveList(out total);

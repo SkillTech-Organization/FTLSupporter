@@ -18,6 +18,7 @@ using System.Linq.Expressions;
 using Microsoft.WindowsAzure.Storage.Table.Queryable;
 using System.Threading.Tasks;
 using PMap.Common.Attrib;
+using Newtonsoft.Json;
 
 namespace PMap.Common.Azure
 {
@@ -32,6 +33,7 @@ namespace PMap.Common.Azure
 
 
         private const int BATCHSIZE = 100;
+        private const int SPLIT_STR_LEN = 32000;    //UTF-8 és UTF-16 -hoz is jó
 
         private CloudStorageAccount m_account = null;
         private CloudTableClient m_client = null;
@@ -98,7 +100,8 @@ namespace PMap.Common.Azure
 
         private DynamicTableEntity cloneForWrite(object p_obj)
         {
-            var jsonSerialiser = new JavaScriptSerializer();
+            JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
+
             DynamicTableEntity TableEntity = null;
             Type tp = p_obj.GetType();
             PropertyInfo PartitionKeyProp = tp.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
@@ -141,7 +144,7 @@ namespace PMap.Common.Azure
                                     TableEntity.Properties.Add(propInf.Name, new EntityProperty(new DateTime(dt.Value.Ticks, DateTimeKind.Utc)));
                                 }
                             }
-                            else if ( propInf.PropertyType == typeof(DateTime))
+                            else if (propInf.PropertyType == typeof(DateTime))
                             {
                                 if (val != null)
                                 {
@@ -165,7 +168,16 @@ namespace PMap.Common.Azure
                             else if (propInf.PropertyType.IsEnum)
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty(val.ToString()));
                             else if (propInf.PropertyType.IsGenericType && (propInf.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
-                                TableEntity.Properties.Add(propInf.Name, new EntityProperty(jsonSerialiser.Serialize(val)));
+                            {
+                                var jsonString = JsonConvert.SerializeObject(val, jsonsettings);
+                                var splitted = Util.ChunkString(jsonString, SPLIT_STR_LEN);
+                                int item = 0;
+                                foreach (var str in splitted)
+                                {
+                                    TableEntity.Properties.Add(propInf.Name + "_" + item.ToString().PadLeft(2, '0'), new EntityProperty(str));
+                                    item++;
+                                }
+                            }
                             else
                                 throw new Exception("There is no conversion for any Azure types:" + propInf.PropertyType.Name);
 
@@ -173,7 +185,8 @@ namespace PMap.Common.Azure
                         }
 
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
                         throw;
                     }     //szebben megoldani!
                 }
@@ -187,7 +200,7 @@ namespace PMap.Common.Azure
             return TableEntity;
         }
 
-   
+
         /// <summary>
         /// tárolóobjektum kulcs -> string map
         /// Megj:Tiltott karakterek a kulcsban:
@@ -199,6 +212,9 @@ namespace PMap.Common.Azure
         public static string GetValidAzureKeyValue(Type p_type, object p_keyValue)
         {
             string key = "";
+            if (p_type == null)
+                throw new Exception("The value of key is null !");
+
             if (p_type == typeof(DateTime))
             {
                 var d = new DateTime(((DateTime)p_keyValue).Ticks, DateTimeKind.Utc);
@@ -215,6 +231,8 @@ namespace PMap.Common.Azure
                             && c != '#'
                             && c != '/'
                             && c != '?'
+                            && c != ','
+                            && c != '.'
                             && !char.IsControl(c))
                 {
                     sb.Append(c);
@@ -229,7 +247,7 @@ namespace PMap.Common.Azure
 
         private object getFromDynamic<T>(DynamicTableEntity p_obj)
         {
-            var jsonSerialiser = new JavaScriptSerializer();
+            JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
 
             object result = Activator.CreateInstance(typeof(T));
             Type t = typeof(T);
@@ -252,16 +270,27 @@ namespace PMap.Common.Azure
             {
                 try
                 {
-                    if (propInf.CanWrite && p_obj.Properties.ContainsKey(propInf.Name))
+                    if (propInf.CanWrite &&
+                        (p_obj.Properties.ContainsKey(propInf.Name) || p_obj.Properties.Where(w => w.Key.StartsWith(propInf.Name + "_")).Count() != 0))
                     {
                         //                                jsonSerialiser.ConvertToType(p_obj.Properties[propInf.Name].StringValue, propInf.PropertyType), null);
-                        if (propInf.PropertyType.IsEnum && p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
+
+
+                        if (propInf.PropertyType.IsGenericType && (propInf.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
+                        {
+                            string strValue = "";
+                            var lstProps = p_obj.Properties.Where(w => w.Key.StartsWith(propInf.Name + "_")).OrderBy(o => o.Key);
+                            foreach (var prop in lstProps)
+                            {
+                                strValue += p_obj.Properties[prop.Key].StringValue;
+                            }
+
+                            t.GetProperty(propInf.Name).SetValue(result,
+                                JsonConvert.DeserializeObject(strValue, propInf.PropertyType, jsonsettings), null);
+                        }
+                        else if (propInf.PropertyType.IsEnum && p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
                             t.GetProperty(propInf.Name).SetValue(result,
                                 Enum.Parse(propInf.PropertyType, p_obj.Properties[propInf.Name].StringValue), null);
-                        else if (propInf.PropertyType.IsGenericType && (propInf.PropertyType.GetGenericTypeDefinition() == typeof(List<>)) &&
-                            p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
-                            t.GetProperty(propInf.Name).SetValue(result,
-                                jsonSerialiser.Deserialize(p_obj.Properties[propInf.Name].StringValue, propInf.PropertyType), null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.String)
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].StringValue, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Int64)
@@ -291,13 +320,13 @@ namespace PMap.Common.Azure
             return result;
         }
 
-    
+
         public static object GetAzureKeyValue(Type p_type, string p_keyValue)
 
         {
 
             string converted = WebUtility.HtmlDecode(p_keyValue.Replace("&@@", "&#"));
-   
+
             if (p_type == typeof(Guid?) || p_type == typeof(Guid))
                 return new Guid(converted);
             else if (p_type == typeof(int?) || p_type == typeof(int))
@@ -310,7 +339,7 @@ namespace PMap.Common.Azure
                 return converted;
         }
 
-        
+
         public string NextID()
         {
             long nextID = DateTime.UtcNow.Ticks;
@@ -322,6 +351,26 @@ namespace PMap.Common.Azure
             string ID = "0000000000000000000" + nextID.ToString();
             m_lastID = nextID;
             return ID.Substring(ID.Length - 20, 20);
+        }
+
+        public bool DeleteTable(string p_tableName)
+        {
+            try
+            {
+                InitTableStore();
+                CloudTable table = null;
+                table = m_client.GetTableReference(p_tableName);
+                bool bOK = table.DeleteIfExists();
+                return bOK;
+            }
+            catch (StorageException sex)
+            {
+                throw new Exception(GetStorageExceptionMessage(sex));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public bool Insert(object p_obj, string p_user)
@@ -361,8 +410,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
-//                return false;
-                throw;
+                throw new Exception(GetStorageExceptionMessage(sex));
             }
             catch (Exception ex)
             {
@@ -448,11 +496,11 @@ namespace PMap.Common.Azure
                         if (!bOK && t.IsSubclassOf(typeof(AzureTableObjBase)))
                         {
                             DynamicTableEntity dt = (DynamicTableEntity)res.Result;
-                            var item = (T)rows.Where(w => GetValidAzureKeyValue(PartitionKeyProp.PropertyType, t.GetProperty(PartitionKeyProp.Name).GetValue(w, null))== dt.PartitionKey &&
+                            var item = (T)rows.Where(w => GetValidAzureKeyValue(PartitionKeyProp.PropertyType, t.GetProperty(PartitionKeyProp.Name).GetValue(w, null)) == dt.PartitionKey &&
                                (RowKeyProp != null ? GetValidAzureKeyValue(RowKeyProp.PropertyType, t.GetProperty(RowKeyProp.Name).GetValue(w, null)) == dt.RowKey : true)).FirstOrDefault();
 
-                      
-                            if ( lstStates.ContainsKey(item))
+
+                            if (lstStates.ContainsKey(item))
                             {
                                 object obj = item;
                                 AzureTableObjBase mb = (AzureTableObjBase)obj;
@@ -477,8 +525,8 @@ namespace PMap.Common.Azure
                     oriState = mb.State;
                     mb.State = AzureTableObjBase.enObjectState.Stored;
                     mb.Updated = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
-                    mb.Updater = p_user;            
-                    if( mb.Created == DateTime.MinValue)
+                    mb.Updater = p_user;
+                    if (mb.Created == DateTime.MinValue)
                     {
                         mb.Created = mb.Updated;
                     }
@@ -505,16 +553,16 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
-                throw ;
-//                return false;
+                throw new Exception(GetStorageExceptionMessage(sex));
+                //                return false;
             }
             catch (Exception ex)
             {
-                throw ;
+                throw;
             }
         }
 
- 
+
         //http://stackoverflow.com/questions/22684881/batch-delete-in-windows-azure-table-storage
         public bool Delete(object p_obj)
         {
@@ -548,8 +596,8 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
-                throw sex;
-//                return false;
+                throw new Exception(GetStorageExceptionMessage(sex));
+                //                return false;
             }
             catch (Exception ex)
             {
@@ -557,7 +605,7 @@ namespace PMap.Common.Azure
             }
         }
 
-         public bool DeleteRange<T>(List<AzureItemKeys> p_itemKeys)
+        public bool DeleteRange<T>(List<AzureItemKeys> p_itemKeys)
         {
             try
             {
@@ -571,8 +619,10 @@ namespace PMap.Common.Azure
 
                 PropertyInfo RowKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr))).FirstOrDefault();
 
-                p_itemKeys.ForEach(x => { x.PartitionKey = GetAzureKeyValue(PartitionKeyProp.PropertyType, x.PartitionKey).ToString();
-                    x.RowKey = (RowKeyProp == null || x.RowKey == null ? x.RowKey : GetAzureKeyValue(RowKeyProp.PropertyType, x.RowKey).ToString()); });
+                p_itemKeys.ForEach(x => {
+                    x.PartitionKey = GetAzureKeyValue(PartitionKeyProp.PropertyType, x.PartitionKey).ToString();
+                    x.RowKey = (RowKeyProp == null || x.RowKey == null ? x.RowKey : GetAzureKeyValue(RowKeyProp.PropertyType, x.RowKey).ToString());
+                });
 
 
                 //egy batch művelet szegmensében azonos partition key szerepelhet
@@ -623,7 +673,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
-                throw sex;
+                throw new Exception(GetStorageExceptionMessage(sex));
                 //                return false;
             }
             catch (Exception ex)
@@ -633,7 +683,7 @@ namespace PMap.Common.Azure
             return true;
         }
 
-        private  void BatchProcessEntities(CloudTable table, Action<IEnumerable<DynamicTableEntity>> processor, List<AzureItemKeys> p_itemKeys)
+        private void BatchProcessEntities(CloudTable table, Action<IEnumerable<DynamicTableEntity>> processor, List<AzureItemKeys> p_itemKeys)
         {
             TableQuerySegment<DynamicTableEntity> segment = null;
 
@@ -667,7 +717,7 @@ namespace PMap.Common.Azure
             }
         }
 
-  
+
         public T Retrieve<T>(T p_obj)
         {
             object partitionKey = "";
@@ -700,9 +750,9 @@ namespace PMap.Common.Azure
                     throw new Exception("AzureTablePartitionKeyAttr annotation is missing!");
                 PropertyInfo RowKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr))).FirstOrDefault();
 
-                TableOperation retrieveOperation = TableOperation.Retrieve<DynamicTableEntity>( 
+                TableOperation retrieveOperation = TableOperation.Retrieve<DynamicTableEntity>(
                                 GetValidAzureKeyValue(PartitionKeyProp.PropertyType, p_partitionKey),
-                                GetValidAzureKeyValue(RowKeyProp == null?typeof(string): RowKeyProp.PropertyType, p_rowKey));
+                                GetValidAzureKeyValue(RowKeyProp == null ? typeof(string) : RowKeyProp.PropertyType, p_rowKey));
                 TableResult res = table.Execute(retrieveOperation);
                 if (parseHttpStatus(res.HttpStatusCode) && res.Result != null)
                 {
@@ -733,30 +783,24 @@ namespace PMap.Common.Azure
         /// 
 
 
-        public ObservableCollection<T> RetrieveList<T>()
+        public List<T> RetrieveList<T>()
         {
             int Total = 0;
             return RetrieveList<T>("", "", out Total);
         }
 
-
-        public ObservableCollection<T> RetrieveList<T>(string p_where)
+        public List<T> RetrieveList<T>(string p_where)
         {
             int Total = 0;
             return RetrieveList<T>(p_where, "", out Total);
         }
 
-        public ObservableCollection<T> RetrieveList<T>(string p_where, out int Total)
+        public List<T> RetrieveList<T>(string p_where, out int Total)
         {
             return RetrieveList<T>(p_where, "", out Total);
         }
-        public ObservableCollection<T> RetrieveList<T>(string p_where, string p_orderBy)
-        {
-            int Total = 0;
-            return RetrieveList<T>(p_where, p_orderBy, out Total);
-        }
 
-        public ObservableCollection<T> RetrieveList<T>(string p_where, string p_orderBy, out int Total, int pageSize = 0, int page = 1)
+        public List<T> RetrieveList<T>(string p_where, string p_orderBy, out int Total, int pageSize = 0, int page = 1)
         {
             List<T> lstResult = new List<T>();
             try
@@ -769,7 +813,7 @@ namespace PMap.Common.Azure
                 TableQuery<DynamicTableEntity> query;
                 if (p_where != "")
                 {
-                    p_where = FixTableStorageWhere(p_where);
+                    p_where = FixTableStorageWhere<T>(p_where);
                     query = new TableQuery<DynamicTableEntity>().Where(p_where);
                 }
                 else
@@ -795,30 +839,32 @@ namespace PMap.Common.Azure
                         lstResult = lstResult.OrderBy(x => x.GetType().GetProperty(ordering[0]).GetValue(x, null)).ToList();
                 }
                 Total = lstResult.Count;
-                if(pageSize > 0)
+                if (pageSize > 0)
                 {
-                    lstResult = lstResult.Skip((page-1)*pageSize).Take(pageSize).ToList();
+                    lstResult = lstResult.Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 }
             }
             catch (StorageException sex)
             {
-                throw sex;
+                throw new Exception(GetStorageExceptionMessage(sex));
             }
             catch (Exception ex)
             {
                 throw;
             }
-            return new ObservableCollection<T>(lstResult);
+            return lstResult;
         }
+
+
 
         public ObservableCollection<T> RetrieveObservableList<T>(out int Total)
         {
-            return RetrieveObservableList<T>("", "", out Total);
+            return RetrieveObservableList<T>(out Total);
         }
 
         public ObservableCollection<T> RetrieveObservableList<T>(string p_where, out int Total)
         {
-            return RetrieveObservableList<T>(p_where, "", out Total);
+            return RetrieveObservableList<T>(p_where, out Total);
         }
         public ObservableCollection<T> RetrieveObservableList<T>(string p_where, string p_orderBy, out int Total, int pageSize = 0)
         {
@@ -827,9 +873,15 @@ namespace PMap.Common.Azure
                 return new ObservableCollection<T>(res);
             return null;
         }
+        public ObservableCollection<T> RetrieveObservableList<T>(string p_where, string p_orderBy, out int Total, int pageSize = 0, int page=1)
+        {
+            var res = RetrieveList<T>(p_where, p_orderBy, out Total, pageSize, page);
+            if (res != null)
+                return new ObservableCollection<T>(res);
+            return null;
+        }
 
-
-        public ObservableCollection<T> RetrieveRange<T>(List<AzureItemKeys> p_itemKeys)
+        public List<T> RetrieveRange<T>(List<AzureItemKeys> p_itemKeys)
         {
             List<T> result = new List<T>();
             try
@@ -908,14 +960,14 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
-                throw sex;
+                throw new Exception(GetStorageExceptionMessage(sex));
                 //                return false;
             }
             catch (Exception ex)
             {
                 throw;
             }
-            return new ObservableCollection<T>(result);
+            return result;
         }
 
 
@@ -925,7 +977,7 @@ namespace PMap.Common.Azure
             return "datetime'" + p_dt.ToString("yyyy-MM-ddTHH:mm:ss") + "'";
         }
 
-        private static string FixTableStorageWhere(string p_where)
+        private static string FixTableStorageWhere<T>(string p_where)
         {
             if (p_where.Contains("datetime"))
             {
@@ -940,6 +992,14 @@ namespace PMap.Common.Azure
             }
 
             return p_where;
+        }
+
+        private static string GetStorageExceptionMessage(StorageException p_sex)
+        {
+            var requestInformation = p_sex.RequestInformation;
+            var information = requestInformation.ExtendedErrorInformation;
+            var errorCode = information.ErrorCode;
+            return String.Format("({0}) {1}", errorCode, information.ErrorMessage);
         }
     }
 }
