@@ -33,7 +33,7 @@ namespace PMAdmin
         {
             InitializeComponent();
             this.DataContext = m_dataContext;
-            m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>("","AppInstance");
+            m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveObservableList<PMapLicence>("","AppInstance");
             m_dataContext.SelLicence = m_dataContext.PMapLicenceList.FirstOrDefault();
             m_dataContext.DateS = DateTime.Now.AddDays(-7).Date;
             m_dataContext.DateE = DateTime.Now.Date;
@@ -79,7 +79,7 @@ namespace PMAdmin
                 string fltINSTANCE = TableQuery.GenerateFilterCondition("AppInstance", QueryComparisons.Equal, m_dataContext.SelLicence.AppInstance);
                 string fltType = TableQuery.GenerateFilterCondition("Type", QueryComparisons.Equal, m_dataContext.SelType);
 
-                m_dataContext.PMapLogList = AzureTableStore.Instance.RetrieveList<PMapLog>(fltDateS + " and " + fltDateE + " and " + fltINSTANCE + (m_dataContext.SelType == "" ? "" : "and " + fltType), "PMapTimestamp");
+                m_dataContext.PMapLogList = AzureTableStore.Instance.RetrieveObservableList<PMapLog>(fltDateS + " and " + fltDateE + " and " + fltINSTANCE + (m_dataContext.SelType == "" ? "" : "and " + fltType), "PMapTimestamp");
                 m_dataContext.SelLog = new PMapLog();
                 dgrLog.SelectedItem = null;
                 m_dataContext.Dirty = false;

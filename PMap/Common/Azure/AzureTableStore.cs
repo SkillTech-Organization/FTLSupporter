@@ -799,7 +799,11 @@ namespace PMap.Common.Azure
         {
             return RetrieveList<T>(p_where, "", out Total);
         }
-
+        public List<T> RetrieveList<T>(string p_where, string p_orderBy)
+        {
+            int Total = 0;
+            return RetrieveList<T>(p_where, p_orderBy, out Total);
+        }
         public List<T> RetrieveList<T>(string p_where, string p_orderBy, out int Total, int pageSize = 0, int page = 1)
         {
             List<T> lstResult = new List<T>();
@@ -866,6 +870,12 @@ namespace PMap.Common.Azure
         {
             return RetrieveObservableList<T>(p_where, out Total);
         }
+        public ObservableCollection<T> RetrieveObservableList<T>(string p_where, string p_orderBy)
+        {
+            int Total = 0;
+            return RetrieveObservableList<T>(p_where, p_orderBy, out Total, 0);
+        }
+
         public ObservableCollection<T> RetrieveObservableList<T>(string p_where, string p_orderBy, out int Total, int pageSize = 0)
         {
             var res = RetrieveList<T>(p_where, p_orderBy, out Total, pageSize);

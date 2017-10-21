@@ -39,7 +39,7 @@ namespace PMap.Common.Azure
             return AzureTableStore.Instance.Modify(p_obj, User);
         }
 
-        //CUD functions
+        //CRUD functions
         public virtual void MaintainItem(T p_obj)
         {
             switch (p_obj.State)
@@ -62,7 +62,7 @@ namespace PMap.Common.Azure
             }
         }
 
-
+   
         public virtual bool Delete(T p_obj)
         {
             return AzureTableStore.Instance.Delete(p_obj);

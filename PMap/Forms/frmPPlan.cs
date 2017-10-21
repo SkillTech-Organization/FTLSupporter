@@ -805,21 +805,31 @@ namespace PMap.Forms
         {
             if (UI.Confirm(PMapMessages.Q_PEDIT_UPLOAD))
             {
-                var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID);
-
-                BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
-                BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
-
-                AzureTableStore.Instance.DeleteTable("PMTour");
-                AzureTableStore.Instance.DeleteTable("PMMapPoint");
-
-                foreach (var xTr in tourList)
+                try
                 {
-                    bllWebTrace.MaintainItem(xTr);
-                    foreach (var xTp in xTr.TourPoints)
+                    using (new WaitCursor())
                     {
-                        bllWebTraceTourPoint.MaintainItem(xTp);
+                        var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID);
+
+                        BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+                        BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
+
+                        AzureTableStore.Instance.DeleteTable("PMTour");
+                        AzureTableStore.Instance.DeleteTable("PMTourPoint");
+
+                        foreach (var xTr in tourList)
+                        {
+                            bllWebTrace.MaintainItem(xTr);
+                            AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
+
+                        }
                     }
+                    UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
+                }
+                catch (Exception ex)
+                {
+                    UI.Error(ex.Message);
+    //                throw;
                 }
             }
         }

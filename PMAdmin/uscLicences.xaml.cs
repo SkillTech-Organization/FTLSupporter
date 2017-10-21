@@ -48,7 +48,7 @@ namespace PMAdmin
         {
             using (new WaitCursor())
             {
-                m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveList<PMapLicence>("", "AppInstance");
+                m_dataContext.PMapLicenceList = AzureTableStore.Instance.RetrieveObservableList<PMapLicence>("", "AppInstance");
                 m_dataContext.SelectedItem = null;
                 m_dataContext.EditedItem = null;
             }
