@@ -38,6 +38,11 @@ namespace PMap
         public const string iniParseLog = "ParseLog";
         public const string iniALog = "ALog";
 
+        public const string iniWeb = "Web";
+        public const string iniAzureAccount = "AzureAccount";
+        public const string iniAzureKey = "AzureKey";
+
+
         public const string iniPriority = "Priority";
         public const string iniInitRouteDataProcess = "InitRouteDataProcess";
         public const string iniCalcPMapRoutesByPlan = "CalcPMapRoutesByPlan";

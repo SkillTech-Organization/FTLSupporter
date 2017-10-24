@@ -49,8 +49,9 @@ namespace PMap.Common
         public bool ParseLog { get; private set; }
         public bool ALog { get; private set; }
 
+        public string AzureAccount { get; private set; }
+        public string AzureKey { get; private set; }
 
-    
         public ThreadPriority InitRouteDataProcess { get; private set; }
         public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
         public ThreadPriority CalcPMapRoutesByOrders { get; private set; }
@@ -194,6 +195,11 @@ namespace PMap.Common
 
             string sALog = ini.ReadString(Global.iniPMap, Global.iniALog);
             ALog = (sALog == "1" || sALog.ToLower() == "true");
+
+
+            AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
+            AzureKey = ini.ReadString(Global.iniWeb, Global.iniAzureKey);
+
 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")

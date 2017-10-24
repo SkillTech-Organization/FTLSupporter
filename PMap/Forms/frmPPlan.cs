@@ -384,6 +384,7 @@ namespace PMap.Forms
 
                 //befrissítjük a túra és túrapont grideket (a layout betöltéssel megváltozott a rendezettség)
                 m_pnlPPlanTours.RefreshPanel(new PlanEventArgs(ePlanEventMode.FirstTour));
+                btnToCloud.Visible = PMapIniParams.Instance.AzureAccount != "";
             }
             catch (Exception e)
             {
@@ -805,15 +806,27 @@ namespace PMap.Forms
         {
             if (UI.Confirm(PMapMessages.Q_PEDIT_UPLOAD))
             {
+
+                string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
+                string oriAzureKey = AzureTableStore.Instance.AzureKey;
+
                 try
                 {
                     using (new WaitCursor())
                     {
                         var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID);
 
+
+                        //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
+                        //connect stringet tudjon kezelni
+                        //
+                        AzureTableStore.Instance.AzureAccount = PMapIniParams.Instance.AzureAccount;
+                        AzureTableStore.Instance.AzureKey = PMapIniParams.Instance.AzureKey;
+
+
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                         BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
-
+                  
                         AzureTableStore.Instance.DeleteTable("PMTour");
                         AzureTableStore.Instance.DeleteTable("PMTourPoint");
 
@@ -830,6 +843,12 @@ namespace PMap.Forms
                 {
                     UI.Error(ex.Message);
     //                throw;
+                }
+                finally
+                {
+                    AzureTableStore.Instance.AzureAccount = oriAzureAccount;
+                    AzureTableStore.Instance.AzureKey = oriAzureKey;
+
                 }
             }
         }
