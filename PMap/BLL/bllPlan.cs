@@ -256,7 +256,7 @@ namespace PMap.BLL
 
             string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME " + Environment.NewLine +
+                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME, " + Environment.NewLine +
                           "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK  " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +

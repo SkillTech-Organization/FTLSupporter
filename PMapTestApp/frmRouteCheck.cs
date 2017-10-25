@@ -170,6 +170,8 @@ namespace PMapTestApp
             cmbRST_ID_LIST.Enabled = numToNOD_ID.Value > 0 && numFromNOD_ID.Value > 0 && m_routes != null && m_routes.Count > 0;
 
             m_boundaryLayer.Polygons.Clear();
+            m_boundNodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
+
             if (chkBoundary.Checked && m_boundNodes.Count > 0)
             {
                 List<int> nodes = new int[] { Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value) }.ToList();
@@ -624,10 +626,6 @@ namespace PMapTestApp
 
             }
         }
-        private void chkBoundary_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateControls();
-        }
 
         private void txtDierctRoute_TextChanged(object sender, EventArgs e)
         {
@@ -759,7 +757,7 @@ namespace PMapTestApp
         {
 
             setFromToMap();
-     //       setToToMap();
+            setToToMap();
         }
 
         private void ckhShowMarkers_CheckedChanged(object sender, EventArgs e)
@@ -790,6 +788,10 @@ namespace PMapTestApp
 
         }
 
-    
+        private void chkBoundary_CheckedChanged_1(object sender, EventArgs e)
+        {
+            UpdateControls();
+
+        }
     }
 }

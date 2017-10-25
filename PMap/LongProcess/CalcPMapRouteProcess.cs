@@ -97,6 +97,9 @@ namespace PMap.LongProcess
                 DateTime dtStartX2 = DateTime.Now;
 
                 var lstCalcNodes = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
+                Random random = new Random();
+                int flushcnt = random.Next(9000, 12000);
+
 
                 List<boRoute> results = new List<boRoute>();
                 foreach (var calcNode in lstCalcNodes.AsEnumerable())
@@ -120,7 +123,7 @@ namespace PMap.LongProcess
                     //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!
                     //m_bllRoute.WriteRoutes(results, m_savePoints);
 
-                    if (results.Count() >= 10000)
+                    if (results.Count() >= flushcnt)
                     {
                         ProcessForm.SetInfoText("Kiírás...");
                         m_bllRoute.WriteRoutesBulk(results, m_savePoints);

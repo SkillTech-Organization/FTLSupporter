@@ -1392,18 +1392,18 @@ namespace PMap.Forms.Panels.frmPPlan
                         m_PPlanCommonVars.FocusedPoint.Marker != null &&
                         m_PPlanCommonVars.FocusedPoint.Marker.Position == item.Position)
                     {
-                        sToolTipText = ">>>" + m_PPlanCommonVars.FocusedPoint.ToolTipText;
+                        sToolTipText = ">>>" + m_PPlanCommonVars.FocusedPoint.ToolTipText.Replace("\\n", "\n");
                     }
 
                     if (m_PPlanCommonVars.FocusedUnplannedOrder != null &&
                         m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
                         m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position == item.Position)
                     {
-                        sToolTipText = ">>>" + m_PPlanCommonVars.FocusedUnplannedOrder.ToolTipText;
+                        sToolTipText = ">>>" + m_PPlanCommonVars.FocusedUnplannedOrder.ToolTipText.Replace("\\n", "\n");
                     }
                     if (m_EditedTourPoint != null && m_EditedTourPoint.Marker != null && m_EditedTourPoint.Marker.Position == item.Position)
                     {
-                        sToolTipText = ">>>" + m_EditedTourPoint.ToolTipText;
+                        sToolTipText = ">>>" + m_EditedTourPoint.ToolTipText.Replace("\\n", "\n");
                     }
 
 
@@ -1421,8 +1421,6 @@ namespace PMap.Forms.Panels.frmPPlan
                                     {
                                         if (!sToolTipText.Contains(rTourPoint.ToolTipText))
                                         {
-                                            if (sToolTipText != "")
-                                                sToolTipText += "\n\n";
                                             sToolTipText += rTourPoint.ToolTipText;
                                             sToolTipText = sToolTipText.Replace("\\n", "\n");
                                         }
