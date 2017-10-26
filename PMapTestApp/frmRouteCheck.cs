@@ -425,16 +425,16 @@ namespace PMapTestApp
                     rp.Weight = (int)numWeigtht.Value;
                 }
 
-                Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
-                Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
-                RouteData.Instance.getNeigboursByBound(lstRoutePars, out NeighborsFull, out NeighborsCut, boundary);
+                Dictionary<string, List<int>[]> NeighborsFull = null;
+                Dictionary<string, List<int>[]> NeighborsCut = null;
+                RouteData.Instance.getNeigboursByBound(lstRoutePars, ref NeighborsFull, ref NeighborsCut, boundary);
 
                 //összes RZN_ID_LIST-ra elkérjük az útvonalakat
                 m_routes.Clear();
                 foreach (var routePar in lstRoutePars)
                 {
                     boRoute result = provider.GetRoute(Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value), routePar,
-                        NeighborsFull[routePar], NeighborsCut[routePar],
+                        NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
                         rdShortestPath.Checked ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
                     m_routes.Add(routePar, result);
                 }

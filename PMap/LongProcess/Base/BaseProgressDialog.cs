@@ -79,6 +79,7 @@ namespace PMap.LongProcess.Base
         public void _stopProcess(BaseLongProcess p_LongProcess)
         {
             p_LongProcess.Stop();
+            
             m_LongProcessList.Remove(p_LongProcess);
             if (m_LongProcessList.Count == 0)
             {

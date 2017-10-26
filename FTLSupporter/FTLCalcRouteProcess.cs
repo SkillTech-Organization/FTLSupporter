@@ -42,7 +42,7 @@ namespace FTLSupporter
         {
             try
             {
-                Completed = true;
+                Completed = false;
 
                 int i = 0;
                 DateTime dtStart = DateTime.Now;
@@ -64,12 +64,12 @@ namespace FTLSupporter
                 boundary = m_bllRoute.getBoundary(allNodes);
 
  
-                Dictionary<CRoutePars, List<int>[]> NeighborsArrFull = null;
-                Dictionary<CRoutePars, List<int>[]> NeighborsArrCut = null;
+                Dictionary<string, List<int>[]> NeighborsArrFull = null;
+                Dictionary<string, List<int>[]> NeighborsArrCut = null;
                 List<CRoutePars> routePars = m_lstRoutes.GroupBy(g => new { g.RZN_ID_LIST, g.GVWR, g.Height, g.Width })
                       .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.GVWR, Height = s.Key.Height, Width = s.Key.Width }).ToList();
 
-                RouteData.Instance.getNeigboursByBound(routePars, out NeighborsArrFull, out NeighborsArrCut, boundary);
+                RouteData.Instance.getNeigboursByBound(routePars, ref NeighborsArrFull, ref NeighborsArrCut, boundary);
 
                 var lstCalcNodes = m_lstRoutes.GroupBy(gr => new { gr.fromNOD_ID, gr.RZN_ID_LIST, gr.GVWR, gr.Height, gr.Width }).ToDictionary(gr => gr.Key, gr => gr.Select(x => x.toNOD_ID).ToList());
 
@@ -87,7 +87,7 @@ namespace FTLSupporter
 
                     List<int> lstToNodes = calcNode.Value;
                     List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.fromNOD_ID, lstToNodes,
-                                            NeighborsArrFull[routePar], NeighborsArrCut[routePar],
+                                            NeighborsArrFull[routePar.Hash], NeighborsArrCut[routePar.Hash],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 
                     //A kiszámolt eredmények 'bedolgozása'

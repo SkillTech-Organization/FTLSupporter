@@ -108,31 +108,14 @@ namespace PMapTestApp
 
         private void button8_Click(object sender, EventArgs e)
         {
-            try
+            PMapIniParams.Instance.ReadParams("", dbConf);
+
+            dlgSelPlan d = new dlgSelPlan();
+
+
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                PMapIniParams.Instance.ReadParams("", dbConf);
-                //              (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 1724, true);
-                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, 754, true);
-
-                dlgSelPlan d = new dlgSelPlan();
-                if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    SQLServerAccess db = new SQLServerAccess();
-                    db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-                    //db.ExecuteNonQuery("truncate table DST_DISTANCE");
-                    //db.ExecuteNonQuery("delete DST_DISTANCE where NOD_ID_FROM = 13 or NOD_ID_TO = 13");
-                    db.Close();
-
-                    (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, d.m_PLN_ID, true);
-                }
-
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error occurred: " + ex.Message);
-                return;
+                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, d.m_PLN_ID, true);
             }
 
         }

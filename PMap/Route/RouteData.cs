@@ -220,9 +220,9 @@ namespace PMap.Route
             }
         }
 
-        public void getNeigboursByBound(CRoutePars p_RoutePar, out Dictionary<CRoutePars, List<int>[]> o_neighborsFull, out Dictionary<CRoutePars, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
+        public void getNeigboursByBound(CRoutePars p_RoutePar, ref Dictionary<string, List<int>[]> o_neighborsFull, ref Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
         {
-            getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), out o_neighborsFull, out o_neighborsCut, p_cutBoundary);
+            getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), ref o_neighborsFull, ref o_neighborsCut, p_cutBoundary);
         }
 
         /// <summary>
@@ -231,11 +231,11 @@ namespace PMap.Route
         /// <param name="p_boundary"></param>
         /// <param name="aRZN_ID_LIST">Behajtásiövezet-lista</param>
         /// <returns></returns>
-        public void getNeigboursByBound(List<CRoutePars> p_RoutePars, out Dictionary<CRoutePars, List<int>[]> o_neighborsFull, out Dictionary<CRoutePars, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
+        public void getNeigboursByBound(List<CRoutePars> p_RoutePars, ref Dictionary<string, List<int>[]> o_neighborsFull, ref Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
         {
             DateTime dtStart = DateTime.Now;
-            o_neighborsFull = new Dictionary<CRoutePars, List<int>[]>();    //csomópont szomszédok korlátozás-route paraméterenként
-            o_neighborsCut = new Dictionary<CRoutePars, List<int>[]>();     //csomópont szomszédok korlátozás-route paraméterenként (vágott térkép)
+            o_neighborsFull = new Dictionary<string, List<int>[]>();    //csomópont szomszédok korlátozás-route paraméterenként
+            o_neighborsCut = new Dictionary<string, List<int>[]>();     //csomópont szomszédok korlátozás-route paraméterenként (vágott térkép)
 
             //Térkép készítése minden behajtásiövezet-listára. Csak akkora méretű térképet használunk,
             //amelybe beleférnek (kis ráhagyással persze) a lerakók.
@@ -270,8 +270,8 @@ namespace PMap.Route
                 }
 
                 Console.WriteLine("CRoutePars:" + routePar.ToString() + " edgcnt:" + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
-                o_neighborsFull.Add(routePar, neighboursFull);
-                o_neighborsCut.Add(routePar, neighboursCut);
+                o_neighborsFull.Add(routePar.Hash, neighboursFull);
+                o_neighborsCut.Add(routePar.Hash, neighboursCut);
 
             }
             Console.WriteLine("getNeigboursByBound " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());

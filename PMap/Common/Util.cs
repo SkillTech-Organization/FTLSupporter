@@ -982,6 +982,26 @@ namespace PMap.Common
             for (int i = 0; i < str.Length; i += maxChunkSize)
                 yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
         }
+
+        private static string HexStringFromBytes(byte[] bytes)
+        {
+            var sb = new StringBuilder();
+            foreach (byte b in bytes)
+            {
+                var hex = b.ToString("x2");
+                sb.Append(hex);
+            }
+            return sb.ToString();
+        }
+
+        public static string GenerateHashCode(string decodeString)
+        {
+            System.Security.Cryptography.SHA1 hash = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            var h2 = hash.ComputeHash(Encoding.Unicode.GetBytes(decodeString));
+            var hh = HexStringFromBytes(h2);
+            return hh;
+        }
+
     }
 }
 

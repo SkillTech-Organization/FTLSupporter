@@ -55,13 +55,13 @@ namespace Map.LongProcess
             boundary = m_bllRoute.getBoundary(nodes);
 
 
-            Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
-            Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
+            Dictionary<string, List<int>[]> NeighborsFull = null;
+            Dictionary<string, List<int>[]> NeighborsCut = null;
 
             boTruck Truck = RouteVisCommonVars.Instance.Truck;
             var routePar = new CRoutePars() { RZN_ID_LIST = Truck.RZN_ID_LIST, Weight = Truck.TRK_WEIGHT, Height = Truck.TRK_XHEIGHT, Width = Truck.TRK_XWIDTH };
 
-            RouteData.Instance.getNeigboursByBound(routePar, out  NeighborsFull, out NeighborsCut, boundary);
+            RouteData.Instance.getNeigboursByBound(routePar, ref  NeighborsFull, ref NeighborsCut, boundary);
 
             PMapRoutingProvider provider = new PMapRoutingProvider();
 
@@ -83,7 +83,7 @@ namespace Map.LongProcess
 
                     //Legrövidebb út
                     boRoute routeS = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, routePar,
-                                    NeighborsFull[routePar], NeighborsCut[routePar],
+                                    NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
                                     ECalcMode.ShortestPath);
                     if (routeS != null)
                     {
@@ -96,7 +96,7 @@ namespace Map.LongProcess
 
                     //Leggyorsabb út
                     boRoute routeF = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, routePar,
-                                    NeighborsFull[routePar], NeighborsCut[routePar],
+                                    NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
                                     ECalcMode.FastestPath);
 
                     if (routeF != null)

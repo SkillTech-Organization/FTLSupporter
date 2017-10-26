@@ -25,6 +25,7 @@ using PMap.BO.DataXChange;
 using PMap.Common.Parse;
 using PMap.Licence;
 using PMap.Localize;
+using System.Diagnostics;
 
 namespace VBInterface
 {
@@ -404,6 +405,10 @@ namespace VBInterface
             string sRetStatus = retOK;
             DateTime dt = DateTime.Now;
 
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                return retErr;
+
             Thread thWaitMessage = new Thread(new ThreadStart(waitMessageThread));
             thWaitMessage.SetApartmentState(ApartmentState.STA);
             try
@@ -418,9 +423,6 @@ namespace VBInterface
                             if (thWaitMessage.IsAlive)
                                 thWaitMessage.Abort();
 
-                            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-                            if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
-                                return retErr;
 
                             //logVersion();
                             Util.Log2File(">>START:CalcPMapRoutesByPlan( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_PLN_ID=" + p_PLN_ID.ToString() + ")");
@@ -470,12 +472,12 @@ namespace VBInterface
                 return true;
 
             bool bOK = false;
-
             if (PMapIniParams.Instance.RouteThreadNum > 1)
                 bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, p_savePoints);
             else
                 bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, p_savePoints);
 
+            System.GC.Collect();
             return bOK;
         }
 
@@ -1179,8 +1181,8 @@ namespace VBInterface
                     }
 
 
-                    Dictionary<CRoutePars, List<int>[]> NeighborsFull = null;
-                    Dictionary<CRoutePars, List<int>[]> NeighborsCut = null;
+                    Dictionary<string, List<int>[]> NeighborsFull = null;
+                    Dictionary<string, List<int>[]> NeighborsCut = null;
                     RectLatLng boundary = route.getBoundary(itemRes.fromLat, itemRes.fromLng, itemRes.toLat, itemRes.toLng);
 
                     if (sRZN_ID_LIST != "")
@@ -1189,11 +1191,11 @@ namespace VBInterface
                     var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = 0, Height = 0, Width = 0};
                     
                     //A menetlevél ellenőrzés nem használ súly- és méretkorlátozásokat !
-                    RouteData.Instance.getNeigboursByBound(routePar, out NeighborsFull, out NeighborsCut, boundary);
+                    RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary);
 
 
                     boRoute result = provider.GetRoute( fromNOD_ID, toNOD_ID, routePar,
-                        NeighborsFull[routePar], NeighborsCut[routePar],
+                        NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
                          PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
 
 

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using PMap;
+using System.Diagnostics;
+using PMap.Common;
 
 namespace PMap.LongProcess.Base
 {
@@ -168,6 +170,15 @@ namespace PMap.LongProcess.Base
                     }
                     Application.DoEvents();
                 }
+                if (m_WorkingThread != null)
+                {
+                    m_WorkingThread.Abort();
+                    m_WorkingThread = null;
+                }
+                System.GC.Collect();
+
+                Process proc = Process.GetCurrentProcess();
+                Util.Log2File("After killed thread:" + proc.PrivateMemorySize64.ToString());
             }
         }
 

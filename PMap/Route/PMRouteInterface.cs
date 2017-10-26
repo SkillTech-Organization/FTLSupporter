@@ -29,10 +29,10 @@ namespace PMap.Route
         public static void StartPMRouteInitProcess()
         {
             DateTime dtStart = DateTime.Now;
-/* 
-            PMapIniParams.Instance.ReadParams("", "DB0");
-            ChkLic.Check(PMapIniParams.Instance.IDFile);
-*/
+            /* 
+                        PMapIniParams.Instance.ReadParams("", "DB0");
+                        ChkLic.Check(PMapIniParams.Instance.IDFile);
+            */
             try
             {
 
@@ -56,7 +56,7 @@ namespace PMap.Route
         /// <param name="p_ThreadPriority"></param>
         /// <param name="p_NotifyForm"></param>
         /// <returns></returns>
-        public static bool GetPMapRoutesSingle(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm,  bool p_savePoints)
+        public static bool GetPMapRoutesSingle(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
         {
             bool bCompleted = false;
             DateTime dtStart = DateTime.Now;
@@ -64,73 +64,78 @@ namespace PMap.Route
 
 
             Util.Log2File("GetPMapRoutes SingleThread START " + Util.GetSysInfo());
-/* EZ NEM KELL 
+            /* EZ NEM KELL 
 
-                        PMapIniParams.Instance.ReadParams("", "DB0");
-                        ChkLic.Check(PMapIniParams.Instance.IDFile);
-*/
-                        try
-                        {
+                                    PMapIniParams.Instance.ReadParams("", "DB0");
+                                    ChkLic.Check(PMapIniParams.Instance.IDFile);
+            */
+            try
+            {
 
-                            string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_TH, p_CalcInfo);
-                            CalcPMapRouteProcess cpp = null;
-                            BaseSilngleProgressDialog pd = null;
-                            ProcessNotifyIcon ni = null;
+                string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_TH, p_CalcInfo);
+                CalcPMapRouteProcess cpp = null;
+                BaseSilngleProgressDialog pd = null;
+                ProcessNotifyIcon ni = null;
 
-                            if (p_NotifyForm)
-                            {
-                                pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).Count() - 1, sTitle, true);
-                                cpp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
-                            }
-                            else
-                            {
-                                ni = new ProcessNotifyIcon();
-                                cpp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
-                            }
+                if (p_NotifyForm)
+                {
+                    //p_CalcDistances = p_CalcDistances.Where(w => w.NOD_ID_FROM == 22613 && w.NOD_ID_TO == 25486).ToList();
 
-
-                            if (p_NotifyForm)
-                            {
-                                cpp.Run();
-                                pd.ShowDialog();
-                            }
-                            else
-                            {
-                                cpp.RunWait();
-                            }
+                    pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).Count() - 1, sTitle, true);
+                    cpp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
+                }
+                else
+                {
+                    ni = new ProcessNotifyIcon();
+                    cpp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
+                }
 
 
-                            bCompleted = cpp.Completed;
-
-                        }
-                        catch (Exception e)
-                        {
-                            throw;
-                        }
-                        tspDiff = DateTime.Now - dtStart;
-                        Util.Log2File("GetPMapRoutes SingleThread END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
-                        return bCompleted;
-                    }
-
-
-                    /// <summary>
-                    /// Útvonalszámítás több szálon
-                    /// </summary>
-                    /// <param name="p_CalcNodes"></param>
-                    /// <param name="p_boundary"></param>
-                    /// <param name="p_CalcInfo"></param>
-                    /// <param name="p_ThreadPriority"></param>
-                    /// <param name="p_NotifyForm"></param>
-                    /// <returns></returns>
-                    public static bool GetPMapRoutesMulti(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
-                    {
-                        bool bCompleted = true;
-
-                        DateTime dtStart = DateTime.Now;
-                        TimeSpan tspDiff;
+                if (p_NotifyForm)
+                {
+                    cpp.Run();
+                    pd.ShowDialog();
+                    pd = null;
+                }
+                else
+                {
+                    cpp.RunWait();
+                    ni = null;
+                }
 
 
-                        Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
+                bCompleted = cpp.Completed;
+                cpp = null;
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            tspDiff = DateTime.Now - dtStart;
+            Util.Log2File("GetPMapRoutes SingleThread END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
+            return bCompleted;
+        }
+
+
+        /// <summary>
+        /// Útvonalszámítás több szálon
+        /// </summary>
+        /// <param name="p_CalcNodes"></param>
+        /// <param name="p_boundary"></param>
+        /// <param name="p_CalcInfo"></param>
+        /// <param name="p_ThreadPriority"></param>
+        /// <param name="p_NotifyForm"></param>
+        /// <returns></returns>
+        public static bool GetPMapRoutesMulti(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
+        {
+            bool bCompleted = true;
+
+            DateTime dtStart = DateTime.Now;
+            TimeSpan tspDiff;
+
+
+            Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
             /* EZ NEM KELL 
                         PMapIniParams.Instance.ReadParams("", "DB0");
                         ChkLic.Check(PMapIniParams.Instance.IDFile);
@@ -155,7 +160,7 @@ namespace PMap.Route
                 foreach (boRoute citem in p_CalcDistances)
                 {
                     calcDistances[cidx].Add(citem);
-                    
+
                     if (lastNODE_FROM_ID != citem.NOD_ID_FROM)
                     {
                         lastNODE_FROM_ID = citem.NOD_ID_FROM;

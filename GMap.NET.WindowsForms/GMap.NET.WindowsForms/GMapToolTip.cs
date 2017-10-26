@@ -42,15 +42,16 @@ namespace GMap.NET.WindowsForms
       /// </summary>
       [NonSerialized]
 #if !PocketPC
-      public Font Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold, GraphicsUnit.Pixel);
+ //       public Font Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold, GraphicsUnit.Pixel);
+        public Font Font = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Regular, GraphicsUnit.Pixel);
 #else
       public Font Font = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Bold);
 #endif
 
-      /// <summary>
-      /// specifies how the outline is painted
-      /// </summary>
-      [NonSerialized]
+        /// <summary>
+        /// specifies how the outline is painted
+        /// </summary>
+        [NonSerialized]
 #if !PocketPC
       public Pen Stroke = new Pen(Color.FromArgb(140, Color.MidnightBlue));
 #else

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PMap.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,17 @@ namespace PMap.Route
         {
             return string.Format("{0}_{1}_{2}_{3}", this.RZN_ID_LIST, this.Weight, this.Height, this.Width).GetHashCode();
         }
+
+
+        public string Hash
+        {
+            get
+            {
+                return Util.GenerateHashCode(
+                   string.Format("{0}_{1}_{2}_{3}", this.RZN_ID_LIST, this.Weight, this.Height, this.Width));
+            }
+        }
+
     }
 
 }

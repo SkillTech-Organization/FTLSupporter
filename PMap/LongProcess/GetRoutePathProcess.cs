@@ -126,8 +126,8 @@ namespace PMap.LongProcess
                     PointLatLng start = new PointLatLng(p_tour.TourPoints[i].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i].NOD_XPOS / Global.LatLngDivider);
                     PointLatLng end = new PointLatLng(p_tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
 
-                    Dictionary<CRoutePars, List<int>[]> neighborsFull = null;
-                    Dictionary<CRoutePars, List<int>[]> neighborsCut = null;
+                    Dictionary<string, List<int>[]> neighborsFull = null;
+                    Dictionary<string, List<int>[]> neighborsCut = null;
 
                     MapRoute result = null;
                     if (p_tour.TourPoints[i].NOD_ID != p_tour.TourPoints[i + 1].NOD_ID)
@@ -145,11 +145,11 @@ namespace PMap.LongProcess
                                 RectLatLng boundary = new RectLatLng();
                                 List<int> nodes = new List<int>() { p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID };
                                 boundary = m_bllRoute.getBoundary(nodes);
-                                RouteData.Instance.getNeigboursByBound(routePar, out neighborsFull, out neighborsCut, boundary);
+                                RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary);
                             }
 
                             boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, routePar,
-                                neighborsFull[routePar], neighborsCut[routePar],
+                                neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
                                 PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                             result = routeInf.Route;
                             m_bllRoute.WriteOneRoute(routeInf);
