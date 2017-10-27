@@ -259,7 +259,7 @@ namespace PMapTestApp
                 this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
                 this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
                 UpdateControls();
-                UI.Message("Diff:"+ diff.ToString());
+           //     UI.Message("Diff:"+ diff.ToString());
 
             }
             else
@@ -649,6 +649,7 @@ namespace PMapTestApp
             using (new WaitCursor())
             {
                 ckhShowEdges.Checked = false;
+                PointLatLng p_pt = MarkerTo.Position;
 
                 RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
@@ -670,24 +671,25 @@ namespace PMapTestApp
 
                 //                   foreach (var edg in RouteData.Instance.Edges)
 
-                //                foreach (var edg in RouteData.Instance.Edges.Where(x => /* x.Value.EDG_MAXWEIGHT > 0 || */ x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
+                //                foreach (var edg in RouteData.Instance.Edges.Where(x =>  x.Value.EDG_MAXWEIGHT > 0 ||  x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
                 // foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.ID == 507536 && x.Value.EDG_LENGTH > 15000))
-                var p_pt = MarkerFrom.Position;
 
                 foreach (var edg in RouteData.Instance.Edges.Where(
-                            w => /* w.Value.ID == 507536 && */
-                                (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
+                                 w => (Math.Abs(w.Value.fromLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.fromLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway/2)))
+                     /*
+                foreach (var edg in RouteData.Instance.Edges.Where(
+                            w =>(Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
                                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
                                 ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) ||
                                 Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
                                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
                                 ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
-
-                                )
-                                )
-
+                                ))
+                 
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
+                */
                 {
+
                     var edge = edg.Value;
 
                     GMapMarker gm = null;
