@@ -217,12 +217,10 @@ namespace PMap.BLL
                 new SqlBulkCopy
                 (
                 DBA.Conn,
-                SqlBulkCopyOptions.TableLock |
-                SqlBulkCopyOptions.FireTriggers |
-                SqlBulkCopyOptions.UseInternalTransaction,
+                SqlBulkCopyOptions.TableLock,
                 null
                 );
-
+            bulkCopy.BulkCopyTimeout = PMapIniParams.Instance.DBCmdTimeOut;
             // set the destination table name
             bulkCopy.DestinationTableName = "DST_DISTANCE";
             bulkCopy.ColumnMappings.Add("NOD_ID_FROM", "NOD_ID_FROM");

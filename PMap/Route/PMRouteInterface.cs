@@ -187,7 +187,7 @@ namespace PMap.Route
 
 
                 List<CalcPMapRouteProcess> distList = new List<CalcPMapRouteProcess>();
-
+                List<CalcPMapRouteProcess> lstGdp = new List<CalcPMapRouteProcess>();
                 for (int i = 0; i < PMapIniParams.Instance.RouteThreadNum; i++)
                 {
                     CalcPMapRouteProcess gdp = null;
@@ -201,7 +201,7 @@ namespace PMap.Route
                         gdp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "#" + i.ToString() + "#", calcDistances[i], p_savePoints);
 
                     }
-
+                    lstGdp.Add(gdp);
                     gdp.Run();
 
                 }
@@ -211,7 +211,7 @@ namespace PMap.Route
                     pd.ShowDialog();
                 }
 
-                foreach (var x in distList)
+                foreach (var x in lstGdp)
                 {
                     bCompleted = bCompleted && x.Completed;
                 }

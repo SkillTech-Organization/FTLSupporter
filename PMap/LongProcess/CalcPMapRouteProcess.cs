@@ -42,7 +42,7 @@ namespace PMap.LongProcess
             m_CalcDistances = p_CalcDistances;
             m_Hint = p_Hint;
             m_DB = new SQLServerAccess();
-            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut );
             m_bllRoute = new bllRoute(m_DB);
             m_savePoints = p_savePoints;
             Completed = false;
@@ -60,7 +60,6 @@ namespace PMap.LongProcess
 
             m_savePoints = p_savePoints;
             Completed = false;
-
         }
 
         protected override void DoWork()
@@ -179,7 +178,6 @@ namespace PMap.LongProcess
                             ProcessForm.SetInfoText("Kiírás...");
                             m_bllRoute.WriteRoutesBulk(results, m_savePoints);
                             results = new List<boRoute>();
-                            Process proc2 = Process.GetCurrentProcess();
                             Util.Log2File("CalcPMapRouteProcess WriteRoutesBulk: " + GC.GetTotalMemory(false).ToString());
                         }
                         /*

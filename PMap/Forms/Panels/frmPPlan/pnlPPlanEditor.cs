@@ -983,6 +983,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     setEditedRoute(eroute);
                     gMapControl.Refresh();
                 }
+
                 UpdateControls();
             }
             catch (Exception ex)
@@ -1374,7 +1375,8 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             try
             {
-
+                boPlanTour tooltipedTour = null;
+                boPlanOrder tooltipedPlanOrder = null;
                 if (m_PPlanCommonVars.TooltipMode == MarkerTooltipMode.Always)
                 {
                     //Ha minden tooltipet megjelenítünk, akkor a kapott item első sora lesz megjelenítve a státuszsorban
@@ -1392,18 +1394,21 @@ namespace PMap.Forms.Panels.frmPPlan
                         m_PPlanCommonVars.FocusedPoint.Marker != null &&
                         m_PPlanCommonVars.FocusedPoint.Marker.Position == item.Position)
                     {
-                        sToolTipText = ">>>" + m_PPlanCommonVars.FocusedPoint.ToolTipText.Replace("\\n", "\n");
+                        sToolTipText = m_PPlanCommonVars.FocusedPoint.ToolTipText.Replace("\\n", "\n");
+                        tooltipedTour = m_PPlanCommonVars.FocusedPoint.Tour;
                     }
 
                     if (m_PPlanCommonVars.FocusedUnplannedOrder != null &&
                         m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
                         m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position == item.Position)
                     {
-                        sToolTipText = ">>>" + m_PPlanCommonVars.FocusedUnplannedOrder.ToolTipText.Replace("\\n", "\n");
+                        sToolTipText = m_PPlanCommonVars.FocusedUnplannedOrder.ToolTipText.Replace("\\n", "\n");
+                        tooltipedPlanOrder = m_PPlanCommonVars.FocusedUnplannedOrder;
                     }
                     if (m_EditedTourPoint != null && m_EditedTourPoint.Marker != null && m_EditedTourPoint.Marker.Position == item.Position)
                     {
-                        sToolTipText = ">>>" + m_EditedTourPoint.ToolTipText.Replace("\\n", "\n");
+                        sToolTipText = m_EditedTourPoint.ToolTipText.Replace("\\n", "\n");
+                        tooltipedTour = m_EditedTourPoint.Tour;
                     }
 
 
@@ -1421,9 +1426,13 @@ namespace PMap.Forms.Panels.frmPPlan
                                     {
                                         if (!sToolTipText.Contains(rTourPoint.ToolTipText))
                                         {
-                                            sToolTipText += "\n" + rTourPoint.ToolTipText;
+                                            if (sToolTipText != "" && sToolTipText.Last() != '\n')
+                                                sToolTipText += "\n";
+
+                                            sToolTipText +=  rTourPoint.ToolTipText;
                                             sToolTipText = sToolTipText.Replace("\\n", "\n");
                                         }
+                                        tooltipedTour = rTour;
                                     }
                                 }
                             }
@@ -1439,11 +1448,12 @@ namespace PMap.Forms.Panels.frmPPlan
                             {
                                 if (!sToolTipText.Contains(rup.ToolTipText))
                                 {
-                                    if (sToolTipText != "")
-                                        sToolTipText += "\n\n";
+                                    if (sToolTipText != "" && sToolTipText.Last() != '\n')
+                                        sToolTipText += "\n";
                                     sToolTipText += rup.ToolTipText;
                                     sToolTipText = sToolTipText.Replace("\\n", "\n");
                                 }
+                                tooltipedPlanOrder = rup;
                             }
                         }
                     }
@@ -1457,6 +1467,19 @@ namespace PMap.Forms.Panels.frmPPlan
                         lblToolTip.Text = aToolTipText[0];
 
                     m_ToolTipedMarker.ToolTipText = sToolTipText;
+                    
+                    //Hogy a tooltip legyen legfelül, az ahhoz tarozó layer-t meg kell emelni
+                    if (tooltipedPlanOrder != null)
+                    {
+                        gMapControl.Overlays.Remove(m_unplannedLayer);
+                        gMapControl.Overlays.Add(m_unplannedLayer);
+                    }
+                    if ( tooltipedTour != null)
+                    {
+                        gMapControl.Overlays.Remove(tooltipedTour.Layer);
+                        //A túrák layere mindig a tervezetlen túrák layer-e alatt van. Emiatt a gMapControl.Overlays.Count - 1
+                        gMapControl.Overlays.Add( tooltipedTour.Layer);
+                    }
 
                 }
                 else
@@ -1619,7 +1642,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 m_EditedUnplannedOrder = null;
 
                 gMapControl.Refresh();
-                statusStrip.BackColor = Color.BlanchedAlmond;
+                statusStrip.BackColor = Color.LightCoral;
 
                 if (p_notify)
                     DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.EditorMode));

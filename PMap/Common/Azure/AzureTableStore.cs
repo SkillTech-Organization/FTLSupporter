@@ -400,11 +400,20 @@ namespace PMap.Common.Azure
 
                 TableResult res = table.Execute(insertOperation);
                 bool bOK = parseHttpStatus(res.HttpStatusCode);
-                if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    mb.State = oriState;
+                    if (bOK)
+                    {
+                        mb.OriPartitionKey = dynObj.PartitionKey;
+                        mb.OriRowKey = dynObj.RowKey;
+                    }
+                    else
+                    {
+                        mb.State = oriState;
+                    }
                 }
+
 
                 return bOK;
             }
@@ -542,12 +551,19 @@ namespace PMap.Common.Azure
                 TableOperation modifyOperation = TableOperation.Replace(dynObj);
                 TableResult res = table.Execute(modifyOperation);
                 bool bOK = parseHttpStatus(res.HttpStatusCode);
-                if (!bOK && tp.IsSubclassOf(typeof(AzureTableObjBase)))
+                if (tp.IsSubclassOf(typeof(AzureTableObjBase)))
                 {
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
-                    mb.State = oriState;
+                    if (bOK)
+                    {
+                        mb.OriPartitionKey = dynObj.PartitionKey;
+                        mb.OriRowKey = dynObj.RowKey;
+                    }
+                    else
+                    {
+                        mb.State = oriState;
+                    }
                 }
-
                 return bOK;
 
             }

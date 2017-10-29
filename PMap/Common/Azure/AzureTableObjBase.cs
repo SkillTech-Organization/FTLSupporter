@@ -1,4 +1,5 @@
-﻿using PMap.Common.Attrib;
+﻿using Newtonsoft.Json;
+using PMap.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,12 +44,26 @@ namespace PMap.Common.Azure
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
             bool isDataMember = false;
-            var pi = this.GetType().GetProperty(propertyName);
+            var tp = this.GetType();
+            var pi = tp.GetProperty(propertyName);
             if (pi != null)
                 isDataMember = Attribute.IsDefined(pi, typeof(DataMemberAttribute));
 
             if (isDataMember && propertyName != "State" && this.m_State != enObjectState.Inactive && this.m_State != enObjectState.New)
                 State = enObjectState.Modified;
+
+            var isPartitionKey = Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr));
+            if (isPartitionKey && OriPartitionKey == null)
+            {
+
+                OriPartitionKey = (tp.GetProperty(pi.Name).GetValue(this, null));
+            }
+
+            var isRowKey = Attribute.IsDefined(pi, typeof(AzureTableRowKeyAttr));
+            if (isRowKey && OriRowKey == null)
+            {
+                OriRowKey = (tp.GetProperty(pi.Name).GetValue(this, null));
+            }
         }
 
         public AzureTableObjBase()
@@ -56,7 +71,15 @@ namespace PMap.Common.Azure
             m_State = enObjectState.New;
         }
 
-         [IgnoreDataMember]
+        [IgnoreDataMember]
+        [JsonProperty("OriPartitionKey")]
+        public object OriPartitionKey { get; set; } = null;
+
+        [IgnoreDataMember]
+        [JsonProperty("OriRowKey")]
+        public object OriRowKey { get; set; } = null;
+
+        [IgnoreDataMember]
         public bool NewState
         {
             get { return m_State == enObjectState.New; }
