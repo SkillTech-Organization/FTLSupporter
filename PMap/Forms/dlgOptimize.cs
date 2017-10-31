@@ -43,7 +43,10 @@ namespace PMap.Forms
             txtPLN_NAME.Text = m_boPlan.PLN_NAME;
             txtPLN_DATE_B.Text = m_boPlan.PLN_DATE_B.ToString(Global.DATETIMEFORMAT);
             txtPLN_DATE_E.Text = m_boPlan.PLN_DATE_E.ToString(Global.DATETIMEFORMAT);
+
             InitDialog();
+            this.AcceptButton = buttonOK;
+
             AskOnExit = false;
 
         }
@@ -81,6 +84,14 @@ namespace PMap.Forms
             finally
             {
                 m_bllSemaphore.FreePlanSemaphore(m_boPlan.ID);
+            }
+        }
+
+        private void dlgOptimize_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                OKPressed();
             }
         }
     }

@@ -234,7 +234,6 @@ namespace PMap.Forms.Panels.frmPPlan
                     {
                         int itemID = (int)gridViewTourPoints.GetRowCellValue(m_StartDragHitInfo.RowHandle, gridColumnID);
                         boPlanTourPoint draggedTourPoint = m_PPlanCommonVars.GetTourPointByID(itemID);
-Console.WriteLine("draggedTourPoint=" + draggedTourPoint.ToString());
 
                         if (draggedTourPoint.PTP_TYPE == Global.PTP_TYPE_DEP)        //csak túrapontot drag&drop-olunk
                         {

@@ -43,7 +43,7 @@ namespace GMap.NET.WindowsForms
       [NonSerialized]
 #if !PocketPC
  //       public Font Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Bold, GraphicsUnit.Pixel);
-        public Font Font = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Regular, GraphicsUnit.Pixel);
+        public Font Font = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular, GraphicsUnit.Pixel);
 #else
       public Font Font = new Font(FontFamily.GenericSansSerif, 6, FontStyle.Bold);
 #endif

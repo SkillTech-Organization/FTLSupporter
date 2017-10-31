@@ -45,10 +45,10 @@
             this.gridColumnTRK_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTRK_CODE = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTRK_REG_NUM = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnORD_COMMENT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTPL_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnPTP_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.reChkVisible = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.gridColumnORD_COMMENT = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.gridPlanOrders)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPlanOrders)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).BeginInit();
@@ -69,8 +69,10 @@
             this.gridViewPlanOrders});
             this.gridPlanOrders.DragDrop += new System.Windows.Forms.DragEventHandler(this.gridPlanOrders_DragDrop);
             this.gridPlanOrders.DragOver += new System.Windows.Forms.DragEventHandler(this.gridPlanOrders_DragOver);
+            this.gridPlanOrders.DragLeave += new System.EventHandler(this.gridPlanOrders_DragLeave);
             this.gridPlanOrders.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridPlanOrders_MouseDown);
             this.gridPlanOrders.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridPlanOrders_MouseMove);
+            this.gridPlanOrders.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPlanOrders_MouseUp);
             // 
             // gridViewPlanOrders
             // 
@@ -243,6 +245,15 @@
             this.gridColumnTRK_REG_NUM.Visible = true;
             this.gridColumnTRK_REG_NUM.VisibleIndex = 12;
             // 
+            // gridColumnORD_COMMENT
+            // 
+            this.gridColumnORD_COMMENT.Caption = "Megjegyzés";
+            this.gridColumnORD_COMMENT.FieldName = "ORD_COMMENT";
+            this.gridColumnORD_COMMENT.Name = "gridColumnORD_COMMENT";
+            this.gridColumnORD_COMMENT.OptionsColumn.AllowEdit = false;
+            this.gridColumnORD_COMMENT.Visible = true;
+            this.gridColumnORD_COMMENT.VisibleIndex = 13;
+            // 
             // gridColumnTPL_ID
             // 
             this.gridColumnTPL_ID.FieldName = "TPL_ID";
@@ -257,15 +268,6 @@
             // 
             this.reChkVisible.AutoHeight = false;
             this.reChkVisible.Name = "reChkVisible";
-            // 
-            // gridColumnORD_COMMENT
-            // 
-            this.gridColumnORD_COMMENT.Caption = "Megjegyzés";
-            this.gridColumnORD_COMMENT.FieldName = "ORD_COMMENT";
-            this.gridColumnORD_COMMENT.Name = "gridColumnORD_COMMENT";
-            this.gridColumnORD_COMMENT.OptionsColumn.AllowEdit = false;
-            this.gridColumnORD_COMMENT.Visible = true;
-            this.gridColumnORD_COMMENT.VisibleIndex = 13;
             // 
             // pnlPPlanOrders
             // 

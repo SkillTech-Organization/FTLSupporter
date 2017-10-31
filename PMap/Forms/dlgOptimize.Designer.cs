@@ -159,6 +159,7 @@
             this.Name = "dlgOptimize";
             this.tabSchemeProvider.SetTabScheme(this, SMcMaster.TabOrderManager.TabScheme.AcrossFirst);
             this.Text = "Tervoptimalizálás";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dlgOptimize_KeyPress);
             this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);

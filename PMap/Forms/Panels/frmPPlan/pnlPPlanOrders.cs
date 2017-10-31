@@ -106,6 +106,8 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             if (e.FocusedRowHandle >= 0)
             {
+                m_PPlanCommonVars.DraggedObj = null;
+
                 int ID = (int)gridViewPlanOrders.GetRowCellValue(e.FocusedRowHandle, gridColumnID);
                 if (ID != GridControl.InvalidRowHandle)
                 {
@@ -198,14 +200,17 @@ namespace PMap.Forms.Panels.frmPPlan
             Rectangle dragRect = new Rectangle(new Point(
                 m_HitInfo.HitPoint.X - SystemInformation.DragSize.Width / 2,
                 m_HitInfo.HitPoint.Y - SystemInformation.DragSize.Height / 2), SystemInformation.DragSize);
-            if (!dragRect.Contains(new Point(e.X, e.Y)) && m_PPlanCommonVars.DraggedObj == null)
+            if ( /* !dragRect.Contains(new Point(e.X, e.Y)) && */ m_PPlanCommonVars.DraggedObj == null)
             {
-                if (m_HitInfo.InRow)
+ //               if (m_HitInfo.InRow)
                 {
                     int itemID = (int)gridViewPlanOrders.GetRowCellValue(m_HitInfo.RowHandle, gridColumnID);
                     boPlanOrder draggedOrder = m_PPlanCommonVars.GetPlannedOrderByID(itemID);
-                    m_PPlanCommonVars.DraggedObj = new PPlanCommonVars.PPlanDragObject(PPlanCommonVars.PPlanDragObject.ESourceDataObjectType.TourPoint) { ID = itemID, DataObject = draggedOrder, SrcGridControl = gridPlanOrders };
-                    gridPlanOrders.DoDragDrop(m_PPlanCommonVars.DraggedObj, DragDropEffects.All);
+                    if (draggedOrder.TRK_ID == 0)
+                    {
+                        m_PPlanCommonVars.DraggedObj = new PPlanCommonVars.PPlanDragObject(PPlanCommonVars.PPlanDragObject.ESourceDataObjectType.TourPoint) { ID = itemID, DataObject = draggedOrder, SrcGridControl = gridPlanOrders };
+                        gridPlanOrders.DoDragDrop(m_PPlanCommonVars.DraggedObj, DragDropEffects.All);
+                    }
                 }
             }
 
@@ -215,6 +220,18 @@ namespace PMap.Forms.Panels.frmPPlan
         private void gridPlanOrders_DragOver(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
+        }
+
+        private void gridPlanOrders_DragLeave(object sender, EventArgs e)
+        {
+    //        m_PPlanCommonVars.DraggedObj = null;
+
+        }
+
+        private void gridPlanOrders_MouseUp(object sender, MouseEventArgs e)
+        {
+            m_PPlanCommonVars.DraggedObj = null;
+
         }
     }
 }

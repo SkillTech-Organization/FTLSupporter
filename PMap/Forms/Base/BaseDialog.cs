@@ -45,6 +45,7 @@ namespace PMap.Forms.Base
         public BaseDialog()
             :this(eEditMode.unset)
         {
+            this.AcceptButton = buttonOK;
             InitForm();
         }
 
@@ -52,6 +53,7 @@ namespace PMap.Forms.Base
         {
             InitializeComponent();
             m_editMode = p_editMode;
+            this.AcceptButton = buttonOK;
             AskOnExit = true;
 
 

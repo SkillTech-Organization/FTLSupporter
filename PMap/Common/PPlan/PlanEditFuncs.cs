@@ -33,10 +33,15 @@ namespace PMap.Common.PPlan
             boPlanTour refreshedTour = null;
             if (p_TourPoint != null && UI.Confirm(PMapMessages.Q_PEDIT_DELDEP, p_TourPoint.CLT_NAME, p_TourPoint.Tour.TRUCK))
             {
-                if (m_bllPlanEdit.RemoveOrderFromTour(p_TourPoint, Global.defWeather, true))
+                //Ha több túrapont is vonatkozik egy pontra, akkor mindegyiket töröljük
+
+                var deletePoints = p_TourPoint.Tour.TourPoints.Where(w => w.NOD_ID == p_TourPoint.NOD_ID).ToList();
+                foreach (var dp in deletePoints)
                 {
-                    refreshedTour = RefreshToursAfterModify(p_TourPoint.Tour.ID, 0);
+                    m_bllPlanEdit.RemoveOrderFromTour(dp, Global.defWeather, true);
                 }
+
+                refreshedTour = RefreshToursAfterModify(p_TourPoint.Tour.ID, 0);
             }
             return refreshedTour;
         }

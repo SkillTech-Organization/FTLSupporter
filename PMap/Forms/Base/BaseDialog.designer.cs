@@ -65,6 +65,7 @@ namespace PMap.Forms.Base
             // 
             // buttonOK
             // 
+            this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonOK.Dock = System.Windows.Forms.DockStyle.Right;
             this.buttonOK.Location = new System.Drawing.Point(98, 5);
             this.buttonOK.Name = "buttonOK";

@@ -763,6 +763,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         //ha már kiválasztott unplanned-re kattintunk
                         if (m_PPlanCommonVars.FocusedUnplannedOrder != null &&
                             m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
+                            m_PPlanCommonVars.FocusedUnplannedOrder.Marker.IsVisible &&
                             m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position == marker.Position)
                         {
 
@@ -775,7 +776,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         //Ha nem, akkor először az unplannedek között keresünk. 
                         foreach (boPlanOrder rUnplanned in m_PPlanCommonVars.PlanOrderList.Where(i => i.PTP_ID == 0).ToList())
                         {
-                            if (rUnplanned.Marker.Position == marker.Position)
+                            if (rUnplanned.Marker.Position == marker.Position && rUnplanned.Marker.IsVisible)
                             {
                                 m_PPlanCommonVars.FocusedUnplannedOrder = rUnplanned;
                                 if (m_EditMode)
