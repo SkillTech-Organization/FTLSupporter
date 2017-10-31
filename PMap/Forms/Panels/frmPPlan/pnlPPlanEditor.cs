@@ -1128,7 +1128,8 @@ namespace PMap.Forms.Panels.frmPPlan
         private void pnlPPlanEditor_KeyUp(object sender, KeyEventArgs e)
         {
             //           Console.WriteLine("cWM_KEYUP");
-            exitEditMode(true);
+            if( e.KeyCode != Keys.Enter && e.KeyCode != Keys.Escape)
+                exitEditMode(true);
         }
 
 
@@ -1637,6 +1638,7 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 m_EditMode = true;
                 //          SetFocusedTour(null);
+                m_PPlanCommonVars.DraggedObj = null;
 
                 setEditedRoute(null);
                 m_EditedTourPoint = null;
@@ -1660,6 +1662,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 m_EditedTourPoint = null;
                 m_EditedUnplannedOrder = null;
                 statusStrip.BackColor = SystemColors.Control;
+                m_PPlanCommonVars.DraggedObj = null;
                 gMapControl.Refresh();
                 if (p_notify)
                     DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ViewerMode));

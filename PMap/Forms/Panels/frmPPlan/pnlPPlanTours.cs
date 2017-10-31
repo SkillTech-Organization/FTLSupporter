@@ -23,11 +23,17 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private bllPlanEdit m_bllPlanEdit;
         private PPlanCommonVars m_PPlanCommonVars;
+        private Color m_Focused_BackColor;
+        private Color m_HideSel_BackColor;
 
         public pnlPPlanTours(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
             m_PPlanCommonVars = p_PPlanCommonVars;
+
+            m_Focused_BackColor = gridViewTours.Appearance.FocusedRow.BackColor;
+            m_HideSel_BackColor = gridViewTours.Appearance.HideSelectionRow.BackColor;
+
             if (!DesignMode)
                 init();
         }
@@ -40,10 +46,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
 
                 gridTours.DataSource = m_PPlanCommonVars.TourList;
-                gridViewTours.Appearance.FocusedRow.BackColor = Color.FromArgb(255, 128, 128);
-                gridViewTours.Appearance.HideSelectionRow.BackColor = Color.FromArgb(128, 255, 128, 128);
-                gridViewTours.Appearance.FocusedRow.Options.UseBackColor = false;
-                gridViewTours.Appearance.HideSelectionRow.Options.UseBackColor = false;
+
                 gridViewTours.MoveFirst();
 
 
@@ -261,9 +264,17 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             bool QTYErr = (bool)gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnQTYErr);
             bool VOLErr = (bool)gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnVOLErr);
+            if (QTYErr || VOLErr)
+            {
+                gridViewTours.Appearance.FocusedRow.BackColor = Color.LightCoral;
+                gridViewTours.Appearance.HideSelectionRow.BackColor = Color.LightCoral;
+            }
+            else
+            {
+                gridViewTours.Appearance.FocusedRow.BackColor = m_Focused_BackColor;
+                gridViewTours.Appearance.HideSelectionRow.BackColor = m_HideSel_BackColor;
+            }
 
-            gridViewTours.Appearance.FocusedRow.Options.UseBackColor = (QTYErr || VOLErr);
-            gridViewTours.Appearance.HideSelectionRow.Options.UseBackColor = (QTYErr || VOLErr);
         }
         private void repositoryItemColorEdit1_EditValueChanged(object sender, EventArgs e)
         {
@@ -317,7 +328,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 bool VOLErr = (bool)gridViewTours.GetRowCellValue(e.RowHandle, gridColumnVOLErr);
                 if (VOLErr)
                 {
-                    e.Appearance.BackColor = Color.Red;
+                    e.Appearance.ForeColor = Color.Red;
                 }
             }
             if (e.Column == gridColumnQTYDETAILS && e.RowHandle >= 0)
@@ -325,7 +336,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 bool QTYErr = (bool)gridViewTours.GetRowCellValue(e.RowHandle, gridColumnQTYErr);
                 if (QTYErr)
                 {
-                    e.Appearance.BackColor = Color.Red;
+                    e.Appearance.ForeColor = Color.Red;
                 }
             }
         }

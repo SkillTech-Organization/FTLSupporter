@@ -28,11 +28,17 @@ namespace PMap.Forms.Panels.frmPPlan
         private PlanEditFuncs m_PlanEditFuncs;
 
         private PPlanCommonVars m_PPlanCommonVars;
+        private Color m_Focused_BackColor;
+        private Color m_HideSel_BackColor;
 
         public pnlPPlanTourPoints(PPlanCommonVars p_PPlanCommonVars)
         {
             InitializeComponent();
             m_PPlanCommonVars = p_PPlanCommonVars;
+
+            m_Focused_BackColor = gridViewTourPoints.Appearance.FocusedRow.BackColor;
+            m_HideSel_BackColor = gridViewTourPoints.Appearance.HideSelectionRow.BackColor;
+
             Init();
         }
 
@@ -141,6 +147,28 @@ namespace PMap.Forms.Panels.frmPPlan
                 int? ID = (int?)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnID);
                 if (ID != null && ID.Value != GridControl.InvalidRowHandle)
                 {
+
+                    DateTime OPEN = (DateTime)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnOPEN);
+                    DateTime CLOSE = (DateTime)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnCLOSE);
+                    DateTime PTP_ARRTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_ARRTIME);
+                    DateTime PTP_SERVTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_SERVTIME);
+                    DateTime PTP_DEPTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_DEPTIME);
+                    int PTP_TYPE = (int)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_TYPE);
+
+                    if (  PTP_TYPE == Global.PTP_TYPE_DEP && 
+                        (PTP_ARRTIME > CLOSE ||
+                        (PTP_SERVTIME < OPEN || PTP_SERVTIME > CLOSE) ||
+                         (PTP_DEPTIME < OPEN || PTP_DEPTIME > CLOSE)))
+                    {
+                        gridViewTourPoints.Appearance.FocusedRow.BackColor = Color.LightCoral;
+                        gridViewTourPoints.Appearance.HideSelectionRow.BackColor = Color.LightCoral;
+                    }
+                    else
+                    {
+                        gridViewTourPoints.Appearance.FocusedRow.BackColor= m_Focused_BackColor;
+                        gridViewTourPoints.Appearance.HideSelectionRow.BackColor = m_HideSel_BackColor;
+                    }
+
                     DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTourPoint, m_PPlanCommonVars.GetTourPointByID(ID.Value)));
                 }
             }
@@ -176,7 +204,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
         private void gridViewTourPoints_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
-            if (e.RowHandle == gridViewTourPoints.FocusedRowHandle && e.Column != gridViewTourPoints.FocusedColumn) return;
+            //if (e.RowHandle == gridViewTourPoints.FocusedRowHandle && e.Column != gridViewTourPoints.FocusedColumn) return;
 
             if ((int)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_TYPE) == Global.PTP_TYPE_DEP && (e.Column == gridColumnPTP_ARRTIME || e.Column == gridColumnPTP_SERVTIME || e.Column == gridColumnPTP_DEPTIME))
             {
@@ -188,19 +216,22 @@ namespace PMap.Forms.Panels.frmPPlan
 
                 if (e.Column == gridColumnPTP_ARRTIME && (PTP_ARRTIME > CLOSE))        //Megj.:Zárás utáni érkezés a probléma, nyitás előtt érkezés esetén a jármű vár.
                 {
-                    e.Appearance.BackColor = Color.Red;
+//                    e.Appearance.BackColor = Color.Red;
+  //                  e.Appearance.BackColor2 = Color.Red;
+                    e.Appearance.ForeColor = Color.Red;
 
                 }
 
                 if (e.Column == gridColumnPTP_SERVTIME && (PTP_SERVTIME < OPEN || PTP_SERVTIME > CLOSE))
                 {
-                    e.Appearance.BackColor = Color.Red;
+      //              e.Appearance.BackColor = Color.Red;
+                    e.Appearance.ForeColor = Color.Red;
 
                 }
                 if (e.Column == gridColumnPTP_DEPTIME && (PTP_DEPTIME < OPEN || PTP_DEPTIME > CLOSE))
                 {
-                    e.Appearance.BackColor = Color.Red;
-
+//                    e.Appearance.BackColor = Color.Red;
+                    e.Appearance.ForeColor = Color.Red;
                 }
 
             }
@@ -328,6 +359,7 @@ namespace PMap.Forms.Panels.frmPPlan
         private void gridTourPoints_MouseUp(object sender, MouseEventArgs e)
         {
             m_StartDragHitInfo = null;
+            m_PPlanCommonVars.DraggedObj = null;
         }
    
 
