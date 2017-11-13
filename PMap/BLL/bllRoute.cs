@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using FastMember;
+using PMap.Cache;
 
 namespace PMap.BLL
 {
@@ -248,76 +249,94 @@ namespace PMap.BLL
                 p_RZN_ID_LIST = "";
 
             boRoute result = null;
-            string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
-                           "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?  ";
-            DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
-
-            if (dt.Rows.Count == 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
+            using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
             {
+                result = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
+                                    w.NOD_ID_TO == p_NOD_ID_TO &&
+                                     w.DST_MAXWEIGHT == p_Weight &&
+                                      w.DST_MAXHEIGHT == p_Height &&
+                                      w.DST_MAXWIDTH == p_Width).FirstOrDefault();
+            }
+            if (result == null)
+            {
+                string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
+                               "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?  ";
+                DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
-
-                result = new boRoute();
-                result.DST_DISTANCE = Util.getFieldValue<int>(dt.Rows[0], "DST_DISTANCE");
-                result.RZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
-                result.DST_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWEIGHT");
-                result.DST_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXHEIGHT");
-                result.DST_MAXWIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWIDTH");
-
-
-                byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
-                String points = Util.UnZipStr(buff);
-                String[] aPoints = points.Split(Global.SEP_POINTC);
-                foreach (string point in aPoints)
+                if (dt.Rows.Count == 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
                 {
-                    string[] aPosLatLng = point.Split(Global.SEP_COORDC);
-                    result.Route.Points.Add(new PointLatLng(Convert.ToDouble(aPosLatLng[0].Replace(',', '.'), CultureInfo.InvariantCulture), Convert.ToDouble(aPosLatLng[1].Replace(',', '.'), CultureInfo.InvariantCulture)));
 
+
+                    result = new boRoute();
+                    result.DST_DISTANCE = Util.getFieldValue<int>(dt.Rows[0], "DST_DISTANCE");
+                    result.RZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
+                    result.DST_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWEIGHT");
+                    result.DST_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXHEIGHT");
+                    result.DST_MAXWIDTH = Util.getFieldValue<int>(dt.Rows[0], "DST_MAXWIDTH");
+
+
+                    byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
+                    String points = Util.UnZipStr(buff);
+                    String[] aPoints = points.Split(Global.SEP_POINTC);
+                    foreach (string point in aPoints)
+                    {
+                        string[] aPosLatLng = point.Split(Global.SEP_COORDC);
+                        result.Route.Points.Add(new PointLatLng(Convert.ToDouble(aPosLatLng[0].Replace(',', '.'), CultureInfo.InvariantCulture), Convert.ToDouble(aPosLatLng[1].Replace(',', '.'), CultureInfo.InvariantCulture)));
+                    }
+
+
+                    buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_EDGES");
+                    String edges = Util.UnZipStr(buff);
+
+                    Dictionary<string, boEdge> dicEdges = new Dictionary<string, boEdge>();
+                    if (edges != "")
+                    {
+                        sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
+                               "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
+                               "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
+                               " from EDG_EDGE  EDG " + Environment.NewLine +
+                               "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
+                               " where EDG.ID in (" + edges + ")";
+
+                        DataTable dtEdges = DBA.Query2DataTable(sSql);
+                        dicEdges = (from r in dtEdges.AsEnumerable()
+                                    select new
+                                    {
+                                        Key = Util.getFieldValue<int>(r, "EDGID").ToString(),
+                                        Value = new boEdge
+                                        {
+                                            ID = Util.getFieldValue<int>(r, "EDGID"),
+                                            NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
+                                            NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
+                                            EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME") != "" ? Util.getFieldValue<string>(r, "EDG_NAME") : "*** nincs név ***",
+                                            EDG_LENGTH = Util.getFieldValue<int>(r, "EDG_LENGTH"),
+                                            RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
+                                            WZONE = Util.getFieldValue<string>(r, "RZN_ZONENAME"),
+                                            EDG_ONEWAY = Util.getFieldValue<bool>(r, "EDG_ONEWAY"),
+                                            EDG_DESTTRAFFIC = Util.getFieldValue<bool>(r, "EDG_DESTTRAFFIC"),
+                                            EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),
+                                            Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
+                                                   .DefaultIfEmpty(new boEtoll()).First().TollsToDict(),
+                                            EDG_MAXWEIGHT = Util.getFieldValue<int>(r, "EDG_MAXWEIGHT"),
+                                            EDG_MAXHEIGHT = Util.getFieldValue<int>(r, "EDG_MAXHEIGHT"),
+                                            EDG_MAXWIDTH = Util.getFieldValue<int>(r, "EDG_MAXWIDTH")
+
+                                        }
+                                    }).ToDictionary(n => n.Key, n => n.Value);
+                        //így boztosítjuk a visszaadott élek rendezettségét
+                        String[] aEdges = edges.Split(Global.SEP_EDGEC);
+                        foreach (string e in aEdges)
+                        {
+                            result.Edges.Add(dicEdges[e]);
+                        }
+                    }
                 }
 
-
-                buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_EDGES");
-                String edges = Util.UnZipStr(buff);
-
-                Dictionary<string, boEdge> dicEdges = new Dictionary<string, boEdge>();
-                if (edges != "")
+                if (result != null)
                 {
-                    sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
-                           "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                           "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine + 
-                           " from EDG_EDGE  EDG " + Environment.NewLine +
-                           "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
-                           " where EDG.ID in (" + edges + ")";
-
-                    DataTable dtEdges = DBA.Query2DataTable(sSql);
-                    dicEdges = (from r in dtEdges.AsEnumerable()
-                                select new
-                                {
-                                    Key = Util.getFieldValue<int>(r, "EDGID").ToString(),
-                                    Value = new boEdge
-                                    {
-                                        ID = Util.getFieldValue<int>(r, "EDGID"),
-                                        NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
-                                        NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                        EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME") != "" ? Util.getFieldValue<string>(r, "EDG_NAME") : "*** nincs név ***",
-                                        EDG_LENGTH = Util.getFieldValue<int>(r, "EDG_LENGTH"),
-                                        RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
-                                        WZONE = Util.getFieldValue<string>(r, "RZN_ZONENAME"),
-                                        EDG_ONEWAY = Util.getFieldValue<bool>(r, "EDG_ONEWAY"),
-                                        EDG_DESTTRAFFIC = Util.getFieldValue<bool>(r, "EDG_DESTTRAFFIC"),
-                                        EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),
-                                        Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(r, "EDG_ETLCODE"))
-                                               .DefaultIfEmpty(new boEtoll()).First().TollsToDict(),
-                                        EDG_MAXWEIGHT = Util.getFieldValue<int>(r, "EDG_MAXWEIGHT"),
-                                        EDG_MAXHEIGHT = Util.getFieldValue<int>(r, "EDG_MAXHEIGHT"),
-                                        EDG_MAXWIDTH = Util.getFieldValue<int>(r, "EDG_MAXWIDTH")
-
-                                    }
-                                }).ToDictionary(n => n.Key, n => n.Value);
-                    //így boztosítjuk a visszaadott élek rendezettségét
-                    String[] aEdges = edges.Split(Global.SEP_EDGEC);
-                    foreach (string e in aEdges)
+                    using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
                     {
-                        result.Edges.Add(dicEdges[e]);
+                        RouteCache.Instance.Items.Add(result);
                     }
                 }
             }
@@ -327,10 +346,29 @@ namespace PMap.BLL
 
         public MapRoute GetMapRouteFromDB(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
         {
+
+
+
+
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
 
             MapRoute result = null;
+
+           using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+            {
+                var boResult = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
+                                    w.NOD_ID_TO == p_NOD_ID_TO &&
+                                     w.DST_MAXWEIGHT == p_Weight &&
+                                      w.DST_MAXHEIGHT == p_Height &&
+                                      w.DST_MAXWIDTH == p_Width).FirstOrDefault();
+                if( boResult != null)
+                {
+                    return boResult.Route;
+                }
+            }
+
+
             string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
                            "where NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST=? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?";
             DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);

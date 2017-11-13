@@ -10,6 +10,10 @@ using PMap.Localize;
 using System.Drawing;
 using PMap.DB.Base;
 using System.Windows.Forms;
+using PMap.Route;
+using GMap.NET;
+using PMap.MapProvider;
+using PMap.Cache;
 
 namespace PMap.Common.PPlan
 {
@@ -17,6 +21,8 @@ namespace PMap.Common.PPlan
     {
         private bllPlan m_bllPlan;
         private bllPlanEdit m_bllPlanEdit;
+        private bllRoute m_bllRoute;
+
         private BasePanel m_panel;
         private PPlanCommonVars m_PPlanCommonVars;
 
@@ -26,6 +32,7 @@ namespace PMap.Common.PPlan
             m_PPlanCommonVars = p_PPlanCommonVars;
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
             m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+            m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
         }
 
         public boPlanTour RemoveTourPoint(boPlanTourPoint p_TourPoint)
@@ -244,7 +251,7 @@ namespace PMap.Common.PPlan
                 {
                     TourWithFreshData = RefreshTourDataFromDB(pChangedTourID1);
                 }
-                if (pChangedTourID2 > 0)
+                    if (pChangedTourID2 > 0)
                 {
                     TourWithFreshData = RefreshTourDataFromDB(pChangedTourID2);
                 }
@@ -283,16 +290,72 @@ namespace PMap.Common.PPlan
         private bool checkInsertionPoint(string p_RZN_ID_LIST, int DST_MAXWEIGHT, int DST_MAXHEIGHT, int DST_MAXWIDTH, int p_NOD_ID_START, int p_NOD_ID_INS, int p_NOD_ID_END)
         {
 
-
+            
             //Ellenőrizni, találunk-e útvonalat a beszúrási pont és a beszúrt lerakó között
             bllPlanCheck.checkDistanceResult dresultStart =
                     bllPlanCheck.CheckDistance(p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, p_NOD_ID_START, p_NOD_ID_INS);
             //Ellenőrizzük, van-e útvonal a lerakó és a beszúrás érkezési pontja között
             bllPlanCheck.checkDistanceResult dresultEnd =
                     bllPlanCheck.CheckDistance(p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, p_NOD_ID_INS, p_NOD_ID_END);
+            
+                        return (dresultStart == bllPlanCheck.checkDistanceResult.OK &&
+                                dresultEnd == bllPlanCheck.checkDistanceResult.OK);
+          /* 
+          EZ KELL
 
-            return (dresultStart == bllPlanCheck.checkDistanceResult.OK &&
-                    dresultEnd == bllPlanCheck.checkDistanceResult.OK);
+            DateTime dtStart = DateTime.Now;
+            Dictionary<string, List<int>[]> neighborsFull = null;
+            Dictionary<string, List<int>[]> neighborsCut = null;
+            var routePar = new CRoutePars() { RZN_ID_LIST = p_RZN_ID_LIST, Weight = DST_MAXWEIGHT, Height = DST_MAXHEIGHT, Width = DST_MAXWIDTH };
+
+            var resultStart = m_bllRoute.GetMapRouteFromDB(p_NOD_ID_START, p_NOD_ID_INS, p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH);
+            var resultEnd = m_bllRoute.GetMapRouteFromDB(p_NOD_ID_INS, p_NOD_ID_END, p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH);
+            if (resultStart == null || resultEnd == null)
+            {
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+                if (neighborsFull == null || neighborsCut == null)
+                {
+                    RectLatLng boundary = new RectLatLng();
+                    List<int> nodes = new List<int>() { p_NOD_ID_START, p_NOD_ID_INS, p_NOD_ID_END };
+                    boundary = m_bllRoute.getBoundary(nodes);
+                    RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary);
+                }
+                PMapRoutingProvider provider = new PMapRoutingProvider();
+
+                if (resultStart == null)
+                {
+                    boRoute routeInfStart = provider.GetRoute(p_NOD_ID_START, p_NOD_ID_INS, routePar,
+                        neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
+                        PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                    resultStart = routeInfStart.Route;
+                    m_bllRoute.WriteOneRoute(routeInfStart);
+
+                    using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+                    {
+                        RouteCache.Instance.Items.Add(routeInfStart);
+                    }
+                }
+
+                if (resultEnd == null)
+                {
+                    boRoute routeInfEnd = provider.GetRoute(p_NOD_ID_INS, p_NOD_ID_END, routePar,
+                        neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
+                        PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                    resultEnd = routeInfEnd.Route;
+                    m_bllRoute.WriteOneRoute(routeInfEnd);
+
+                    using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+                    {
+                        RouteCache.Instance.Items.Add(routeInfEnd);
+                    }
+                }
+
+            }
+            Util.Log2File(String.Format("InsertionPoint Időtartam:{0}", (DateTime.Now - dtStart).ToString()), false);
+            Console.WriteLine(String.Format("InsertionPoint Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
+
+            return (resultStart != null && resultEnd != null);
+            */
         }
 
         /// <summary>

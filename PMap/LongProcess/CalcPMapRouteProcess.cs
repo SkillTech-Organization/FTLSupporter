@@ -68,16 +68,16 @@ namespace PMap.LongProcess
             try
             {
                 long availe = GC.GetTotalMemory(false);
-                long allocated = (int)(availe / 1024 / 1024) < 30 ? (int)(availe / 1024 / 1024) : 30;
+                long allocated = (int)(availe / 1024 / 1024) < 30 ? (int)(availe / 1024 / 1024) : 50;
                 memFailPoint = new MemoryFailPoint((int)allocated);
                 Util.Log2File("CalcPMapRouteProcess Allocated: " + allocated.ToString());
 
                 Completed = false;
-
+                /*
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-
+                */
                 DateTime dtStart = DateTime.Now;
                 TimeSpan tspDiff;
 

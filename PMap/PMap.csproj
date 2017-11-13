@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PMap</RootNamespace>
     <AssemblyName>PMap</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -206,6 +206,8 @@
     <Compile Include="BLL\Base\bllBase.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
+    <Compile Include="Cache\LogForRouteCache.cs" />
+    <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />

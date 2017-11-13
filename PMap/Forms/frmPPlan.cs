@@ -826,9 +826,15 @@ namespace PMap.Forms
 
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                         BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
-                  
-                        AzureTableStore.Instance.DeleteTable("PMTour");
-                        AzureTableStore.Instance.DeleteTable("PMTourPoint");
+
+                        //AzureTableStore.Instance.DeleteTable("PMTour");
+                        //AzureTableStore.Instance.DeleteTable("PMTourPoint");
+
+                        var tr = AzureTableStore.Instance.RetrieveList<PMTour>();
+                        AzureTableStore.Instance.DeleteRange<PMTour>(tr.Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList());
+
+                        var tp = AzureTableStore.Instance.RetrieveList<PMTourPoint>();
+                        AzureTableStore.Instance.DeleteRange<PMTourPoint>(tp.Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList());
 
                         foreach (var xTr in tourList)
                         {
