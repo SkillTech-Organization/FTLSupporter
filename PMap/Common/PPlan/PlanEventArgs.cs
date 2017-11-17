@@ -34,7 +34,8 @@ namespace PMap.Common.PPlan
         EditorMode,                     //Szerkesztés üzemmód
         PrevTour,                       //Előző túra kiválasztása (pplPPlanEditor használja)
         NextTour,                       //Következő túra kiválasztása (pplPPlanEditor használja)
-        FirstTour                       //Gridben a legelső túra kiválasztása 
+        FirstTour,                      //Gridben a legelső túra kiválasztása 
+        CheckMode                       //Ellenörző üzemmód
 
     }
 

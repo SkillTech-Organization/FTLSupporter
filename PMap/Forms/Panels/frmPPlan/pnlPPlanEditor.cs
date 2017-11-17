@@ -24,6 +24,7 @@ using PMap.Common;
 using PMap.Forms.Base;
 using PMap.Common.PPlan;
 using PMap.DB.Base;
+using PMap.Route;
 
 namespace PMap.Forms.Panels.frmPPlan
 {
@@ -44,6 +45,8 @@ namespace PMap.Forms.Panels.frmPPlan
         private GMapOverlay m_baseLayer = null;
         private GMapOverlay m_unplannedLayer = null;
         private GMapOverlay m_editorLayer = null;
+        private GMapOverlay m_checkMapLayer = null;
+
 
         private GMapMarker m_selectorMarker = null;
 
@@ -51,6 +54,7 @@ namespace PMap.Forms.Panels.frmPPlan
         private EditedRoute m_EditedRoute = null;
         private boPlanTourPoint m_EditedTourPoint = null;
         private boPlanOrder m_EditedUnplannedOrder = null;
+        private bool m_CheckMode = false;
 
         private bool m_MouseMoved = false;
         private GMapMarker m_ToolTipedMarker = null;
@@ -106,6 +110,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     clearMarkerTooltip();
 
                     m_EditMode = false;
+                    m_CheckMode = false;
 
                     gMapControl.Manager.Mode = PMapCommonVars.Instance.MapAccessMode;
                     gMapControl.MapProvider = PMapCommonVars.Instance.MapProvider;
@@ -155,6 +160,18 @@ namespace PMap.Forms.Panels.frmPPlan
                     }
 
 
+                    if (m_checkMapLayer == null)
+                    {
+                        m_checkMapLayer = new GMapOverlay("checkMapLayer");
+                        m_checkMapLayer.IsVisibile = true;
+                        gMapControl.Overlays.Add(m_checkMapLayer);
+                    }
+                    else
+                    {
+                        m_checkMapLayer.Markers.Clear();
+                        m_checkMapLayer.Routes.Clear();
+                        m_checkMapLayer.Polygons.Clear();
+                    }
 
                     if (m_selectorMarker == null)
                     {
@@ -199,6 +216,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     gMapControl.Overlays.Add(m_baseLayer);
                     gMapControl.Overlays.Add(m_unplannedLayer);
                     gMapControl.Overlays.Add(m_editorLayer);
+                    gMapControl.Overlays.Add(m_checkMapLayer);
                     return GetRoutePathProcess.eCompleteCode.OK;
                 }
 
@@ -513,7 +531,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
                         if (m_PPlanCommonVars.ShowUnPlannedDepots)
                         {
-                       //     setFocusedTour(null);
+                            //     setFocusedTour(null);
                             m_PPlanCommonVars.FocusedPoint = null;
                             m_PPlanCommonVars.FocusedUnplannedOrder = p_planEventArgs.PlanOrder;
                             if (m_PPlanCommonVars.ZoomToSelectedUnPlanned)
@@ -522,25 +540,32 @@ namespace PMap.Forms.Panels.frmPPlan
                             }
                             else
                             {
-                                if( m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
+                                if (m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
                                     !gMapControl.ViewArea.Contains(m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position))
                                     gMapControl.Position = m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position;
-//                                    gMapControl.ZoomAndCenterMarkers(m_unplannedLayer.Id);
+                                //                                    gMapControl.ZoomAndCenterMarkers(m_unplannedLayer.Id);
                             }
-                            
+
 
                             gMapControl.Refresh();
                         }
                         break;
 
                     case ePlanEventMode.EditorMode:
+                        exitCheckMode();
                         enterEditMode(false);
                         break;
 
                     case ePlanEventMode.ViewerMode:
+                        exitCheckMode();
                         exitEditMode(false);
                         break;
 
+                    case ePlanEventMode.CheckMode:
+                        exitEditMode(false);
+                        enterCheckMode();
+
+                        break;
 
                     default:
                         break;
@@ -629,15 +654,15 @@ namespace PMap.Forms.Panels.frmPPlan
             //először az unplanned layeren keresünk (felhasználói igény)
             //
             foreach (GMapMarker m in m_unplannedLayer.Markers)
+            {
+                if (m.IsVisible)
+                {
+                    if (m.LocalAreaInControlSpace.Contains(x, y))
                     {
-                        if (m.IsVisible)
-                        {
-                            if (m.LocalAreaInControlSpace.Contains(x, y))
-                            {
-                                return m;
-                            }
-                        }
+                        return m;
                     }
+                }
+            }
 
             for (int i = gMapControl.Overlays.Count - 1; i >= 0; i--)
             {
@@ -742,6 +767,9 @@ namespace PMap.Forms.Panels.frmPPlan
 
                 if (e.Button == MouseButtons.Left)
                 {
+
+        
+
                     //               Console.WriteLine("gMapControl_MouseDown");
 
 
@@ -788,7 +816,7 @@ namespace PMap.Forms.Panels.frmPPlan
                             }
                         }
 
-                        
+
                         //az előző keresés nem volt sikeres, már kiválasztott túrapontra kattintottunk-e ?
                         //
                         if (!bRefresh && m_PPlanCommonVars.FocusedPoint != null &&
@@ -796,7 +824,7 @@ namespace PMap.Forms.Panels.frmPPlan
                             m_PPlanCommonVars.FocusedPoint.Marker.Position == marker.Position)
                         {
                             m_EditedTourPoint = m_PPlanCommonVars.FocusedPoint;
-                            m_EditedUnplannedOrder  = null;
+                            m_EditedUnplannedOrder = null;
                             m_PPlanCommonVars.FocusedUnplannedOrder = null;
                             return;
                         }
@@ -1073,7 +1101,7 @@ namespace PMap.Forms.Panels.frmPPlan
                         }
                     }
                 }
-    
+
                 resetEditMode();
                 m_MouseMoved = false;
             }
@@ -1100,6 +1128,15 @@ namespace PMap.Forms.Panels.frmPPlan
                 GPoint gmapPt = gMapControl.FromLatLngToLocal(gMapControl.Position);
 
                 Cursor.Position = gMapControl.PointToScreen(new System.Drawing.Point((int)gmapPt.X, (int)gmapPt.Y));
+
+
+                if (m_CheckMode)
+                {
+                    m_PlanEditFuncs.ShowMapEdgesForCheck(m_editorLayer, gMapControl.Position);
+                    return;
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -1128,7 +1165,7 @@ namespace PMap.Forms.Panels.frmPPlan
         private void pnlPPlanEditor_KeyUp(object sender, KeyEventArgs e)
         {
             //           Console.WriteLine("cWM_KEYUP");
-            if( e.KeyCode != Keys.Enter && e.KeyCode != Keys.Escape)
+            if (e.KeyCode != Keys.Enter && e.KeyCode != Keys.Escape)
                 exitEditMode(true);
         }
 
@@ -1431,7 +1468,7 @@ namespace PMap.Forms.Panels.frmPPlan
                                             if (sToolTipText != "" && sToolTipText.Last() != '\n')
                                                 sToolTipText += "\n";
 
-                                            sToolTipText +=  rTourPoint.ToolTipText;
+                                            sToolTipText += rTourPoint.ToolTipText;
                                             sToolTipText = sToolTipText.Replace("\\n", "\n");
                                         }
                                         tooltipedTour = rTour;
@@ -1469,18 +1506,18 @@ namespace PMap.Forms.Panels.frmPPlan
                         lblToolTip.Text = aToolTipText[0];
 
                     m_ToolTipedMarker.ToolTipText = sToolTipText;
-                    
+
                     //Hogy a tooltip legyen legfelül, az ahhoz tarozó layer-t meg kell emelni
                     if (tooltipedPlanOrder != null)
                     {
                         gMapControl.Overlays.Remove(m_unplannedLayer);
                         gMapControl.Overlays.Add(m_unplannedLayer);
                     }
-                    if ( tooltipedTour != null)
+                    if (tooltipedTour != null)
                     {
                         gMapControl.Overlays.Remove(tooltipedTour.Layer);
                         //A túrák layere mindig a tervezetlen túrák layer-e alatt van. Emiatt a gMapControl.Overlays.Count - 1
-                        gMapControl.Overlays.Add( tooltipedTour.Layer);
+                        gMapControl.Overlays.Add(tooltipedTour.Layer);
                     }
 
                 }
@@ -1678,5 +1715,22 @@ namespace PMap.Forms.Panels.frmPPlan
             gMapControl.Invalidate();
             gMapControl.Refresh();
         }
-    }
+
+        private void enterCheckMode()
+        {
+            m_CheckMode = true;
+    //        m_checkMapLayer.IsVisibile = true;
+            gMapControl.Refresh();
+        }
+
+        private void exitCheckMode()
+        {
+            m_CheckMode = false;
+            m_editorLayer.Markers.Clear();
+            m_editorLayer.Routes.Clear();
+   //         m_checkMapLayer.IsVisibile = false;
+            gMapControl.Refresh();
+        }
+
+     }
 }

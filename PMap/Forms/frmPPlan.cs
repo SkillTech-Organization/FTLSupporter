@@ -858,6 +858,29 @@ namespace PMap.Forms
                 }
             }
         }
+
+        private void btnCheckMapOn_Click(object sender, EventArgs e)
+        {
+
+            SetViewMode(true);
+            PlanEventArgs ev = new PlanEventArgs(ePlanEventMode.CheckMode);
+            RefreshAll(ev);
+
+            btnCheckMapOn.Visible = false;
+            btnCheckMapOff.Visible = true;
+            PMapCommonVars.Instance.IsCheckMode = true;
+        }
+
+        private void btnCheckMapOff_Click(object sender, EventArgs e)
+        {
+            SetViewMode(true);
+            btnCheckMapOff.Visible = false;
+            btnCheckMapOn.Visible = true;
+            PMapCommonVars.Instance.IsCheckMode = true;
+
+        }
+
+
     }
     #endregion
 }

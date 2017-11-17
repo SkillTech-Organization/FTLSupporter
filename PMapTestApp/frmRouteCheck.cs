@@ -674,9 +674,11 @@ namespace PMapTestApp
                 //                foreach (var edg in RouteData.Instance.Edges.Where(x =>  x.Value.EDG_MAXWEIGHT > 0 ||  x.Value.EDG_MAXHEIGHT > 0 /*|| x.Value.EDG_MAXWIDTH > 0*/))
                 // foreach (var edg in RouteData.Instance.Edges.Where(x => x.Value.ID == 507536 && x.Value.EDG_LENGTH > 15000))
 
-                foreach (var edg in RouteData.Instance.Edges.Where(
-                                 w => (Math.Abs(w.Value.fromLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.fromLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway/2)))
-                     /*
+  //              foreach (var edg in RouteData.Instance.Edges.Where(
+  //                               w => (Math.Abs(w.Value.fromLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.fromLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway/2)))
+                    foreach (var edg in RouteData.Instance.Edges.Where(
+                                    w => (Math.Abs(w.Value.toLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.toLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway / 2)))
+                    /*
                 foreach (var edg in RouteData.Instance.Edges.Where(
                             w =>(Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
                                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
@@ -688,9 +690,9 @@ namespace PMapTestApp
                  
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
                 */
-                {
+                    {
 
-                    var edge = edg.Value;
+                        var edge = edg.Value;
 
                     GMapMarker gm = null;
                     if (markersPts.Contains(edge.fromLatLng))

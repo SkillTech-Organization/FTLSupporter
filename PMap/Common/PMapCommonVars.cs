@@ -92,6 +92,8 @@ namespace PMap.Common
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public Dictionary<int, string> RZN_ID_LISTCahce = null;  //Behajtási zóna ID cache
 
+        public bool IsCheckMode { get; set; } = false;
+
     }
 
 }
