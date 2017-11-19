@@ -1414,6 +1414,8 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             try
             {
+                if (item.GetType() == typeof(GMarkerGoogle))
+                    return;
                 boPlanTour tooltipedTour = null;
                 boPlanOrder tooltipedPlanOrder = null;
                 if (m_PPlanCommonVars.TooltipMode == MarkerTooltipMode.Always)

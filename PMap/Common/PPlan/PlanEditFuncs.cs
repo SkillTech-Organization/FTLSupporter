@@ -15,6 +15,7 @@ using GMap.NET;
 using PMap.MapProvider;
 using PMap.Cache;
 using GMap.NET.WindowsForms.Markers;
+using PMap.Markers;
 
 namespace PMap.Common.PPlan
 {
@@ -404,7 +405,8 @@ namespace PMap.Common.PPlan
                 HashSet<PointLatLng> markersPts = new HashSet<PointLatLng>(p_checkMapLayer.Markers.Select(s=>s.Position).ToList());
 
                 foreach (var edg in RouteData.Instance.Edges.Where(
-                     w => (Math.Abs(w.Value.toLatLng.Lng - p_position.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_position.Lat) < (double)Global.EdgeApproachCity/Global.LatLngDivider)))
+                     w => (Math.Abs(w.Value.toLatLng.Lng - p_position.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_position.Lat) < (double)Global.EdgeApproachCity/Global.LatLngDivider))
+                     )
                 {
                     var edge = edg.Value;
 
@@ -413,26 +415,11 @@ namespace PMap.Common.PPlan
                     {
 
 
-                       var ToolTipText = String.Format("ID:{0} Súly:{1}, Magaság:{2}, Szélesség:{3}\nNév:{4}, fromNOD:{5}, toNOD:{6}", edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
+                       var ToolTipText = String.Format("ID:{0} Súly:{1}, Magaság:{2}, Szélesség:{3}\nNév:{4}, fromNOD:{5}, toNOD:{6}\nBehajtási övezet:{7}",
+                           edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO, edge.WZONE);
+                        GMapMarker gm = null;
 
-                  //    if (!markersPts.Contains(edge.fromLatLng))
-                        {
-                            GMapMarker gm = null;
-                            gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
-                            p_checkMapLayer.Markers.Add(gm);
-                            gm.ToolTipText = ToolTipText;
-                            markersPts.Add(gm.Position);
-                        }
-                        
-                       // if (p_checkMapLayer.Markers.FirstOrDefault(a => a.Position  == edge.toLatLng) == null)
-                        {
-                            GMapMarker gm = null;
-                            gm = new GMarkerGoogle(edge.toLatLng, GMarkerGoogleType.orange_small);
-                            p_checkMapLayer.Markers.Add(gm);
-                            gm.ToolTipText = ToolTipText;
-                            markersPts.Add(gm.Position);
-                        }
-                        /*
+                
                            if (markersPts.Contains(edge.fromLatLng))
                            {
                                gm = p_checkMapLayer.Markers.FirstOrDefault(x => x.Position == edge.fromLatLng);
@@ -441,26 +428,28 @@ namespace PMap.Common.PPlan
                            }
                            else
                            {
-                               gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
+                               gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.orange_small);
                                p_checkMapLayer.Markers.Add(gm);
                                gm.ToolTipText = ToolTipText;
                                markersPts.Add(gm.Position);
                            }
-                           */
-                        /*
+                           
+                        
                         if (markersPts.Contains(edge.toLatLng))
                         {
                             gm = p_checkMapLayer.Markers.FirstOrDefault(x => x.Position == edge.toLatLng);
-                            gm.ToolTipText += "\n";
+                            gm.ToolTipText += "\n" + ToolTipText;
+
 
                         }
                         else
                         {
-                            gm = new GMarkerGoogle(edge.toLatLng, GMarkerGoogleType.blue_small);
+                            gm = new GMarkerGoogle(edge.toLatLng, GMarkerGoogleType.orange_small);
                             p_checkMapLayer.Markers.Add(gm);
-                              markersPts.Add(gm.Position);
+                            gm.ToolTipText = ToolTipText;
+                            markersPts.Add(gm.Position);
                       }
-                        */
+                        
                         //    gm.ToolTipText += String.Format("ID:{0} Súly:{1}, Magaság:{2}, Szélesség:{3}\nNév:{4}, fromNOD:{5}, toNOD:{6}", edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
 
                         Pen p;

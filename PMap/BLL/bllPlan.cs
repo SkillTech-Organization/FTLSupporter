@@ -524,7 +524,7 @@ namespace PMap.BLL
                 {
                     ID = tr.ID.ToString(),
                     Carrier = tr.CRR_NAME,
-                    TruckRegNo = tr.TRK_ID.ToString(),      //Bővíteni a boPlanTour-t
+                    TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
                     TruckWeight = tr.TRK_WEIGHT,
                     TruckHeight = tr.TRK_XHEIGHT,
                     TruckWidth = tr.TRK_XWIDTH,
