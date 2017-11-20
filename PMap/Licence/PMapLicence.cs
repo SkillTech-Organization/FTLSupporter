@@ -76,10 +76,32 @@ namespace PMap.Licence
             get { return m_MachineID; }
             set { m_MachineID = value; NotifyPropertyChanged("MachineID"); }
         }
-/*
-        [DisplayNameAttributeX(Name = "State", Order = 5, NoPrefix = true)]
-        public string xState { get{ return this.State; } }
-*/
+
+        private string m_AzureTableStoreApiKey;
+        [DataMember]
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "Azure TableStore ApiKey", Order = 5, NoPrefix = true)]
+        public string AzureTableStoreApiKey
+        {
+            get { return m_AzureTableStoreApiKey; }
+            set { m_AzureTableStoreApiKey = value; NotifyPropertyChanged("AzureTableStoreApiKey"); }
+        }
+
+        private string m_AzureSendGridApiKey;
+        [DataMember]
+        [AzurePartitionAttr]
+        [DisplayNameAttributeX(Name = "Azure SendGrid ApiKey", Order = 5, NoPrefix = true)]
+        public string AzureSendGridApiKey
+        {
+            get { return m_AzureSendGridApiKey; }
+            set { m_AzureSendGridApiKey = value; NotifyPropertyChanged("AzureSendGridApiKey"); }
+        }
+
+
+        /*
+                [DisplayNameAttributeX(Name = "State", Order = 5, NoPrefix = true)]
+                public string xState { get{ return this.State; } }
+        */
 
     }
 }

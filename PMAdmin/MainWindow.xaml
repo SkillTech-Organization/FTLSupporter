@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PMAdmin.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PMap adminisztráció" Height="533.167" Width="845.833">
+        Title="PMap adminisztráció" Height="600" Width="1065.3">
     <Grid>
         <DockPanel>
             <StatusBar DockPanel.Dock="Bottom">

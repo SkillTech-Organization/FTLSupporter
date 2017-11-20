@@ -28,6 +28,8 @@ using System.Web.Script.Serialization;
 using PMap.Common.Azure;
 using System.Net;
 using Newtonsoft.Json;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace PMapTestApp
 {
@@ -793,6 +795,23 @@ namespace PMapTestApp
             Console.WriteLine(html);
             
             //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr
+
+        }
+
+        private async void button30_Click(object sender, EventArgs e)
+        {
+            
+            var apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            
+            var from = new EmailAddress("test@example.com", "Example User");
+            var subject = "Sending with SendGrid is Fun2";
+            var to = new EmailAddress("agyorgyi01@gmail.com", "Example User");
+            var plainTextContent = "and easy to do anywhere, even with C#";
+            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+           // var response = client.SendEmailAsync(msg);
+            var response = await client.SendEmailAsync(msg);
 
         }
     }

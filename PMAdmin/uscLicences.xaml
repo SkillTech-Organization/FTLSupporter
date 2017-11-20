@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PMAdmin"
              xmlns:DTPicker="clr-namespace:DTPicker;assembly=DTPicker" x:Class="PMAdmin.uscLicences"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500" >
+             d:DesignHeight="326" d:DesignWidth="600" >
     <UserControl.Resources>
         <local:BooleanAndConverter x:Key="AndConverter" />
     </UserControl.Resources>
@@ -15,8 +15,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="120" />
+            <RowDefinition />
+            <RowDefinition Height="184" />
         </Grid.RowDefinitions>
 
         <!--  IsSynchronizedWithCurrentItem="False"  is jó lehet -->
@@ -35,24 +35,34 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0"  ShowGridLines="false">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="160"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="114"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Content="Alkalmazáspéldány megnev." VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <Label Content="Lejárati dátum" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <Label Content="Megjegyzés" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,11,5,7" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                <Label Content="Név" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,6,0,5" Width="31" />
+                <Label Content="Lejárati dátum" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5,0,6" Width="86" />
+                <Label Content="TableStore API key" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,6,0,5" Width="107" />
+                <Label Content="SendGrid API key" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5" Width="101" />
+                <Label Content="Megjegyzés" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5,0,6" Width="73" />
+                <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,10,5,5" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
                          Text="{Binding Path=EditedItem.AppInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   
                          IsEnabled="{Binding Path=HasEditedItem}"/>
-                <DatePicker x:Name="dtpExpired" Grid.Column="1" HorizontalAlignment="Left" Margin="5,0,8,0" Grid.Row="1" VerticalAlignment="Center"
+                <DatePicker x:Name="dtpExpired" Grid.Column="1" HorizontalAlignment="Left" Margin="5,7,0,6" Grid.Row="1" VerticalAlignment="Center"
                             Text="{Binding Path=EditedItem.Expired, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}" Width="125"   
-                            IsEnabled="{Binding Path=HasEditedItem}"/>
-                <TextBox x:Name="txtComment"  Grid.Column="1" Grid.Row="2" Height="22"  Margin="5,0,5,0" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                            IsEnabled="{Binding Path=HasEditedItem}" Height="24"/>
+                <TextBox x:Name="txtAzureTableStoreApiKey"  Grid.Column="1" Grid.Row="2" Height="22"  Margin="5,8,5,7" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                         Text="{Binding Path=EditedItem.AzureTableStoreApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   
+                          IsEnabled="{Binding Path=HasEditedItem}"/>
+                <TextBox x:Name="txtAzureSendGridApiKey"  Grid.Column="1" Grid.Row="3" Height="22"  Margin="5,7" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
+                         Text="{Binding Path=EditedItem.AzureSendGridApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   
+                          IsEnabled="{Binding Path=HasEditedItem}"/>
+                <TextBox x:Name="txtComment"  Grid.Column="1" Grid.Row="4" Height="22"  Margin="5,7,5,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
                          Text="{Binding Path=EditedItem.Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   
                           IsEnabled="{Binding Path=HasEditedItem}"/>
             </Grid>
