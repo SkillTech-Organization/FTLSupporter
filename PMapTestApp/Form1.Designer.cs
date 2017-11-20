@@ -63,6 +63,7 @@
             this.btnBatchReverseGeoc = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
             this.button28 = new System.Windows.Forms.Button();
+            this.button29 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
@@ -392,11 +393,22 @@
             this.button28.UseVisualStyleBackColor = true;
             this.button28.Click += new System.EventHandler(this.button28_Click);
             // 
+            // button29
+            // 
+            this.button29.Location = new System.Drawing.Point(728, 275);
+            this.button29.Name = "button29";
+            this.button29.Size = new System.Drawing.Size(223, 34);
+            this.button29.TabIndex = 34;
+            this.button29.Text = "Token kérés";
+            this.button29.UseVisualStyleBackColor = true;
+            this.button29.Click += new System.EventHandler(this.button29_Click);
+            // 
             // frmPMapTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(989, 446);
+            this.Controls.Add(this.button29);
             this.Controls.Add(this.button28);
             this.Controls.Add(this.button25);
             this.Controls.Add(this.btnBatchReverseGeoc);
@@ -477,6 +489,7 @@
         private System.Windows.Forms.Button btnBatchReverseGeoc;
         private System.Windows.Forms.Button button25;
         private System.Windows.Forms.Button button28;
+        private System.Windows.Forms.Button button29;
     }
 }
 

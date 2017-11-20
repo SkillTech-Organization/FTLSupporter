@@ -26,6 +26,8 @@ using System.Net.Http;
 using PMap.WebTrace;
 using System.Web.Script.Serialization;
 using PMap.Common.Azure;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace PMapTestApp
 {
@@ -740,6 +742,57 @@ namespace PMapTestApp
             //összes elem (van where paraméter is!)
             int total;
             var l2 = bllWebTrace.RetrieveList(out total);
+
+        }
+
+        /*
+         backendbe bekerult egy CryptoHandler.cs, es a Web.configba az also ket kulcs-ertek par, 
+         ami a token generalashoz kell majd neked. A hivas ugy megy, hogy az Auth/GenerateTempUserToken-re 
+         kell kuldened egy HTTPGet-et egy parameterrel: tokenContent={base64-be kodolva azt, amit 
+         keresztultoltam az encrypten}
+         encrypten egy JSON-be serializalt List<string> kell, ahol minden elem egy rendszam (jelenleg)
+         feature-vehicle-tracking branch legutolso commitja, ha keresed
+        */
+        private void button29_Click(object sender, EventArgs e)
+        {
+            List<string> lstRegNo = new List<string>();
+            lstRegNo.Add("KVS-483");
+            lstRegNo.Add("LSN-700");
+            lstRegNo.Add("PEK-064");
+            lstRegNo.Add("PEB-687");
+            
+            /*
+            < add key = "AuthTokenCryptAESKey" value = "VhHe1F6DExaWl1T0bcOxdok58CyIXnjwCDQmojbwpH4=" />
+            < add key = "AuthTokenCryptAESIV" value = "GFXXSSi7IQFN0bgbwuuVng==" />
+            */
+            var AuthTokenCryptAESKey = "VhHe1F6DExaWl1T0bcOxdok58CyIXnjwCDQmojbwpH4=";
+            var AuthTokenCryptAESIV = "GFXXSSi7IQFN0bgbwuuVng==";
+
+            JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
+            var jsonRegno = JsonConvert.SerializeObject(lstRegNo, jsonsettings);
+
+            var crypted = AESCryptoHelper.EncryptString(jsonRegno, AuthTokenCryptAESKey, AuthTokenCryptAESIV);
+            byte[] bytes = Encoding.Default.GetBytes(crypted);
+            string base64 = Convert.ToBase64String(bytes);
+
+            Console.WriteLine(base64);
+
+
+            string url = @"http://mplastwebtest.azurewebsites.net/Auth/GenerateTempUserToken?tokencontent="+ base64;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.GZip;
+
+            string html = "";
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                html = reader.ReadToEnd();
+            }
+
+            Console.WriteLine(html);
+            
+            //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr
 
         }
     }

@@ -209,6 +209,7 @@
     <Compile Include="Cache\LogForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
+    <Compile Include="WebTrace\AESCryptoHelper.cs" />
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
     <Compile Include="WebTrace\PMMapPoint.cs" />
