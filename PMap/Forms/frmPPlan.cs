@@ -814,14 +814,16 @@ namespace PMap.Forms
                 {
                     using (new WaitCursor())
                     {
-                        var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID);
+                        var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
+
+                        var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, tours);
 
 
                         //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
                         //connect stringet tudjon kezelni
                         //
                         AzureTableStore.Instance.AzureAccount = PMapIniParams.Instance.AzureAccount;
-                        AzureTableStore.Instance.AzureKey = PMapIniParams.Instance.AzureKey;
+                        AzureTableStore.Instance.AzureKey = PMapCommonVars.Instance.AzureTableStoreApiKey;
 
 
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
@@ -842,6 +844,10 @@ namespace PMap.Forms
                             AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
 
                         }
+
+                        
+
+
                     }
                     UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
                 }

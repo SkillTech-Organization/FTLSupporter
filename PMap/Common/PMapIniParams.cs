@@ -50,7 +50,9 @@ namespace PMap.Common
         public bool ALog { get; private set; }
 
         public string AzureAccount { get; private set; }
-        public string AzureKey { get; private set; }
+        public string AuthTokenCryptAESKey { get; private set; }
+        public string AuthTokenCryptAESIV { get; private set; }
+        public string WebLoginTemplate { get; private set; }
 
         public ThreadPriority InitRouteDataProcess { get; private set; }
         public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
@@ -198,7 +200,9 @@ namespace PMap.Common
 
 
             AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
-            AzureKey = ini.ReadString(Global.iniWeb, Global.iniAzureKey);
+            AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);
+            AuthTokenCryptAESIV = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESIV);
+            WebLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniWebLoginTemplate);
 
 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);

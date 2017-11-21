@@ -143,6 +143,9 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Szállító neve", Order = 37)]
         public string CRR_NAME { get; set; }
 
+        [DisplayNameAttributeX(Name = "EMail kiküldve?", Order = 38)]
+        public bool TOD_SENTEMAIL { get; set; }
+
 
         //Technikai mezők
         //

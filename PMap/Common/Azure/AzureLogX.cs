@@ -9,6 +9,9 @@ namespace PMap.Common.Azure
     {
         public static void LogToAzure(string p_type, DateTime p_timestamp, string p_text)
         {
+
+            
+            
             PMapLog pl = new PMapLog()
             {
                 AppInstance = PMapCommonVars.Instance.AppInstance,

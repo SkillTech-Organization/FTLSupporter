@@ -713,7 +713,8 @@ namespace PMapTestApp
                 SQLServerAccess db = new SQLServerAccess();
                 db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
                 bllPlan bllPlan = new bllPlan(db);
-                var TourList = bllPlan.GetToursForAzure(d.m_PLN_ID);
+                var tours = bllPlan.GetPlanTours(d.m_PLN_ID);
+                var TourList = bllPlan.GetToursForAzure(d.m_PLN_ID, tours);
                 db.Close();
 
                 //connectionString = "DefaultEndpointsProtocol=https;AccountName=petawebdbtest;AccountKey=ucXUpxndw4j+73Ygjk7Cg3I93voioqGC5PCCelVr4g8aSpub+AEfk99YG6c/8768Exzv9wXDcQQd/o7xenoxzQ==;EndpointSuffix=core.windows.net" />

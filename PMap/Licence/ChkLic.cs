@@ -22,38 +22,46 @@ namespace PMap.Licence
 
             if (p_IDFile.Length == 0)
                 throw (new PMapLicenceException(PMapMessages.E_LIC_NOFILE));
+
+            string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
+            string oriAzureKey = AzureTableStore.Instance.AzureKey;
             try
             {
-                buffer = Util.FileToByteArray( p_IDFile);
+                buffer = Util.FileToByteArray(p_IDFile);
                 using (Aes oAes = Aes.Create())
                 {
                     string xml = AES.DecryptStringFromBytes_Aes(buffer, Encoding.Default.GetBytes(pw), Encoding.Default.GetBytes(iv));
                     PMapID pi = Util.XmlToObject<PMapID>(xml);
+
+
                     AzureTableStore.Instance.AzureAccount = pi.AzureAccountName;
                     AzureTableStore.Instance.AzureKey = pi.AzureAccountKey;
 
                     PMapLicence pl = AzureTableStore.Instance.Retrieve<PMapLicence>(pi.ID.ToString(), "");
-                    if( pl == null)
+                    if (pl == null)
                         throw (new PMapLicenceException(PMapMessages.E_LIC_INVALIDFILE));
 
-                    if( pl.Expired < DateTime.Now.Date)
-                        throw (new PMapLicenceException(String.Format( PMapMessages.E_LIC_EXPIRED, pl.Expired.ToString(Global.DATEFORMAT))));
+                    if (pl.Expired < DateTime.Now.Date)
+                        throw (new PMapLicenceException(String.Format(PMapMessages.E_LIC_EXPIRED, pl.Expired.ToString(Global.DATEFORMAT))));
 
                     PMapCommonVars.Instance.AppInstance = pi.AppInstance;
                     PMapCommonVars.Instance.Expired = pl.Expired;
+                    PMapCommonVars.Instance.AzureTableStoreApiKey = pl.AzureTableStoreApiKey;
+                    PMapCommonVars.Instance.AzureSendGridApiKey = pl.AzureSendGridApiKey;
+
 
                     string sMachineID = FingerPrint.Value();
 
                     if (pl.MachineID != null && pl.MachineID != "" && pl.MachineID != sMachineID)
                     {
-                        var warn = new PMapLicWarn() 
-                                { AppInstance = pl.AppInstance,
-                                  OldMachineID = pl.MachineID,
-                                  NewMachineID = sMachineID,
-                                  PMapTimestamp = DateTime.Now.ToString(Global.DATETIMEFORMAT)
-                                };
+                        var warn = new PMapLicWarn()
+                        { AppInstance = pl.AppInstance,
+                            OldMachineID = pl.MachineID,
+                            NewMachineID = sMachineID,
+                            PMapTimestamp = DateTime.Now.ToString(Global.DATETIMEFORMAT)
+                        };
                         AzureTableStore.Instance.Insert(warn, Environment.MachineName);
-                        
+
                     }
                     if (pl.MachineID != sMachineID)
                     {
@@ -62,16 +70,22 @@ namespace PMap.Licence
                     }
                 }
             }
-                /*
-            catch (FileNotFoundException fe)
-            {
-                UI.Error(PMapMessages.E_LIC_IDNOTFOUND);
-                throw(fe);
-            }
-                 */
+            /*
+        catch (FileNotFoundException fe)
+        {
+            UI.Error(PMapMessages.E_LIC_IDNOTFOUND);
+            throw(fe);
+        }
+             */
             catch (Exception ex)
             {
-                throw(ex);
+                throw (ex);
+            }
+            finally
+            {
+                AzureTableStore.Instance.AzureAccount = oriAzureAccount;
+                AzureTableStore.Instance.AzureKey = oriAzureKey;
+
             }
         }
     }
