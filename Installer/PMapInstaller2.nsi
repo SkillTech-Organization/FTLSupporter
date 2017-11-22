@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "PMap"
-!define PRODUCT_VERSION "4.1.0"
+!define PRODUCT_VERSION "4.2.0"
 !define PRODUCT_PUBLISHER "Pratix Kft."
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -50,6 +50,7 @@ Section "Fõszakasz" SEC01
   File "..\PMap\bin\Release\*.dll"
   File "..\VBInterface\bin\Release\*.tlb"
   File "..\VBInterface\bin\Release\*.dll"
+  File "..\Templates\*.*"
   File "RegAsm.exe"
 
 SectionEnd
@@ -85,6 +86,7 @@ Section Uninstall
   Delete "$INSTDIR\regasm.exe"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\*.tlb"
+  Delete "$INSTDIR\*.htm*"
 
   Delete "$SMPROGRAMS\PMap\Uninstall.lnk"
 

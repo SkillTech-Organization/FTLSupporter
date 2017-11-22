@@ -466,7 +466,9 @@ namespace PMap.Forms
 
                                     if (PMapIniParams.Instance.OrdCommentInTooltip)
                                     {
-                                        tour.TourPoints[i + 1].ToolTipText += "\n" + tour.TourPoints[i + 1].ORD_COMMENT;
+                                        tour.TourPoints[i + 1].ToolTipText += "\n" + 
+                                            "Térfogat:" + tour.TourPoints[i + 1].ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + tour.TourPoints[i + 1].TOD_QTY.ToString(Global.NUMFORMAT) +
+                                            "\n" + tour.TourPoints[i + 1].ORD_COMMENT;
                                     }
 
                                     tour.TourPoints[i + 1].Marker = mrkTourPoint;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             this.gridTourPoints = new DevExpress.XtraGrid.GridControl();
             this.gridViewTourPoints = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumnID = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -53,22 +54,32 @@
             this.gridColumnORD_LENGTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnORD_WIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnORD_HEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnSendEMail = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemButtonEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.reChkVisible = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.repositoryItemPopupContainerEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit();
             ((System.ComponentModel.ISupportInitialize)(this.gridTourPoints)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTourPoints)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).BeginInit();
             this.SuspendLayout();
             // 
             // gridTourPoints
             // 
             this.gridTourPoints.AllowDrop = true;
             this.gridTourPoints.Dock = System.Windows.Forms.DockStyle.Fill;
+            gridLevelNode1.RelationName = "Level1";
+            this.gridTourPoints.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
+            gridLevelNode1});
             this.gridTourPoints.Location = new System.Drawing.Point(0, 0);
             this.gridTourPoints.LookAndFeel.UseDefaultLookAndFeel = false;
             this.gridTourPoints.MainView = this.gridViewTourPoints;
             this.gridTourPoints.Name = "gridTourPoints";
             this.gridTourPoints.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.reChkVisible});
+            this.reChkVisible,
+            this.repositoryItemButtonEdit1,
+            this.repositoryItemPopupContainerEdit1});
             this.gridTourPoints.Size = new System.Drawing.Size(746, 443);
             this.gridTourPoints.TabIndex = 1;
             this.gridTourPoints.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -107,7 +118,8 @@
             this.gridColumnPTP_TYPE,
             this.gridColumnORD_LENGTH,
             this.gridColumnORD_WIDTH,
-            this.gridColumnORD_HEIGHT});
+            this.gridColumnORD_HEIGHT,
+            this.gridColumnSendEMail});
             this.gridViewTourPoints.GridControl = this.gridTourPoints;
             this.gridViewTourPoints.Name = "gridViewTourPoints";
             this.gridViewTourPoints.OptionsBehavior.Editable = false;
@@ -121,6 +133,7 @@
             this.gridViewTourPoints.OptionsView.ShowDetailButtons = false;
             this.gridViewTourPoints.OptionsView.ShowGroupPanel = false;
             this.gridViewTourPoints.PaintStyleName = "MixedXP";
+            this.gridViewTourPoints.ShowButtonMode = DevExpress.XtraGrid.Views.Base.ShowButtonModeEnum.ShowAlways;
             this.gridViewTourPoints.CustomDrawColumnHeader += new DevExpress.XtraGrid.Views.Grid.ColumnHeaderCustomDrawEventHandler(this.gridViewTourPoints_CustomDrawColumnHeader);
             this.gridViewTourPoints.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridViewTourPoints_CustomDrawCell);
             this.gridViewTourPoints.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewTourPoints_FocusedRowChanged);
@@ -341,10 +354,30 @@
             this.gridColumnORD_HEIGHT.Visible = true;
             this.gridColumnORD_HEIGHT.VisibleIndex = 17;
             // 
+            // gridColumnSendEMail
+            // 
+            this.gridColumnSendEMail.Caption = "E-mail küldés";
+            this.gridColumnSendEMail.ColumnEdit = this.repositoryItemPopupContainerEdit1;
+            this.gridColumnSendEMail.Name = "gridColumnSendEMail";
+            // 
+            // repositoryItemButtonEdit1
+            // 
+            this.repositoryItemButtonEdit1.AutoHeight = false;
+            this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
+            // 
             // reChkVisible
             // 
             this.reChkVisible.AutoHeight = false;
             this.reChkVisible.Name = "reChkVisible";
+            // 
+            // repositoryItemPopupContainerEdit1
+            // 
+            this.repositoryItemPopupContainerEdit1.AutoHeight = false;
+            this.repositoryItemPopupContainerEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemPopupContainerEdit1.Name = "repositoryItemPopupContainerEdit1";
             // 
             // pnlPPlanTourPoints
             // 
@@ -358,7 +391,9 @@
             this.Text = "Túrapontok";
             ((System.ComponentModel.ISupportInitialize)(this.gridTourPoints)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTourPoints)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -391,5 +426,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnORD_NUM;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnDEP_CODE;
         private DevExpress.XtraGrid.Columns.GridColumn gridColPTP_TOLL;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnSendEMail;
+        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit1;
     }
 }

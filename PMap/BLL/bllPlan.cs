@@ -220,12 +220,13 @@ namespace PMap.BLL
         {
             string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
-                          " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, TOD_SENTEMAIL, " + Environment.NewLine +
+                          " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
                           "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join TOD_TOURORDER TOD on TOD.ID = PTP.TOD_ID " + Environment.NewLine +
+                          "left join ORD_ORDER ORDE on ORDE.ID = TOD.ORD_ID " + Environment.NewLine +
                           "left join v_TPLANQTY TPQ ON TPQ.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join v_TPLANVOL TPV ON TPV.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join v_TPLANTOLL TPT ON TPT.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -239,7 +240,7 @@ namespace PMap.BLL
                           "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.PLN_ID = ? " + Environment.NewLine +
                           "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
-                          " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, TOD_SENTEMAIL " + Environment.NewLine +
+                          " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, TOD_SENTEMAIL, ORD_EMAIL " + Environment.NewLine +
                           "order by TRK_REG_NUM, TRK_TRAILER ";
 
 
@@ -251,21 +252,19 @@ namespace PMap.BLL
             return linq.ToList();
         }
 
-        /*alter table TOD_TOURORDER 
-ADD  TOD_SENTEMAIL [dbo].[TY_BVALUE] NULL DEFAULT 1*/
-
         public boPlanTour GetPlanTour(int p_TPL_ID)
         {
             boPlanTour retVal = null;
 
             string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME, TOD_SENTEMAIL, " + Environment.NewLine +
+                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
                           "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK  " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join TOD_TOURORDER TOD on TOD.ID = PTP.TOD_ID " + Environment.NewLine +
+                          "left join ORD_ORDER ORDE on ORDE.ID = TOD.ORD_ID " + Environment.NewLine +
                           "left join v_TPLANQTY TPQ ON TPQ.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join v_TPLANVOL TPV ON TPV.TPL_ID = TPL.ID " + Environment.NewLine +
                           "left join v_TPLANTOLL TPT ON TPT.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -280,7 +279,7 @@ ADD  TOD_SENTEMAIL [dbo].[TY_BVALUE] NULL DEFAULT 1*/
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.ID = ? " + Environment.NewLine +
                           "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME),  " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST, CRR_NAME, TOD_SENTEMAIL    ";
+                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST, CRR_NAME, TOD_SENTEMAIL, ORD_EMAIL    ";
 
 
             Random rnd = new Random((int)DateTime.Now.Millisecond);
@@ -332,7 +331,8 @@ ADD  TOD_SENTEMAIL [dbo].[TY_BVALUE] NULL DEFAULT 1*/
                 VOLErr = false,
                 TDURATION = new DateTime(0).AddMinutes(Util.getFieldValue<int>(p_dr, "TDURATION")),
                 CRR_NAME = Util.getFieldValue<string>(p_dr, "CRR_NAME"),
-                TOD_SENTEMAIL = Util.getFieldValue<bool>(p_dr, "TOD_SENTEMAIL")
+                TOD_SENTEMAIL = Util.getFieldValue<bool>(p_dr, "TOD_SENTEMAIL"),
+                ORD_EMAIL = Util.getFieldValue<string>(p_dr, "ORD_EMAIL")
             };
 
             foreach (boPlanTourPoint tp in ret.TourPoints)
@@ -471,7 +471,9 @@ ADD  TOD_SENTEMAIL [dbo].[TY_BVALUE] NULL DEFAULT 1*/
                 TRK_REG_NUM = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM")
             };
             if (PMapIniParams.Instance.OrdCommentInTooltip)
-                ret.ToolTipText += "\n" + ret.ORD_COMMENT;
+                ret.ToolTipText += "\n" +
+                    "Térfogat:" + ret.ORD_VOLUME.ToString( Global.NUMFORMAT) + ", Mennyiség:" + ret.TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
+                    ret.ORD_COMMENT;
             return ret;
         }
 
