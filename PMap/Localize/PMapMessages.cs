@@ -32,6 +32,7 @@ namespace PMap.Localize
         public const string E_PVRP_ERR= "Tervezőmotor hibaüzenet:{0}";
         public const string Q_PEDIT_UPLOAD = "Feltölthetőek a túrák a felhőbe?";
         public const string M_PEDIT_UPLOADOK = "Feltöltés rendben megtörtént";
+        public const string E_SNDEMAIL_MAIL = "Legalább egy e-mailcímet meg kell adni !";
 
 
 

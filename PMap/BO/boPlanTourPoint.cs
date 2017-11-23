@@ -5,6 +5,7 @@ using System.Text;
 using PMap.Markers;
 using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
+using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
@@ -58,6 +59,13 @@ namespace PMap.BO
         public double ORD_HEIGHT { get; set; }
         public double ORD_VOLUME { get; set; }
         public string ORD_COMMENT { get; set; }
+
+        [DisplayNameAttributeX(Name = "EMail kiküldve?", Order = 38)]
+        public bool TOD_SENTEMAIL { get; set; }
+
+        [DisplayNameAttributeX(Name = "Szállító neve", Order = 39)]
+        public string ORD_EMAIL { get; set; }
+
         [ScriptIgnore]
         public boPlanTour Tour { get; set; }
         public string ToolTipText { get; set; }

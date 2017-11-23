@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(pnlPPlanTourPoints));
             this.gridTourPoints = new DevExpress.XtraGrid.GridControl();
             this.gridViewTourPoints = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumnID = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -55,14 +56,13 @@
             this.gridColumnORD_WIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnORD_HEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnSendEMail = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.repositoryItemButtonEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
-            this.reChkVisible = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.repositoryItemPopupContainerEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit();
+            this.gridColumnORD_EMAIL = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.reChkSendEMail = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.gridTourPoints)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTourPoints)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.reChkSendEMail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             this.SuspendLayout();
             // 
             // gridTourPoints
@@ -77,9 +77,8 @@
             this.gridTourPoints.MainView = this.gridViewTourPoints;
             this.gridTourPoints.Name = "gridTourPoints";
             this.gridTourPoints.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.reChkVisible,
-            this.repositoryItemButtonEdit1,
-            this.repositoryItemPopupContainerEdit1});
+            this.reChkSendEMail,
+            this.repositoryItemCheckEdit1});
             this.gridTourPoints.Size = new System.Drawing.Size(746, 443);
             this.gridTourPoints.TabIndex = 1;
             this.gridTourPoints.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -119,10 +118,11 @@
             this.gridColumnORD_LENGTH,
             this.gridColumnORD_WIDTH,
             this.gridColumnORD_HEIGHT,
-            this.gridColumnSendEMail});
+            this.gridColumnSendEMail,
+            this.gridColumnORD_EMAIL});
+            this.gridViewTourPoints.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus;
             this.gridViewTourPoints.GridControl = this.gridTourPoints;
             this.gridViewTourPoints.Name = "gridViewTourPoints";
-            this.gridViewTourPoints.OptionsBehavior.Editable = false;
             this.gridViewTourPoints.OptionsCustomization.AllowGroup = false;
             this.gridViewTourPoints.OptionsDetail.AllowZoomDetail = false;
             this.gridViewTourPoints.OptionsDetail.EnableMasterViewMode = false;
@@ -150,6 +150,7 @@
             this.gridColumnPTP_ORDER.Caption = "Sorrend";
             this.gridColumnPTP_ORDER.FieldName = "PTP_ORDER";
             this.gridColumnPTP_ORDER.Name = "gridColumnPTP_ORDER";
+            this.gridColumnPTP_ORDER.OptionsColumn.AllowEdit = false;
             // 
             // gridColumnORD_NUM
             // 
@@ -159,6 +160,7 @@
             this.gridColumnORD_NUM.OptionsColumn.AllowEdit = false;
             this.gridColumnORD_NUM.Visible = true;
             this.gridColumnORD_NUM.VisibleIndex = 3;
+            this.gridColumnORD_NUM.Width = 39;
             // 
             // gridColumnDEP_CODE
             // 
@@ -168,15 +170,17 @@
             this.gridColumnDEP_CODE.OptionsColumn.AllowEdit = false;
             this.gridColumnDEP_CODE.Visible = true;
             this.gridColumnDEP_CODE.VisibleIndex = 0;
+            this.gridColumnDEP_CODE.Width = 39;
             // 
             // gridColumnCLT_NAME
             // 
             this.gridColumnCLT_NAME.Caption = "Túrapont";
             this.gridColumnCLT_NAME.FieldName = "CLT_NAME";
             this.gridColumnCLT_NAME.Name = "gridColumnCLT_NAME";
+            this.gridColumnCLT_NAME.OptionsColumn.AllowEdit = false;
             this.gridColumnCLT_NAME.Visible = true;
             this.gridColumnCLT_NAME.VisibleIndex = 1;
-            this.gridColumnCLT_NAME.Width = 100;
+            this.gridColumnCLT_NAME.Width = 52;
             // 
             // gridColumnPTP_TIME
             // 
@@ -185,9 +189,10 @@
             this.gridColumnPTP_TIME.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnPTP_TIME.FieldName = "PTP_TIME";
             this.gridColumnPTP_TIME.Name = "gridColumnPTP_TIME";
+            this.gridColumnPTP_TIME.OptionsColumn.AllowEdit = false;
             this.gridColumnPTP_TIME.Visible = true;
             this.gridColumnPTP_TIME.VisibleIndex = 5;
-            this.gridColumnPTP_TIME.Width = 68;
+            this.gridColumnPTP_TIME.Width = 35;
             // 
             // gridColumnPTP_DISTANCE
             // 
@@ -196,9 +201,10 @@
             this.gridColumnPTP_DISTANCE.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnPTP_DISTANCE.FieldName = "PTP_DISTANCE";
             this.gridColumnPTP_DISTANCE.Name = "gridColumnPTP_DISTANCE";
+            this.gridColumnPTP_DISTANCE.OptionsColumn.AllowEdit = false;
             this.gridColumnPTP_DISTANCE.Visible = true;
             this.gridColumnPTP_DISTANCE.VisibleIndex = 6;
-            this.gridColumnPTP_DISTANCE.Width = 68;
+            this.gridColumnPTP_DISTANCE.Width = 35;
             // 
             // gridColumnPTP_ARRTIME
             // 
@@ -207,9 +213,10 @@
             this.gridColumnPTP_ARRTIME.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.gridColumnPTP_ARRTIME.FieldName = "PTP_ARRTIME";
             this.gridColumnPTP_ARRTIME.Name = "gridColumnPTP_ARRTIME";
+            this.gridColumnPTP_ARRTIME.OptionsColumn.AllowEdit = false;
             this.gridColumnPTP_ARRTIME.Visible = true;
             this.gridColumnPTP_ARRTIME.VisibleIndex = 7;
-            this.gridColumnPTP_ARRTIME.Width = 68;
+            this.gridColumnPTP_ARRTIME.Width = 35;
             // 
             // gridColumnPTP_SERVTIME
             // 
@@ -218,9 +225,10 @@
             this.gridColumnPTP_SERVTIME.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.gridColumnPTP_SERVTIME.FieldName = "PTP_SERVTIME";
             this.gridColumnPTP_SERVTIME.Name = "gridColumnPTP_SERVTIME";
+            this.gridColumnPTP_SERVTIME.OptionsColumn.AllowEdit = false;
             this.gridColumnPTP_SERVTIME.Visible = true;
             this.gridColumnPTP_SERVTIME.VisibleIndex = 8;
-            this.gridColumnPTP_SERVTIME.Width = 68;
+            this.gridColumnPTP_SERVTIME.Width = 35;
             // 
             // gridColumnPTP_DEPTIME
             // 
@@ -229,17 +237,20 @@
             this.gridColumnPTP_DEPTIME.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.gridColumnPTP_DEPTIME.FieldName = "PTP_DEPTIME";
             this.gridColumnPTP_DEPTIME.Name = "gridColumnPTP_DEPTIME";
+            this.gridColumnPTP_DEPTIME.OptionsColumn.AllowEdit = false;
             this.gridColumnPTP_DEPTIME.Visible = true;
             this.gridColumnPTP_DEPTIME.VisibleIndex = 9;
-            this.gridColumnPTP_DEPTIME.Width = 68;
+            this.gridColumnPTP_DEPTIME.Width = 35;
             // 
             // gridColumnOPENCLOSE
             // 
             this.gridColumnOPENCLOSE.Caption = "Nyitva tartás";
             this.gridColumnOPENCLOSE.FieldName = "OPENCLOSE";
             this.gridColumnOPENCLOSE.Name = "gridColumnOPENCLOSE";
+            this.gridColumnOPENCLOSE.OptionsColumn.AllowEdit = false;
             this.gridColumnOPENCLOSE.Visible = true;
             this.gridColumnOPENCLOSE.VisibleIndex = 4;
+            this.gridColumnOPENCLOSE.Width = 39;
             // 
             // gridColumnTOD_QTY
             // 
@@ -248,9 +259,10 @@
             this.gridColumnTOD_QTY.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnTOD_QTY.FieldName = "TOD_QTY";
             this.gridColumnTOD_QTY.Name = "gridColumnTOD_QTY";
+            this.gridColumnTOD_QTY.OptionsColumn.AllowEdit = false;
             this.gridColumnTOD_QTY.Visible = true;
             this.gridColumnTOD_QTY.VisibleIndex = 10;
-            this.gridColumnTOD_QTY.Width = 68;
+            this.gridColumnTOD_QTY.Width = 35;
             // 
             // gridColumnTOD_QTY_INC
             // 
@@ -259,9 +271,10 @@
             this.gridColumnTOD_QTY_INC.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnTOD_QTY_INC.FieldName = "TOD_QTY_INC";
             this.gridColumnTOD_QTY_INC.Name = "gridColumnTOD_QTY_INC";
+            this.gridColumnTOD_QTY_INC.OptionsColumn.AllowEdit = false;
             this.gridColumnTOD_QTY_INC.Visible = true;
             this.gridColumnTOD_QTY_INC.VisibleIndex = 11;
-            this.gridColumnTOD_QTY_INC.Width = 68;
+            this.gridColumnTOD_QTY_INC.Width = 35;
             // 
             // gridColumnTOD_VOLUME
             // 
@@ -270,18 +283,20 @@
             this.gridColumnTOD_VOLUME.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnTOD_VOLUME.FieldName = "TOD_VOLUME";
             this.gridColumnTOD_VOLUME.Name = "gridColumnTOD_VOLUME";
+            this.gridColumnTOD_VOLUME.OptionsColumn.AllowEdit = false;
             this.gridColumnTOD_VOLUME.Visible = true;
             this.gridColumnTOD_VOLUME.VisibleIndex = 12;
-            this.gridColumnTOD_VOLUME.Width = 68;
+            this.gridColumnTOD_VOLUME.Width = 35;
             // 
             // gridColumnPTP_BUNDLE
             // 
             this.gridColumnPTP_BUNDLE.Caption = "Göngyöleg";
             this.gridColumnPTP_BUNDLE.FieldName = "PTP_BUNDLE";
             this.gridColumnPTP_BUNDLE.Name = "gridColumnPTP_BUNDLE";
+            this.gridColumnPTP_BUNDLE.OptionsColumn.AllowEdit = false;
             this.gridColumnPTP_BUNDLE.Visible = true;
             this.gridColumnPTP_BUNDLE.VisibleIndex = 13;
-            this.gridColumnPTP_BUNDLE.Width = 81;
+            this.gridColumnPTP_BUNDLE.Width = 42;
             // 
             // gridColPTP_TOLL
             // 
@@ -293,14 +308,17 @@
             this.gridColPTP_TOLL.OptionsColumn.AllowEdit = false;
             this.gridColPTP_TOLL.Visible = true;
             this.gridColPTP_TOLL.VisibleIndex = 14;
+            this.gridColPTP_TOLL.Width = 39;
             // 
             // gridColumnADDR
             // 
             this.gridColumnADDR.Caption = "Cím";
             this.gridColumnADDR.FieldName = "ADDR";
             this.gridColumnADDR.Name = "gridColumnADDR";
+            this.gridColumnADDR.OptionsColumn.AllowEdit = false;
             this.gridColumnADDR.Visible = true;
             this.gridColumnADDR.VisibleIndex = 2;
+            this.gridColumnADDR.Width = 39;
             // 
             // gridColumnOPEN
             // 
@@ -309,6 +327,7 @@
             this.gridColumnOPEN.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.gridColumnOPEN.FieldName = "OPEN";
             this.gridColumnOPEN.Name = "gridColumnOPEN";
+            this.gridColumnOPEN.OptionsColumn.AllowEdit = false;
             // 
             // gridColumnCLOSE
             // 
@@ -317,12 +336,14 @@
             this.gridColumnCLOSE.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.gridColumnCLOSE.FieldName = "CLOSE";
             this.gridColumnCLOSE.Name = "gridColumnCLOSE";
+            this.gridColumnCLOSE.OptionsColumn.AllowEdit = false;
             // 
             // gridColumnPTP_TYPE
             // 
             this.gridColumnPTP_TYPE.Caption = "Típus";
             this.gridColumnPTP_TYPE.FieldName = "PTP_TYPE";
             this.gridColumnPTP_TYPE.Name = "gridColumnPTP_TYPE";
+            this.gridColumnPTP_TYPE.OptionsColumn.AllowEdit = false;
             // 
             // gridColumnORD_LENGTH
             // 
@@ -331,8 +352,10 @@
             this.gridColumnORD_LENGTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnORD_LENGTH.FieldName = "ORD_LENGTH";
             this.gridColumnORD_LENGTH.Name = "gridColumnORD_LENGTH";
+            this.gridColumnORD_LENGTH.OptionsColumn.AllowEdit = false;
             this.gridColumnORD_LENGTH.Visible = true;
             this.gridColumnORD_LENGTH.VisibleIndex = 15;
+            this.gridColumnORD_LENGTH.Width = 39;
             // 
             // gridColumnORD_WIDTH
             // 
@@ -341,8 +364,10 @@
             this.gridColumnORD_WIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnORD_WIDTH.FieldName = "ORD_WIDTH";
             this.gridColumnORD_WIDTH.Name = "gridColumnORD_WIDTH";
+            this.gridColumnORD_WIDTH.OptionsColumn.AllowEdit = false;
             this.gridColumnORD_WIDTH.Visible = true;
             this.gridColumnORD_WIDTH.VisibleIndex = 16;
+            this.gridColumnORD_WIDTH.Width = 39;
             // 
             // gridColumnORD_HEIGHT
             // 
@@ -351,33 +376,46 @@
             this.gridColumnORD_HEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.gridColumnORD_HEIGHT.FieldName = "ORD_HEIGHT";
             this.gridColumnORD_HEIGHT.Name = "gridColumnORD_HEIGHT";
+            this.gridColumnORD_HEIGHT.OptionsColumn.AllowEdit = false;
             this.gridColumnORD_HEIGHT.Visible = true;
             this.gridColumnORD_HEIGHT.VisibleIndex = 17;
+            this.gridColumnORD_HEIGHT.Width = 39;
             // 
             // gridColumnSendEMail
             // 
-            this.gridColumnSendEMail.Caption = "E-mail küldés";
-            this.gridColumnSendEMail.ColumnEdit = this.repositoryItemPopupContainerEdit1;
+            this.gridColumnSendEMail.Caption = "E-mail";
+            this.gridColumnSendEMail.ColumnEdit = this.reChkSendEMail;
+            this.gridColumnSendEMail.FieldName = "TOD_SENTEMAIL";
             this.gridColumnSendEMail.Name = "gridColumnSendEMail";
+            this.gridColumnSendEMail.OptionsColumn.FixedWidth = true;
+            this.gridColumnSendEMail.Visible = true;
+            this.gridColumnSendEMail.VisibleIndex = 18;
+            this.gridColumnSendEMail.Width = 35;
             // 
-            // repositoryItemButtonEdit1
+            // gridColumnORD_EMAIL
             // 
-            this.repositoryItemButtonEdit1.AutoHeight = false;
-            this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
+            this.gridColumnORD_EMAIL.Caption = "E-mailcímek";
+            this.gridColumnORD_EMAIL.FieldName = "ORD_EMAIL";
+            this.gridColumnORD_EMAIL.Name = "gridColumnORD_EMAIL";
+            this.gridColumnORD_EMAIL.OptionsColumn.AllowEdit = false;
+            this.gridColumnORD_EMAIL.Visible = true;
+            this.gridColumnORD_EMAIL.VisibleIndex = 19;
             // 
-            // reChkVisible
+            // reChkSendEMail
             // 
-            this.reChkVisible.AutoHeight = false;
-            this.reChkVisible.Name = "reChkVisible";
+            this.reChkSendEMail.AutoHeight = false;
+            this.reChkSendEMail.Caption = "";
+            this.reChkSendEMail.CheckStyle = DevExpress.XtraEditors.Controls.CheckStyles.UserDefined;
+            this.reChkSendEMail.Name = "reChkSendEMail";
+            this.reChkSendEMail.PictureChecked = ((System.Drawing.Image)(resources.GetObject("reChkSendEMail.PictureChecked")));
+            this.reChkSendEMail.PictureUnchecked = ((System.Drawing.Image)(resources.GetObject("reChkSendEMail.PictureUnchecked")));
+            this.reChkSendEMail.CheckedChanged += new System.EventHandler(this.reChkSendEMail_CheckedChanged);
+            this.reChkSendEMail.EditValueChanged += new System.EventHandler(this.reChkSendEMail_EditValueChanged);
             // 
-            // repositoryItemPopupContainerEdit1
+            // repositoryItemCheckEdit1
             // 
-            this.repositoryItemPopupContainerEdit1.AutoHeight = false;
-            this.repositoryItemPopupContainerEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemPopupContainerEdit1.Name = "repositoryItemPopupContainerEdit1";
+            this.repositoryItemCheckEdit1.AutoHeight = false;
+            this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
             // 
             // pnlPPlanTourPoints
             // 
@@ -391,9 +429,8 @@
             this.Text = "Túrapontok";
             ((System.ComponentModel.ISupportInitialize)(this.gridTourPoints)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTourPoints)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.reChkSendEMail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -409,7 +446,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnPTP_SERVTIME;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnPTP_DEPTIME;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnCLT_NAME;
-        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit reChkVisible;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTOD_QTY;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTOD_QTY_INC;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTOD_VOLUME;
@@ -427,7 +463,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnDEP_CODE;
         private DevExpress.XtraGrid.Columns.GridColumn gridColPTP_TOLL;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnSendEMail;
-        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEdit1;
-        private DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit reChkSendEMail;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnORD_EMAIL;
     }
 }

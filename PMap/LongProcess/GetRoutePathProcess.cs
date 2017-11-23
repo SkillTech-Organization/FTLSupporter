@@ -219,7 +219,9 @@ namespace PMap.LongProcess
 
                                 if (PMapIniParams.Instance.OrdCommentInTooltip)
                                 {
-                                    p_tour.TourPoints[i + 1].ToolTipText += "\n" + p_tour.TourPoints[i + 1].ORD_COMMENT;
+                                    p_tour.TourPoints[i + 1].ToolTipText += "\n" + 
+                                        "Térfogat:" + p_tour.TourPoints[i + 1].ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + p_tour.TourPoints[i + 1].TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
+                                        p_tour.TourPoints[i + 1].ORD_COMMENT;
                                 }
                               
                                 p_tour.Layer.Markers.Add(mrkTourPoint);

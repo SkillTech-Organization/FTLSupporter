@@ -141,9 +141,13 @@
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\packages\WindowsAzure.Storage.7.0.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SendGrid, Version=9.8.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sendgrid.9.9.0\lib\net452\SendGrid.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -209,10 +213,18 @@
     <Compile Include="Cache\LogForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
+    <Compile Include="Forms\dlgSendEMail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgSendEMail.Designer.cs">
+      <DependentUpon>dlgSendEMail.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebTrace\AESCryptoHelper.cs" />
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
+    <Compile Include="WebTrace\NotificationMail.cs" />
     <Compile Include="WebTrace\PMMapPoint.cs" />
+    <Compile Include="WebTrace\PMToken.cs" />
     <Compile Include="WebTrace\PMTourPoint.cs" />
     <Compile Include="Common\Attrib\AzureTableFieldAttr.cs" />
     <Compile Include="WebTrace\PMTour.cs" />
@@ -554,6 +566,9 @@
     <EmbeddedResource Include="Forms\dlgRouteVisDetails.resx">
       <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgSendEMail.resx">
+      <DependentUpon>dlgSendEMail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\dlgTourDetails.resx">
       <DependentUpon>dlgTourDetails.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -647,6 +662,7 @@
     <Compile Include="Common\UI.cs" />
     <Compile Include="Common\Util.cs" />
     <Compile Include="Route\RouteVisualisationData.cs" />
+    <Compile Include="WebTrace\PMTracedTour.cs" />
     <Compile Include="XMLSerializator.cs" />
     <None Include="sn.snk" />
   </ItemGroup>

@@ -41,8 +41,8 @@ namespace PMap
         public const string iniWeb = "Web";
         public const string iniAzureAccount = "AzureAccount";
         public const string iniAuthTokenCryptAESKey = "AuthTokenCryptAESKey";
-        public const string iniAuthTokenCryptAESIV = "AuthTokenCryptAESKey";
-        public const string iniWebLoginTemplate = "";
+        public const string iniAuthTokenCryptAESIV = "AuthTokenCryptAESIV";
+        public const string iniWebLoginTemplate = "WebLoginTemplate";
 
 
         public const string iniPriority = "Priority";

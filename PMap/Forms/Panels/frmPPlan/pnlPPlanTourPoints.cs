@@ -16,6 +16,7 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using PMap.BLL;
 using PMap.Localize;
 using PMap.Common.PPlan;
+using DevExpress.XtraEditors;
 
 namespace PMap.Forms.Panels.frmPPlan
 {
@@ -361,12 +362,40 @@ namespace PMap.Forms.Panels.frmPPlan
             m_StartDragHitInfo = null;
             m_PPlanCommonVars.DraggedObj = null;
         }
-   
+
+
+
+
 
         #endregion
 
+        private void reChkSendEMail_EditValueChanged(object sender, EventArgs e)
+        {
+            if (gridViewTourPoints.FocusedRowHandle >= 0)
+            {
+                CheckEdit chkEdt = (CheckEdit)sender;
+                int ID = (int)gridViewTourPoints.GetRowCellValue(gridViewTourPoints.FocusedRowHandle, gridColumnID);
 
- 
+                var tp = m_PPlanCommonVars.GetTourPointByID(ID);
 
+
+                dlgSendEMail dlgSend = new dlgSendEMail(tp);
+                dlgSend.ShowDialog(this);
+
+                /*
+                    int ID = (int)gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnID);
+
+                    m_bllPlanEdit.ChangeTourSelected(ID, chkEdt.Checked);
+                    boPlanTour tour = m_PPlanCommonVars.GetTourByID(ID);
+                    tour.PSelect = chkEdt.Checked;
+                     DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgTourSelected, tour, chkEdt.Checked));
+                   */
+            }
+        }
+
+        private void reChkSendEMail_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
