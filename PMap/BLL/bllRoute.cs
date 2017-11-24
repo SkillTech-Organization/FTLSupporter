@@ -65,7 +65,8 @@ namespace PMap.BLL
                          "inner join NOD_NODE (NOLOCK) NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
                          "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
                          "left outer join RZN_RESTRZONE (NOLOCK) RZN on EDG.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
-                         "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0";
+                         "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0 " + Environment.NewLine +
+                         "order by ID " ; //Meg kell rendezni, hogy a duplikátumok közül csak az elsőt vegyük minden esetbe figyelembe
 
             return DBA.Query2DataTable(sSql);
         }

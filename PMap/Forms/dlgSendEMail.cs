@@ -23,6 +23,7 @@ namespace PMap.Forms
             InitializeComponent();
             m_tp = p_tp;
             txtORD_EMAIL.Text = m_tp.ORD_EMAIL;
+            txtORD_EMAIL.Text = "agyorgyi01@gmail.com,'agyorgyi01@gmail.com'";
         }
 
 
@@ -38,15 +39,28 @@ namespace PMap.Forms
 
         public override bool OKPressed()
         {
-            List<PMTracedTour> tracedTour = new List<PMTracedTour>();
-            PMTracedTour tt = new PMTracedTour() { TourID = m_tp.Tour.ID, Order = m_tp.PTP_ORDER };
-            tracedTour.Add(tt);
-            var token = NotificationMail.GetToken(tracedTour);
-            NotificationMail.SendNotificationMail(txtORD_EMAIL.Text, token);
+            try
+            {
+                List<PMTracedTour> tracedTour = new List<PMTracedTour>();
+                PMTracedTour tt = new PMTracedTour() { TourID = m_tp.Tour.ID, Order = m_tp.PTP_ORDER };
+                tracedTour.Add(tt);
+                //var token = NotificationMail.GetToken(tracedTour);
+                var token = new PMToken() { temporaryUserToken = "token lesy itt" };
+                NotificationMail.SendNotificationMail(txtORD_EMAIL.Text, token);
+
+                UI.Message(PMapMessages.E_SNDEMAIL_OK);
+                return true;
 
 
+            }
+            catch (Exception e)
+            {
+                Util.Log2File(e.Message);
+                UI.Error(e.Message);
+            }
 
-              return true;
+
+            return true;
         }
     }
 }

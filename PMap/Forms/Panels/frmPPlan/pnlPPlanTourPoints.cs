@@ -156,7 +156,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     DateTime PTP_DEPTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_DEPTIME);
                     int PTP_TYPE = (int)gridViewTourPoints.GetRowCellValue(e.FocusedRowHandle, gridColumnPTP_TYPE);
 
-                    if (  PTP_TYPE == Global.PTP_TYPE_DEP && 
+                    if (PTP_TYPE == Global.PTP_TYPE_DEP &&
                         (PTP_ARRTIME > CLOSE ||
                         (PTP_SERVTIME < OPEN || PTP_SERVTIME > CLOSE) ||
                          (PTP_DEPTIME < OPEN || PTP_DEPTIME > CLOSE)))
@@ -166,7 +166,7 @@ namespace PMap.Forms.Panels.frmPPlan
                     }
                     else
                     {
-                        gridViewTourPoints.Appearance.FocusedRow.BackColor= m_Focused_BackColor;
+                        gridViewTourPoints.Appearance.FocusedRow.BackColor = m_Focused_BackColor;
                         gridViewTourPoints.Appearance.HideSelectionRow.BackColor = m_HideSel_BackColor;
                     }
 
@@ -206,35 +206,40 @@ namespace PMap.Forms.Panels.frmPPlan
         private void gridViewTourPoints_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
             //if (e.RowHandle == gridViewTourPoints.FocusedRowHandle && e.Column != gridViewTourPoints.FocusedColumn) return;
+            int PTP_TYPE = (int)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_TYPE);
 
-            if ((int)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_TYPE) == Global.PTP_TYPE_DEP && (e.Column == gridColumnPTP_ARRTIME || e.Column == gridColumnPTP_SERVTIME || e.Column == gridColumnPTP_DEPTIME))
+            if (PTP_TYPE == Global.PTP_TYPE_DEP && (e.Column == gridColumnPTP_ARRTIME || e.Column == gridColumnPTP_SERVTIME || e.Column == gridColumnPTP_DEPTIME))
             {
                 DateTime OPEN = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnOPEN);
                 DateTime CLOSE = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnCLOSE);
                 DateTime PTP_ARRTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_ARRTIME);
                 DateTime PTP_SERVTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_SERVTIME);
                 DateTime PTP_DEPTIME = (DateTime)gridViewTourPoints.GetRowCellValue(e.RowHandle, gridColumnPTP_DEPTIME);
-
                 if (e.Column == gridColumnPTP_ARRTIME && (PTP_ARRTIME > CLOSE))        //Megj.:Zárás utáni érkezés a probléma, nyitás előtt érkezés esetén a jármű vár.
                 {
-//                    e.Appearance.BackColor = Color.Red;
-  //                  e.Appearance.BackColor2 = Color.Red;
+                    //                    e.Appearance.BackColor = Color.Red;
+                    //                  e.Appearance.BackColor2 = Color.Red;
                     e.Appearance.ForeColor = Color.Red;
 
                 }
 
                 if (e.Column == gridColumnPTP_SERVTIME && (PTP_SERVTIME < OPEN || PTP_SERVTIME > CLOSE))
                 {
-      //              e.Appearance.BackColor = Color.Red;
+                    //              e.Appearance.BackColor = Color.Red;
                     e.Appearance.ForeColor = Color.Red;
 
                 }
                 if (e.Column == gridColumnPTP_DEPTIME && (PTP_DEPTIME < OPEN || PTP_DEPTIME > CLOSE))
                 {
-//                    e.Appearance.BackColor = Color.Red;
+                    //                    e.Appearance.BackColor = Color.Red;
                     e.Appearance.ForeColor = Color.Red;
                 }
 
+            }
+            if ((PTP_TYPE == Global.PTP_TYPE_WHS_S || PTP_TYPE == Global.PTP_TYPE_WHS_E) && e.Column == gridColumnSendEMail)
+            {
+                e.Handled = true;
+              
             }
 
         }

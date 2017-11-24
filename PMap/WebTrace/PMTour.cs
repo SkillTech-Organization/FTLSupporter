@@ -45,6 +45,10 @@ namespace PMap.WebTrace
         public string TruckRegNo { get; set; }
 
         [DataMember]
+        [DisplayNameAttributeX(Name = "Behajtási övezet lista")]
+        public string RZN_ID_LIST { get; set; }
+
+        [DataMember]
         [DisplayNameAttributeX(Name = "Összsúly")]
         public int TruckWeight { get; set; }
 

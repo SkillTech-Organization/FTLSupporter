@@ -1216,15 +1216,14 @@ namespace VBInterface
 
 
 
+            /*
+                    private void logVersion()
+                    {
 
-        /*
-                private void logVersion()
-                {
+                        Util.Log2File(String.Format("Product:{0} Ver.:{1}", ApplicationInfo.Title, ApplicationInfo.Version));
+                    }
+             */
+            #endregion
+        }
 
-                    Util.Log2File(String.Format("Product:{0} Ver.:{1}", ApplicationInfo.Title, ApplicationInfo.Version));
-                }
-         */
-        #endregion
     }
-
-}

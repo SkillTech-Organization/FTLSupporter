@@ -526,6 +526,7 @@ namespace PMap.BLL
                     ID = tr.ID.ToString(),
                     Carrier = tr.CRR_NAME,
                     TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
+                    RZN_ID_LIST = tr.RZN_ID_LIST,
                     TruckWeight = tr.TRK_WEIGHT,
                     TruckHeight = tr.TRK_XHEIGHT,
                     TruckWidth = tr.TRK_XWIDTH,

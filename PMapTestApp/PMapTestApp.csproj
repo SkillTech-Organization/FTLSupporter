@@ -304,6 +304,10 @@
       <Project>{3E3FE032-B237-479B-938B-63F693265432}</Project>
       <Name>PMap</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PMRoute\PMRoute.csproj">
+      <Project>{26639170-a1f0-40f1-9750-c857c55f3434}</Project>
+      <Name>PMRoute</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VBInterface\VBInterface.csproj">
       <Project>{50AA2C7B-A6DA-4EB7-8316-9D87CAEBA9B7}</Project>
       <Name>VBInterface</Name>

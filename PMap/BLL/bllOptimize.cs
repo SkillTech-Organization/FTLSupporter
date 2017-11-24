@@ -679,9 +679,9 @@ namespace PMap.BLL
             DataTable dt;
             string sSql = "";
             RouteData.Instance.Init(DBA, null);
-            Dictionary<int, boEdge> lstAllEdges = RouteData.Instance.Edges.GroupBy( g=>g.Value.ID)
-                        .Select(s=>s.First()).ToDictionary(i => i.Value.ID, i => i.Value);
 
+            Dictionary<int, boEdge> lstAllEdges = RouteData.Instance.Edges.GroupBy(g => g.Value.ID)
+                        .Select(s => s.First()).ToDictionary(i => i.Value.ID, i => i.Value);
             if (boOpt.TPL_ID <= 0)
             {
                 if (p_notify != null)

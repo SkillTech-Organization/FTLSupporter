@@ -53,6 +53,7 @@ namespace PMap.Common
         public string AuthTokenCryptAESKey { get; private set; }
         public string AuthTokenCryptAESIV { get; private set; }
         public string WebLoginTemplate { get; private set; }
+        public string WebLoginSenderEmail { get; private set; }
 
         public ThreadPriority InitRouteDataProcess { get; private set; }
         public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
@@ -203,7 +204,7 @@ namespace PMap.Common
             AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);
             AuthTokenCryptAESIV = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESIV);
             WebLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniWebLoginTemplate);
-
+            WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebLoginSenderEmail);
 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")

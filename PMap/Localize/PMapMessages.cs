@@ -33,6 +33,8 @@ namespace PMap.Localize
         public const string Q_PEDIT_UPLOAD = "Feltölthetőek a túrák a felhőbe?";
         public const string M_PEDIT_UPLOADOK = "Feltöltés rendben megtörtént";
         public const string E_SNDEMAIL_MAIL = "Legalább egy e-mailcímet meg kell adni !";
+        public const string E_SNDEMAIL_FAILED = "Sikertelen e-mailküldés {0}";
+        public const string E_SNDEMAIL_OK = "E-mailküldés rendben megtörtént!";
 
 
 

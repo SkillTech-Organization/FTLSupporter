@@ -43,7 +43,7 @@ namespace PMap
         public const string iniAuthTokenCryptAESKey = "AuthTokenCryptAESKey";
         public const string iniAuthTokenCryptAESIV = "AuthTokenCryptAESIV";
         public const string iniWebLoginTemplate = "WebLoginTemplate";
-
+        public const string iniWebLoginSenderEmail = "WebLoginSenderEmail";
 
         public const string iniPriority = "Priority";
         public const string iniInitRouteDataProcess = "InitRouteDataProcess";

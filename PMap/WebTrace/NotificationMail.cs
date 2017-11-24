@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PMap.Common;
+using PMap.Localize;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -55,20 +56,32 @@ namespace PMap.WebTrace
         }
         public static async void SendNotificationMail( string p_emailAddr, PMToken p_token)
         {
+           // var apiKey = "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";
             var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
-
+            
             var client = new SendGridClient(apiKey);
+            //érvénytelen karakterek kiszedése
+            p_emailAddr = p_emailAddr.Replace(" ", "");
+            p_emailAddr = p_emailAddr.Replace("\"", "");
+            p_emailAddr = p_emailAddr.Replace("'", "");
+            p_emailAddr = p_emailAddr.Replace(",", ";");
 
-            var from = new EmailAddress("xxx.xx.com", "paraméterbe!");
-            var subject = "Web követés belépés";
-            var to = new EmailAddress(p_emailAddr, "");
-            var plainTextContent = "";
-            var htmlContent = Util.FileToString(PMapIniParams.Instance.WebLoginTemplate);
-            htmlContent.Replace("@@token", p_token.temporaryUserToken);
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            // var response = client.SendEmailAsync(msg);
-            var response = await client.SendEmailAsync(msg);
+            string[] addr = p_emailAddr.Split(';');
 
+            foreach (var toEmail in addr)
+            {
+                var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, "");
+                var subject = "Web követés belépés";
+                var to = new EmailAddress(toEmail, "");
+                var plainTextContent = "";
+                var htmlContent = Util.FileToString(PMapIniParams.Instance.WebLoginTemplate);
+                htmlContent.Replace("@@token", p_token.temporaryUserToken);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                // var response = client.SendEmailAsync(msg);
+                var response = await client.SendEmailAsync(msg);
+                if (response.StatusCode != HttpStatusCode.Accepted)
+                    throw new Exception(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
+            }
         }
 
     }
