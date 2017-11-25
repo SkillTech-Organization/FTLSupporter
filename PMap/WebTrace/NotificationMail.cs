@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace PMap.WebTrace
 {
@@ -30,25 +32,35 @@ namespace PMap.WebTrace
             var jsonRegno = JsonConvert.SerializeObject(p_tracedTour, jsonsettings);
 
             var crypted = AESCryptoHelper.EncryptString(jsonRegno, PMapIniParams.Instance.AuthTokenCryptAESKey, PMapIniParams.Instance.AuthTokenCryptAESIV);
-            byte[] bytes = Encoding.Default.GetBytes(crypted);
+            var ori = AESCryptoHelper.DecryptString(crypted, PMapIniParams.Instance.AuthTokenCryptAESKey, PMapIniParams.Instance.AuthTokenCryptAESIV);
+
+            byte[] bytes = Encoding.UTF8.GetBytes(crypted);
             string base64 = Convert.ToBase64String(bytes);
 
             Console.WriteLine(base64);
 
 
-            string url = @"http://mplastwebtest.azurewebsites.net/Auth/GenerateTempUserToken?tokencontent=" + base64;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip;
+            string baseurl = @"http://mplastwebtest.azurewebsites.net/Auth/GenerateTempUserToken";
+            var builder = new UriBuilder(baseurl);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query["tokenContent"] = crypted;
+            builder.Query = query.ToString();
+            string url = builder.ToString();
 
-            string html = "";
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            HttpClient client = new HttpClient();
+            
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            if (response.IsSuccessStatusCode)
             {
-                html = reader.ReadToEnd();
-                ret = JsonConvert.DeserializeObject<PMToken>(html);
-                
+                var res = response.Content.ReadAsStringAsync().Result;
+                if (!string.IsNullOrEmpty(res))
+                {
+                    ret = JsonConvert.DeserializeObject<PMToken>(res);
+                }
+
             }
+
+     
 
             return ret;
             //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr

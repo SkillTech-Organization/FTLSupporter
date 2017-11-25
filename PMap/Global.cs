@@ -217,5 +217,9 @@ namespace PMap
         public const int ETOLLCAT_MAX12T = 3;         //3:max 12 tonna
         public const int ETOLLCAT_BIGGER12T = 4;      //4:12 tonnánál több
 
+
+        public const string EXTFILE_EDG = "PMap.edg.json";
+        public const string EXTFILE_NOD = "PMap.nod.json";
+
     }
 }

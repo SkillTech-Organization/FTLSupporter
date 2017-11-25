@@ -581,7 +581,7 @@ namespace PMap.BLL
         /// </summary>
         /// <param name="p_nodes"></param>
         /// <returns></returns>
-        public RectLatLng getBoundary(List<int> p_nodes)
+        public  RectLatLng getBoundary(List<int> p_nodes)
         {
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
             string sSql = "select * from NOD_NODE where id in (" + sNODE_IDs + ")";
@@ -595,7 +595,7 @@ namespace PMap.BLL
             return getBoundary(dLat1, dLng1, dLat2, dLng2);
 
         }
-        public RectLatLng getBoundary(double dLat1, double dLng1, double dLat2, double dLng2)
+        public static RectLatLng getBoundary(double dLat1, double dLng1, double dLat2, double dLng2)
         {
             //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
             //tételnél biztosan kapjanak értéket

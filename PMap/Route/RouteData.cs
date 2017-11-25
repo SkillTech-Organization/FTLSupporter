@@ -11,7 +11,8 @@ using PMap.BO;
 using PMap.BLL;
 using PMap.Localize;
 using PMap.Common;
-
+using System.IO;
+using Newtonsoft.Json;
 
 namespace PMap.Route
 {
@@ -33,12 +34,18 @@ namespace PMap.Route
 
         public Dictionary<string, boEdge> Edges = null; //Az útvonalak korlátozás-zónatípusonként
 
-        public Dictionary<int, PointLatLng> NodePositions = null;  //Node koordináták
+        public Dictionary<int, PointLatLng> NodePositions  = null;  //Node koordináták
 
         Dictionary<string, Dictionary<string, double>> dicAllTolls = new Dictionary<string, Dictionary<string, double>>();
 
         private bllRoute m_bllRoute;
-        public int NodeCount { get; set; }
+        public int NodeCount {
+            get
+            {
+               return NodePositions.Keys.Max() + 1;
+            }
+        }
+
         private RouteData()
         {
         }
@@ -49,6 +56,30 @@ namespace PMap.Route
             get
             {
                 return m_instance.Value;            //It's thread safe!
+            }
+        }
+
+
+        public void InitFromFiles(string p_dir, bool p_Forced = false)
+        {
+            using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
+            {
+                if (!m_Initalized || p_Forced)
+                {
+                    JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
+
+                    DateTime dtStart = DateTime.Now;
+                    string strEdges = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_EDG));
+                    var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
+                    Edges = xEdges;
+
+                    string strNodePositions = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_NOD));
+                    var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
+                    NodePositions = xNodePositions;
+
+                    Util.Log2File("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
+                    m_Initalized = true;
+                }
             }
         }
 
@@ -90,7 +121,6 @@ namespace PMap.Route
                         //üríteni! a EDG_ETLCODE='67u81k45m67u88k' 
                         DateTime dtStart = DateTime.Now;
                         DataTable dt = m_bllRoute.GetEdgesToDT();
-                        NodeCount = m_bllRoute.GetMaxNodeID() + 1;
 
                         foreach (DataRow dr in dt.Rows)
                         {

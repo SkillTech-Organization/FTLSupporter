@@ -1183,7 +1183,7 @@ namespace VBInterface
 
                     Dictionary<string, List<int>[]> NeighborsFull = null;
                     Dictionary<string, List<int>[]> NeighborsCut = null;
-                    RectLatLng boundary = route.getBoundary(itemRes.fromLat, itemRes.fromLng, itemRes.toLat, itemRes.toLng);
+                    RectLatLng boundary = bllRoute.getBoundary(itemRes.fromLat, itemRes.fromLng, itemRes.toLat, itemRes.toLng);
 
                     if (sRZN_ID_LIST != "")
                         sRZN_ID_LIST = sRZN_ID_LIST.Substring(1);
