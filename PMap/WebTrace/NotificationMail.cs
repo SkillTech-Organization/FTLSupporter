@@ -87,7 +87,7 @@ namespace PMap.WebTrace
                 var to = new EmailAddress(toEmail, "");
                 var plainTextContent = "";
                 var htmlContent = Util.FileToString(PMapIniParams.Instance.WebLoginTemplate);
-                htmlContent.Replace("@@token", p_token.temporaryUserToken);
+                htmlContent = htmlContent.Replace("@@token", HttpUtility.UrlEncode( p_token.temporaryUserToken));
                 var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
                 // var response = client.SendEmailAsync(msg);
                 var response = await client.SendEmailAsync(msg);
