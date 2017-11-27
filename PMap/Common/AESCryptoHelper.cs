@@ -2,8 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace PMap.WebTrace
-{
+namespace PMap.Common
+{ 
     public static class AESCryptoHelper
     {
         public static string EncryptString(string strToEncrypt, string keyBase64, string ivBase64)

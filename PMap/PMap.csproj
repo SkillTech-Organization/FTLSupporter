@@ -104,6 +104,10 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="BCrypt.Net-Next.StrongName, Version=2.1.0.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.StrongName.2.1.0\lib\net452\BCrypt.Net-Next.StrongName.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Data.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.v10.1.Compact, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.v10.1.Linq, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -208,10 +212,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\Base\bllBase.cs" />
+    <Compile Include="BLL\bllUser.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
+    <Compile Include="BO\boUser.cs" />
     <Compile Include="Cache\LogForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
+    <Compile Include="Common\AuthCryptoHelper.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
     <Compile Include="Forms\dlgSendEMail.cs">
       <SubType>Form</SubType>
@@ -219,7 +226,7 @@
     <Compile Include="Forms\dlgSendEMail.Designer.cs">
       <DependentUpon>dlgSendEMail.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebTrace\AESCryptoHelper.cs" />
+    <Compile Include="Common\AESCryptoHelper.cs" />
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
     <Compile Include="WebTrace\NotificationMail.cs" />
@@ -663,6 +670,7 @@
     <Compile Include="Common\Util.cs" />
     <Compile Include="Route\RouteVisualisationData.cs" />
     <Compile Include="WebTrace\PMTracedTour.cs" />
+    <Compile Include="WebTrace\PMUser.cs" />
     <Compile Include="XMLSerializator.cs" />
     <None Include="sn.snk" />
   </ItemGroup>
@@ -747,6 +755,10 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

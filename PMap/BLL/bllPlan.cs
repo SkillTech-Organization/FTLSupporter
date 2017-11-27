@@ -516,7 +516,8 @@ namespace PMap.BLL
         }
         public List<PMTour> GetToursForAzure(int p_PLN_ID, List<boPlanTour> p_tourList)
         {
-            var bllRoute = new bllRoute(DBA);
+            var bllUser = new bllUser(DBA);
+                var bllRoute = new bllRoute(DBA);
 
             List<PMTour> xTourList = new List<PMTour>();
             foreach (var tr in p_tourList.Where(w => w.TOURPOINTCNT > 0).ToList())

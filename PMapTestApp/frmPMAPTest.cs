@@ -830,7 +830,7 @@ namespace PMapTestApp
             double fromLng = 20.1599030;
             double toLat = 46.2562870;
             double toLng = 20.2757270;
-            PMRoute.RouteFuncs.GetDistance("", dbConf, @"c:\Map",
+            PMRoute.RouteFuncs.GetDistance("", dbConf, @"d:\temp\ct",
             fromLat, fromLng, toLat, toLng, "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24", 0, 0, 0, out dist, out durat);
             UI.Message("dist:" + dist.ToString() + ", dur:" + durat.ToString());
 

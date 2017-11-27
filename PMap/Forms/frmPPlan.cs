@@ -50,6 +50,7 @@ namespace PMap.Forms
         private bllPlanEdit m_bllPlanEdit;
         private bllPlan m_bllPlan;
         private bllSemaphore m_bllSemaphore;
+        private bllUser m_bllUser;
 
         private int m_USR_ID = 0;
         private bool m_IsEnablePlanManage = false;
@@ -105,6 +106,7 @@ namespace PMap.Forms
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
             m_bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
             m_bllSemaphore.ClearSemaphores();
+            m_bllUser = new bllUser(PMapCommonVars.Instance.CT_DB);
 
             initPPlanForm(p_PLN_ID, false);
 
@@ -806,7 +808,7 @@ namespace PMap.Forms
         {
             if (UI.Confirm(PMapMessages.Q_PEDIT_UPLOAD))
             {
-
+                var crypto = new AuthCryptoHelper("$2a$10$GH1ygiHqiZ9Q18Bk.1hrJ.");
                 string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
                 string oriAzureKey = AzureTableStore.Instance.AzureKey;
 
@@ -814,9 +816,7 @@ namespace PMap.Forms
                 {
                     using (new WaitCursor())
                     {
-                        var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
 
-                        var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, tours);
 
 
                         //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
@@ -824,6 +824,30 @@ namespace PMap.Forms
                         //
                         AzureTableStore.Instance.AzureAccount = PMapIniParams.Instance.AzureAccount;
                         AzureTableStore.Instance.AzureKey = PMapCommonVars.Instance.AzureTableStoreApiKey;
+
+                        
+                        //Felhasználók
+                        var us = AzureTableStore.Instance.RetrieveList<PMUser>();
+                        AzureTableStore.Instance.DeleteRange<PMUser>(us.Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList());
+
+
+                        var lstUsers = m_bllUser.GetAllUsers();
+                        foreach (var usr in lstUsers.Where(w => !w.USR_DELETED).ToList())
+                        {
+                            PMUser pmUsr = new PMUser()
+                            {
+                                ID = usr.USR_LOGIN,
+                                UserName = usr.USR_NAME,
+                                Password = !String.IsNullOrEmpty(usr.USR_PASSWD) ? crypto.HashPassword(usr.USR_PASSWD) : ""
+                            };
+                            AzureTableStore.Instance.Insert(pmUsr, Environment.MachineName);
+
+                        }
+
+
+                        var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
+
+                        var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, tours);
 
 
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
