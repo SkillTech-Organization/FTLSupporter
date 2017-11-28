@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PMap.Common;
 using PMap.Localize;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,8 +64,10 @@ namespace PMap.WebTrace
             //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr
 
         }
-        public static async void SendNotificationMail( string p_emailAddr, PMToken p_token)
+   //     public static async void SendNotificationMail(string p_emailAddr, PMToken p_token)
+        public static void SendNotificationMail(string p_emailAddr, PMToken p_token)
         {
+            /*
            // var apiKey = "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";
             var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
             
@@ -94,6 +94,7 @@ namespace PMap.WebTrace
                 if (response.StatusCode != HttpStatusCode.Accepted)
                     throw new Exception(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
             }
+            */
         }
 
     }
