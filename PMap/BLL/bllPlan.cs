@@ -125,7 +125,7 @@ namespace PMap.BLL
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_ADRSTREET ELSE WHS.WHS_ADRSTREET END as ADRSTREET, " + Environment.NewLine +
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
-                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL " + Environment.NewLine +
+                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL " + Environment.NewLine +
                     "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                     "INNER JOIN TPL_TRUCKPLAN TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
                     "LEFT JOIN TOD_TOURORDER TOD ON PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -179,6 +179,7 @@ namespace PMap.BLL
                             DEP_CODE = Util.getFieldValue<string>(o, "DEP_CODE"),
                             DEP_NAME = Util.getFieldValue<string>(o, "DEP_NAME"),
                             ORD_NUM = Util.getFieldValue<string>(o, "ORD_NUM"),
+                            ORD_VOLUME = Util.getFieldValue<double>(o, "ORD_VOLUME"),
                             ORD_LENGTH = Util.getFieldValue<double>(o, "ORD_LENGTH"),
                             ORD_WIDTH = Util.getFieldValue<double>(o, "ORD_WIDTH"),
                             ORD_HEIGHT = Util.getFieldValue<double>(o, "ORD_HEIGHT"),
