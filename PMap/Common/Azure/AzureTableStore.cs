@@ -780,7 +780,7 @@ namespace PMap.Common.Azure
             }
             catch (StorageException sex)
             {
-                return default(T);
+                throw new Exception(GetStorageExceptionMessage(sex));
             }
             catch (Exception ex)
             {
@@ -1023,9 +1023,9 @@ namespace PMap.Common.Azure
         private static string GetStorageExceptionMessage(StorageException p_sex)
         {
             var requestInformation = p_sex.RequestInformation;
-            var information = requestInformation.ExtendedErrorInformation;
-            var errorCode = information.ErrorCode;
-            return String.Format("({0}) {1}", errorCode, information.ErrorMessage);
+            var information = requestInformation.ExtendedErrorInformation ;
+            var errorCode = information != null ? information.ErrorCode : "???";
+            return String.Format("({0}) {1}", errorCode, (information != null ? information.ErrorMessage: p_sex.Message));
         }
     }
 }
