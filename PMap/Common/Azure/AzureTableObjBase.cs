@@ -15,6 +15,7 @@ using System.Xml.Serialization;
 
 namespace PMap.Common.Azure
 {
+    [Serializable]
     [DataContract(Name = "AzureTableObjBase")]
     public class AzureTableObjBase : INotifyPropertyChanged, IDataErrorInfo
     {

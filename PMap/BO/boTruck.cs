@@ -9,6 +9,7 @@ using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boTruck
     {
         [WriteFieldAttribute(Insert = false, Update = false)]

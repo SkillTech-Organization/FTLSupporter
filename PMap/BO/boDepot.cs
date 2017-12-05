@@ -9,6 +9,7 @@ using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boDepot
     {
 

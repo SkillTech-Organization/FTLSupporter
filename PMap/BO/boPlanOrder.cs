@@ -8,6 +8,7 @@ using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boPlanOrder
     {
         [DisplayNameAttributeX(Name = "ID", Order = 1)]

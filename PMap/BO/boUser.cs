@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boUser
     {
         [WriteFieldAttribute(Insert = false, Update = false)]

@@ -9,6 +9,7 @@ using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boPlanTourPoint
     {
         public int ID { get; set; }             //--> PTP.ID vagy PTP_ID

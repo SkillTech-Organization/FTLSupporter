@@ -9,6 +9,7 @@ using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boPlanTour
     {
         [DisplayNameAttributeX(Name = "ID", Order = 1)]

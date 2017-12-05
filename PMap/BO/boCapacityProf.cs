@@ -7,6 +7,7 @@ using PMap.Common.Attrib;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boCapacityProf
     {
         [WriteFieldAttribute(Insert = false, Update = false)]

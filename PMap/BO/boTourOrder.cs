@@ -6,6 +6,7 @@ using System.Web.Script.Serialization;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boTourOrder
     {
         public int TOD_ID { get; set; }

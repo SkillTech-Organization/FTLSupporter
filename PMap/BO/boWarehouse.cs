@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boWarehouse
     {
         public int ID { get; set; }

@@ -818,6 +818,7 @@ namespace PMap.Forms
                     {
 
 
+                        Util.Log2File("SendToAzure START");
 
                         //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
                         //connect stringet tudjon kezelni
@@ -832,6 +833,9 @@ namespace PMap.Forms
 
 
                         var lstUsers = m_bllUser.GetAllUsers();
+                        FileInfo fiUsers = new FileInfo( Path.Combine( PMapIniParams.Instance.LogDir, "users_dump.bin"));
+                        BinarySerializer.Serialize(fiUsers, lstUsers);
+
                         foreach (var usr in lstUsers.Where(w => !w.USR_DELETED).ToList())
                         {
                             PMUser pmUsr = new PMUser()
@@ -846,8 +850,13 @@ namespace PMap.Forms
 
 
                         var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
+                        FileInfo fiTours = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tours_dump.bin"));
+                        BinarySerializer.Serialize(fiTours, tours);
+
 
                         var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, tours);
+                        FileInfo fiToursList = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tourlist_dump.bin"));
+                        BinarySerializer.Serialize(fiToursList, tourList);
 
 
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
@@ -868,15 +877,15 @@ namespace PMap.Forms
                             AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
 
                         }
-
-                        
-
-
                     }
+                    Util.Log2File("SendToAzure END");
+
                     UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
                 }
                 catch (Exception ex)
                 {
+                    Util.ExceptionLog(ex);
+
                     UI.Error(ex.Message);
     //                throw;
                 }

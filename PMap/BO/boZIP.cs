@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boZIP
     {
         public int ID { get; set; }

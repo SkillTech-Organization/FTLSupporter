@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boSpeedProfValues
     {
         public int SPP_ID { get; set; }             //->SPP_SPEEDPROF

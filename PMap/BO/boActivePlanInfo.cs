@@ -5,6 +5,7 @@ using System.Text;
 
 namespace PMap.BO
 {
+    [Serializable]
     public class boActivePlanInfo
     {
         public int ID { get; set; }
