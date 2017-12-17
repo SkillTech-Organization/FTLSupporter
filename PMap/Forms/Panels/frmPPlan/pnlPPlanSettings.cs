@@ -51,6 +51,7 @@ namespace PMap.Forms.Panels.frmPPlan
             chkZoomToSelectedTour.Checked = m_PPlanCommonVars.ZoomToSelectedPlan;
             chkZoomToSelectedUnPlanned.Checked = m_PPlanCommonVars.ZoomToSelectedUnPlanned;
             chkShowAllOrdersInGrid.Checked = m_PPlanCommonVars.ShowAllOrdersInGrid;
+            numTPArea.Value = PMapCommonVars.Instance.TPArea;
 
             switch (m_PPlanCommonVars.TooltipMode)
             {
@@ -183,7 +184,9 @@ namespace PMap.Forms.Panels.frmPPlan
                 UI.Message(PMapMessages.E_PLANSETT_ORDER_NOT_FOUND);
         }
 
-
-
+        private void numTPArea_ValueChanged(object sender, EventArgs e)
+        { 
+            PMapCommonVars.Instance.TPArea = (int)numTPArea.Value;
+        }
     }
 }

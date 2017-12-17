@@ -17,6 +17,7 @@ using PMap.BLL;
 using PMap.DB.Base;
 using PMap.Common;
 using PMap.Common.PPlan;
+using PMap.Localize;
 
 namespace PMap.LongProcess
 {
@@ -73,7 +74,7 @@ namespace PMap.LongProcess
             {
                 if (m_genTPL_ID <= 0 || m_TourList[i].ID == m_genTPL_ID)
                 {
-                    ProcessForm.SetInfoText("Túrarészletező betöltés:" + m_TourList[i].TRUCK);
+                    ProcessForm.SetInfoText(PMapMessages.T_LOAD_ROUTEDETAILS + m_TourList[i].TRUCK);
                     CompleteCode = CreateOneRoute(m_TourList[i], true);
 
 
@@ -118,6 +119,9 @@ namespace PMap.LongProcess
                 //FONTOS !!!
                 //A túrák mindig visszatérnek a kiindulási raktárba, ezért a legutolsó túrapontra nem készítünk markert.
                 //
+                Dictionary<string, List<int>[]> neighborsFull = null;
+                Dictionary<string, List<int>[]> neighborsCut = null;
+
                 PMapRoutingProvider provider = new PMapRoutingProvider();
                 System.Drawing.Drawing2D.DashStyle dashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
                 for (int i = 0; i < p_tour.TourPoints.Count - 1; i++)
@@ -126,10 +130,7 @@ namespace PMap.LongProcess
                     PointLatLng start = new PointLatLng(p_tour.TourPoints[i].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i].NOD_XPOS / Global.LatLngDivider);
                     PointLatLng end = new PointLatLng(p_tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
 
-                    Dictionary<string, List<int>[]> neighborsFull = null;
-                    Dictionary<string, List<int>[]> neighborsCut = null;
-
-                    MapRoute result = null;
+                   MapRoute result = null;
                     if (p_tour.TourPoints[i].NOD_ID != p_tour.TourPoints[i + 1].NOD_ID)
                     {
 
@@ -139,13 +140,15 @@ namespace PMap.LongProcess
                             RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
                             var routePar = new CRoutePars() { RZN_ID_LIST = p_tour.RZN_ID_LIST, Weight = p_tour.TRK_WEIGHT, Height = p_tour.TRK_XHEIGHT, Width = p_tour.TRK_XWIDTH };
-                            //TODO:lehet, hogy nem kellene térkép kivágást végeznni itt
+
+                            //Azért van itt a térkép előkészítés, hogy csak akkor fusson le, ha 
+                            //kell útvonalat számítani
                             if (neighborsFull == null || neighborsCut == null)
                             {
                                 RectLatLng boundary = new RectLatLng();
-                                List<int> nodes = new List<int>() { p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID };
+                                List<int> nodes = p_tour.TourPoints.Select(s => s.NOD_ID).ToList();
                                 boundary = m_bllRoute.getBoundary(nodes);
-                                RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary);
+                                RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary, p_tour.TourPoints);
                             }
 
                             boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, routePar,

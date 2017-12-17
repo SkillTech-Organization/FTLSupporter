@@ -228,6 +228,7 @@
       <DependentUpon>dlgSendEMail.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\AESCryptoHelper.cs" />
+    <Compile Include="LongProcess\CalcRoutesForTour.cs" />
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
     <Compile Include="WebTrace\NotificationMail.cs" />

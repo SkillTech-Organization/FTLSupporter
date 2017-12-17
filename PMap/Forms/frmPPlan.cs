@@ -30,6 +30,7 @@ using PMap.Common.PPlan;
 using PMap.Route;
 using PMap.WebTrace;
 using PMap.Common.Azure;
+using PMap.DB.Base;
 
 namespace PMap.Forms
 {
@@ -51,6 +52,7 @@ namespace PMap.Forms
         private bllPlan m_bllPlan;
         private bllSemaphore m_bllSemaphore;
         private bllUser m_bllUser;
+        private bllRoute m_bllRoute;
 
         private int m_USR_ID = 0;
         private bool m_IsEnablePlanManage = false;
@@ -104,6 +106,7 @@ namespace PMap.Forms
 
             m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
             m_bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
+            m_bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
             m_bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
             m_bllSemaphore.ClearSemaphores();
             m_bllUser = new bllUser(PMapCommonVars.Instance.CT_DB);
@@ -580,6 +583,12 @@ namespace PMap.Forms
                     UI.Message(PMapMessages.E_PEDIT_LOCKEDTRUCK);
                     return;
                 }
+
+                if (PMapIniParams.Instance.TourRoute)
+                    recalcCompletedTour(m_PPlanCommonVars.FocusedTour);
+                else
+                    calcMissingDistances();
+
                 dlgOptimize dOpt = new dlgOptimize(m_PPlanCommonVars.PLN_ID, m_PPlanCommonVars.FocusedTour.ID);
                 if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK && dOpt.Result == TourOptimizerProcess.eOptResult.OK)
                 {
@@ -592,6 +601,11 @@ namespace PMap.Forms
                     UI.Message(PMapMessages.E_PEDIT_OPTISNFINISHED);
                 }
             }
+            else
+            {
+                UI.Message(PMapMessages.E_NOSELTOUR);
+            }
+
         }
 
         private void btnNewTour_Click(object sender, EventArgs e)
@@ -778,27 +792,31 @@ namespace PMap.Forms
         {
             if (UI.Confirm(PMapMessages.Q_PEDIT_CALCDST))
             {
-                bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
-                List<boRoute> res = bllRoute.GetDistancelessPlanNodes(m_PPlanCommonVars.PLN_ID);
-                if (res.Count == 0)
-                    return;
-
-                bool bOK = false;
-
-                if (PMapIniParams.Instance.RouteThreadNum > 1)
-                    bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
-                else
-                    bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
-
-                if (bOK)
-                {
-                    //                    UI.Message(PMapMessages.M_PEDIT_CALCDST_END);
-                }
+                calcMissingDistances();
 
             }
 
         }
 
+        private void calcMissingDistances()
+        {
+            bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            List<boRoute> res = bllRoute.GetDistancelessPlanNodes(m_PPlanCommonVars.PLN_ID);
+            if (res.Count == 0)
+                return;
+
+            bool bOK = false;
+
+            if (PMapIniParams.Instance.RouteThreadNum > 1)
+                bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
+            else
+                bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
+
+            if (bOK)
+            {
+                //                    UI.Message(PMapMessages.M_PEDIT_CALCDST_END);
+            }
+        }
         private void cmbPlans_Click(object sender, EventArgs e)
         {
 
@@ -826,14 +844,14 @@ namespace PMap.Forms
                         AzureTableStore.Instance.AzureAccount = PMapIniParams.Instance.AzureAccount;
                         AzureTableStore.Instance.AzureKey = PMapCommonVars.Instance.AzureTableStoreApiKey;
 
-                        
+
                         //Felhasználók
                         var us = AzureTableStore.Instance.RetrieveList<PMUser>();
                         AzureTableStore.Instance.DeleteRange<PMUser>(us.Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList());
 
 
                         var lstUsers = m_bllUser.GetAllUsers();
-                        FileInfo fiUsers = new FileInfo( Path.Combine( PMapIniParams.Instance.LogDir, "users_dump.bin"));
+                        FileInfo fiUsers = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "users_dump.bin"));
                         BinarySerializer.Serialize(fiUsers, lstUsers);
 
                         foreach (var usr in lstUsers.Where(w => !w.USR_DELETED).ToList())
@@ -887,7 +905,7 @@ namespace PMap.Forms
                     Util.ExceptionLog(ex);
 
                     UI.Error(ex.Message);
-    //                throw;
+                    //                throw;
                 }
                 finally
                 {
@@ -919,7 +937,67 @@ namespace PMap.Forms
 
         }
 
+        private void btnCompleteTourRoutes_Click(object sender, EventArgs e)
+        {
+            if (m_PPlanCommonVars.FocusedTour != null)
 
+            {
+                if (m_PPlanCommonVars.FocusedTour.LOCKED)
+                {
+                    UI.Message(PMapMessages.E_PEDIT_LOCKEDTRUCK);
+                    return;
+                }
+                recalcCompletedTour(m_PPlanCommonVars.FocusedTour);
+                RefreshAll(new PlanEventArgs(ePlanEventMode.Refresh));
+            }
+            else
+            {
+                UI.Message(PMapMessages.E_NOSELTOUR);
+            }
+
+        }
+
+        private void  recalcCompletedTour( boPlanTour p_tour)
+        {
+         
+
+            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
+            {
+                try
+                {
+                    p_tour.Completed = true;
+                    m_bllPlan.SetTourCompleted(p_tour);
+                    m_bllRoute.DeleteTourRoutes(p_tour);
+                }
+                catch (Exception ex)
+                {
+                    PMapCommonVars.Instance.CT_DB.Rollback();
+                    throw;
+                }
+
+                finally
+                {
+                }
+            }
+            BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, p_tour.TOURPOINTCNT, PMapMessages.T_COMPLETE_TOURROUTES, false);
+            CalcRoutesForTours rpp = new CalcRoutesForTours(pd, p_tour);
+            rpp.Run();
+            pd.ShowDialog();
+
+            if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.UserBreak)
+            {
+                UI.Message(PMapMessages.E_TOURCOMPL_ABORTED);
+                PMapCommonVars.Instance.CT_DB.Rollback();
+            }
+
+            if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.NoRoute)
+            {
+                UI.Message(PMapMessages.E_TOURCOMPL_NOGETROUTES);
+                PMapCommonVars.Instance.CT_DB.Rollback();
+            }
+
+
+        }
     }
     #endregion
 }

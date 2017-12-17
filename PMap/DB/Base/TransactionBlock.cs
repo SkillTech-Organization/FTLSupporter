@@ -28,7 +28,7 @@ namespace PMap.DB.Base
             //            StackTrace trace = new StackTrace(1, true);
             //            Console.WriteLine("TRANS TRY  ido:" + DateTime.Now + " " + trace.GetFrame(1).GetMethod() + "-->" + trace.GetFrame(0).GetMethod());
         }
-
+      
 
         #region IDisposable Members
         public void Dispose()

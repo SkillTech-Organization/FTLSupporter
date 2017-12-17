@@ -260,7 +260,7 @@ namespace PMap.BLL
             }
             if (result == null)
             {
-                string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
+                string sSql = "select * from DST_DISTANCE (NOLOCK) DST  " + Environment.NewLine +
                                "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?  ";
                 DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
@@ -295,7 +295,7 @@ namespace PMap.BLL
                         sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                                "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
                                "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME,EDG_MAXWEIGHT,EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
-                               " from EDG_EDGE  EDG " + Environment.NewLine +
+                               " from EDG_EDGE (NOLOCK) EDG  " + Environment.NewLine +
                                "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                                " where EDG.ID in (" + edges + ")";
 
@@ -370,7 +370,7 @@ namespace PMap.BLL
             }
 
 
-            string sSql = "select * from DST_DISTANCE DST " + Environment.NewLine +
+            string sSql = "select * from DST_DISTANCE (NOLOCK) DST  " + Environment.NewLine +
                            "where NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST=? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?";
             DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
@@ -417,7 +417,7 @@ namespace PMap.BLL
                           "    order by TRZX.RZN_ID  " + Environment.NewLine +
                           "    FOR XML PATH('') " + Environment.NewLine +
                           "), 1, 1, ''), '') as RESTZONE_NAMES " + Environment.NewLine +
-                          "from TRK_TRUCK TRK " + Environment.NewLine +
+                          "from TRK_TRUCK (NOLOCK) TRK " + Environment.NewLine +
                           "UNION  select '' as RESTZONE_IDS, '***nincs engedély***' as RESTZONE_NAMES " + Environment.NewLine +
                           "EXCEPT select '' as RESTZONE_IDS, '' as RESTZONE_NAMES ";
 
@@ -530,17 +530,48 @@ namespace PMap.BLL
         public List<boRoute> GetDistancelessPlanNodes(int pPLN_ID)
         {
 
-           string sSQL = "; WITH CTE_TPL as (" + Environment.NewLine +
-                    "select distinct " + Environment.NewLine +
-                    "	  isnull(stuff(  " + Environment.NewLine +
-                    "	  (  " + Environment.NewLine +
-                    "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
-                    "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
-                    "		  where TRZX.TRK_ID = TPL.TRK_ID " + Environment.NewLine +
-                    "		  order by TRZX.RZN_ID " + Environment.NewLine +
-                    "		  FOR XML PATH('') " + Environment.NewLine +
-                    "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
-                    "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
+            string sSQL = "; WITH CTE_TPL as (" + Environment.NewLine +
+                     "select distinct " + Environment.NewLine;
+
+
+            var sSQLRESTZONES = "	  isnull(stuff(  " + Environment.NewLine +
+                   "	  (  " + Environment.NewLine +
+                   "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
+                   "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
+                   "		  where TRZX.TRK_ID = TPL.TRK_ID " + Environment.NewLine +
+                   "		  order by TRZX.RZN_ID " + Environment.NewLine +
+                   "		  FOR XML PATH('') " + Environment.NewLine +
+                   "	  ), 1, 1, ''), '')  " + Environment.NewLine;
+
+            if (PMapIniParams.Instance.TourRoute)
+            {
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else " + sSQLRESTZONES + " end  as RESTZONES, " + Environment.NewLine;
+            }
+            else
+            {
+                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, ";
+            }
+
+          
+
+            //Egyedi túraútvonalas tervezés (TourRoute)  esetén csak TPL_COMPLETED túráknál  vesszük figyelembe a súly- és méretkorlátozásokat
+            if (PMapIniParams.Instance.TourRoute)
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine;
+            else
+                sSQL += " TRK.TRK_WEIGHT, " + Environment.NewLine;
+
+            if (PMapIniParams.Instance.TourRoute)
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine;
+            else
+                sSQL += " TRK.TRK_XHEIGHT, " + Environment.NewLine;
+
+            if (PMapIniParams.Instance.TourRoute)
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
+            else
+                sSQL += " TRK.TRK_XWIDTH " + Environment.NewLine;
+
+
+            sSQL += "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
                     "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                     "	  where TPL.PLN_ID = ? " + Environment.NewLine +
                     ") " + Environment.NewLine +
@@ -642,15 +673,26 @@ namespace PMap.BLL
         {
 
             string sSQL = "; WITH CTE_TRK as (" + Environment.NewLine +
-                            "select distinct " + Environment.NewLine +
-                            "	  isnull(stuff(  " + Environment.NewLine +
-                            "	  (  " + Environment.NewLine +
-                            "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
-                            "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
-                            "		  where TRZX.TRK_ID = TRK.ID " + Environment.NewLine +
-                            "		  order by TRZX.RZN_ID   " + Environment.NewLine +
-                            "		  FOR XML PATH('')  " + Environment.NewLine +
-                            "	  ), 1, 1, ''), '') as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
+                            "select distinct " + Environment.NewLine;
+            var sSQLRESTZONES = "	  isnull(stuff(  " + Environment.NewLine +
+                           "	  (  " + Environment.NewLine +
+                           "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
+                           "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
+                           "		  where TRZX.TRK_ID = TRK.ID " + Environment.NewLine +
+                           "		  order by TRZX.RZN_ID   " + Environment.NewLine +
+                           "		  FOR XML PATH('')  " + Environment.NewLine +
+                           "	  ), 1, 1, ''), '') ";
+
+            if (PMapIniParams.Instance.TourRoute)
+            {
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else "+sSQLRESTZONES+ " end as RESTZONES, " + Environment.NewLine;
+            }
+            else
+            {
+                sSQL += "	" + sSQLRESTZONES + " as RESTZONES,  ";
+            }
+
+            sSQL += "	   TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
                             "	  from TRK_TRUCK TRK " + Environment.NewLine +
                             "	  where TRK_ACTIVE = 1 " + Environment.NewLine +
                             ") " + Environment.NewLine +
@@ -736,52 +778,7 @@ namespace PMap.BLL
 
         }
 
-        /// <summary>
-        /// Egy lerakó ID lista hiányzó, összes behajtási zónát használó távolságainak lekérése
-        /// 
-        /// </summary>
-        /// <param name="p_lstDEP_ID"></param>
-        /// <returns></returns>
-        public List<boRoute> GetDistancelessNodesForAllZonesByDepList__NEMKELL(List<int> p_lstDEP_ID)
-        {
-            string sDepIDList = string.Join(",", p_lstDEP_ID.Select(x => x.ToString()).ToArray());
-
-            string sSQL = " select  * from  " + Environment.NewLine +
-                          " (select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO    " + Environment.NewLine +
-                          "  from ( select distinct NOD_ID as ID from DEP_DEPOT DEP  where DEP.ID in ({0}) " + Environment.NewLine +
-                          " ) NOD_FROM  " + Environment.NewLine +
-                          " inner join (select distinct NOD_ID as ID from DEP_DEPOT DEP  where DEP.ID in ({1}) " + Environment.NewLine +
-                          " ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
-                          ") ALLNODES,          " + Environment.NewLine +
-                          "(select distinct     " + Environment.NewLine +
-                          "isnull(stuff(        " + Environment.NewLine +
-                          "( " + Environment.NewLine +
-                          "select ',' + convert( varchar(MAX), RZN.ID )  " + Environment.NewLine +
-                          "from RZN_RESTRZONE RZN   " + Environment.NewLine +
-                          "order by RZN.ID          " + Environment.NewLine +
-                          "FOR XML PATH('')         " + Environment.NewLine +
-                          "), 1, 1, ''), '')  as RESTZONES  " + Environment.NewLine +
-                          ") ALLRSTZ   " + Environment.NewLine +
-                          "--kivonjuk a létező távolságokat " + Environment.NewLine +
-                          "EXCEPT " + Environment.NewLine +
-                          "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES from DST_DISTANCE DST";
-
-            DataTable dt = DBA.Query2DataTable(String.Format(sSQL, sDepIDList, sDepIDList));
-            return (from row in dt.AsEnumerable()
-                    select new boRoute
-                    {
-                        NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
-                        NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
-                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
-                        DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
-                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT"),
-                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH")
-                    }).ToList();
-
-
-
-        }
-
+  
         public void WriteOneRoute(boRoute p_Route)
         {
             using (TransactionBlock transObj = new TransactionBlock(DBA))
@@ -829,6 +826,14 @@ namespace PMap.BLL
                 {
                 }
             }
+        }
+
+        public void DeleteTourRoutes(boPlanTour p_Tour)
+        {
+
+            DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and DST_MAXWEIGHT=? and DST_MAXHEIGHT=? and DST_MAXWIDTH=? ",
+                p_Tour.RZN_ID_LIST, p_Tour.TRK_WEIGHT, p_Tour.TRK_XHEIGHT, p_Tour.TRK_XWIDTH);
+
         }
 
         private string getEgesFromEdgeList(List<boEdge> p_Edges)

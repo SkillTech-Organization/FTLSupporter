@@ -250,23 +250,23 @@ namespace PMap.Route
             }
         }
 
-        public void getNeigboursByBound(CRoutePars p_RoutePar, ref Dictionary<string, List<int>[]> o_neighborsFull, ref Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
+        public void getNeigboursByBound(CRoutePars p_RoutePar, ref Dictionary<string, List<int>[]> o_neighborsFull, ref Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary, List<boPlanTourPoint> p_tourPoints)
         {
-            getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), ref o_neighborsFull, ref o_neighborsCut, p_cutBoundary);
+            getNeigboursByBound(new CRoutePars[] { p_RoutePar }.ToList(), ref o_neighborsFull, ref o_neighborsCut, p_cutBoundary, p_tourPoints);
         }
 
         /// <summary>
-        /// 
+        /// Az útvonalszámításhoz a feltételeknek megfelelő teljes és vágott térkép készítése 
         /// </summary>
         /// <param name="p_boundary"></param>
         /// <param name="aRZN_ID_LIST">Behajtásiövezet-lista</param>
         /// <returns></returns>
-        public void getNeigboursByBound(List<CRoutePars> p_RoutePars, ref Dictionary<string, List<int>[]> o_neighborsFull, ref Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary)
+        public void getNeigboursByBound(List<CRoutePars> p_RoutePars, ref Dictionary<string, List<int>[]> o_neighborsFull, ref Dictionary<string, List<int>[]> o_neighborsCut, RectLatLng p_cutBoundary, List<boPlanTourPoint> p_tourPoints)
         {
             DateTime dtStart = DateTime.Now;
             o_neighborsFull = new Dictionary<string, List<int>[]>();    //csomópont szomszédok korlátozás-route paraméterenként
             o_neighborsCut = new Dictionary<string, List<int>[]>();     //csomópont szomszédok korlátozás-route paraméterenként (vágott térkép)
-
+            bool CalcForCompletedTour = false;
             //Térkép készítése minden behajtásiövezet-listára. Csak akkora méretű térképet használunk,
             //amelybe beleférnek (kis ráhagyással persze) a lerakók.
             foreach (var routePar in p_RoutePars)
@@ -276,19 +276,52 @@ namespace PMap.Route
                 List<int>[] neighboursCut = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
 
                 string[] aRZN = aRZN = routePar.RZN_ID_LIST.Split(',');
+                List<int> tourPointsRzn = new List<int>();
+
+                List<PointLatLng> tourPointPositions = new List<PointLatLng>();
+
+                if (p_tourPoints != null && aRZN.Length > 0 && aRZN.First().StartsWith(Global.COMPLETEDTOUR))
+                {
+                    //Útvonalszámításnak jeleztük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak
+
+                    tourPointPositions = p_tourPoints.Select(s => new PointLatLng(s.NOD_YPOS / Global.LatLngDivider, s.NOD_XPOS / Global.LatLngDivider)).ToList();
+
+                    CalcForCompletedTour = true;
+                    var nodes = p_tourPoints.GroupBy(g => g.NOD_ID).Select( s=>s.Key).ToList();
+                    tourPointsRzn = RouteData.Instance.Edges.Where(w => nodes.Any(a => a == w.Value.NOD_ID_FROM) || nodes.Any(a => a == w.Value.NOD_ID_TO)).GroupBy(g=>g.Value.RZN_ID).Select(s => s.Key).ToList();
+
+
+                }
+                double TPArea = (double)PMapCommonVars.Instance.TPArea / Global.LatLngDivider;
 
                 //Az adott feletételeknek megfelelő élek beválogatása
                 var lstEdges = RouteData.Instance.Edges
-                    .Where(edg => ( /*sRZN_ID_LIST == ""                                               /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
+                    .Where(edg =>
+                       (edg.Value.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
+                       ||                                                                            /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
+                       //Övezet feltételek
+                       //
+                       ( /*sRZN_ID_LIST == ""                                                     /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
                         || */ edg.Value.RZN_ID == 0                                               /// Védett övezet-e
-                        || (edg.Value.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
-                                                                                                  /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
-                        || aRZN.Contains(edg.Value.RZN_ID.ToString()))                            /// Az él szerepel-e a zónalistában?
-
+                         || aRZN.Contains(edg.Value.RZN_ID.ToString())                            /// Az él szerepel-e a zónalistában? 
+                         || tourPointsRzn.Contains(edg.Value.RZN_ID)                            /// Az él szerepel-e a túrapontok zónalistában? 
+                        )
                         //Korlátozás feltételek
-                        && (edg.Value.EDG_MAXWEIGHT == 0 || routePar.Weight == 0 || routePar.Weight <= edg.Value.EDG_MAXWEIGHT)   /// Súlykorlátozás
-                        && (edg.Value.EDG_MAXHEIGHT == 0 || routePar.Height == 0 || routePar.Height <= edg.Value.EDG_MAXHEIGHT)   /// Magasságkorlátozás
-                        && (edg.Value.EDG_MAXWIDTH == 0 || routePar.Width == 0 || routePar.Width <= edg.Value.EDG_MAXWIDTH)      /// Szélességlátozás
+                        //
+                        || 
+                        ( 
+                           (
+                            //letervezett túrák pontjainak környékén a súly- és méretkorlátozást nem vesszük figyelembe
+                            (CalcForCompletedTour &&
+                            tourPointPositions.Any(a => Math.Abs(edg.Value.toLatLng.Lng - a.Lng) <= TPArea && Math.Abs(edg.Value.toLatLng.Lat - a.Lat) <= TPArea))
+                           )
+                           || (
+                           //Korlátozás feltételek
+                           (edg.Value.EDG_MAXWEIGHT == 0 || routePar.Weight == 0 || routePar.Weight <= edg.Value.EDG_MAXWEIGHT)   /// Súlykorlátozás
+                           && (edg.Value.EDG_MAXHEIGHT == 0 || routePar.Height == 0 || routePar.Height <= edg.Value.EDG_MAXHEIGHT)   /// Magasságkorlátozás
+                           && (edg.Value.EDG_MAXWIDTH == 0 || routePar.Width == 0 || routePar.Width <= edg.Value.EDG_MAXWIDTH)      /// Szélességlátozás
+                          )
+                        )
                      ).Select(s => s.Value).ToList();
 
                 lstEdges.ForEach(edg => neighboursFull[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO));

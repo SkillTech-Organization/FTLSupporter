@@ -1132,7 +1132,7 @@ namespace PMap.Forms.Panels.frmPPlan
 
                 if (m_CheckMode)
                 {
-                    m_PlanEditFuncs.ShowMapEdgesForCheck(m_editorLayer, gMapControl.Position);
+                    m_PlanEditFuncs.ShowMapEdgesForCheck(m_editorLayer, gMapControl.Position, PMapCommonVars.Instance.TPArea);
                     return;
                 }
 

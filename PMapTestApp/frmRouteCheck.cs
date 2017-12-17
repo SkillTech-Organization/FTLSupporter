@@ -427,7 +427,7 @@ namespace PMapTestApp
 
                 Dictionary<string, List<int>[]> NeighborsFull = null;
                 Dictionary<string, List<int>[]> NeighborsCut = null;
-                RouteData.Instance.getNeigboursByBound(lstRoutePars, ref NeighborsFull, ref NeighborsCut, boundary);
+                RouteData.Instance.getNeigboursByBound(lstRoutePars, ref NeighborsFull, ref NeighborsCut, boundary, null);
 
                 //összes RZN_ID_LIST-ra elkérjük az útvonalakat
                 m_routes.Clear();

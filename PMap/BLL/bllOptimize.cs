@@ -214,13 +214,27 @@ namespace PMap.BLL
 
         private void fillTruckType()
         {
-            string sSql = "select distinct RZN_ID_LIST, SPP.ID as SPP_ID, " + Environment.NewLine +
-                          "TRKX.TRK_WEIGHT, TRKX.TRK_XHEIGHT, TRKX.TRK_XWIDTH " + Environment.NewLine +
-                          "from v_trk_RZN_ID_LIST, SPP_SPEEDPROF SPP, " + Environment.NewLine +
-                          "(select TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH from TRK_TRUCK group by TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH) TRKX " + Environment.NewLine +
-                          "order by RZN_ID_LIST, TRKX.TRK_WEIGHT, TRKX.TRK_XHEIGHT, TRKX.TRK_XWIDTH";
+            string sSql = " select distinct ";
+
+            if (PMapIniParams.Instance.TourRoute)
+                sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine;
+            else
+                sSql += "  RZN_ID_LIST, " + Environment.NewLine;
+
+
+            sSql += "   SPP.ID as SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
+            " from TRK_TRUCK TRK " + Environment.NewLine +
+            " inner join SPP_SPEEDPROF SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
+            " inner join v_trk_RZN_ID_LIST RZN on TRK.ID = RZN.TRK_ID " + Environment.NewLine +
+            " inner join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine;
+            if (boOpt.TPL_ID != 0)
+                sSql += " where TPL.ID = ?";
+            else
+                sSql += " where TPL.PLN_ID = ?";
+
+
             int innerID = 1;
-            DataTable dt = DBA.Query2DataTable(sSql);
+            DataTable dt = DBA.Query2DataTable(sSql, (boOpt.TPL_ID != 0 ? boOpt.TPL_ID : boOpt.PLN_ID));
             boOpt.dicTruckType =
                     (from r in dt.AsEnumerable()
                      select new
@@ -392,7 +406,13 @@ namespace PMap.BLL
         {
             string sSql = "select TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK_REG_NUM, CRR_OWN, TFP_ID, CPP_ID, PLN_DATE_B, PLN_DATE_E, TPL_LOCKED, " + Environment.NewLine +
                         "isnull(TMX.MAXTIME, isnull(DATEADD(n, TPL.TPL_IDLETIME, AV.AVAIL), PLN.PLN_DATE_B)) AS AVAIL, TPL.TPL_MAXSCORE AS TPL_ORIGSCORE,  " + Environment.NewLine +
-                        "TPL.TPL_AVAIL_S, RPS.START, TRK.TRK_BUNDPOINT, TRK.TRK_BUNDTIME, TRK.WHS_ID, TPL.ARR_WHS_ID, RESTZ.RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK.SPP_ID  " + Environment.NewLine +
+                        "TPL.TPL_AVAIL_S, RPS.START, TRK.TRK_BUNDPOINT, TRK.TRK_BUNDTIME, TRK.WHS_ID, TPL.ARR_WHS_ID, ";
+            if (PMapIniParams.Instance.TourRoute)
+                sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RESTZ.RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine;
+            else
+                sSql += "  RESTZ.RZN_ID_LIST, " + Environment.NewLine;
+
+            sSql += "  TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK.SPP_ID  " + Environment.NewLine +
                         "from TPL_TRUCKPLAN TPL  " + Environment.NewLine +
                         "inner join TRK_TRUCK TRK ON TPL.TRK_ID = TRK.ID  " + Environment.NewLine +
                         "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID  " + Environment.NewLine +
@@ -707,13 +727,36 @@ namespace PMap.BLL
                         "				  inner join TOD_TOURORDER (NOLOCK) TOD on TOD.PLN_ID = ? and TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                         "				  ) NOD_TO on NOD_TO.NOD_ID <> NOD_FROM.NOD_ID  " + Environment.NewLine +
                         "			) Q1, " + Environment.NewLine +
-                        "			(select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH  " + Environment.NewLine +
-                        "			  from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
+                        "			(select distinct  TRK.SPP_ID, " + Environment.NewLine;
+
+                //Egyedi túraútvonalas tervezés (TourRoute)  esetén csak TPL_COMPLETED túráknál  vesszük figyelembe a súly- és méretkorlátozásokat
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else RZN.RZN_ID_LIST end  as RZN_ID_LIST , " + Environment.NewLine;
+                else
+                    sSql += " RZN.RZN_ID_LIST, ";
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine;
+                else
+                    sSql += " TRK.TRK_WEIGHT, " + Environment.NewLine;
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine;
+                else
+                    sSql += " TRK.TRK_XHEIGHT, " + Environment.NewLine;
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
+                else
+                    sSql += " TRK.TRK_XWIDTH " + Environment.NewLine;
+
+                sSql += "			  from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
                         "			  inner join v_trk_RZN_ID_LIST (NOLOCK) RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                         "			  inner join TRK_TRUCK (NOLOCK) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "			  where TPL.PLN_ID = ? and isnull(TPL.TPL_LOCKED,0) = 0 " + Environment.NewLine +
                         "			  ) Q2) NODES " + Environment.NewLine +
-                        "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
+                        "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST = NODES.RZN_ID_LIST  and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
                         "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH  " + Environment.NewLine +
                         "order by NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST, NODES.TRK_WEIGHT, NODES.TRK_XHEIGHT, NODES.TRK_XWIDTH, DST.DST_EDGES ";
 
@@ -741,13 +784,36 @@ namespace PMap.BLL
                         "					left outer join DEP_DEPOT (NOLOCK) DEP on DEP.ID = TOD.DEP_ID " + Environment.NewLine +
                         "					where TPL_ID = ?) NOD_TO on NOD_TO.NOD_ID <> NOD_FROM.NOD_ID " + Environment.NewLine +
                         "	) Q1, " + Environment.NewLine +
-                        "   (select distinct RZN.RZN_ID_LIST, TRK.SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT,  TRK.TRK_XWIDTH" + Environment.NewLine +
-                        "	 from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
+                        "   (select distinct TRK.SPP_ID, " + Environment.NewLine;
+                //Egyedi túraútvonalas tervezés (TourRoute)  esetén csak TPL_COMPLETED túráknál  vesszük figyelembe a súly- és méretkorlátozásokat
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)   else RZN.RZN_ID_LIST end   as RZN_ID_LIST , " + Environment.NewLine;
+                else
+                    sSql += " RZN.RZN_ID_LIST, ";
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine;
+                else
+                    sSql += " TRK.TRK_WEIGHT, " + Environment.NewLine;
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine;
+                else
+                    sSql += " TRK.TRK_XHEIGHT, " + Environment.NewLine;
+
+                if (PMapIniParams.Instance.TourRoute)
+                    sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
+                else
+                    sSql += " TRK.TRK_XWIDTH " + Environment.NewLine;
+
+
+                sSql += "	 from TPL_TRUCKPLAN (NOLOCK) TPL " + Environment.NewLine +
                         "	 inner join v_trk_RZN_ID_LIST (NOLOCK) RZN on RZN.TRK_ID  = TPL.TRK_ID " + Environment.NewLine +
                         "	 inner join TRK_TRUCK (NOLOCK) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "	 where TPL.ID = ? " + Environment.NewLine +
                         "	 ) Q2 ) NODES " + Environment.NewLine +
-                        "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST =NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
+                        "inner join DST_DISTANCE (NOLOCK) DST on DST.RZN_ID_LIST = NODES.RZN_ID_LIST and DST.NOD_ID_FROM = NODES.NOD_ID_FROM and  DST.NOD_ID_TO = NODES.NOD_ID_TO " + Environment.NewLine +
                         "                                       and DST.DST_MAXWEIGHT=NODES.TRK_WEIGHT and DST.DST_MAXHEIGHT=NODES.TRK_XHEIGHT and DST.DST_MAXWIDTH=NODES.TRK_XWIDTH " + Environment.NewLine +
                         "order by ID_FROM, ID_TO, NODES.SPP_ID, NODES.RZN_ID_LIST, NODES.TRK_WEIGHT, NODES.TRK_XHEIGHT, NODES.TRK_XWIDTH, DST.DST_EDGES ";
 

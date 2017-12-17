@@ -61,7 +61,7 @@ namespace Map.LongProcess
             boTruck Truck = RouteVisCommonVars.Instance.Truck;
             var routePar = new CRoutePars() { RZN_ID_LIST = Truck.RZN_ID_LIST, Weight = Truck.TRK_WEIGHT, Height = Truck.TRK_XHEIGHT, Width = Truck.TRK_XWIDTH };
 
-            RouteData.Instance.getNeigboursByBound(routePar, ref  NeighborsFull, ref NeighborsCut, boundary);
+            RouteData.Instance.getNeigboursByBound(routePar, ref  NeighborsFull, ref NeighborsCut, boundary, null);
 
             PMapRoutingProvider provider = new PMapRoutingProvider();
 

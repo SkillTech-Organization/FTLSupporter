@@ -53,6 +53,18 @@ namespace PMRoute
             string p_RZN_ID_LIST, int p_weight, int p_height, int p_width,
             out int o_distance, out int o_duration)
         {
+            /*
+                        System.Diagnostics.Trace.TraceInformation("p_iniPath" + p_iniPath);
+                        System.Diagnostics.Trace.TraceInformation("p_dbConf" + p_dbConf);
+                        System.Diagnostics.Trace.TraceInformation("p_dir" + p_dir);
+            */
+            Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_iniPath:" + p_iniPath), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
+            Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_dbConf:" + p_dbConf), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
+            Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_dir:" + p_dir), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
+
+
+
+
             DateTime dt = DateTime.Now;
             try
             {
@@ -61,19 +73,31 @@ namespace PMRoute
                 RouteData.Instance.InitFromFiles(p_dir, false);
 
 
+                Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_fromLat, p_fromLng).ToString(), false);
                 int fromNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_fromLat, p_fromLng));
                 if (fromNOD_ID == 0)
                 {
-                    throw new Exception(String.Format("Position can't be matched on map:{0}",
+
+                    var exc =  new Exception(String.Format("Position can't be matched on map:{0}",
                                       new GMap.NET.PointLatLng(p_fromLat, p_fromLng)));
-                }
-                int toNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_toLat, p_toLng));
-                if (toNOD_ID == 0)
-                {
-                    throw new Exception(String.Format("Position can't be matched on map:{0}",
-                                      new GMap.NET.PointLatLng(p_toLat, p_toLng)));
+
+                    Util.ExceptionLog(exc);
+                    throw exc;
+
                 }
 
+                Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_toLat, p_toLat).ToString(), false);
+                int toNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_toLat, p_toLat));
+                if (toNOD_ID == 0)
+                {
+                    var exc = new Exception(String.Format("Position can't be matched on map:{0}",
+                                      new GMap.NET.PointLatLng(p_toLat, p_toLng)));
+                    Util.ExceptionLog(exc);
+                    throw exc;
+                }
+
+
+                Util.Log2File("fromNOD_ID" + fromNOD_ID.ToString() + ", toNOD_ID" + toNOD_ID.ToString(), false);
 
                 RectLatLng boundary = bllRoute.getBoundary(p_fromLat, p_fromLng, p_toLat, p_toLng);
 
@@ -87,7 +111,7 @@ namespace PMRoute
                     Width = p_width
                 };
 
-                RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary);
+                RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary, null);
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
 
@@ -98,6 +122,7 @@ namespace PMRoute
                 o_distance = (int)result.CalcDistance;
                 o_duration = bllPlanEdit.GetDuration(result.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
 
+                Util.Log2File("o_distance" + o_distance.ToString() + ", o_duration" + o_duration.ToString(), false);
 
 
                 return true;

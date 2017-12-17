@@ -70,13 +70,15 @@
             this.btnToCloud = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnCheckMapOn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnCheckMapOff = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnSaveLayout = new System.Windows.Forms.ToolStripButton();
             this.btnRestoreLayout = new System.Windows.Forms.ToolStripButton();
             this.btnResetScreen = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.btnCompleteTourRoutes = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dmPPlan)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -118,6 +120,8 @@
             this.btnTourDetails,
             this.btnOptimizeAll,
             this.btnOptimizeTrk,
+            this.btnCompleteTourRoutes,
+            this.toolStripSeparator5,
             this.btnNewTour,
             this.btnDelTour,
             this.btnChgTruck,
@@ -340,11 +344,6 @@
             this.btnCheckMapOn.ToolTipText = "Ellenőrző mód bekapcsolása";
             this.btnCheckMapOn.Click += new System.EventHandler(this.btnCheckMapOn_Click);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
             // btnCheckMapOff
             // 
             this.btnCheckMapOff.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -356,6 +355,11 @@
             this.btnCheckMapOff.ToolTipText = "Ellenőrző mód kikapcsolása";
             this.btnCheckMapOff.Visible = false;
             this.btnCheckMapOff.Click += new System.EventHandler(this.btnCheckMapOff_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // btnSaveLayout
             // 
@@ -457,6 +461,21 @@
             this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 3;
             // 
+            // btnCompleteTourRoutes
+            // 
+            this.btnCompleteTourRoutes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnCompleteTourRoutes.Image = ((System.Drawing.Image)(resources.GetObject("btnCompleteTourRoutes.Image")));
+            this.btnCompleteTourRoutes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCompleteTourRoutes.Name = "btnCompleteTourRoutes";
+            this.btnCompleteTourRoutes.Size = new System.Drawing.Size(23, 22);
+            this.btnCompleteTourRoutes.Text = "Túra útvonalak véglegesítése";
+            this.btnCompleteTourRoutes.Click += new System.EventHandler(this.btnCompleteTourRoutes_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
             // frmPPlan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -512,5 +531,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnCheckMapOn;
         private System.Windows.Forms.ToolStripButton btnCheckMapOff;
+        private System.Windows.Forms.ToolStripButton btnCompleteTourRoutes;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }

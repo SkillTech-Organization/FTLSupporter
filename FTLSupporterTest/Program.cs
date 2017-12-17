@@ -862,10 +862,10 @@ namespace FTLSupporterTest
             //    lstTrk.RemoveRange(1, lstTrk.Count-1);
             //            lstTsk = lstTsk.Where( w=>w.TaskID  != "2143461").ToList();
 
-           lstTrk = lstTrk.Where(w => w.TruckID == "MZE-800").ToList();
+           lstTrk = lstTrk.Where(w => w.TruckID == "MZE-807").ToList();
 
             List<FTLResult> res;
-            Console.BufferHeight = 300;
+            Console.BufferHeight =600;
             if (p_bestTruck)
                 res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
             else

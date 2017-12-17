@@ -6,6 +6,7 @@ using System.Drawing;
 using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using PMap.Common.Attrib;
+using PMap.Common;
 
 namespace PMap.BO
 {
@@ -34,7 +35,21 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Engedélyezett behajtási zónák", Order = 6)]
         public string RZN_ID_LIST
         {
-            get { return _RZN_ID_LIST; }
+            get
+            {
+
+                string retval = _RZN_ID_LIST;
+                if (PMapIniParams.Instance.TourRoute &&  Completed)
+                {
+                    //Egyedi túraútvonalak esetén az útvonalszámításnak jelezzük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak
+                    //Ehhez Completed esetén a RZN_ID_LIST -be betesszük az ID-t, így kényszerítve a rendszert arra, hogy minden túrához egyedi 
+                    //útvonalakat számítson ugyanolyan két túrapont között
+                    //
+                    retval = Global.COMPLETEDTOUR + ID.ToString(); // + (!String.IsNullOrEmpty(retval) ? "," + retval : "");
+                }
+                return retval;
+
+            }
             set
             {
                 if (value != null)
@@ -90,61 +105,95 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Túra szinezése", Order = 21)]
         public Color PCOLOR { get; set; }
 
-        [DisplayNameAttributeX(Name = "Jármű szinezése", Order = 22)]
+        [DisplayNameAttributeX(Name = "Jármű színezése", Order = 22)]
         public Color TRK_COLOR { get; set; }
 
+        [DisplayNameAttributeX(Name = "Tervezés befejezve?", Order = 23)]
+        public bool Completed { get; set; }
+
+
+
         [ScriptIgnore]
-        [DisplayNameAttributeX(Name = "Túrapontok listája", Order = 23)]
+        [DisplayNameAttributeX(Name = "Túrapontok listája", Order = 24)]
         public List<boPlanTourPoint> TourPoints { get; set; }   //üres, ha nincs a járműnek túrája
 
-        
+
         //Járműtörzs adatok
         //
-        [DisplayNameAttributeX(Name = "Kapacitás teherbírás", Order = 24)]
+        [DisplayNameAttributeX(Name = "Kapacitás teherbírás", Order = 25)]
         public double CPP_LOADQTY { get; set; }
 
-        [DisplayNameAttributeX(Name = "Kapacitás térfogat", Order = 25)]
+        [DisplayNameAttributeX(Name = "Kapacitás térfogat", Order = 26)]
         public double CPP_LOADVOL { get; set; }
 
-        [DisplayNameAttributeX(Name = "Kapacitástúllépés? (teherbírás)", Order = 26)]
+        [DisplayNameAttributeX(Name = "Kapacitástúllépés? (teherbírás)", Order = 27)]
         public bool QTYErr { get; set; }
 
-        [DisplayNameAttributeX(Name = "Kapacitástúllépés? (térfogat)", Order = 27)]
+        [DisplayNameAttributeX(Name = "Kapacitástúllépés? (térfogat)", Order = 28)]
         public bool VOLErr { get; set; }
 
 
-        [DisplayNameAttributeX(Name = "Raktér hossza", Order = 28)]
+        [DisplayNameAttributeX(Name = "Raktér hossza", Order = 29)]
         public double TRK_LENGTH { get; set; }
 
-        [DisplayNameAttributeX(Name = "Raktér szélessége", Order = 29)]
+        [DisplayNameAttributeX(Name = "Raktér szélessége", Order = 30)]
         public int TRK_WIDTH { get; set; }
 
-        [DisplayNameAttributeX(Name = "Raktér magassága", Order = 30)]
+        [DisplayNameAttributeX(Name = "Raktér magassága", Order = 31)]
         public int TRK_HEIGHT { get; set; }
 
-        [DisplayNameAttributeX(Name = "Összsúly", Order = 31)]
-        public int TRK_WEIGHT { get; set; }
+        private int m_TRK_WEIGHT = 0;
+        [DisplayNameAttributeX(Name = "Összsúly", Order = 32)]
+        public int TRK_WEIGHT
+        {
+            get
+            {
+                if (PMapIniParams.Instance.TourRoute && !Completed)              //Egyedi túraútvonalak esetén ha nem befejetett a túra
+                    return 0;                                                    //nem vesszük figyelembe a korlátozást
+                return m_TRK_WEIGHT;
+            }
+            set { m_TRK_WEIGHT = value; }
+        }
 
-        [DisplayNameAttributeX(Name = "Teljes magasság", Order = 32)]
-        public int TRK_XHEIGHT { get; set; }
+        private int m_TRK_XHEIGHT = 0;
+        [DisplayNameAttributeX(Name = "Teljes magasság", Order = 33)]
+        public int TRK_XHEIGHT
+        {
+            get
+            {
+                if (PMapIniParams.Instance.TourRoute && !Completed)              //Egyedi túraútvonalak esetén ha nem befejetett a túra
+                    return 0;                                                    //nem vesszük figyelembe a korlátozást
+                    return m_TRK_XHEIGHT;
+            }
+            set { m_TRK_XHEIGHT = value; }
+        }
 
-        [DisplayNameAttributeX(Name = "Teljes szélesség", Order = 33)]
-        public int TRK_XWIDTH { get; set; }
+        private int m_TRK_XWIDTH = 0;
+        [DisplayNameAttributeX(Name = "Teljes szélesség", Order = 34)]
+        public int TRK_XWIDTH
+        {
+            get
+            {
+                if (PMapIniParams.Instance.TourRoute && !Completed)              //Egyedi túraútvonalak esetén ha nem befejetett a túra
+                    return 0;                                                    //nem vesszük figyelembe a korlátozást
+                 return m_TRK_XWIDTH;
+            }
+            set { m_TRK_XWIDTH = value; }
+        }
 
-
-        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 34)]
+        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 35)]
         public int TRK_ETOLLCAT { get; set; }                               //0: nincs útdíj
 
-        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 35)]
+        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 36)]
         public int TRK_ENGINEEURO { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 36)]
+        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 37)]
         public double TollMultiplier { get; set; }
 
-        [DisplayNameAttributeX(Name = "Szállító neve", Order = 37)]
+        [DisplayNameAttributeX(Name = "Szállító neve", Order = 38)]
         public string CRR_NAME { get; set; }
 
-    
+
         //Technikai mezők
         //
         [ScriptIgnore]

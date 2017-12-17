@@ -97,7 +97,8 @@ namespace PMap.Common
         public string AzureTableStoreApiKey { get;  set; }
         public string AzureSendGridApiKey { get;  set; }
 
-
+        public int TPArea { get; set; } = 12000;
+   
     }
 
 }

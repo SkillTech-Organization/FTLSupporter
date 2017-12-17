@@ -48,6 +48,8 @@ namespace PMap.Common
         public bool TestMode { get; private set; }
         public bool ParseLog { get; private set; }
         public bool ALog { get; private set; }
+        public bool TourRoute { get; private set; }     //Egyedi túraútvonalak
+
 
         public string AzureAccount { get; private set; }
         public string AuthTokenCryptAESKey { get; private set; }
@@ -199,6 +201,8 @@ namespace PMap.Common
             string sALog = ini.ReadString(Global.iniPMap, Global.iniALog);
             ALog = (sALog == "1" || sALog.ToLower() == "true");
 
+            string sTourRoute = ini.ReadString(Global.iniPMap, Global.iniTourRoute);
+            TourRoute = (sTourRoute == "1" || sTourRoute.ToLower() == "true");
 
             AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
             AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);

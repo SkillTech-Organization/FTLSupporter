@@ -73,6 +73,9 @@ namespace PMap.Common.PPlan
 
             if (UI.Confirm(PMapMessages.Q_PEDIT_REORDER, p_ReorganizedTourPoint.Tour.TRUCK, p_ReorganizedTourPoint.CLT_NAME))
             {
+
+                m_bllPlan.SetTourUnCompleted(p_Tour);
+
                 bllPlanCheck.checkOrderResult res = bllPlanCheck.checkOrderResult.OK;
                 //Egyelőre nem kell kézi tervezésnél a járműellenőrzés
                 //res = bllPlanCheck.CheckAll(m_EditedTourPoint.TOD_ID, m_EditedRoute.Tour.ID);
@@ -140,7 +143,7 @@ namespace PMap.Common.PPlan
                     UI.Error(PMapMessages.E_PEDIT_WRONGINSPOINT);
                     return refreshedTour;
                 }
-
+                m_bllPlan.SetTourUnCompleted(p_Tour);
                 bllPlanCheck.checkOrderResult res = bllPlanCheck.checkOrderResult.OK;
 
                 //Egyelőre nem kell kézi tervezésnél a járműellenőrzés
@@ -303,7 +306,7 @@ namespace PMap.Common.PPlan
                         return (dresultStart == bllPlanCheck.checkDistanceResult.OK &&
                                 dresultEnd == bllPlanCheck.checkDistanceResult.OK);
           /* 
-          EZ KELL
+          EZ KELL A DINAMIKUS SZÁMOLÁS ESETÉN
 
             DateTime dtStart = DateTime.Now;
             Dictionary<string, List<int>[]> neighborsFull = null;
@@ -395,7 +398,7 @@ namespace PMap.Common.PPlan
             return TourWithFreshData;
         }
 
-        public void ShowMapEdgesForCheck(GMapOverlay p_checkMapLayer, PointLatLng p_position)
+        public void ShowMapEdgesForCheck(GMapOverlay p_checkMapLayer, PointLatLng p_position, double p_TPArea)
         {
             using (new WaitCursor())
             {
@@ -405,7 +408,7 @@ namespace PMap.Common.PPlan
                 HashSet<PointLatLng> markersPts = new HashSet<PointLatLng>(p_checkMapLayer.Markers.Select(s=>s.Position).ToList());
 
                 foreach (var edg in RouteData.Instance.Edges.Where(
-                     w => (Math.Abs(w.Value.toLatLng.Lng - p_position.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_position.Lat) < (double)Global.EdgeApproachCity/Global.LatLngDivider))
+                     w => (Math.Abs(w.Value.toLatLng.Lng - p_position.Lng) <= p_TPArea / Global.LatLngDivider && Math.Abs(w.Value.toLatLng.Lat - p_position.Lat) <= p_TPArea/Global.LatLngDivider))
                      )
                 {
                     var edge = edg.Value;
@@ -415,8 +418,8 @@ namespace PMap.Common.PPlan
                     {
 
 
-                       var ToolTipText = String.Format("ID:{0} Súly:{1}, Magaság:{2}, Szélesség:{3}\nNév:{4}, fromNOD:{5}, toNOD:{6}\nBehajtási övezet:{7}",
-                           edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO, edge.WZONE);
+                       var ToolTipText = String.Format("ID:{0} Súly:{1}, Magaság:{2}, Szélesség:{3}\nNév:{4}, fromNOD:{5}, toNOD:{6}\nBehajtási övezet:{7}, Célforgalom? {8}",
+                           edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO, edge.WZONE, edge.EDG_DESTTRAFFIC.ToString());
                         GMapMarker gm = null;
 
                 

@@ -25,12 +25,14 @@ namespace PMap.BLL
 
         private bllRoute m_bllRoute;
         private bllWarehouse m_bllWarehouse;
+        private bllPlan m_bllPlan;
 
         public bllPlanEdit(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
             m_bllRoute = new bllRoute(p_DBA);
             m_bllWarehouse = new bllWarehouse(p_DBA);
+            m_bllPlan = new bllPlan(p_DBA);
         }
 
         public int AddOrderToTour(int p_TPL_ID, boPlanOrder p_UpOrder, boPlanTourPoint p_insertionPoint, int p_Weather)
@@ -77,6 +79,7 @@ namespace PMap.BLL
                                       "where TPL_ID =?) pt " + Environment.NewLine +
                                       "where PTP_PLANTOURPOINT.ID = pt.ID ";
                         DBA.ExecuteNonQuery(sSQL, p_TPL_ID);
+                        m_bllPlan.SetTourUnCompleted(p_TPL_ID);
 
                     }
                     RecalcTour(p_insertionPoint.PTP_ORDER, p_TPL_ID, p_Weather);
@@ -737,6 +740,8 @@ namespace PMap.BLL
                     */
                     DBA.ExecuteNonQuery("update PTP_PLANTOURPOINT set TPL_ID=? where TPL_ID=?", p_NewTPL_ID, p_OldTPL_ID);
                     UpdateDriverForTour(p_PLN_ID, p_NewTPL_ID);
+                    m_bllPlan.SetTourUnCompleted(p_NewTPL_ID);
+
                     RecalcTour(0, p_NewTPL_ID, p_Weather);
                     bllHistory.WriteHistory(0, "PTP_PLANTOURPOINT", p_OldTPL_ID, bllHistory.EMsgCodes.UPD, p_PLN_ID, p_OldTPL_ID, p_NewTPL_ID, p_Weather);
                 }
@@ -755,7 +760,8 @@ namespace PMap.BLL
                 try
                 {
 
-                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH" + Environment.NewLine +
+                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, " + Environment.NewLine +
+                                   "RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TPL_COMPLETED, TPL.ID as TPL_ID" + Environment.NewLine +
                                    "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                                    "left outer join WHS_WAREHOUSE WHS on WHS.ID = PTP.WHS_ID " + Environment.NewLine +
                                    "inner join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
@@ -783,6 +789,11 @@ namespace PMap.BLL
                             string lastETLCODE = "";
                             int NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
                             string RZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
+
+                            if (PMapIniParams.Instance.TourRoute && Util.getFieldValue<bool>(dr, "TPL_COMPLETED"))
+                            {
+                                RZN_ID_LIST = Global.COMPLETEDTOUR + Util.getFieldValue<int>(dr, "TPL_ID").ToString(); // + "," + RZN_ID_LIST;
+                            }
 
                             dToll = 0;
                             if (lastNOD_ID > 0)
@@ -865,7 +876,7 @@ namespace PMap.BLL
             //Kiszedem a módosítandó rekordokat
             sSQLStr = "select PTP_ARRTIME, PTP_SERVTIME, PTP_DEPTIME, PTP.ID, PTP.NOD_ID, PTP_ORDER, WHS_BNDTIME, DEP_QTYSRVTIME, " + Environment.NewLine +
                       "TOD.DEP_ID, TOD_QTY, TOD_DATE, TOD.PLN_ID, DEP_SRVTIME, PTP_TYPE, WHS_SRVTIME, WHS_SRVTIME_UNLOAD, PTP_SRVTIME_UNLOAD, TOD_SERVS, " + Environment.NewLine +
-                      "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH " + Environment.NewLine +
+                      "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH, TPL.TPL_COMPLETED, TPL.ID as TPL_ID " + Environment.NewLine +
                       "from PTP_PLANTOURPOINT  PTP " + Environment.NewLine +
                       "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
                       "left join ORD_ORDER     ORD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
@@ -917,6 +928,11 @@ namespace PMap.BLL
                             int NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
                             string RZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
 
+                            if (PMapIniParams.Instance.TourRoute && Util.getFieldValue<bool>(dr, "TPL_COMPLETED"))
+                            {
+                                RZN_ID_LIST = Global.COMPLETEDTOUR + Util.getFieldValue<int>(dr, "TPL_ID").ToString(); // + "," + RZN_ID_LIST;
+                            }
+
                             dToll = 0;
                             if (lastNOD_ID > 0)
                             {
@@ -957,7 +973,13 @@ namespace PMap.BLL
                             Dist = 0;
                             Time = 0;
 
-                            GetDistanceAndDuration(Util.getFieldValue<string>(drPrev, "RZN_ID_LIST"), TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, Util.getFieldValue<int>(drPrev, "NOD_ID"), Util.getFieldValue<int>(dr, "NOD_ID"), Util.getFieldValue<int>(dr, "SPP_ID"), p_Weather, out Dist, out Time);
+                            string RZN_ID_LIST = Util.getFieldValue<string>(drPrev, "RZN_ID_LIST");
+                            if (PMapIniParams.Instance.TourRoute && Util.getFieldValue<bool>(dr, "TPL_COMPLETED"))
+                            {
+                                RZN_ID_LIST = Global.COMPLETEDTOUR + Util.getFieldValue<int>(dr, "TPL_ID").ToString();// + ","+ RZN_ID_LIST;
+                            }
+
+                            GetDistanceAndDuration(RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, Util.getFieldValue<int>(drPrev, "NOD_ID"), Util.getFieldValue<int>(dr, "NOD_ID"), Util.getFieldValue<int>(dr, "SPP_ID"), p_Weather, out Dist, out Time);
 
                             //megérkezés (előző távozás+menetidő)
                             dtPTP_ARRTIME = dtPTP_DEPTIME.AddMinutes(Time);
@@ -1093,9 +1115,6 @@ namespace PMap.BLL
             if (dt.Rows.Count == 1)
             {
                 DataRow dr = dt.Rows[0];
-                if (p_ORD_NUM == "KÜ-17/030246")
-                    Console.WriteLine("c");
-
 
                 int newTOD_ID = DBA.InsertPar("TOD_TOURORDER",
                     "DEP_ID", Util.getFieldValue<int>(dr, "DEPID"),

@@ -18,7 +18,7 @@ using PMap.Common;
 
 namespace PMap.LongProcess
 {
-    class GetTourDetailsProcess : BaseLongProcess
+    public class GetTourDetailsProcess : BaseLongProcess
     {
         public bool Completed { get; set; }
         public List<dlgTourDetails.CTourDetails> TourDetails { get; set; }
@@ -69,13 +69,14 @@ namespace PMap.LongProcess
 
                         RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
                         var routePar = new CRoutePars() { RZN_ID_LIST = m_Tour.RZN_ID_LIST, Weight = m_Tour.TRK_WEIGHT, Height = m_Tour.TRK_XHEIGHT, Width = m_Tour.TRK_XWIDTH };
-                        //TODO:lehet, hogy nem kellene térkép kivágást végeznni itt
+                        //Azért van itt a térkép előkészítés, hogy csak akkor fusson le, ha 
+                        //kell útvonalat számítani
                         if (neighborsFull == null)
                         {
                             RectLatLng boundary = new RectLatLng();
-                            List<int> nodes = new List<int>() { m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID };
+                            List<int> nodes = m_Tour.TourPoints.Select(s => s.NOD_ID).ToList();
                             boundary = m_bllRoute.getBoundary(nodes);
-                            RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary);
+                            RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary, m_Tour.TourPoints);
                         }
 
                         result = provider.GetRoute(m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, routePar,

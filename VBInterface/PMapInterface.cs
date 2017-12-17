@@ -1191,7 +1191,7 @@ namespace VBInterface
                     var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = 0, Height = 0, Width = 0};
                     
                     //A menetlevél ellenőrzés nem használ súly- és méretkorlátozásokat !
-                    RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary);
+                    RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary, null);
 
 
                     boRoute result = provider.GetRoute( fromNOD_ID, toNOD_ID, routePar,

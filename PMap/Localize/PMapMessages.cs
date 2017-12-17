@@ -54,6 +54,9 @@ namespace PMap.Localize
         public const string Q_PEDIT_DEPINTOTOUR = "{0} jármű túrájába szervezhető {1} lerakó?";
         public const string Q_PEDIT_NEWTOUR = "Új túra létrehozása?";
 
+        public const string E_TOURCOMPL_ABORTED = "Véglegesítés megszakítva!";
+        public const string E_TOURCOMPL_NOGETROUTES = "Útvonalak nem kérhetőek le! Lehet, hogy hálózati hiba történt.";
+
 
         public const string E_PCHK_NOROUTE = "A magadott övezetlistára nincs útvonal!";
         public const string E_PCHK_ERRINROUTE = "Hiba a beírt útvonalban:{0}\n";
@@ -142,6 +145,11 @@ namespace PMap.Localize
 
         public const string M_PROC_INIT = "** Inicializálás **";
         public const string M_PROC_STOP = "Leállít";
+
+        public const string T_LOAD_ROUTEDETAILS = "Túrarészletező betöltés:";
+        public const string T_COMPLETE_TOURROUTES = "Túraútvonalak véglegesítés";
+        public const string T_COMPLETE_TOURROUTES2 = "Túraútvonalak véglegesítése:";
+        public const string E_NOSELTOUR = "Nincs kiválasztott túra";
 
     }
 

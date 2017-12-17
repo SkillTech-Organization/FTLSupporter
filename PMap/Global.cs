@@ -37,6 +37,7 @@ namespace PMap
         public const string iniTestMode = "TestMode";
         public const string iniParseLog = "ParseLog";
         public const string iniALog = "ALog";
+        public const string iniTourRoute = "TourRoute";
 
         public const string iniWeb = "Web";
         public const string iniAzureAccount = "AzureAccount";
@@ -220,6 +221,9 @@ namespace PMap
 
         public const string EXTFILE_EDG = "PMap.edg.json";
         public const string EXTFILE_NOD = "PMap.nod.json";
+
+
+        public const string COMPLETEDTOUR = "COMPLETEDTOUR";            //Útvonalszámításnak jelezzük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak
 
     }
 }
