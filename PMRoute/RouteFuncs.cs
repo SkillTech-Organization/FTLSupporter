@@ -58,11 +58,12 @@ namespace PMRoute
                         System.Diagnostics.Trace.TraceInformation("p_dbConf" + p_dbConf);
                         System.Diagnostics.Trace.TraceInformation("p_dir" + p_dir);
             */
+            /*
             Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_iniPath:" + p_iniPath), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
             Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_dbConf:" + p_dbConf), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
             Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_dir:" + p_dir), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
 
-
+    */
 
 
             DateTime dt = DateTime.Now;
@@ -86,8 +87,8 @@ namespace PMRoute
 
                 }
 
-                Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_toLat, p_toLat).ToString(), false);
-                int toNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_toLat, p_toLat));
+                Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_toLat, p_toLng).ToString(), false);
+                int toNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_toLat, p_toLng));
                 if (toNOD_ID == 0)
                 {
                     var exc = new Exception(String.Format("Position can't be matched on map:{0}",

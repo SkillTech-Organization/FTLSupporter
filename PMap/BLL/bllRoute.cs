@@ -615,17 +615,21 @@ namespace PMap.BLL
         public  RectLatLng getBoundary(List<int> p_nodes)
         {
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
-            string sSql = "select * from NOD_NODE where id in (" + sNODE_IDs + ")";
+            string sSql = "select min(NOD_XPOS) as minLng, min( NOD_YPOS) as minLat , max(NOD_XPOS) as maxLng, max( NOD_YPOS)  as maxLat from NOD_NODE where id in (" + sNODE_IDs + ")";
             DataTable dt = DBA.Query2DataTable(sSql);
+
+
             //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
             //tételnél biztosan kapjanak értéket
-            double dLat1 = Util.getFieldValue<double>(dt.Rows[0], "NOD_YPOS") / Global.LatLngDivider;
-            double dLng1 = Util.getFieldValue<double>(dt.Rows[0], "NOD_XPOS") / Global.LatLngDivider;
-            double dLat2 = Util.getFieldValue<double>(dt.Rows[1], "NOD_YPOS") / Global.LatLngDivider;
-            double dLng2 = Util.getFieldValue<double>(dt.Rows[1], "NOD_XPOS") / Global.LatLngDivider;
+            double dLat1 = Util.getFieldValue<double>(dt.Rows[0], "minLat") / Global.LatLngDivider;
+            double dLng1 = Util.getFieldValue<double>(dt.Rows[0], "minLng") / Global.LatLngDivider;
+            double dLat2 = Util.getFieldValue<double>(dt.Rows[0], "maxLat") / Global.LatLngDivider;
+            double dLng2 = Util.getFieldValue<double>(dt.Rows[0], "maxLng") / Global.LatLngDivider;
             return getBoundary(dLat1, dLng1, dLat2, dLng2);
 
         }
+
+
         public static RectLatLng getBoundary(double dLat1, double dLng1, double dLat2, double dLng2)
         {
             //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 

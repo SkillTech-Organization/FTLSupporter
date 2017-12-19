@@ -57,7 +57,7 @@ namespace PMap.LongProcess
 
             CompleteCode = eCompleteCode.OK;
 
-            ProcessForm.SetInfoText( PMapMessages.T_COMPLETE_TOURROUTES2 + m_Tour.TRUCK);
+            ProcessForm.SetInfoText(PMapMessages.T_COMPLETE_TOURROUTES2 + m_Tour.TRUCK);
             CompleteCode = CreateOneRoute(m_Tour);
 
 
@@ -88,57 +88,38 @@ namespace PMap.LongProcess
                 //FONTOS !!!
                 //A túrák mindig visszatérnek a kiindulási raktárba, ezért a legutolsó túrapontra nem készítünk markert.
                 //
+
+                var routePar = new CRoutePars() { RZN_ID_LIST = p_tour.RZN_ID_LIST, Weight = p_tour.TRK_WEIGHT, Height = p_tour.TRK_XHEIGHT, Width = p_tour.TRK_XWIDTH };
+
                 Dictionary<string, List<int>[]> neighborsFull = null;
                 Dictionary<string, List<int>[]> neighborsCut = null;
+                RectLatLng boundary = new RectLatLng();
+                List<int> nodes = p_tour.TourPoints.Select(s => s.NOD_ID).ToList();
+                boundary = m_bllRoute.getBoundary(nodes);
+                RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary, p_tour.TourPoints);
+
+                List<boRoute> results = new List<boRoute>();
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
-                for (int i = 0; i < p_tour.TourPoints.Count - 1; i++)
+                foreach (var tourPoint in p_tour.TourPoints)
                 {
                     ProcessForm.NextStep();
 
-                    PointLatLng start = new PointLatLng(p_tour.TourPoints[i].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i].NOD_XPOS / Global.LatLngDivider);
-                    PointLatLng end = new PointLatLng(p_tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, p_tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
+                    RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
-                     MapRoute result = null;
-                     if (p_tour.TourPoints[i].NOD_ID != p_tour.TourPoints[i + 1].NOD_ID)
-                    {
+                    var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.NOD_ID).Select(s => s.Key).ToList();
+                    results.AddRange(provider.GetAllRoutes(routePar, tourPoint.NOD_ID, toNodes,
+                                         neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
+                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 
-                        result = m_bllRoute.GetMapRouteFromDB(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, p_tour.RZN_ID_LIST, p_tour.TRK_WEIGHT, p_tour.TRK_XHEIGHT, p_tour.TRK_XWIDTH);
-                        if (result == null)
-                        {
-                            RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
-
-                            var routePar = new CRoutePars() { RZN_ID_LIST = p_tour.RZN_ID_LIST, Weight = p_tour.TRK_WEIGHT, Height = p_tour.TRK_XHEIGHT, Width = p_tour.TRK_XWIDTH };
-
-                            //Azért van itt a térkép előkészítés, hogy csak akkor fusson le, ha 
-                            //kell útvonalat számítani
-                            if (neighborsFull == null || neighborsCut == null)
-                            {
-                                RectLatLng boundary = new RectLatLng();
-                                List<int> nodes = p_tour.TourPoints.Select(s => s.NOD_ID).ToList();
-                                boundary = m_bllRoute.getBoundary(nodes);
-                                RouteData.Instance.getNeigboursByBound(routePar, ref neighborsFull, ref neighborsCut, boundary, p_tour.TourPoints);
-                            }
-
-                            boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, routePar,
-                                neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
-                                PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
-                            result = routeInf.Route;
-                            m_bllRoute.WriteOneRoute(routeInf);
-                        }
-
-
-                    }
-
-                    else
-                    {
-                        iErrCnt++;
-                    }
-                    if (iErrCnt >= 6)
-                    {
-                        return eCompleteCode.NoRoute;
-                    }
                 }
+                m_bllRoute.DeleteTourRoutes(p_tour);
+                m_bllRoute.WriteRoutesBulk(results, true);
+                results = new List<boRoute>();
+                Util.Log2File("CalcRoutesForTours WriteRoutesBulk: " + GC.GetTotalMemory(false).ToString());
+
+
+
             }
             catch (Exception e)
             {

@@ -280,7 +280,7 @@ namespace PMap.Route
 
                 List<PointLatLng> tourPointPositions = new List<PointLatLng>();
 
-                if (p_tourPoints != null && aRZN.Length > 0 && aRZN.First().StartsWith(Global.COMPLETEDTOUR))
+                if (p_tourPoints != null && aRZN.Length > 0 && aRZN.First().StartsWith(Global.COMPLETEDTOUR))           //
                 {
                     //Útvonalszámításnak jeleztük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak
 

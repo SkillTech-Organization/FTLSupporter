@@ -119,35 +119,13 @@ namespace PMap.LongProcess
 
                 // Check for available memory.
 
+                Dictionary<string, List<int>[]> NeighborsArrFull = null;
+                Dictionary<string, List<int>[]> NeighborsArrCut = null;
+                RouteData.Instance.getNeigboursByBound(routePars, ref NeighborsArrFull, ref NeighborsArrCut, boundary, null);
 
 
                 foreach (var routePar in routePars)
                 {
-
-                    List<int>[] neighboursFull = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
-                    List<int>[] neighboursCut = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
-                    string[] aRZN = aRZN = routePar.RZN_ID_LIST.Split(',');
-
-                    var lstEdges = RouteData.Instance.Edges
-                        .Where(edg => ( /*sRZN_ID_LIST == ""                                               /// Van-e rajta behajtási korlátozást figyelembe vegyünk-e? ( sRZN_ID_LIST == "" --> NEM)
-                        || */ edg.Value.RZN_ID == 0                                               /// Védett övezet-e
-                        || (edg.Value.EDG_DESTTRAFFIC && PMapIniParams.Instance.DestTraffic)      /// PMapIniParams.Instance.DestTraffic paraméter beállítása esetén a célforgalomban használható 
-                                                                                                  /// utaknál nem veszük a korlátozást figyelembe (SzL, 2013.04.16)
-                        || aRZN.Contains(edg.Value.RZN_ID.ToString()))                            /// Az él szerepel-e a zónalistában?
-
-                            //Korlátozás feltételek
-                            && (edg.Value.EDG_MAXWEIGHT == 0 || routePar.Weight == 0 || routePar.Weight <= edg.Value.EDG_MAXWEIGHT)   /// Súlykorlátozás
-                        && (edg.Value.EDG_MAXHEIGHT == 0 || routePar.Height == 0 || routePar.Height <= edg.Value.EDG_MAXHEIGHT)   /// Magasságkorlátozás
-                        && (edg.Value.EDG_MAXWIDTH == 0 || routePar.Width == 0 || routePar.Width <= edg.Value.EDG_MAXWIDTH)      /// Szélességlátozás
-                     ).Select(s => s.Value).ToList();
-
-                    lstEdges.ForEach(edg => neighboursFull[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO));
-                    if (PMapIniParams.Instance.CutMapForRouting && boundary != null)
-                    {
-                        lstEdges.Where(edg => boundary.Contains(edg.fromLatLng) && boundary.Contains(edg.toLatLng)).
-                            ToList().ForEach(edg => neighboursCut[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO));
-
-                    }
 
                     var dicCalcNodes = m_CalcDistances.Where(w => w.RZN_ID_LIST == routePar.RZN_ID_LIST &&
                                                         w.DST_MAXWEIGHT == routePar.Weight &&
@@ -155,7 +133,8 @@ namespace PMap.LongProcess
                                                         w.DST_MAXWIDTH == routePar.Width)
                                                         .GroupBy(g=>g.NOD_ID_FROM)
                                                         .ToDictionary(gr => gr.Key, gr => gr.Select(x => x.NOD_ID_TO).ToList());
-                    foreach (var calcNode in dicCalcNodes.AsEnumerable())
+
+                   foreach (var calcNode in dicCalcNodes.AsEnumerable())
                     {
  
                         dtStart = DateTime.Now;
@@ -167,7 +146,7 @@ namespace PMap.LongProcess
                         //megj: nins routePar null ellenőrzés, hogy szálljon el, ha valami probléma van
                         //
                         results.AddRange(provider.GetAllRoutes(routePar, calcNode.Key, lstToNodes,
-                                            neighboursFull, neighboursCut,
+                                            NeighborsArrFull[routePar.Hash], NeighborsArrCut[routePar.Hash],
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 
                         //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!
