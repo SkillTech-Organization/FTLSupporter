@@ -101,14 +101,14 @@ namespace PMap.LongProcess
                 List<boRoute> results = new List<boRoute>();
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
-                foreach (var tourPoint in p_tour.TourPoints)
+                foreach (var tourPoint in p_tour.TourPoints.GroupBy(g => g.NOD_ID))
                 {
                     ProcessForm.NextStep();
 
                     RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
-                    var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.NOD_ID).Select(s => s.Key).ToList();
-                    results.AddRange(provider.GetAllRoutes(routePar, tourPoint.NOD_ID, toNodes,
+                    var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.First().NOD_ID).Select(s => s.Key).ToList();
+                    results.AddRange(provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,
                                          neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
                                          PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 

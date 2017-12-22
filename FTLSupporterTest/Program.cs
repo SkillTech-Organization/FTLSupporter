@@ -862,7 +862,7 @@ namespace FTLSupporterTest
             //    lstTrk.RemoveRange(1, lstTrk.Count-1);
             //            lstTsk = lstTsk.Where( w=>w.TaskID  != "2143461").ToList();
 
-           lstTrk = lstTrk.Where(w => w.TruckID == "MZE-807").ToList();
+           lstTrk = lstTrk.Where(w => w.TruckID == "MPT-130").ToList();
 
             List<FTLResult> res;
             Console.BufferHeight =600;

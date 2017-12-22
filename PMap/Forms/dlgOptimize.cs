@@ -20,6 +20,8 @@ namespace PMap.Forms
     {
 
         public TourOptimizerProcess.eOptResult Result { get; set; }
+        public string IgnoredOrders { get; private set; } = "";
+
         private boPlan m_boPlan = null;
         private boPlanTour m_boTour = null;
 
@@ -67,6 +69,7 @@ namespace PMap.Forms
 
                     top.Run();
                     pd.ShowDialog();
+                    IgnoredOrders = top.IgnoredOrders;
                     Result = top.Result;
                     return true;
                 }

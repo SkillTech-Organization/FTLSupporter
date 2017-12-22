@@ -46,6 +46,9 @@ namespace PMap.LongProcess
             Dictionary<int, string> rdt = m_bllRoute.GetRoadTypesToDict();
             PMapRoutingProvider provider = new PMapRoutingProvider();
 
+            Dictionary<string, List<int>[]> neighborsFull = null;
+            Dictionary<string, List<int>[]> neighborsCut = null;
+
             string LastETLCODE = "";
             for (int i = 0; i < m_Tour.TourPoints.Count() - 1; i++)
             {
@@ -60,8 +63,6 @@ namespace PMap.LongProcess
                     PointLatLng end = new PointLatLng(m_Tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, m_Tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
 
                     boRoute result = null;
-                    Dictionary<string, List<int>[]> neighborsFull = null;
-                    Dictionary<string, List<int>[]> neighborsCut = null;
 
                     result = m_bllRoute.GetRouteFromDB( m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, m_Tour.RZN_ID_LIST, m_Tour.TRK_WEIGHT, m_Tour.TRK_XHEIGHT, m_Tour.TRK_XWIDTH);
                     if (result == null)

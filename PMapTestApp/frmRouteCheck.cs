@@ -676,8 +676,13 @@ namespace PMapTestApp
 
   //              foreach (var edg in RouteData.Instance.Edges.Where(
   //                               w => (Math.Abs(w.Value.fromLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.fromLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway/2)))
-                    foreach (var edg in RouteData.Instance.Edges.Where(
+             /*       foreach (var edg in RouteData.Instance.Edges.Where(
                                     w => (Math.Abs(w.Value.toLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.toLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway / 2)))
+*/
+
+                    foreach (var edg in RouteData.Instance.Edges.Where(
+                                     w => int.Parse( w.Value.EDG_STRNUM4 ) > 1000))
+
                     /*
                 foreach (var edg in RouteData.Instance.Edges.Where(
                             w =>(Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
@@ -707,7 +712,6 @@ namespace PMapTestApp
                         m_edgesMarkerLayer.Markers.Add(gm);
                     }
                     gm.ToolTipText += String.Format("ID:{0} weight{1}, height:{2}, width:{3}\nname:{4}, fromNOD:{5}, toNOD:{6}", edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
-
                     Pen p;
                     switch ( edge.RDT_VALUE)
                     {

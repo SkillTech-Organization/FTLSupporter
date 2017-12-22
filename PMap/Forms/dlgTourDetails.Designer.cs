@@ -47,6 +47,9 @@
             this.gridColEDG_ETLCODE = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColOrigToll = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColToll = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXWEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEDG_MAXWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.imageEditType = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
             this.itemImageType = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
             this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
@@ -54,9 +57,6 @@
             this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.excelToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
-            this.colEDG_MAXWEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colEDG_MAXHEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colEDG_MAXWIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridTourDetails)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTourDetails)).BeginInit();
@@ -261,8 +261,6 @@
             this.gridColOrigToll.FieldName = "OrigToll";
             this.gridColOrigToll.Name = "gridColOrigToll";
             this.gridColOrigToll.OptionsColumn.AllowEdit = false;
-            this.gridColOrigToll.SummaryItem.DisplayFormat = "{0:C2}";
-            this.gridColOrigToll.SummaryItem.SummaryType = DevExpress.Data.SummaryItemType.Sum;
             this.gridColOrigToll.Visible = true;
             this.gridColOrigToll.VisibleIndex = 10;
             this.gridColOrigToll.Width = 55;
@@ -280,6 +278,42 @@
             this.gridColToll.Visible = true;
             this.gridColToll.VisibleIndex = 11;
             this.gridColToll.Width = 67;
+            // 
+            // colEDG_MAXWEIGHT
+            // 
+            this.colEDG_MAXWEIGHT.Caption = "Súlykorlát";
+            this.colEDG_MAXWEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.colEDG_MAXWEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXWEIGHT.FieldName = "EDG_MAXWEIGHT";
+            this.colEDG_MAXWEIGHT.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.colEDG_MAXWEIGHT.Name = "colEDG_MAXWEIGHT";
+            this.colEDG_MAXWEIGHT.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXWEIGHT.Visible = true;
+            this.colEDG_MAXWEIGHT.VisibleIndex = 12;
+            // 
+            // colEDG_MAXHEIGHT
+            // 
+            this.colEDG_MAXHEIGHT.Caption = "Magasságkorlát";
+            this.colEDG_MAXHEIGHT.DisplayFormat.FormatString = "#,#0.00";
+            this.colEDG_MAXHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXHEIGHT.FieldName = "EDG_MAXHEIGHT";
+            this.colEDG_MAXHEIGHT.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.colEDG_MAXHEIGHT.Name = "colEDG_MAXHEIGHT";
+            this.colEDG_MAXHEIGHT.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXHEIGHT.Visible = true;
+            this.colEDG_MAXHEIGHT.VisibleIndex = 13;
+            // 
+            // colEDG_MAXWIDTH
+            // 
+            this.colEDG_MAXWIDTH.Caption = "Szélességkorlát";
+            this.colEDG_MAXWIDTH.DisplayFormat.FormatString = "#,#0.00";
+            this.colEDG_MAXWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.colEDG_MAXWIDTH.FieldName = "EDG_MAXWIDTH";
+            this.colEDG_MAXWIDTH.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.colEDG_MAXWIDTH.Name = "colEDG_MAXWIDTH";
+            this.colEDG_MAXWIDTH.OptionsColumn.AllowEdit = false;
+            this.colEDG_MAXWIDTH.Visible = true;
+            this.colEDG_MAXWIDTH.VisibleIndex = 14;
             // 
             // imageEditType
             // 
@@ -337,42 +371,6 @@
             this.openExcel.CheckFileExists = false;
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xls|*.xls";
-            // 
-            // colEDG_MAXWEIGHT
-            // 
-            this.colEDG_MAXWEIGHT.Caption = "Súlykorlát";
-            this.colEDG_MAXWEIGHT.DisplayFormat.FormatString = "#,#0.00";
-            this.colEDG_MAXWEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colEDG_MAXWEIGHT.FieldName = "EDG_MAXWEIGHT";
-            this.colEDG_MAXWEIGHT.ImageAlignment = System.Drawing.StringAlignment.Center;
-            this.colEDG_MAXWEIGHT.Name = "colEDG_MAXWEIGHT";
-            this.colEDG_MAXWEIGHT.OptionsColumn.AllowEdit = false;
-            this.colEDG_MAXWEIGHT.Visible = true;
-            this.colEDG_MAXWEIGHT.VisibleIndex = 12;
-            // 
-            // colEDG_MAXHEIGHT
-            // 
-            this.colEDG_MAXHEIGHT.Caption = "Magasságkorlát";
-            this.colEDG_MAXHEIGHT.DisplayFormat.FormatString = "#,#0.00";
-            this.colEDG_MAXHEIGHT.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colEDG_MAXHEIGHT.FieldName = "EDG_MAXHEIGHT";
-            this.colEDG_MAXHEIGHT.ImageAlignment = System.Drawing.StringAlignment.Center;
-            this.colEDG_MAXHEIGHT.Name = "colEDG_MAXHEIGHT";
-            this.colEDG_MAXHEIGHT.OptionsColumn.AllowEdit = false;
-            this.colEDG_MAXHEIGHT.Visible = true;
-            this.colEDG_MAXHEIGHT.VisibleIndex = 13;
-            // 
-            // colEDG_MAXWIDTH
-            // 
-            this.colEDG_MAXWIDTH.Caption = "Szélességkorlát";
-            this.colEDG_MAXWIDTH.DisplayFormat.FormatString = "#,#0.00";
-            this.colEDG_MAXWIDTH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colEDG_MAXWIDTH.FieldName = "EDG_MAXWIDTH";
-            this.colEDG_MAXWIDTH.ImageAlignment = System.Drawing.StringAlignment.Center;
-            this.colEDG_MAXWIDTH.Name = "colEDG_MAXWIDTH";
-            this.colEDG_MAXWIDTH.OptionsColumn.AllowEdit = false;
-            this.colEDG_MAXWIDTH.Visible = true;
-            this.colEDG_MAXWIDTH.VisibleIndex = 14;
             // 
             // dlgTourDetails
             // 

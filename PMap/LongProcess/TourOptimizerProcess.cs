@@ -22,10 +22,14 @@ namespace PMap.LongProcess
             Init = 0,
             OK = 1,
             Error = 2,
-            Cancel = 3
+            Cancel = 3,
+            IgnoredHappened = 4                 //Csak a túrára optimalizálás esetén értelmezett
         }
 
         public eOptResult Result { get; set; }
+        public string IgnoredOrders { get; private set; } = "";
+
+
         private int m_PLN_ID;
         private int m_TPL_ID;
         private bool m_Replan;
@@ -138,15 +142,22 @@ namespace PMap.LongProcess
         private void finalize(eOptResult p_result)
         {
 
+            Result = p_result;
             if (!m_procOptimizer.HasExited)
                 m_procOptimizer.Kill();
             if (PMapIniParams.Instance.LogVerbose >= PMapIniParams.eLogVerbose.debug && m_procOptimizer.StartInfo.RedirectStandardOutput)
                 Util.Log2File(String.Format(PMapMessages.M_OPT_OPTRESULT, m_procOptimizer.StandardOutput.ReadToEnd()));
 
             if (p_result == eOptResult.OK && m_optimize != null)
-                m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile,ProcessForm);
-            Result = p_result;
-            
+            {
+                m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile, ProcessForm);
+                if (!string.IsNullOrEmpty(m_optimize.IgnoredOrders))
+                {
+                    IgnoredOrders = m_optimize.IgnoredOrders;
+                    Result = eOptResult.IgnoredHappened;
+                }
+            }
+
             return;
         }
 

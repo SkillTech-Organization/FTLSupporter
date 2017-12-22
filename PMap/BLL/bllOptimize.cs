@@ -18,6 +18,7 @@ namespace PMap.BLL
     public class bllOptimize : bllBase
     {
         public boOptimize boOpt { get; private set; }
+        public string IgnoredOrders { get; private set; } = "";
 
         private boWarehouse m_boWarehouse;
         private bllPlanEdit m_bllPlanEdit;
@@ -217,12 +218,18 @@ namespace PMap.BLL
             string sSql = " select distinct ";
 
             if (PMapIniParams.Instance.TourRoute)
-                sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine;
+            {
+                sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH, " + Environment.NewLine;
+            }
             else
-                sSql += "  RZN_ID_LIST, " + Environment.NewLine;
+            {
+                sSql += "  RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, " + Environment.NewLine;
+            }
 
-
-            sSql += "   SPP.ID as SPP_ID, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
+            sSql += "   SPP.ID as SPP_ID " + Environment.NewLine +
             " from TRK_TRUCK TRK " + Environment.NewLine +
             " inner join SPP_SPEEDPROF SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
             " inner join v_trk_RZN_ID_LIST RZN on TRK.ID = RZN.TRK_ID " + Environment.NewLine +
@@ -408,11 +415,17 @@ namespace PMap.BLL
                         "isnull(TMX.MAXTIME, isnull(DATEADD(n, TPL.TPL_IDLETIME, AV.AVAIL), PLN.PLN_DATE_B)) AS AVAIL, TPL.TPL_MAXSCORE AS TPL_ORIGSCORE,  " + Environment.NewLine +
                         "TPL.TPL_AVAIL_S, RPS.START, TRK.TRK_BUNDPOINT, TRK.TRK_BUNDTIME, TRK.WHS_ID, TPL.ARR_WHS_ID, ";
             if (PMapIniParams.Instance.TourRoute)
-                sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RESTZ.RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine;
+            {
+                sSql += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RESTZ.RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH, " + Environment.NewLine;
+            }
             else
-                sSql += "  RESTZ.RZN_ID_LIST, " + Environment.NewLine;
-
-            sSql += "  TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK.SPP_ID  " + Environment.NewLine +
+            {
+                sSql += "  RESTZ.RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine;
+            }
+            sSql += " TRK.SPP_ID  " + Environment.NewLine +
                         "from TPL_TRUCKPLAN TPL  " + Environment.NewLine +
                         "inner join TRK_TRUCK TRK ON TPL.TRK_ID = TRK.ID  " + Environment.NewLine +
                         "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID  " + Environment.NewLine +
@@ -1057,7 +1070,7 @@ namespace PMap.BLL
         //private const string getRouteDuration = "getRouteDuration";
         //private const string getRouteLength = "getRouteLength";
         //private const string getRouteLoad = "getRouteLoad";
-        //private const string getRouteCost = "getRouteCost";
+        private const string getRouteCost = "getRouteCost";
         private const string getIgnoredOrder = "getIgnoredOrder";
         //private const string getIgnoredOrdersCount = "getIgnoredOrdersCount";
         //private const string popError = "popError";
@@ -1075,7 +1088,7 @@ namespace PMap.BLL
 
         public void ProcessResult(string p_resultFile, BaseProgressDialog p_notify)
         {
-
+            bool ignoredOrderHappened = false;
             using (TransactionBlock transObj = new TransactionBlock(DBA))
             {
                 try
@@ -1100,10 +1113,6 @@ namespace PMap.BLL
                         string[] aFn = line.Split('(');
                         if (aFn[0] == getRouteNodesCount)
                         {
-                            if (currTrk != null)
-                            {
-                                m_bllPlanEdit.RecalcTour(0, currTrk.TPL_ID, Global.defWeather);
-                            }
                             string[] aArgs = aFn[1].Replace(")", "").Split(',');
 
                             if (currTrk == null || currTrk.innerID != Convert.ToInt32(aArgs[0]))
@@ -1239,35 +1248,60 @@ namespace PMap.BLL
                                 }
 
                             }
-                            
+
+                        }
+                        else if (aFn[0] == getRouteCost)
+
+                        {
+                            if (currTrk != null)
+                            {
+                                m_bllPlanEdit.RecalcTour(0, currTrk.TPL_ID, Global.defWeather);
+                            }
+
                         }
                         else if (aFn[0] == getIgnoredOrder)
                         {
-                            //ElseIf left(sLine, Len(GETIGNOREDORDER)) = GETIGNOREDORDER And left(sLine, Len(GETIGNOREDORDERSCOUNT)) <> GETIGNOREDORDERSCOUNT Then
-                            //m_oOptimize.AddIgnoredOrder sLine
-                            //End If
+
                             string[] aArgs = aFn[1].Replace(")", "").Split(',');
-                            int ORD_ID = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[1])).First().Value.ID;
-                            double dQty = Math.Abs(Convert.ToDouble(aArgs[2].Replace(',', '.'), CultureInfo.InvariantCulture) / Global.csQTY_DEC);        //a problémafájl létrehozásakor felszoroztuk, most
-                            //visszaosztjuk, hogy a valós értékeket kapjuk meg.
+                            if (boOpt.PLN_ID <= 0)
+                            {
+
+                                //ElseIf left(sLine, Len(GETIGNOREDORDER)) = GETIGNOREDORDER And left(sLine, Len(GETIGNOREDORDERSCOUNT)) <> GETIGNOREDORDERSCOUNT Then
+                                //m_oOptimize.AddIgnoredOrder sLine
+                                //End If
+                                int ORD_ID = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[1])).First().Value.ID;
+                                double dQty = Math.Abs(Convert.ToDouble(aArgs[2].Replace(',', '.'), CultureInfo.InvariantCulture) / Global.csQTY_DEC);        //a problémafájl létrehozásakor felszoroztuk, most
+                                                                                                                                                              //visszaosztjuk, hogy a valós értékeket kapjuk meg.
 
 
-                            //Opt.dicTruckType.Where( i=>i.Value.RZN_ID_LIST==Util.getFieldValue<string>(r, "RZN_ID_LIST")).ToList().First(),
-                            if (p_notify != null)
-                                p_notify.SetInfoText(PMapMessages.M_OPT_RES_UNPLANNED);
+                                //Opt.dicTruckType.Where( i=>i.Value.RZN_ID_LIST==Util.getFieldValue<string>(r, "RZN_ID_LIST")).ToList().First(),
+                                if (p_notify != null)
+                                    p_notify.SetInfoText(PMapMessages.M_OPT_RES_UNPLANNED);
 
-                            ple.CreateUnplannedPlanOrder(boOpt.PLN_ID, ORD_ID, dQty, ple.getNEWTODNUM(boOpt.PLN_ID, ORD_ID));
+                                ple.CreateUnplannedPlanOrder(boOpt.PLN_ID, ORD_ID, dQty, ple.getNEWTODNUM(boOpt.PLN_ID, ORD_ID));
+                            }
+                            else
+                            {
+                                ignoredOrderHappened = true;
+                                var order = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[1])).First().Value;
+                                if (!String.IsNullOrEmpty(IgnoredOrders))
+                                    IgnoredOrders += ",";
+                                IgnoredOrders += order.client.clName;
+                            }
                         }
 
                         Console.WriteLine(line);
                     }
                     file.Close();
-                    if (currTrk != null)
+
+                    if (boOpt.PLN_ID > 0 && ignoredOrderHappened)
                     {
-                        m_bllPlanEdit.RecalcTour(0, currTrk.TPL_ID, Global.defWeather);
+                        DBA.Rollback();
+                        return;
                     }
 
                     unLockNoReplanned();
+
                 }
 
                 catch (FileNotFoundException fe)

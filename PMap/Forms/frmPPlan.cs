@@ -590,14 +590,23 @@ namespace PMap.Forms
                     calcMissingDistances();
 
                 dlgOptimize dOpt = new dlgOptimize(m_PPlanCommonVars.PLN_ID, m_PPlanCommonVars.FocusedTour.ID);
-                if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK && dOpt.Result == TourOptimizerProcess.eOptResult.OK)
+                if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    m_PlanEditFuncs.RefreshToursAfterModify(m_PPlanCommonVars.FocusedTour.ID, 0);
-                    m_PPlanCommonVars.PlanOrderList = m_bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);  //
+                    if (dOpt.Result == TourOptimizerProcess.eOptResult.OK)
+                    {
+                        m_PlanEditFuncs.RefreshToursAfterModify(m_PPlanCommonVars.FocusedTour.ID, 0);
+                        m_PPlanCommonVars.PlanOrderList = m_bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);  //
+                    }
+                    else if(dOpt.Result == TourOptimizerProcess.eOptResult.IgnoredHappened)
+                    {
+                        m_bllPlan.SetTourUnCompleted(m_PPlanCommonVars.FocusedTour.ID);
+                        UI.Message(PMapMessages.E_PEDIT_IGNOREDORDERHAPPENED, dOpt.IgnoredOrders);
+                    }
                     RefreshAll(new PlanEventArgs(ePlanEventMode.RefreshOrders));
                 }
                 else
                 {
+                    
                     UI.Message(PMapMessages.E_PEDIT_OPTISNFINISHED);
                 }
             }
@@ -961,24 +970,7 @@ namespace PMap.Forms
         {
          
 
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
-            {
-                try
-                {
-                    p_tour.Completed = true;
-                    m_bllPlan.SetTourCompleted(p_tour);
-                    m_bllRoute.DeleteTourRoutes(p_tour);
-                }
-                catch (Exception ex)
-                {
-                    PMapCommonVars.Instance.CT_DB.Rollback();
-                    throw;
-                }
-
-                finally
-                {
-                }
-            }
+            m_bllPlan.SetTourCompleted(p_tour);
             BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, p_tour.TOURPOINTCNT, PMapMessages.T_COMPLETE_TOURROUTES, false);
             CalcRoutesForTours rpp = new CalcRoutesForTours(pd, p_tour);
             rpp.Run();

@@ -543,33 +543,20 @@ namespace PMap.BLL
                    "		  FOR XML PATH('') " + Environment.NewLine +
                    "	  ), 1, 1, ''), '')  " + Environment.NewLine;
 
-            if (PMapIniParams.Instance.TourRoute)
-            {
-                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else " + sSQLRESTZONES + " end  as RESTZONES, " + Environment.NewLine;
-            }
-            else
-            {
-                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, ";
-            }
-
-          
-
             //Egyedi túraútvonalas tervezés (TourRoute)  esetén csak TPL_COMPLETED túráknál  vesszük figyelembe a súly- és méretkorlátozásokat
             if (PMapIniParams.Instance.TourRoute)
-                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine;
+            {
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else " + sSQLRESTZONES + " end  as RESTZONES, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
+            }
             else
-                sSQL += " TRK.TRK_WEIGHT, " + Environment.NewLine;
+            {
+                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH ";
+            }
 
-            if (PMapIniParams.Instance.TourRoute)
-                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine;
-            else
-                sSQL += " TRK.TRK_XHEIGHT, " + Environment.NewLine;
-
-            if (PMapIniParams.Instance.TourRoute)
-                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
-            else
-                sSQL += " TRK.TRK_XWIDTH " + Environment.NewLine;
-
+      
 
             sSQL += "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
                     "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
@@ -687,17 +674,20 @@ namespace PMap.BLL
                            "		  FOR XML PATH('')  " + Environment.NewLine +
                            "	  ), 1, 1, ''), '') ";
 
+            //Egyedi túraútvonalas tervezés (TourRoute)  esetén csak TPL_COMPLETED túráknál  vesszük figyelembe a súly- és méretkorlátozásokat
             if (PMapIniParams.Instance.TourRoute)
             {
-                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else "+sSQLRESTZONES+ " end as RESTZONES, " + Environment.NewLine;
+                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else " + sSQLRESTZONES + " end  as RESTZONES, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
             }
             else
             {
-                sSQL += "	" + sSQLRESTZONES + " as RESTZONES,  ";
+                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH ";
             }
 
-            sSQL += "	   TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH " + Environment.NewLine +
-                            "	  from TRK_TRUCK TRK " + Environment.NewLine +
+            sSQL += "	  from TRK_TRUCK TRK " + Environment.NewLine +
                             "	  where TRK_ACTIVE = 1 " + Environment.NewLine +
                             ") " + Environment.NewLine +
                             "--Összegy√jtjük a megrednelésekben szereplo NODE-ID-ket  " + Environment.NewLine +
@@ -834,9 +824,13 @@ namespace PMap.BLL
 
         public void DeleteTourRoutes(boPlanTour p_Tour)
         {
-
+            /*
             DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? and DST_MAXWEIGHT=? and DST_MAXHEIGHT=? and DST_MAXWIDTH=? ",
                 p_Tour.RZN_ID_LIST, p_Tour.TRK_WEIGHT, p_Tour.TRK_XHEIGHT, p_Tour.TRK_XWIDTH);
+            */
+
+            //A túrához tartozó összes távolságot kitöröljük
+            DBA.ExecuteNonQuery("delete from DST_DISTANCE where RZN_ID_LIST = ? ", p_Tour.RZN_ID_LIST);
 
         }
 

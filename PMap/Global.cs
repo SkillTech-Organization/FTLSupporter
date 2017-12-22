@@ -175,7 +175,7 @@ namespace PMap
         public const int NearestNOD_ID_Approach = 100000;         //Mekkora körzetben keressen lehetséges node-okat
         public const int NearestNOD_ID_ApproachBig = 80000;       //Nagyobb körzet a II. menetes keresésnek
         public const int EdgeApproachCity = 10000;                //Közelítő tűrése városon belül (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
-        public const int EdgeApproachHighway = 90000;            //Közelítő tűrése városon kivül !(EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
+        public const int EdgeApproachHighway = 100000;            //Közelítő tűrése városon kivül !(EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
 
 
         public const int LatLngDivider = 1000000;               //Adatbázis koordináta -> GPS koordiánta osztó

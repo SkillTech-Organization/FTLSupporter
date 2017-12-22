@@ -24,6 +24,7 @@ namespace PMap.Localize
         public const string E_PEDIT_WRONGARR = "A távozás időpontja korábbi az érkezésnél!";
         public const string E_PEDIT_WRONTIME = "Túl nagy vagy túl kicsi időpont megadása! (Minimum:{0}, maximum {1})";
         public const string E_PEDIT_OPTISNFINISHED = "A tervezés nem futott le!";
+        public const string E_PEDIT_IGNOREDORDERHAPPENED = "A túrára optimalizálás visszavonva, mert  túrapontot hagyott ki:\n{0}";
         public const string E_PEDIT_LOCKEDTRUCK = "A jármű zárolt!";
         public const string E_PEDIT_OPTANOTHERWS = "Ennek a tervnek az optimalizálása folyik egy másik munkaállomáson!";
         public const string Q_PEDIT_DELPLAN = "Törölhető a megnyitott terv?";

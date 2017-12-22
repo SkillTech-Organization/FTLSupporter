@@ -760,19 +760,33 @@ namespace PMap.BLL
                 try
                 {
 
-                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, " + Environment.NewLine +
-                                   "RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TPL_COMPLETED, TPL.ID as TPL_ID" + Environment.NewLine +
-                                   "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
-                                   "left outer join WHS_WAREHOUSE WHS on WHS.ID = PTP.WHS_ID " + Environment.NewLine +
-                                   "inner join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
-                                   "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
-                                   "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
-                                   "where PTP.TPL_ID = ? " + Environment.NewLine +
-                                   "order by PTP_ORDER ";
+                    string sSQL = "select PTP.ID as ID, PTP_ORDER, PTP.NOD_ID, PTP_DISTANCE, TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, " + Environment.NewLine;
+
+                    if (PMapIniParams.Instance.TourRoute)
+                    {
+                        sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RESTZ.RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine +
+                                " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
+                                " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
+                                " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH, " + Environment.NewLine;
+                    }
+                    else
+                    {
+                        sSQL += "  RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, " + Environment.NewLine;
+                    }
+
+                    sSQL+= " TPL_COMPLETED, TPL.ID as TPL_ID" + Environment.NewLine +
+                            "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
+                            "left outer join WHS_WAREHOUSE WHS on WHS.ID = PTP.WHS_ID " + Environment.NewLine +
+                            "inner join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
+                            "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                            "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
+                            "where PTP.TPL_ID = ? " + Environment.NewLine +
+                            "order by PTP_ORDER ";
                     DataTable dt = DBA.Query2DataTable(sSQL, p_TPL_ID);
                     double dToll = 0;
 
                     int lastNOD_ID = -1;
+                    string lastETLCODE = "";
                     foreach (DataRow dr in dt.Rows)
                     {
                         int TRK_ETOLLCAT = Util.getFieldValue<int>(dr, "TRK_ETOLLCAT");
@@ -786,14 +800,8 @@ namespace PMap.BLL
                                 TRK_ENGINEEURO = 1;
                             double dTollMultiplier = GetTollMultiplier(TRK_ETOLLCAT, TRK_ENGINEEURO);
 
-                            string lastETLCODE = "";
                             int NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
                             string RZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
-
-                            if (PMapIniParams.Instance.TourRoute && Util.getFieldValue<bool>(dr, "TPL_COMPLETED"))
-                            {
-                                RZN_ID_LIST = Global.COMPLETEDTOUR + Util.getFieldValue<int>(dr, "TPL_ID").ToString(); // + "," + RZN_ID_LIST;
-                            }
 
                             dToll = 0;
                             if (lastNOD_ID > 0)
@@ -876,7 +884,21 @@ namespace PMap.BLL
             //Kiszedem a módosítandó rekordokat
             sSQLStr = "select PTP_ARRTIME, PTP_SERVTIME, PTP_DEPTIME, PTP.ID, PTP.NOD_ID, PTP_ORDER, WHS_BNDTIME, DEP_QTYSRVTIME, " + Environment.NewLine +
                       "TOD.DEP_ID, TOD_QTY, TOD_DATE, TOD.PLN_ID, DEP_SRVTIME, PTP_TYPE, WHS_SRVTIME, WHS_SRVTIME_UNLOAD, PTP_SRVTIME_UNLOAD, TOD_SERVS, " + Environment.NewLine +
-                      "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH, TPL.TPL_COMPLETED, TPL.ID as TPL_ID " + Environment.NewLine +
+                      "TRK.TRK_ENGINEEURO, TRK.TRK_ETOLLCAT, TRK.SPP_ID, " + Environment.NewLine;
+
+            if (PMapIniParams.Instance.TourRoute)
+            {
+                sSQLStr += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "' + cast(TPL.ID as varchar)  else RESTZ.RZN_ID_LIST end  as RZN_ID_LIST, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
+                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH, " + Environment.NewLine;
+            }
+            else
+            {
+                sSQLStr += " RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH, " + Environment.NewLine;
+            }
+            
+            sSQLStr += " TPL.TPL_COMPLETED, TPL.ID as TPL_ID " + Environment.NewLine +
                       "from PTP_PLANTOURPOINT  PTP " + Environment.NewLine +
                       "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
                       "left join ORD_ORDER     ORD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
@@ -909,6 +931,7 @@ namespace PMap.BLL
                 {
 
 
+                    string lastETLCODE = "";
                     foreach (DataRow dr in dt.Rows)
                     {
 
@@ -924,14 +947,8 @@ namespace PMap.BLL
                                 TRK_ENGINEEURO = 1;
                             double dTollMultiplier = GetTollMultiplier(TRK_ETOLLCAT, TRK_ENGINEEURO);
 
-                            string lastETLCODE = "";
                             int NOD_ID = Util.getFieldValue<int>(dr, "NOD_ID");
                             string RZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
-
-                            if (PMapIniParams.Instance.TourRoute && Util.getFieldValue<bool>(dr, "TPL_COMPLETED"))
-                            {
-                                RZN_ID_LIST = Global.COMPLETEDTOUR + Util.getFieldValue<int>(dr, "TPL_ID").ToString(); // + "," + RZN_ID_LIST;
-                            }
 
                             dToll = 0;
                             if (lastNOD_ID > 0)
@@ -974,10 +991,6 @@ namespace PMap.BLL
                             Time = 0;
 
                             string RZN_ID_LIST = Util.getFieldValue<string>(drPrev, "RZN_ID_LIST");
-                            if (PMapIniParams.Instance.TourRoute && Util.getFieldValue<bool>(dr, "TPL_COMPLETED"))
-                            {
-                                RZN_ID_LIST = Global.COMPLETEDTOUR + Util.getFieldValue<int>(dr, "TPL_ID").ToString();// + ","+ RZN_ID_LIST;
-                            }
 
                             GetDistanceAndDuration(RZN_ID_LIST, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, Util.getFieldValue<int>(drPrev, "NOD_ID"), Util.getFieldValue<int>(dr, "NOD_ID"), Util.getFieldValue<int>(dr, "SPP_ID"), p_Weather, out Dist, out Time);
 
