@@ -273,7 +273,6 @@ namespace PMap.Route
             {
                 int nEdgCnt = 0;
                 List<int>[] neighboursFull = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
-                List<int>[] neighboursCut = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
 
                 string[] aRZN = aRZN = routePar.RZN_ID_LIST.Split(',');
                 List<int> tourPointsRzn = new List<int>();
@@ -327,14 +326,16 @@ namespace PMap.Route
                 lstEdges.ForEach(edg => neighboursFull[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO));
                 if (PMapIniParams.Instance.CutMapForRouting && p_cutBoundary != null)
                 {
+                    List<int>[] neighboursCut = new List<int>[RouteData.Instance.Edges.Count + 1].Select(p => new List<int>()).ToArray();
+
                     lstEdges.Where(edg => p_cutBoundary.Contains(edg.fromLatLng) && p_cutBoundary.Contains(edg.toLatLng)).
                         ToList().ForEach(edg => { ++nEdgCnt; neighboursCut[edg.NOD_ID_FROM].Add(edg.NOD_ID_TO); });
+                    o_neighborsCut.Add(routePar.Hash, neighboursCut);
 
                 }
 
                 Console.WriteLine("CRoutePars:" + routePar.ToString() + " edgcnt:" + Edges.Count.ToString() + "->" + nEdgCnt.ToString());
                 o_neighborsFull.Add(routePar.Hash, neighboursFull);
-                o_neighborsCut.Add(routePar.Hash, neighboursCut);
 
             }
             Console.WriteLine("getNeigboursByBound " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());

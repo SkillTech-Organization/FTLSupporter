@@ -24,6 +24,7 @@ using System.Web.Script.Serialization;
 using PMap.Common.Azure;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace PMap.Common
 {
@@ -1001,7 +1002,15 @@ namespace PMap.Common
             var hh = HexStringFromBytes(h2);
             return hh;
         }
-
+        public static int GetObjectSize(object TestObject)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            MemoryStream ms = new MemoryStream();
+            byte[] Array;
+            bf.Serialize(ms, TestObject);
+            Array = ms.ToArray();
+            return Array.Length;
+        }
     }
 }
 

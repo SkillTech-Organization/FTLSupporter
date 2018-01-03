@@ -28,7 +28,7 @@ using System.Web.Script.Serialization;
 using PMap.Common.Azure;
 using System.Net;
 using Newtonsoft.Json;
-
+using System.Diagnostics;
 
 namespace PMapTestApp
 {
@@ -845,6 +845,7 @@ namespace PMapTestApp
                 Lng = 18.3439433611111
             };
 
+           
             PMRoute.RouteFuncs.GetDistance("", dbConf, @"d:\temp\ct",
             testPoint1.Lat, testPoint1.Lng, testPoint2.Lat, testPoint2.Lng, "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24", 0, 0, 0, out dist, out durat);
             UI.Message("dist:" + dist.ToString() + ", dur:" + durat.ToString());

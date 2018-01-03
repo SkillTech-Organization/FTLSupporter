@@ -1195,8 +1195,9 @@ namespace VBInterface
 
 
                     boRoute result = provider.GetRoute( fromNOD_ID, toNOD_ID, routePar,
-                        NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
-                         PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
+                        NeighborsFull[routePar.Hash],
+                        PMapIniParams.Instance.CutMapForRouting ? NeighborsCut[routePar.Hash] : null,
+                        PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
 
 
                     //logVersion();

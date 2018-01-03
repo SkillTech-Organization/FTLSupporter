@@ -83,7 +83,8 @@ namespace Map.LongProcess
 
                     //Legrövidebb út
                     boRoute routeS = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, routePar,
-                                    NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
+                                    NeighborsFull[routePar.Hash], 
+                                    PMapIniParams.Instance.CutMapForRouting ? NeighborsCut[routePar.Hash] : null,
                                     ECalcMode.ShortestPath);
                     if (routeS != null)
                     {
@@ -96,7 +97,8 @@ namespace Map.LongProcess
 
                     //Leggyorsabb út
                     boRoute routeF = provider.GetRoute(RouteVisCommonVars.Instance.lstRouteDepots[i].Depot.NOD_ID, RouteVisCommonVars.Instance.lstRouteDepots[i + 1].Depot.NOD_ID, routePar,
-                                    NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
+                                    NeighborsFull[routePar.Hash], 
+                                    PMapIniParams.Instance.CutMapForRouting ? NeighborsCut[routePar.Hash] : null,
                                     ECalcMode.FastestPath);
 
                     if (routeF != null)

@@ -69,7 +69,7 @@ namespace PMap.MapProvider
             RouteCalculator.RouteCalcResult optimizedPathsForAllDest = null;
             RouteCalculator.RouteCalcResult optimizedPathsForAllDestNOCUT = null;
 
-            if (PMapIniParams.Instance.CutMapForRouting && p_neighborsArrCut.Length > 0)
+            if (PMapIniParams.Instance.CutMapForRouting && p_neighborsArrCut  != null && p_neighborsArrCut.Length > 0)
                 m_computedNeighborsArr = p_neighborsArrCut;
             else
                 m_computedNeighborsArr = p_neighborsArrFull;
@@ -142,7 +142,7 @@ namespace PMap.MapProvider
 
             int[] optimizedPath = new int[0];
 
-            if (PMapIniParams.Instance.CutMapForRouting && p_neighborsArrCut.Length > 0)
+            if (PMapIniParams.Instance.CutMapForRouting && p_neighborsArrCut != null && p_neighborsArrCut.Length > 0)
             {
                 m_computedNeighborsArr = p_neighborsArrCut;
                 optimizedPath = calcEngine.CalcOneOptimizedPath(p_NOD_ID_FROM, p_NOD_ID_TO);

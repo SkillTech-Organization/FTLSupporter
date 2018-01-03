@@ -87,7 +87,8 @@ namespace FTLSupporter
 
                     List<int> lstToNodes = calcNode.Value;
                     List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.fromNOD_ID, lstToNodes,
-                                            NeighborsArrFull[routePar.Hash], NeighborsArrCut[routePar.Hash],
+                                            NeighborsArrFull[routePar.Hash], 
+                                            PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ?  NeighborsArrCut[routePar.Hash] : null,
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
 
                     //A kiszámolt eredmények 'bedolgozása'

@@ -146,7 +146,8 @@ namespace PMap.LongProcess
                         //megj: nins routePar null ellenőrzés, hogy szálljon el, ha valami probléma van
                         //
                         results.AddRange(provider.GetAllRoutes(routePar, calcNode.Key, lstToNodes,
-                                            NeighborsArrFull[routePar.Hash], NeighborsArrCut[routePar.Hash],
+                                            NeighborsArrFull[routePar.Hash],
+                                            PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ? NeighborsArrCut[routePar.Hash] : null,
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 
                         //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!

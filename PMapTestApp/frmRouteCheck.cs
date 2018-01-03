@@ -434,7 +434,8 @@ namespace PMapTestApp
                 foreach (var routePar in lstRoutePars)
                 {
                     boRoute result = provider.GetRoute(Convert.ToInt32(numFromNOD_ID.Value), Convert.ToInt32(numToNOD_ID.Value), routePar,
-                        NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
+                        NeighborsFull[routePar.Hash],
+                        PMapIniParams.Instance.CutMapForRouting ? NeighborsCut[routePar.Hash] : null,
                         rdShortestPath.Checked ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
                     m_routes.Add(routePar, result);
                 }

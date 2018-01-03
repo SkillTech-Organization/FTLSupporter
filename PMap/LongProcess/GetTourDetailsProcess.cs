@@ -81,7 +81,8 @@ namespace PMap.LongProcess
                         }
 
                         result = provider.GetRoute(m_Tour.TourPoints[i].NOD_ID, m_Tour.TourPoints[i + 1].NOD_ID, routePar,
-                                        neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
+                                        neighborsFull[routePar.Hash], 
+                                        PMapIniParams.Instance.CutMapForRouting ? neighborsCut[routePar.Hash] : null,
                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                         m_bllRoute.WriteOneRoute(result);
                     }

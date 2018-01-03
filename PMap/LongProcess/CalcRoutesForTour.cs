@@ -109,7 +109,8 @@ namespace PMap.LongProcess
 
                     var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.First().NOD_ID).Select(s => s.Key).ToList();
                     results.AddRange(provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,
-                                         neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
+                                         neighborsFull[routePar.Hash],
+                                         PMapIniParams.Instance.CutMapForRouting && neighborsCut != null ? neighborsCut[routePar.Hash] : null,
                                          PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 
                 }

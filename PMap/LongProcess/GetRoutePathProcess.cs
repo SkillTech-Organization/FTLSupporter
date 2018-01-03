@@ -152,7 +152,8 @@ namespace PMap.LongProcess
                             }
 
                             boRoute routeInf = provider.GetRoute(p_tour.TourPoints[i].NOD_ID, p_tour.TourPoints[i + 1].NOD_ID, routePar,
-                                neighborsFull[routePar.Hash], neighborsCut[routePar.Hash],
+                                neighborsFull[routePar.Hash],
+                                PMapIniParams.Instance.CutMapForRouting ? neighborsCut[routePar.Hash] : null,
                                 PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                             result = routeInf.Route;
                             m_bllRoute.WriteOneRoute(routeInf);

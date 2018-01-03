@@ -9,6 +9,7 @@ using PMap.MapProvider;
 using PMap.Route;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,10 @@ namespace PMRoute
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 PMapCommonVars.Instance.ConnectToDB();
                 RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
-              
+                foreach( var rr in RouteData.Instance.Edges)
+                {
+                    rr.Value.EDG_NAME = "";
+                }
                 JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
                 var jsonString = JsonConvert.SerializeObject(RouteData.Instance.Edges, jsonsettings);
                 Util.String2File(jsonString, Path.Combine(p_dir , Global.EXTFILE_EDG));
@@ -64,15 +68,19 @@ namespace PMRoute
             Util.String2File(String.Format("{0}: {1}\n", DateTime.Now.ToString(Global.DATETIMEFORMAT), "p_dir:" + p_dir), @"D:\home\site\wwwroot\PMRoute\log\GetDistanceStart.log", true);
 
     */
-
+            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+            var oriCutMapForRouting = PMapIniParams.Instance.CutMapForRouting;
+            PMapIniParams.Instance.CutMapForRouting = false;
 
             DateTime dt = DateTime.Now;
             try
             {
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+
+                Util.Log2File("GetDistance() mmry:" + GC.GetTotalMemory(false).ToString(), false);
 
                 RouteData.Instance.InitFromFiles(p_dir, false);
 
+  //              var os = Util.GetObjectSize(RouteData.Instance.Edges);
 
                 Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_fromLat, p_fromLng).ToString(), false);
                 int fromNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_fromLat, p_fromLng));
@@ -117,21 +125,28 @@ namespace PMRoute
                 PMapRoutingProvider provider = new PMapRoutingProvider();
 
                 boRoute result = provider.GetRoute(fromNOD_ID, toNOD_ID, routePar,
-                    NeighborsFull[routePar.Hash], NeighborsCut[routePar.Hash],
+                    NeighborsFull[routePar.Hash],
+                    PMapIniParams.Instance.CutMapForRouting ? NeighborsCut[routePar.Hash] : null,
                      PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
 
                 o_distance = (int)result.CalcDistance;
                 o_duration = bllPlanEdit.GetDuration(result.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
 
-                Util.Log2File("o_distance" + o_distance.ToString() + ", o_duration" + o_duration.ToString(), false);
+                Util.Log2File("o_distance" + o_distance.ToString() + ", o_duration" + o_duration.ToString() + ", mmry:" + GC.GetTotalMemory(false).ToString(), false);
 
 
                 return true;
             }
-            catch (Exception e)
+           catch (Exception e)
             {
                 Util.ExceptionLog(e);
                 throw;
+            }
+            finally
+            {
+                PMapIniParams.Instance.CutMapForRouting = oriCutMapForRouting;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
 
             //Util.Log2File(">>END:InitPMapRouteData() -->" + sRet);

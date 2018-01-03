@@ -66,7 +66,7 @@ namespace PMap.Common
         public int RouteThreadNum { get; private set; }
         public bool FastestPath { get; private set; }
         public bool DestTraffic { get; private set; }
-        public bool CutMapForRouting { get; private set; }           //Útvonalszámítás vágja-e a térképet?
+        public bool CutMapForRouting { get;  set; }           //Útvonalszámítás vágja-e a térképet?
         public double CutExtDegree { get; private set; }               //A kivágásnál mekkora ráhagyással kel dolgozni? (fokban megadva)
 
         public Dictionary<int, int> dicSpeed { get; private set; }
