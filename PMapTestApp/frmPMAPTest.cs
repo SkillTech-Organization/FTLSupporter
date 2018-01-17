@@ -273,6 +273,7 @@ namespace PMapTestApp
             d.txtAddr.Text = "Ivanka pri Dunaji Cintorínska, Ivanka pri Dunaji";
             d.txtAddr.Text = "Jászberény Kossuth u 80";
             d.txtAddr.Text = "Jászberény KOSSUTH U. 23.";
+            d.txtAddr.Text = "4033 Debrecen Kőrösi Csoma Sándor";
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();
@@ -836,13 +837,13 @@ namespace PMapTestApp
 
             var testPoint1 = new PMMapPoint
             {
-                Lat = 47.1506631111111,
-                Lng = 18.343794
+                Lat = 46.2422210, // 47.1506631111111,
+                Lng = 20.1599030 // 18.343794
             };
             var testPoint2 = new PMMapPoint
             {
-                Lat = 47.1507555555556,
-                Lng = 18.3439433611111
+                Lat = 46.2686520, //47.1507555555556,
+                Lng = 20.1646350 //18.3439433611111
             };
 
            

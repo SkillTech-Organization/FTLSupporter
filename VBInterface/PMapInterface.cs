@@ -106,7 +106,6 @@ namespace VBInterface
 
             //     logVersion();
             Util.Log2File(">>START:Geocoding(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
-
             try
             {
                 PMapCommonVars.Instance.ConnectToDB();
@@ -182,6 +181,9 @@ namespace VBInterface
 
             if (!PMapIniParams.Instance.TestMode)
                 ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);
+
+
+
             return sRetStatus;
         }
 

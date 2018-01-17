@@ -30,6 +30,7 @@ namespace PMRoute
                 foreach( var rr in RouteData.Instance.Edges)
                 {
                     rr.Value.EDG_NAME = "";
+                    rr.Value.Tolls = null;
                 }
                 JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
                 var jsonString = JsonConvert.SerializeObject(RouteData.Instance.Edges, jsonsettings);
@@ -80,7 +81,7 @@ namespace PMRoute
 
                 RouteData.Instance.InitFromFiles(p_dir, false);
 
-  //              var os = Util.GetObjectSize(RouteData.Instance.Edges);
+//var os = Util.GetObjectSize(RouteData.Instance.Edges);
 
                 Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_fromLat, p_fromLng).ToString(), false);
                 int fromNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_fromLat, p_fromLng));
@@ -121,6 +122,8 @@ namespace PMRoute
                 };
 
                 RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary, null);
+//var os2 = Util.GetObjectSize(NeighborsFull);
+//var os3 = Util.GetObjectSize(NeighborsCut);
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
 
