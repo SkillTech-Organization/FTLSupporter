@@ -838,9 +838,11 @@ namespace PMap.Forms
                 var crypto = new AuthCryptoHelper("$2a$10$GH1ygiHqiZ9Q18Bk.1hrJ.");
                 string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
                 string oriAzureKey = AzureTableStore.Instance.AzureKey;
-
+                
                 try
                 {
+                    
+
                     using (new WaitCursor())
                     {
 
@@ -889,25 +891,97 @@ namespace PMap.Forms
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                         BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
 
-                        //AzureTableStore.Instance.DeleteTable("PMTour");
-                        //AzureTableStore.Instance.DeleteTable("PMTourPoint");
-
-                        var tr = AzureTableStore.Instance.RetrieveList<PMTour>();
-                        AzureTableStore.Instance.DeleteRange<PMTour>(tr.Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList());
 
                         var tp = AzureTableStore.Instance.RetrieveList<PMTourPoint>();
-                        AzureTableStore.Instance.DeleteRange<PMTourPoint>(tp.Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList());
+
+                        //5 napnyi adatot megtartunk
+                        var delPoints = tp.Where(w=>w.ArrTime.Date.AddDays(5) <= DateTime.Now.Date).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
+                        AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints);
+
+
+                        var tr = AzureTableStore.Instance.RetrieveList<PMTour>();
+                        var delTours = tr.Where(w => w.Start.Date.AddDays(5) <= DateTime.Now.Date).Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList();
+                        AzureTableStore.Instance.DeleteRange<PMTour>(delTours);
+
 
                         foreach (var xTr in tourList)
                         {
                             bllWebTrace.MaintainItem(xTr);
                             AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
+                        }
+
+                        Util.Log2File("SendToAzure END");
+
+                        UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
+
+                        if (UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAIL1) && UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAIL2))
+                        {
+                            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
+                            {
+                                try
+                                {
+                                    Dictionary<string, List<PMTracedTour>> lstEmail = new Dictionary<string, List<PMTracedTour>> ();
+                                    foreach (var tour in tours)
+                                    {
+                                        foreach (var tourpont in tour.TourPoints)
+                                        {
+                                            if (!tourpont.TOD_SENTEMAIL && !String.IsNullOrEmpty(tourpont.ORD_EMAIL))
+                                            {
+                                                m_bllPlan.SetTourPointSent(tourpont.TOD_ID);
+
+                                                //érvénytelen karakterek kiszedése
+                                                var emailAddr = tourpont.ORD_EMAIL.Replace(" ", "");
+                                                emailAddr = emailAddr.Replace("\"", "");
+                                                emailAddr = emailAddr.Replace("'", "");
+                                                emailAddr = emailAddr.Replace(",", ";");
+
+                                                var emailAddress = emailAddr.Split(';').ToList();
+                                                foreach (string em in emailAddress)
+                                                {
+
+                                                    PMTracedTour tt = new PMTracedTour() { TourID = tourpont.Tour.ID, Order = tourpont.PTP_ORDER };
+
+                                                    if (!lstEmail.ContainsKey(em))
+                                                    {
+                                                        List<PMTracedTour> tracedTour = new List<PMTracedTour>();
+                                                        tracedTour.Add(tt);
+
+                                                        lstEmail.Add(em, tracedTour);
+                                                    }
+                                                    else
+                                                    {
+                                                        lstEmail[em].Add(tt);
+                                                    }
+
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+
+                                    foreach( var emailItem in lstEmail)
+                                    {
+                                        var token = NotificationMail.GetToken(emailItem.Value);
+
+                                        NotificationMail.SendNotificationMail(emailItem.Key, token);
+
+                                    }
+
+                                    PMapCommonVars.Instance.CT_DB.Commit();
+
+                                }
+                                catch (Exception exx)
+                                {
+                                    PMapCommonVars.Instance.CT_DB.Rollback();
+                                    throw;
+                                }
+                            }
+
 
                         }
                     }
-                    Util.Log2File("SendToAzure END");
-
-                    UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
                 }
                 catch (Exception ex)
                 {
@@ -968,8 +1042,8 @@ namespace PMap.Forms
 
         private void  recalcCompletedTour( boPlanTour p_tour)
         {
-         
 
+            RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
             m_bllPlan.SetTourCompleted(p_tour);
             BaseSilngleProgressDialog pd = new BaseSilngleProgressDialog(0, p_tour.TOURPOINTCNT, PMapMessages.T_COMPLETE_TOURROUTES, false);
             CalcRoutesForTours rpp = new CalcRoutesForTours(pd, p_tour);
@@ -982,9 +1056,11 @@ namespace PMap.Forms
                 PMapCommonVars.Instance.CT_DB.Rollback();
             }
 
-            if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.NoRoute)
+            if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.NoRouteOccured)
             {
-                UI.Message(PMapMessages.E_TOURCOMPL_NOGETROUTES);
+                var pts = string.Join(Environment.NewLine, rpp.NoRoutes);
+
+                UI.Message(PMapMessages.E_TOURCOMPL_NOGETROUTES, pts);
                 PMapCommonVars.Instance.CT_DB.Rollback();
             }
 

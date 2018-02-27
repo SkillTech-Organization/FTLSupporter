@@ -1011,6 +1011,61 @@ namespace PMap.Common
             Array = ms.ToArray();
             return Array.Length;
         }
+
+        public static void ParseAddress(string p_Addr, out string o_ZIP_NUM, out  string o_City, out string o_Street, out string o_StreetType, out int o_AddrNum)
+        {
+            o_ZIP_NUM = "";
+            o_City = "";
+            o_Street = "";
+            o_StreetType = "";
+            o_AddrNum = 0;
+            RegexOptions options = RegexOptions.None;
+            Regex regex = new Regex("[ ]{2,}", options);
+            p_Addr = regex.Replace(p_Addr, " ");
+
+            string[] parts = p_Addr.Split(' ');
+            int nCurrPart = 0;
+
+            //irányítószám-e?
+            if (parts.Length > nCurrPart)
+            {
+                int nZIP_NUM = 0;
+                if (int.TryParse(parts[nCurrPart], out nZIP_NUM))
+                {
+                    o_ZIP_NUM = parts[nCurrPart];
+                    nCurrPart++;
+                }
+            }
+
+            //településnév keresése
+            if (parts.Length > nCurrPart)
+            {
+                o_City = parts[nCurrPart];
+                nCurrPart++;
+            }
+
+            //utca keresése
+            if (parts.Length > nCurrPart)
+            {
+                o_Street = parts[nCurrPart];
+                nCurrPart++;
+            }
+
+            //közterület típus (nem vesz részt a keresésben)
+            if (parts.Length > nCurrPart)
+            {
+                o_StreetType = parts[nCurrPart];
+                nCurrPart++;
+            }
+
+            //Házszám keresése
+            if (parts.Length > nCurrPart)
+            {
+                int.TryParse(parts[nCurrPart], out o_AddrNum);
+                nCurrPart++;
+            }
+
+        }
     }
 }
 

@@ -18,6 +18,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using FastMember;
 using PMap.Cache;
+using PMap.BLL;
+using PMap.Localize;
 
 namespace PMap.BLL
 {
@@ -26,10 +28,12 @@ namespace PMap.BLL
 
 
         private bllPlan m_bllPlan;
+        private bllZIP m_bllZip;
         public bllRoute(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
             m_bllPlan = new bllPlan(p_DBA);
+            m_bllZip = new bllZIP(p_DBA);
 
         }
 
@@ -66,7 +70,7 @@ namespace PMap.BLL
                          "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
                          "left outer join RZN_RESTRZONE (NOLOCK) RZN on EDG.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
                          "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0 " + Environment.NewLine +
-                         "order by ID " ; //Meg kell rendezni, hogy a duplikátumok közül csak az elsőt vegyük minden esetbe figyelembe
+                         "order by ID "; //Meg kell rendezni, hogy a duplikátumok közül csak az elsőt vegyük minden esetbe figyelembe
 
             return DBA.Query2DataTable(sSql);
         }
@@ -186,8 +190,8 @@ namespace PMap.BLL
 
         public void WriteRoutesBulk(List<boRoute> p_Routes, bool p_savePoints)
         {
-            if( p_Routes.Count() == 0)
-		return;
+            if (p_Routes.Count() == 0)
+                return;
 
             DataTable dt;
             DataTable table = new DataTable();
@@ -239,12 +243,12 @@ namespace PMap.BLL
             bulkCopy.WriteToServer(table, DataRowState.Unchanged);
 
         }
-    
 
 
 
 
-        public boRoute GetRouteFromDB( int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
+
+        public boRoute GetRouteFromDB(int p_NOD_ID_FROM, int p_NOD_ID_TO, string p_RZN_ID_LIST, int p_Weight, int p_Height, int p_Width)
         {
             if (p_RZN_ID_LIST == null)
                 p_RZN_ID_LIST = "";
@@ -356,14 +360,14 @@ namespace PMap.BLL
 
             MapRoute result = null;
 
-           using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+            using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
             {
                 var boResult = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
                                     w.NOD_ID_TO == p_NOD_ID_TO &&
                                      w.DST_MAXWEIGHT == p_Weight &&
                                       w.DST_MAXHEIGHT == p_Height &&
                                       w.DST_MAXWIDTH == p_Width).FirstOrDefault();
-                if( boResult != null)
+                if (boResult != null)
                 {
                     return boResult.Route;
                 }
@@ -556,7 +560,7 @@ namespace PMap.BLL
                 sSQL += "  " + sSQLRESTZONES + " as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH ";
             }
 
-      
+
 
             sSQL += "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
                     "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
@@ -599,7 +603,7 @@ namespace PMap.BLL
         /// </summary>
         /// <param name="p_nodes"></param>
         /// <returns></returns>
-        public  RectLatLng getBoundary(List<int> p_nodes)
+        public RectLatLng getBoundary(List<int> p_nodes)
         {
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
             string sSql = "select min(NOD_XPOS) as minLng, min( NOD_YPOS) as minLat , max(NOD_XPOS) as maxLng, max( NOD_YPOS)  as maxLat from NOD_NODE where id in (" + sNODE_IDs + ")";
@@ -772,7 +776,7 @@ namespace PMap.BLL
 
         }
 
-  
+
         public void WriteOneRoute(boRoute p_Route)
         {
             using (TransactionBlock transObj = new TransactionBlock(DBA))
@@ -848,11 +852,14 @@ namespace PMap.BLL
         {
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
               "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH from EDG_EDGE  EDG " + Environment.NewLine +
+              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, NOD.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO  " + Environment.NewLine +
+              "from EDG_EDGE  EDG " + Environment.NewLine +
+              "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
+              "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
               "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
               " where EDG.ID = ?  ";
 
-            return fillEdgeFromDt( DBA.Query2DataTable(sSql, p_ID));
+            return fillEdgeFromDt(DBA.Query2DataTable(sSql, p_ID));
         }
 
         public boEdge GetEdgeByNOD_ID(int p_NOD_ID, string p_street = "")
@@ -860,9 +867,12 @@ namespace PMap.BLL
 
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                    "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH from EDG_EDGE  EDG " + Environment.NewLine +
+                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, NOD.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO " + Environment.NewLine +
+                   "from EDG_EDGE  EDG " + Environment.NewLine +
+                   "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
+                   "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
                    "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
-                   " where EDG.NOD_NUM = ? or EDG.NOD_NUM2 = ? ";
+                   " where (EDG.NOD_NUM = ? or EDG.NOD_NUM2 = ?) ";
             if (p_street != "")
                 sSql += " and UPPER(convert(varchar(max),decryptbykey(EDG_NAME_ENC))) like '%" + p_street.ToUpper() + "%' ";
             return fillEdgeFromDt(DBA.Query2DataTable(sSql, p_NOD_ID, p_NOD_ID));
@@ -887,12 +897,15 @@ namespace PMap.BLL
                     EDG_MAXWEIGHT = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXWEIGHT"),
                     EDG_MAXHEIGHT = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXHEIGHT"),
                     EDG_MAXWIDTH = Util.getFieldValue<int>(dt.Rows[0], "EDG_MAXWIDTH"),
+                    ZIP_NUM_FROM = Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM_FROM"),
+                    ZIP_NUM_TO = Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM_TO"),
+
                     Tolls = PMapCommonVars.Instance.LstEToll.Where(i => i.ETL_CODE == Util.getFieldValue<string>(dt.Rows[0], "EDG_ETLCODE"))
                            .DefaultIfEmpty(new boEtoll()).First().TollsToDict()
 
                 };
                 return res;
-                
+
             }
             else
                 return null;
@@ -930,223 +943,121 @@ namespace PMap.BLL
                 return null;
         }
 
-        public int GetNearestNOD_ID(PointLatLng p_pt)
+        public int GetNearestNOD_ID(PointLatLng p_pt, string p_street = "")
         {
             int diff = 0;
-            return GetNearestNOD_ID(p_pt, out diff);
+            return GetNearestNOD_ID(p_pt, out diff, p_street);
 
         }
 
-
-        /*****************************************************************/
-        /* kivezetni a metódust, helyette a                             */
-        /* RouteData.Instance.GetNearestNOD_ID -t kell használni !!!    */
-        /*****************************************************************/
 
         /// <summary>
         /// Egy térképi ponthoz legközelebb lévő NOD_ID visszaadása
         /// </summary>
         /// <param name="p_pt"></param>
+        /// <param name="r_diff"></param>
+        /// <param name="p_street">A leközelebbi pont közterületneve legyen az alábbi</param>
         /// <returns></returns>
-        public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
-         {
-             r_diff = Int32.MaxValue;
+        public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff, string p_street = "")
+        {
+            r_diff = Int32.MaxValue;
 
-             string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
-             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
-
-
-             string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
-             "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
-             "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
-             "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, " + Environment.NewLine +
-             "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF " + Environment.NewLine +
-             "from EDG_EDGE EDG " + Environment.NewLine +
-             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
-             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
-             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   AND " + Environment.NewLine +
-             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
-             "select top 1 " + Environment.NewLine +
-             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
-             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
-             "XDIFF " + Environment.NewLine +
-             "from CTE " + Environment.NewLine +
-             "where  CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
-             "order by CTE.XDIFF asc";
+            string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
+            string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
 
 
+            string sSql = "";
+            if (p_street != "")
+                sSql += "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine;
 
-             DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_Approach, Global.EdgeApproachCity, Global.EdgeApproachHighway));
+            sSql += "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
+           "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
+           "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
+           "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ";
+            if (p_street != "")
+                sSql += "convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAMEX, " + Environment.NewLine;
 
-
-             //Extrém esetben előfordulhat, hogy az eredeti közelítéssel (Global.NearestNOD_ID_Approach) nem találunk élt, mert az adott pozíciótol
-             //nagyon messze vannak a végpontok. Ebben az esetben egy újabb lekérdezést indítunk 3 szoros közelítési távolsággal. 
-             //Futásidőre optimalizálás miatt van így megoldva.
-             if (dt.Rows.Count == 0)
-             {
-                 dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway));
-             }
-
-
-
-             if (dt.Rows.Count > 0)
-             {
-                 r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
-                 return Util.getFieldValue<int>(dt.Rows[0], "ID");
-             }
-             return 0;
-         }
-
-
-
-
-        /********************************************************************************/
-        /* kivezetni a metódust, helyette a                                             */
-        /* RouteData.Instance.GetNearestReachableNOD_IDForTruck -t kell használni !!!   */
-        /********************************************************************************/
-        /// <summary>
-        /// Egy térképi ponthoz a leközelebb eső, egy jármű által megközelíthető pont (p_RZN_ID_LIST tartalmazza a behajtási zónákat)
-        /// Globális paraméterek:
-        ///     Global.NearestNOD_ID_Approach = 60000;         //Mekkora körzetben keressen lehetséges node-okat
-        ///     Global.NearestNOD_ID_ApproachBig = 180000;     //Nagyobb körzet a II. menetes keresésnek
-        ///     Global.EdgeApproachCity = 2000;                //Közelítő tűrés városon belül (RDT_VALUE>=3 és EDG_ETLCODE == '')
-        ///     Global.EdgeApproachHighway = 30000;            //Közelítő tűrés városon kivül (RDT_VALUE in (1,2) VAGY EDG_ETLCODE != '')
-        /// </summary>
-        /// <param name="p_pt"></param>
-        /// <param name="p_RZN_ID_LIST"></param>
-        /// <returns></returns>
-        public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width, out int r_diff)
-         {
-             string ptX = (Math.Round(p_pt.Lng * Global.LatLngDivider)).ToString();
-             string ptY = (Math.Round(p_pt.Lat * Global.LatLngDivider)).ToString();
-             r_diff = -1;
-
-             /*
-             string sSql = " select top 1  " + Environment.NewLine +
-             "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ID else NOD2.ID end as ID,  " + Environment.NewLine +
-             "case when abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") then NOD.ZIP_NUM else NOD2.ZIP_NUM end as ZIP_NUM,  " + Environment.NewLine +
-             "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") as XDIFF  " + Environment.NewLine +
-             "from EDG_EDGE EDG  " + Environment.NewLine +
-             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM  " + Environment.NewLine +
-             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2  " + Environment.NewLine +
-             "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
-             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and  " + Environment.NewLine +
-             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   OR  " + Environment.NewLine +
-             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0} ) and " + Environment.NewLine +
-             "( RZN.ID is null  " + Environment.NewLine +
-             "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN.ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN.ID,0)), '," + p_RZN_ID_LIST + "') > 0) " : "") + Environment.NewLine +
-             "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG.EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
-             " ) and  " + Environment.NewLine +
-             " dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") <= " + Environment.NewLine +
-             "  (case when (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0) then {1}  else {2} end) " + Environment.NewLine +
-             "order by dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ", " + ptY + ") asc ";
-             */
-
-        string sSql = "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
-            "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
-            "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
-            "RZN.ID as RZN_ID,EDG.EDG_DESTTRAFFIC as EDG_EDG_DESTTRAFFIC, " + Environment.NewLine +
-            "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF" + Environment.NewLine +
+            sSql += "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF " + Environment.NewLine +
             "from EDG_EDGE EDG " + Environment.NewLine +
             "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
             "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-            "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
-            "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   OR " + Environment.NewLine +    //itt nem AND
-            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0}) " + Environment.NewLine +
-            "and (EDG.EDG_MAXWEIGHT=0 or EDG.EDG_MAXWEIGHT>={3}) and (EDG.EDG_MAXHEIGHT=0 or EDG.EDG_MAXHEIGHT={4}) and (EDG.EDG_MAXWIDTH=0 or EDG.EDG_MAXWIDTH={5}))" + Environment.NewLine +
+            "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   AND " + Environment.NewLine +
+            "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
-            "CTE.XDIFF" + Environment.NewLine +
+            "XDIFF " + Environment.NewLine +
             "from CTE " + Environment.NewLine +
-            "where ( RZN_ID is null  " + Environment.NewLine +
-            "    " + (p_RZN_ID_LIST.Length > 0 ? " or ( RZN_ID is NOT null and charindex( ','+convert( varchar(50), isnull(RZN_ID,0))+',', '," + p_RZN_ID_LIST + ",') > 0) " : "") + Environment.NewLine +
-            "    " + (PMapIniParams.Instance.DestTraffic ? "  or EDG_EDG_DESTTRAFFIC = 1 " : " ") + "  " + Environment.NewLine +
-            " ) and  " + Environment.NewLine +
-            "CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end)  " + Environment.NewLine +
-            "order by CTE.XDIFF  asc";
+            "where  (CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end) ) " + Environment.NewLine;
 
-            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway, p_weight, p_height, p_width));
+            if (p_street != "")
+                sSql += " and UPPER(EDG_NAMEX) like '%" + p_street.ToUpper() + "%' " + Environment.NewLine;
+
+            sSql += "order by CTE.XDIFF asc";
+
+
+
+            DataTable dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_Approach, Global.EdgeApproachCity, Global.EdgeApproachHighway));
+
+
+            //Extrém esetben előfordulhat, hogy az eredeti közelítéssel (Global.NearestNOD_ID_Approach) nem találunk élt, mert az adott pozíciótol
+            //nagyon messze vannak a végpontok. Ebben az esetben egy újabb lekérdezést indítunk 3 szoros közelítési távolsággal. 
+            //Futásidőre optimalizálás miatt van így megoldva.
+            if (dt.Rows.Count == 0)
+            {
+                dt = DBA.Query2DataTable(String.Format(sSql, Global.NearestNOD_ID_ApproachBig, Global.EdgeApproachCity, Global.EdgeApproachHighway));
+            }
+
+
+
             if (dt.Rows.Count > 0)
             {
                 r_diff = Util.getFieldValue<int>(dt.Rows[0], "XDIFF");
                 return Util.getFieldValue<int>(dt.Rows[0], "ID");
             }
             return 0;
-
         }
 
-        public bool GeocodingByAddr(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID, out boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT)
+
+
+
+
+
+        /// <summary>
+        /// Geokódolás
+        /// </summary>
+        /// <param name="p_addr">Cím</param>
+        /// <param name="ZIP_ID">Output ZIP ID</param>
+        /// <param name="NOD_ID">Output node ID</param>
+        /// <param name="EDG_ID">Output edge ID</param>
+        /// <param name="DEP_IMPADDRSTAT">Milyen típusú </param>
+        /// <param name="p_onlyFullAddr">Csak teljes címre keresés</param>
+        /// <returns></returns>
+        /// 
+        /// GeocodingByGoogle ini paraméter beállítása esetén, amennyiben nem található meg a cím a címtárban, Google-t is igényve veszi
+        /// 
+        public bool GeocodingByAddr(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID, out boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT, bool p_onlyFullAddr = false)
         {
             string sZIP_NUM = "";
             string sCity = "";
             string sStreet = "";
             string sStreetType = "";
             int nAddrNum = 0;
-
-
-            RegexOptions options = RegexOptions.None;
-            Regex regex = new Regex("[ ]{2,}", options);
-            p_addr = regex.Replace(p_addr, " ");
-
-            string[] parts = p_addr.Split(' ');
-            int nCurrPart = 0;
-
-            //irányítószám-e?
-            if (parts.Length > nCurrPart)
-            {
-                int nZIP_NUM = 0;
-                if (int.TryParse(parts[nCurrPart], out nZIP_NUM))
-                {
-                    sZIP_NUM = parts[nCurrPart];
-                    nCurrPart++;
-                }
-            }
-
-            //településnév keresése
-            if (parts.Length > nCurrPart)
-            {
-                sCity = parts[nCurrPart];
-                nCurrPart++;
-            }
-
-            //utca keresése
-            if (parts.Length > nCurrPart)
-            {
-                sStreet = parts[nCurrPart];
-                nCurrPart++;
-            }
-
-            //közterület típus (nem vesz részt a keresésben)
-            if (parts.Length > nCurrPart)
-            {
-                sStreetType = parts[nCurrPart];
-                nCurrPart++;
-            }
-
-            //Házszám keresése
-            if (parts.Length > nCurrPart)
-            {
-                int.TryParse(parts[nCurrPart], out nAddrNum);
-                nCurrPart++;
-            }
-
+            Util.ParseAddress(p_addr, out sZIP_NUM, out sCity, out sStreet, out sStreetType, out nAddrNum);
 
             SqlCommand sqlCmd;
             sqlCmd = DBA.Conn.CreateCommand();
             sqlCmd.Parameters.Clear();
 
+            string sWhereCity = "";
             string sWhereAddr = "";
             string sWhereZipNum = "";
             string sWhereAddrNum = "";
 
             if (sCity != "")
             {
-                if (sWhereAddr != "")
-                    sWhereAddr += " and ";
-                sWhereAddr += " upper(ZIP_CITY) + '.' like @ZIP_CITY ";
+                sWhereCity += " upper(ZIP_CITY) + '.' like @ZIP_CITY ";
                 DbParameter par = sqlCmd.CreateParameter();
                 par.ParameterName = "@ZIP_CITY";
                 par.Value = "%" + sCity.ToUpper() + "[^A-Z]%";
@@ -1157,7 +1068,7 @@ namespace PMap.BLL
             {
                 if (sWhereAddr != "")
                     sWhereAddr += " and ";
-                sWhereAddr += " upper(EDG_NAMEX) + '.' like @EDG_NAME ";
+                sWhereAddr += " upper(convert(varchar(max),decryptbykey(EDG_NAME_ENC))) + '.' like @EDG_NAME ";
                 DbParameter par = sqlCmd.CreateParameter();
                 par.ParameterName = "@EDG_NAME";
                 par.Value = sStreet.ToUpper() + "[^A-Z]%";
@@ -1191,22 +1102,25 @@ namespace PMap.BLL
             //                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
             //                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
-                          "select  * from ( " + Environment.NewLine +
-                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY, " + Environment.NewLine +
-                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAMEX, " + Environment.NewLine +
-                          "  EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4 " + Environment.NewLine +
+                          ";WITH CTE as (" + Environment.NewLine +
+                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
                           "  from NOD_NODE NOD " + Environment.NewLine +
                           "  inner join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID " + Environment.NewLine +
                           "  inner join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = NOD.ZIP_NUM " + Environment.NewLine +
+                          " WHERECITY " + Environment.NewLine +
                           " UNION " + Environment.NewLine +
-                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY, " + Environment.NewLine +
-                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC))  as EDG_NAMEX, " + Environment.NewLine +
-                          "  EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4 " + Environment.NewLine +
+                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
                           "  from NOD_NODE NOD " + Environment.NewLine +
                           "  inner join EDG_EDGE EDG on EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +
                           "  inner join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = NOD.ZIP_NUM " + Environment.NewLine +
-                          ") cc  ";
+                          " WHERECITY " + Environment.NewLine +
+                          ") " + Environment.NewLine +
+                          "select *, convert(varchar(max), decryptbykey(EDG_NAME_ENC)) as EDG_NAMEX, " + Environment.NewLine +
+                          " EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4 FROM CTE " + Environment.NewLine +
+                          "inner join EDG_EDGE EDG on EDG.ID = EDG_ID ";
+
             sSql = sSql.Replace("'***************'", "'FormClosedEventArgs01'");
+            sSql = sSql.Replace("WHERECITY", (!String.IsNullOrEmpty(sWhereCity) ?  "where " + sWhereCity: ""));
 
             //Teljes címre keresés
             sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" || sWhereAddrNum != "" ? " where " + sWhereAddr + sWhereZipNum + sWhereAddrNum : "");
@@ -1224,11 +1138,14 @@ namespace PMap.BLL
                 DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_FULL;
                 return true;
             }
-            else
+
+            if (!p_onlyFullAddr)
             {
 
                 //keresés házszám nélkül
+                //         sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
                 sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
+
                 DBA.DA.SelectCommand = sqlCmd;
                 DataSet d2 = new DataSet();
                 DBA.DA.Fill(d2);
@@ -1241,57 +1158,61 @@ namespace PMap.BLL
                     DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_WITHOUT_HNUM;
                     return true;
                 }
-                else
+            }
+
+            if (!p_onlyFullAddr)
+            {
+                //keresés irányítószám és házszám nélkül
+                //Ha van irányítószám, akkor az ahhoz legközelebb lévőt vesszük
+                //                sqlCmd.CommandText = sSql + (sWhereAddr != "" ? " where " + sWhereAddr : "") + (sZIP_NUM != "" ? " order by ABS( cc.ZIP_NUM - " + sZIP_NUM + ") " : "");
+                sqlCmd.CommandText = sSql + (sWhereAddr != "" ? " where " + sWhereAddr : "");
+                DBA.DA.SelectCommand = sqlCmd;
+                DataSet d3 = new DataSet();
+                DBA.DA.Fill(d3);
+                DataTable dt3 = d3.Tables[0];
+                string sDB_ZIP_NUM = "";
+
+                if (dt3.Rows.Count > 0)
+                    sDB_ZIP_NUM = ("0000" + Util.getFieldValue<int>(dt3.Rows[0], "ZIP_NUM").ToString()).RightString(4);
+
+
+                if (dt3.Rows.Count > 0 && (sZIP_NUM == "" ||
+                    (sDB_ZIP_NUM.Substring(0, 1) == "1" && sDB_ZIP_NUM.Substring(0, 1) == sZIP_NUM.Substring(0, 1)) ||
+                    (sDB_ZIP_NUM.Substring(0, 1) != "1" && sDB_ZIP_NUM.Substring(0, 3) == sZIP_NUM.Substring(0, 3))))
                 {
-                    //keresés irányítószám és házszám nélkül
-                    //Ha van irányítószám, akkor az ahhoz legközelebb lévőt vesszük
-                    sqlCmd.CommandText = sSql + (sWhereAddr != "" ? " where " + sWhereAddr : "") + (sZIP_NUM != "" ? " order by ABS( cc.ZIP_NUM - " + sZIP_NUM + ") " : "");
-                    DBA.DA.SelectCommand = sqlCmd;
-                    DataSet d3 = new DataSet();
-                    DBA.DA.Fill(d3);
-                    DataTable dt3 = d3.Tables[0];
-                    string sDB_ZIP_NUM = "";
-
-                    if (dt3.Rows.Count > 0)
-                        sDB_ZIP_NUM = ("0000" + Util.getFieldValue<int>(dt3.Rows[0], "ZIP_NUM").ToString()).RightString(4);
-
-
-                    if (dt3.Rows.Count > 0 && (sZIP_NUM == "" ||
-                        (sDB_ZIP_NUM.Substring(0, 1) == "1" && sDB_ZIP_NUM.Substring(0, 1) == sZIP_NUM.Substring(0, 1)) ||
-                        (sDB_ZIP_NUM.Substring(0, 1) != "1" && sDB_ZIP_NUM.Substring(0, 3) == sZIP_NUM.Substring(0, 3))))
-                    {
-                        //Megadott irányítószám esetén csak akkor vesszük megtaláltnak a pontot, ha az átadott és a megtalált pont irányítószáma 
-                        //ugyan abba a körzetbe esik
-                        ZIP_ID = Util.getFieldValue<int>(dt3.Rows[0], "ZIP_ID");
-                        NOD_ID = Util.getFieldValue<int>(dt3.Rows[0], "NOD_ID");
-                        EDG_ID = Util.getFieldValue<int>(dt3.Rows[0], "EDG_ID");
-                        DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_WITHOUT_ZIP_HNUM;
-                        return true;
-                    }
-                    else
-                    {
-                        //utolsó lehetőség a google-hoz fordulni.
-                        if (PMapIniParams.Instance.GeocodingByGoogle && GeocodingByGoogle(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID))
-                        {
-                            DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE;
-                            return true;
-                        }
-
-                        if (PMapIniParams.Instance.GeocodingByGoogle && sCity != "" && GeocodingByGoogle(sCity, out ZIP_ID, out NOD_ID, out EDG_ID))
-                        {
-                            DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE_ONLYCITY;
-                            return true;
-                        }
-                        //nincs eredmény...
-                        ZIP_ID = 0;
-                        NOD_ID = 0;
-                        EDG_ID = 0;
-                        DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                        return false;
-                    }
+                    //Megadott irányítószám esetén csak akkor vesszük megtaláltnak a pontot, ha az átadott és a megtalált pont irányítószáma 
+                    //ugyan abba a körzetbe esik
+                    ZIP_ID = Util.getFieldValue<int>(dt3.Rows[0], "ZIP_ID");
+                    NOD_ID = Util.getFieldValue<int>(dt3.Rows[0], "NOD_ID");
+                    EDG_ID = Util.getFieldValue<int>(dt3.Rows[0], "EDG_ID");
+                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_WITHOUT_ZIP_HNUM;
+                    return true;
                 }
             }
+
+
+            //utolsó lehetőség a google-hoz fordulni.
+            if (PMapIniParams.Instance.GeocodingByGoogle && GeocodingByGoogle(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID))
+            {
+                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE;
+                return true;
+            }
+
+            //Google csak város
+            if (!p_onlyFullAddr && PMapIniParams.Instance.GeocodingByGoogle && sCity != "" && GeocodingByGoogle(sCity, out ZIP_ID, out NOD_ID, out EDG_ID))
+            {
+                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE_ONLYCITY;
+                return true;
+            }
+
+            //nincs eredmény...
+            ZIP_ID = 0;
+            NOD_ID = 0;
+            EDG_ID = 0;
+            DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
+            return false;
         }
+    
 
 
         /*****/
@@ -1326,6 +1247,7 @@ namespace PMap.BLL
             var response = request.GetResponse();
             var xdoc = XDocument.Load(response.GetResponseStream());
             string street_name = "";
+            string city_name = "";
             var xElement = xdoc.Element("GeocodeResponse");
             if (xElement != null)
             {
@@ -1351,26 +1273,57 @@ namespace PMap.BLL
                         }
 
                         var xx = result.Elements("address_component").ToList();
-                        foreach( var nd in xx)
+
+                        var telements = xx.Elements("type").ToList();
+                        foreach (var t in telements)
                         {
-                           
-                            var t = nd.Element("type");
-                            if (t != null)
+                            if (t.Value.ToUpper() == "ROUTE")
                             {
-                                if( t.Value == "route")
+                                var names = t.Parent.Element("long_name").Value.Split(' ');
+                                if (names.Length > 0)
+                                    street_name = names[0];
+
+                            }
+                            if (t.Value.ToUpper() == "LOCALITY")
+                            {
+                                var names = t.Parent.Element("long_name").Value.Split(' ');
+                                if (names.Length > 0)
+                                    city_name = names[0];
+
+                            }
+
+
+                        }
+                    }
+                    /*
+                        if (t != null && t.Count > 0)
+                        {
+                            if (t.Any(a => a.Name.LocalName.ToUpper() == "ROUTE"))
+                            {
+                                var ln = nd.Element("long_name");
+                                if (ln != null)
                                 {
-                                    var ln = nd.Element("long_name");
-                                    if( ln != null)
-                                    {
-                                        var names = ln.Value.Split(' ');
-                                        if (names.Length > 0)
-                                            street_name = names[0];
-                                        break;
-                                    }
+                                    var names = ln.Value.Split(' ');
+                                    if (names.Length > 0)
+                                        street_name = names[0];
+                                    // break;
+                                }
+                            }
+                            if (t.Any(a => a.Name.LocalName.ToUpper() == "LOCALITY"))
+                            {
+                                var ln = nd.Element("long_name");
+                                if (ln != null)
+                                {
+                                    var names = ln.Value.Split(' ');
+                                    if (names.Length > 0)
+                                        city_name = names[0];
+                                    //    break;
                                 }
                             }
                         }
                     }
+                    */
+
                 }
                 else
                 {
@@ -1380,7 +1333,10 @@ namespace PMap.BLL
             }
             if (ResultPt.Lat != 0 && ResultPt.Lng != 0)
             {
-                NOD_ID = GetNearestNOD_ID(ResultPt);
+                NOD_ID = GetNearestNOD_ID(ResultPt, street_name);
+                if(NOD_ID == 0)
+                    NOD_ID = GetNearestNOD_ID(ResultPt);
+
                 boNode nod = GetNode(NOD_ID);
                 if (nod == null)
                     return false;
@@ -1389,12 +1345,50 @@ namespace PMap.BLL
                 boEdge edg = GetEdgeByNOD_ID(NOD_ID, street_name);
                 if (edg == null && street_name != "")
                     edg = GetEdgeByNOD_ID(NOD_ID);
-
-
                 if (edg == null)
                     return false;
 
                 EDG_ID = edg.ID;
+
+                // város ellenőrzése
+
+                string sZIP_NUM = "";
+                string sCity = "";
+                string sStreet = "";
+                string sStreetType = "";
+                int nAddrNum = 0;
+                Util.ParseAddress(p_addr, out sZIP_NUM, out sCity, out sStreet, out sStreetType, out nAddrNum);
+                sCity = sCity.Trim().ToUpper();
+
+
+                var zip1 = m_bllZip.GetZIPbyNum(edg.ZIP_NUM_FROM);
+                //       if (zip1 == null)
+                //           throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_FROM));
+
+                var zip2 = m_bllZip.GetZIPbyNum(edg.ZIP_NUM_TO);
+                //       if (zip2 == null)
+                //            throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_TO));
+
+                city_name = city_name.Trim().ToUpper();
+                if ((zip1 != null && !zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity))        //Budapest város nevében van a kerület is, 
+                    && (zip2 != null && !zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)))     //ezért kell a Contains-t használni
+                {
+                    ZIP_ID = 0;
+                    NOD_ID = 0;
+                    EDG_ID = 0;
+                    return false;
+                }
+
+                //Vissza adott google és cím városnévre is végzünk egy ellenőrzést (ha nincs a ZIP kitöltve)
+
+                if (city_name != sCity)
+                {
+                    ZIP_ID = 0;
+                    NOD_ID = 0;
+                    EDG_ID = 0;
+                    return false;
+                }
+
                 return true;
             }
             else
@@ -1404,26 +1398,28 @@ namespace PMap.BLL
         }
 
 
-        public Dictionary<string, Dictionary<string, double>> GetAllTolls()
+        public Dictionary<string, Dictionary<int, double>> GetAllTolls()
         {
-            Dictionary<string, Dictionary<string, double>> dicAllTolls = new Dictionary<string, Dictionary<string, double>>();
+            Dictionary<string, Dictionary<int, double>> dicAllTolls = new Dictionary<string, Dictionary<int, double>>();
 
             string sSql = "select * from ETL_ETOLL ETL order by ETL.ETL_CODE";
             DataTable dte = DBA.Query2DataTable(sSql);
             foreach (DataRow dre in dte.Rows)
             {
-                Dictionary<string, double> tolls = new Dictionary<string, double>();
-                tolls.Add("J2", Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
-                tolls.Add("J3", Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
-                tolls.Add("J4", Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
+                Dictionary<int, double> tolls = new Dictionary<int, double>();
+                tolls.Add(Global.ETOLLCAT_J0, 0);
+                tolls.Add(Global.ETOLLCAT_J2, Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
+                tolls.Add(Global.ETOLLCAT_J3, Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
+                tolls.Add(Global.ETOLLCAT_J4, Util.getFieldValue<double>(dre, "ETL_J2_TOLL_FULL"));
                 dicAllTolls.Add(Util.getFieldValue<string>(dre, "ETL_CODE"), tolls);
 
             }
             //díjnélküli tétel
-            Dictionary<string, double> tollsX = new Dictionary<string, double>();
-            tollsX.Add("J2", 0);
-            tollsX.Add("J3", 0);
-            tollsX.Add("J4", 0);
+            Dictionary<int, double> tollsX = new Dictionary<int, double>();
+            tollsX.Add(Global.ETOLLCAT_J0, 0);
+            tollsX.Add(Global.ETOLLCAT_J2, 0);
+            tollsX.Add(Global.ETOLLCAT_J3, 0);
+            tollsX.Add(Global.ETOLLCAT_J4, 0);
             dicAllTolls.Add("", tollsX);
 
             return dicAllTolls;

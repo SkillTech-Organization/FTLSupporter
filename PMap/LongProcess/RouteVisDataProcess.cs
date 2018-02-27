@@ -238,16 +238,16 @@ namespace Map.LongProcess
                 if (RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT > 1 && p_lastETLCODE != edge.EDG_ETLCODE)
                 {
                     //Az 
-                    detail.Toll += edge.Tolls[Global.ETOLLCAT_Prefix + RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                    detail.Toll += edge.Tolls[RouteVisCommonVars.Instance.CalcTRK_ETOLLCAT] * p_TollMultiplier;
 
                     if (edge.EDG_ETLCODE.Length > 0)
                     {
-                        p_RouteVis.SumToll += edge.Tolls[Global.ETOLLCAT_Prefix + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                        p_RouteVis.SumToll += edge.Tolls[p_Truck.TRK_ETOLLCAT] * p_TollMultiplier;
 
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Empty)
-                            p_RouteVis.SumTollEmpty += edge.Tolls[Global.ETOLLCAT_Prefix + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                            p_RouteVis.SumTollEmpty += edge.Tolls[p_Truck.TRK_ETOLLCAT] * p_TollMultiplier;
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Loaded)
-                            p_RouteVis.SumTollLoaded += edge.Tolls[Global.ETOLLCAT_Prefix  + p_Truck.TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                            p_RouteVis.SumTollLoaded += edge.Tolls[p_Truck.TRK_ETOLLCAT] * p_TollMultiplier;
 
                     }
                     p_lastETLCODE = edge.EDG_ETLCODE;

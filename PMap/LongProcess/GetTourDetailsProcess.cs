@@ -145,7 +145,7 @@ namespace PMap.LongProcess
 
                                 if (m_Tour.TRK_ETOLLCAT > 1 && LastETLCODE != edge.EDG_ETLCODE && xedge.Tolls.Count > 0)
                                 {
-                                    td.OrigToll = xedge.Tolls[Global.ETOLLCAT_Prefix + m_Tour.TRK_ETOLLCAT.ToString()] * Global.VAT;
+                                    td.OrigToll = xedge.Tolls[m_Tour.TRK_ETOLLCAT] * Global.VAT;
                                     td.Toll = td.OrigToll * m_Tour.TollMultiplier;
                                 }
 
@@ -186,7 +186,7 @@ namespace PMap.LongProcess
                         TourDetails.Add(td2);
                         if (m_Tour.TRK_ETOLLCAT > 1 && LastETLCODE != xedge.EDG_ETLCODE && xedge.Tolls.Count > 0)
                         {
-                            td2.OrigToll = xedge.Tolls[Global.ETOLLCAT_Prefix + m_Tour.TRK_ETOLLCAT.ToString()] * Global.VAT;
+                            td2.OrigToll = xedge.Tolls[ m_Tour.TRK_ETOLLCAT] * Global.VAT;
                             td2.Toll = td2.OrigToll * m_Tour.TollMultiplier;
                         }
 

@@ -36,6 +36,8 @@ namespace PMap.Localize
         public const string E_SNDEMAIL_MAIL = "Legalább egy e-mailcímet meg kell adni !";
         public const string E_SNDEMAIL_FAILED = "Sikertelen e-mailküldés {0}";
         public const string E_SNDEMAIL_OK = "E-mailküldés rendben megtörtént!";
+        public const string Q_PEDIT_SENDEMAIL1 = "Elküldhető az ÖSSZES értesítő e-mail?";
+        public const string Q_PEDIT_SENDEMAIL2 = "Megerősítés : elküldhető az ÖSSZES értesítő e-mail?";
 
 
 
@@ -56,7 +58,7 @@ namespace PMap.Localize
         public const string Q_PEDIT_NEWTOUR = "Új túra létrehozása?";
 
         public const string E_TOURCOMPL_ABORTED = "Véglegesítés megszakítva!";
-        public const string E_TOURCOMPL_NOGETROUTES = "Útvonalak nem kérhetőek le! Lehet, hogy hálózati hiba történt.";
+        public const string E_TOURCOMPL_NOGETROUTES = "Járműtulajdonságok miatt az alábbi pontokra nem lehetet útvonalat számolni:\n{0}";
 
 
         public const string E_PCHK_NOROUTE = "A magadott övezetlistára nincs útvonal!";
@@ -151,6 +153,8 @@ namespace PMap.Localize
         public const string T_COMPLETE_TOURROUTES = "Túraútvonalak véglegesítés";
         public const string T_COMPLETE_TOURROUTES2 = "Túraútvonalak véglegesítése:";
         public const string E_NOSELTOUR = "Nincs kiválasztott túra";
+
+        public const string E_UNKOWN_ZIP = "Ismeretlen irányítószám:{0}";
 
     }
 

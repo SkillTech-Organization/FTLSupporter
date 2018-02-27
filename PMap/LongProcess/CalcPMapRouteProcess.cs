@@ -68,16 +68,17 @@ namespace PMap.LongProcess
             try
             {
                 long availe = GC.GetTotalMemory(false);
-                long allocated = (int)(availe / 1024 / 1024) < 30 ? (int)(availe / 1024 / 1024) : 50;
+                long allocated = (int)(availe / 1024 / 1024) < 40 ? (int)(availe / 1024 / 1024) : 60;
                 memFailPoint = new MemoryFailPoint((int)allocated);
                 Util.Log2File("CalcPMapRouteProcess Allocated: " + allocated.ToString());
 
                 Completed = false;
-                /*
+
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-                */
+
+
                 DateTime dtStart = DateTime.Now;
                 TimeSpan tspDiff;
 
@@ -106,7 +107,6 @@ namespace PMap.LongProcess
                 List<CRoutePars> routePars = m_CalcDistances.GroupBy(g => new { g.RZN_ID_LIST, g.DST_MAXWEIGHT, g.DST_MAXHEIGHT, g.DST_MAXWIDTH })
                     .Select(s => new CRoutePars() { RZN_ID_LIST = s.Key.RZN_ID_LIST, Weight = s.Key.DST_MAXWEIGHT, Height = s.Key.DST_MAXHEIGHT, Width = s.Key.DST_MAXWIDTH }).ToList();
 
-                //RouteData.Instance.getNeigboursByBound(routePars, ref NeighborsArrFull, ref NeighborsArrCut, boundary);
 
                 DateTime dtStartX2 = DateTime.Now;
 
@@ -117,15 +117,18 @@ namespace PMap.LongProcess
                 List<boRoute> results = new List<boRoute>();
                 int itemNo = 0;
 
-                // Check for available memory.
 
+    /*
                 Dictionary<string, List<int>[]> NeighborsArrFull = null;
                 Dictionary<string, List<int>[]> NeighborsArrCut = null;
                 RouteData.Instance.getNeigboursByBound(routePars, ref NeighborsArrFull, ref NeighborsArrCut, boundary, null);
-
+*/
 
                 foreach (var routePar in routePars)
                 {
+                    List<int>[] MapFull = null;
+                    List<int>[] MapCut = null;
+                    RouteData.Instance.PrepareMap(routePar, ref MapFull, ref MapCut, boundary, null);
 
                     var dicCalcNodes = m_CalcDistances.Where(w => w.RZN_ID_LIST == routePar.RZN_ID_LIST &&
                                                         w.DST_MAXWEIGHT == routePar.Weight &&
@@ -146,8 +149,8 @@ namespace PMap.LongProcess
                         //megj: nins routePar null ellenőrzés, hogy szálljon el, ha valami probléma van
                         //
                         results.AddRange(provider.GetAllRoutes(routePar, calcNode.Key, lstToNodes,
-                                            NeighborsArrFull[routePar.Hash],
-                                            PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ? NeighborsArrCut[routePar.Hash] : null,
+                                            MapFull,
+                                            PMapIniParams.Instance.CutMapForRouting && MapCut != null ? MapCut : null,
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
 
                         //Eredmény adatbázisba írása minden csomópont kiszámolása után -- NEM, a BULK insertet használjuk !!!
@@ -242,6 +245,13 @@ namespace PMap.LongProcess
             {
                Util.ExceptionLog(ex);
                 Util.Log2File("CalcPMapRouteProcess InsufficientMemoryException AVAILABLE:" + GC.GetTotalMemory(false).ToString());
+                throw;
+            }
+            catch (OutOfMemoryException ex)
+            {
+                Util.ExceptionLog(ex);
+                Util.Log2File("CalcPMapRouteProcess OutOfMemoryException AVAILABLE:" + GC.GetTotalMemory(false).ToString());
+                throw;
             }
             catch (Exception e)
             {

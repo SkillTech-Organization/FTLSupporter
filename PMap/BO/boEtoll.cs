@@ -31,12 +31,13 @@ namespace PMap.BO
         [WriteFieldAttribute(Insert = false, Update = true)]
         public DateTime LASTDATE { get; set; }
 
-        public Dictionary<string, double> TollsToDict()
+        public Dictionary<int, double> TollsToDict()
         {
-            Dictionary<string, double> retTolls = new Dictionary<string, double>();
-            retTolls.Add("J2", ETL_J2_TOLL_FULL);
-            retTolls.Add("J3", ETL_J3_TOLL_FULL);
-            retTolls.Add("J4", ETL_J4_TOLL_FULL);
+            Dictionary<int, double> retTolls = new Dictionary<int, double>();
+            retTolls.Add(Global.ETOLLCAT_J0, 0);
+            retTolls.Add(Global.ETOLLCAT_J2, ETL_J2_TOLL_FULL);
+            retTolls.Add(Global.ETOLLCAT_J3, ETL_J3_TOLL_FULL);
+            retTolls.Add(Global.ETOLLCAT_J4, ETL_J4_TOLL_FULL);
             return retTolls;
         }
 

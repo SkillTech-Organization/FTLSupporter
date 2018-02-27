@@ -10,7 +10,7 @@ namespace PMap.BO
     [Serializable]
     public class boEdge
     {
-        public int ID { get; set; }
+        public int ID;//{ get; set; }
         public int NOD_ID_FROM { get; set; }
         public int NOD_ID_TO { get; set; }
         public int RDT_VALUE { get; set; }
@@ -29,7 +29,7 @@ namespace PMap.BO
         public float CalcSpeed { get; set; }                      //idealizált sebességprofil sebesség (ez alapján számítjuk a leggyorsabb utat)
         public float CalcDuration { get; set; }                   //menetidő (idealizált sebességprofil alapján) megj.:futásidő miatt float
         [ScriptIgnore]
-        public Dictionary<string, double> Tolls { get; set; }      //Útdíjak járműkategóriánként, teljes szelvénydíjakkal
+        public Dictionary<int, double> Tolls { get; set; }      //Útdíjak járműkategóriánként, teljes szelvénydíjakkal
         [ScriptIgnore]
         public PointLatLng fromLatLng { get; set; }                //LatLng kiemelése, hogy gyors lehessen a térképkivágás útvonalszámításnál
         [ScriptIgnore]

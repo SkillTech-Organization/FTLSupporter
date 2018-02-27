@@ -93,9 +93,41 @@ namespace VBInterface
             return sRetStatus;
         }
 
+        /// <summary>
+        /// Geokódolás
+        /// </summary>
+        /// <param name="p_addr"></param>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <returns></returns>
         public string Geocoding(string p_addr, string p_iniPath, string p_dbConf)
         {
-            Util.Log2File(">>START:Geocoding(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
+            return GeocodingCore(p_addr, p_iniPath, p_dbConf, false);
+        }
+
+        /// <summary>
+        /// Geokódolás teljes címre
+        /// </summary>
+        /// <param name="p_addr"></param>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <returns></returns>
+        public string GeocodingFulAddr(string p_addr, string p_iniPath, string p_dbConf)
+        {
+            return GeocodingCore(p_addr, p_iniPath, p_dbConf, true);
+        }
+
+        /// <summary>
+        /// Geokódolás core
+        /// </summary>
+        /// <param name="p_addr"></param>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConfm"></param>
+        /// <param name="p_onlyFullAddr"></param>
+        /// <returns></returns>
+        private string GeocodingCore(string p_addr, string p_iniPath, string p_dbConf, bool p_onlyFullAddr = false)
+        {
+            Util.Log2File(">>START:GeocodingCore(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ", "+p_onlyFullAddr.ToString() +")", false);
             string sRetStatus = retOK;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
@@ -103,9 +135,6 @@ namespace VBInterface
 
 
             DateTime dt = DateTime.Now;
-
-            //     logVersion();
-            Util.Log2File(">>START:Geocoding(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ")", false);
             try
             {
                 PMapCommonVars.Instance.ConnectToDB();
@@ -115,7 +144,7 @@ namespace VBInterface
                 int ZIP_ID = 0;
                 int NOD_ID = 0;
                 int EDG_ID = 0;
-                bool bFound = route.GeocodingByAddr(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT);
+                bool bFound = route.GeocodingByAddr(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, p_onlyFullAddr);
                 if (bFound && DEP_IMPADDRSTAT != boDepot.EIMPADDRSTAT.MISSADDR)
                 {
                     boEdge edg = route.GetEdgeByID(EDG_ID);
@@ -132,7 +161,7 @@ namespace VBInterface
                 UI.Error(e.Message);
                 sRetStatus = retErr;
             }
-            //   Util.Log2File(">>END:SelectPosition()-->" + sRet, false);
+            //   Util.Log2File(">>END:GeocodingCore()-->" + sRet, false);
 
             if (!PMapIniParams.Instance.TestMode)
                 ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt);

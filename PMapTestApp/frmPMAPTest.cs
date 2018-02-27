@@ -274,11 +274,15 @@ namespace PMapTestApp
             d.txtAddr.Text = "Jászberény Kossuth u 80";
             d.txtAddr.Text = "Jászberény KOSSUTH U. 23.";
             d.txtAddr.Text = "4033 Debrecen Kőrösi Csoma Sándor";
+            d.txtAddr.Text = "7400 zselickislak Raktár utca 25";
+            d.txtAddr.Text = "Csorna  Táncsics utca 19";
+            d.txtAddr.Text = "Szeged Vedres utca 19";
+            d.txtAddr.Text = "Domoszló  Mező I. utca 2 ";
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();
 
-                UI.Message("Geocoding->" + vbintf.GeocodingByGoogle(d.txtAddr.Text, "", dbConf));
+                UI.Message("Geocoding->" + vbintf.GeocodingFulAddr(d.txtAddr.Text, "", dbConf));
 
 
                 PMapCommonVars.Instance.ConnectToDB();
@@ -851,6 +855,11 @@ namespace PMapTestApp
             testPoint1.Lat, testPoint1.Lng, testPoint2.Lat, testPoint2.Lng, "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24", 0, 0, 0, out dist, out durat);
             UI.Message("dist:" + dist.ToString() + ", dur:" + durat.ToString());
 
+        }
+
+        private void button33_Click(object sender, EventArgs e)
+        {
+            MemoryFailPointTest.EntryPoint();
         }
     }
 }

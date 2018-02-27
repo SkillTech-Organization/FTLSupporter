@@ -30,6 +30,7 @@ namespace PMapTestApp
             public double Speed { get; set; }
             public string RoadType { get; set; }
             public string WZone { get; set; }
+            public int Weight { get; set; }
             public bool OneWay { get; set; }
             public bool DestTraffic { get; set; }
             public string EDG_ETLCODE { get; set; }
@@ -112,7 +113,6 @@ namespace PMapTestApp
             int SPP_ID = (int)cmbSpeedProfile.SelectedValue;
             string sRZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue;
 
-
             var routePar = new CRoutePars() { RZN_ID_LIST = sRZN_ID_LIST, Weight = m_weight, Height = 0, Width = 0 };  ///A TestApp-ban egyelőre csak a súlykorlátozásokkal foglalkozunk
             if (m_route[routePar].Route != null)
             {
@@ -120,6 +120,8 @@ namespace PMapTestApp
                 foreach (boEdge edge in m_route[routePar].Edges)
                 {
                     double fSpeed = m_sp[edge.RDT_VALUE.ToString() + Global.SEP_COORD + SPP_ID.ToString()].SPV_VALUE;
+                    fSpeed = PMapIniParams.Instance.dicSpeed[edge.RDT_VALUE];
+
 
                     if (edge.EDG_ETLCODE.Length > 0)
                         System.Console.WriteLine("c");
@@ -133,6 +135,7 @@ namespace PMapTestApp
                         Duration = (edge.EDG_LENGTH / (fSpeed / 3.6 * 60)),
                         Speed = fSpeed,
                         RoadType = edge.RDT_VALUE.ToString() + "-" + m_rdt[edge.RDT_VALUE],
+                        Weight = edge.EDG_MAXWEIGHT,
                         OneWay = edge.EDG_ONEWAY,
                         WZone = edge.WZONE,
                         DestTraffic = edge.EDG_DESTTRAFFIC,

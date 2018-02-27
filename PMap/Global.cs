@@ -212,7 +212,13 @@ namespace PMap
         public static Color DISABLEDFONTCOLOR = Color.Black;
         public static Color UNPLANNEDITEMCOLOR = Color.Azure;
 
-        public static string ETOLLCAT_Prefix = "J";
+//        public static string ETOLLCAT_Prefix = "J";
+        public static int ETOLLCAT_J0 = 0;      //nincs útdíj
+        public static int ETOLLCAT_J2 = 2;
+        public static int ETOLLCAT_J3 = 3;
+        public static int ETOLLCAT_J4 = 4;
+
+
         public const int ETOLLCAT_MAX35T = 1;         //1.max 3.5 tonna (nics útdíj)
         public const int ETOLLCAT_MAX75T = 2;         //2:max 7.5 tonna
         public const int ETOLLCAT_MAX12T = 3;         //3:max 12 tonna

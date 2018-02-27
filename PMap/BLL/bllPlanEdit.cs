@@ -395,7 +395,7 @@ namespace PMap.BLL
             {
                 if (p_TRK_ETOLLCAT > 1  && p_lastETLCODE != edge.EDG_ETLCODE)
                 {
-                    dToll += edge.Tolls[Global.ETOLLCAT_Prefix + p_TRK_ETOLLCAT.ToString()] * p_TollMultiplier;
+                    dToll += edge.Tolls[p_TRK_ETOLLCAT] * p_TollMultiplier;
                     p_lastETLCODE = edge.EDG_ETLCODE;
                 }
             }
@@ -816,7 +816,7 @@ namespace PMap.BLL
                                         {
                                             if (edge.EDG_ETLCODE.Length > 0)
                                             {
-                                                dToll += edge.Tolls[Global.ETOLLCAT_Prefix + TRK_ETOLLCAT.ToString()] * dTollMultiplier;
+                                                dToll += edge.Tolls[TRK_ETOLLCAT] * dTollMultiplier;
                                             }
                                             lastETLCODE = edge.EDG_ETLCODE;
                                         }
@@ -963,7 +963,7 @@ namespace PMap.BLL
                                         {
                                             if (edge.EDG_ETLCODE.Length > 0)
                                             {
-                                                dToll += edge.Tolls[ Global.ETOLLCAT_Prefix + TRK_ETOLLCAT.ToString()] * dTollMultiplier;
+                                                dToll += edge.Tolls[TRK_ETOLLCAT] * dTollMultiplier;
                                             }
                                             lastETLCODE = edge.EDG_ETLCODE;
                                         }
@@ -1239,7 +1239,8 @@ namespace PMap.BLL
                     "TOD_CUTQTY2", dQty2,
                     "TOD_CUTQTY3", dQty3,
                     "TOD_CUTQTY5", dQty5,
-                    "TOD_VOLUME", dVol);
+                    "TOD_VOLUME", dVol,
+                    "TOD_SENTEMAIL", 0);
 
                 //                bllHistory.WriteHistory(0, "TOD_TOURORDER", newTOD_ID, bllHistory.EMsgCodes.ADD, p_PLN_ID, p_ORD_ID, p_QTY, p_ORD_NUM);
                 return newTOD_ID;

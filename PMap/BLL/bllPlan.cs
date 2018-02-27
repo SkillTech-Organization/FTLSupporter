@@ -598,6 +598,10 @@ namespace PMap.BLL
             return xTourList;
         }
 
+        public void SetTourPointSent(int p_TOD_ID)
+        {
+            DBA.ExecuteNonQuery("update TOD_TOURORDER set TOD_SENTEMAIL=1 where ID=?", p_TOD_ID);
+        }
 
     }
 }

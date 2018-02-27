@@ -29,11 +29,11 @@ namespace PMap.LongProcess
         {
             OK,
             UserBreak,
-            NoRoute
+            NoRouteOccured
         }
 
-        public eCompleteCode CompleteCode { get; set; }
-
+        public eCompleteCode CompleteCode { get; private set; }
+        public List<string> NoRoutes { get; private set; }
         private boPlanTour m_Tour;
 
 
@@ -84,6 +84,7 @@ namespace PMap.LongProcess
             {
 
                 int iErrCnt = 0;
+                NoRoutes = new List<string>();
 
                 //FONTOS !!!
                 //A túrák mindig visszatérnek a kiindulási raktárba, ezért a legutolsó túrapontra nem készítünk markert.
@@ -108,16 +109,31 @@ namespace PMap.LongProcess
                     RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
 
                     var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.First().NOD_ID).Select(s => s.Key).ToList();
-                    results.AddRange(provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,
+                    var resRoute = provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,
                                          neighborsFull[routePar.Hash],
                                          PMapIniParams.Instance.CutMapForRouting && neighborsCut != null ? neighborsCut[routePar.Hash] : null,
-                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath));
+                                         PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+
+
+                    results.AddRange(resRoute);
 
                 }
-                m_bllRoute.DeleteTourRoutes(p_tour);
-                m_bllRoute.WriteRoutesBulk(results, true);
-                results = new List<boRoute>();
-                Util.Log2File("CalcRoutesForTours WriteRoutesBulk: " + GC.GetTotalMemory(false).ToString());
+
+                NoRoutes.AddRange(results.Where(w => w.NOD_ID_FROM != w.NOD_ID_TO && w.Edges.Count() == 0).
+                            Select(s => p_tour.TourPoints.Where(w1 => w1.NOD_ID == s.NOD_ID_FROM).First().ADDR
+                            + "-->"
+                            + p_tour.TourPoints.Where(w2 => w2.NOD_ID == s.NOD_ID_TO).First().ADDR));
+                if (NoRoutes.Count() == 0)
+                {
+                    m_bllRoute.DeleteTourRoutes(p_tour);
+                    m_bllRoute.WriteRoutesBulk(results, true);
+                    results = new List<boRoute>();
+                    Util.Log2File("CalcRoutesForTours WriteRoutesBulk: " + GC.GetTotalMemory(false).ToString());
+                }
+                else
+                {
+                    Util.Log2File("CalcRoutesForTours NoRoutes found!  " + GC.GetTotalMemory(false).ToString());
+                }
 
 
 
@@ -130,7 +146,7 @@ namespace PMap.LongProcess
             finally
             {
             }
-            return eCompleteCode.OK;
+            return NoRoutes.Count() == 0 ?  eCompleteCode.OK: eCompleteCode.NoRouteOccured;
         }
 
     }

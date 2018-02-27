@@ -51,6 +51,8 @@
             this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
             this.repositoryItemImageComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblWeight = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.cmbRST_ID_LIST = new System.Windows.Forms.ComboBox();
             this.lblDistance = new System.Windows.Forms.Label();
@@ -63,8 +65,7 @@
             this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.excelToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
-            this.lblWeight = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.layoutDialog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridRouteDetails)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewRouteDetails)).BeginInit();
@@ -144,7 +145,8 @@
             this.colOneWay,
             this.colWZone,
             this.colDestTraffic,
-            this.colEDG_ETLCODE});
+            this.colEDG_ETLCODE,
+            this.gridColumn1});
             this.gridViewRouteDetails.GridControl = this.gridRouteDetails;
             this.gridViewRouteDetails.Name = "gridViewRouteDetails";
             this.gridViewRouteDetails.OptionsBehavior.Editable = false;
@@ -247,7 +249,7 @@
             // 
             // colWZone
             // 
-            this.colWZone.Caption = "Súlykorlátozás zóna";
+            this.colWZone.Caption = "Zóna";
             this.colWZone.FieldName = "WZone";
             this.colWZone.Name = "colWZone";
             this.colWZone.OptionsColumn.AllowEdit = false;
@@ -325,6 +327,24 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1011, 40);
             this.panel1.TabIndex = 8;
+            // 
+            // lblWeight
+            // 
+            this.lblWeight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblWeight.Location = new System.Drawing.Point(646, 12);
+            this.lblWeight.Name = "lblWeight";
+            this.lblWeight.Size = new System.Drawing.Size(78, 18);
+            this.lblWeight.TabIndex = 9;
+            this.lblWeight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(615, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(27, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Súly";
             // 
             // label7
             // 
@@ -442,23 +462,13 @@
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xls|*.xls";
             // 
-            // lblWeight
+            // gridColumn1
             // 
-            this.lblWeight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblWeight.Location = new System.Drawing.Point(646, 12);
-            this.lblWeight.Name = "lblWeight";
-            this.lblWeight.Size = new System.Drawing.Size(78, 18);
-            this.lblWeight.TabIndex = 9;
-            this.lblWeight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(615, 15);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(27, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Súly";
+            this.gridColumn1.Caption = "Súlykorlát";
+            this.gridColumn1.FieldName = "Weight";
+            this.gridColumn1.Name = "gridColumn1";
+            this.gridColumn1.Visible = true;
+            this.gridColumn1.VisibleIndex = 11;
             // 
             // dlgCheckRouteDetails
             // 
@@ -529,5 +539,6 @@
         private System.Windows.Forms.ComboBox cmbRST_ID_LIST;
         private System.Windows.Forms.Label lblWeight;
         private System.Windows.Forms.Label label5;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn1;
     }
 }

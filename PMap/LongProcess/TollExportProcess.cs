@@ -92,7 +92,7 @@ namespace PMap.LongProcess
             bllRoute route = new bllRoute(m_DB);
             bllPlan plan = new bllPlan(m_DB);
 
-            Dictionary<string, Dictionary<string, double>> dicAllTolls = route.GetAllTolls();
+            Dictionary<string, Dictionary<int, double>> dicAllTolls = route.GetAllTolls();
 
 
             Dictionary<int, boEdge> lstAllEdges = new Dictionary<int, boEdge>();
@@ -220,15 +220,15 @@ namespace PMap.LongProcess
                                     //B kategória (EURO II.)	        1	                  1   
                                     //C kategória (≤ EURO I.)	        1,15	            1,2
 
-                                    res.TollJ2_A += edge.Tolls["J2"] * 0.85;
-                                    res.TollJ3_A += edge.Tolls["J3"] * 0.85;
-                                    res.TollJ4_A += edge.Tolls["J4"] * 0.8;
-                                    res.TollJ2_B += edge.Tolls["J2"];
-                                    res.TollJ3_B += edge.Tolls["J3"];
-                                    res.TollJ4_B += edge.Tolls["J4"];
-                                    res.TollJ2_C += edge.Tolls["J2"] * 1.15;
-                                    res.TollJ3_C += edge.Tolls["J3"] * 1.15;
-                                    res.TollJ4_C += edge.Tolls["J4"] * 1.2;
+                                    res.TollJ2_A += edge.Tolls[Global.ETOLLCAT_J2] * 0.85;
+                                    res.TollJ3_A += edge.Tolls[Global.ETOLLCAT_J3] * 0.85;
+                                    res.TollJ4_A += edge.Tolls[Global.ETOLLCAT_J4] * 0.8;
+                                    res.TollJ2_B += edge.Tolls[Global.ETOLLCAT_J2];
+                                    res.TollJ3_B += edge.Tolls[Global.ETOLLCAT_J3];
+                                    res.TollJ4_B += edge.Tolls[Global.ETOLLCAT_J4];
+                                    res.TollJ2_C += edge.Tolls[Global.ETOLLCAT_J2] * 1.15;
+                                    res.TollJ3_C += edge.Tolls[Global.ETOLLCAT_J3] * 1.15;
+                                    res.TollJ4_C += edge.Tolls[Global.ETOLLCAT_J4] * 1.2;
                                 }
                                 lastETLCODE = edge.EDG_ETLCODE;
                             }

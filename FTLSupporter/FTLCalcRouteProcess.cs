@@ -94,6 +94,7 @@ namespace FTLSupporter
                     //A kiszámolt eredmények 'bedolgozása'
                     foreach (boRoute route in results)
                     {
+
                         //leválogatjuk, mely útvonalakra tartozik a számítás
                         List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO 
                                                                     && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR==routePar.Weight && x.Height==routePar.Height && x.Width==routePar.Width).ToList();

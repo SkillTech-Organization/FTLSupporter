@@ -48,5 +48,23 @@ namespace PMap.BLL
             else
                 throw new DuplicatedZIP_NUMException();
         }
+        public boZIP GetZIPbyID(int p_ID)
+        {
+            string sSql = "select * from ZIP_ZIPCODE ZIP where ID = ?";
+            DataTable dt = DBA.Query2DataTable(sSql, p_ID);
+            if (dt.Rows.Count == 1)
+            {
+                return new boZIP()
+                {
+                    ID = Util.getFieldValue<int>(dt.Rows[0], "ID"),
+                    ZIP_NUM = Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM"),
+                    ZIP_CITY = Util.getFieldValue<string>(dt.Rows[0], "ZIP_CITY")
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
