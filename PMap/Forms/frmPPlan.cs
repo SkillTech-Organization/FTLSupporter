@@ -841,13 +841,13 @@ namespace PMap.Forms
                 
                 try
                 {
-                    
+
 
                     using (new WaitCursor())
                     {
 
 
-                        Util.Log2File("SendToAzure START");
+                        Util.Log2File("SendToAzure START, PLN_ID:"+ m_PPlanCommonVars.PLN_ID.ToString());
 
                         //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
                         //connect stringet tudjon kezelni
@@ -895,13 +895,15 @@ namespace PMap.Forms
                         var tp = AzureTableStore.Instance.RetrieveList<PMTourPoint>();
 
                         //5 napnyi adatot megtartunk
-                        var delPoints = tp.Where(w=>w.ArrTime.Date.AddDays(5) <= DateTime.Now.Date).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
+                        var tr = AzureTableStore.Instance.RetrieveList<PMTour>();
+                        var delTours = tr.Where(w => w.Start.Date.AddDays(5) <= DateTime.Now.Date || w.PLN_ID == m_PPlanCommonVars.PLN_ID).Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList();
+                        AzureTableStore.Instance.DeleteRange<PMTour>(delTours);
+
+
+                        var delPoints = tp.Where(w => delTours.Any( a=>a.RowKey==w.TourID.ToString())).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
                         AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints);
 
 
-                        var tr = AzureTableStore.Instance.RetrieveList<PMTour>();
-                        var delTours = tr.Where(w => w.Start.Date.AddDays(5) <= DateTime.Now.Date).Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList();
-                        AzureTableStore.Instance.DeleteRange<PMTour>(delTours);
 
 
                         foreach (var xTr in tourList)
@@ -910,7 +912,7 @@ namespace PMap.Forms
                             AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
                         }
 
-                        Util.Log2File("SendToAzure END");
+                        Util.Log2File("SendToAzure END tours:"+ tourList.Count().ToString());
 
                         UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
 
@@ -1053,15 +1055,16 @@ namespace PMap.Forms
             if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.UserBreak)
             {
                 UI.Message(PMapMessages.E_TOURCOMPL_ABORTED);
-                PMapCommonVars.Instance.CT_DB.Rollback();
+                m_bllPlan.SetTourUnCompleted(p_tour);
+               // PMapCommonVars.Instance.CT_DB.Rollback();
             }
 
             if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.NoRouteOccured)
             {
                 var pts = string.Join(Environment.NewLine, rpp.NoRoutes);
-
                 UI.Message(PMapMessages.E_TOURCOMPL_NOGETROUTES, pts);
-                PMapCommonVars.Instance.CT_DB.Rollback();
+                m_bllPlan.SetTourUnCompleted(p_tour);
+                // PMapCommonVars.Instance.CT_DB.Rollback();
             }
 
 

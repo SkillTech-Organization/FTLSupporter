@@ -558,7 +558,8 @@ namespace PMap.BLL
                     Vol = tr.VOL,
                     Toll = tr.TOLL,
                     TourColor = ColorTranslator.ToHtml(Color.FromArgb(tr.PCOLOR.ToArgb())),
-                    TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb()))
+                    TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb())),
+                    PLN_ID = p_PLN_ID
                 };
                 for (int i = 0; i < tr.TourPoints.Count; i++)
                 {
@@ -585,7 +586,9 @@ namespace PMap.BLL
                         Addr = tr.TourPoints[i].ADDR,
                         Position = new JavaScriptSerializer().Serialize(new PMMapPoint() { Lat = tr.TourPoints[i].NOD_YPOS / Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
                         OrdNum = tr.TourPoints[i].ORD_NUM,
-                        MapPoints = mpList
+                        MapPoints = mpList,
+                        Open = tr.TourPoints[i].OPEN,
+                        Close = tr.TourPoints[i].CLOSE
 
                     };
                     xTr.TourPoints.Add(xtp);

@@ -343,14 +343,17 @@ namespace PMap.BLL
 
         public int GetDuration(string p_EDG_ID_LIST, int p_SPP_ID, int p_Weather)
         {
-            String sSql = String.Format("select sum(EDG.EDG_LENGTH / (SPV.SPV_VALUE  / 3.6 * 60)) as DURATION from EDG_EDGE EDG " + Environment.NewLine +
-                  "inner join SPV_SPEEDPROFVALUE SPV on SPV.RDT_ID = EDG.RDT_VALUE and SPV.SPP_ID = ?  " + Environment.NewLine +
-                  "where EDG.ID in ({0}) ", p_EDG_ID_LIST);
-
-            DataTable dt = DBA.Query2DataTable(sSql, p_SPP_ID);
-            if (dt.Rows.Count > 0)
+            if (!String.IsNullOrEmpty(p_EDG_ID_LIST))
             {
-                return Util.getFieldValue<int>(dt.Rows[0], "DURATION") * p_Weather;
+                String sSql = String.Format("select sum(EDG.EDG_LENGTH / (SPV.SPV_VALUE  / 3.6 * 60)) as DURATION from EDG_EDGE EDG " + Environment.NewLine +
+                      "inner join SPV_SPEEDPROFVALUE SPV on SPV.RDT_ID = EDG.RDT_VALUE and SPV.SPP_ID = ?  " + Environment.NewLine +
+                      "where EDG.ID in ({0}) ", p_EDG_ID_LIST);
+
+                DataTable dt = DBA.Query2DataTable(sSql, p_SPP_ID);
+                if (dt.Rows.Count > 0)
+                {
+                    return Util.getFieldValue<int>(dt.Rows[0], "DURATION") * p_Weather;
+                }
             }
             return 0;
 

@@ -64,6 +64,14 @@ namespace PMap.WebTrace
         public string Addr { get; set; }
 
         [DataMember]
+        [DisplayNameAttributeX(Name = "Raktár/lerakó/felrakó nyitva tartás kezdete")]
+        public DateTime Open { get; set; }
+
+        [DataMember]
+        [DisplayNameAttributeX(Name = "Raktár/lerakó/felrakó nyitva tartás vége")]
+        public DateTime Close { get; set; }
+
+        [DataMember]
         [DisplayNameAttributeX(Name = "Raktár/lerakó/felrakó pozíció")]
         public string Position { get; set; }
 

@@ -37,6 +37,9 @@ namespace PMap.WebTrace
         }
 
         [DataMember]
+        public int PLN_ID { get; set; }
+
+        [DataMember]
         [DisplayNameAttributeX(Name = "Szállító")]
         public string Carrier { get; set; }
 
