@@ -16,7 +16,7 @@ namespace PMap.Common
         /* partition key */
         /*****************/
 
-        public PMapLog() { m_ID = Guid.NewGuid(); }
+        public PMapLog() { m_ID = Guid.NewGuid(); DateTimeKind = DateTimeKind.Local; }
 
         public PMapLog ShallowCopy()
         {

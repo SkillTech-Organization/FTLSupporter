@@ -14,7 +14,7 @@ namespace PMap.Licence
     [DataContract(Namespace = "")]
     public class PMapLicence : AzureTableObjBase
     {
-        public PMapLicence() { m_ID = Guid.NewGuid(); Expired = DateTime.Now.Date; }
+        public PMapLicence() { m_ID = Guid.NewGuid(); Expired = DateTime.Now.Date; DateTimeKind = DateTimeKind.Local; }
         public PMapLicence ShallowCopy()
         {
             return (PMapLicence)this.MemberwiseClone();

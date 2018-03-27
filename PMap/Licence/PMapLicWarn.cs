@@ -14,7 +14,7 @@ namespace PMap.Licence
     [DataContract(Namespace = "")]
     public class PMapLicWarn : AzureTableObjBase
     {
-        public PMapLicWarn() { m_ID = Guid.NewGuid(); }
+        public PMapLicWarn() { m_ID = Guid.NewGuid(); DateTimeKind = DateTimeKind.Local; }
         public PMapLicWarn ShallowCopy()
         {
             return (PMapLicWarn)this.MemberwiseClone();

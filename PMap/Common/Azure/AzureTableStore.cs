@@ -129,7 +129,7 @@ namespace PMap.Common.Azure
 
                         if (propInf.CanWrite)
                         {
-
+                           
                             var val = tp.GetProperty(propInf.Name).GetValue(p_obj, null);
                             if (propInf.PropertyType == typeof(bool?) || propInf.PropertyType == typeof(bool))
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty((bool?)val));
@@ -137,6 +137,7 @@ namespace PMap.Common.Azure
                                 TableEntity.Properties.Add(propInf.Name, new EntityProperty((byte[])val));
                             else if (propInf.PropertyType == typeof(DateTime?))
                             {
+                                /* A beírandó DateTime -ra azt mondjuk, hogy UTC, így már nem konvertál az Azure */
                                 if (val != null)
                                 {
                                     var dt = (DateTime?)val;
@@ -148,6 +149,7 @@ namespace PMap.Common.Azure
                             {
                                 if (val != null)
                                 {
+                                    /* A beírandó DateTime -ra azt mondjuk, hogy UTC, így már nem konvertál az Azure */
                                     var dt = (DateTime)val;
                                     TableEntity.Properties.Add(propInf.Name, new EntityProperty(new DateTime(dt.Ticks, DateTimeKind.Utc)));
                                 }
@@ -217,6 +219,7 @@ namespace PMap.Common.Azure
 
             if (p_type == typeof(DateTime))
             {
+                /* UTC-ben tárolunk */
                 var d = new DateTime(((DateTime)p_keyValue).Ticks, DateTimeKind.Utc);
                 key = d.ToString(IsoDateTimeFormat);
             }
@@ -250,6 +253,7 @@ namespace PMap.Common.Azure
             JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
 
             object result = Activator.CreateInstance(typeof(T));
+
             Type t = typeof(T);
             PropertyInfo PartitionKeyProp = t.GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr))).FirstOrDefault();
             if (PartitionKeyProp == null)
@@ -262,6 +266,8 @@ namespace PMap.Common.Azure
             {
                 t.GetProperty(RowKeyProp.Name).SetValue(result, GetAzureKeyValue(RowKeyProp.PropertyType, p_obj.RowKey), null);
             }
+
+            DateTimeKind kind = (DateTimeKind)(t.GetProperty("DateTimeKind").GetValue((object)result));
 
             PropertyInfo[] writeProps = t.GetProperties().Where(pi => (Attribute.IsDefined(pi, typeof(DataMemberAttribute)) &&
                                                                    !Attribute.IsDefined(pi, typeof(AzureTablePartitionKeyAttr)) &&
@@ -299,8 +305,11 @@ namespace PMap.Common.Azure
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].Int32Value, null);
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.DateTime)
                         {
+
+                            /* Kind propertyvel mondjuk meg, hogz az objektum miben tárolja az időt és beállítjuk azt */
                             var dt = (DateTime)p_obj.Properties[propInf.Name].DateTime;
-                            t.GetProperty(propInf.Name).SetValue(result, new DateTime(dt.Ticks, DateTimeKind.Utc), null);
+                            t.GetProperty(propInf.Name).SetValue(result, new DateTime(dt.Ticks, kind), null);
+
                         }
                         else if (p_obj.Properties[propInf.Name].PropertyType == EdmType.Guid)
                             t.GetProperty(propInf.Name).SetValue(result, p_obj.Properties[propInf.Name].GuidValue, null);
@@ -386,7 +395,7 @@ namespace PMap.Common.Azure
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
                     oriState = mb.State;
                     mb.State = AzureTableObjBase.enObjectState.Stored;
-                    mb.Created = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+                    mb.Created = (mb.DateTimeKind == DateTimeKind.Utc ? DateTime.UtcNow : DateTime.Now);
                     mb.Creator = p_user;            //TODO: usert beimportálni !
                 }
 
@@ -481,12 +490,12 @@ namespace PMap.Common.Azure
 
                             if (oriState == AzureTableObjBase.enObjectState.New)
                             {
-                                mb.Created = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+                                mb.Created = (mb.DateTimeKind == DateTimeKind.Utc ? DateTime.UtcNow : DateTime.Now);
                                 mb.Creator = p_user;
                             }
                             if (oriState == AzureTableObjBase.enObjectState.Modified)
                             {
-                                mb.Updated = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+                                mb.Updated = (mb.DateTimeKind == DateTimeKind.Utc ? DateTime.UtcNow : DateTime.Now);
                                 mb.Updater = p_user;
                             }
 
@@ -533,7 +542,7 @@ namespace PMap.Common.Azure
                     AzureTableObjBase mb = (AzureTableObjBase)p_obj;
                     oriState = mb.State;
                     mb.State = AzureTableObjBase.enObjectState.Stored;
-                    mb.Updated = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+                    mb.Updated = (mb.DateTimeKind == DateTimeKind.Utc ? DateTime.UtcNow : DateTime.Now);
                     mb.Updater = p_user;
                     if (mb.Created == DateTime.MinValue)
                     {

@@ -19,6 +19,9 @@ namespace PMap.Common.Azure
     [DataContract(Name = "AzureTableObjBase")]
     public class AzureTableObjBase : INotifyPropertyChanged, IDataErrorInfo
     {
+
+        [IgnoreDataMember]
+        public DateTimeKind DateTimeKind { get; set;} = DateTimeKind.Utc;
         public enum enObjectState
         {
             [Description("N")]
