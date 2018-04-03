@@ -685,6 +685,7 @@ namespace PMap.BLL
                 }
             }
         }
+
         public void UpdateTourSelect(int p_TPL_ID, bool p_TPL_PSELECT)
         {
             using (TransactionBlock transObj = new TransactionBlock(DBA))
@@ -1450,6 +1451,23 @@ namespace PMap.BLL
                 }
             }
             return true;
+        }
+
+
+        public void UpdateTourOrderOpenClose(int p_TOD_ID, int p_TOD_SERVS, int p_TOD_SERVE)
+        {
+            using (TransactionBlock reansObj = new TransactionBlock(DBA))
+            {
+                try
+                {
+                    DBA.ExecuteNonQuery("update TOD_TOURORDER set TOD_SERVS=?, TOD_SERVE=? where ID=?", p_TOD_SERVS, p_TOD_SERVE, p_TOD_ID);
+                }
+                catch (Exception e)
+                {
+                    DBA.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }

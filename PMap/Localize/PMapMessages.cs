@@ -38,6 +38,7 @@ namespace PMap.Localize
         public const string E_SNDEMAIL_OK = "E-mailküldés rendben megtörtént!";
         public const string Q_PEDIT_SENDEMAIL1 = "Elküldhető az ÖSSZES értesítő e-mail?";
         public const string Q_PEDIT_SENDEMAIL2 = "Megerősítés : elküldhető az ÖSSZES értesítő e-mail?";
+        public const string E_PEDIT_WRONGOPENCLOSE = "Helytelen nyitva tartás!";
 
 
 

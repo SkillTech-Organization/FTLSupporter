@@ -14,6 +14,8 @@ namespace PMap.Common.Azure
 {
     public class AzureBllBase<T> where T : AzureTableObjBase
     {
+        [IgnoreDataMember]
+        public DateTimeKind DateTimeKind { get; set; } = DateTimeKind.Utc;
         protected string User { get; private set; }
 
         public AzureBllBase(string p_user)

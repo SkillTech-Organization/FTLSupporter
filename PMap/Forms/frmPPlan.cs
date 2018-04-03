@@ -177,6 +177,8 @@ namespace PMap.Forms
                 cmbPlans.SelectedIndexChanged += new EventHandler(cmbPlans_SelectedIndexChanged);
             }
 
+            btnToCloud.Visible = PMapIniParams.Instance.AzureAccount.Length > 0;
+
             btnDelPlan.Enabled = (p_PLN_ID > 0);
             btnFindORD_NUM.Enabled = (p_PLN_ID > 0);
             btnToEditMode.Enabled = (p_PLN_ID > 0);
@@ -189,7 +191,7 @@ namespace PMap.Forms
             btnDelTour.Enabled = (p_PLN_ID > 0);
             btnChgTruck.Enabled = (p_PLN_ID > 0);
             btnTurnTour.Enabled = (p_PLN_ID > 0);
-
+            btnToCloud.Enabled = (p_PLN_ID > 0);
 
 
             m_PPlanCommonVars.PLN_ID = p_PLN_ID;
@@ -426,6 +428,11 @@ namespace PMap.Forms
             btnTurnTour.Enabled = m_PPlanCommonVars.FocusedTour != null;
             btnDelTour.Enabled = m_PPlanCommonVars.FocusedTour != null;
             btnChgTruck.Enabled = m_PPlanCommonVars.FocusedTour != null;
+
+            btnOpenClose.Enabled = m_pnlPlanOrders.GetID() > 0;
+
+
+
         }
 
         private void SetViewMode(bool p_refresh)
@@ -440,6 +447,7 @@ namespace PMap.Forms
             btnTurnTour.Enabled = false;
             btnDelTour.Enabled = false;
             btnChgTruck.Enabled = false;
+            btnOpenClose.Enabled = false;
         }
 
         private void btnSaveLayout_Click(object sender, EventArgs e)
@@ -1068,6 +1076,21 @@ namespace PMap.Forms
             }
 
 
+        }
+
+        private void btnOpenClose_Click(object sender, EventArgs e)
+        {
+            int ID = m_pnlPlanOrders.GetID();
+            if (ID > 0)
+            {
+                dlgAddOpenClose aoc = new dlgAddOpenClose(ID);
+                if (aoc.ShowDialog(this) == DialogResult.OK)
+                {
+                    var bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
+                    m_PPlanCommonVars.PlanOrderList = bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);
+                    m_pnlPlanOrders.RefreshAll(true);
+                }
+            }
         }
     }
     #endregion

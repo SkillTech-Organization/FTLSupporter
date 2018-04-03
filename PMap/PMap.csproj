@@ -221,6 +221,12 @@
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\AuthCryptoHelper.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
+    <Compile Include="Forms\dlgAddOpenClose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgAddOpenClose.Designer.cs">
+      <DependentUpon>dlgAddOpenClose.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\dlgSendEMail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -560,6 +566,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Base\BasePanel.resx">
       <DependentUpon>BasePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgAddOpenClose.resx">
+      <DependentUpon>dlgAddOpenClose.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\dlgFindORD_NUM.resx">
       <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>

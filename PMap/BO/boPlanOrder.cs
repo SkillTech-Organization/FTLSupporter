@@ -55,6 +55,9 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Térfogat", Order = 14)]
         public double TOD_VOLUME { get; set; }
 
+        public int TOD_SERVS { get; set; }
+        public int TOD_SERVE { get; set; }
+
         //MEgrendelés adatok
         [DisplayNameAttributeX(Name = "Megrendelés száma", Order = 15)]
         public string ORD_NUM { get; set; }

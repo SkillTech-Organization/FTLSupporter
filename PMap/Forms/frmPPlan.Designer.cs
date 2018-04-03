@@ -62,6 +62,8 @@
             this.btnTourDetails = new System.Windows.Forms.ToolStripButton();
             this.btnOptimizeAll = new System.Windows.Forms.ToolStripButton();
             this.btnOptimizeTrk = new System.Windows.Forms.ToolStripButton();
+            this.btnCompleteTourRoutes = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.btnNewTour = new System.Windows.Forms.ToolStripButton();
             this.btnDelTour = new System.Windows.Forms.ToolStripButton();
             this.btnChgTruck = new System.Windows.Forms.ToolStripButton();
@@ -77,8 +79,7 @@
             this.btnResetScreen = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.btnCompleteTourRoutes = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnOpenClose = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dmPPlan)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -134,7 +135,8 @@
             this.toolStripSeparator2,
             this.btnSaveLayout,
             this.btnRestoreLayout,
-            this.btnResetScreen});
+            this.btnResetScreen,
+            this.btnOpenClose});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1016, 25);
@@ -266,6 +268,21 @@
             this.btnOptimizeTrk.Size = new System.Drawing.Size(23, 22);
             this.btnOptimizeTrk.Text = "Túraoptimailzálás egy járműre";
             this.btnOptimizeTrk.Click += new System.EventHandler(this.btnOptimizeTrk_Click);
+            // 
+            // btnCompleteTourRoutes
+            // 
+            this.btnCompleteTourRoutes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnCompleteTourRoutes.Image = ((System.Drawing.Image)(resources.GetObject("btnCompleteTourRoutes.Image")));
+            this.btnCompleteTourRoutes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCompleteTourRoutes.Name = "btnCompleteTourRoutes";
+            this.btnCompleteTourRoutes.Size = new System.Drawing.Size(23, 22);
+            this.btnCompleteTourRoutes.Text = "Túra útvonalak véglegesítése";
+            this.btnCompleteTourRoutes.Click += new System.EventHandler(this.btnCompleteTourRoutes_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
             // btnNewTour
             // 
@@ -461,20 +478,15 @@
             this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 3;
             // 
-            // btnCompleteTourRoutes
+            // btnOpenClose
             // 
-            this.btnCompleteTourRoutes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnCompleteTourRoutes.Image = ((System.Drawing.Image)(resources.GetObject("btnCompleteTourRoutes.Image")));
-            this.btnCompleteTourRoutes.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnCompleteTourRoutes.Name = "btnCompleteTourRoutes";
-            this.btnCompleteTourRoutes.Size = new System.Drawing.Size(23, 22);
-            this.btnCompleteTourRoutes.Text = "Túra útvonalak véglegesítése";
-            this.btnCompleteTourRoutes.Click += new System.EventHandler(this.btnCompleteTourRoutes_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            this.btnOpenClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnOpenClose.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenClose.Image")));
+            this.btnOpenClose.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOpenClose.Name = "btnOpenClose";
+            this.btnOpenClose.Size = new System.Drawing.Size(23, 22);
+            this.btnOpenClose.Text = "toolStripButton1";
+            this.btnOpenClose.Click += new System.EventHandler(this.btnOpenClose_Click);
             // 
             // frmPPlan
             // 
@@ -533,5 +545,6 @@
         private System.Windows.Forms.ToolStripButton btnCheckMapOff;
         private System.Windows.Forms.ToolStripButton btnCompleteTourRoutes;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripButton btnOpenClose;
     }
 }

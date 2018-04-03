@@ -481,7 +481,9 @@ namespace PMap.BLL
                 TPL_ID = Util.getFieldValue<int>(p_dr, "TPL_ID"),
                 TRK_ID = Util.getFieldValue<int>(p_dr, "TRK_ID"),
                 TRK_CODE = Util.getFieldValue<string>(p_dr, "TRK_CODE"),
-                TRK_REG_NUM = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM")
+                TRK_REG_NUM = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM"),
+                TOD_SERVS = Util.getFieldValue<int>(p_dr, "TOD_SERVS"),
+                TOD_SERVE = Util.getFieldValue<int>(p_dr, "TOD_SERVE")
             };
             if (PMapIniParams.Instance.OrdCommentInTooltip)
                 ret.ToolTipText += "\n" +
@@ -587,8 +589,8 @@ namespace PMap.BLL
                         Position = new JavaScriptSerializer().Serialize(new PMMapPoint() { Lat = tr.TourPoints[i].NOD_YPOS / Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
                         OrdNum = tr.TourPoints[i].ORD_NUM,
                         MapPoints = mpList,
-                        Open = tr.TourPoints[i].OPEN,
-                        Close = tr.TourPoints[i].CLOSE
+                        Open = tr.TourPoints[i].OPEN.ToUniversalTime(),
+                        Close = tr.TourPoints[i].CLOSE.ToUniversalTime()
 
                     };
                     xTr.TourPoints.Add(xtp);

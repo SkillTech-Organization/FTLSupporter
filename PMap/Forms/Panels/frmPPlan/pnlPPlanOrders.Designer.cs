@@ -110,6 +110,7 @@
             this.gridViewPlanOrders.PaintStyleName = "MixedXP";
             this.gridViewPlanOrders.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.gridViewPlanOrders_RowStyle);
             this.gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewUnplannedOrders_FocusedRowChanged);
+            this.gridViewPlanOrders.DoubleClick += new System.EventHandler(this.gridViewPlanOrders_DoubleClick);
             // 
             // gridColumnID
             // 
@@ -279,7 +280,7 @@
             this.Controls.Add(this.gridPlanOrders);
             this.Name = "pnlPPlanOrders";
             this.Text = "Megrendelések";
-            ((System.ComponentModel.ISupportInitialize)(this.gridPlanOrders)).EndInit();
+             ((System.ComponentModel.ISupportInitialize)(this.gridPlanOrders)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPlanOrders)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).EndInit();
             this.ResumeLayout(false);

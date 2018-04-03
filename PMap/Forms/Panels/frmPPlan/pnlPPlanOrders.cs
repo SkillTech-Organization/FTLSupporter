@@ -16,6 +16,7 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using PMap.Common.PPlan;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Base;
+using PMap.BLL;
 
 namespace PMap.Forms.Panels.frmPPlan
 {
@@ -59,13 +60,13 @@ namespace PMap.Forms.Panels.frmPPlan
             {
                 case ePlanEventMode.ReInit:
                     this.init();
-                    refreshAll(false);
+                    RefreshAll(false);
                     break;
                 case ePlanEventMode.Refresh:
-                    refreshAll();
+                    RefreshAll();
                     break;
                 case ePlanEventMode.RefreshOrders:
-                    refreshAll();
+                    RefreshAll();
                     break;
                 case ePlanEventMode.ChgZoom:
                     break;
@@ -74,7 +75,7 @@ namespace PMap.Forms.Panels.frmPPlan
                 case ePlanEventMode.ChgShowUnPlannedFlag:
                     break;
                 case ePlanEventMode.ChgShowAllOrdersInGrid:
-                    refreshAll(false);
+                    RefreshAll(false);
                     break;
                 case ePlanEventMode.ChgTooltipMode:
                     break;
@@ -102,6 +103,13 @@ namespace PMap.Forms.Panels.frmPPlan
             }
         }
 
+        public int  GetID ()
+        {
+
+            if (gridViewPlanOrders.FocusedRowHandle >= 0)
+                return (int)gridViewPlanOrders.GetRowCellValue(gridViewPlanOrders.FocusedRowHandle, gridColumnID);
+            return GridControl.InvalidRowHandle;
+        }
         private void gridViewUnplannedOrders_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
             if (e.FocusedRowHandle >= 0)
@@ -127,7 +135,7 @@ namespace PMap.Forms.Panels.frmPPlan
             }
         }
 
-        private void refreshAll(bool p_setFocus = true)
+        public void RefreshAll(bool p_setFocus = true)
         {
             gridViewPlanOrders.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(gridViewUnplannedOrders_FocusedRowChanged);
             int ID =0;
@@ -232,6 +240,25 @@ namespace PMap.Forms.Panels.frmPPlan
         {
             m_PPlanCommonVars.DraggedObj = null;
 
+        }
+
+
+        private void gridViewPlanOrders_DoubleClick(object sender, EventArgs e)
+        {
+            int ID = 0;
+
+            if (gridViewPlanOrders.FocusedRowHandle >= 0)
+                ID = (int)gridViewPlanOrders.GetRowCellValue(gridViewPlanOrders.FocusedRowHandle, gridColumnID);
+            if (ID > 0)
+            {
+                dlgAddOpenClose aoc = new dlgAddOpenClose(ID);
+                if( aoc.ShowDialog(this) == DialogResult.OK)
+                {
+                    var bllPlan = new bllPlan(PMapCommonVars.Instance.CT_DB);
+                    m_PPlanCommonVars.PlanOrderList = bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);
+                    RefreshAll(true);
+                }
+            }
         }
     }
 }
