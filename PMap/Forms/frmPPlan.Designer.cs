@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPPlan));
             WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
             WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
@@ -45,7 +44,7 @@
             WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            this.dmPPlan = new DevExpress.XtraBars.Docking.DockManager(this.components);
+            this.dmPPlan = new DevExpress.XtraBars.Docking.DockManager();
             this.btnExit = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnQuit = new System.Windows.Forms.ToolStripButton();
@@ -77,9 +76,9 @@
             this.btnSaveLayout = new System.Windows.Forms.ToolStripButton();
             this.btnRestoreLayout = new System.Windows.Forms.ToolStripButton();
             this.btnResetScreen = new System.Windows.Forms.ToolStripButton();
+            this.btnOpenClose = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.btnOpenClose = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dmPPlan)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -408,6 +407,16 @@
             this.btnResetScreen.Text = "Képernyő alaphelyzetbe állítása";
             this.btnResetScreen.Click += new System.EventHandler(this.btnResetScreen_Click);
             // 
+            // btnOpenClose
+            // 
+            this.btnOpenClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnOpenClose.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenClose.Image")));
+            this.btnOpenClose.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOpenClose.Name = "btnOpenClose";
+            this.btnOpenClose.Size = new System.Drawing.Size(23, 22);
+            this.btnOpenClose.Text = "Nyitva tartás módosítása";
+            this.btnOpenClose.Click += new System.EventHandler(this.btnOpenClose_Click);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.dockPanel);
@@ -477,16 +486,6 @@
             dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
             this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 3;
-            // 
-            // btnOpenClose
-            // 
-            this.btnOpenClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnOpenClose.Image = ((System.Drawing.Image)(resources.GetObject("btnOpenClose.Image")));
-            this.btnOpenClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnOpenClose.Name = "btnOpenClose";
-            this.btnOpenClose.Size = new System.Drawing.Size(23, 22);
-            this.btnOpenClose.Text = "toolStripButton1";
-            this.btnOpenClose.Click += new System.EventHandler(this.btnOpenClose_Click);
             // 
             // frmPPlan
             // 

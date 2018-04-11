@@ -534,6 +534,117 @@ namespace PMap.BLL
         public List<boRoute> GetDistancelessPlanNodes(int pPLN_ID)
         {
 
+            //I. A 
+
+            string sSQL = "; WITH CTE_TPL as (" + Environment.NewLine +
+                     "select distinct " + Environment.NewLine;
+
+
+            var sSQLRESTZONES = "	  isnull(stuff(  " + Environment.NewLine +
+                   "	  (  " + Environment.NewLine +
+                   "		  select ',' + convert( varchar(MAX), TRZX.RZN_ID )  " + Environment.NewLine +
+                   "		  from TRZ_TRUCKRESTRZONE TRZX  " + Environment.NewLine +
+                   "		  where TRZX.TRK_ID = TPL.TRK_ID " + Environment.NewLine +
+                   "		  order by TRZX.RZN_ID " + Environment.NewLine +
+                   "		  FOR XML PATH('') " + Environment.NewLine +
+                   "	  ), 1, 1, ''), '')  " + Environment.NewLine;
+
+            if (PMapIniParams.Instance.TourRoute)
+            {
+                //Egyedi túraútvonalas tervezés (TourRoute)  nem vesszük figyelembe a súly- és méretkorlátozásokat
+                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, 0 as TRK_WEIGHT, 0 as TRK_XHEIGHT, 0 as TRK_XWIDTH ";
+            }
+            else
+            {
+                //Normál működés, korlátozások figyelembe vétele
+                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH ";
+            }
+
+            sSQL += "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
+                    "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                    "	  where TPL.PLN_ID = ?  " + Environment.NewLine +
+                    ") " + Environment.NewLine +
+                    "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_MAXWEIGHT, CTE_TPL.TRK_XHEIGHT as DST_MAXHEIGHT, CTE_TPL.TRK_XWIDTH as DST_MAXWIDTH " + Environment.NewLine +
+                    "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
+                    "		union  " + Environment.NewLine +
+                    "		select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
+                    "		inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "		) NOD_FROM  " + Environment.NewLine +
+                    "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                    "	    union  " + Environment.NewLine +
+                    "	    select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
+                    "	    inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "	    ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
+                    "inner join CTE_TPL on 1=1 " + Environment.NewLine +
+                    "EXCEPT  " + Environment.NewLine +
+                    "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH from DST_DISTANCE DST " + Environment.NewLine +
+                    "order by 1,2,3,4,5,6";
+
+
+
+
+            DataTable dt = DBA.Query2DataTable(sSQL, pPLN_ID, pPLN_ID, pPLN_ID);
+            var res = (from row in dt.AsEnumerable()
+                    select new boRoute
+                    {
+                        NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
+                        NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
+                        RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
+                        DST_MAXWEIGHT = Util.getFieldValue<int>(row, "DST_MAXWEIGHT"),
+                        DST_MAXHEIGHT = Util.getFieldValue<int>(row, "DST_MAXHEIGHT"),
+                        DST_MAXWIDTH = Util.getFieldValue<int>(row, "DST_MAXWIDTH")
+                    }).ToList();
+
+            if (PMapIniParams.Instance.TourRoute)
+            {
+                //Egyedi túraútvonalas tervezés (TourRoute) esetén a véglegsített túrákra útvonalszámítás, amelyben figyelembe 
+                //vesszük a súly- és méretkorlátozásokat
+                sSQL = "; WITH CTE_TPL as ( " + Environment.NewLine +
+                        " select distinct " + Environment.NewLine +
+                        "    TPL.ID as TPL_ID, " + Environment.NewLine +
+                        "   '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar) as RESTZONES,  " + Environment.NewLine + //Global.COMPLETEDTOUR prefixxel jelezzük az útvonalszámításnak, hogy a túrapontok körzetében
+                                                                                                                            //szabadítsa fel a korlátozásokat
+                        "    trk.TRK_WEIGHT, " + Environment.NewLine +
+                        "    trk.TRK_XHEIGHT, " + Environment.NewLine +
+                        "    trk.TRK_XWIDTH " + Environment.NewLine +
+                        "    from TPL_TRUCKPLAN TPL " + Environment.NewLine +
+                        "    inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                        "    where isnull(TPL.TPL_COMPLETED, 0) = 1 and TPL.PLN_ID = ? " + Environment.NewLine +
+                        ")  " + Environment.NewLine +
+                        "select PTP.NOD_ID as NOD_ID_FROM, PTP2.NOD_ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT, CTE_TPL.TRK_XHEIGHT,CTE_TPL.TRK_XWIDTH " + Environment.NewLine +
+                        "from CTE_TPL " + Environment.NewLine +
+                        "inner join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = CTE_TPL.TPL_ID " + Environment.NewLine +
+                        "inner join PTP_PLANTOURPOINT PTP2 on PTP2.TPL_ID = CTE_TPL.TPL_ID and PTP2.PTP_ORDER = PTP.PTP_ORDER + 1 " + Environment.NewLine +
+                        "where  PTP.NOD_ID != PTP2.NOD_ID " + Environment.NewLine +
+                        "EXCEPT " + Environment.NewLine +
+                        "select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO, isnull(DST.RZN_ID_LIST, '') as RESTZONES, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH " + Environment.NewLine +
+                        "from DST_DISTANCE DST ";
+
+
+                DataTable dt2 = DBA.Query2DataTable(sSQL,  pPLN_ID );
+
+                var resw = (from row in dt2.AsEnumerable()
+                           select new boRoute
+                           {
+                               NOD_ID_FROM = Util.getFieldValue<int>(row, "NOD_ID_FROM"),
+                               NOD_ID_TO = Util.getFieldValue<int>(row, "NOD_ID_TO"),
+                               RZN_ID_LIST = Util.getFieldValue<string>(row, "RESTZONES"),
+                               DST_MAXWEIGHT = Util.getFieldValue<int>(row, "TRK_WEIGHT"),
+                               DST_MAXHEIGHT = Util.getFieldValue<int>(row, "TRK_XHEIGHT"),
+                               DST_MAXWIDTH = Util.getFieldValue<int>(row, "TRK_XWIDTH")
+                           }).ToList();
+
+
+                res.AddRange(resw);
+            }
+            return res;
+
+
+        }
+
+        public List<boRoute> GetDistancelessPlanNodes_NEMJO(int pPLN_ID)
+        {
+
             string sSQL = "; WITH CTE_TPL as (" + Environment.NewLine +
                      "select distinct " + Environment.NewLine;
 
@@ -681,16 +792,14 @@ namespace PMap.BLL
             //Egyedi túraútvonalas tervezés (TourRoute)  esetén csak TPL_COMPLETED túráknál  vesszük figyelembe a súly- és méretkorlátozásokat
             if (PMapIniParams.Instance.TourRoute)
             {
-                sSQL += " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then '" + Global.COMPLETEDTOUR + "'+cast(TPL.ID as varchar)  else " + sSQLRESTZONES + " end  as RESTZONES, " + Environment.NewLine +
-                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_WEIGHT else 0 end as TRK_WEIGHT, " + Environment.NewLine +
-                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XHEIGHT else 0 end as TRK_XHEIGHT, " + Environment.NewLine +
-                        " case when isnull(TPL.TPL_COMPLETED, 0) != 0 then  TRK.TRK_XWIDTH else 0 end as TRK_XWIDTH " + Environment.NewLine;
+                //Egyedi túraútvonalas tervezés (TourRoute)  nem vesszük figyelembe a súly- és méretkorlátozásokat
+                sSQL += "  " + sSQLRESTZONES + " as RESTZONES, 0 as TRK_WEIGHT, 0 as TRK_XHEIGHT, 0 as TRK_XWIDTH ";
             }
             else
             {
+                //Normál működés, korlátozások figyelembe vétele
                 sSQL += "  " + sSQLRESTZONES + " as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH ";
             }
-
             sSQL += "	  from TRK_TRUCK TRK " + Environment.NewLine +
                             "	  where TRK_ACTIVE = 1 " + Environment.NewLine +
                             ") " + Environment.NewLine +
@@ -714,6 +823,9 @@ namespace PMap.BLL
 
 
             DataTable dt = DBA.Query2DataTable(sSQL, p_ORD_DATE_S, p_ORD_DATE_E, p_ORD_DATE_S, p_ORD_DATE_E);
+
+            //itt nem kell foglalkozni a véglegesített túrákkal
+
             return (from row in dt.AsEnumerable()
                     select new boRoute
                     {

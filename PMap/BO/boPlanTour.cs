@@ -132,8 +132,7 @@ namespace PMap.BO
         [DisplayNameAttributeX(Name = "Kapacitástúllépés? (térfogat)", Order = 28)]
         public bool VOLErr { get; set; }
 
-
-        [DisplayNameAttributeX(Name = "Raktér hossza", Order = 29)]
+         [DisplayNameAttributeX(Name = "Raktér hossza", Order = 29)]
         public double TRK_LENGTH { get; set; }
 
         [DisplayNameAttributeX(Name = "Raktér szélessége", Order = 30)]
@@ -181,16 +180,19 @@ namespace PMap.BO
             set { m_TRK_XWIDTH = value; }
         }
 
-        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 35)]
+        [DisplayNameAttributeX(Name = "Járműkód", Order = 35)]
+        public string TRK_CODE { get; set; }
+
+        [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 36)]
         public int TRK_ETOLLCAT { get; set; }                               //0: nincs útdíj
 
-        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 36)]
+        [DisplayNameAttributeX(Name = "EURO besorolás", Order = 37)]
         public int TRK_ENGINEEURO { get; set; }
 
-        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 37)]
+        [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 38)]
         public double TollMultiplier { get; set; }
 
-        [DisplayNameAttributeX(Name = "Szállító neve", Order = 38)]
+        [DisplayNameAttributeX(Name = "Szállító neve", Order = 39)]
         public string CRR_NAME { get; set; }
 
 

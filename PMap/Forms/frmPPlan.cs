@@ -870,7 +870,7 @@ namespace PMap.Forms
 
 
                         var lstUsers = m_bllUser.GetAllUsers();
-                        FileInfo fiUsers = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "users_dump.bin"));
+                        FileInfo fiUsers = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "users.dmp"));
                         BinarySerializer.Serialize(fiUsers, lstUsers);
 
                         foreach (var usr in lstUsers.Where(w => !w.USR_DELETED).ToList())
@@ -887,12 +887,12 @@ namespace PMap.Forms
 
 
                         var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
-                        FileInfo fiTours = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tours_dump.bin"));
+                        FileInfo fiTours = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tours.dmp"));
                         BinarySerializer.Serialize(fiTours, tours);
 
 
                         var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, tours);
-                        FileInfo fiToursList = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tourlist_dump.bin"));
+                        FileInfo fiToursList = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tourlist.dmp"));
                         BinarySerializer.Serialize(fiToursList, tourList);
 
 

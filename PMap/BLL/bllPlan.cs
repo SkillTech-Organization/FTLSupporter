@@ -220,7 +220,7 @@ namespace PMap.BLL
 
         public List<boPlanTour> GetPlanTours(int p_PLN_ID)
         {
-            string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
+            string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
                           " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, TPL_COMPLETED, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK " + Environment.NewLine +
@@ -237,7 +237,7 @@ namespace PMap.BLL
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.PLN_ID = ? " + Environment.NewLine +
-                          "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
+                          "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE,  TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME " + Environment.NewLine +
                           "order by TRK_REG_NUM, TRK_TRAILER ";
 
@@ -255,7 +255,7 @@ namespace PMap.BLL
         {
             boPlanTour retVal = null;
 
-            string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
+            string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
                           "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME, " + Environment.NewLine +
                           "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
@@ -273,7 +273,7 @@ namespace PMap.BLL
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.ID = ? " + Environment.NewLine +
-                          "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
+                          "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME),  " + Environment.NewLine +
                           "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_COMPLETED,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST, CRR_NAME    ";
 
@@ -296,6 +296,7 @@ namespace PMap.BLL
                 RZN_ID_LIST = Util.getFieldValue<string>(p_dr, "RZN_ID_LIST"),
                 LOCKED = Util.getFieldValue<bool>(p_dr, "TPL_LOCKED"),
                 TRUCK = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM") + (Util.getFieldValue<string>(p_dr, "TRK_TRAILER").Length > 0 ? "/" + Util.getFieldValue<string>(p_dr, "TRK_TRAILER") : ""),
+                TRK_CODE = Util.getFieldValue<string>(p_dr, "TRK_CODE"),
                 TRK_LENGTH = Util.getFieldValue<double>(p_dr, "TRK_LENGTH"),
                 TRK_WIDTH = Util.getFieldValue<int>(p_dr, "TRK_WIDTH"),
                 TRK_HEIGHT = Util.getFieldValue<int>(p_dr, "TRK_HEIGHT"),
@@ -548,7 +549,8 @@ namespace PMap.BLL
                 {
                     ID = tr.ID.ToString(),
                     Carrier = tr.CRR_NAME,
-                    TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
+   //                 TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
+                    TruckRegNo = tr.TRK_CODE,      
                     RZN_ID_LIST = tr.RZN_ID_LIST,
                     TruckWeight = tr.TRK_WEIGHT,
                     TruckHeight = tr.TRK_XHEIGHT,

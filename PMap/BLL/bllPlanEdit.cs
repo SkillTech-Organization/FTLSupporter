@@ -1090,7 +1090,7 @@ namespace PMap.BLL
 
 
         public int CreatePlanOrder(int p_PLN_ID, int p_ORD_ID, double p_QTY, double p_QTY1, double p_QTY2, double p_QTY3, double p_Qty4, double p_QTY5,
-    double p_Volume, string p_ORD_NUM, DateTime? pTOD_DATE)
+    double p_Volume, string p_ORD_NUM, DateTime? pTOD_DATE, int p_SERVS, int p_SERVE)
         {
             DataTable dt;
             string sSql = "";
@@ -1142,8 +1142,10 @@ namespace PMap.BLL
                     "TOD_QTY", p_QTY,
                     "TOD_ISOPT", Util.getFieldValue<bool>(dr, "ORD_ISOPT") ? 1 : 0,
                     "TOD_SERVTIME", Util.getFieldValue<int>(dr, "DEP_SRVTIME", 0),
-                    "TOD_SERVS", Util.getFieldValue<int>(dr, "ORD_SERVS", Util.getFieldValue<int>(dr, "SERVS", 0)),
-                    "TOD_SERVE", Util.getFieldValue<int>(dr, "ORD_SERVE", Util.getFieldValue<int>(dr, "SERVE", 0)),
+//                    "TOD_SERVS", Util.getFieldValue<int>(dr, "ORD_SERVS", Util.getFieldValue<int>(dr, "SERVS", 0)),
+//                    "TOD_SERVE", Util.getFieldValue<int>(dr, "ORD_SERVE", Util.getFieldValue<int>(dr, "SERVE", 0)),
+                    "TOD_SERVS", p_SERVS,           
+                    "TOD_SERVE", p_SERVE,
                     "TOD_QTY4", p_Qty4,
                     "TOD_CUTQTY1", p_QTY1,
                     "TOD_CUTQTY2", p_QTY2,

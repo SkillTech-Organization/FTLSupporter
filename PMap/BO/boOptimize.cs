@@ -339,6 +339,12 @@ namespace PMap.BO
 
                 OptimizerContent += String.Format("setDepotInformation( {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})\n",
                                     dp.innerID, dp.isCentral, dp.serviceFix, dp.serviceVar, dp.planstart, dp.pc2, dp.pc3, dp.pc4, dp.pc5);
+
+                /*
+                OptimizerContent += String.Format("addDepotTimeWindow( {0}, {1}, {2})\n",
+                                    dp.innerID, dp.dpMinTime, dp.dpMaxTime);
+                */
+
             }
         }
 

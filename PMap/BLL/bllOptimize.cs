@@ -543,7 +543,7 @@ namespace PMap.BLL
         private void fillOrder()
         {
             string sSql = "select distinct TOD.ID as TOD_ID, ORD.ID as XORD_ID, ORD.DEP_ID, ORD.ORD_NUM, ORD_QTY, DEP_OPEN, DEP_CLOSE, DEP_SRVTIME, TOD_SERVTIME, ISNULL(PUB.PUBQTY, 0) + ISNULL(LCK.LCKQTY, 0) AS PUBQTY, " + Environment.NewLine +
-                    "SVT_SERVTIME_S , SVT_SERVTIME_E, ORD.ID, WHS_OPEN, TOD_DATE, OTP_VALUE, CTP_VALUE, DEP_QTYSRVTIME, DEP.NOD_ID, ORD_DATE, ORD_SERVS, ORD_SERVE, " + Environment.NewLine +
+                    "SVT_SERVTIME_S , SVT_SERVTIME_E, ORD.ID, WHS_OPEN, TOD_DATE, OTP_VALUE, CTP_VALUE, DEP_QTYSRVTIME, DEP.NOD_ID, ORD_DATE, ORD_SERVS, ORD_SERVE, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
                     "ISNULL(PUB.PUBQTY1, 0) + ISNULL(LCK.LCKQTY1, 0) AS PUBQTY1, ISNULL(PUB.PUBQTY2, 0) + ISNULL(LCK.LCKQTY2, 0) AS PUBQTY2, " + Environment.NewLine +
                     "ISNULL(PUB.PUBQTY3, 0) + ISNULL(LCK.LCKQTY3, 0) AS PUBQTY3, ISNULL(PUB.PUBQTY4, 0) + ISNULL(LCK.LCKQTY4, 0) AS PUBQTY4, ISNULL(PUB.PUBQTY5, 0) + ISNULL(LCK.LCKQTY5, 0) AS PUBQTY5, " + Environment.NewLine +
                     "ISNULL(PUB.PUBVOL, 0) + ISNULL(LCK.LCKVOL, 0) AS PUBVOL, " + Environment.NewLine +
@@ -622,15 +622,43 @@ namespace PMap.BLL
                 ord.orServiceTime = (int)Math.Round(Math.Ceiling(Math.Abs(ord.dQty) * Util.getFieldValue<double>(dr, "DEP_QTYSRVTIME") / (Global.csQTYSRVDivider)));
 
                 //Idõablak
-                int SERVS = Math.Max(Util.getFieldValue<int>(dr, "ORD_SERVS"), Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") : boOpt.MinTime);
-                if (SERVS < Util.getFieldValue<int>(dr, "DEP_OPEN"))
-                    SERVS = Util.getFieldValue<int>(dr, "DEP_OPEN");
+                /*
+                                int SERVS = Math.Max(Util.getFieldValue<int>(dr, "ORD_SERVS"), Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") : boOpt.MinTime);
+                                if (SERVS < Util.getFieldValue<int>(dr, "DEP_OPEN"))
+                                    SERVS = Util.getFieldValue<int>(dr, "DEP_OPEN");
+                                ord.orMinTime = SERVS;
+
+                                int SERVE = Math.Min(Util.getFieldValue<int>(dr, "ORD_SERVE"), Util.getFieldValue<int>(dr, "SVT_SERVTIME_E") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_E") : boOpt.MaxTime);
+                                if (SERVE > Util.getFieldValue<int>(dr, "DEP_CLOSE"))
+                                    SERVE = Util.getFieldValue<int>(dr, "DEP_CLOSE");
+                                ord.orMaxTime = SERVE;
+                */
+
+
+
+                int TOD_SERVS = Util.getFieldValue<int>(dr, "TOD_SERVS");
+                int ORD_SERVS = Util.getFieldValue<int>(dr, "ORD_SERVS");
+                int SERVS = Math.Max(TOD_SERVS, Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_S") : boOpt.MinTime);
+
+                if (TOD_SERVS == ORD_SERVS)         //csak akkor korlátozunk a nyitva tartásra, ha tervben NEM változtattuk meg a nyitva tartást.
+                {
+                    if (SERVS < Util.getFieldValue<int>(dr, "DEP_OPEN"))
+                        SERVS = Util.getFieldValue<int>(dr, "DEP_OPEN");
+                }
+
                 ord.orMinTime = SERVS;
 
-                int SERVE = Math.Min(Util.getFieldValue<int>(dr, "ORD_SERVE"), Util.getFieldValue<int>(dr, "SVT_SERVTIME_E") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_E") : boOpt.MaxTime);
-                if (SERVE > Util.getFieldValue<int>(dr, "DEP_CLOSE"))
-                    SERVE = Util.getFieldValue<int>(dr, "DEP_CLOSE");
+                int TOD_SERVE = Util.getFieldValue<int>(dr, "TOD_SERVE");
+                int ORD_SERVE = Util.getFieldValue<int>(dr, "ORD_SERVE");
+                int SERVE = Math.Min(TOD_SERVE, Util.getFieldValue<int>(dr, "SVT_SERVTIME_E") > 0 ? Util.getFieldValue<int>(dr, "SVT_SERVTIME_E") : boOpt.MaxTime);
+                if (TOD_SERVS == ORD_SERVS)         //csak akkor korlátozunk a nyitva tartásra, ha tervben NEM változtattuk meg a nyitva tartást.
+                {
+                    if (SERVE > Util.getFieldValue<int>(dr, "DEP_CLOSE"))
+                        SERVE = Util.getFieldValue<int>(dr, "DEP_CLOSE");
+                }
                 ord.orMaxTime = SERVE;
+
+
                 if (ord.orMinTime > ord.orMaxTime)
                     Console.WriteLine("Ezt kezelni kell");
                 ord.client = boOpt.dicClient[Util.getFieldValue<int>(dr, "DEP_ID")];
@@ -1208,7 +1236,7 @@ namespace PMap.BLL
 
                                     int TOD_ID = ple.CreatePlanOrder(boOpt.PLN_ID, ord.ID,
                                                     dQty, dQty1, dQty2, dQty3, dQty4, dQty5, dVolume,
-                                                    ple.getNEWTODNUM(boOpt.PLN_ID, ord.ID), (ord.isDiffDates ? (DateTime?)ord.TOD_DATE : null));
+                                                    ple.getNEWTODNUM(boOpt.PLN_ID, ord.ID), (ord.isDiffDates ? (DateTime?)ord.TOD_DATE : null), ord.orMinTime, ord.orMaxTime);
 
 
                                     m_bllPlanEdit.CreateTourPoint(currTrk.TPL_ID, TOD_ID, ord.NOD_ID, PTP_ORDER, 0, 0,
