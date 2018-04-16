@@ -34,6 +34,9 @@ namespace PMap.Forms
                 UI.Error(PMapMessages.E_SNDEMAIL_MAIL);
                 return txtORD_EMAIL;
             }
+
+ 
+
             return null;
         }
 
@@ -45,10 +48,7 @@ namespace PMap.Forms
                 PMTracedTour tt = new PMTracedTour() { TourID = m_tp.Tour.ID, Order = m_tp.PTP_ORDER };
                 tracedTour.Add(tt);
                 var token = NotificationMail.GetToken(tracedTour);
-              //  var token = new PMToken() { temporaryUserToken = "token lesy itt" };
-                NotificationMail.SendNotificationMail(txtORD_EMAIL.Text, token);
-
-                UI.Message(PMapMessages.E_SNDEMAIL_OK);
+                NotificationMail.SendNotificationMail(txtORD_EMAIL.Text, token, PMapMessages.E_SNDEMAIL_OK);
                 return true;
 
 

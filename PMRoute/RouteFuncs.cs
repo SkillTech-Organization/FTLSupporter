@@ -87,23 +87,32 @@ namespace PMRoute
                 int fromNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_fromLat, p_fromLng));
                 if (fromNOD_ID == 0)
                 {
-
-                    var exc =  new Exception(String.Format("Position can't be matched on map:{0}",
-                                      new GMap.NET.PointLatLng(p_fromLat, p_fromLng)));
-
+                    o_distance = -1;
+                    o_duration = -1;
+                    var errmsg = String.Format("Position can't be matched on map:{0}",new GMap.NET.PointLatLng(p_fromLat, p_fromLng));
+                    Util.Log2File(errmsg, false);
+                    return false;
+                    /*
+                    var exc = new Exception(errmsg);
                     Util.ExceptionLog(exc);
                     throw exc;
-
+                    */
                 }
 
                 Util.Log2File("GetNearestNOD_ID:" + new GMap.NET.PointLatLng(p_toLat, p_toLng).ToString(), false);
                 int toNOD_ID = RouteData.Instance.GetNearestNOD_ID(new GMap.NET.PointLatLng(p_toLat, p_toLng));
                 if (toNOD_ID == 0)
                 {
-                    var exc = new Exception(String.Format("Position can't be matched on map:{0}",
-                                      new GMap.NET.PointLatLng(p_toLat, p_toLng)));
-                    Util.ExceptionLog(exc);
-                    throw exc;
+                    o_distance = -1;
+                    o_duration = -1;
+                    var errmsg = String.Format("Position can't be matched on map:{0}", new GMap.NET.PointLatLng(p_toLat, p_toLng));
+                    Util.Log2File(errmsg, false);
+                    return false;
+                    /*
+                     var exc = new Exception(errmsg);
+                     Util.ExceptionLog(exc);
+                     throw exc;
+                     */
                 }
 
 
@@ -130,7 +139,7 @@ namespace PMRoute
                 boRoute result = provider.GetRoute(fromNOD_ID, toNOD_ID, routePar,
                     NeighborsFull[routePar.Hash],
                     PMapIniParams.Instance.CutMapForRouting ? NeighborsCut[routePar.Hash] : null,
-                     PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
+                    PMapIniParams.Instance.FastestPath ? ECalcMode.ShortestPath : ECalcMode.FastestPath);
 
                 o_distance = (int)result.CalcDistance;
                 o_duration = bllPlanEdit.GetDuration(result.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);

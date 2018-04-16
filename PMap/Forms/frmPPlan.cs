@@ -887,6 +887,7 @@ namespace PMap.Forms
 
 
                         var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
+
                         FileInfo fiTours = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tours.dmp"));
                         BinarySerializer.Serialize(fiTours, tours);
 
@@ -930,7 +931,7 @@ namespace PMap.Forms
                             {
                                 try
                                 {
-                                    Dictionary<string, List<PMTracedTour>> lstEmail = new Dictionary<string, List<PMTracedTour>> ();
+                                    Dictionary<string, List<PMTracedTour>> lstEmail = new Dictionary<string, List<PMTracedTour>>();
                                     foreach (var tour in tours)
                                     {
                                         foreach (var tourpont in tour.TourPoints)
@@ -970,17 +971,31 @@ namespace PMap.Forms
                                         }
                                     }
 
-
-                                    foreach( var emailItem in lstEmail)
+                                    List<string> invalidEmails = new List<string>();
+                                    foreach (var emailItem in lstEmail)
                                     {
-                                        var token = NotificationMail.GetToken(emailItem.Value);
-
-                                        NotificationMail.SendNotificationMail(emailItem.Key, token);
-
+                                        if (Util.IsValidEmail(emailItem.Key))
+                                        {
+                                            var token = NotificationMail.GetToken(emailItem.Value);
+                                            NotificationMail.SendNotificationMail(emailItem.Key, token);
+                                        }
+                                        else
+                                        {
+                                            invalidEmails.Add(emailItem.Key);
+                                        }
                                     }
 
                                     PMapCommonVars.Instance.CT_DB.Commit();
 
+                                    if (invalidEmails.Count == 0)
+                                    {
+                                        UI.Message(PMapMessages.E_SNDEMAIL_OK);
+                                    }
+                                    else
+                                    {
+                                        UI.Message(PMapMessages.E_SNDEMAIL_OK2, String.Join("\n", invalidEmails));
+
+                                    }
                                 }
                                 catch (Exception exx)
                                 {

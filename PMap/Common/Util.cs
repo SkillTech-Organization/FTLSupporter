@@ -25,6 +25,7 @@ using PMap.Common.Azure;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ComponentModel;
 
 namespace PMap.Common
 {
@@ -385,6 +386,16 @@ namespace PMap.Common
         {
             int temp;
             return Int32.TryParse(p_s, out temp);
+        }
+
+        public static bool IsDateTime(this Type type)
+        {
+            return type == typeof(DateTime) || type == typeof(DateTime?);
+        }
+
+        public static bool IsGuid(this Type type)
+        {
+            return type == typeof(Guid) || type == typeof(Guid?);
         }
 
         /// <summary>
@@ -1066,6 +1077,38 @@ namespace PMap.Common
             }
 
         }
+
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public static string GetEnumDescription(Enum p_value)
+        {
+            FieldInfo fi = p_value.GetType().GetField(p_value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return p_value.ToString();
+        }
+
+
     }
 }
 

@@ -67,7 +67,7 @@ namespace PMap.WebTrace
             //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr
 
         }
-        public static async void SendNotificationMail(string p_emailAddr, PMToken p_token)
+        public static async void SendNotificationMail(string p_emailAddr, PMToken p_token, string p_msgOk = "")
         {
             
            // var apiKey = "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";
@@ -84,17 +84,29 @@ namespace PMap.WebTrace
 
             foreach (var toEmail in addr)
             {
-                var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, "");
-                var subject = "Web követés belépés";
-                var to = new EmailAddress(toEmail, "");
-                var plainTextContent = "";
-                var htmlContent = Util.FileToString(PMapIniParams.Instance.WebLoginTemplate);
-                htmlContent = htmlContent.Replace("@@token", HttpUtility.UrlEncode( p_token.temporaryUserToken));
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-                // var response = client.SendEmailAsync(msg);
-                var response = await client.SendEmailAsync(msg);
-                if (response.StatusCode != HttpStatusCode.Accepted)
-                    throw new Exception(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
+                if (Util.IsValidEmail(toEmail))
+                {
+                    var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, "");
+                    var subject = "Web követés belépés";
+                    var to = new EmailAddress(toEmail, "");
+                    var plainTextContent = "";
+                    var htmlContent = Util.FileToString(PMapIniParams.Instance.WebLoginTemplate);
+                    htmlContent = htmlContent.Replace("@@token", HttpUtility.UrlEncode(p_token.temporaryUserToken));
+                    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                    // var response = client.SendEmailAsync(msg);
+                    var response = await client.SendEmailAsync(msg);
+                    if (response.StatusCode == HttpStatusCode.Accepted)
+                    {
+                        if( !String.IsNullOrEmpty( p_msgOk))
+                            UI.Message(p_msgOk);
+                    }
+                    else
+                        UI.Message(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
+                }
+                else
+                {
+                    UI.Message(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
+                }
             }
         }
 
