@@ -231,5 +231,7 @@ namespace PMap
 
         public const string COMPLETEDTOUR = "COMPLETEDTOUR";            //Útvonalszámításnak jelezzük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak
 
+        public const string DEF_BUDAPEST = "BUDAPEST";            
+
     }
 }

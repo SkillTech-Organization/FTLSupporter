@@ -1169,10 +1169,20 @@ namespace PMap.BLL
 
             if (sCity != "")
             {
-                sWhereCity += " upper(ZIP_CITY) + '.' like @ZIP_CITY ";
+
                 DbParameter par = sqlCmd.CreateParameter();
                 par.ParameterName = "@ZIP_CITY";
-                par.Value = "%" + sCity.ToUpper() + "[^A-Z]%";
+
+                if (sCity.ToUpper().Trim() == Global.DEF_BUDAPEST)
+                {
+                    sWhereCity += " upper(ZIP_CITY) + '.' like @ZIP_CITY ";
+                    par.Value = "%" + sCity.ToUpper() + "[^A-Z]%";
+                }
+                else
+                {
+                    sWhereCity += " upper(ZIP_CITY) = @ZIP_CITY ";
+                    par.Value = sCity.ToUpper();
+                }
                 sqlCmd.Parameters.Add(par);
             }
 
@@ -1482,8 +1492,13 @@ namespace PMap.BLL
                 //            throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_TO));
 
                 city_name = city_name.Trim().ToUpper();
-                if ((zip1 != null && !zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity))        //Budapest város nevében van a kerület is, 
-                    && (zip2 != null && !zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)))     //ezért kell a Contains-t használni
+                if ((zip1 != null && !( 
+                                (sCity == Global.DEF_BUDAPEST &&  zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
+                                 || zip1.ZIP_CITY.Trim().ToUpper() == sCity)))
+                    && (zip2 != null && !(
+                                (sCity == Global.DEF_BUDAPEST && zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
+                                 || zip2.ZIP_CITY.Trim().ToUpper() == sCity)))
+                   )
                 {
                     ZIP_ID = 0;
                     NOD_ID = 0;

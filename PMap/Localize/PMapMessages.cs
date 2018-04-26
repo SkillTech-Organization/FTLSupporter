@@ -35,8 +35,9 @@ namespace PMap.Localize
         public const string M_PEDIT_UPLOADOK = "Feltöltés rendben megtörtént";
         public const string E_SNDEMAIL_MAIL = "Legalább egy e-mailcímet meg kell adni !";
         public const string E_SNDEMAIL_FAILED = "Sikertelen e-mailküldés {0}";
-        public const string E_SNDEMAIL_OK = "E-mailküldés rendben megtörtént!";
-        public const string E_SNDEMAIL_OK2 = "E-mailküldés rendben megtörtént! Hibás e-mail-címek:\n{0}";
+        public const string E_SNDEMAIL_OK = "{0} db. e-mailküldés rendben megtörtént!";
+        public const string E_SNDEMAIL_OK2 = "{0} db. e-mailküldés rendben megtörtént! Hibás e-mail-címek({1} db.):\n{2}";
+        public const string M_MAIL_SENT = "Értesítő e-mail elküldve:{0}";
         public const string Q_PEDIT_SENDEMAIL1 = "Elküldhető az ÖSSZES értesítő e-mail?";
         public const string Q_PEDIT_SENDEMAIL2 = "Megerősítés : elküldhető az ÖSSZES értesítő e-mail?";
         public const string E_PEDIT_WRONGOPENCLOSE = "Helytelen nyitva tartás!";

@@ -970,7 +970,7 @@ namespace PMap.Forms
                                             }
                                         }
                                     }
-
+                                    int sentEmails = 0;
                                     List<string> invalidEmails = new List<string>();
                                     foreach (var emailItem in lstEmail)
                                     {
@@ -978,6 +978,8 @@ namespace PMap.Forms
                                         {
                                             var token = NotificationMail.GetToken(emailItem.Value);
                                             NotificationMail.SendNotificationMail(emailItem.Key, token);
+                                            Util.Log2File(String.Format(PMapMessages.M_MAIL_SENT, emailItem.Key));
+                                            sentEmails++;
                                         }
                                         else
                                         {
@@ -989,12 +991,13 @@ namespace PMap.Forms
 
                                     if (invalidEmails.Count == 0)
                                     {
-                                        UI.Message(PMapMessages.E_SNDEMAIL_OK);
+                                        UI.Message(PMapMessages.E_SNDEMAIL_OK, sentEmails);
+                                        Util.Log2File( String.Format(PMapMessages.E_SNDEMAIL_OK, sentEmails));
                                     }
                                     else
                                     {
-                                        UI.Message(PMapMessages.E_SNDEMAIL_OK2, String.Join("\n", invalidEmails));
-
+                                        UI.Message(PMapMessages.E_SNDEMAIL_OK2, sentEmails, invalidEmails.Count, String.Join("\n", invalidEmails));
+                                        Util.Log2File(String.Format(PMapMessages.E_SNDEMAIL_OK2, sentEmails, invalidEmails.Count, String.Join("\n", invalidEmails)));
                                     }
                                 }
                                 catch (Exception exx)

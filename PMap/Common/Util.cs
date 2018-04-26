@@ -1032,6 +1032,7 @@ namespace PMap.Common
             o_AddrNum = 0;
             RegexOptions options = RegexOptions.None;
             Regex regex = new Regex("[ ]{2,}", options);
+            p_Addr = p_Addr.Trim();
             p_Addr = regex.Replace(p_Addr, " ");
 
             string[] parts = p_Addr.Split(' ');
@@ -1072,7 +1073,10 @@ namespace PMap.Common
             //Házszám keresése
             if (parts.Length > nCurrPart)
             {
-                int.TryParse(parts[nCurrPart], out o_AddrNum);
+                var addrNum = parts.Last().Replace( " ", "").Replace(".", "").Replace(",", "");
+                string[] addrNumParts = addrNum.Split('/');
+
+                int.TryParse(addrNumParts.First(), out o_AddrNum);
                 nCurrPart++;
             }
 
