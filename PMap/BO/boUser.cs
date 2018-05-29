@@ -16,6 +16,9 @@ namespace PMap.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int UST_ID { get; set; }
 
+        [WriteFieldAttribute(Insert = false, Update = false)]
+        public string UST_NAME { get; set; }
+
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string USR_NAME { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]

@@ -56,5 +56,18 @@ namespace PMap.WebTrace
                 NotifyPropertyChanged("Password");
             }
         }
+
+        private string m_userType { get; set; }
+        [DataMember]
+        public string UserType
+        {
+            get { return m_userType; }
+            set
+            {
+                m_userType = value;
+                NotifyPropertyChanged("UserType");
+            }
+        }
+
     }
 }

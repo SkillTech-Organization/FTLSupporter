@@ -98,7 +98,7 @@ namespace PMap.WebTrace
                     if (response.StatusCode == HttpStatusCode.Accepted)
                     {
                         if( !String.IsNullOrEmpty( p_msgOk))
-                            UI.Message(p_msgOk);
+                           UI.Message(p_msgOk, toEmail);
                     }
                     else
                         UI.Message(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));

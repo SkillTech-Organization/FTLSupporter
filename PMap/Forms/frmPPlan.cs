@@ -879,7 +879,9 @@ namespace PMap.Forms
                             {
                                 ID = usr.USR_LOGIN,
                                 UserName = usr.USR_NAME,
-                                Password = !String.IsNullOrEmpty(usr.USR_PASSWD) ? crypto.HashPassword(usr.USR_PASSWD) : ""
+                                Password = !String.IsNullOrWhiteSpace(usr.USR_PASSWD) ? crypto.HashPassword(usr.USR_PASSWD) : "",
+                                UserType = !String.IsNullOrWhiteSpace(usr.UST_NAME) ? usr.UST_NAME : "Admin"
+
                             };
                             AzureTableStore.Instance.Insert(pmUsr, Environment.MachineName);
 

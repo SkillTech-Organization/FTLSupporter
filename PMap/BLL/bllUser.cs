@@ -22,7 +22,8 @@ namespace PMap.BLL
         public List<boUser> GetAllUsers(string p_where = "", params object[] p_pars)
         {
             string sSql = "select * " + Environment.NewLine +
-                          "  from USR_USER ";
+                          "  from USR_USER " + Environment.NewLine +
+                          " left outer join UST_USERTYPE on UST_USERTYPE.ID = USR_USER.UST_ID ";
             if (p_where != "")
                 sSql += " where " + p_where;
             DataTable dt = DBA.Query2DataTable(sSql, p_pars);
@@ -38,7 +39,8 @@ namespace PMap.BLL
                             USR_PPANEL = Util.getFieldValue<string>(rec, "USR_PPANEL"),
                             USR_PGRID = Util.getFieldValue<string>(rec, "USR_PGRID"),
                             USR_DELETED = Util.getFieldValue<bool>(rec, "USR_DELETED"),
-                            LASTDATE = Util.getFieldValue<DateTime>(rec, "LASTDATE")
+                            LASTDATE = Util.getFieldValue<DateTime>(rec, "LASTDATE"),
+                            UST_NAME = Util.getFieldValue<string>(rec, "UST_NAME1")
                         });
             return linq.ToList();
         }
