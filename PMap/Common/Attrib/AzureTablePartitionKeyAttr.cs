@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.Common.Attrib
+namespace PMapCore.Common.Attrib
 {
     /*Csoportképző kulcs (Ha nem kell particionálni az adatokat, akkor is érdemes ezt használni a rekordazonosításhoz, mert
      gyorsabb:

@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
-using PMap.DB;
+using PMapCore.LongProcess.Base;
+using PMapCore.DB;
 using System.Globalization;
 using GMap.NET;
-using PMap.MapProvider;
-using PMap.Forms;
-using PMap.Route;
+using PMapCore.MapProvider;
+using PMapCore.Forms;
+using PMapCore.Route;
 using System.Threading;
-using PMap.DB.Base;
-using PMap.BO;
-using PMap.Localize;
-using PMap.BLL;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.BLL;
+using PMapCore.Common;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     public class GetTourDetailsProcess : BaseLongProcess
     {

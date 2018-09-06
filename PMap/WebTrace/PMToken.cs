@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     [Serializable]
     public class PMToken

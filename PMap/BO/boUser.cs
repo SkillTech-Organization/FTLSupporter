@@ -1,11 +1,11 @@
-﻿using PMap.Common.Attrib;
+﻿using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boUser

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PMap.Common.PPlan
+namespace PMapCore.Common.PPlan
 {
     
     public class PlanParams

@@ -1,6 +1,6 @@
 ﻿using PMAdmin.Model;
-using PMap.Common;
-using PMap.Licence;
+using PMapCore.Common;
+using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,9 +57,9 @@ namespace PMAdmin
         {
             InitializeComponent();
             var pml = new PMapLicence();
-            pml.State = PMap.Common.Azure.AzureTableObjBase.enObjectState.Stored;
+            pml.State = PMapCore.Common.Azure.AzureTableObjBase.enObjectState.Stored;
             var md = new mdlLicences();
-            md.EditedItem.State = PMap.Common.Azure.AzureTableObjBase.enObjectState.Stored;
+            md.EditedItem.State = PMapCore.Common.Azure.AzureTableObjBase.enObjectState.Stored;
             this.DataContext = md;
         }
     }

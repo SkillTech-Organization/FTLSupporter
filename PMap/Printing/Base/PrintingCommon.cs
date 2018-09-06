@@ -5,7 +5,7 @@ using System.Text;
 using DevExpress.XtraPrinting;
 using System.Drawing;
 
-namespace PMap.Base.Printing
+namespace PMapCore.Base.Printing
 {
     public static class PrintingCommon  
     {

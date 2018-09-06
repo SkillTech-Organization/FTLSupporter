@@ -1,9 +1,9 @@
 ﻿using Microsoft.Win32;
 using PMAdmin.Common;
 using PMAdmin.Model;
-using PMap.Common;
-using PMap.Common.Azure;
-using PMap.Licence;
+using PMapCore.Common;
+using PMapCore.Common.Azure;
+using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

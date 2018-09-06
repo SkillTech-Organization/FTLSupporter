@@ -6,14 +6,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.DB;
+using PMapCore.DB;
 using System.Globalization;
 using GMap.NET;
-using PMap.Printing;
-using PMap.BO;
-using PMap.Forms.Base;
+using PMapCore.Printing;
+using PMapCore.BO;
+using PMapCore.Forms.Base;
+using PMapCore.Common;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgTourDetails : BaseDialog
     {

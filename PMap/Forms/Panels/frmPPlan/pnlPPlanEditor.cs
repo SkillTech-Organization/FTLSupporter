@@ -9,24 +9,24 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using GMap.NET;
 using GMap.NET.WindowsForms;
-using PMap.DB;
+using PMapCore.DB;
 using GMap.NET.WindowsForms.Markers;
-using PMap.LongProcess.Base;
-using PMap.LongProcess;
+using PMapCore.LongProcess.Base;
+using PMapCore.LongProcess;
 using System.Drawing.Drawing2D;
-using PMap.Markers;
+using PMapCore.Markers;
 using GMap.NET.ObjectModel;
 using GMap.NET.MapProviders;
-using PMap.BO;
-using PMap.Localize;
-using PMap.BLL;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Common.PPlan;
-using PMap.DB.Base;
-using PMap.Route;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.BLL;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Common.PPlan;
+using PMapCore.DB.Base;
+using PMapCore.Route;
 
-namespace PMap.Forms.Panels.frmPPlan
+namespace PMapCore.Forms.Panels.frmPPlan
 {
     public partial class pnlPPlanEditor : BasePanel
     {

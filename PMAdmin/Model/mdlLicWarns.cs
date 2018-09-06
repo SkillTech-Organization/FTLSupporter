@@ -1,4 +1,4 @@
-﻿using PMap.Licence;
+﻿using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

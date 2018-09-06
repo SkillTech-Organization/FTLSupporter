@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.DB.Base;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.Common;
 
 
-namespace PMap.DB
+namespace PMapCore.DB
 {
     public class DBLockHolder : LockHolder<SQLServerAccess>
     {

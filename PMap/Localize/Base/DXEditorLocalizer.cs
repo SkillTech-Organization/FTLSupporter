@@ -5,9 +5,9 @@ using System.Text;
 using DevExpress.XtraEditors.Controls;
 using System.Collections;
 using System.IO;
-using PMap.Common;
+using PMapCore.Common;
 
-namespace PMap.Localize.Base
+namespace PMapCore.Localize.Base
 {
     class DXEditorLocalizer : Localizer
     {

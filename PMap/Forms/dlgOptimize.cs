@@ -6,15 +6,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.LongProcess.Base;
-using PMap.LongProcess;
-using PMap.BLL;
-using PMap.BO;
-using PMap.Localize;
-using PMap.Forms.Base;
-using PMap.Common;
+using PMapCore.LongProcess.Base;
+using PMapCore.LongProcess;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.Forms.Base;
+using PMapCore.Common;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgOptimize : BaseDialog
     {

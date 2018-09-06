@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET;
-using PMap.DB;
-using PMap.BO;
+using PMapCore.DB;
+using PMapCore.BO;
 
-namespace PMap.Markers
+namespace PMapCore.Markers
 {
     public class PPlanMarkerUnPlanned : GMarkerGoogle
     {

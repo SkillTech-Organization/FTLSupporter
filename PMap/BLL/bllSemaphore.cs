@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using PMap.DB.Base;
-using PMap.Common;
-using PMap.BLL.Base;
+using PMapCore.DB.Base;
+using PMapCore.Common;
+using PMapCore.BLL.Base;
 using System.ComponentModel;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
 
     public class bllSemaphore : bllBase

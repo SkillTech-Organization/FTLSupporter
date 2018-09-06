@@ -1,4 +1,4 @@
-﻿namespace PMap.LongProcess.Base
+﻿namespace PMapCore.LongProcess.Base
 {
     partial class BaseProgressDialog
     {

@@ -12,7 +12,7 @@ using System.Globalization;
 using GMap.NET.MapProviders;
 using System.Net;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public sealed class PMapIniParams
     {

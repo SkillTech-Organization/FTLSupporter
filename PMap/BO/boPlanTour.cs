@@ -5,10 +5,10 @@ using System.Text;
 using System.Drawing;
 using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
-using PMap.Common.Attrib;
-using PMap.Common;
+using PMapCore.Common.Attrib;
+using PMapCore.Common;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boPlanTour

@@ -1,4 +1,4 @@
-﻿using PMap.Common.Attrib;
+﻿using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     [Serializable]
     public class PMTracedTour

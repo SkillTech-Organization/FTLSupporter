@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
  
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public class JSONHelper
     {

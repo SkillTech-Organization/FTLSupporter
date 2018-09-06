@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public class WaitCursor : IDisposable
     {

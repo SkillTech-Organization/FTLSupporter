@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace PMap.Common  
+namespace PMapCore.Common  
 {
     class CSVParser
     {

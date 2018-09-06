@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
-using PMap.DB.Base;
-using PMap.Localize;
-using PMap;
-using PMap.Common;
-using PMap.BLL;
-using PMap.BO;
+using PMapCore.LongProcess.Base;
+using PMapCore.DB.Base;
+using PMapCore.Localize;
+using PMapCore.Common;
+using PMapCore.BLL;
+using PMapCore.BO;
 using GMap.NET;
-using PMap.Route;
-using PMap.MapProvider;
-using PMap.BO.DataXChange;
+using PMapCore.Route;
+using PMapCore.MapProvider;
+using PMapCore.BO.DataXChange;
 
 namespace Map.LongProcess
 {

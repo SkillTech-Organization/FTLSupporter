@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     [Serializable]
     public class PMMapPoint

@@ -526,7 +526,7 @@
         private System.Windows.Forms.Button button22;
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button24;
-        private PMap.Controls.PropertyGridCtrl propertyGridCtrl1;
+        private PMapCore.Controls.PropertyGridCtrl propertyGridCtrl1;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
         private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit1;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit1;

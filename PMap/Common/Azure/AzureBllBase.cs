@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.Common.Azure
+namespace PMapCore.Common.Azure
 {
     public class AzureBllBase<T> where T : AzureTableObjBase
     {

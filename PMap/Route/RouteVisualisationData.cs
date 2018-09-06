@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.Common;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.LongProcess;
+using PMapCore.Common;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.LongProcess;
 using Map.LongProcess;
-using PMap.BO;
-using PMap.BO.DataXChange;
+using PMapCore.BO;
+using PMapCore.BO.DataXChange;
 
-namespace PMap.Route
+namespace PMapCore.Route
 {
     public class RouteVisualisationData
     {

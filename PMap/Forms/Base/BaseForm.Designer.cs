@@ -1,4 +1,4 @@
-﻿namespace PMap.Forms.Base
+﻿namespace PMapCore.Forms.Base
 {
     partial class BaseForm
     {

@@ -1,8 +1,8 @@
-﻿using PMap.BO;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Localize;
-using PMap.WebTrace;
+﻿using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Localize;
+using PMapCore.WebTrace;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgSendEMail : BaseDialog
     {

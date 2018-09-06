@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using Map.LongProcess;
 
-namespace PMap
+namespace PMapCore.Common
 {
     public static class Global
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-    using PMap.Localize.Base;
+    using PMapCore.Localize.Base;
 
-namespace PMap.Localize
+namespace PMapCore.Localize
 {
     public class PMapMessages : Messages
     {

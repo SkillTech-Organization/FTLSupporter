@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace PMap.Licence
+namespace PMapCore.Licence
 {
     /// <summary>
     /// Generates a 16 byte Unique Identification code of a computer

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BLL.Base;
+using PMapCore.BLL.Base;
 using GMap.NET;
 using System.Web.Script.Serialization;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
+using PMapCore.Common;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boDepot

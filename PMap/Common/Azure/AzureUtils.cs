@@ -1,5 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PMap.Common.Azure
+namespace PMapCore.Common.Azure
 {
     public static class ContainsExtension
     {

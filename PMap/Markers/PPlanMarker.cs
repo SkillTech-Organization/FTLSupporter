@@ -1,14 +1,14 @@
 ﻿using System.Drawing;
-using PMap.Properties;
+using PMapCore.Properties;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace PMap.Markers
+namespace PMapCore.Markers
 {
       using System.Drawing;
-    using PMap.DB;
+    using PMapCore.DB;
     using GMap.NET.WindowsForms.Markers;
-    using PMap.BO;
+    using PMapCore.BO;
     public class PPlanMarker : GMapMarker
 {
 

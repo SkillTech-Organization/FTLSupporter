@@ -1,4 +1,4 @@
-﻿namespace PMap.Forms
+﻿namespace PMapCore.Forms
 {
     partial class dlgNewTour
     {
@@ -42,7 +42,7 @@
             this.lblStartDateTime = new System.Windows.Forms.Label();
             this.dtpWhsS = new System.Windows.Forms.DateTimePicker();
             this.lblColor = new System.Windows.Forms.Label();
-            this.cmbColor = new PMap.Controls.ColorComboBox();
+            this.cmbColor = new PMapCore.Controls.ColorComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();

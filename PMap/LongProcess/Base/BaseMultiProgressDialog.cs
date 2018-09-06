@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PMap.LongProcess.Base
+namespace PMapCore.LongProcess.Base
 {
     public partial class BaseMultiProgressDialog : BaseProgressDialog
     {

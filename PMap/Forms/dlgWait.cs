@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgWait : Form
     {

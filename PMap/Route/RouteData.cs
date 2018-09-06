@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using PMap.DB;
+using PMapCore.DB;
 using System.Data;
-using PMap.DB.Base;
-using PMap.LongProcess.Base;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.LongProcess.Base;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Common;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace PMap.Route
+namespace PMapCore.Route
 {
     public class CCalcNodeFrom
     {

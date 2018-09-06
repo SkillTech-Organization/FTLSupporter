@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PMap.Localize.Base
+namespace PMapCore.Localize.Base
 {
     public class Messages
     {

@@ -1,4 +1,4 @@
-﻿namespace PMap.Controls
+﻿namespace PMapCore.Controls
 {
     partial class ColorComboBox
     {

@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
-using PMap.LongProcess.Base;
-using PMap.LongProcess;
+using PMapCore.LongProcess.Base;
+using PMapCore.LongProcess;
 using GMap.NET.Internals;
 using System.Threading;
-using PMap.MapProvider;
-using PMap.Route;
+using PMapCore.MapProvider;
+using PMapCore.Route;
 using Map.LongProcess;
-using PMap.BO;
-using PMap.Localize;
-using PMap.Common;
-using PMap.Licence;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.Common;
+using PMapCore.Licence;
 
-namespace PMap.Route
+namespace PMapCore.Route
 {
     /// <summary>
     /// Útvonalszámítás entry point-ok. A PMap.Route névtér osztályait és metódousait csak ezen az osztályon keresztül érjük el.

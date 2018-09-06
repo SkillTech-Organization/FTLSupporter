@@ -6,16 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.DB;
-using PMap.BO;
-using PMap.DB.Base;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Common.PPlan;
+using PMapCore.DB;
+using PMapCore.BO;
+using PMapCore.DB.Base;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Common.PPlan;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgNewTour : BaseDialog
     {

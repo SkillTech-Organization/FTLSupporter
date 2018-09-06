@@ -6,14 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap;
-using PMap.DB;
-using PMap.Route;
-using PMap.Printing;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Common;
+using PMapCore.Route;
+using PMapCore.Printing;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Common;
 
 namespace PMapTestApp
 {

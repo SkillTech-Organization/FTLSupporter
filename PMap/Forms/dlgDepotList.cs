@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
-using PMap.BO;
-using PMap.Printing;
+using PMapCore.Forms.Base;
+using PMapCore.BO;
+using PMapCore.Printing;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgDepotList : BaseDialog
     {

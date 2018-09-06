@@ -66,9 +66,9 @@
       <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
       <Name>GMap.NET.WindowsForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PMap\PMap.csproj">
+    <ProjectReference Include="..\PMap\PMapCore.csproj">
       <Project>{3e3fe032-b237-479b-938b-63f693265432}</Project>
-      <Name>PMap</Name>
+      <Name>PMapCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

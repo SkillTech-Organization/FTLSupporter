@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
-using PMap.Localize;
-using PMap.BO.Base;
-using PMap.Common.Attrib;
+using PMapCore.Localize;
+using PMapCore.BO.Base;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BO.DataXChange
+namespace PMapCore.BO.DataXChange
 {
     /*
     Megnevezés	            Mezőkód	        Típus           Megjegyzés

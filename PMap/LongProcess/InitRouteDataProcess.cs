@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
-using PMap.DB.Base;
-using PMap;
-using PMap.Route;
-using PMap.Localize;
-using PMap.Common;
+using PMapCore.LongProcess.Base;
+using PMapCore.DB.Base;
+using PMapCore.Route;
+using PMapCore.Localize;
+using PMapCore.Common;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     
 

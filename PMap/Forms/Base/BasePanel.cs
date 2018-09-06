@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Properties;
+using PMapCore.Properties;
 using System.IO;
-using PMap.Localize.Base;
+using PMapCore.Localize.Base;
 using DevExpress.XtraPrinting.Localization;
 using DevExpress.XtraGrid.Localization;
 using DevExpress.XtraEditors.Controls;
@@ -17,7 +17,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 
 
-namespace PMap.Forms.Base
+namespace PMapCore.Forms.Base
 {
     public partial class BasePanel : DockContent
     {
@@ -51,9 +51,9 @@ namespace PMap.Forms.Base
 
             //            if( p_tabscheme != TabOrderManager.TabScheme.None )
 
-            PreviewLocalizer.Active = new DXPrintPreviewLocalizer(new StringReader(PMap.Properties.Resources.ppreviewloc_hu));
-            GridLocalizer.Active = new DXGridLocalizer(new StringReader(PMap.Properties.Resources.gridloc_hu));
-            Localizer.Active = new DXEditorLocalizer(new StringReader(PMap.Properties.Resources.editorloc_hu));
+            PreviewLocalizer.Active = new DXPrintPreviewLocalizer(new StringReader(PMapCore.Properties.Resources.ppreviewloc_hu));
+            GridLocalizer.Active = new DXGridLocalizer(new StringReader(PMapCore.Properties.Resources.gridloc_hu));
+            Localizer.Active = new DXEditorLocalizer(new StringReader(PMapCore.Properties.Resources.editorloc_hu));
 
             tabSchemeProvider.SetTabScheme(this, p_tabscheme);
             this.SelectNextControl(this, true, true, true, true);

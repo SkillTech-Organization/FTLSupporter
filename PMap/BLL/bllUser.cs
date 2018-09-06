@@ -1,7 +1,7 @@
-﻿using PMap.BLL.Base;
-using PMap.BO;
-using PMap.Common;
-using PMap.DB.Base;
+﻿using PMapCore.BLL.Base;
+using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.DB.Base;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     public class bllUser : bllBase
     {

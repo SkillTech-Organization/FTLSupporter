@@ -9,15 +9,14 @@ using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET;
 using GMap.NET.WindowsForms.Markers;
-using PMap.DB;
-using PMap.MapProvider;
+using PMapCore.DB;
+using PMapCore.MapProvider;
 using System.Drawing.Drawing2D;
-using PMap.Route;
-using PMap;
-using PMap.BO;
-using PMap.Localize;
-using PMap.BLL;
-using PMap.Common;
+using PMapCore.Route;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.BLL;
+using PMapCore.Common;
 using System.Globalization;
 
 namespace PMapTestApp

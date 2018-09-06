@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace PMap
+namespace PMapCore.Common
 {
     /// Summary description for ProcessUtils.
     public static class ProcessUtils

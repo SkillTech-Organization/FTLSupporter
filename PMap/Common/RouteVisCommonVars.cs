@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
-using PMap.BO;
-using PMap.Markers;
-using PMap.BO.DataXChange;
+using PMapCore.BO;
+using PMapCore.Markers;
+using PMapCore.BO.DataXChange;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
 
     public sealed class RouteVisCommonVars

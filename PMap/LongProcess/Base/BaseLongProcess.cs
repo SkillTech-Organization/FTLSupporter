@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using PMap;
 using System.Diagnostics;
-using PMap.Common;
+using PMapCore.Common;
 
-namespace PMap.LongProcess.Base
+namespace PMapCore.LongProcess.Base
 {
     /// <summary>
     /// Hosszú folyamat alaposztály

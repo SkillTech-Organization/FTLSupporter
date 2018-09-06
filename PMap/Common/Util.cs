@@ -19,15 +19,15 @@ using System.IO.Compression;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using PMap.Common.Parse;
+using PMapCore.Common.Parse;
 using System.Web.Script.Serialization;
-using PMap.Common.Azure;
+using PMapCore.Common.Azure;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public static class Util
     {

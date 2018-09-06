@@ -7,9 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AnimatedNotifyIconNS;
-using PMap.Localize;
+using PMapCore.Localize;
+using PMapCore.Common;
 
-namespace PMap.LongProcess.Base
+namespace PMapCore.LongProcess.Base
 {
     public partial class ProcessNotifyIcon : AnimatedNotifyIcon
     {

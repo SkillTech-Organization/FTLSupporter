@@ -6,9 +6,9 @@ using DevExpress.XtraGrid.Localization;
 using System.IO;
 using System.Collections;
 using DevExpress.XtraPrinting.Localization;
-using PMap.Common;
+using PMapCore.Common;
 
-namespace PMap.Localize.Base
+namespace PMapCore.Localize.Base
 {
     class DXGridLocalizer : GridLocalizer
     {

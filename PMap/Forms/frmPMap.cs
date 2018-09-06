@@ -14,21 +14,21 @@ using Microsoft.Win32;
 using GMap.NET.Internals;
 using System.Drawing.Drawing2D;
 using GMap.NET.MapProviders;
-using PMap.Markers;
-using PMap.MapProvider;
-using PMap.DB.Base;
-using PMap.DB;
-using PMap.LongProcess;
-using PMap.LongProcess.Base;
-using PMap.Route;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Common.PPlan;
+using PMapCore.Markers;
+using PMapCore.MapProvider;
+using PMapCore.DB.Base;
+using PMapCore.DB;
+using PMapCore.LongProcess;
+using PMapCore.LongProcess.Base;
+using PMapCore.Route;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Common.PPlan;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
 
     public partial class frmPMap : BaseForm

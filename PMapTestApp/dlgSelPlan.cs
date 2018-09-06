@@ -6,9 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.DB.Base;
-using PMap;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.Common;
 
 namespace PMapTestApp
 {

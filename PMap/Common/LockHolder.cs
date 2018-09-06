@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public  class LockHolder<T> : IDisposable where T : class
     {

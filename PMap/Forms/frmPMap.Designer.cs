@@ -1,6 +1,6 @@
 ﻿using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     partial class frmPMap
     {

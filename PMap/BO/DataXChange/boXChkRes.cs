@@ -1,11 +1,11 @@
-﻿using PMap.Common.Attrib;
+﻿using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace PMap.BO.DataXChange
+namespace PMapCore.BO.DataXChange
 {
     public class boXChkRes
     {

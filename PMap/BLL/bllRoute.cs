@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using PMap.MapProvider;
+using PMapCore.MapProvider;
 using System.Data.SqlClient;
-using PMap.DB.Base;
+using PMapCore.DB.Base;
 using GMap.NET;
-using PMap.Route;
-using PMap.BO;
-using PMap.BLL.Base;
-using PMap.Common;
+using PMapCore.Route;
+using PMapCore.BO;
+using PMapCore.BLL.Base;
+using PMapCore.Common;
 using System.Data.Common;
 using System.Net;
 using System.Xml.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using FastMember;
-using PMap.Cache;
-using PMap.BLL;
-using PMap.Localize;
+using PMapCore.Cache;
+using PMapCore.BLL;
+using PMapCore.Localize;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     public class bllRoute : bllBase
     {

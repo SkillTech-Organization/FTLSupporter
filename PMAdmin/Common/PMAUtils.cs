@@ -1,5 +1,5 @@
-﻿using PMap;
-using PMap.Common.Attrib;
+﻿using PMapCore.Common;
+using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PMap.Common.Attrib
+namespace PMapCore.Common.Attrib
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class AzureTableFieldAttr: Attribute

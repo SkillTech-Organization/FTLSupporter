@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
-using PMap.Localize;
+using PMapCore.Localize;
 using System.ComponentModel;
-using PMap.BO.Base;
-using PMap.Common.Attrib;
+using PMapCore.BO.Base;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BO.DataXChange
+namespace PMapCore.BO.DataXChange
 {
     public class boXRouteSection : boXBase
     {

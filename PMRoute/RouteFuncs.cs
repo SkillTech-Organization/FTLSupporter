@@ -1,12 +1,11 @@
 ﻿using GMap.NET;
 using GMap.NET.WindowsForms;
 using Newtonsoft.Json;
-using PMap;
-using PMap.BLL;
-using PMap.BO;
-using PMap.Common;
-using PMap.MapProvider;
-using PMap.Route;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.MapProvider;
+using PMapCore.Route;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

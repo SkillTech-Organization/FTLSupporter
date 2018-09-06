@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PMapCore.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boOptimize

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
 
     public class EmptyTableNameException : Exception

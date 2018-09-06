@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BO.Base;
-using PMap.Common.Attrib;
+using PMapCore.BO.Base;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BO.DataXChange
+namespace PMapCore.BO.DataXChange
 {
     public class boXFullPlan : boXBase
     {

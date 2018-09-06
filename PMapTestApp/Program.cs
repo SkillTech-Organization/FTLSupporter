@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using PMap;
-using PMap.Common;
+using PMapCore.Common;
 
 namespace PMapTestApp
 {

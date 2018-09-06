@@ -1,11 +1,11 @@
 ﻿using GMap.NET;
-using PMap.BO;
+using PMapCore.BO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PMap.Cache
+namespace PMapCore.Cache
 {
    
 

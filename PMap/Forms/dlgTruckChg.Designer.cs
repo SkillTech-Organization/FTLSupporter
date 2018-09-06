@@ -1,4 +1,4 @@
-﻿namespace PMap.Forms
+﻿namespace PMapCore.Forms
 {
     partial class dlgTruckChg
     {
@@ -34,7 +34,7 @@
             this.lblTRK = new System.Windows.Forms.Label();
             this.cmbTruck = new System.Windows.Forms.ComboBox();
             this.lblColor = new System.Windows.Forms.Label();
-            this.cmbColor = new PMap.Controls.ColorComboBox();
+            this.cmbColor = new PMapCore.Controls.ColorComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();

@@ -6,20 +6,20 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
+using PMapCore.Forms.Base;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
-using PMap.Common;
-using PMap.BO;
-using PMap.Markers;
+using PMapCore.Common;
+using PMapCore.BO;
+using PMapCore.Markers;
 using System.Drawing.Drawing2D;
-using PMap.Common.PPlan;
+using PMapCore.Common.PPlan;
 using Map.LongProcess;
-using PMap.BLL;
-using PMap.BO.DataXChange;
+using PMapCore.BLL;
+using PMapCore.BO.DataXChange;
 
-namespace PMap.Forms.Panels.frmRouteVisualization
+namespace PMapCore.Forms.Panels.frmRouteVisualization
 {
     public partial class pnlRouteVisMap : BasePanel
     {

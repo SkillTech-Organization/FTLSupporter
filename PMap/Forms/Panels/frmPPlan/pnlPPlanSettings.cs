@@ -8,15 +8,15 @@ using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using GMap.NET.WindowsForms;
-using PMap.DB;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Common.PPlan;
+using PMapCore.DB;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Common.PPlan;
 
-namespace PMap.Forms.Panels.frmPPlan
+namespace PMapCore.Forms.Panels.frmPPlan
 {
     public partial class pnlPPlanSettings : BasePanel
     {

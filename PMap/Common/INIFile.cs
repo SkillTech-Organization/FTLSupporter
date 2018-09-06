@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     /// <summary>
     /// Class to read from INI files. Based loosely on the Delphi class of the same name.

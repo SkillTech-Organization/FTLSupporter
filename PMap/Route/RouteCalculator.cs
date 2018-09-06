@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PMap.Route
+namespace PMapCore.Route
 {
     ///http://www.codeproject.com/Articles/24816/A-Fast-Priority-Queue-Implementation-of-the-Dijkst
     public class RouteCalculator

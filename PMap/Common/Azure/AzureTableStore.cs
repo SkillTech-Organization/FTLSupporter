@@ -17,10 +17,10 @@ using System.Net;
 using System.Linq.Expressions;
 using Microsoft.WindowsAzure.Storage.Table.Queryable;
 using System.Threading.Tasks;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 using Newtonsoft.Json;
 
-namespace PMap.Common.Azure
+namespace PMapCore.Common.Azure
 {
     public class AzureTableStore
     {

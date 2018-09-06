@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.Markers;
+using PMapCore.Markers;
 using System.Web.Script.Serialization;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boPlanOrder

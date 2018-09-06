@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMap", "PMap\PMap.csproj", "{3E3FE032-B237-479B-938B-63F693265432}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMapCore", "PMap\PMapCore.csproj", "{3E3FE032-B237-479B-938B-63F693265432}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C} = {D0C39D9D-BED0-418B-9A5E-713176CAF40C}
 	EndProjectSection
@@ -66,6 +66,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsUI", "WinFormsUI\WinFormsUI.csproj", "{C75532C4-765B-418E-B09B-46D36B2ABDB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMRoute", "PMRoute\PMRoute.csproj", "{26639170-A1F0-40F1-9750-C857C55F3434}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPOrder", "MPOrder\MPOrder.csproj", "{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -282,12 +284,28 @@ Global
 		{26639170-A1F0-40F1-9750-C857C55F3434}.Release|x64.Build.0 = Release|Any CPU
 		{26639170-A1F0-40F1-9750-C857C55F3434}.Release|x86.ActiveCfg = Release|Any CPU
 		{26639170-A1F0-40F1-9750-C857C55F3434}.Release|x86.Build.0 = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|x64.Build.0 = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Debug|x86.Build.0 = Debug|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x64.ActiveCfg = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x64.Build.0 = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x86.ActiveCfg = Release|Any CPU
+		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://gyorgyiantal.visualstudio.com/
 		SccLocalPath0 = .
@@ -303,35 +321,38 @@ Global
 		SccProjectUniqueName4 = GMap.NET.WindowsForms\\GMap.NET.WindowsForms.csproj
 		SccProjectName4 = GMap.NET.WindowsForms
 		SccLocalPath4 = GMap.NET.WindowsForms
-		SccProjectUniqueName5 = PMap\\PMap.csproj
-		SccProjectName5 = PMap
-		SccLocalPath5 = PMap
-		SccProjectUniqueName6 = PMapTestApp\\PMapTestApp.csproj
-		SccProjectName6 = PMapTestApp
-		SccLocalPath6 = PMapTestApp
-		SccProjectUniqueName7 = TabOrder\\TabOrder.csproj
-		SccProjectName7 = TabOrder
-		SccLocalPath7 = TabOrder
-		SccProjectUniqueName8 = VBInterface\\VBInterface.csproj
-		SccProjectName8 = VBInterface
-		SccLocalPath8 = VBInterface
-		SccProjectUniqueName9 = FTLSupporter\\FTLSupporter.csproj
-		SccProjectName9 = FTLSupporter
-		SccLocalPath9 = FTLSupporter
-		SccProjectUniqueName10 = FTLSupporterTest\\FTLSupporterTest.csproj
-		SccProjectName10 = FTLSupporterTest
-		SccLocalPath10 = FTLSupporterTest
-		SccProjectUniqueName11 = PMAdmin\\PMAdmin.csproj
-		SccProjectName11 = PMAdmin
-		SccLocalPath11 = PMAdmin
-		SccProjectUniqueName12 = DTPicker\\DTPicker.vbproj
-		SccProjectName12 = DTPicker
-		SccLocalPath12 = DTPicker
-		SccProjectUniqueName13 = WinFormsUI\\WinFormsUI.csproj
-		SccProjectName13 = WinFormsUI
-		SccLocalPath13 = WinFormsUI
-		SccProjectUniqueName14 = PMRoute\\PMRoute.csproj
-		SccProjectName14 = PMRoute
-		SccLocalPath14 = PMRoute
+		SccProjectUniqueName5 = PMapTestApp\\PMapTestApp.csproj
+		SccProjectName5 = PMapTestApp
+		SccLocalPath5 = PMapTestApp
+		SccProjectUniqueName6 = TabOrder\\TabOrder.csproj
+		SccProjectName6 = TabOrder
+		SccLocalPath6 = TabOrder
+		SccProjectUniqueName7 = VBInterface\\VBInterface.csproj
+		SccProjectName7 = VBInterface
+		SccLocalPath7 = VBInterface
+		SccProjectUniqueName8 = FTLSupporter\\FTLSupporter.csproj
+		SccProjectName8 = FTLSupporter
+		SccLocalPath8 = FTLSupporter
+		SccProjectUniqueName9 = FTLSupporterTest\\FTLSupporterTest.csproj
+		SccProjectName9 = FTLSupporterTest
+		SccLocalPath9 = FTLSupporterTest
+		SccProjectUniqueName10 = PMAdmin\\PMAdmin.csproj
+		SccProjectName10 = PMAdmin
+		SccLocalPath10 = PMAdmin
+		SccProjectUniqueName11 = DTPicker\\DTPicker.vbproj
+		SccProjectName11 = DTPicker
+		SccLocalPath11 = DTPicker
+		SccProjectUniqueName12 = WinFormsUI\\WinFormsUI.csproj
+		SccProjectName12 = WinFormsUI
+		SccLocalPath12 = WinFormsUI
+		SccProjectUniqueName13 = PMRoute\\PMRoute.csproj
+		SccProjectName13 = PMRoute
+		SccLocalPath13 = PMRoute
+		SccProjectUniqueName14 = MPOrder\\MPOrder.csproj
+		SccProjectName14 = MPOrder
+		SccLocalPath14 = MPOrder
+		SccProjectUniqueName15 = PMap\\PMapCore.csproj
+		SccProjectName15 = PMap
+		SccLocalPath15 = PMap
 	EndGlobalSection
 EndGlobal

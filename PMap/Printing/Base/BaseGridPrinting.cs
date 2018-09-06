@@ -11,9 +11,9 @@ using System.Windows.Forms;
 using DevExpress.XtraGrid.Views.Base;
 using System.Collections;
 using DevExpress.Utils;
-using PMap.Base.Printing;
+using PMapCore.Base.Printing;
 
-namespace PMap.Printing.Base
+namespace PMapCore.Printing.Base
 {
     public class BaseGridPrinting : PrintableComponentLink
     {

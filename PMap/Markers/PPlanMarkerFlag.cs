@@ -1,13 +1,13 @@
 ﻿using System.Drawing;
-using PMap.Properties;
+using PMapCore.Properties;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace PMap.Markers
+namespace PMapCore.Markers
 {
     using System.Drawing;
-using PMap.DB;
-    using PMap.BO;
+using PMapCore.DB;
+    using PMapCore.BO;
     public class PPlanMarkerFlag : PPlanMarker
     {
 

@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
-using PMap.MapProvider;
-using PMap.Route;
-using PMap.DB;
-using PMap.DB.Base;
+using PMapCore.LongProcess.Base;
+using PMapCore.MapProvider;
+using PMapCore.Route;
+using PMapCore.DB;
+using PMapCore.DB.Base;
 using System.Data.SqlClient;
 using GMap.NET;
 using System.Threading;
-using PMap.Forms;
+using PMapCore.Forms;
 using Map.LongProcess;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Common;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Common;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
 
     /// <summary>

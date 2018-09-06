@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using PMap.BLL;
-using PMap.Common;
-using PMap.DB.Base;
-using PMap.LongProcess.Base;
+using PMapCore.BLL;
+using PMapCore.Common;
+using PMapCore.DB.Base;
+using PMapCore.LongProcess.Base;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     public class OCAddrProcess : BaseLongProcess
     {

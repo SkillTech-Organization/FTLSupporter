@@ -1,4 +1,4 @@
-﻿namespace PMap.Forms.Panels.frmPPlan
+﻿namespace PMapCore.Forms.Panels.frmPPlan
 {
     partial class pnlPPlanOrders
     {

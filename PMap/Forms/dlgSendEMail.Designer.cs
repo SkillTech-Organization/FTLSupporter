@@ -1,4 +1,4 @@
-﻿namespace PMap.Forms
+﻿namespace PMapCore.Forms
 {
     partial class dlgSendEMail
     {

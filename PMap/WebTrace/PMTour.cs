@@ -5,12 +5,12 @@ using System.Text;
 using System.Drawing;
 using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using PMap.Common.Azure;
+using PMapCore.Common.Azure;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "Tour")]

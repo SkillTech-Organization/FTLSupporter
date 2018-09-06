@@ -5,7 +5,7 @@ using System.Text;
 using GMap.NET;
 using System.Web.Script.Serialization;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boEdge

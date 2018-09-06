@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BLL.Base;
-using PMap.DB.Base;
+using PMapCore.BLL.Base;
+using PMapCore.DB.Base;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     public class bllApp : bllBase
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace PMap.Forms.Base
+namespace PMapCore.Forms.Base
 {
     partial class BaseDialog
     {

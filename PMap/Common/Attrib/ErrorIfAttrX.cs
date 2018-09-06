@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace PMap.Common.Attrib
+namespace PMapCore.Common.Attrib
 {
 
     public enum EvalMode

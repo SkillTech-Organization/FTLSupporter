@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace PMap.LongProcess.Base
+namespace PMapCore.LongProcess.Base
 {
     public partial class BaseSilngleProgressDialog : BaseProgressDialog
     {

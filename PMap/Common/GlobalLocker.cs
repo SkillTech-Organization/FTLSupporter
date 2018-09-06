@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.Common;
 
-namespace PMap
+namespace PMapCore.Common
 {
      public class GlobalLocker : LockHolder<object>
     {

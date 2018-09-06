@@ -1,5 +1,5 @@
-﻿using PMap.Common.Attrib;
-using PMap.Common.Azure;
+﻿using PMapCore.Common.Attrib;
+using PMapCore.Common.Azure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace PMap.Licence
+namespace PMapCore.Licence
 {
     [Serializable]
     [DataContract(Namespace = "")]

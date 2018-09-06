@@ -6,16 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.DB;
-using PMap.DB.Base;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Localize;
-using PMap.Common.PPlan;
+using PMapCore.DB;
+using PMapCore.DB.Base;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Localize;
+using PMapCore.Common.PPlan;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgTruckChg : BaseDialog
     {

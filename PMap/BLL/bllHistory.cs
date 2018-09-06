@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.DB.Base;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.Common;
 using System.ComponentModel;
 using System.Web.Script.Serialization;
 using System.Globalization;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     public static class bllHistory
     {

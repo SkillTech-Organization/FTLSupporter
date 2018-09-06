@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace PMap.Common
+namespace PMapCore.Common
 { 
     public static class AESCryptoHelper
     {

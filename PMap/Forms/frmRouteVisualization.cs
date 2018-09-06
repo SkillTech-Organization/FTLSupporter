@@ -6,26 +6,26 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
-using PMap.Localize;
-using PMap.Forms.Panels.frmRouteVisualization;
+using PMapCore.Forms.Base;
+using PMapCore.Localize;
+using PMapCore.Forms.Panels.frmRouteVisualization;
 using System.IO;
-using PMap.Common;
+using PMapCore.Common;
 using WeifenLuo.WinFormsUI.Docking;
 using GMap.NET;
-using PMap.BLL;
-using PMap.BO;
-using PMap.Route;
-using PMap.MapProvider;
-using PMap.LongProcess.Base;
-using PMap.LongProcess;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Route;
+using PMapCore.MapProvider;
+using PMapCore.LongProcess.Base;
+using PMapCore.LongProcess;
 using GMap.NET.WindowsForms;
-using PMap.Markers;
+using PMapCore.Markers;
 using Map.LongProcess;
-using PMap.BO.DataXChange;
-using PMap.Common.PPlan;
+using PMapCore.BO.DataXChange;
+using PMapCore.Common.PPlan;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class frmRouteVisualization : BaseForm
     {

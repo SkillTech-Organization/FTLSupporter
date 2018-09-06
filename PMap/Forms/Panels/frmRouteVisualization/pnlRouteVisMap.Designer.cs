@@ -1,4 +1,4 @@
-﻿namespace PMap.Forms.Panels.frmRouteVisualization
+﻿namespace PMapCore.Forms.Panels.frmRouteVisualization
 {
     partial class pnlRouteVisMap
     {

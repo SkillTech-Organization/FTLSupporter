@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace PMap.Common.Azure
+namespace PMapCore.Common.Azure
 {
     [Serializable]
     [DataContract(Name = "AzureTableObjBase")]

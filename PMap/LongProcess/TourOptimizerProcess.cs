@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
-using PMap.DB;
+using PMapCore.LongProcess.Base;
+using PMapCore.DB;
 using System.Threading;
-using PMap.BLL;
-using PMap.BO;
-using PMap.Localize;
-using PMap.DB.Base;
+using PMapCore.BLL;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.DB.Base;
 using System.Diagnostics;
-using PMap.Common;
+using PMapCore.Common;
 using System.Windows.Forms;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     public class TourOptimizerProcess : BaseLongProcess
     {

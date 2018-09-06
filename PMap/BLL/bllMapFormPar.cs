@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using PMap.DB.Base;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.Common;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     public static class bllMapFormPar
     {

@@ -7,18 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using PMap.DB;
+using PMapCore.DB;
 using DevExpress.XtraGrid;
-using PMap.BO;
-using PMap.Forms.Base;
-using PMap.Common;
+using PMapCore.BO;
+using PMapCore.Forms.Base;
+using PMapCore.Common;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Common.PPlan;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Common.PPlan;
 using DevExpress.XtraEditors;
 
-namespace PMap.Forms.Panels.frmPPlan
+namespace PMapCore.Forms.Panels.frmPPlan
 {
     public partial class pnlPPlanTourPoints : BasePanel
     {

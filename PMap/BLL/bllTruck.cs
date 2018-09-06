@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BO;
+using PMapCore.BO;
 using System.Data;
-using PMap.Common;
-using PMap.BLL.Base;
-using PMap.DB.Base;
+using PMapCore.Common;
+using PMapCore.BLL.Base;
+using PMapCore.DB.Base;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     public class bllTruck : bllBase
     {

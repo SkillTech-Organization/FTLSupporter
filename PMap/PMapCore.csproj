@@ -8,8 +8,8 @@
     <ProjectGuid>{3E3FE032-B237-479B-938B-63F693265432}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PMap</RootNamespace>
-    <AssemblyName>PMap</AssemblyName>
+    <RootNamespace>PMapCore</RootNamespace>
+    <AssemblyName>PMapCore</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -446,7 +446,7 @@
     <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.Designer.cs">
       <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobalLocker.cs" />
+    <Compile Include="Common\GlobalLocker.cs" />
     <Compile Include="Licence\AES.cs" />
     <Compile Include="Licence\PMapLicWarn.cs" />
     <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
@@ -469,7 +469,7 @@
     <Compile Include="LongProcess\RouteVisDataProcess.cs" />
     <Compile Include="Localize\PMapMessages.cs" />
     <Compile Include="Common\PMapCommonVars.cs" />
-    <Compile Include="ProcessUtils.cs" />
+    <Compile Include="Common\ProcessUtils.cs" />
     <Compile Include="Route\CRoutePars.cs" />
     <Compile Include="Route\RouteData.cs" />
     <Compile Include="Route\PMapRoutingProvider.cs" />
@@ -497,7 +497,7 @@
     <Compile Include="Forms\frmPPlan.Designer.cs">
       <DependentUpon>frmPPlan.cs</DependentUpon>
     </Compile>
-    <Compile Include="Global.cs" />
+    <Compile Include="Common\Global.cs" />
     <Compile Include="Common\PMapIniParams.cs" />
     <Compile Include="LongProcess\Base\BaseLongProcess.cs" />
     <Compile Include="LongProcess\Base\BaseMultiProgressDialog.cs">
@@ -682,7 +682,7 @@
     <Compile Include="Route\RouteVisualisationData.cs" />
     <Compile Include="WebTrace\PMTracedTour.cs" />
     <Compile Include="WebTrace\PMUser.cs" />
-    <Compile Include="XMLSerializator.cs" />
+    <Compile Include="Common\XMLSerializator.cs" />
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,9 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using PMAdmin.Common;
 using PMAdmin.Model;
-using PMap;
-using PMap.Common;
-using PMap.Common.Azure;
-using PMap.Licence;
+using PMapCore.Common;
+using PMapCore.Common.Azure;
+using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

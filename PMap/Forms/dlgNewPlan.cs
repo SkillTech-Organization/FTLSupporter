@@ -6,16 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
-using PMap.BLL;
-using PMap.Common;
-using PMap.DB.Base;
-using PMap.BO;
-using PMap.Localize;
-using PMap.Common.PPlan;
-using PMap.BO.DataXChange;
+using PMapCore.Forms.Base;
+using PMapCore.BLL;
+using PMapCore.Common;
+using PMapCore.DB.Base;
+using PMapCore.BO;
+using PMapCore.Localize;
+using PMapCore.Common.PPlan;
+using PMapCore.BO.DataXChange;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgNewPlan : BaseDialog
     {

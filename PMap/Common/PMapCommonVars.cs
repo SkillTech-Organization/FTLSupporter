@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.DB.Base;
+using PMapCore.DB.Base;
 using GMap.NET;
 using GMap.NET.MapProviders;
-using PMap.BLL;
-using PMap.BO;
+using PMapCore.BLL;
+using PMapCore.BO;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public class PMapCommonVars
     {

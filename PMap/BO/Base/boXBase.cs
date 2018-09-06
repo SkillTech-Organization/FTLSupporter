@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using PMap.Common;
+using PMapCore.Common;
 using System.Reflection;
 
-namespace PMap.BO.Base
+namespace PMapCore.BO.Base
 {
     public class boXBase
     {

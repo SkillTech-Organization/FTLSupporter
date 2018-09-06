@@ -8,17 +8,17 @@ using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using DevExpress.XtraGrid;
-using PMap.DB;
-using PMap.Forms.Base;
-using PMap.Common;
-using PMap.BO;
+using PMapCore.DB;
+using PMapCore.Forms.Base;
+using PMapCore.Common;
+using PMapCore.BO;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
-using PMap.Common.PPlan;
+using PMapCore.Common.PPlan;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Base;
-using PMap.BLL;
+using PMapCore.BLL;
 
-namespace PMap.Forms.Panels.frmPPlan
+namespace PMapCore.Forms.Panels.frmPPlan
 {
     public partial class pnlPPlanOrders : BasePanel
     {

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using PMap.DB;
-using PMap.DB.Base;
-using PMap.LongProcess.Base;
-using PMap.Forms;
+using PMapCore.DB;
+using PMapCore.DB.Base;
+using PMapCore.LongProcess.Base;
+using PMapCore.Forms;
 using GMap.NET;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Route;
-using PMap.Common;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Route;
+using PMapCore.Common;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     /// <summary>
     /// Megrendelések lerakóira történő útvonalszámítás indítása. Ennek a threadnak csak az útvonalszámítás elindítása a feladat. 

@@ -1,8 +1,8 @@
-﻿using PMap.BLL;
-using PMap.Common;
-using PMap.Common.PPlan;
-using PMap.Forms.Base;
-using PMap.Localize;
+﻿using PMapCore.BLL;
+using PMapCore.Common;
+using PMapCore.Common.PPlan;
+using PMapCore.Forms.Base;
+using PMapCore.Localize;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgAddOpenClose : BaseDialog
     {

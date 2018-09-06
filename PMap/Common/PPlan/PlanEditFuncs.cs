@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BLL;
-using PMap.BO;
+using PMapCore.BLL;
+using PMapCore.BO;
 using GMap.NET.WindowsForms;
-using PMap.Forms.Base;
-using PMap.Localize;
+using PMapCore.Forms.Base;
+using PMapCore.Localize;
 using System.Drawing;
-using PMap.DB.Base;
+using PMapCore.DB.Base;
 using System.Windows.Forms;
-using PMap.Route;
+using PMapCore.Route;
 using GMap.NET;
-using PMap.MapProvider;
-using PMap.Cache;
+using PMapCore.MapProvider;
+using PMapCore.Cache;
 using GMap.NET.WindowsForms.Markers;
-using PMap.Markers;
+using PMapCore.Markers;
 
-namespace PMap.Common.PPlan
+namespace PMapCore.Common.PPlan
 {
     public class PlanEditFuncs
     {

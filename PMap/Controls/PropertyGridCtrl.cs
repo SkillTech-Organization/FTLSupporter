@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
+using PMapCore.Forms.Base;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.Utils;
 using DevExpress.XtraVerticalGrid.Rows;
 using System.Reflection;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
+using PMapCore.Common;
 
-namespace PMap.Controls
+namespace PMapCore.Controls
 {
 
 

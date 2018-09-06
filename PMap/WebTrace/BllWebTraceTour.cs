@@ -1,12 +1,12 @@
 ﻿
-using PMap.Common.Azure;
+using PMapCore.Common.Azure;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     public class BllWebTraceTour : AzureBllBase< PMTour>
     {

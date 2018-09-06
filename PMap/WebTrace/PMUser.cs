@@ -1,5 +1,5 @@
-﻿using PMap.Common.Attrib;
-using PMap.Common.Azure;
+﻿using PMapCore.Common.Attrib;
+using PMapCore.Common.Azure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "User")]

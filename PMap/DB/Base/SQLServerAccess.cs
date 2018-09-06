@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data.Common;
-using PMap.Common;
+using PMapCore.Common;
 
-namespace PMap.DB.Base
+namespace PMapCore.DB.Base
 {
 
     public class SQLServerAccess : DBAccess<SqlConnection, SqlDataAdapter, SqlTransaction, SqlCommand, SqlParameter>

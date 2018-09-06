@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
+using PMapCore.LongProcess.Base;
 using System.Threading;
-using PMap.DB.Base;
-using PMap.BLL;
-using PMap.BO;
+using PMapCore.DB.Base;
+using PMapCore.BLL;
+using PMapCore.BO;
 using System.Data;
-using PMap.Localize;
+using PMapCore.Localize;
 using System.IO;
 using System.Windows.Forms;
-using PMap.Common;
+using PMapCore.Common;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     public class TollExportProcess : BaseLongProcess
     {

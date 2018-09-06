@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace PMap.Common.Attrib
+namespace PMapCore.Common.Attrib
 {
     public class DisplayNameAttributeX : DisplayNameAttribute
     {

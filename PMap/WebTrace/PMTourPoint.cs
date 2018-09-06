@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.Markers;
+using PMapCore.Markers;
 using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 using Newtonsoft.Json;
-using PMap.Common.Azure;
+using PMapCore.Common.Azure;
 using System.ComponentModel;
 
-namespace PMap.WebTrace
+namespace PMapCore.WebTrace
 {
     [Serializable]
     [DataContract(Namespace = "TourPoint")]

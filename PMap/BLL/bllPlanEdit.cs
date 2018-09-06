@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Drawing;
-using PMap.DB.Base;
+using PMapCore.DB.Base;
 using System.Diagnostics;
-using PMap.Route;
-using PMap.BO;
-using PMap.BLL.Base;
-using PMap.Common;
+using PMapCore.Route;
+using PMapCore.BO;
+using PMapCore.BLL.Base;
+using PMapCore.Common;
 using System.Globalization;
-using PMap.Localize;
-using PMap.Common.PPlan;
+using PMapCore.Localize;
+using PMapCore.Common.PPlan;
 using System.Windows.Forms;
-using PMap.BO.DataXChange;
+using PMapCore.BO.DataXChange;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
     //A Correc_Tour modulok lettek migrálva
 

@@ -1,8 +1,8 @@
 ﻿using FTLSupporter;
 using GMap.NET;
-using PMap.BLL;
-using PMap.Common;
-using PMap.Licence;
+using PMapCore.BLL;
+using PMapCore.Common;
+using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

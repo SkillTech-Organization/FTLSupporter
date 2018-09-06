@@ -4,7 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 
-namespace PMap.Licence
+namespace PMapCore.Licence
 {
     public class AES
     {

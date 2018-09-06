@@ -14,12 +14,12 @@ using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
 using SMcMaster;
-using PMap.Localize;
+using PMapCore.Localize;
 using DevExpress.Utils;
 using DevExpress.XtraNavBar;
-using PMap.Common;
+using PMapCore.Common;
 
-namespace PMap.Forms.Base
+namespace PMapCore.Forms.Base
 {
     public partial class BaseDialog : BaseForm,  IDisposable 
     {

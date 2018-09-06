@@ -1,5 +1,5 @@
-﻿using PMap.Common;
-using PMap.Licence;
+﻿using PMapCore.Common;
+using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

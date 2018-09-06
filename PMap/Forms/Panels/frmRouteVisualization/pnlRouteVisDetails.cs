@@ -6,14 +6,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
-using PMap.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Common;
 using GMap.NET.WindowsForms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
 using DevExpress.XtraEditors.Repository;
 
-namespace PMap.Forms.Panels.frmRouteVisualization
+namespace PMapCore.Forms.Panels.frmRouteVisualization
 {
     public partial class pnlRouteVisDetails : BasePanel
     {

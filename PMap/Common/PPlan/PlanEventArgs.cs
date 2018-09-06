@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using PMap.DB;
-using PMap.BO;
+using PMapCore.DB;
+using PMapCore.BO;
 
-namespace PMap.Common.PPlan
+namespace PMapCore.Common.PPlan
 {
     public enum ePlanEventMode
     {

@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.LongProcess.Base;
-using PMap.DB;
+using PMapCore.LongProcess.Base;
+using PMapCore.DB;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using System.Drawing;
-using PMap.Markers;
+using PMapCore.Markers;
 using GMap.NET.ObjectModel;
-using PMap.Route;
-using PMap.MapProvider;
+using PMapCore.Route;
+using PMapCore.MapProvider;
 using System.Threading;
-using PMap.BO;
-using PMap.BLL;
-using PMap.DB.Base;
-using PMap.Common;
-using PMap.Common.PPlan;
-using PMap.Localize;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.DB.Base;
+using PMapCore.Common;
+using PMapCore.Common.PPlan;
+using PMapCore.Localize;
 
-namespace PMap.LongProcess
+namespace PMapCore.LongProcess
 {
     public class GetRoutePathProcess : BaseLongProcess
     {

@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Forms.Base;
+using PMapCore.Forms.Base;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgFindORD_NUM : BaseDialog
     {

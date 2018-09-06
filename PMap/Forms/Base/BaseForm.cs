@@ -15,11 +15,11 @@ using DevExpress.Utils;
 using DevExpress.XtraPrinting.Localization;
 using DevExpress.XtraGrid.Localization;
 using DevExpress.XtraEditors.Controls;
-using PMap.Localize.Base;
+using PMapCore.Localize.Base;
 using System.IO;
-using PMap.Properties;
+using PMapCore.Properties;
 
-namespace PMap.Forms.Base
+namespace PMapCore.Forms.Base
 {
     public partial class BaseForm : XtraForm, IDisposable
     {

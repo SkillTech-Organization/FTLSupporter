@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BLL.Base;
-using PMap.Common.Attrib;
+using PMapCore.BLL.Base;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
     [Serializable]
     public class boOrder

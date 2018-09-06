@@ -7,10 +7,10 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 using DevExpress.XtraPrinting.Export.Pdf;
-using PMap.Properties;
-using PMap.Common;
+using PMapCore.Properties;
+using PMapCore.Common;
 
-namespace PMap.Localize.Base
+namespace PMapCore.Localize.Base
 {
     class DXPrintPreviewLocalizer : PreviewLocalizer
     {

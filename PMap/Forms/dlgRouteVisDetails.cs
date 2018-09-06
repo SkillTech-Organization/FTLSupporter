@@ -6,12 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PMap.Common;
-using PMap.BO;
-using PMap.Forms.Base;
-using PMap.Printing;
+using PMapCore.Common;
+using PMapCore.BO;
+using PMapCore.Forms.Base;
+using PMapCore.Printing;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class dlgRouteVisDetails : BaseDialog
     {

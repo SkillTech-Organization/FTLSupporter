@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using GMap.NET;
 
-namespace PMap.BO
+namespace PMapCore.BO
 {
 
     [Serializable]

@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using GMap.NET.MapProviders;
 using GMap.NET;
-using PMap.DB.Base;
+using PMapCore.DB.Base;
 using System.Data;
-using PMap.Route;
+using PMapCore.Route;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Data.Odbc;
-using PMap.DB;
-using PMap.BO;
-using PMap.Common;
+using PMapCore.DB;
+using PMapCore.BO;
+using PMapCore.Common;
 
-namespace PMap.MapProvider
+namespace PMapCore.MapProvider
 {
 
     //Üzemmódok

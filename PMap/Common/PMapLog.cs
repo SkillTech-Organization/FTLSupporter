@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
-using PMap.Common.Azure;
-using PMap.Common.Attrib;
+using PMapCore.Common.Azure;
+using PMapCore.Common.Attrib;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     [Serializable]
     [DataContract(Namespace = "")]

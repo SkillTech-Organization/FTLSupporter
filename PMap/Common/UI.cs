@@ -7,9 +7,9 @@ using DevExpress.XtraGrid;
 using System.Drawing;
 using System.Collections;
 using DevExpress.XtraEditors;
-using PMap.Localize.Base;
+using PMapCore.Localize.Base;
 
-namespace PMap.Common
+namespace PMapCore.Common
 {
     public class UI
     {

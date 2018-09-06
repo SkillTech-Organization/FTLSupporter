@@ -299,9 +299,9 @@
       <Project>{e06def77-f933-42fb-afd7-db2d0d8d6a98}</Project>
       <Name>GMap.NET.WindowsForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PMap\PMap.csproj">
+    <ProjectReference Include="..\PMap\PMapCore.csproj">
       <Project>{3E3FE032-B237-479B-938B-63F693265432}</Project>
-      <Name>PMap</Name>
+      <Name>PMapCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\PMRoute\PMRoute.csproj">
       <Project>{26639170-a1f0-40f1-9750-c857c55f3434}</Project>

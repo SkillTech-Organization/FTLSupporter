@@ -1,6 +1,6 @@
 ﻿using PMAdmin.Common;
 using PMAdmin.Properties;
-using PMap.Common.Azure;
+using PMapCore.Common.Azure;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

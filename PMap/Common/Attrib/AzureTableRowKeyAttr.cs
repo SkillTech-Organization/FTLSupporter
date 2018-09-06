@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMap.Common.Attrib
+namespace PMapCore.Common.Attrib
 {
     /*Rekord egyedi kulcs. Ha a tárolt adatszerkezet nem hierarchius, akkor a PartitionKeyt- kell használni a rekordazonosításra,
      mert az gyorsabb:

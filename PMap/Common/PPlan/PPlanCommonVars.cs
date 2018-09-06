@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using PMap.DB.Base;
+using PMapCore.DB.Base;
 using System.ComponentModel;
-using PMap.DB;
+using PMapCore.DB;
 using GMap.NET.WindowsForms;
 using System.Xml.Serialization;
 using GMap.NET.MapProviders;
-using PMap.Route;
-using PMap.BO;
+using PMapCore.Route;
+using PMapCore.BO;
 using DevExpress.XtraGrid;
 
 
-namespace PMap.Common.PPlan
+namespace PMapCore.Common.PPlan
 {
     public sealed class PPlanCommonVars
     {

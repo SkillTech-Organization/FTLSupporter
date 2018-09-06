@@ -1,6 +1,6 @@
-﻿using PMap.Common;
-using PMap.Common.Azure;
-using PMap.Localize;
+﻿using PMapCore.Common;
+using PMapCore.Common.Azure;
+using PMapCore.Localize;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 
-namespace PMap.Licence
+namespace PMapCore.Licence
 {
     public static class ChkLic
     {

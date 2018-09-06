@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using PMap.DB.Base;
-using PMap.BO;
-using PMap.BLL;
-using PMap.BLL.Base;
-using PMap.Common;
-using PMap.Common.PPlan;
-using PMap.WebTrace;
+using PMapCore.DB.Base;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.BLL.Base;
+using PMapCore.Common;
+using PMapCore.Common.PPlan;
+using PMapCore.WebTrace;
 using System.Drawing;
 using System.Web.Script.Serialization;
 
-namespace PMap.BLL
+namespace PMapCore.BLL
 {
 
     public class bllPlan : bllBase

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.DB.Base;
-using PMap.Common;
+using PMapCore.DB.Base;
+using PMapCore.Common;
 using System.Reflection;
 using System.Collections;
-using PMap.Common.Attrib;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BLL.Base
+namespace PMapCore.BLL.Base
 {
     public class bllBase
     {

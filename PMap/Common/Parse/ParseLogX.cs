@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 
-namespace PMap.Common.Parse
+namespace PMapCore.Common.Parse
 {
     public static class ParseLogX
     {

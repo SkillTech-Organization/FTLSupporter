@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 
-namespace PMap
+namespace PMapCore.Common
 {
     public static class XMLSerializator
     {

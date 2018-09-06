@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMap.BLL.Base;
-using PMap.DB.Base;
-using PMap.BO;
-using PMap.Common;
-using PMap.Localize;
-using PMap.BO.DataXChange;
+using PMapCore.BLL.Base;
+using PMapCore.DB.Base;
+using PMapCore.BO;
+using PMapCore.Common;
+using PMapCore.Localize;
+using PMapCore.BO.DataXChange;
 
-namespace PMap.BLL.DataXChange
+namespace PMapCore.BLL.DataXChange
 {
     public class dtXTruck : bllBase
     {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using PMap.BO;
-using PMap.BO.Base;
-using PMap.Common.Attrib;
+using PMapCore.BO;
+using PMapCore.BO.Base;
+using PMapCore.Common.Attrib;
 
-namespace PMap.BLL.DataXChange
+namespace PMapCore.BLL.DataXChange
 {
     public class boXRouteSummary : boXBase
     {

@@ -8,31 +8,30 @@ using System.Text;
 using System.Windows.Forms;
 using DevExpress.XtraBars.Docking;
 using GMap.NET;
-using PMap;
-using PMap.DB;
+using PMapCore.DB;
 using System.IO;
 using System.Xml.Serialization;
-using PMap.Localize.Base;
+using PMapCore.Localize.Base;
 using DevExpress.XtraPrinting.Localization;
 using DevExpress.XtraGrid.Localization;
 using DevExpress.XtraEditors.Controls;
-using PMap.Properties;
+using PMapCore.Properties;
 using WeifenLuo.WinFormsUI.Docking;
-using PMap.LongProcess.Base;
-using PMap.LongProcess;
-using PMap.BO;
-using PMap.BLL;
-using PMap.Localize;
-using PMap.Forms.Panels.frmPPlan;
-using PMap.Common;
-using PMap.Forms.Base;
-using PMap.Common.PPlan;
-using PMap.Route;
-using PMap.WebTrace;
-using PMap.Common.Azure;
-using PMap.DB.Base;
+using PMapCore.LongProcess.Base;
+using PMapCore.LongProcess;
+using PMapCore.BO;
+using PMapCore.BLL;
+using PMapCore.Localize;
+using PMapCore.Forms.Panels.frmPPlan;
+using PMapCore.Common;
+using PMapCore.Forms.Base;
+using PMapCore.Common.PPlan;
+using PMapCore.Route;
+using PMapCore.WebTrace;
+using PMapCore.Common.Azure;
+using PMapCore.DB.Base;
 
-namespace PMap.Forms
+namespace PMapCore.Forms
 {
     public partial class frmPPlan : BaseForm
     {
