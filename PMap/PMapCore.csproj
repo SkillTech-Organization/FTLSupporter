@@ -217,6 +217,7 @@
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
     <Compile Include="BO\boUser.cs" />
+    <Compile Include="BO\Mapei\boMPOrder.cs" />
     <Compile Include="Cache\LogForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\AuthCryptoHelper.cs" />

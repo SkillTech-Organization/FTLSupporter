@@ -134,6 +134,10 @@
       <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
       <Name>GMap.NET.WindowsForms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MPOrder\MPOrder.csproj">
+      <Project>{aaec2b18-3fc5-47ca-a308-8cf76e77b9ef}</Project>
+      <Name>MPOrder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PMap\PMapCore.csproj">
       <Project>{3E3FE032-B237-479B-938B-63F693265432}</Project>
       <Name>PMapCore</Name>

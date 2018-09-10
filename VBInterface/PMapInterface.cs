@@ -25,6 +25,7 @@ using PMapCore.Common.Parse;
 using PMapCore.Licence;
 using PMapCore.Localize;
 using System.Diagnostics;
+using MPOrder.Forms;
 
 namespace VBInterface
 {
@@ -671,6 +672,30 @@ namespace VBInterface
         }
 
         #endregion
+
+        public string MPOrderDialog(string p_iniPath, string p_dbConf, bool p_showMessage = true)
+        {
+
+            string sRetStatus = retOK;
+            try
+            {
+
+                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                    return retErr;
+
+                frmMPOrder dlg = new frmMPOrder();
+                dlg.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                Util.ExceptionLog(e);
+                UI.Error(e.Message);
+                sRetStatus = retErr;
+            }
+            return sRetStatus;
+        }
+
 
         #region Csak C#-ból hívható szolgáltatások
         public List<dtXResult> ImportDepots(string p_iniPath, string p_dbConf, List<boXDepot> p_depots)

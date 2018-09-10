@@ -69,6 +69,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMRoute", "PMRoute\PMRoute.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPOrder", "MPOrder\MPOrder.csproj", "{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapeiDocs", "MapeiDocs", "{5B599073-8416-4A3C-8D92-B15B9E57E410}"
+	ProjectSection(SolutionItems) = preProject
+		doc\Mapei\dbmod.sql = doc\Mapei\dbmod.sql
+		doc\Mapei\Mapei_Estrazione_HUN.TXT = doc\Mapei\Mapei_Estrazione_HUN.TXT
+		doc\Mapei\Megrendeléskonverzió.docx = doc\Mapei\Megrendeléskonverzió.docx
+		doc\Mapei\Megrendeléskonverzió_ori.docx = doc\Mapei\Megrendeléskonverzió_ori.docx
+		doc\Mapei\megrendeléskonverzióv2.docx = doc\Mapei\megrendeléskonverzióv2.docx
+		doc\Mapei\NetMover adatexport.xls = doc\Mapei\NetMover adatexport.xls
+		doc\Mapei\NetMover adatexport.xlsx = doc\Mapei\NetMover adatexport.xlsx
+		doc\Mapei\SQLQuery5.sql = doc\Mapei\SQLQuery5.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -303,6 +315,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5B599073-8416-4A3C-8D92-B15B9E57E410} = {DE152D52-1346-4F9C-A0D3-0CD98319DD14}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 16
