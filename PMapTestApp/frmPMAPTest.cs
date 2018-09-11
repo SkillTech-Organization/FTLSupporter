@@ -28,6 +28,7 @@ using PMapCore.Common.Azure;
 using System.Net;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using MPOrder.Forms;
 
 namespace PMapTestApp
 {
@@ -863,6 +864,8 @@ namespace PMapTestApp
 
         private void button34_Click(object sender, EventArgs e)
         {
+            frmMPOrder dlg = new frmMPOrder();
+            dlg.Show();
 
         }
     }

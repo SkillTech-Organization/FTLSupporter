@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace PMapCore.BO.Mapei
 {
     [Serializable]
-    public class boMPOrder
+
+    public class boMPOrderF
     {
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
@@ -37,14 +38,6 @@ namespace PMapCore.BO.Mapei
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string WarehouseCode { get; set; }
 
-        //Rendelés Össz bruttó súly, Total gross weight of order
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double TotalGrossWeightOfOrder { get; set; }
-
-        //Szállítandó raklapok száma, Number of pallet for del.
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double NumberOfPalletForDel { get; set; }
-
         //Szállítási Cím ID, Shipp.Address ID
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippAddressID { get; set; }
@@ -65,73 +58,15 @@ namespace PMapCore.BO.Mapei
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippingAddressStreetAndNumber { get; set; }
 
-        //Megjegyzés, NOTE
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string Note { get; set; }
-
-        //Sor száma(rendelésen belül),ROW NUMBER
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public int RowNumber { get; set; }
-
-        //Termékkód,Product Code
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ProductCode { get; set; }
-
-        //Mennyiségi egység, U.M.
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string U_M { get; set; }
-
-        //Termék megnevezés, Prod Description
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ProdDescription { get; set; }
-
-        //Rendelt mennyiség bruttó súly, Conf.Order Qty ROW
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ConfOrderQty { get; set; }
+        //Szállítási cím
+        [WriteFieldAttribute(Insert = false, Update = false)]
+        public string ShippingAddress { get {
+                return (ShippAddressZipCode + " " + ShippingAddressCity + " " + ShippingAddressStreetAndNumber).Trim();
+            } }
 
         //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double ConfPlannedQty { get; set; }
-
-        //Rendelt mennyiség raklap,Pallet Order Qty(Row)
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double PalletOrderQty { get; set; }
-
-        //Szállítandó mennyiség raklap,Pallet Planned Qty(Row)
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double PalletPlannedQty { get; set; }
-
-        //,Pallet ‘Bulk’ qty(Row)
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double PalletBulkQty { get; set; }
-
-        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double GrossWeightPlanned { get; set; }
-
-        //ADR,ADR
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public bool ADR { get; set; }
-
-        //ADR szorzó, ADR Multiplier
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ADRMultiplier { get; set; }
-
-        //ADR köteles mennyiség, limited_quantity
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ADRLimitedQuantity { get; set; }
-
-        //Fagyérzékeny, Freeze
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public bool Freeze { get; set; }
-
-        //Hőérzékeny,MELT
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public bool Melt { get; set; }
-
-        //UV érzékeny,UV
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public bool UV { get; set; }
 
         //!!!Fuvarszám,BORDERO
         [WriteFieldAttribute(Insert = true, Update = true)]
@@ -155,6 +90,8 @@ namespace PMapCore.BO.Mapei
 
         //!!!Útdíj pénznem(HUF)CURRENCY
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public string Currency { get; set; } = "HUF";
+        public string Currency { get; set; }
     }
+
+  
 }

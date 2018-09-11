@@ -41,28 +41,10 @@
             this.grpMegrF = new System.Windows.Forms.GroupBox();
             this.gridMegrF = new DevExpress.XtraGrid.GridControl();
             this.gridViewMegrF = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.grcMEGRID = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcMEGRTIPX = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColRKTKOD = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcMEGRDAT = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcVEVONEV = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcSZAMLASZ = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcMEGJ = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridMegrT = new DevExpress.XtraGrid.GridControl();
             this.gridViewMegrT = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gerMEGRID_T = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcROWNO = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcTermKod = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcTERMNEV = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcDB = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcAR = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcDATUM = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcRELROW = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcFBiz = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcSZVEVOID = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcSZVEVONEV = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.grpFilter = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -72,6 +54,32 @@
             this.cboMegrType = new System.Windows.Forms.ComboBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnFindPartner = new System.Windows.Forms.Button();
+            this.grcCustomerOrderNumber = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcCustomerOrderDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricShippingDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricWarehouseCode = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcTotalGrossWeightOfOrder = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcNumberOfPalletForDel = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcShippAddressID = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcShippAddressCompanyName = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricShippAddress = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricNote = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricConfPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricID = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcRowNumber = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcProductCode = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcProdDescription = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcU_M = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcConfOrderQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcConfPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcPalletOrderQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcPalletPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcPalletBulkQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gricADR = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcADRLimitedQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -215,87 +223,24 @@
             // gridViewMegrF
             // 
             this.gridViewMegrF.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.grcMEGRID,
-            this.grcMEGRTIPX,
-            this.gridColRKTKOD,
-            this.grcMEGRDAT,
-            this.grcVEVONEV,
-            this.grcSZAMLASZ,
-            this.grcMEGJ});
+            this.grcCustomerOrderNumber,
+            this.grcCustomerOrderDate,
+            this.gricShippingDate,
+            this.gricWarehouseCode,
+            this.grcTotalGrossWeightOfOrder,
+            this.grcNumberOfPalletForDel,
+            this.grcShippAddressID,
+            this.grcShippAddressCompanyName,
+            this.gricShippAddress,
+            this.gricNote,
+            this.gricConfPlannedQty,
+            this.grcGrossWeightPlanned});
             this.gridViewMegrF.GridControl = this.gridMegrF;
             this.gridViewMegrF.Name = "gridViewMegrF";
             this.gridViewMegrF.OptionsSelection.EnableAppearanceFocusedCell = false;
             this.gridViewMegrF.OptionsView.EnableAppearanceEvenRow = true;
             this.gridViewMegrF.OptionsView.EnableAppearanceOddRow = true;
             this.gridViewMegrF.OptionsView.ShowFooter = true;
-            // 
-            // grcMEGRID
-            // 
-            this.grcMEGRID.Caption = "Megr.száma";
-            this.grcMEGRID.FieldName = "MEGRID";
-            this.grcMEGRID.Name = "grcMEGRID";
-            this.grcMEGRID.OptionsColumn.AllowEdit = false;
-            this.grcMEGRID.Visible = true;
-            this.grcMEGRID.VisibleIndex = 0;
-            this.grcMEGRID.Width = 80;
-            // 
-            // grcMEGRTIPX
-            // 
-            this.grcMEGRTIPX.Caption = "Típus";
-            this.grcMEGRTIPX.FieldName = "MEGRTIPX";
-            this.grcMEGRTIPX.Name = "grcMEGRTIPX";
-            this.grcMEGRTIPX.Visible = true;
-            this.grcMEGRTIPX.VisibleIndex = 1;
-            // 
-            // gridColRKTKOD
-            // 
-            this.gridColRKTKOD.Caption = "Raktár";
-            this.gridColRKTKOD.FieldName = "RKTKOD";
-            this.gridColRKTKOD.Name = "gridColRKTKOD";
-            this.gridColRKTKOD.OptionsColumn.AllowEdit = false;
-            this.gridColRKTKOD.OptionsColumn.AllowFocus = false;
-            this.gridColRKTKOD.Visible = true;
-            this.gridColRKTKOD.VisibleIndex = 2;
-            // 
-            // grcMEGRDAT
-            // 
-            this.grcMEGRDAT.Caption = "Dátum";
-            this.grcMEGRDAT.FieldName = "MEGRDAT";
-            this.grcMEGRDAT.Name = "grcMEGRDAT";
-            this.grcMEGRDAT.OptionsColumn.AllowEdit = false;
-            this.grcMEGRDAT.Visible = true;
-            this.grcMEGRDAT.VisibleIndex = 3;
-            this.grcMEGRDAT.Width = 60;
-            // 
-            // grcVEVONEV
-            // 
-            this.grcVEVONEV.Caption = "Partner";
-            this.grcVEVONEV.FieldName = "VEVONEV";
-            this.grcVEVONEV.Name = "grcVEVONEV";
-            this.grcVEVONEV.OptionsColumn.AllowEdit = false;
-            this.grcVEVONEV.Visible = true;
-            this.grcVEVONEV.VisibleIndex = 4;
-            this.grcVEVONEV.Width = 239;
-            // 
-            // grcSZAMLASZ
-            // 
-            this.grcSZAMLASZ.Caption = "Telj.szla.";
-            this.grcSZAMLASZ.FieldName = "SZAMLASZ";
-            this.grcSZAMLASZ.Name = "grcSZAMLASZ";
-            this.grcSZAMLASZ.OptionsColumn.AllowEdit = false;
-            this.grcSZAMLASZ.Visible = true;
-            this.grcSZAMLASZ.VisibleIndex = 5;
-            this.grcSZAMLASZ.Width = 82;
-            // 
-            // grcMEGJ
-            // 
-            this.grcMEGJ.Caption = "Megjegyzés";
-            this.grcMEGJ.FieldName = "MEGJ";
-            this.grcMEGJ.Name = "grcMEGJ";
-            this.grcMEGJ.OptionsColumn.AllowEdit = false;
-            this.grcMEGJ.Visible = true;
-            this.grcMEGJ.VisibleIndex = 6;
-            this.grcMEGJ.Width = 182;
             // 
             // gridView1
             // 
@@ -322,17 +267,20 @@
             // gridViewMegrT
             // 
             this.gridViewMegrT.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.gerMEGRID_T,
-            this.grcROWNO,
-            this.grcTermKod,
-            this.grcTERMNEV,
-            this.grcDB,
-            this.grcAR,
-            this.grcDATUM,
-            this.grcRELROW,
-            this.grcFBiz,
-            this.grcSZVEVOID,
-            this.grcSZVEVONEV});
+            this.gricID,
+            this.grcRowNumber,
+            this.grcProductCode,
+            this.grcProdDescription,
+            this.grcU_M,
+            this.grcConfOrderQty,
+            this.grcConfPlannedQty,
+            this.grcPalletOrderQty,
+            this.grcPalletPlannedQty,
+            this.grcPalletBulkQty,
+            this.gricGrossWeightPlanned,
+            this.gricADR,
+            this.grcADRMultiplier,
+            this.grcADRLimitedQuantity});
             this.gridViewMegrT.GridControl = this.gridMegrT;
             this.gridViewMegrT.Name = "gridViewMegrT";
             this.gridViewMegrT.OptionsCustomization.AllowGroup = false;
@@ -341,124 +289,6 @@
             this.gridViewMegrT.OptionsView.EnableAppearanceOddRow = true;
             this.gridViewMegrT.OptionsView.ShowFooter = true;
             this.gridViewMegrT.OptionsView.ShowGroupPanel = false;
-            // 
-            // gerMEGRID_T
-            // 
-            this.gerMEGRID_T.Caption = "Megr.ID";
-            this.gerMEGRID_T.FieldName = "MEGRID";
-            this.gerMEGRID_T.Name = "gerMEGRID_T";
-            this.gerMEGRID_T.Visible = true;
-            this.gerMEGRID_T.VisibleIndex = 0;
-            // 
-            // grcROWNO
-            // 
-            this.grcROWNO.Caption = "Sor";
-            this.grcROWNO.FieldName = "ROWNO";
-            this.grcROWNO.Name = "grcROWNO";
-            this.grcROWNO.Visible = true;
-            this.grcROWNO.VisibleIndex = 1;
-            this.grcROWNO.Width = 59;
-            // 
-            // grcTermKod
-            // 
-            this.grcTermKod.Caption = "Termékkód";
-            this.grcTermKod.FieldName = "TERMKOD";
-            this.grcTermKod.Name = "grcTermKod";
-            this.grcTermKod.OptionsColumn.AllowEdit = false;
-            this.grcTermKod.OptionsColumn.AllowFocus = false;
-            this.grcTermKod.Visible = true;
-            this.grcTermKod.VisibleIndex = 2;
-            this.grcTermKod.Width = 68;
-            // 
-            // grcTERMNEV
-            // 
-            this.grcTERMNEV.Caption = "Terméknév";
-            this.grcTERMNEV.FieldName = "TERMNEV";
-            this.grcTERMNEV.Name = "grcTERMNEV";
-            this.grcTERMNEV.OptionsColumn.AllowEdit = false;
-            this.grcTERMNEV.OptionsColumn.AllowFocus = false;
-            this.grcTERMNEV.Visible = true;
-            this.grcTERMNEV.VisibleIndex = 3;
-            this.grcTERMNEV.Width = 119;
-            // 
-            // grcDB
-            // 
-            this.grcDB.Caption = "Mennyiség";
-            this.grcDB.DisplayFormat.FormatString = "#,#0.00";
-            this.grcDB.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcDB.FieldName = "DB";
-            this.grcDB.Name = "grcDB";
-            this.grcDB.OptionsColumn.AllowEdit = false;
-            this.grcDB.OptionsColumn.AllowFocus = false;
-            this.grcDB.Visible = true;
-            this.grcDB.VisibleIndex = 4;
-            this.grcDB.Width = 46;
-            // 
-            // grcAR
-            // 
-            this.grcAR.Caption = "Ár";
-            this.grcAR.DisplayFormat.FormatString = "#,#0.00";
-            this.grcAR.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcAR.FieldName = "AR";
-            this.grcAR.Name = "grcAR";
-            this.grcAR.OptionsColumn.AllowEdit = false;
-            this.grcAR.OptionsColumn.AllowFocus = false;
-            this.grcAR.Visible = true;
-            this.grcAR.VisibleIndex = 5;
-            this.grcAR.Width = 59;
-            // 
-            // grcDATUM
-            // 
-            this.grcDATUM.Caption = "Visszaig.dát.";
-            this.grcDATUM.FieldName = "DATUM";
-            this.grcDATUM.Name = "grcDATUM";
-            this.grcDATUM.OptionsColumn.AllowEdit = false;
-            this.grcDATUM.OptionsColumn.AllowFocus = false;
-            this.grcDATUM.Visible = true;
-            this.grcDATUM.VisibleIndex = 6;
-            this.grcDATUM.Width = 78;
-            // 
-            // grcRELROW
-            // 
-            this.grcRELROW.Caption = "Kapcs.megr.";
-            this.grcRELROW.FieldName = "RELROW";
-            this.grcRELROW.Name = "grcRELROW";
-            this.grcRELROW.OptionsColumn.AllowEdit = false;
-            this.grcRELROW.OptionsColumn.AllowFocus = false;
-            this.grcRELROW.Visible = true;
-            this.grcRELROW.VisibleIndex = 7;
-            this.grcRELROW.Width = 31;
-            // 
-            // grcFBiz
-            // 
-            this.grcFBiz.Caption = "Küls.bizsz.";
-            this.grcFBiz.FieldName = "FBIZ";
-            this.grcFBiz.Name = "grcFBiz";
-            this.grcFBiz.OptionsColumn.AllowEdit = false;
-            this.grcFBiz.OptionsColumn.AllowFocus = false;
-            this.grcFBiz.Visible = true;
-            this.grcFBiz.VisibleIndex = 8;
-            this.grcFBiz.Width = 59;
-            // 
-            // grcSZVEVOID
-            // 
-            this.grcSZVEVOID.Caption = "Vevőkód";
-            this.grcSZVEVOID.FieldName = "SZVEVOID";
-            this.grcSZVEVOID.Name = "grcSZVEVOID";
-            this.grcSZVEVOID.OptionsColumn.AllowEdit = false;
-            this.grcSZVEVOID.OptionsColumn.AllowFocus = false;
-            this.grcSZVEVOID.Visible = true;
-            this.grcSZVEVOID.VisibleIndex = 9;
-            // 
-            // grcSZVEVONEV
-            // 
-            this.grcSZVEVONEV.Caption = "Vevőnév";
-            this.grcSZVEVONEV.FieldName = "VEVONEV";
-            this.grcSZVEVONEV.Name = "grcSZVEVONEV";
-            this.grcSZVEVONEV.OptionsColumn.AllowEdit = false;
-            this.grcSZVEVONEV.OptionsColumn.AllowFocus = false;
-            this.grcSZVEVONEV.Visible = true;
-            this.grcSZVEVONEV.VisibleIndex = 10;
             // 
             // gridView3
             // 
@@ -568,6 +398,210 @@
             this.btnFindPartner.TabIndex = 10;
             this.btnFindPartner.UseVisualStyleBackColor = false;
             // 
+            // grcCustomerOrderNumber
+            // 
+            this.grcCustomerOrderNumber.Caption = "Vevő rendelés száma";
+            this.grcCustomerOrderNumber.FieldName = "CustomerOrderNumber";
+            this.grcCustomerOrderNumber.Name = "grcCustomerOrderNumber";
+            this.grcCustomerOrderNumber.Visible = true;
+            this.grcCustomerOrderNumber.VisibleIndex = 0;
+            // 
+            // grcCustomerOrderDate
+            // 
+            this.grcCustomerOrderDate.Caption = "Vevő rendelés dátuma";
+            this.grcCustomerOrderDate.FieldName = "CustomerOrderDate";
+            this.grcCustomerOrderDate.Name = "grcCustomerOrderDate";
+            this.grcCustomerOrderDate.Visible = true;
+            this.grcCustomerOrderDate.VisibleIndex = 1;
+            // 
+            // gricShippingDate
+            // 
+            this.gricShippingDate.Caption = "Szállítási dátum";
+            this.gricShippingDate.FieldName = "ShippingDate";
+            this.gricShippingDate.Name = "gricShippingDate";
+            this.gricShippingDate.Visible = true;
+            this.gricShippingDate.VisibleIndex = 2;
+            // 
+            // gricWarehouseCode
+            // 
+            this.gricWarehouseCode.Caption = "Raktár kód";
+            this.gricWarehouseCode.FieldName = "WarehouseCode";
+            this.gricWarehouseCode.Name = "gricWarehouseCode";
+            this.gricWarehouseCode.Visible = true;
+            this.gricWarehouseCode.VisibleIndex = 3;
+            // 
+            // grcTotalGrossWeightOfOrder
+            // 
+            this.grcTotalGrossWeightOfOrder.Caption = "Rendelés Össz bruttó súly";
+            this.grcTotalGrossWeightOfOrder.FieldName = "TotalGrossWeightOfOrder";
+            this.grcTotalGrossWeightOfOrder.Name = "grcTotalGrossWeightOfOrder";
+            this.grcTotalGrossWeightOfOrder.Visible = true;
+            this.grcTotalGrossWeightOfOrder.VisibleIndex = 4;
+            // 
+            // grcNumberOfPalletForDel
+            // 
+            this.grcNumberOfPalletForDel.Caption = "Szállítandó raklapok száma";
+            this.grcNumberOfPalletForDel.FieldName = "NumberOfPalletForDel";
+            this.grcNumberOfPalletForDel.Name = "grcNumberOfPalletForDel";
+            this.grcNumberOfPalletForDel.Visible = true;
+            this.grcNumberOfPalletForDel.VisibleIndex = 5;
+            // 
+            // grcShippAddressID
+            // 
+            this.grcShippAddressID.Caption = "Szállítási Cím ID";
+            this.grcShippAddressID.FieldName = "ShippAddressID";
+            this.grcShippAddressID.Name = "grcShippAddressID";
+            this.grcShippAddressID.Visible = true;
+            this.grcShippAddressID.VisibleIndex = 6;
+            // 
+            // grcShippAddressCompanyName
+            // 
+            this.grcShippAddressCompanyName.Caption = "Szállítási cím cégnév";
+            this.grcShippAddressCompanyName.FieldName = "ShippAddressCompanyName";
+            this.grcShippAddressCompanyName.Name = "grcShippAddressCompanyName";
+            this.grcShippAddressCompanyName.Visible = true;
+            this.grcShippAddressCompanyName.VisibleIndex = 7;
+            // 
+            // gricShippAddress
+            // 
+            this.gricShippAddress.Caption = "Szállítási cím";
+            this.gricShippAddress.FieldName = "ShippAddress";
+            this.gricShippAddress.Name = "gricShippAddress";
+            this.gricShippAddress.Visible = true;
+            this.gricShippAddress.VisibleIndex = 8;
+            // 
+            // gricNote
+            // 
+            this.gricNote.Caption = "Megjegyzés";
+            this.gricNote.FieldNameSortGroup = "Note";
+            this.gricNote.Name = "gricNote";
+            this.gricNote.Visible = true;
+            this.gricNote.VisibleIndex = 9;
+            // 
+            // gricConfPlannedQty
+            // 
+            this.gricConfPlannedQty.Caption = "Szállítandó mennyiség";
+            this.gricConfPlannedQty.FieldName = "ConfPlannedQty";
+            this.gricConfPlannedQty.Name = "gricConfPlannedQty";
+            this.gricConfPlannedQty.Visible = true;
+            this.gricConfPlannedQty.VisibleIndex = 10;
+            // 
+            // grcGrossWeightPlanned
+            // 
+            this.grcGrossWeightPlanned.Caption = "Szállítandó bruttó súly";
+            this.grcGrossWeightPlanned.FieldName = "GrossWeightPlanned";
+            this.grcGrossWeightPlanned.Name = "grcGrossWeightPlanned";
+            this.grcGrossWeightPlanned.Visible = true;
+            this.grcGrossWeightPlanned.VisibleIndex = 11;
+            // 
+            // gricID
+            // 
+            this.gricID.Caption = "ID";
+            this.gricID.FieldName = "ID";
+            this.gricID.Name = "gricID";
+            // 
+            // grcRowNumber
+            // 
+            this.grcRowNumber.Caption = "Sor száma";
+            this.grcRowNumber.FieldName = "RowNumber";
+            this.grcRowNumber.Name = "grcRowNumber";
+            this.grcRowNumber.Visible = true;
+            this.grcRowNumber.VisibleIndex = 0;
+            // 
+            // grcProductCode
+            // 
+            this.grcProductCode.Caption = "Termékkód";
+            this.grcProductCode.FieldName = "ProductCode";
+            this.grcProductCode.Name = "grcProductCode";
+            this.grcProductCode.Visible = true;
+            this.grcProductCode.VisibleIndex = 1;
+            // 
+            // grcProdDescription
+            // 
+            this.grcProdDescription.Caption = "Megnevezés";
+            this.grcProdDescription.FieldName = "ProdDescription";
+            this.grcProdDescription.Name = "grcProdDescription";
+            this.grcProdDescription.Visible = true;
+            this.grcProdDescription.VisibleIndex = 2;
+            // 
+            // grcU_M
+            // 
+            this.grcU_M.Caption = "M.e";
+            this.grcU_M.FieldName = "U_M";
+            this.grcU_M.Name = "grcU_M";
+            this.grcU_M.Visible = true;
+            this.grcU_M.VisibleIndex = 3;
+            // 
+            // grcConfOrderQty
+            // 
+            this.grcConfOrderQty.Caption = "Rendelt mennyiség bruttó súly";
+            this.grcConfOrderQty.FieldName = "ConfOrderQty";
+            this.grcConfOrderQty.Name = "grcConfOrderQty";
+            this.grcConfOrderQty.Visible = true;
+            this.grcConfOrderQty.VisibleIndex = 4;
+            // 
+            // grcConfPlannedQty
+            // 
+            this.grcConfPlannedQty.Caption = "!Szállítandó mennyiség";
+            this.grcConfPlannedQty.FieldName = "ConfPlannedQty";
+            this.grcConfPlannedQty.Name = "grcConfPlannedQty";
+            this.grcConfPlannedQty.Visible = true;
+            this.grcConfPlannedQty.VisibleIndex = 5;
+            // 
+            // grcPalletOrderQty
+            // 
+            this.grcPalletOrderQty.Caption = "Rendelt mennyiség raklap";
+            this.grcPalletOrderQty.FieldName = "PalletOrderQty";
+            this.grcPalletOrderQty.Name = "grcPalletOrderQty";
+            this.grcPalletOrderQty.Visible = true;
+            this.grcPalletOrderQty.VisibleIndex = 6;
+            // 
+            // grcPalletPlannedQty
+            // 
+            this.grcPalletPlannedQty.Caption = "Szállítandó mennyiség raklap";
+            this.grcPalletPlannedQty.FieldName = "PalletPlannedQty";
+            this.grcPalletPlannedQty.Name = "grcPalletPlannedQty";
+            this.grcPalletPlannedQty.Visible = true;
+            this.grcPalletPlannedQty.VisibleIndex = 7;
+            // 
+            // grcPalletBulkQty
+            // 
+            this.grcPalletBulkQty.Caption = "PalletBulkQty";
+            this.grcPalletBulkQty.FieldName = "PalletBulkQty";
+            this.grcPalletBulkQty.Name = "grcPalletBulkQty";
+            this.grcPalletBulkQty.Visible = true;
+            this.grcPalletBulkQty.VisibleIndex = 8;
+            // 
+            // gricGrossWeightPlanned
+            // 
+            this.gricGrossWeightPlanned.Caption = "!Szállítandó bruttó súly";
+            this.gricGrossWeightPlanned.FieldName = "GrossWeightPlanned";
+            this.gricGrossWeightPlanned.Name = "gricGrossWeightPlanned";
+            this.gricGrossWeightPlanned.Visible = true;
+            this.gricGrossWeightPlanned.VisibleIndex = 9;
+            // 
+            // gricADR
+            // 
+            this.gricADR.Caption = "ADR";
+            this.gricADR.FieldName = "ADR";
+            this.gricADR.Name = "gricADR";
+            // 
+            // grcADRMultiplier
+            // 
+            this.grcADRMultiplier.Caption = "ADR szorzó";
+            this.grcADRMultiplier.FieldName = "ADRMultiplier";
+            this.grcADRMultiplier.Name = "grcADRMultiplier";
+            this.grcADRMultiplier.Visible = true;
+            this.grcADRMultiplier.VisibleIndex = 10;
+            // 
+            // grcADRLimitedQuantity
+            // 
+            this.grcADRLimitedQuantity.Caption = "ADR köteles mennyiség";
+            this.grcADRLimitedQuantity.FieldName = "ADRLimitedQuantity";
+            this.grcADRLimitedQuantity.Name = "grcADRLimitedQuantity";
+            this.grcADRLimitedQuantity.Visible = true;
+            this.grcADRLimitedQuantity.VisibleIndex = 11;
+            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -613,28 +647,10 @@
         private System.Windows.Forms.GroupBox grpMegrF;
         private DevExpress.XtraGrid.GridControl gridMegrF;
         private DevExpress.XtraGrid.Views.Grid.GridView gridViewMegrF;
-        private DevExpress.XtraGrid.Columns.GridColumn grcMEGRID;
-        private DevExpress.XtraGrid.Columns.GridColumn grcMEGRTIPX;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColRKTKOD;
-        private DevExpress.XtraGrid.Columns.GridColumn grcMEGRDAT;
-        private DevExpress.XtraGrid.Columns.GridColumn grcVEVONEV;
-        private DevExpress.XtraGrid.Columns.GridColumn grcSZAMLASZ;
-        private DevExpress.XtraGrid.Columns.GridColumn grcMEGJ;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
         private DevExpress.XtraGrid.GridControl gridMegrT;
         private DevExpress.XtraGrid.Views.Grid.GridView gridViewMegrT;
-        private DevExpress.XtraGrid.Columns.GridColumn gerMEGRID_T;
-        private DevExpress.XtraGrid.Columns.GridColumn grcROWNO;
-        private DevExpress.XtraGrid.Columns.GridColumn grcTermKod;
-        private DevExpress.XtraGrid.Columns.GridColumn grcTERMNEV;
-        private DevExpress.XtraGrid.Columns.GridColumn grcDB;
-        private DevExpress.XtraGrid.Columns.GridColumn grcAR;
-        private DevExpress.XtraGrid.Columns.GridColumn grcDATUM;
-        private DevExpress.XtraGrid.Columns.GridColumn grcRELROW;
-        private DevExpress.XtraGrid.Columns.GridColumn grcFBiz;
-        private DevExpress.XtraGrid.Columns.GridColumn grcSZVEVOID;
-        private DevExpress.XtraGrid.Columns.GridColumn grcSZVEVONEV;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView3;
         private System.Windows.Forms.GroupBox grpFilter;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -644,5 +660,31 @@
         private System.Windows.Forms.ComboBox cboMegrType;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnFindPartner;
+        private DevExpress.XtraGrid.Columns.GridColumn grcCustomerOrderNumber;
+        private DevExpress.XtraGrid.Columns.GridColumn grcCustomerOrderDate;
+        private DevExpress.XtraGrid.Columns.GridColumn gricShippingDate;
+        private DevExpress.XtraGrid.Columns.GridColumn gricWarehouseCode;
+        private DevExpress.XtraGrid.Columns.GridColumn grcTotalGrossWeightOfOrder;
+        private DevExpress.XtraGrid.Columns.GridColumn grcNumberOfPalletForDel;
+        private DevExpress.XtraGrid.Columns.GridColumn grcShippAddressID;
+        private DevExpress.XtraGrid.Columns.GridColumn grcShippAddressCompanyName;
+        private DevExpress.XtraGrid.Columns.GridColumn gricShippAddress;
+        private DevExpress.XtraGrid.Columns.GridColumn gricNote;
+        private DevExpress.XtraGrid.Columns.GridColumn gricConfPlannedQty;
+        private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlanned;
+        private DevExpress.XtraGrid.Columns.GridColumn gricID;
+        private DevExpress.XtraGrid.Columns.GridColumn grcRowNumber;
+        private DevExpress.XtraGrid.Columns.GridColumn grcProductCode;
+        private DevExpress.XtraGrid.Columns.GridColumn grcProdDescription;
+        private DevExpress.XtraGrid.Columns.GridColumn grcU_M;
+        private DevExpress.XtraGrid.Columns.GridColumn grcConfOrderQty;
+        private DevExpress.XtraGrid.Columns.GridColumn grcConfPlannedQty;
+        private DevExpress.XtraGrid.Columns.GridColumn grcPalletOrderQty;
+        private DevExpress.XtraGrid.Columns.GridColumn grcPalletPlannedQty;
+        private DevExpress.XtraGrid.Columns.GridColumn grcPalletBulkQty;
+        private DevExpress.XtraGrid.Columns.GridColumn gricGrossWeightPlanned;
+        private DevExpress.XtraGrid.Columns.GridColumn gricADR;
+        private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplier;
+        private DevExpress.XtraGrid.Columns.GridColumn grcADRLimitedQuantity;
     }
 }
