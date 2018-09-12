@@ -89,9 +89,13 @@ namespace PMapCore.BO.Mapei
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double ConfOrderQty { get; set; }
 
-        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)
+        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double ConfPlannedQty { get; set; }
+
+        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  *** MÓDÓSÍTOTT ÉRTÉK ***
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ConfPlannedQtyX { get; set; }
 
         //Rendelt mennyiség raklap,Pallet Order Qty(Row)
         [WriteFieldAttribute(Insert = true, Update = true)]
@@ -108,6 +112,10 @@ namespace PMapCore.BO.Mapei
         //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double GrossWeightPlanned { get; set; }
+
+        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)      *** MÓDÓSÍTOTT ÉRTÉK ***
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double GrossWeightPlannedX { get; set; }
 
         //ADR,ADR
         [WriteFieldAttribute(Insert = true, Update = true)]

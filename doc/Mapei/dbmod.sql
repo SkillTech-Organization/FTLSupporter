@@ -8,7 +8,8 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
+drop table [MPO_MPORDER]
+go
 CREATE TABLE [dbo].[MPO_MPORDER](
 	[ID] [dbo].[TY_ID] IDENTITY(1,1) NOT NULL,
 	[CompanyCode] [dbo].[TY_NAME] NULL,					--,Company code
@@ -31,10 +32,12 @@ CREATE TABLE [dbo].[MPO_MPORDER](
 	[ProdDescription] [dbo].[TY_TEXT] NULL,				--Termék megnevezés, Prod Description
 	[ConfOrderQty] [dbo].[TY_NVALUE] NULL,				--Rendelt mennyiség bruttó súly,Conf.Order Qty ROW 
 	[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,			--!!!szállítandó mennyiség (ret.val.),Conf. Planned Qty (Row)
+	[ConfPlannedQtyX] [dbo].[TY_NVALUE] NULL,			--!!!szállítandó mennyiség (ret.val.),Conf. Planned Qty (Row)
 	[PalletOrderQty] [dbo].[TY_NVALUE]  NULL,			--Rendelt mennyiség raklap,Pallet Order Qty (Row)
 	[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,			--Szállítandó mennyiség raklap,Pallet Planned Qty (Row)
 	[PalletBulkQty] [dbo].[TY_NVALUE]  NULL,			--,Pallet ‘Bulk’ qty (Row)
 	[GrossWeightPlanned] [dbo].[TY_NVALUE]  NULL,		--!!!Szállítandó bruttó súly,Gross Weight Planned (Row)
+	[GrossWeightPlannedX] [dbo].[TY_NVALUE]  NULL,		--!!!Szállítandó bruttó súly,Gross Weight Planned (Row)
 	[ADR] [dbo].[TY_BVALUE]  NULL,						--ADR,ADR
 	[ADRMultiplier] [dbo].[TY_NVALUE]  NULL,			--ADR szorzó,ADR Multiplier
 	[ADRLimitedQuantity] [dbo].[TY_NVALUE]  NULL,		--ADR köteles mennyiség, limited_quantity

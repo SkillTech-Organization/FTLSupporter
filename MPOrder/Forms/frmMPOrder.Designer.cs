@@ -29,31 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMPOrder));
-            this.printToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.xcelToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
             this.tsbExportItems = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnPlus = new System.Windows.Forms.ToolStripButton();
             this.btnMinus = new System.Windows.Forms.ToolStripButton();
             this.tsMegr = new System.Windows.Forms.ToolStrip();
+            this.btnQuit = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.grpMegrF = new System.Windows.Forms.GroupBox();
             this.gridMegrF = new DevExpress.XtraGrid.GridControl();
             this.gridViewMegrF = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gridMegrT = new DevExpress.XtraGrid.GridControl();
-            this.gridViewMegrT = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.grpFilter = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtPartnerNev = new System.Windows.Forms.TextBox();
-            this.btnFilter = new System.Windows.Forms.Button();
-            this.cboMegrType = new System.Windows.Forms.ComboBox();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.btnFindPartner = new System.Windows.Forms.Button();
             this.grcCustomerOrderNumber = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcCustomerOrderDate = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricShippingDate = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -66,6 +53,10 @@
             this.gricNote = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricConfPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridMegrT = new DevExpress.XtraGrid.GridControl();
+            this.gridViewMegrT = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gricID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcRowNumber = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcProductCode = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -80,6 +71,16 @@
             this.gricADR = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRLimitedQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.grpFilter = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtPartnerNev = new System.Windows.Forms.TextBox();
+            this.btnFilter = new System.Windows.Forms.Button();
+            this.cboMegrType = new System.Windows.Forms.ComboBox();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnFindPartner = new System.Windows.Forms.Button();
+            this.openExcel = new System.Windows.Forms.OpenFileDialog();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -98,23 +99,15 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // printToolStripButton
+            // btnExcelImport
             // 
-            this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
-            this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.printToolStripButton.Name = "printToolStripButton";
-            this.printToolStripButton.Size = new System.Drawing.Size(24, 22);
-            this.printToolStripButton.Text = "&Nyomtatás";
-            // 
-            // xcelToolStripButton
-            // 
-            this.xcelToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.xcelToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("xcelToolStripButton.Image")));
-            this.xcelToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.xcelToolStripButton.Name = "xcelToolStripButton";
-            this.xcelToolStripButton.Size = new System.Drawing.Size(24, 22);
-            this.xcelToolStripButton.Text = "&Export Excelbe";
+            this.btnExcelImport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnExcelImport.Image = ((System.Drawing.Image)(resources.GetObject("btnExcelImport.Image")));
+            this.btnExcelImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnExcelImport.Name = "btnExcelImport";
+            this.btnExcelImport.Size = new System.Drawing.Size(24, 22);
+            this.btnExcelImport.Text = "&Export Excelbe";
+            this.btnExcelImport.Click += new System.EventHandler(this.btnExcelImport_Click);
             // 
             // tsbExportItems
             // 
@@ -153,8 +146,8 @@
             this.tsMegr.AutoSize = false;
             this.tsMegr.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsMegr.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.printToolStripButton,
-            this.xcelToolStripButton,
+            this.btnQuit,
+            this.btnExcelImport,
             this.tsbExportItems,
             this.toolStripSeparator2,
             this.btnPlus,
@@ -163,6 +156,16 @@
             this.tsMegr.Name = "tsMegr";
             this.tsMegr.Size = new System.Drawing.Size(1024, 25);
             this.tsMegr.TabIndex = 10;
+            // 
+            // btnQuit
+            // 
+            this.btnQuit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnQuit.Image = ((System.Drawing.Image)(resources.GetObject("btnQuit.Image")));
+            this.btnQuit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnQuit.Name = "btnQuit";
+            this.btnQuit.Size = new System.Drawing.Size(24, 22);
+            this.btnQuit.Text = "Kilépés";
+            this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -241,162 +244,6 @@
             this.gridViewMegrF.OptionsView.EnableAppearanceEvenRow = true;
             this.gridViewMegrF.OptionsView.EnableAppearanceOddRow = true;
             this.gridViewMegrF.OptionsView.ShowFooter = true;
-            // 
-            // gridView1
-            // 
-            this.gridView1.GridControl = this.gridMegrF;
-            this.gridView1.Name = "gridView1";
-            // 
-            // gridView2
-            // 
-            this.gridView2.GridControl = this.gridMegrF;
-            this.gridView2.Name = "gridView2";
-            // 
-            // gridMegrT
-            // 
-            this.gridMegrT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridMegrT.Location = new System.Drawing.Point(0, 0);
-            this.gridMegrT.MainView = this.gridViewMegrT;
-            this.gridMegrT.Name = "gridMegrT";
-            this.gridMegrT.Size = new System.Drawing.Size(1018, 190);
-            this.gridMegrT.TabIndex = 10;
-            this.gridMegrT.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridViewMegrT,
-            this.gridView3});
-            // 
-            // gridViewMegrT
-            // 
-            this.gridViewMegrT.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.gricID,
-            this.grcRowNumber,
-            this.grcProductCode,
-            this.grcProdDescription,
-            this.grcU_M,
-            this.grcConfOrderQty,
-            this.grcConfPlannedQty,
-            this.grcPalletOrderQty,
-            this.grcPalletPlannedQty,
-            this.grcPalletBulkQty,
-            this.gricGrossWeightPlanned,
-            this.gricADR,
-            this.grcADRMultiplier,
-            this.grcADRLimitedQuantity});
-            this.gridViewMegrT.GridControl = this.gridMegrT;
-            this.gridViewMegrT.Name = "gridViewMegrT";
-            this.gridViewMegrT.OptionsCustomization.AllowGroup = false;
-            this.gridViewMegrT.OptionsSelection.EnableAppearanceFocusedCell = false;
-            this.gridViewMegrT.OptionsView.EnableAppearanceEvenRow = true;
-            this.gridViewMegrT.OptionsView.EnableAppearanceOddRow = true;
-            this.gridViewMegrT.OptionsView.ShowFooter = true;
-            this.gridViewMegrT.OptionsView.ShowGroupPanel = false;
-            // 
-            // gridView3
-            // 
-            this.gridView3.GridControl = this.gridMegrT;
-            this.gridView3.Name = "gridView3";
-            // 
-            // grpFilter
-            // 
-            this.grpFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.grpFilter.Controls.Add(this.tableLayoutPanel2);
-            this.grpFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpFilter.Location = new System.Drawing.Point(3, 3);
-            this.grpFilter.Name = "grpFilter";
-            this.grpFilter.Size = new System.Drawing.Size(1018, 54);
-            this.grpFilter.TabIndex = 10;
-            this.grpFilter.TabStop = false;
-            this.grpFilter.Text = "Szűrő";
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 6;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.txtPartnerNev, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnFilter, 5, 0);
-            this.tableLayoutPanel2.Controls.Add(this.cboMegrType, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnClear, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnFindPartner, 4, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1012, 35);
-            this.tableLayoutPanel2.TabIndex = 11;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Bizonylattípus:";
-            // 
-            // txtPartnerNev
-            // 
-            this.txtPartnerNev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPartnerNev.BackColor = System.Drawing.Color.OldLace;
-            this.txtPartnerNev.Enabled = false;
-            this.txtPartnerNev.Location = new System.Drawing.Point(323, 7);
-            this.txtPartnerNev.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.txtPartnerNev.Name = "txtPartnerNev";
-            this.txtPartnerNev.Size = new System.Drawing.Size(581, 20);
-            this.txtPartnerNev.TabIndex = 8;
-            // 
-            // btnFilter
-            // 
-            this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFilter.BackColor = System.Drawing.Color.Yellow;
-            this.btnFilter.Image = ((System.Drawing.Image)(resources.GetObject("btnFilter.Image")));
-            this.btnFilter.Location = new System.Drawing.Point(980, 4);
-            this.btnFilter.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.btnFilter.Name = "btnFilter";
-            this.btnFilter.Size = new System.Drawing.Size(29, 26);
-            this.btnFilter.TabIndex = 4;
-            this.btnFilter.UseVisualStyleBackColor = false;
-            // 
-            // cboMegrType
-            // 
-            this.cboMegrType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboMegrType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboMegrType.FormattingEnabled = true;
-            this.cboMegrType.Location = new System.Drawing.Point(123, 7);
-            this.cboMegrType.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.cboMegrType.Name = "cboMegrType";
-            this.cboMegrType.Size = new System.Drawing.Size(194, 21);
-            this.cboMegrType.TabIndex = 7;
-            // 
-            // btnClear
-            // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.BackColor = System.Drawing.Color.OldLace;
-            this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
-            this.btnClear.Location = new System.Drawing.Point(910, 4);
-            this.btnClear.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(29, 26);
-            this.btnClear.TabIndex = 9;
-            this.btnClear.UseVisualStyleBackColor = false;
-            // 
-            // btnFindPartner
-            // 
-            this.btnFindPartner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFindPartner.BackColor = System.Drawing.Color.OldLace;
-            this.btnFindPartner.Image = ((System.Drawing.Image)(resources.GetObject("btnFindPartner.Image")));
-            this.btnFindPartner.Location = new System.Drawing.Point(945, 4);
-            this.btnFindPartner.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.btnFindPartner.Name = "btnFindPartner";
-            this.btnFindPartner.Size = new System.Drawing.Size(29, 26);
-            this.btnFindPartner.TabIndex = 10;
-            this.btnFindPartner.UseVisualStyleBackColor = false;
             // 
             // grcCustomerOrderNumber
             // 
@@ -493,6 +340,54 @@
             this.grcGrossWeightPlanned.Name = "grcGrossWeightPlanned";
             this.grcGrossWeightPlanned.Visible = true;
             this.grcGrossWeightPlanned.VisibleIndex = 11;
+            // 
+            // gridView1
+            // 
+            this.gridView1.GridControl = this.gridMegrF;
+            this.gridView1.Name = "gridView1";
+            // 
+            // gridView2
+            // 
+            this.gridView2.GridControl = this.gridMegrF;
+            this.gridView2.Name = "gridView2";
+            // 
+            // gridMegrT
+            // 
+            this.gridMegrT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridMegrT.Location = new System.Drawing.Point(0, 0);
+            this.gridMegrT.MainView = this.gridViewMegrT;
+            this.gridMegrT.Name = "gridMegrT";
+            this.gridMegrT.Size = new System.Drawing.Size(1018, 190);
+            this.gridMegrT.TabIndex = 10;
+            this.gridMegrT.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridViewMegrT,
+            this.gridView3});
+            // 
+            // gridViewMegrT
+            // 
+            this.gridViewMegrT.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.gricID,
+            this.grcRowNumber,
+            this.grcProductCode,
+            this.grcProdDescription,
+            this.grcU_M,
+            this.grcConfOrderQty,
+            this.grcConfPlannedQty,
+            this.grcPalletOrderQty,
+            this.grcPalletPlannedQty,
+            this.grcPalletBulkQty,
+            this.gricGrossWeightPlanned,
+            this.gricADR,
+            this.grcADRMultiplier,
+            this.grcADRLimitedQuantity});
+            this.gridViewMegrT.GridControl = this.gridMegrT;
+            this.gridViewMegrT.Name = "gridViewMegrT";
+            this.gridViewMegrT.OptionsCustomization.AllowGroup = false;
+            this.gridViewMegrT.OptionsSelection.EnableAppearanceFocusedCell = false;
+            this.gridViewMegrT.OptionsView.EnableAppearanceEvenRow = true;
+            this.gridViewMegrT.OptionsView.EnableAppearanceOddRow = true;
+            this.gridViewMegrT.OptionsView.ShowFooter = true;
+            this.gridViewMegrT.OptionsView.ShowGroupPanel = false;
             // 
             // gricID
             // 
@@ -602,6 +497,120 @@
             this.grcADRLimitedQuantity.Visible = true;
             this.grcADRLimitedQuantity.VisibleIndex = 11;
             // 
+            // gridView3
+            // 
+            this.gridView3.GridControl = this.gridMegrT;
+            this.gridView3.Name = "gridView3";
+            // 
+            // grpFilter
+            // 
+            this.grpFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.grpFilter.Controls.Add(this.tableLayoutPanel2);
+            this.grpFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpFilter.Location = new System.Drawing.Point(3, 3);
+            this.grpFilter.Name = "grpFilter";
+            this.grpFilter.Size = new System.Drawing.Size(1018, 54);
+            this.grpFilter.TabIndex = 10;
+            this.grpFilter.TabStop = false;
+            this.grpFilter.Text = "Szűrő";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.txtPartnerNev, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnFilter, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cboMegrType, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnClear, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnFindPartner, 4, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1012, 35);
+            this.tableLayoutPanel2.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(114, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Bizonylattípus:";
+            // 
+            // txtPartnerNev
+            // 
+            this.txtPartnerNev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPartnerNev.BackColor = System.Drawing.Color.OldLace;
+            this.txtPartnerNev.Enabled = false;
+            this.txtPartnerNev.Location = new System.Drawing.Point(323, 7);
+            this.txtPartnerNev.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.txtPartnerNev.Name = "txtPartnerNev";
+            this.txtPartnerNev.Size = new System.Drawing.Size(581, 20);
+            this.txtPartnerNev.TabIndex = 8;
+            // 
+            // btnFilter
+            // 
+            this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFilter.BackColor = System.Drawing.Color.Yellow;
+            this.btnFilter.Image = ((System.Drawing.Image)(resources.GetObject("btnFilter.Image")));
+            this.btnFilter.Location = new System.Drawing.Point(980, 4);
+            this.btnFilter.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.btnFilter.Name = "btnFilter";
+            this.btnFilter.Size = new System.Drawing.Size(29, 26);
+            this.btnFilter.TabIndex = 4;
+            this.btnFilter.UseVisualStyleBackColor = false;
+            // 
+            // cboMegrType
+            // 
+            this.cboMegrType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboMegrType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboMegrType.FormattingEnabled = true;
+            this.cboMegrType.Location = new System.Drawing.Point(123, 7);
+            this.cboMegrType.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.cboMegrType.Name = "cboMegrType";
+            this.cboMegrType.Size = new System.Drawing.Size(194, 21);
+            this.cboMegrType.TabIndex = 7;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClear.BackColor = System.Drawing.Color.OldLace;
+            this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
+            this.btnClear.Location = new System.Drawing.Point(910, 4);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(29, 26);
+            this.btnClear.TabIndex = 9;
+            this.btnClear.UseVisualStyleBackColor = false;
+            // 
+            // btnFindPartner
+            // 
+            this.btnFindPartner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFindPartner.BackColor = System.Drawing.Color.OldLace;
+            this.btnFindPartner.Image = ((System.Drawing.Image)(resources.GetObject("btnFindPartner.Image")));
+            this.btnFindPartner.Location = new System.Drawing.Point(945, 4);
+            this.btnFindPartner.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.btnFindPartner.Name = "btnFindPartner";
+            this.btnFindPartner.Size = new System.Drawing.Size(29, 26);
+            this.btnFindPartner.TabIndex = 10;
+            this.btnFindPartner.UseVisualStyleBackColor = false;
+            // 
+            // openExcel
+            // 
+            this.openExcel.CheckFileExists = false;
+            this.openExcel.DefaultExt = "xls";
+            this.openExcel.Filter = "*.xlsx|*.xlsx";
+            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -634,9 +643,7 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ToolStripButton printToolStripButton;
-        private System.Windows.Forms.ToolStripButton xcelToolStripButton;
+        private System.Windows.Forms.ToolStripButton btnExcelImport;
         private System.Windows.Forms.ToolStripButton tsbExportItems;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnPlus;
@@ -686,5 +693,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn gricADR;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplier;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRLimitedQuantity;
+        private System.Windows.Forms.ToolStripButton btnQuit;
+        private System.Windows.Forms.OpenFileDialog openExcel;
     }
 }
