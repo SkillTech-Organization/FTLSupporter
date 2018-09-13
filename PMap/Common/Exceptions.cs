@@ -149,4 +149,22 @@ namespace PMapCore.Common
         {
         }
     }
+
+    public class DuplicatedMPO_MPORDERException : Exception
+    {
+        public DuplicatedMPO_MPORDERException()
+        {
+        }
+
+        public DuplicatedMPO_MPORDERException(string message)
+            : base(message)
+        {
+        }
+
+        public DuplicatedMPO_MPORDERException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
 }

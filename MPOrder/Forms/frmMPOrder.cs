@@ -1,4 +1,6 @@
-﻿using PMapCore.BO.Mapei;
+﻿using PMapCore.BLL.Mapei;
+using PMapCore.BO.Mapei;
+using PMapCore.Common;
 using PMapCore.Localize;
 using System;
 using System.Collections.Generic;
@@ -61,7 +63,7 @@ namespace MPOrder.Forms
                     int lastUsedRow = last.Row;
                     int lastUsedColumn = last.Column;
                     var items = new List<boMPOrder>();
-                    for (int rowIndex = 2; rowIndex <= lastUsedRow; rowIndex++)
+                    for (int rowIndex = 3; rowIndex <= lastUsedRow; rowIndex++)
                     {
                         int columnIndex = 0;
                         var CompanyCode = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "");
@@ -84,12 +86,12 @@ namespace MPOrder.Forms
                         var ProdDescription = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "");
                         var ConfOrderQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                         var ConfPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
-                        var ConfPlannedQtyX = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
+                        var ConfPlannedQtyX = ConfPlannedQty;
                         var PalletOrderQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                         var PalletPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                         var PalletBulkQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                         var GrossWeightPlanned = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
-                        var GrossWeightPlannedX = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
+                        var GrossWeightPlannedX = GrossWeightPlanned;
                         var ADR = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
                         var ADRMultiplier = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                         var ADRLimitedQuantity = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
@@ -98,40 +100,40 @@ namespace MPOrder.Forms
                         var UV = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
 
                         boMPOrder item = new boMPOrder()
-                            {
-                                CompanyCode = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                                CustomerCode = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            CustomerOrderNumber = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            CustomerOrderDate = (val[rowIndex, ++columnIndex] != null ? DateTime.Parse( val[rowIndex, columnIndex].ToString())  : DateTime.Now.Date),
-                            ShippingDate = (val[rowIndex, ++columnIndex] != null ? DateTime.Parse(val[rowIndex, columnIndex].ToString()) : DateTime.Now.Date),
-                            WarehouseCode = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            TotalGrossWeightOfOrder = Double.Parse("0"+ (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            NumberOfPalletForDel = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            ShippAddressID = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            ShippAddressCompanyName = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            ShippAddressZipCode = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            ShippingAddressCity = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            ShippingAddressStreetAndNumber = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            Note = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            RowNumber = Int32.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            ProductCode = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            U_M = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            ProdDescription = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""),
-                            ConfOrderQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            ConfPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            ConfPlannedQtyX = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            PalletOrderQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            PalletPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            PalletBulkQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            GrossWeightPlanned = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            GrossWeightPlannedX = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            ADR = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false),
-                            ADRMultiplier = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            ADRLimitedQuantity = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "")),
-                            Freeze = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false),
-                            Melt = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false),
-                            UV = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false),
-                            Bordero =  "",
+                        {
+                            CompanyCode = CompanyCode,
+                            CustomerCode = CustomerCode,
+                            CustomerOrderNumber = CustomerOrderNumber,
+                            CustomerOrderDate = CustomerOrderDate,
+                            ShippingDate = ShippingDate,
+                            WarehouseCode = WarehouseCode,
+                            TotalGrossWeightOfOrder = TotalGrossWeightOfOrder,
+                            NumberOfPalletForDel = NumberOfPalletForDel,
+                            ShippAddressID = ShippAddressID,
+                            ShippAddressCompanyName = ShippAddressCompanyName,
+                            ShippAddressZipCode = ShippAddressZipCode,
+                            ShippingAddressCity = ShippingAddressCity,
+                            ShippingAddressStreetAndNumber = ShippingAddressStreetAndNumber,
+                            Note = Note,
+                            RowNumber = RowNumber,
+                            ProductCode = ProductCode,
+                            U_M = U_M,
+                            ProdDescription = ProdDescription,
+                            ConfOrderQty = ConfOrderQty,
+                            ConfPlannedQty = ConfPlannedQty,
+                            ConfPlannedQtyX = ConfPlannedQtyX,
+                            PalletOrderQty = PalletOrderQty,
+                            PalletPlannedQty = PalletPlannedQty,
+                            PalletBulkQty = PalletBulkQty,
+                            GrossWeightPlanned = GrossWeightPlanned,
+                            GrossWeightPlannedX = GrossWeightPlannedX,
+                            ADR = ADR,
+                            ADRMultiplier = ADRMultiplier,
+                            ADRLimitedQuantity = ADRLimitedQuantity,
+                            Freeze = Freeze,
+                            Melt = Melt,
+                            UV = UV,
+                            Bordero = "",
                             Carrier = "",
                             VehicleType = "",
                             KM = 0,
@@ -141,18 +143,33 @@ namespace MPOrder.Forms
                         items.Add(item);
 
                     }
+                    var bllMPOrderx = new bllMPOrder(PMapCommonVars.Instance.CT_DB);
+
+                    var added = 0;
+                    foreach (var item in items)
+                    {
+                        var existed = bllMPOrderx.GetMPOrderByCODE(item.CustomerOrderNumber, item.ProductCode);
+                        if (existed == null)
+                        {
+
+                            bllMPOrderx.AddMPOrder(item);
+                            added++;
+                        }
+                    }
+                    //itt tartok
                 }
 
                 catch (Exception ex)
                 {
-                    //Utils.String2File($"SetOutputFileNames_iop ERROR: {Utils.GetExceptionText(ex)} ", logFile, true);
-                    throw new Exception(string.Format(PMapMessages.E_MPORD_INTEROP_ERR, ex.Message));
+                    Util.ExceptionLog(ex);
+                    UI.Message(string.Format(PMapMessages.E_MPORD_EXCELIMP_ERR, ex.Message));
+                    //throw new Exception(string.Format(PMapMessages.E_MPORD_INTEROP_ERR, ex.Message));
                 }
                 finally
                 {
-                System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+                    System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
 
-                excelWorkbook.Close(0);
+                    excelWorkbook.Close(0);
                     excelApp.Quit();
                     Marshal.FinalReleaseComObject(excelApp);
                 }

@@ -864,8 +864,8 @@ namespace PMapTestApp
 
         private void button34_Click(object sender, EventArgs e)
         {
-            frmMPOrder dlg = new frmMPOrder();
-            dlg.Show();
+            (new PMapInterface()).MPOrderDialog("", dbConf);
+            
 
         }
     }

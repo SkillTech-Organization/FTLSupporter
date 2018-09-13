@@ -162,6 +162,7 @@ namespace PMapCore.Localize
 
         public const string E_MPORD_SEETNOTFOUND = "Nincs munkalap az Excel állományban!";
         public const string E_MPORD_INTEROP_ERR = "Excel interop error:{0}";
+        public const string E_MPORD_EXCELIMP_ERR = "Hiba történt az Excel import közben:{0}";
 
     }
 

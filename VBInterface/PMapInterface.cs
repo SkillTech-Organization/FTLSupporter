@@ -673,7 +673,7 @@ namespace VBInterface
 
         #endregion
 
-        public string MPOrderDialog(string p_iniPath, string p_dbConf, bool p_showMessage = true)
+        public string MPOrderDialog(string p_iniPath, string p_dbConf)
         {
 
             string sRetStatus = retOK;
@@ -681,6 +681,9 @@ namespace VBInterface
             {
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                Util.Log2File(">>START:MPOrderDialog( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + "')");
+                PMapCommonVars.Instance.ConnectToDB();
+
                 if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
                     return retErr;
 
@@ -693,6 +696,7 @@ namespace VBInterface
                 UI.Error(e.Message);
                 sRetStatus = retErr;
             }
+            //Util.Log2File(">>END:MPOrderDialog()-->" + sRetStatus);
             return sRetStatus;
         }
 
