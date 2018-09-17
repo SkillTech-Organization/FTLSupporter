@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMapCore.BLL.Mapei
+namespace MPOrder.BLL
 {
     public class bllMPOrder : bllBase
     {

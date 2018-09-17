@@ -17,6 +17,7 @@ namespace PMapCore.LongProcess.Base
 
         protected delegate void nextStepDelegate();
         protected delegate void StopDelegate(BaseLongProcess p_LongProcess);
+        protected delegate void SetMinMaxDelegate(int p_min, int p_max);
         protected delegate void SetParDelegate(int p_min, int p_max, string p_caption);
         protected delegate void SetCaptionDelegate(string p_caption);
         protected delegate void SetInfoTextDelegate(string p_infoText);
@@ -53,6 +54,13 @@ namespace PMapCore.LongProcess.Base
             m_min = p_min;
             m_max = p_max;
             this.Text = p_caption;
+        }
+
+        public virtual void _setMinMax(int p_min, int p_max)
+        {
+            m_value = p_min;
+            m_min = p_min;
+            m_max = p_max;
         }
 
         public virtual void _setFormCaption(string p_caption)
@@ -93,6 +101,18 @@ namespace PMapCore.LongProcess.Base
             e.Cancel = !m_closeable;
         }
 
+
+        public void SetMinMax(int p_min, int p_max)
+        {
+            try
+            {
+                Invoke(new SetMinMaxDelegate(this._setMinMax), p_min, p_max);
+            }
+            catch (Exception e)
+            {
+                Util.ExceptionLog(e);
+            }
+        }
 
         public void SetParams(int p_min, int p_max, string p_caption)
         {
@@ -181,5 +201,17 @@ namespace PMapCore.LongProcess.Base
             }
         }
 
+
+
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
+        }
     }
 }

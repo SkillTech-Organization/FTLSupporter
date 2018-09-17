@@ -40,5 +40,7 @@ namespace PMapCore.LongProcess.Base
             StopAllThreadsAndCloseForm();
         }
 
+      
+
     }
 }

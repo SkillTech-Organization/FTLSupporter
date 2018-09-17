@@ -81,6 +81,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\bllMPOrder.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +94,7 @@
     <Compile Include="Forms\frmMPOrder.Designer.cs">
       <DependentUpon>frmMPOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="LongProcess\ImportFromXML.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\frmMPOrder.resx">

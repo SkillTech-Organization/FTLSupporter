@@ -127,7 +127,7 @@ namespace PMapCore.BO.Mapei
 
         //ADR köteles mennyiség, limited_quantity
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ADRLimitedQuantity { get; set; }
+        public bool ADRLimitedQuantity { get; set; }
 
         //Fagyérzékeny, Freeze
         [WriteFieldAttribute(Insert = true, Update = true)]

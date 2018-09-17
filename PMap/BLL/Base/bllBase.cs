@@ -86,7 +86,7 @@ namespace PMapCore.BLL.Base
 
 
 
-        protected int AddItem(object p_boObject)
+        protected int AddItem(object p_boObject, bool p_history = true)
         {
             // ha nincs táblanév definiálva, exception
             if (TableName == "")
@@ -99,7 +99,8 @@ namespace PMapCore.BLL.Base
                     Hashtable values = getValues(p_boObject, true);
                     string IDName = getIDName(p_boObject);
                     int ID = DBA.InsertHash(TableName, IDName, values, true);
-                    bllHistory.WriteHistory(0, this.TableName, ID, bllHistory.EMsgCodes.ADD, p_boObject);
+                    if(p_history)
+                        bllHistory.WriteHistory(0, this.TableName, ID, bllHistory.EMsgCodes.ADD, p_boObject);
 
                     return ID;
 
