@@ -1,5 +1,5 @@
-﻿using PMapCore.BLL.Mapei;
-using PMapCore.BO.Mapei;
+﻿using MPOrder.BLL;
+using MPOrder.BO;
 using PMapCore.Common;
 using PMapCore.DB.Base;
 using PMapCore.Localize;

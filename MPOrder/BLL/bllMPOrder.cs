@@ -1,5 +1,5 @@
-﻿using PMapCore.BLL.Base;
-using PMapCore.BO.Mapei;
+﻿using MPOrder.BO;
+using PMapCore.BLL.Base;
 using PMapCore.Common;
 using PMapCore.DB.Base;
 using System;
@@ -91,7 +91,7 @@ namespace MPOrder.BLL
             {
                 return null;
             }
-//            else if (lstMPOrder.Count == 1)
+            //            else if (lstMPOrder.Count == 1)
             else if (lstMPOrder.Count >= 1)
             {
                 return lstMPOrder[0];
@@ -116,5 +116,78 @@ namespace MPOrder.BLL
             return AddItem(p_MPOrder, false);
         }
 
+        public List<boMPOrderF> GetAllMPOrdersForGrid(DateTime p_ShippingDate)
+        {
+            var lst = GetAllMPOrders("ShippingDate = ?", p_ShippingDate.Date);
+            if (lst != null)
+            {
+                var res = lst.GroupBy(g1 => new
+                {
+                    g1.CompanyCode,
+                    g1.CustomerCode,
+                    g1.CustomerOrderNumber,
+                    g1.CustomerOrderDate,
+                    g1.ShippingDate,
+                    g1.WarehouseCode,
+                    g1.ShippAddressID,
+                    g1.ShippAddressCompanyName,
+                    g1.ShippAddressZipCode,
+                    g1.ShippingAddressCity,
+                    g1.ShippingAddressStreetAndNumber,
+                    g1.ConfPlannedQty,
+                    g1.Bordero,
+                    g1.Carrier,
+                    g1.VehicleType,
+                    g1.KM,
+                    g1.Forfait,
+                    g1.Currency
+                }).Select(s => new boMPOrderF()
+                {
+                    CompanyCode = s.Key.CompanyCode,
+                    CustomerCode = s.Key.CustomerCode,
+                    CustomerOrderNumber = s.Key.CustomerOrderNumber,
+                    CustomerOrderDate = s.Key.CustomerOrderDate,
+                    ShippingDate = s.Key.ShippingDate,
+                    WarehouseCode = s.Key.WarehouseCode,
+                    ShippAddressID = s.Key.ShippAddressID,
+                    ShippAddressCompanyName = s.Key.ShippAddressCompanyName,
+                    ShippAddressZipCode = s.Key.ShippAddressZipCode,
+                    ShippingAddressCity = s.Key.ShippingAddressCity,
+                    ShippingAddressStreetAndNumber = s.Key.ShippingAddressStreetAndNumber,
+                    ConfPlannedQty = s.Key.ConfPlannedQty,
+                    Bordero = s.Key.Bordero,
+                    Carrier = s.Key.Carrier,
+                    VehicleType = s.Key.VehicleType,
+                    KM = s.Key.KM,
+                    Forfait = s.Key.Forfait,
+                    Currency = s.Key.Currency,
+                    Items = s.ToList().Select(s2 => new boMPOrderT()
+                    {
+                        ID = s2.ID,
+                        CustomerOrderNumber = s2.CustomerOrderNumber,
+                        RowNumber = s2.RowNumber,
+                        ProductCode = s2.ProductCode,
+                        U_M = s2.U_M,
+                        ProdDescription = s2.ProdDescription,
+                        ConfOrderQty = s2.ConfOrderQty,
+                        PalletOrderQty = s2.PalletOrderQty,
+                        PalletPlannedQty = s2.PalletPlannedQty,
+                        PalletBulkQty = s2.PalletBulkQty,
+                        ADR = s2.ADR,
+                        ADRMultiplier = s2.ADRMultiplier,
+                        ADRLimitedQuantity = s2.ADRLimitedQuantity,
+                        Freeze = s2.Freeze,
+                        Melt = s2.Melt,
+                        UV = s2.UV
+                    }
+                   ).ToList()
+                }).ToList();
+                return res;
+            }
+            else
+            {
+                return new List<boMPOrderF>();
+            }
+        }
     }
 }

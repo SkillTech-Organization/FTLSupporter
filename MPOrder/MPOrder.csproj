@@ -82,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\bllMPOrder.cs" />
+    <Compile Include="BO\boMPOrder.cs" />
+    <Compile Include="BO\boMPOrderF.cs" />
+    <Compile Include="BO\boMPOrderT.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

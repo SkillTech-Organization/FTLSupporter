@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMapCore.BO.Mapei
+namespace MPOrder.BO
 {
     [Serializable]
     public class boMPOrder

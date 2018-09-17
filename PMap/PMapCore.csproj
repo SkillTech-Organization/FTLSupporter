@@ -215,12 +215,8 @@
     <Compile Include="BLL\Base\bllBase.cs" />
     <Compile Include="BLL\bllUser.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
-    <Compile Include="BLL\Mapei\bllMPOrder.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
     <Compile Include="BO\boUser.cs" />
-    <Compile Include="BO\Mapei\boMPOrder.cs" />
-    <Compile Include="BO\Mapei\boMPOrderF.cs" />
-    <Compile Include="BO\Mapei\boMPOrderT.cs" />
     <Compile Include="Cache\LogForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\AuthCryptoHelper.cs" />

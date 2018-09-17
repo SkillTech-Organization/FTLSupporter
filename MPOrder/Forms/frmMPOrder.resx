@@ -214,35 +214,6 @@
         Ckhy6PIFK55lEmRASQfY8X8GAP61RBfaJjhjAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btnClear.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
-        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsKAAALCgG/Q2ZTAAAArElE
-        QVQ4T6WRyw3EIAxEKYMUwSUVcNoi6IBOuFMMJ2qgJC92APGxtI52pCfZY3skEgUAf8GbSt1CPtzxVcFC
-        ws0e55yJlBKx16WUM6AfxxghhFCtR1hz3hLQj733hHPu2Wzi+hHQj621C8aYtr4KfZzPAaC1ZsHZrHkX
-        6wo9oTcHnLad8RH3AVpDXN9YfuM8wJb0w1sCaGMaSjgC3oawAYhINeDijl/BmnJAfQFMdj1imDyPHQAA
-        AABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="btnFindPartner.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
-        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsKAAALCgG/Q2ZTAAAC1klE
-        QVQ4T6WSSUxTURSGb4XX93ilihRMW0qgaFqg0NIKLZSxlEloSxlaSwEpUKFISE2FFgFBWRCRIUwhcaNL
-        dWE0slAjxJULQ2JMXLhx6QI1EWOMLAz5fY+ExIGFw0n+5Ob7z/1z7sklAP5LB8K/0W8gLu5oukqdbokR
-        0op9JiACWbIi2aJSqTN+7OVFZmbnyeLSCklJSSVisViQpEi+Z8ov2BKzoglLWRkpt1oIFU2FdFrdlk6X
-        87iouITKyTGQhcUVMju3QLjDMllaWSWpqUqfXq9/ZLPZd1taWpGZkflco9EsZmRmzKlOqNa9HHM6G2A0
-        mdazs7WBpeVVMje/SMhQeJhcnZ5VWyuqPja7PAiHRzA6MgarxbpbW1sHu80Bs8n8zefrxvlgCG73aVTV
-        nPoyPnElr6uri+yV0Wga7g2cQ12dA9osLRqdjfB3n4XH0wJ+mu7OTrS1tiPXkAu73QGX2wOvt3XebC4k
-        RCA4VFJZXbU9cmkUM3Oz6PB1wJCjR29PH5pdrr3mcDgCvVYHa7kFocEQBiMRVNZUfaIoYQVJPJb4Okud
-        jeOsGkWScgy0BxEI9CAyPILcPCOyuImGuSe1tbfC3+aHUZqPgsOlqNRUQy5PekMkcfHvalOcmHYsI2i4
-        iGZtC/r8AXi8XiiVys0khWKj7YwPA/0DsGsb0KcJ4UbPHQxZxqCUprznAz506LpxK3QfU00L6LX2ozCv
-        cIemhZMsy6aJRCIZE8OM55/M/+o1deBy7TWsTW5gtH4Scolsm8SwzIuCbDMGHBcQsAThLvVAniRb43bL
-        0DRNuBB+z0KpXHq3sbgJPlMPgo4IbOZ6xMaKHvJmCSWkNiUJ8Z8TEhN2xEfEzziWzBsMw+wH8CUVidkH
-        Upl0S5IY/5aio19xLI83Urm/epNmhZsMS7+MoqKuc4zhjV8CqEPRgiku5CnN0k+4O7c5lvbTv/4XHQj/
-        XCDfAVzS1XrYMmQCAAAAAElFTkSuQmCC
-</value>
-  </data>
   <metadata name="openExcel.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>122, 14</value>
   </metadata>

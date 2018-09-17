@@ -10,48 +10,65 @@ SET QUOTED_IDENTIFIER ON
 GO
 drop table [MPO_MPORDER]
 go
+
 CREATE TABLE [dbo].[MPO_MPORDER](
 	[ID] [dbo].[TY_ID] IDENTITY(1,1) NOT NULL,
-	[CompanyCode] [dbo].[TY_NAME] NULL,					--,Company code
-	[CustomerCode] [dbo].[TY_NAME] NULL,				--Vevõkód, CustomerCode
-	[CustomerOrderNumber] [dbo].[TY_NAME] NULL,			--Vevõ rendelés száma, Customer Order date
-	[CustomerOrderDate] [dbo].[TY_DATETIME] NULL,		--Vevõ rendelés dátuma, Vevõ rendelés dátuma
-	[ShippingDate]  [dbo].[TY_DATETIME] NULL,			--Szállítási dátum, Shipping date
-	[WarehouseCode] [dbo].[TY_NAME] NULL,				--Raktár kód,Warehouse code
-	[TotalGrossWeightOfOrder] [dbo].[TY_NVALUE] NULL,	--Rendelés Össz bruttó súly, Total gross weight of order
-	[NumberOfPalletForDel] [dbo].[TY_NVALUE] NULL,		--Szállítandó raklapok száma, Number of pallet for del.
-	[ShippAddressID] [dbo].[TY_NAME] NULL,				--Szállítási Cím ID, Shipp.Address ID
-	[ShippAddressCompanyName] [dbo].[TY_NAME] NULL,		--Szállítási cím cégnév, ShippAddre- Company name
-	[ShippAddressZipCode] [dbo].[TY_NAME]  NULL,		--Szállítási cím IRSZ,ShippAddress - Zip Code 
-	[ShippingAddressCity] [dbo].[TY_TEXT] NULL,			--Szállítási cím város,Shipping address – City
-	[ShippingAddressStreetAndNumber] [dbo].[TY_TEXT] NULL,	--Szállítási cím,Shipping address - street and number
-	[Note] [dbo].[TY_TEXT] NULL,						--Megjegyzés, NOTE
-	[RowNumber] [dbo].[TY_NVALUE] NULL,					--Sor száma (rendelésen belül),ROW NUMBER
-	[ProductCode] [dbo].[TY_NAME] NULL,					--Termékkód,Product Code
-	[U_M]  [dbo].[TY_NAME] NULL,						--Mennyiségi egység,U.M.
-	[ProdDescription] [dbo].[TY_TEXT] NULL,				--Termék megnevezés, Prod Description
-	[ConfOrderQty] [dbo].[TY_NVALUE] NULL,				--Rendelt mennyiség bruttó súly,Conf.Order Qty ROW 
-	[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,			--!!!szállítandó mennyiség (ret.val.),Conf. Planned Qty (Row)
-	[ConfPlannedQtyX] [dbo].[TY_NVALUE] NULL,			--!!!szállítandó mennyiség (ret.val.),Conf. Planned Qty (Row)
-	[PalletOrderQty] [dbo].[TY_NVALUE]  NULL,			--Rendelt mennyiség raklap,Pallet Order Qty (Row)
-	[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,			--Szállítandó mennyiség raklap,Pallet Planned Qty (Row)
-	[PalletBulkQty] [dbo].[TY_NVALUE]  NULL,			--,Pallet ‘Bulk’ qty (Row)
-	[GrossWeightPlanned] [dbo].[TY_NVALUE]  NULL,		--!!!Szállítandó bruttó súly,Gross Weight Planned (Row)
-	[GrossWeightPlannedX] [dbo].[TY_NVALUE]  NULL,		--!!!Szállítandó bruttó súly,Gross Weight Planned (Row)
-	[ADR] [dbo].[TY_BVALUE]  NULL,						--ADR,ADR
-	[ADRMultiplier] [dbo].[TY_NVALUE]  NULL,			--ADR szorzó,ADR Multiplier
-	[ADRLimitedQuantity] [dbo].[TY_NVALUE]  NULL,		--ADR köteles mennyiség, limited_quantity
-	[Freeze] [dbo].[TY_BVALUE]  NULL,					--Fagyérzékeny, Freeze
-	[Melt] [dbo].[TY_BVALUE] NULL,						--Hõérzékeny,MELT
-	[UV] [dbo].[TY_BVALUE] NULL,						--UV érzékeny,UV
-	[Bordero] [dbo].[TY_NAME] NULL,						--!!!Fuvarszám,BORDERO
-	[Carrier ] [dbo].[TY_NAME] NULL,					--!!!Fuvaros,CARRIER 
-	[VehicleType] [dbo].[TY_NAME] NULL,				--!!!Szállítóeszköz típus, VEHICLE TYPE
-	[KM] [dbo].[TY_NVALUE]  NULL,						--!!!Teljes Fuvar km, KM
-	[Forfait] [dbo].[TY_NVALUE] NULL,					--!!!Teljes Fuvar Útdíj, FORFAIT
-	[Currency] [dbo].[TY_NAME] NULL						--!!!Útdíj pénznem (HUF)CURRENCY
-) ON [PRIMARY]
+	[CompanyCode] [dbo].[TY_NAME] NULL,
+	[CustomerCode] [dbo].[TY_NAME] NULL,
+	[CustomerOrderNumber] [dbo].[TY_NAME] NULL,
+	[CustomerOrderDate] [dbo].[TY_DATETIME] NULL,
+	[ShippingDate] [dbo].[TY_DATETIME] NULL,
+	[WarehouseCode] [dbo].[TY_NAME] NULL,
+	[TotalGrossWeightOfOrder] [dbo].[TY_NVALUE] NULL,
+	[NumberOfPalletForDel] [dbo].[TY_NVALUE] NULL,
+	[ShippAddressID] [dbo].[TY_NAME] NULL,
+	[ShippAddressCompanyName] [dbo].[TY_NAME] NULL,
+	[ShippAddressZipCode] [dbo].[TY_NAME] NULL,
+	[ShippingAddressCity] [dbo].[TY_TEXT] NULL,
+	[ShippingAddressStreetAndNumber] [dbo].[TY_TEXT] NULL,
+	[Note] [dbo].[TY_TEXT] NULL,
+	[RowNumber] [dbo].[TY_NVALUE] NULL,
+	[ProductCode] [dbo].[TY_NAME] NULL,
+	[U_M] [dbo].[TY_NAME] NULL,
+	[ProdDescription] [dbo].[TY_TEXT] NULL,
+	[ConfOrderQty] [dbo].[TY_NVALUE] NULL,
+	[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,
+	[ConfPlannedQtyX] [dbo].[TY_NVALUE] NULL,
+	[PalletOrderQty] [dbo].[TY_NVALUE] NULL,
+	[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,
+	[PalletBulkQty] [dbo].[TY_NVALUE] NULL,
+	[GrossWeightPlanned] [dbo].[TY_NVALUE] NULL,
+	[GrossWeightPlannedX] [dbo].[TY_NVALUE] NULL,
+	[ADR] [dbo].[TY_BVALUE] NULL,
+	[ADRMultiplier] [dbo].[TY_NVALUE] NULL,
+	[ADRLimitedQuantity] [dbo].[TY_NVALUE] NULL,
+	[Freeze] [dbo].[TY_BVALUE] NULL,
+	[Melt] [dbo].[TY_BVALUE] NULL,
+	[UV] [dbo].[TY_BVALUE] NULL,
+	[Bordero] [dbo].[TY_NAME] NULL,
+	[Carrier] [dbo].[TY_NAME] NULL,
+	[VehicleType] [dbo].[TY_NAME] NULL,
+	[KM] [dbo].[TY_NVALUE] NULL,
+	[Forfait] [dbo].[TY_NVALUE] NULL,
+	[Currency] [dbo].[TY_NAME] NULL,
+ CONSTRAINT [PK_MPO_MPORDER] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
+CREATE NONCLUSTERED INDEX [IX_MPO_ShippingDate] ON [dbo].[MPO_MPORDER]
+(
+	[ShippingDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO 
+CREATE NONCLUSTERED INDEX [IX_MPO_CustProd] ON [dbo].[MPO_MPORDER]
+(
+	[CustomerCode] ASC,
+	[ProductCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
 
 

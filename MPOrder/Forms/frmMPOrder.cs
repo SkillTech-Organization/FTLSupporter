@@ -1,6 +1,6 @@
-﻿using MPOrder.LongProcess;
-using PMapCore.BLL.Mapei;
-using PMapCore.BO.Mapei;
+﻿using MPOrder.BLL;
+using MPOrder.BO;
+using MPOrder.LongProcess;
 using PMapCore.Common;
 using PMapCore.Localize;
 using PMapCore.LongProcess.Base;
@@ -21,9 +21,15 @@ namespace MPOrder.Forms
 {
     public partial class frmMPOrder : Form
     {
+        bllMPOrder m_bllMPOrder;
+        List<boMPOrderF> m_data = new List<boMPOrderF>();
+        bool m_firstF = false;
+        bool m_firstT = false;
+
         public frmMPOrder()
         {
             InitializeComponent();
+            m_bllMPOrder = new bllMPOrder(PMapCommonVars.Instance.CT_DB);
         }
 
         private void btnQuit_Click(object sender, EventArgs e)
@@ -92,5 +98,62 @@ namespace MPOrder.Forms
             }
         }
 
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            fillGrids();
+        }
+
+        private void fillGrids()
+        {
+
+            Cursor oldCursor = Cursor;
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                int focusedRowF = gridViewMegrF.FocusedRowHandle;
+                int focusedRowT = gridViewMegrT.FocusedRowHandle;
+                m_data = m_bllMPOrder.GetAllMPOrdersForGrid(dtmOrderDate.Value);
+                gridMegrF.DataSource = m_data;
+                if (m_firstF && m_data.Count > 0)
+                {
+                    gridViewMegrF.BestFitColumns();
+                    m_firstF = false;
+                }
+
+                if (gridViewMegrF.RowCount <= focusedRowF)
+                    gridViewMegrF.FocusedRowHandle = gridViewMegrF.RowCount - 1;
+                else
+                    gridViewMegrF.FocusedRowHandle = focusedRowF;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                Cursor.Current = oldCursor;
+            }
+        }
+
+        private void gridViewMegrF_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
+        {
+            if (e.FocusedRowHandle >= 0)
+            {
+
+                List<boMPOrderF> data = (List<boMPOrderF>)gridViewMegrF.DataSource;
+                var master = data[e.FocusedRowHandle];
+                if (master != null)
+                {
+                    gridMegrT.DataSource = master.Items;
+                    if (m_firstT && master.Items.Count > 0)
+                    {
+                        gridViewMegrF.BestFitColumns();
+                        m_firstT = false;
+                    }
+                }
+
+            }
+        }
     }
 }

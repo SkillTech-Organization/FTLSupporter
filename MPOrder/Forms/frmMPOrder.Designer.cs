@@ -75,12 +75,9 @@
             this.grpFilter = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtPartnerNev = new System.Windows.Forms.TextBox();
             this.btnFilter = new System.Windows.Forms.Button();
-            this.cboMegrType = new System.Windows.Forms.ComboBox();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.btnFindPartner = new System.Windows.Forms.Button();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
+            this.dtmOrderDate = new System.Windows.Forms.DateTimePicker();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -244,6 +241,7 @@
             this.gridViewMegrF.OptionsView.EnableAppearanceEvenRow = true;
             this.gridViewMegrF.OptionsView.EnableAppearanceOddRow = true;
             this.gridViewMegrF.OptionsView.ShowFooter = true;
+            this.gridViewMegrF.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewMegrF_FocusedRowChanged);
             // 
             // grcCustomerOrderNumber
             // 
@@ -523,12 +521,9 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel2.Controls.Add(this.dtmOrderDate, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.txtPartnerNev, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnFilter, 5, 0);
-            this.tableLayoutPanel2.Controls.Add(this.cboMegrType, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnClear, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnFindPartner, 4, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -545,18 +540,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(114, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Bizonylattípus:";
-            // 
-            // txtPartnerNev
-            // 
-            this.txtPartnerNev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPartnerNev.BackColor = System.Drawing.Color.OldLace;
-            this.txtPartnerNev.Enabled = false;
-            this.txtPartnerNev.Location = new System.Drawing.Point(323, 7);
-            this.txtPartnerNev.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.txtPartnerNev.Name = "txtPartnerNev";
-            this.txtPartnerNev.Size = new System.Drawing.Size(581, 20);
-            this.txtPartnerNev.TabIndex = 8;
+            this.label1.Text = "Dátum";
             // 
             // btnFilter
             // 
@@ -569,47 +553,22 @@
             this.btnFilter.Size = new System.Drawing.Size(29, 26);
             this.btnFilter.TabIndex = 4;
             this.btnFilter.UseVisualStyleBackColor = false;
-            // 
-            // cboMegrType
-            // 
-            this.cboMegrType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboMegrType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboMegrType.FormattingEnabled = true;
-            this.cboMegrType.Location = new System.Drawing.Point(123, 7);
-            this.cboMegrType.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.cboMegrType.Name = "cboMegrType";
-            this.cboMegrType.Size = new System.Drawing.Size(194, 21);
-            this.cboMegrType.TabIndex = 7;
-            // 
-            // btnClear
-            // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.BackColor = System.Drawing.Color.OldLace;
-            this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
-            this.btnClear.Location = new System.Drawing.Point(910, 4);
-            this.btnClear.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(29, 26);
-            this.btnClear.TabIndex = 9;
-            this.btnClear.UseVisualStyleBackColor = false;
-            // 
-            // btnFindPartner
-            // 
-            this.btnFindPartner.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFindPartner.BackColor = System.Drawing.Color.OldLace;
-            this.btnFindPartner.Image = ((System.Drawing.Image)(resources.GetObject("btnFindPartner.Image")));
-            this.btnFindPartner.Location = new System.Drawing.Point(945, 4);
-            this.btnFindPartner.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.btnFindPartner.Name = "btnFindPartner";
-            this.btnFindPartner.Size = new System.Drawing.Size(29, 26);
-            this.btnFindPartner.TabIndex = 10;
-            this.btnFindPartner.UseVisualStyleBackColor = false;
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
             // openExcel
             // 
             this.openExcel.CheckFileExists = false;
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xlsx|*.xlsx";
+            // 
+            // dtmOrderDate
+            // 
+            this.dtmOrderDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtmOrderDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtmOrderDate.Location = new System.Drawing.Point(123, 7);
+            this.dtmOrderDate.Name = "dtmOrderDate";
+            this.dtmOrderDate.Size = new System.Drawing.Size(194, 20);
+            this.dtmOrderDate.TabIndex = 11;
             // 
             // frmMPOrder
             // 
@@ -662,11 +621,7 @@
         private System.Windows.Forms.GroupBox grpFilter;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtPartnerNev;
         private System.Windows.Forms.Button btnFilter;
-        private System.Windows.Forms.ComboBox cboMegrType;
-        private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.Button btnFindPartner;
         private DevExpress.XtraGrid.Columns.GridColumn grcCustomerOrderNumber;
         private DevExpress.XtraGrid.Columns.GridColumn grcCustomerOrderDate;
         private DevExpress.XtraGrid.Columns.GridColumn gricShippingDate;
@@ -695,5 +650,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcADRLimitedQuantity;
         private System.Windows.Forms.ToolStripButton btnQuit;
         private System.Windows.Forms.OpenFileDialog openExcel;
+        private System.Windows.Forms.DateTimePicker dtmOrderDate;
     }
 }

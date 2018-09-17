@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMapCore.BO.Mapei
+namespace MPOrder.BO
 {
     [Serializable]
 
@@ -91,7 +91,12 @@ namespace PMapCore.BO.Mapei
         //!!!Útdíj pénznem(HUF)CURRENCY
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string Currency { get; set; }
+
+
+        [WriteFieldAttribute(Insert = false, Update = false)]
+        public List<boMPOrderT> Items { get; set; } = new List<boMPOrderT>();
+
     }
 
-  
+
 }
