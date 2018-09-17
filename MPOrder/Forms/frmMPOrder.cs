@@ -1,6 +1,8 @@
 ﻿using MPOrder.BLL;
 using MPOrder.BO;
 using MPOrder.LongProcess;
+using PMapCore.BLL;
+using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Localize;
 using PMapCore.LongProcess.Base;
@@ -22,7 +24,9 @@ namespace MPOrder.Forms
     public partial class frmMPOrder : Form
     {
         bllMPOrder m_bllMPOrder;
+        bllPackUnit m_bllPackUnit;
         List<boMPOrderF> m_data = new List<boMPOrderF>();
+        List<boPackUnit> m_packUnits = new List<boPackUnit>();
         bool m_firstF = false;
         bool m_firstT = false;
 
@@ -30,6 +34,7 @@ namespace MPOrder.Forms
         {
             InitializeComponent();
             m_bllMPOrder = new bllMPOrder(PMapCommonVars.Instance.CT_DB);
+            m_bllPackUnit = new bllPackUnit(PMapCommonVars.Instance.CT_DB);
         }
 
         private void btnQuit_Click(object sender, EventArgs e)
@@ -154,6 +159,12 @@ namespace MPOrder.Forms
                 }
 
             }
+        }
+
+        private void edConfPlannedQty_EditValueChanged(object sender, EventArgs e)
+        {
+            gridViewMegrF.RefreshData();
+
         }
     }
 }

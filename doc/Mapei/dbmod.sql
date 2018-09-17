@@ -13,6 +13,7 @@ go
 
 CREATE TABLE [dbo].[MPO_MPORDER](
 	[ID] [dbo].[TY_ID] IDENTITY(1,1) NOT NULL,
+	[SentToCT] [dbo].[TY_BVALUE] NULL,
 	[CompanyCode] [dbo].[TY_NAME] NULL,
 	[CustomerCode] [dbo].[TY_NAME] NULL,
 	[CustomerOrderNumber] [dbo].[TY_NAME] NULL,

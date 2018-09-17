@@ -11,89 +11,83 @@ namespace MPOrder.BO
 
     public class boMPOrderF
     {
-        [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
 
+        //CT-be küldve ?
+        public bool SentToCT { get; set; } = false;
+
         //,Company code
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string CompanyCode { get; set; }
 
         //Vevőkód, CustomerCode
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string CustomerCode { get; set; }
 
         //Vevő rendelés száma, Customer Order  code
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string CustomerOrderNumber { get; set; }
 
         //-Vevő rendelés dátuma, Customer Order date
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public DateTime CustomerOrderDate { get; set; }
 
         //Szállítási dátum, Shipping date
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public DateTime ShippingDate { get; set; }
 
         //Raktár kód, Warehouse code
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string WarehouseCode { get; set; }
 
         //Szállítási Cím ID, Shipp.Address ID
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippAddressID { get; set; }
 
         //Szállítási cím cégnév, ShippAddre- Company name
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippAddressCompanyName { get; set; }
 
         //Szállítási cím IRSZ,ShippAddress - Zip Code
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippAddressZipCode { get; set; }
 
         //Szállítási cím város,Shipping address – City
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippingAddressCity { get; set; }
 
         //Szállítási cím, Shipping address - street and number
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippingAddressStreetAndNumber { get; set; }
 
         //Szállítási cím
-        [WriteFieldAttribute(Insert = false, Update = false)]
         public string ShippingAddress { get {
                 return (ShippAddressZipCode + " " + ShippingAddressCity + " " + ShippingAddressStreetAndNumber).Trim();
             } }
 
-        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ConfPlannedQty { get; set; }
+        #region szerkesztendő mezők összesítve
 
+        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  
+        public double ConfPlannedQty { get { return Items.Sum(s => s.ConfPlannedQty); } }
+
+        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  *** MÓDÓSÍTOTT ÉRTÉK ***
+        public double ConfPlannedQtyX { get { return Items.Sum(s => s.ConfPlannedQtyX); } }
+
+        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
+        public double GrossWeightPlanned { get { return Items.Sum(s => s.GrossWeightPlanned); } }
+
+        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)      *** MÓDÓSÍTOTT ÉRTÉK ***
+        public double GrossWeightPlannedX { get { return Items.Sum(s => s.GrossWeightPlannedX); } }
+
+        public double ADRMultiplierSum { get { return Items.Sum(s => s.ADRMultiplier); } }
+        #endregion
         //!!!Fuvarszám,BORDERO
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string Bordero { get; set; }
 
         //!!!Fuvaros,CARRIER
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string Carrier { get; set; }
 
         //!!!Szállítóeszköz típus, VEHICLE TYPE
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string VehicleType { get; set; }
 
         //!!!Teljes Fuvar km, KM
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public double KM { get; set; }
 
         //!!!Teljes Fuvar Útdíj, FORFAIT
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public double Forfait { get; set; }
 
         //!!!Útdíj pénznem(HUF)CURRENCY
-        [WriteFieldAttribute(Insert = true, Update = true)]
         public string Currency { get; set; }
 
-
-        [WriteFieldAttribute(Insert = false, Update = false)]
         public List<boMPOrderT> Items { get; set; } = new List<boMPOrderT>();
 
     }

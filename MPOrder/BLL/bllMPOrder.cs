@@ -123,6 +123,7 @@ namespace MPOrder.BLL
             {
                 var res = lst.GroupBy(g1 => new
                 {
+                    g1.SentToCT,
                     g1.CompanyCode,
                     g1.CustomerCode,
                     g1.CustomerOrderNumber,
@@ -134,7 +135,6 @@ namespace MPOrder.BLL
                     g1.ShippAddressZipCode,
                     g1.ShippingAddressCity,
                     g1.ShippingAddressStreetAndNumber,
-                    g1.ConfPlannedQty,
                     g1.Bordero,
                     g1.Carrier,
                     g1.VehicleType,
@@ -143,6 +143,7 @@ namespace MPOrder.BLL
                     g1.Currency
                 }).Select(s => new boMPOrderF()
                 {
+                    SentToCT = s.Key.SentToCT,
                     CompanyCode = s.Key.CompanyCode,
                     CustomerCode = s.Key.CustomerCode,
                     CustomerOrderNumber = s.Key.CustomerOrderNumber,
@@ -154,7 +155,6 @@ namespace MPOrder.BLL
                     ShippAddressZipCode = s.Key.ShippAddressZipCode,
                     ShippingAddressCity = s.Key.ShippingAddressCity,
                     ShippingAddressStreetAndNumber = s.Key.ShippingAddressStreetAndNumber,
-                    ConfPlannedQty = s.Key.ConfPlannedQty,
                     Bordero = s.Key.Bordero,
                     Carrier = s.Key.Carrier,
                     VehicleType = s.Key.VehicleType,
@@ -176,6 +176,10 @@ namespace MPOrder.BLL
                         ADR = s2.ADR,
                         ADRMultiplier = s2.ADRMultiplier,
                         ADRLimitedQuantity = s2.ADRLimitedQuantity,
+                        ConfPlannedQty = s2.ConfPlannedQty,
+                        ConfPlannedQtyX = s2.ConfPlannedQtyX,
+                        GrossWeightPlanned = s2.GrossWeightPlannedX,
+                        GrossWeightPlannedX = s2.GrossWeightPlannedX,
                         Freeze = s2.Freeze,
                         Melt = s2.Melt,
                         UV = s2.UV

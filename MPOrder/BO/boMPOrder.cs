@@ -13,6 +13,10 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
 
+        //CT-be küldve ?
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public bool SentToCT { get; set; } = false;
+
         //,Company code
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string CompanyCode { get; set; }
