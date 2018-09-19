@@ -162,8 +162,29 @@ namespace MPOrder.Forms
         }
 
         private void edConfPlannedQty_EditValueChanged(object sender, EventArgs e)
+           {
+
+            //   gridMegrF.DataSource = m_data;
+            //   gridViewMegrF.RefreshData();
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcConfPlannedQtyX);
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, gricGrossWeightPlannedX);
+            gridViewMegrF.RefreshRow(gridViewMegrF.FocusedRowHandle);
+
+        }
+
+        private void edConfPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
-            gridViewMegrF.RefreshData();
+
+            double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
+            double UnitWeight = m_data[gridViewMegrF.FocusedRowHandle].Items[gridViewMegrT.FocusedRowHandle].UnitWeight;
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQtyX, newQty);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, gricGrossWeightPlannedX, newQty * UnitWeight);
+
+
+        }
+
+        private void edConfPlannedQtyX_ValueChanged(object sender, EventArgs e)
+        {
 
         }
     }

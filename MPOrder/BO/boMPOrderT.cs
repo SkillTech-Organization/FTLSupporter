@@ -14,7 +14,7 @@ namespace MPOrder.BO
 
         //Vevő rendelés száma, Customer Order  code
         public string CustomerOrderNumber { get; set; }
-        
+
         //Sor száma(rendelésen belül),ROW NUMBER
         public int RowNumber { get; set; }
 
@@ -73,6 +73,12 @@ namespace MPOrder.BO
         //UV érzékeny,UV
         public bool UV { get; set; }
 
+
+        #region számolt mezők 
+        //UV érzékeny,UV
+        public double UnitWeight { get { return GrossWeightPlanned / ConfPlannedQty; } }
+
+        #endregion
     }
 
 }
