@@ -4,6 +4,7 @@ using MPOrder.LongProcess;
 using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
+using PMapCore.Forms.Base;
 using PMapCore.Localize;
 using PMapCore.LongProcess.Base;
 using System;
@@ -21,7 +22,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace MPOrder.Forms
 {
-    public partial class frmMPOrder : Form
+    public partial class frmMPOrder : BaseForm
     {
         bllMPOrder m_bllMPOrder;
         bllPackUnit m_bllPackUnit;
@@ -79,7 +80,7 @@ namespace MPOrder.Forms
                     var import = new ImportFromXML(new BaseSilngleProgressDialog(0, lastUsedRow * 2, string.Format(PMapMessages.E_MPORD_EXCELIMP, openExcel.FileName), false), val, lastUsedRow, lastUsedColumn);
                     import.Run();
                     import.ProcessForm.ShowDialog();
-
+                    fillGrids();
                 }
 
                 catch (Exception ex)
@@ -166,8 +167,10 @@ namespace MPOrder.Forms
 
             //   gridMegrF.DataSource = m_data;
             //   gridViewMegrF.RefreshData();
-            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcConfPlannedQtyX);
-            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, gricGrossWeightPlannedX);
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcConfPlannedQtySum);
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcGrossWeightPlannedSum);
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcADRMultiplierSum);
+            
             gridViewMegrF.RefreshRow(gridViewMegrF.FocusedRowHandle);
 
         }
@@ -176,15 +179,41 @@ namespace MPOrder.Forms
         {
 
             double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
-            double UnitWeight = m_data[gridViewMegrF.FocusedRowHandle].Items[gridViewMegrT.FocusedRowHandle].UnitWeight;
-            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQtyX, newQty);
-            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, gricGrossWeightPlannedX, newQty * UnitWeight);
-
+            double UnitWeight = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcUnitWeight);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, newQty);
+          //  gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, gricGrossWeightPlannedX, newQty * UnitWeight);
 
         }
 
         private void edConfPlannedQtyX_ValueChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void gridViewMegrF_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
+        {
+
+            if (e.Column == grcADRMultiplierSum || e.Column == grcGrossWeightPlannedSum || e.Column == grcConfPlannedQtySum)
+            {
+                double UnitWeight = (double)gridViewMegrF.GetRowCellValue(e.RowHandle, grcUnitWeightF);
+                if (UnitWeight == 0)
+                {
+                    e.Appearance.ForeColor = Color.Red;
+                }
+            }
+
+        }
+
+        private void gridViewMegrT_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
+        {
+            if (e.Column == grcADRMultiplier || e.Column == grcUnitWeight || e.Column == grcConfPlannedQty)
+            {
+                double UnitWeight = (double)gridViewMegrT.GetRowCellValue(e.RowHandle, grcUnitWeight);
+                if (UnitWeight == 0)
+                {
+                    e.Appearance.ForeColor = Color.Red;
+                }
+            }
 
         }
     }

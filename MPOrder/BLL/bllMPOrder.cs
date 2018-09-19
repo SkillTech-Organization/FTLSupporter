@@ -20,8 +20,9 @@ namespace MPOrder.BLL
 
         public List<boMPOrder> GetAllMPOrders(string p_where = "", params object[] p_pars)
         {
-            string sSql = "select MPO.* " + Environment.NewLine +
-                          "  from MPO_MPORDER MPO " + Environment.NewLine;
+            string sSql = "select * " + Environment.NewLine +
+                          "  from MPO_MPORDER MPO " + Environment.NewLine +
+                         "  left outer join PCU_PACKUNIT PCU on upper(PCU.PCU_NAME1) = upper( MPO.U_M)  " + Environment.NewLine;
             if (p_where != "")
                 sSql += " where " + p_where;
             DataTable dt = DBA.Query2DataTable(sSql, p_pars);
@@ -50,12 +51,10 @@ namespace MPOrder.BLL
                             ProdDescription = Util.getFieldValue<string>(o, "ProdDescription"),
                             ConfOrderQty = Util.getFieldValue<double>(o, "ConfOrderQty"),
                             ConfPlannedQty = Util.getFieldValue<double>(o, "ConfPlannedQty"),
-                            ConfPlannedQtyX = Util.getFieldValue<double>(o, "ConfPlannedQtyX"),
                             PalletOrderQty = Util.getFieldValue<double>(o, "PalletOrderQty"),
                             PalletPlannedQty = Util.getFieldValue<double>(o, "PalletPlannedQty"),
                             PalletBulkQty = Util.getFieldValue<double>(o, "PalletBulkQty"),
                             GrossWeightPlanned = Util.getFieldValue<double>(o, "GrossWeightPlanned"),
-                            GrossWeightPlannedX = Util.getFieldValue<double>(o, "GrossWeightPlannedX"),
                             ADR = Util.getFieldValue<bool>(o, "ADR"),
                             ADRMultiplier = Util.getFieldValue<double>(o, "ADRMultiplier"),
                             ADRLimitedQuantity = Util.getFieldValue<bool>(o, "ADRLimitedQuantity"),
@@ -67,7 +66,10 @@ namespace MPOrder.BLL
                             VehicleType = Util.getFieldValue<string>(o, "VehicleType"),
                             KM = Util.getFieldValue<double>(o, "KM"),
                             Forfait = Util.getFieldValue<double>(o, "Forfait"),
-                            Currency = Util.getFieldValue<string>(o, "Currency")
+                            Currency = Util.getFieldValue<string>(o, "Currency"),
+                            UnitWeight = Util.getFieldValue<double>(o, "PCU_EXCVALUE"),
+
+
                         });
             return linq.ToList();
         }
@@ -140,7 +142,8 @@ namespace MPOrder.BLL
                     g1.VehicleType,
                     g1.KM,
                     g1.Forfait,
-                    g1.Currency
+                    g1.Currency,
+                    g1.UnitWeight
                 }).Select(s => new boMPOrderF()
                 {
                     SentToCT = s.Key.SentToCT,
@@ -161,6 +164,7 @@ namespace MPOrder.BLL
                     KM = s.Key.KM,
                     Forfait = s.Key.Forfait,
                     Currency = s.Key.Currency,
+                    UnitWeight = s.Key.UnitWeight,
                     Items = s.ToList().Select(s2 => new boMPOrderT()
                     {
                         ID = s2.ID,
@@ -177,12 +181,11 @@ namespace MPOrder.BLL
                         ADRMultiplier = s2.ADRMultiplier,
                         ADRLimitedQuantity = s2.ADRLimitedQuantity,
                         ConfPlannedQty = s2.ConfPlannedQty,
-                        ConfPlannedQtyX = s2.ConfPlannedQtyX,
-                        GrossWeightPlanned = s2.GrossWeightPlannedX,
-                        GrossWeightPlannedX = s2.GrossWeightPlannedX,
+                        GrossWeightPlanned = s2.GrossWeightPlanned,
                         Freeze = s2.Freeze,
                         Melt = s2.Melt,
-                        UV = s2.UV
+                        UV = s2.UV,
+                        UnitWeight = s2.UnitWeight
                     }
                    ).ToList()
                 }).ToList();

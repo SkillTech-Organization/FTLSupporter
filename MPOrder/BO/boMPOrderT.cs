@@ -53,15 +53,11 @@ namespace MPOrder.BO
         //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  
         public double ConfPlannedQty { get; set; }
 
-        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  *** MÓDÓSÍTOTT ÉRTÉK ***
-        public double ConfPlannedQtyX { get; set; }
-
+ 
         //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
         public double GrossWeightPlanned { get; set; }
 
-        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)      *** MÓDÓSÍTOTT ÉRTÉK ***
-        public double GrossWeightPlannedX { get; set; }
-
+ 
         #endregion
 
         //Fagyérzékeny, Freeze
@@ -73,10 +69,11 @@ namespace MPOrder.BO
         //UV érzékeny,UV
         public bool UV { get; set; }
 
+        #region joinolt mezők 
+        public double UnitWeight { get; set; }
+        #endregion
 
         #region számolt mezők 
-        //UV érzékeny,UV
-        public double UnitWeight { get { return GrossWeightPlanned / ConfPlannedQty; } }
 
         #endregion
     }

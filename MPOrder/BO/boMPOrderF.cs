@@ -57,16 +57,11 @@ namespace MPOrder.BO
         #region szerkesztendő mezők összesítve
 
         //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  
-        public double ConfPlannedQty { get { return Items.Sum(s => s.ConfPlannedQty); } }
+        public double ConfPlannedQtySum { get { return Items.Sum(s => s.ConfPlannedQty); } }
 
-        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  *** MÓDÓSÍTOTT ÉRTÉK ***
-        public double ConfPlannedQtyX { get { return Items.Sum(s => s.ConfPlannedQtyX); } }
 
         //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
-        public double GrossWeightPlanned { get { return Items.Sum(s => s.GrossWeightPlanned); } }
-
-        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)      *** MÓDÓSÍTOTT ÉRTÉK ***
-        public double GrossWeightPlannedX { get { return Items.Sum(s => s.GrossWeightPlannedX); } }
+        public double GrossWeightPlannedSum { get { return Items.Sum(s => s.GrossWeightPlanned); } }
 
         public double ADRMultiplierSum { get { return Items.Sum(s => s.ADRMultiplier); } }
         #endregion
@@ -89,6 +84,10 @@ namespace MPOrder.BO
         public string Currency { get; set; }
 
         public List<boMPOrderT> Items { get; set; } = new List<boMPOrderT>();
+
+        #region joinolt mezők 
+        public double UnitWeight { get; set; }
+        #endregion
 
     }
 

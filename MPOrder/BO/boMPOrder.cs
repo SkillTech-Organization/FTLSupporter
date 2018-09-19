@@ -97,10 +97,6 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double ConfPlannedQty { get; set; }
 
-        //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  *** MÓDÓSÍTOTT ÉRTÉK ***
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ConfPlannedQtyX { get; set; }
-
         //Rendelt mennyiség raklap,Pallet Order Qty(Row)
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double PalletOrderQty { get; set; }
@@ -116,10 +112,6 @@ namespace MPOrder.BO
         //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double GrossWeightPlanned { get; set; }
-
-        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)      *** MÓDÓSÍTOTT ÉRTÉK ***
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double GrossWeightPlannedX { get; set; }
 
         //ADR,ADR
         [WriteFieldAttribute(Insert = true, Update = true)]
@@ -168,5 +160,11 @@ namespace MPOrder.BO
         //!!!Útdíj pénznem(HUF)CURRENCY
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string Currency { get; set; } = "HUF";
+
+        #region joinolt mezők 
+        [WriteFieldAttribute(Insert = false, Update = false)]
+        public double UnitWeight { get; set; }
+        #endregion
+
     }
 }

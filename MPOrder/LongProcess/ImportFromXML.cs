@@ -1,5 +1,6 @@
 ﻿using MPOrder.BLL;
 using MPOrder.BO;
+using PMapCore.BLL;
 using PMapCore.Common;
 using PMapCore.DB.Base;
 using PMapCore.Localize;
@@ -37,6 +38,9 @@ namespace MPOrder.LongProcess
         {
             try
             {
+                bllPackUnit bllPu = new bllPackUnit(PMapCommonVars.Instance.CT_DB);
+                var lstPackUnits = bllPu.GetAllPackUnits();
+
                 var items = new List<boMPOrder>();
 
                 for (int rowIndex = 3; rowIndex <= lastUsedRow; rowIndex++)
@@ -62,19 +66,22 @@ namespace MPOrder.LongProcess
                     var U_M = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "");
                     var ProdDescription = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : "");
                     var ConfOrderQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
-                    var ConfPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
-                    var ConfPlannedQtyX = ConfPlannedQty;
+//                    var ConfPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                     var PalletOrderQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                     var PalletPlannedQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                     var PalletBulkQty = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                     var GrossWeightPlanned = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
-                    var GrossWeightPlannedX = GrossWeightPlanned;
                     var ADR = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
                     var ADRMultiplier = Double.Parse("0" + (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex].ToString() : ""));
                     var ADRLimitedQuantity = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
                     var Freeze = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
                     var Melt = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
                     var UV = (val[rowIndex, ++columnIndex] != null ? val[rowIndex, columnIndex] : false);
+
+                    var pu = lstPackUnits.FirstOrDefault(f => f.PCU_NAME1.ToUpper() == U_M.ToUpper() && !f.PCU_DELETED);
+                    double UnitWeight = 0;
+                    if (pu != null)
+                        UnitWeight = pu.PCU_EXCVALUE;
 
                     boMPOrder item = new boMPOrder()
                     {
@@ -97,13 +104,11 @@ namespace MPOrder.LongProcess
                         U_M = U_M,
                         ProdDescription = ProdDescription,
                         ConfOrderQty = ConfOrderQty,
-                        ConfPlannedQty = ConfPlannedQty,
-                        ConfPlannedQtyX = ConfPlannedQtyX,
+                        ConfPlannedQty = ConfOrderQty,
                         PalletOrderQty = PalletOrderQty,
                         PalletPlannedQty = PalletPlannedQty,
                         PalletBulkQty = PalletBulkQty,
-                        GrossWeightPlanned = GrossWeightPlanned,
-                        GrossWeightPlannedX = GrossWeightPlannedX,
+                        GrossWeightPlanned = ConfOrderQty * UnitWeight,
                         ADR = (ADR.ToUpper() == "I"),
                         ADRMultiplier = ADRMultiplier,
                         ADRLimitedQuantity = (ADRLimitedQuantity.ToUpper() == "I"),
