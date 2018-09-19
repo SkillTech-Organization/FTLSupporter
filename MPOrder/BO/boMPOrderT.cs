@@ -57,7 +57,10 @@ namespace MPOrder.BO
         //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
         public double GrossWeightPlanned { get; set; }
 
- 
+        //ADR szorzó, ADR Multiplier (egyelőre csak átadjuk a CT-be)
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ADRMultiplierX { get; set; }
+
         #endregion
 
         //Fagyérzékeny, Freeze

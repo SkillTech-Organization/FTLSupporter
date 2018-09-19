@@ -63,7 +63,7 @@ namespace MPOrder.BO
         //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
         public double GrossWeightPlannedSum { get { return Items.Sum(s => s.GrossWeightPlanned); } }
 
-        public double ADRMultiplierSum { get { return Items.Sum(s => s.ADRMultiplier); } }
+        public double ADRMultiplierXSum { get { return Items.Sum(s => s.ADRMultiplierX); } }
         #endregion
         //!!!Fuvarszám,BORDERO
         public string Bordero { get; set; }

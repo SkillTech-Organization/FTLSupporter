@@ -185,7 +185,8 @@ namespace MPOrder.BLL
                         Freeze = s2.Freeze,
                         Melt = s2.Melt,
                         UV = s2.UV,
-                        UnitWeight = s2.UnitWeight
+                        UnitWeight = s2.UnitWeight,
+                        ADRMultiplierX = s2.ADRMultiplierX
                     }
                    ).ToList()
                 }).ToList();

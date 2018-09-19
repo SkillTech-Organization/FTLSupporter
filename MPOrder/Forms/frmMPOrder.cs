@@ -169,7 +169,7 @@ namespace MPOrder.Forms
             //   gridViewMegrF.RefreshData();
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcConfPlannedQtySum);
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcGrossWeightPlannedSum);
-            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcADRMultiplierSum);
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcADRMultiplierXSum);
             
             gridViewMegrF.RefreshRow(gridViewMegrF.FocusedRowHandle);
 
@@ -181,8 +181,17 @@ namespace MPOrder.Forms
             double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
             double UnitWeight = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcUnitWeight);
             gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, newQty);
-          //  gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, gricGrossWeightPlannedX, newQty * UnitWeight);
 
+
+            bool ADR = (bool)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADR);
+            if (ADR)
+            {
+                double ConfOrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
+                double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
+                double ADRMultiplierX = Math.Round( ADRMultiplier * (ConfOrderQty/ newQty));
+
+                gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplierX);
+            }
         }
 
         private void edConfPlannedQtyX_ValueChanged(object sender, EventArgs e)
@@ -193,7 +202,7 @@ namespace MPOrder.Forms
         private void gridViewMegrF_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
 
-            if (e.Column == grcADRMultiplierSum || e.Column == grcGrossWeightPlannedSum || e.Column == grcConfPlannedQtySum)
+            if (e.Column == grcADRMultiplierXSum || e.Column == grcGrossWeightPlannedSum || e.Column == grcConfPlannedQtySum)
             {
                 double UnitWeight = (double)gridViewMegrF.GetRowCellValue(e.RowHandle, grcUnitWeightF);
                 if (UnitWeight == 0)
@@ -206,7 +215,7 @@ namespace MPOrder.Forms
 
         private void gridViewMegrT_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
-            if (e.Column == grcADRMultiplier || e.Column == grcUnitWeight || e.Column == grcConfPlannedQty)
+            if (e.Column == grcADRMultiplierX || e.Column == grcUnitWeight || e.Column == grcConfPlannedQty)
             {
                 double UnitWeight = (double)gridViewMegrT.GetRowCellValue(e.RowHandle, grcUnitWeight);
                 if (UnitWeight == 0)

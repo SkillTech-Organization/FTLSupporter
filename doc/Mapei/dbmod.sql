@@ -34,12 +34,10 @@ CREATE TABLE [dbo].[MPO_MPORDER](
 	[ProdDescription] [dbo].[TY_TEXT] NULL,
 	[ConfOrderQty] [dbo].[TY_NVALUE] NULL,
 	[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,
-	[ConfPlannedQtyX] [dbo].[TY_NVALUE] NULL,
 	[PalletOrderQty] [dbo].[TY_NVALUE] NULL,
 	[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,
 	[PalletBulkQty] [dbo].[TY_NVALUE] NULL,
 	[GrossWeightPlanned] [dbo].[TY_NVALUE] NULL,
-	[GrossWeightPlannedX] [dbo].[TY_NVALUE] NULL,
 	[ADR] [dbo].[TY_BVALUE] NULL,
 	[ADRMultiplier] [dbo].[TY_NVALUE] NULL,
 	[ADRLimitedQuantity] [dbo].[TY_NVALUE] NULL,
@@ -52,6 +50,7 @@ CREATE TABLE [dbo].[MPO_MPORDER](
 	[KM] [dbo].[TY_NVALUE] NULL,
 	[Forfait] [dbo].[TY_NVALUE] NULL,
 	[Currency] [dbo].[TY_NAME] NULL,
+	[ADRMultiplierX] [dbo].[TY_NVALUE] NULL,
  CONSTRAINT [PK_MPO_MPORDER] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
