@@ -1,5 +1,7 @@
 ﻿using MPOrder.BO;
+using PMapCore.BLL;
 using PMapCore.BLL.Base;
+using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.DB.Base;
 using System;
@@ -31,6 +33,7 @@ namespace MPOrder.BLL
                         select new boMPOrder
                         {
                             ID = Util.getFieldValue<int>(o, "ID"),
+                            SentToCT = Util.getFieldValue<bool>(o, "SentToCT"),
                             CompanyCode = Util.getFieldValue<string>(o, "CompanyCode"),
                             CustomerCode = Util.getFieldValue<string>(o, "CustomerCode"),
                             CustomerOrderNumber = Util.getFieldValue<string>(o, "CustomerOrderNumber"),
@@ -105,7 +108,7 @@ namespace MPOrder.BLL
         }
 
 
-        public bool IsExists(string p_CustomerOrderNumber, string p_ProductCode)
+        public bool IsExist(string p_CustomerOrderNumber, string p_ProductCode)
         {
             string sSql = "select case when exists( select ID from MPO_MPORDER where upper(CustomerOrderNumber) = ? and upper(ProductCode) = ?)  then 'OK' else '' end";
             var retVal = DBA.ExecuteScalar(sSql, p_CustomerOrderNumber, p_ProductCode);
@@ -196,6 +199,133 @@ namespace MPOrder.BLL
             {
                 return new List<boMPOrderF>();
             }
+        }
+
+
+        public void SetManualValues( int p_ID, double p_ConfPlannedQty, double p_GrossWeightPlanned, double p_ADRMultiplierX)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set ConfPlannedQty = ?, GrossWeightPlanned = ?, ADRMultiplierX = ? where ID=?", p_ConfPlannedQty, p_GrossWeightPlanned, p_ADRMultiplierX, p_ID);
+        }
+
+        public void SetSentToCT( string p_CustomerOrderNumber, bool p_SentToCT)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CustomerOrderNumber=?", p_SentToCT, p_CustomerOrderNumber);
+        }
+
+        public void SetSentToCT2(DateTime p_CustomerOrderDate, bool p_SentToCT)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CustomerOrderDate=?", p_SentToCT, p_CustomerOrderDate);
+        }
+
+        public List<string> SendToCT(List<boMPOrderF> p_data)
+        {
+            var res = new List<string>();
+            var bllOrderX = new bllOrder(DBA);
+            var bllPlanX = new bllPlan(DBA);
+            var bllZipX = new bllZIP(DBA);
+
+            foreach (var item in p_data)
+            {
+                List<boPlan> lstPlan = new List<boPlan>();
+                boOrder ord = bllOrderX.GetOrderByORD_NUM(item.CustomerOrderNumber);
+                if( ord != null)
+                {
+                    lstPlan = bllPlanX.GetPlansByOrderID(ord.ID);
+                }
+
+                //1.CT-be küldjük és nincs még ORD_ORDER rekord.
+                if( item.SentToCT && ord == null)
+                {
+                    //ZIP ID megállapítása
+                    var iZIP_ID = bllZipX.GetZIPbyNum( Int32.Parse( "0" + item.ShippAddressZipCode))
+
+                    //Lerakó felvitele
+                    boDepot dep = new boDepot()
+                    {
+                        WHS_ID = 1,             //Csak egy raktárat kezelünk
+                        DEP_CODE = item.CustomerCode,
+                        DEP_NAME = item.ShippAddressCompanyName,
+                        ZIP_ID   = iZIP_ID,
+                        DEP_ADRSTREET = item.ShippingAddressStreetAndNumber,
+                        DEP_ADRNUM = ""
+
+                    }
+
+
+                    boOrder newOrder = new boOrder()
+                    {
+                        OTP_ID = Global.OTP_OUTPUT,
+                        CTP_ID = 1,
+
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int DEP_ID { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int WHS_ID { get; set; }
+
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string ORD_NUM { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string ORD_ORIGNUM { get; set; }                     //Masterplast mező
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public DateTime ORD_DATE { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string ORD_CLIENTNUM { get; set; }
+
+        [WriteFieldAttribute(Insert = false, Update = true)]
+        public DateTime ORD_LOCKDATE { get; set; }                  //Új felvitelkor nem szabad tölteni
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public DateTime ORD_FIRSTDATE { get; set; }
+
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_QTY { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_ORIGQTY1 { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_ORIGQTY2 { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_ORIGQTY3 { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_ORIGQTY4 { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_ORIGQTY5 { get; set; }
+
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int ORD_SERVS { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int ORD_SERVE { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_VOLUME { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_LENGTH { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_WIDTH { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_HEIGHT { get; set; }
+
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public bool ORD_LOCKED { get; set; }
+        [WriteFieldAttribute(Insert = false, Update = true)]
+        public bool ORD_ISOPT { get; set; }                      //Új felvitelkor nem szabad tölteni
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string ORD_GATE { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string ORD_COMMENT { get; set; }
+        [WriteFieldAttribute(Insert = false, Update = true)]
+        public bool ORD_UPDATED { get; set; }
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public bool ORD_ACTIVE { get; set; }
+        [WriteFieldAttribute(Insert = false, Update = true)]
+        public DateTime LASTDATE { get; set; }
+
+    }
+
+}
+
+
+
+            }
+
+            return res;
         }
     }
 }

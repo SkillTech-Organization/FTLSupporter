@@ -130,5 +130,11 @@ namespace PMapCore.BLL
         }
 
 
+        public List<boPlan> GetOrderPlans( int p_id)
+        {
+
+        }
+
+
     }
 }

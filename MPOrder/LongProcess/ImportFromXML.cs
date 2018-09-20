@@ -132,7 +132,7 @@ namespace MPOrder.LongProcess
                 foreach (var item in items)
                 {
                     ProcessForm.NextStep();
-                    if( !bllMPOrderx.IsExists(item.CustomerOrderNumber, item.ProductCode))
+                    if( !bllMPOrderx.IsExist(item.CustomerOrderNumber, item.ProductCode))
                     {
 
                         bllMPOrderx.AddMPOrder(item);

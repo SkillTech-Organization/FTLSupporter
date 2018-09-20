@@ -117,9 +117,10 @@ namespace MPOrder.Forms
 
             try
             {
+                gridMegrT.DataSource = null;
                 int focusedRowF = gridViewMegrF.FocusedRowHandle;
                 int focusedRowT = gridViewMegrT.FocusedRowHandle;
-                m_data = m_bllMPOrder.GetAllMPOrdersForGrid(dtmOrderDate.Value);
+                m_data = m_bllMPOrder.GetAllMPOrdersForGrid(dtmOrderDate.Value.Date);
                 gridMegrF.DataSource = m_data;
                 if (m_firstF && m_data.Count > 0)
                 {
@@ -177,21 +178,31 @@ namespace MPOrder.Forms
 
         private void edConfPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
-
+            double ADRMultiplierX;
             double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
+            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
+
             double UnitWeight = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcUnitWeight);
             gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, newQty);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, gricGrossWeightPlanned, newQty * UnitWeight);
 
 
+            double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
             bool ADR = (bool)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADR);
             if (ADR)
             {
                 double ConfOrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
-                double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
-                double ADRMultiplierX = Math.Round( ADRMultiplier * (ConfOrderQty/ newQty));
+                ADRMultiplierX = Math.Round( ADRMultiplier * (ConfOrderQty/ newQty));
 
                 gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplierX);
             }
+            else
+            {
+                ADRMultiplierX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX);
+            }
+
+            m_bllMPOrder.SetManualValues(ID, newQty, newQty * UnitWeight, ADRMultiplierX);
+
         }
 
         private void edConfPlannedQtyX_ValueChanged(object sender, EventArgs e)
@@ -224,6 +235,37 @@ namespace MPOrder.Forms
                 }
             }
 
+        }
+
+        private void edSentToCT_EditValueChanged(object sender, EventArgs e)
+        {
+            /*
+            string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
+            bool SentToCT = (bool)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcSentToCT);
+            m_bllMPOrder.SetSentToCT(CustomerOrderNumber, SentToCT);
+            */
+        }
+
+        private void edSentToCT_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+        {
+            string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
+            bool SentToCT = (bool)e.NewValue;
+            m_bllMPOrder.SetSentToCT(CustomerOrderNumber, SentToCT);
+
+        }
+
+        private void btnSelAll_Click(object sender, EventArgs e)
+        {
+            m_data.ForEach(item => item.SentToCT = true);
+            m_bllMPOrder.SetSentToCT2(dtmOrderDate.Value.Date, true);
+            gridViewMegrF.RefreshData();
+        }
+
+        private void btnDeselAll_Click(object sender, EventArgs e)
+        {
+            m_data.ForEach(item => item.SentToCT = false);
+            m_bllMPOrder.SetSentToCT2(dtmOrderDate.Value.Date, false);
+            gridViewMegrF.RefreshData();
         }
     }
 }

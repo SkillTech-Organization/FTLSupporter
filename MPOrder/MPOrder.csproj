@@ -85,12 +85,6 @@
     <Compile Include="BO\boMPOrder.cs" />
     <Compile Include="BO\boMPOrderF.cs" />
     <Compile Include="BO\boMPOrderT.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmMPOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +138,13 @@
       <Project>{6e23d5d1-fb6b-450d-8244-34172b60c166}</Project>
       <Name>TabOrder</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lightning_add.png" />
+    <Content Include="lightning_delete.png" />
+    <Content Include="monitor_go.png" />
+    <Content Include="page_go.png" />
+    <Content Include="tick.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -18,7 +18,7 @@ namespace PMapCore.BLL
 
     public class bllPlan : bllBase
     {
-        
+
         public bllPlan(SQLServerAccess p_DBA)
             : base(p_DBA, "PLN_PUBLICATEDPLAN")
         {
@@ -44,18 +44,18 @@ namespace PMapCore.BLL
         private boPlan getPlanRec(DataRow p_dr)
         {
             boPlan ret = new boPlan()
-                {
-                    ID = Util.getFieldValue<int>(p_dr, "ID"),
-                    WHS_ID = Util.getFieldValue<int>(p_dr, "WHS_ID"),
-                    PLN_NAME = Util.getFieldValue<string>(p_dr, "PLN_NAME"),
-                    PLN_DATE_B = Util.getFieldValue<DateTime>(p_dr, "PLN_DATE_B"),
-                    PLN_DATE_E = Util.getFieldValue<DateTime>(p_dr, "PLN_DATE_E"),
-                    PLN_WEATHER = Util.getFieldValue<int>(p_dr, "PLN_WEATHER"),
+            {
+                ID = Util.getFieldValue<int>(p_dr, "ID"),
+                WHS_ID = Util.getFieldValue<int>(p_dr, "WHS_ID"),
+                PLN_NAME = Util.getFieldValue<string>(p_dr, "PLN_NAME"),
+                PLN_DATE_B = Util.getFieldValue<DateTime>(p_dr, "PLN_DATE_B"),
+                PLN_DATE_E = Util.getFieldValue<DateTime>(p_dr, "PLN_DATE_E"),
+                PLN_WEATHER = Util.getFieldValue<int>(p_dr, "PLN_WEATHER"),
 
-                    PLN_USEINTERVAL = Util.getFieldValue<bool>(p_dr, "PLN_USEINTERVAL"),
-                    PLN_INTERVAL_B = Util.getFieldValue<DateTime>(p_dr, "PLN_INTERVAL_B"),
-                    PLN_INTERVAL_E = Util.getFieldValue<DateTime>(p_dr, "PLN_INTERVAL_E")
-                };
+                PLN_USEINTERVAL = Util.getFieldValue<bool>(p_dr, "PLN_USEINTERVAL"),
+                PLN_INTERVAL_B = Util.getFieldValue<DateTime>(p_dr, "PLN_INTERVAL_B"),
+                PLN_INTERVAL_E = Util.getFieldValue<DateTime>(p_dr, "PLN_INTERVAL_E")
+            };
             return ret;
         }
 
@@ -375,7 +375,7 @@ namespace PMapCore.BLL
             return ret;
         }
 
-        public void SetTourCompleted( boPlanTour p_tour)
+        public void SetTourCompleted(boPlanTour p_tour)
         {
             p_tour.Completed = true;
             SetTourCompleted(p_tour.ID);
@@ -414,7 +414,7 @@ namespace PMapCore.BLL
 
             DataTable dt = DBA.Query2DataTable(sSql, p_PLN_ID);
             var linq = (from o in dt.AsEnumerable()
-                        orderby  Util.getFieldValue<string>(o,"DEP_NAME") 
+                        orderby Util.getFieldValue<string>(o, "DEP_NAME")
                         select getPlanOrderRec(o)
                         );
             return linq.ToList();
@@ -488,7 +488,7 @@ namespace PMapCore.BLL
             };
             if (PMapIniParams.Instance.OrdCommentInTooltip)
                 ret.ToolTipText += "\n" +
-                    "Térfogat:" + ret.ORD_VOLUME.ToString( Global.NUMFORMAT) + ", Mennyiség:" + ret.TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
+                    "Térfogat:" + ret.ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + ret.TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
                     ret.ORD_COMMENT;
             return ret;
         }
@@ -540,7 +540,7 @@ namespace PMapCore.BLL
         public List<PMTour> GetToursForAzure(int p_PLN_ID, List<boPlanTour> p_tourList)
         {
             var bllUser = new bllUser(DBA);
-                var bllRoute = new bllRoute(DBA);
+            var bllRoute = new bllRoute(DBA);
 
             List<PMTour> xTourList = new List<PMTour>();
             foreach (var tr in p_tourList.Where(w => w.TOURPOINTCNT > 0).ToList())
@@ -549,8 +549,8 @@ namespace PMapCore.BLL
                 {
                     ID = tr.ID.ToString(),
                     Carrier = tr.CRR_NAME,
-   //                 TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
-                    TruckRegNo = tr.TRK_CODE,      
+                    //                 TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
+                    TruckRegNo = tr.TRK_CODE,
                     RZN_ID_LIST = tr.RZN_ID_LIST,
                     TruckWeight = tr.TRK_WEIGHT,
                     TruckHeight = tr.TRK_XHEIGHT,
@@ -610,5 +610,16 @@ namespace PMapCore.BLL
             DBA.ExecuteNonQuery("update TOD_TOURORDER set TOD_SENTEMAIL=1 where ID=?", p_TOD_ID);
         }
 
+        public List<boPlan> GetPlansByOrderID(int p_ORD_ID)
+        {
+            string sSql = "select PLN.* from TOD_TOURORDER TOD " + Environment.NewLine +
+                          " inner join PLN_PUBLICATEDPLAN PLN on PLN.ID=TOD.PLN_ID " + Environment.NewLine +
+                          "where TOD.ORD_ID = ? " + Environment.NewLine +
+                          "order by PLN_NAME ";
+            DataTable dt = DBA.Query2DataTable(sSql, p_ORD_ID);
+            var linq = (from o in dt.AsEnumerable()
+                        select getPlanRec(o));
+            return linq.ToList();
+        }
     }
 }

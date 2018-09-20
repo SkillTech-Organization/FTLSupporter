@@ -32,10 +32,13 @@
             this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
             this.tsbExportItems = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnPlus = new System.Windows.Forms.ToolStripButton();
-            this.btnMinus = new System.Windows.Forms.ToolStripButton();
+            this.btnSelAll = new System.Windows.Forms.ToolStripButton();
+            this.btnDeselAll = new System.Windows.Forms.ToolStripButton();
             this.tsMegr = new System.Windows.Forms.ToolStrip();
             this.btnQuit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnSend = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.grpMegrF = new System.Windows.Forms.GroupBox();
@@ -43,6 +46,7 @@
             this.gridViewMegrF = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.grcSentToCT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.edSentToCT = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.grcCustomerCode = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcCustomerOrderNumber = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcCustomerOrderDate = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricShippingDate = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -61,7 +65,7 @@
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridMegrT = new DevExpress.XtraGrid.GridControl();
             this.gridViewMegrT = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.gricID = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcRowNumber = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcProductCode = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcProdDescription = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -70,13 +74,14 @@
             this.grcPalletPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcPalletBulkQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADR = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcADRMultiplierX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRLimitedQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcConfOrderQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcConfPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.edConfPlannedQty = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.grcUnitWeight = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcADRMultiplierX = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.grpFilter = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -84,7 +89,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnFilter = new System.Windows.Forms.Button();
             this.openExcel = new System.Windows.Forms.OpenFileDialog();
-            this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -129,23 +133,25 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnPlus
+            // btnSelAll
             // 
-            this.btnPlus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnPlus.Image = ((System.Drawing.Image)(resources.GetObject("btnPlus.Image")));
-            this.btnPlus.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnPlus.Name = "btnPlus";
-            this.btnPlus.Size = new System.Drawing.Size(24, 22);
-            this.btnPlus.Text = "Összes csoport kinyitása";
+            this.btnSelAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSelAll.Image = ((System.Drawing.Image)(resources.GetObject("btnSelAll.Image")));
+            this.btnSelAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSelAll.Name = "btnSelAll";
+            this.btnSelAll.Size = new System.Drawing.Size(24, 22);
+            this.btnSelAll.Text = "Összes  kijelölése";
+            this.btnSelAll.Click += new System.EventHandler(this.btnSelAll_Click);
             // 
-            // btnMinus
+            // btnDeselAll
             // 
-            this.btnMinus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnMinus.Image = ((System.Drawing.Image)(resources.GetObject("btnMinus.Image")));
-            this.btnMinus.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnMinus.Name = "btnMinus";
-            this.btnMinus.Size = new System.Drawing.Size(24, 22);
-            this.btnMinus.Text = "Összes csoport bezárása";
+            this.btnDeselAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnDeselAll.Image = ((System.Drawing.Image)(resources.GetObject("btnDeselAll.Image")));
+            this.btnDeselAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDeselAll.Name = "btnDeselAll";
+            this.btnDeselAll.Size = new System.Drawing.Size(24, 22);
+            this.btnDeselAll.Text = "Összes kijelölés visszavonása";
+            this.btnDeselAll.Click += new System.EventHandler(this.btnDeselAll_Click);
             // 
             // tsMegr
             // 
@@ -153,11 +159,14 @@
             this.tsMegr.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsMegr.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnQuit,
+            this.toolStripSeparator1,
             this.btnExcelImport,
             this.tsbExportItems,
             this.toolStripSeparator2,
-            this.btnPlus,
-            this.btnMinus});
+            this.btnSelAll,
+            this.btnDeselAll,
+            this.toolStripSeparator3,
+            this.btnSend});
             this.tsMegr.Location = new System.Drawing.Point(0, 0);
             this.tsMegr.Name = "tsMegr";
             this.tsMegr.Size = new System.Drawing.Size(1167, 25);
@@ -172,6 +181,25 @@
             this.btnQuit.Size = new System.Drawing.Size(24, 22);
             this.btnQuit.Text = "Kilépés";
             this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnSend
+            // 
+            this.btnSend.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSend.Image = ((System.Drawing.Image)(resources.GetObject("btnSend.Image")));
+            this.btnSend.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(24, 22);
+            this.btnSend.Text = "Küldés CT-be";
             // 
             // tableLayoutPanel1
             // 
@@ -235,6 +263,7 @@
             // 
             this.gridViewMegrF.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.grcSentToCT,
+            this.grcCustomerCode,
             this.grcCustomerOrderNumber,
             this.grcCustomerOrderDate,
             this.gricShippingDate,
@@ -275,6 +304,17 @@
             // 
             this.edSentToCT.AutoHeight = false;
             this.edSentToCT.Name = "edSentToCT";
+            this.edSentToCT.EditValueChanged += new System.EventHandler(this.edSentToCT_EditValueChanged);
+            this.edSentToCT.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edSentToCT_EditValueChanging);
+            // 
+            // grcCustomerCode
+            // 
+            this.grcCustomerCode.Caption = "Vevőkód";
+            this.grcCustomerCode.FieldName = "CustomerCode";
+            this.grcCustomerCode.Name = "grcCustomerCode";
+            this.grcCustomerCode.OptionsColumn.AllowEdit = false;
+            this.grcCustomerCode.Visible = true;
+            this.grcCustomerCode.VisibleIndex = 1;
             // 
             // grcCustomerOrderNumber
             // 
@@ -283,7 +323,7 @@
             this.grcCustomerOrderNumber.Name = "grcCustomerOrderNumber";
             this.grcCustomerOrderNumber.OptionsColumn.AllowEdit = false;
             this.grcCustomerOrderNumber.Visible = true;
-            this.grcCustomerOrderNumber.VisibleIndex = 1;
+            this.grcCustomerOrderNumber.VisibleIndex = 2;
             this.grcCustomerOrderNumber.Width = 84;
             // 
             // grcCustomerOrderDate
@@ -293,7 +333,7 @@
             this.grcCustomerOrderDate.Name = "grcCustomerOrderDate";
             this.grcCustomerOrderDate.OptionsColumn.AllowEdit = false;
             this.grcCustomerOrderDate.Visible = true;
-            this.grcCustomerOrderDate.VisibleIndex = 2;
+            this.grcCustomerOrderDate.VisibleIndex = 3;
             this.grcCustomerOrderDate.Width = 84;
             // 
             // gricShippingDate
@@ -303,7 +343,7 @@
             this.gricShippingDate.Name = "gricShippingDate";
             this.gricShippingDate.OptionsColumn.AllowEdit = false;
             this.gricShippingDate.Visible = true;
-            this.gricShippingDate.VisibleIndex = 3;
+            this.gricShippingDate.VisibleIndex = 4;
             this.gricShippingDate.Width = 84;
             // 
             // gricWarehouseCode
@@ -313,7 +353,7 @@
             this.gricWarehouseCode.Name = "gricWarehouseCode";
             this.gricWarehouseCode.OptionsColumn.AllowEdit = false;
             this.gricWarehouseCode.Visible = true;
-            this.gricWarehouseCode.VisibleIndex = 4;
+            this.gricWarehouseCode.VisibleIndex = 5;
             this.gricWarehouseCode.Width = 84;
             // 
             // grcNumberOfPalletForDel
@@ -333,7 +373,7 @@
             this.grcShippAddressID.Name = "grcShippAddressID";
             this.grcShippAddressID.OptionsColumn.AllowEdit = false;
             this.grcShippAddressID.Visible = true;
-            this.grcShippAddressID.VisibleIndex = 5;
+            this.grcShippAddressID.VisibleIndex = 6;
             this.grcShippAddressID.Width = 84;
             // 
             // grcShippAddressCompanyName
@@ -343,7 +383,7 @@
             this.grcShippAddressCompanyName.Name = "grcShippAddressCompanyName";
             this.grcShippAddressCompanyName.OptionsColumn.AllowEdit = false;
             this.grcShippAddressCompanyName.Visible = true;
-            this.grcShippAddressCompanyName.VisibleIndex = 6;
+            this.grcShippAddressCompanyName.VisibleIndex = 7;
             this.grcShippAddressCompanyName.Width = 84;
             // 
             // gricShippingAddress
@@ -353,7 +393,7 @@
             this.gricShippingAddress.Name = "gricShippingAddress";
             this.gricShippingAddress.OptionsColumn.AllowEdit = false;
             this.gricShippingAddress.Visible = true;
-            this.gricShippingAddress.VisibleIndex = 7;
+            this.gricShippingAddress.VisibleIndex = 8;
             this.gricShippingAddress.Width = 84;
             // 
             // gricNote
@@ -363,7 +403,7 @@
             this.gricNote.Name = "gricNote";
             this.gricNote.OptionsColumn.AllowEdit = false;
             this.gricNote.Visible = true;
-            this.gricNote.VisibleIndex = 8;
+            this.gricNote.VisibleIndex = 9;
             this.gricNote.Width = 84;
             // 
             // grcConfPlannedQtySum
@@ -378,7 +418,7 @@
             this.grcConfPlannedQtySum.Name = "grcConfPlannedQtySum";
             this.grcConfPlannedQtySum.OptionsColumn.AllowEdit = false;
             this.grcConfPlannedQtySum.Visible = true;
-            this.grcConfPlannedQtySum.VisibleIndex = 9;
+            this.grcConfPlannedQtySum.VisibleIndex = 10;
             this.grcConfPlannedQtySum.Width = 84;
             // 
             // grcGrossWeightPlannedSum
@@ -393,7 +433,7 @@
             this.grcGrossWeightPlannedSum.Name = "grcGrossWeightPlannedSum";
             this.grcGrossWeightPlannedSum.OptionsColumn.AllowEdit = false;
             this.grcGrossWeightPlannedSum.Visible = true;
-            this.grcGrossWeightPlannedSum.VisibleIndex = 10;
+            this.grcGrossWeightPlannedSum.VisibleIndex = 11;
             this.grcGrossWeightPlannedSum.Width = 84;
             // 
             // grcADRMultiplierXSum
@@ -408,7 +448,7 @@
             this.grcADRMultiplierXSum.Name = "grcADRMultiplierXSum";
             this.grcADRMultiplierXSum.OptionsColumn.AllowEdit = false;
             this.grcADRMultiplierXSum.Visible = true;
-            this.grcADRMultiplierXSum.VisibleIndex = 11;
+            this.grcADRMultiplierXSum.VisibleIndex = 12;
             this.grcADRMultiplierXSum.Width = 85;
             // 
             // grcTotalGrossWeightOfOrder
@@ -452,7 +492,7 @@
             // gridViewMegrT
             // 
             this.gridViewMegrT.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.gricID,
+            this.grcID,
             this.grcRowNumber,
             this.grcProductCode,
             this.grcProdDescription,
@@ -478,12 +518,12 @@
             this.gridViewMegrT.OptionsView.ShowGroupPanel = false;
             this.gridViewMegrT.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridViewMegrT_CustomDrawCell);
             // 
-            // gricID
+            // grcID
             // 
-            this.gricID.Caption = "ID";
-            this.gricID.FieldName = "ID";
-            this.gricID.Name = "gricID";
-            this.gricID.OptionsColumn.AllowEdit = false;
+            this.grcID.Caption = "ID";
+            this.grcID.FieldName = "ID";
+            this.grcID.Name = "grcID";
+            this.grcID.OptionsColumn.AllowEdit = false;
             // 
             // grcRowNumber
             // 
@@ -557,20 +597,6 @@
             this.grcADR.Visible = true;
             this.grcADR.VisibleIndex = 9;
             // 
-            // grcADRMultiplierX
-            // 
-            this.grcADRMultiplierX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.grcADRMultiplierX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.grcADRMultiplierX.AppearanceCell.Options.UseBackColor = true;
-            this.grcADRMultiplierX.Caption = "ADR szorzó";
-            this.grcADRMultiplierX.DisplayFormat.FormatString = "#,#0.00";
-            this.grcADRMultiplierX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcADRMultiplierX.FieldName = "ADRMultiplierX";
-            this.grcADRMultiplierX.Name = "grcADRMultiplierX";
-            this.grcADRMultiplierX.OptionsColumn.AllowEdit = false;
-            this.grcADRMultiplierX.Visible = true;
-            this.grcADRMultiplierX.VisibleIndex = 8;
-            // 
             // grcADRLimitedQuantity
             // 
             this.grcADRLimitedQuantity.Caption = "ADR köteles mennyiség";
@@ -636,6 +662,26 @@
             this.gricGrossWeightPlanned.OptionsColumn.AllowEdit = false;
             this.gricGrossWeightPlanned.Visible = true;
             this.gricGrossWeightPlanned.VisibleIndex = 7;
+            // 
+            // grcADRMultiplierX
+            // 
+            this.grcADRMultiplierX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.grcADRMultiplierX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.grcADRMultiplierX.AppearanceCell.Options.UseBackColor = true;
+            this.grcADRMultiplierX.Caption = "ADR szorzó";
+            this.grcADRMultiplierX.DisplayFormat.FormatString = "#,#0.00";
+            this.grcADRMultiplierX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcADRMultiplierX.FieldName = "ADRMultiplierX";
+            this.grcADRMultiplierX.Name = "grcADRMultiplierX";
+            this.grcADRMultiplierX.OptionsColumn.AllowEdit = false;
+            this.grcADRMultiplierX.Visible = true;
+            this.grcADRMultiplierX.VisibleIndex = 8;
+            // 
+            // grcADRMultiplier
+            // 
+            this.grcADRMultiplier.Caption = "Eredeti ADR szorzó";
+            this.grcADRMultiplier.FieldName = "ADRMultiplier";
+            this.grcADRMultiplier.Name = "grcADRMultiplier";
             // 
             // gridView3
             // 
@@ -712,12 +758,6 @@
             this.openExcel.DefaultExt = "xls";
             this.openExcel.Filter = "*.xlsx|*.xlsx";
             // 
-            // grcADRMultiplier
-            // 
-            this.grcADRMultiplier.Caption = "Eredeti ADR szorzó";
-            this.grcADRMultiplier.FieldName = "ADRMultiplier";
-            this.grcADRMultiplier.Name = "grcADRMultiplier";
-            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -755,8 +795,8 @@
         private System.Windows.Forms.ToolStripButton btnExcelImport;
         private System.Windows.Forms.ToolStripButton tsbExportItems;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton btnPlus;
-        private System.Windows.Forms.ToolStripButton btnMinus;
+        private System.Windows.Forms.ToolStripButton btnSelAll;
+        private System.Windows.Forms.ToolStripButton btnDeselAll;
         private System.Windows.Forms.ToolStrip tsMegr;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -783,7 +823,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn gricNote;
         private DevExpress.XtraGrid.Columns.GridColumn grcConfPlannedQtySum;
         private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlannedSum;
-        private DevExpress.XtraGrid.Columns.GridColumn gricID;
+        private DevExpress.XtraGrid.Columns.GridColumn grcID;
         private DevExpress.XtraGrid.Columns.GridColumn grcRowNumber;
         private DevExpress.XtraGrid.Columns.GridColumn grcProductCode;
         private DevExpress.XtraGrid.Columns.GridColumn grcProdDescription;
@@ -808,5 +848,9 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcTotalGrossWeightOfOrder;
         private DevExpress.XtraGrid.Columns.GridColumn grcUnitWeightF;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplier;
+        private DevExpress.XtraGrid.Columns.GridColumn grcCustomerCode;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton btnSend;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
