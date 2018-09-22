@@ -12,6 +12,7 @@ namespace PMapCore.BO
     {
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
+
         [WriteFieldAttribute(Insert = true, Update = true, FieldName="TFP_NAME1")]
         public string TFP_NAME { get; set; }
 

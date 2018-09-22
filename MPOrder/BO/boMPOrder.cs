@@ -161,13 +161,14 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string Currency { get; set; } = "HUF";
 
-        #region joinolt mezők 
-        [WriteFieldAttribute(Insert = false, Update = false)]
+        [WriteFieldAttribute(Insert = true, Update = true)]
         public double UnitWeight { get; set; }
-        #endregion
-
+ 
         //ADR szorzó, ADR Multiplier (Új érték, egyelőre csak átadjuk a CT-be)
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double ADRMultiplierX { get; set; }
+
+        #region joinolt mezők 
+        #endregion
     }
 }

@@ -87,7 +87,7 @@ namespace PMapCore.BLL
                              DEP_CLOSE = Util.getFieldValue<int>(p_dr, "DEP_CLOSE"),
                              DEP_COMMENT = Util.getFieldValue<string>(p_dr, "DEP_COMMENT"),
                              DEP_SRVTIME = Util.getFieldValue<int>(p_dr, "DEP_SRVTIME"),
-                             DEP_QTYSRVTIME = Util.getFieldValue<int>(p_dr, "DEP_QTYSRVTIME"),
+                             DEP_QTYSRVTIME = Util.getFieldValue<double>(p_dr, "DEP_QTYSRVTIME"),
                              DEP_CLIENTNUM = Util.getFieldValue<string>(p_dr, "DEP_CLIENTNUM"),
                              DEP_IMPADDRSTAT = (boDepot.EIMPADDRSTAT)(Util.getFieldValue<int>(p_dr, "DEP_IMPADDRSTAT")),
                              DEP_LIFETIME = Util.getFieldValue<int>(p_dr, "DEP_LIFETIME"),

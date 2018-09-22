@@ -60,7 +60,6 @@
             this.grcGrossWeightPlannedSum = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplierXSum = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcTotalGrossWeightOfOrder = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcUnitWeightF = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridMegrT = new DevExpress.XtraGrid.GridControl();
@@ -276,8 +275,7 @@
             this.grcConfPlannedQtySum,
             this.grcGrossWeightPlannedSum,
             this.grcADRMultiplierXSum,
-            this.grcTotalGrossWeightOfOrder,
-            this.grcUnitWeightF});
+            this.grcTotalGrossWeightOfOrder});
             this.gridViewMegrF.GridControl = this.gridMegrF;
             this.gridViewMegrF.Name = "gridViewMegrF";
             this.gridViewMegrF.OptionsSelection.EnableAppearanceFocusedCell = false;
@@ -459,12 +457,6 @@
             this.grcTotalGrossWeightOfOrder.FieldName = "TotalGrossWeightOfOrder";
             this.grcTotalGrossWeightOfOrder.Name = "grcTotalGrossWeightOfOrder";
             // 
-            // grcUnitWeightF
-            // 
-            this.grcUnitWeightF.Caption = "Egységsúly";
-            this.grcUnitWeightF.FieldName = "UnitWeight";
-            this.grcUnitWeightF.Name = "grcUnitWeightF";
-            // 
             // gridView1
             // 
             this.gridView1.GridControl = this.gridMegrF;
@@ -626,6 +618,7 @@
             this.grcConfPlannedQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcConfPlannedQty.FieldName = "ConfPlannedQty";
             this.grcConfPlannedQty.Name = "grcConfPlannedQty";
+            this.grcConfPlannedQty.OptionsColumn.AllowEdit = false;
             this.grcConfPlannedQty.Visible = true;
             this.grcConfPlannedQty.VisibleIndex = 6;
             // 
@@ -846,7 +839,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcConfPlannedQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcUnitWeight;
         private DevExpress.XtraGrid.Columns.GridColumn grcTotalGrossWeightOfOrder;
-        private DevExpress.XtraGrid.Columns.GridColumn grcUnitWeightF;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplier;
         private DevExpress.XtraGrid.Columns.GridColumn grcCustomerCode;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

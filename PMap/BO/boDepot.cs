@@ -70,7 +70,7 @@ namespace PMapCore.BO
         public int DEP_SRVTIME { get; set; }
 
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public int DEP_QTYSRVTIME { get; set; }
+        public double DEP_QTYSRVTIME { get; set; }
 
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string DEP_CLIENTNUM { get; set; }

@@ -215,13 +215,16 @@ namespace MPOrder.Forms
 
             if (e.Column == grcADRMultiplierXSum || e.Column == grcGrossWeightPlannedSum || e.Column == grcConfPlannedQtySum)
             {
-                double UnitWeight = (double)gridViewMegrF.GetRowCellValue(e.RowHandle, grcUnitWeightF);
-                if (UnitWeight == 0)
+                string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(e.RowHandle, grcCustomerOrderNumber);
+                if ( !string.IsNullOrWhiteSpace(CustomerOrderNumber))
                 {
-                    e.Appearance.ForeColor = Color.Red;
+                    var item = m_data.Where(w => w.CustomerOrderNumber == CustomerOrderNumber).FirstOrDefault();
+                    if (item == null || item.Items.Any(a => a.UnitWeight == 0))
+                    {
+                        e.Appearance.ForeColor = Color.Red;
+                    }
                 }
             }
-
         }
 
         private void gridViewMegrT_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)

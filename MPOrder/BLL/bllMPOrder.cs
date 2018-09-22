@@ -4,6 +4,7 @@ using PMapCore.BLL.Base;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.DB.Base;
+using PMapCore.Localize;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,7 +25,7 @@ namespace MPOrder.BLL
         {
             string sSql = "select * " + Environment.NewLine +
                           "  from MPO_MPORDER MPO " + Environment.NewLine +
-                         "  left outer join PCU_PACKUNIT PCU on upper(PCU.PCU_NAME1) = upper( MPO.U_M)  " + Environment.NewLine;
+                         "  left outer join PCU_PACKUNIT PCU on upper(PCU.PCU_NAME1) = upper( MPO.U_M)  " + Environment.NewLine; 
             if (p_where != "")
                 sSql += " where " + p_where;
             DataTable dt = DBA.Query2DataTable(sSql, p_pars);
@@ -70,6 +71,7 @@ namespace MPOrder.BLL
                             KM = Util.getFieldValue<double>(o, "KM"),
                             Forfait = Util.getFieldValue<double>(o, "Forfait"),
                             Currency = Util.getFieldValue<string>(o, "Currency"),
+//                            UnitWeight = Util.getFieldValue<double>(o, "UnitWeight"),
                             UnitWeight = Util.getFieldValue<double>(o, "PCU_EXCVALUE"),
 
 
@@ -145,8 +147,7 @@ namespace MPOrder.BLL
                     g1.VehicleType,
                     g1.KM,
                     g1.Forfait,
-                    g1.Currency,
-                    g1.UnitWeight
+                    g1.Currency
                 }).Select(s => new boMPOrderF()
                 {
                     SentToCT = s.Key.SentToCT,
@@ -167,7 +168,6 @@ namespace MPOrder.BLL
                     KM = s.Key.KM,
                     Forfait = s.Key.Forfait,
                     Currency = s.Key.Currency,
-                    UnitWeight = s.Key.UnitWeight,
                     Items = s.ToList().Select(s2 => new boMPOrderT()
                     {
                         ID = s2.ID,
@@ -217,12 +217,14 @@ namespace MPOrder.BLL
             DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CustomerOrderDate=?", p_SentToCT, p_CustomerOrderDate);
         }
 
-        public List<string> SendToCT(List<boMPOrderF> p_data)
+        public List<SendToCTResult> SendToCT(List<boMPOrderF> p_data)
         {
-            var res = new List<string>();
+            var res = new List<SendToCTResult>();
             var bllOrderX = new bllOrder(DBA);
             var bllPlanX = new bllPlan(DBA);
             var bllZipX = new bllZIP(DBA);
+            var bllDepotX = new bllDepot(DBA);
+            var bllRouteX = new bllRoute(PMapCommonVars.Instance.CT_DB);
 
             foreach (var item in p_data)
             {
@@ -236,90 +238,118 @@ namespace MPOrder.BLL
                 //1.CT-be küldjük és nincs még ORD_ORDER rekord.
                 if( item.SentToCT && ord == null)
                 {
-                    //ZIP ID megállapítása
-                    var iZIP_ID = bllZipX.GetZIPbyNum( Int32.Parse( "0" + item.ShippAddressZipCode))
 
-                    //Lerakó felvitele
-                    boDepot dep = new boDepot()
+                    boDepot dep = bllDepotX.GetDepotByDEP_CODE(item.CustomerCode);
+                    if (dep == null)
                     {
-                        WHS_ID = 1,             //Csak egy raktárat kezelünk
-                        DEP_CODE = item.CustomerCode,
-                        DEP_NAME = item.ShippAddressCompanyName,
-                        ZIP_ID   = iZIP_ID,
-                        DEP_ADRSTREET = item.ShippingAddressStreetAndNumber,
-                        DEP_ADRNUM = ""
+                        //ZIP ID megállapítása
+                        var boZip = bllZipX.GetZIPbyNum(Int32.Parse("0" + item.ShippAddressZipCode));
 
+                        string fullAddr = (item.ShippAddressZipCode + " " + item.ShippingAddressCity + " " + item.ShippingAddressStreetAndNumber).Trim();
+                        boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
+                        int ZIP_ID = 0;
+                        int NOD_ID = 0;
+                        int EDG_ID = 0;
+                        bool bFound = bllRouteX.GeocodingByAddr(fullAddr, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, false);
+                        if (bFound && DEP_IMPADDRSTAT != boDepot.EIMPADDRSTAT.MISSADDR)
+                        {
+                            boEdge edg = bllRouteX.GetEdgeByID(EDG_ID);
+                        }
+                        else
+                        {
+                            res.Add(new SendToCTResult()
+                            {
+                                ResultType = SendToCTResult.RESTYPE.WARNING,
+                                Message = string.Format(PMapMessages.E_MPSENDTOCT_WRONGADDR, item.ShippAddressCompanyName, fullAddr)
+                            });
+                        }
+
+
+                        //Lerakó felvitele
+                        dep = new boDepot()
+                        {
+                            WHS_ID = 1,             //Csak egy raktárat kezelünk
+                            DEP_CODE = item.CustomerCode,
+                            DEP_NAME = item.ShippAddressCompanyName,
+                            ZIP_ID = ZIP_ID,
+                            DEP_ADRSTREET = item.ShippingAddressStreetAndNumber,
+                            DEP_ADRNUM = "",
+                            DEP_OPEN = 0,
+                            DEP_CLOSE = 1439,
+                            DEP_COMMENT = "",
+                            DEP_SRVTIME = 10,
+                            NOD_ID = NOD_ID,
+                            EDG_ID = EDG_ID,
+                            DEP_DELETED = false,
+                            REG_ID = 0,
+                            DEP_QTYSRVTIME = 0.05,
+                            DEP_CLIENTNUM = item.CustomerCode,
+                            DEP_IMPADDRSTAT = (NOD_ID == 0 ? boDepot.EIMPADDRSTAT.MISSADDR : boDepot.EIMPADDRSTAT.OK),
+                            DEP_LIFETIME = 0
+                        };
+                        dep.ID = bllDepotX.AddDepot(dep);
                     }
 
+                        boOrder newOrder = new boOrder()
+                        {
+                            OTP_ID = Global.OTP_OUTPUT,
+                            CTP_ID = 1,                     //csak egyféle árutípust kezelünk
+                            DEP_ID = dep.ID,
+                            WHS_ID = 1,                     //csak központi raktár van
+                            ORD_NUM  = item.CustomerOrderNumber,
+                            ORD_ORIGNUM = item.CustomerOrderNumber, //Masterplast mező
+                            ORD_DATE = item.ShippingDate,
+                            ORD_CLIENTNUM = item 
 
-                    boOrder newOrder = new boOrder()
-                    {
-                        OTP_ID = Global.OTP_OUTPUT,
-                        CTP_ID = 1,
+                            [WriteFieldAttribute(Insert = false, Update = true)]
+                            public DateTime ORD_LOCKDATE { get; set; }                  //Új felvitelkor nem szabad tölteni
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public DateTime ORD_FIRSTDATE { get; set; }
 
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public int DEP_ID { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public int WHS_ID { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_QTY { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_ORIGQTY1 { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_ORIGQTY2 { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_ORIGQTY3 { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_ORIGQTY4 { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_ORIGQTY5 { get; set; }
 
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ORD_NUM { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ORD_ORIGNUM { get; set; }                     //Masterplast mező
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public DateTime ORD_DATE { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ORD_CLIENTNUM { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public int ORD_SERVS { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public int ORD_SERVE { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_VOLUME { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_LENGTH { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_WIDTH { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public double ORD_HEIGHT { get; set; }
 
-        [WriteFieldAttribute(Insert = false, Update = true)]
-        public DateTime ORD_LOCKDATE { get; set; }                  //Új felvitelkor nem szabad tölteni
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public DateTime ORD_FIRSTDATE { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public bool ORD_LOCKED { get; set; }
+                            [WriteFieldAttribute(Insert = false, Update = true)]
+                            public bool ORD_ISOPT { get; set; }                      //Új felvitelkor nem szabad tölteni
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public string ORD_GATE { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public string ORD_COMMENT { get; set; }
+                            [WriteFieldAttribute(Insert = false, Update = true)]
+                            public bool ORD_UPDATED { get; set; }
+                            [WriteFieldAttribute(Insert = true, Update = true)]
+                            public bool ORD_ACTIVE { get; set; }
+                            [WriteFieldAttribute(Insert = false, Update = true)]
+                            public DateTime LASTDATE { get; set; }
 
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_QTY { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_ORIGQTY1 { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_ORIGQTY2 { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_ORIGQTY3 { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_ORIGQTY4 { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_ORIGQTY5 { get; set; }
+                        }   */
 
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public int ORD_SERVS { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public int ORD_SERVE { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_VOLUME { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_LENGTH { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_WIDTH { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public double ORD_HEIGHT { get; set; }
-
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public bool ORD_LOCKED { get; set; }
-        [WriteFieldAttribute(Insert = false, Update = true)]
-        public bool ORD_ISOPT { get; set; }                      //Új felvitelkor nem szabad tölteni
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ORD_GATE { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ORD_COMMENT { get; set; }
-        [WriteFieldAttribute(Insert = false, Update = true)]
-        public bool ORD_UPDATED { get; set; }
-        [WriteFieldAttribute(Insert = true, Update = true)]
-        public bool ORD_ACTIVE { get; set; }
-        [WriteFieldAttribute(Insert = false, Update = true)]
-        public DateTime LASTDATE { get; set; }
-
-    }
-
-}
+                }
 
 
 

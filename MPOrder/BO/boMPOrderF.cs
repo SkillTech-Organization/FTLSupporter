@@ -84,9 +84,8 @@ namespace MPOrder.BO
         public string Currency { get; set; }
 
         public List<boMPOrderT> Items { get; set; } = new List<boMPOrderT>();
-
+ 
         #region joinolt mezők 
-        public double UnitWeight { get; set; }
         #endregion
 
     }

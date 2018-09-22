@@ -20,7 +20,6 @@ namespace MPOrder.LongProcess
     public class ImportFromXML : BaseLongProcess
     {
         private SQLServerAccess m_DB;
-        private string m_fileName;
         private dynamic val;
         private int lastUsedRow;
         private int lastUsedColumn;
@@ -38,6 +37,7 @@ namespace MPOrder.LongProcess
         {
             try
             {
+
                 bllPackUnit bllPu = new bllPackUnit(PMapCommonVars.Instance.CT_DB);
                 var lstPackUnits = bllPu.GetAllPackUnits();
 
@@ -108,6 +108,7 @@ namespace MPOrder.LongProcess
                         PalletOrderQty = PalletOrderQty,
                         PalletPlannedQty = PalletPlannedQty,
                         PalletBulkQty = PalletBulkQty,
+                        //GrossWeightPlanned = 0,  // később számoljuk ConfOrderQty * UnitWeight,
                         GrossWeightPlanned = ConfOrderQty * UnitWeight,
                         ADR = (ADR.ToUpper() == "I"),
                         ADRMultiplier = ADRMultiplier,
@@ -121,11 +122,28 @@ namespace MPOrder.LongProcess
                         KM = 0,
                         Forfait = 0,
                         Currency = "HUF",
-                        ADRMultiplierX = ADRMultiplier
+                        ADRMultiplierX = ADRMultiplier,
+                        // UnitWeight = UnitWeight      //később 
+                        UnitWeight = 0
                     };
                     items.Add(item);
 
                 }
+
+   
+/*
+                //UintWeight számítás
+                var sumQty = items.GroupBy(g1 => g1.CustomerOrderNumber,
+                    (key, values) => new {
+                        CustomerOrderNumber = key,
+                        sumOrderQty = values.Sum(s => s.ConfOrderQty)
+                    }).ToDictionary( d=>d.CustomerOrderNumber, d=>d.sumOrderQty);
+
+                items.ForEach(e => { e.UnitWeight = e.TotalGrossWeightOfOrder/ sumQty[e.CustomerOrderNumber]  ;
+                    e.GrossWeightPlanned = e.ConfOrderQty * e.TotalGrossWeightOfOrder / sumQty[e.CustomerOrderNumber] ;
+                });
+*/
+
                 var bllMPOrderx = new bllMPOrder(PMapCommonVars.Instance.CT_DB);
 
                 var added = 0;

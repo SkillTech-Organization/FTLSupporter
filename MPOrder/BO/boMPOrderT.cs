@@ -71,9 +71,9 @@ namespace MPOrder.BO
 
         //UV érzékeny,UV
         public bool UV { get; set; }
+        public double UnitWeight { get; set; }
 
         #region joinolt mezők 
-        public double UnitWeight { get; set; }
         #endregion
 
         #region számolt mezők 
