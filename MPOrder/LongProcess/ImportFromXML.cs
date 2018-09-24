@@ -157,7 +157,7 @@ namespace MPOrder.LongProcess
                         added++;
                     }
                 }
-                UI.Message(string.Format(PMapMessages.E_MPORD_EXCELIMP_LOADED, added, items.Count));
+                UI.Message(string.Format(PMapMessages.M_MPORD_EXCELIMP_LOADED, added, items.Count));
 
             }
 

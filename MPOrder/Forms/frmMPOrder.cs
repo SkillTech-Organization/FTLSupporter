@@ -77,7 +77,7 @@ namespace MPOrder.Forms
                     int lastUsedColumn = last.Column;
 
 
-                    var import = new ImportFromXML(new BaseSilngleProgressDialog(0, lastUsedRow * 2, string.Format(PMapMessages.E_MPORD_EXCELIMP, openExcel.FileName), false), val, lastUsedRow, lastUsedColumn);
+                    var import = new ImportFromXML(new BaseSilngleProgressDialog(0, lastUsedRow * 2, string.Format(PMapMessages.M_MPORD_EXCELIMP, openExcel.FileName), false), val, lastUsedRow, lastUsedColumn);
                     import.Run();
                     import.ProcessForm.ShowDialog();
                     fillGrids();
@@ -132,6 +132,9 @@ namespace MPOrder.Forms
                     gridViewMegrF.FocusedRowHandle = gridViewMegrF.RowCount - 1;
                 else
                     gridViewMegrF.FocusedRowHandle = focusedRowF;
+                initMegrTGrid();
+
+
             }
             catch (Exception ex)
             {
@@ -147,9 +150,16 @@ namespace MPOrder.Forms
         {
             if (e.FocusedRowHandle >= 0)
             {
+                initMegrTGrid();
+            }
+        }
 
+        private void initMegrTGrid()
+        {
+            if (gridViewMegrF.FocusedRowHandle >= 0)
+            {
                 List<boMPOrderF> data = (List<boMPOrderF>)gridViewMegrF.DataSource;
-                var master = data[e.FocusedRowHandle];
+                var master = data[gridViewMegrF.FocusedRowHandle];
                 if (master != null)
                 {
                     gridMegrT.DataSource = master.Items;
@@ -159,9 +169,13 @@ namespace MPOrder.Forms
                         m_firstT = false;
                     }
                 }
-
+            }
+            else
+            {
+                gridMegrT.DataSource = null;
             }
         }
+
 
         private void edConfPlannedQty_EditValueChanged(object sender, EventArgs e)
            {
@@ -269,6 +283,21 @@ namespace MPOrder.Forms
             m_data.ForEach(item => item.SentToCT = false);
             m_bllMPOrder.SetSentToCT2(dtmOrderDate.Value.Date, false);
             gridViewMegrF.RefreshData();
+        }
+
+        private void tsbExportItems_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            if (UI.Confirm(PMapMessages.Q_MPORD_SENDTOCT))
+            {
+                var sndproc = new SendToCT(new BaseSilngleProgressDialog(0, m_data.Count, PMapMessages.M_MPORD_SENDTOCT, false), m_data);
+                sndproc.Run();
+                sndproc.ProcessForm.ShowDialog();
+            }
         }
     }
 }

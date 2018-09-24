@@ -1246,8 +1246,9 @@ namespace PMapCore.BLL
 
             //Teljes címre keresés
             sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" || sWhereAddrNum != "" ? " where " + sWhereAddr + sWhereZipNum + sWhereAddrNum : "");
-
+            sqlCmd.Transaction = DBA.Tran;
             DBA.DA.SelectCommand = sqlCmd;
+
             DataSet d = new DataSet();
             DBA.DA.Fill(d);
             DataTable dt = d.Tables[0];

@@ -163,10 +163,13 @@ namespace PMapCore.Localize
         public const string E_MPORD_SEETNOTFOUND = "Nincs munkalap az Excel állományban!";
         public const string E_MPORD_INTEROP_ERR = "Excel interop error:{0}";
         public const string E_MPORD_EXCELIMP_ERR = "Hiba történt az Excel import közben:{0}";
-        public const string E_MPORD_EXCELIMP_LOADED = "Sikeres beolvasás. Betöltve {0}/{1} db. tétel. ";
-        public const string E_MPORD_EXCELIMP = "Excel import:{0}";
+        public const string M_MPORD_EXCELIMP_LOADED = "Sikeres beolvasás. Betöltve {0}/{1} db. tétel. ";
+        public const string M_MPORD_EXCELIMP = "Excel import:{0}";
 
         public const string E_MPSENDTOCT_WRONGADDR = "Nem lehet geokódolni:{0} cím:{1}";
+        public const string E_MPSENDTOCT_TOURED= "A megrendelés túrába van szervezve:{0} túrák:{1}";
+        public const string M_MPORD_SENDTOCT = "Küldés CorrectTour-ba";
+        public const string Q_MPORD_SENDTOCT = "Adatküldés a CorrectTour-ba ?";
 
 
     }

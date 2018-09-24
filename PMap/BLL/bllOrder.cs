@@ -113,13 +113,14 @@ namespace PMapCore.BLL
             }
         }
 
-        public void UpdateOrder(boTruck p_Order)
+        public void UpdateOrder(boOrder p_Order)
         {
             using (TransactionBlock transObj = new TransactionBlock(DBA))
             {
                 try
                 {
                     UpdateItem(p_Order);
+                    UpdateOrderQtyInPlans(p_Order.ID);
                 }
                 catch (Exception e)
                 {
@@ -129,6 +130,47 @@ namespace PMapCore.BLL
             }
         }
 
+        public void UpdateOrderQtyInPlans(int p_ORD_ID)
+        {
+
+            /*MEGJ: A TOD_CUTQTY** mezők már nem használtak */
+            string sSql = "update TOD " + Environment.NewLine +
+                          "set TOD.TOD_QTY = ORDx.ORD_QTY, " + Environment.NewLine +
+                          "TOD.TOD_CUTQTY1 = ORDx.ORD_ORIGQTY1, " + Environment.NewLine +
+                          "TOD.TOD_CUTQTY2 = ORDx.ORD_ORIGQTY2, " + Environment.NewLine +
+                          "TOD.TOD_CUTQTY3 = ORDx.ORD_ORIGQTY3, " + Environment.NewLine +
+                          "/*TOD_CUTQTY4 - dohányáru nincs !! */ " + Environment.NewLine +
+                          "TOD.TOD_CUTQTY5 = ORDx.ORD_ORIGQTY5 " + Environment.NewLine +
+                          "from TOD_TOURORDER TOD " + Environment.NewLine +
+                          "inner join ORD_ORDER ORDx on ORDx.ID = TOD.ORD_ID " + Environment.NewLine +
+                          "where ORDx.ID = ?" ;
+
+            using (TransactionBlock transObj = new TransactionBlock(DBA))
+            {
+                try
+                {
+                    DBA.ExecuteNonQuery(sSql, p_ORD_ID);
+                }
+                catch (Exception e)
+                {
+                    DBA.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void DeleteOrder(int p_ORD_ID)
+        {
+            try
+            {
+                string sSql = "delete ORD_ORDER where ID = ?";
+                DBA.ExecuteNonQuery(sSql, p_ORD_ID);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
 
         public List<boPlan> GetOrderPlans( int p_id)
         {

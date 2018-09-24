@@ -100,6 +100,7 @@ namespace PMapCore.BLL
             return linq.ToList();
         }
 
+     
         public List<boPlan> GetAllPlans()
         {
             string sSql = "select * from PLN_PUBLICATEDPLAN order by PLN_DATE_B desc, PLN_NAME ";
@@ -605,11 +606,20 @@ namespace PMapCore.BLL
             return xTourList;
         }
 
+        /// <summary>
+        /// TOD_SENTEMAIL beállítása
+        /// </summary>
+        /// <param name="p_TOD_ID"></param>
         public void SetTourPointSent(int p_TOD_ID)
         {
             DBA.ExecuteNonQuery("update TOD_TOURORDER set TOD_SENTEMAIL=1 where ID=?", p_TOD_ID);
         }
 
+        /// <summary>
+        /// Tervek, amelyben egy megrendelés szerepel
+        /// </summary>
+        /// <param name="p_ORD_ID"></param>
+        /// <returns></returns>
         public List<boPlan> GetPlansByOrderID(int p_ORD_ID)
         {
             string sSql = "select PLN.* from TOD_TOURORDER TOD " + Environment.NewLine +
@@ -621,5 +631,39 @@ namespace PMapCore.BLL
                         select getPlanRec(o));
             return linq.ToList();
         }
+
+        /// <summary>
+        /// Azon tervek, amelyekben az adott megrendelés járműköz van rendelve
+        /// </summary>
+        /// <param name="p_ORD_ID"></param>
+        /// <returns></returns>
+        public List<boPlan> GetTouredPlansByOrderID(int p_ORD_ID)
+        {
+
+            string sSql = " select PLN.* " + Environment.NewLine +
+                          "from TOD_TOURORDER TOD " + Environment.NewLine +
+                          "inner join PTP_PLANTOURPOINT PTP on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
+                          "inner join PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                          "where TOD.ORD_ID = ? " + Environment.NewLine +
+                          " order by PLN_DATE_B ";
+            DataTable dt = DBA.Query2DataTable(sSql, p_ORD_ID);
+            var linq = (from o in dt.AsEnumerable()
+                        select getPlanRec(o));
+            return linq.ToList();
+        }
+
+        public void DeleteTourOrderByOrderID(int p_ORD_ID)
+        {
+            try
+            {
+                string sSql = "delete TOD_TOURORDER where ORD_ID = ?";
+                DBA.ExecuteNonQuery(sSql, p_ORD_ID);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
     }
 }

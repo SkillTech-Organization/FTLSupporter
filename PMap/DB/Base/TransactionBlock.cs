@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace PMapCore.DB.Base
 {
-    class TransactionBlock : IDisposable
+    public class TransactionBlock : IDisposable
     {
         private SQLServerAccess m_DBA;
         private bool m_isInTrans;

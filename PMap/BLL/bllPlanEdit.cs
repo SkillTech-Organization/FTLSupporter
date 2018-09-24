@@ -396,7 +396,7 @@ namespace PMapCore.BLL
 
             foreach (boEdge edge in p_Edges)
             {
-                if (p_TRK_ETOLLCAT > 1  && p_lastETLCODE != edge.EDG_ETLCODE)
+                if (p_TRK_ETOLLCAT > 1 && p_lastETLCODE != edge.EDG_ETLCODE)
                 {
                     dToll += edge.Tolls[p_TRK_ETOLLCAT] * p_TollMultiplier;
                     p_lastETLCODE = edge.EDG_ETLCODE;
@@ -778,7 +778,7 @@ namespace PMapCore.BLL
                         sSQL += "  RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, " + Environment.NewLine;
                     }
 
-                    sSQL+= " TPL_COMPLETED, TPL.ID as TPL_ID" + Environment.NewLine +
+                    sSQL += " TPL_COMPLETED, TPL.ID as TPL_ID" + Environment.NewLine +
                             "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                             "left outer join WHS_WAREHOUSE WHS on WHS.ID = PTP.WHS_ID " + Environment.NewLine +
                             "inner join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
@@ -901,7 +901,7 @@ namespace PMapCore.BLL
             {
                 sSQLStr += " RESTZ.RZN_ID_LIST, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH, TRK.TRK_HEIGHT, TRK.TRK_WIDTH, " + Environment.NewLine;
             }
-            
+
             sSQLStr += " TPL.TPL_COMPLETED, TPL.ID as TPL_ID " + Environment.NewLine +
                       "from PTP_PLANTOURPOINT  PTP " + Environment.NewLine +
                       "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -1008,7 +1008,7 @@ namespace PMapCore.BLL
                                 if (dtPTP_SERVTIME < dtPTP_ARRTIME)
                                     dtPTP_SERVTIME = dtPTP_ARRTIME;
 
-//TODO:paraméterbe kivezetni ezt a működést
+                                //TODO:paraméterbe kivezetni ezt a működést
                                 //A DREHERnél minden megrendelésre rá kell számítani a DEP_SRVTIME-t
                                 //                            if (LastDepot != dr.Field<int>("DEP_ID"))
 
@@ -1142,9 +1142,9 @@ namespace PMapCore.BLL
                     "TOD_QTY", p_QTY,
                     "TOD_ISOPT", Util.getFieldValue<bool>(dr, "ORD_ISOPT") ? 1 : 0,
                     "TOD_SERVTIME", Util.getFieldValue<int>(dr, "DEP_SRVTIME", 0),
-//                    "TOD_SERVS", Util.getFieldValue<int>(dr, "ORD_SERVS", Util.getFieldValue<int>(dr, "SERVS", 0)),
-//                    "TOD_SERVE", Util.getFieldValue<int>(dr, "ORD_SERVE", Util.getFieldValue<int>(dr, "SERVE", 0)),
-                    "TOD_SERVS", p_SERVS,           
+                    //                    "TOD_SERVS", Util.getFieldValue<int>(dr, "ORD_SERVS", Util.getFieldValue<int>(dr, "SERVS", 0)),
+                    //                    "TOD_SERVE", Util.getFieldValue<int>(dr, "ORD_SERVE", Util.getFieldValue<int>(dr, "SERVE", 0)),
+                    "TOD_SERVS", p_SERVS,
                     "TOD_SERVE", p_SERVE,
                     "TOD_QTY4", p_Qty4,
                     "TOD_CUTQTY1", p_QTY1,

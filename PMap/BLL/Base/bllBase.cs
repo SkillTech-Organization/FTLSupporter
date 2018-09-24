@@ -150,6 +150,5 @@ namespace PMapCore.BLL.Base
                 }
             }
         }
-
     }
 }

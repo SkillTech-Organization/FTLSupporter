@@ -39,6 +39,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnSend = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.grpMegrF = new System.Windows.Forms.GroupBox();
@@ -126,6 +127,7 @@
             this.tsbExportItems.Name = "tsbExportItems";
             this.tsbExportItems.Size = new System.Drawing.Size(24, 22);
             this.tsbExportItems.Text = "&Tételek exportja Excelbe";
+            this.tsbExportItems.Click += new System.EventHandler(this.tsbExportItems_Click);
             // 
             // toolStripSeparator2
             // 
@@ -160,12 +162,13 @@
             this.btnQuit,
             this.toolStripSeparator1,
             this.btnExcelImport,
-            this.tsbExportItems,
             this.toolStripSeparator2,
             this.btnSelAll,
             this.btnDeselAll,
             this.toolStripSeparator3,
-            this.btnSend});
+            this.btnSend,
+            this.toolStripSeparator4,
+            this.tsbExportItems});
             this.tsMegr.Location = new System.Drawing.Point(0, 0);
             this.tsMegr.Name = "tsMegr";
             this.tsMegr.Size = new System.Drawing.Size(1167, 25);
@@ -199,6 +202,12 @@
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(24, 22);
             this.btnSend.Text = "Küldés CT-be";
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // tableLayoutPanel1
             // 
@@ -618,7 +627,6 @@
             this.grcConfPlannedQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcConfPlannedQty.FieldName = "ConfPlannedQty";
             this.grcConfPlannedQty.Name = "grcConfPlannedQty";
-            this.grcConfPlannedQty.OptionsColumn.AllowEdit = false;
             this.grcConfPlannedQty.Visible = true;
             this.grcConfPlannedQty.VisibleIndex = 6;
             // 
@@ -639,6 +647,7 @@
             this.grcUnitWeight.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcUnitWeight.FieldName = "UnitWeight";
             this.grcUnitWeight.Name = "grcUnitWeight";
+            this.grcUnitWeight.OptionsColumn.AllowEdit = false;
             this.grcUnitWeight.Visible = true;
             this.grcUnitWeight.VisibleIndex = 5;
             // 
@@ -675,6 +684,7 @@
             this.grcADRMultiplier.Caption = "Eredeti ADR szorzó";
             this.grcADRMultiplier.FieldName = "ADRMultiplier";
             this.grcADRMultiplier.Name = "grcADRMultiplier";
+            this.grcADRMultiplier.OptionsColumn.AllowEdit = false;
             // 
             // gridView3
             // 
@@ -844,5 +854,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btnSend;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }

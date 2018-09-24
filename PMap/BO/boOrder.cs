@@ -46,9 +46,9 @@ namespace PMapCore.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string ORD_CLIENTNUM { get; set; }
 
-        [DisplayNameAttributeX("Zárolás időpontja")]
-        [WriteFieldAttribute(Insert = false, Update = true)]
-        public DateTime ORD_LOCKDATE { get; set; }                  //Új felvitelkor nem szabad tölteni
+        [DisplayNameAttributeX("Véglegesítés ideje")]
+        [WriteFieldAttribute(Insert = false, Update = false)]
+        public DateTime ORD_LOCKDATE { get; set; }                  //CSAK A VÉGLEGESÍTÉS ÍRHATJA !!!
 
         [DisplayNameAttributeX("Rendszerbe bekerülés időpontja")]
         [WriteFieldAttribute(Insert = true, Update = true)]
