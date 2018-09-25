@@ -29,6 +29,7 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using MPOrder.Forms;
+using MPOrder;
 
 namespace PMapTestApp
 {
@@ -864,6 +865,19 @@ namespace PMapTestApp
 
         private void button34_Click(object sender, EventArgs e)
         {
+            /*
+             List<SendToCTResult> res  = new List<SendToCTResult>();
+            res.Add(new SendToCTResult()
+            {
+                ResultType = SendToCTResult.RESTYPE.WARNING,
+                CustomerOrderNumber = "aaa",
+                Message = "mmm"
+            });
+
+            var dlgRes = new dlgSendToCTResult();
+            dlgRes.Result = res;
+            dlgRes.ShowDialog();
+            */
             (new PMapInterface()).MPOrderDialog("", dbConf);
             
 

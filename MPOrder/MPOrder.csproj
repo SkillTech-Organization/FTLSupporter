@@ -85,6 +85,12 @@
     <Compile Include="BO\boMPOrder.cs" />
     <Compile Include="BO\boMPOrderF.cs" />
     <Compile Include="BO\boMPOrderT.cs" />
+    <Compile Include="Forms\dlgSendToCTResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgSendToCTResult.Designer.cs">
+      <DependentUpon>dlgSendToCTResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmMPOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendToCTResult.cs" />
+    <EmbeddedResource Include="Forms\dlgSendToCTResult.resx">
+      <DependentUpon>dlgSendToCTResult.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMPOrder.resx">
       <DependentUpon>frmMPOrder.cs</DependentUpon>
     </EmbeddedResource>
@@ -142,9 +151,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bullet_error.png" />
     <Content Include="lightning_add.png" />
     <Content Include="lightning_delete.png" />
+    <Content Include="messagebox_warning.png" />
     <Content Include="monitor_go.png" />
+    <Content Include="ok.png" />
     <Content Include="page_go.png" />
     <Content Include="tick.png" />
   </ItemGroup>

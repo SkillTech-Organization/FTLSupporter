@@ -264,6 +264,7 @@ namespace MPOrder.BLL
                                     res.Add(new SendToCTResult()
                                     {
                                         ResultType = SendToCTResult.RESTYPE.WARNING,
+                                        CustomerOrderNumber = item.CustomerOrderNumber,
                                         Message = string.Format(PMapMessages.E_MPSENDTOCT_WRONGADDR, item.ShippAddressCompanyName, fullAddr)
                                     });
                                 }
@@ -328,6 +329,13 @@ namespace MPOrder.BLL
                             };
                             newOrder.ID = bllOrderX.AddOrder(newOrder);
 
+                            res.Add(new SendToCTResult()
+                            {
+                                ResultType = SendToCTResult.RESTYPE.OK,
+                                CustomerOrderNumber = item.CustomerOrderNumber,
+                                Message = string.Format(PMapMessages.E_MPSENDTOCT_ADDOK)
+                            });
+
                         }
 
                         //2.CT-be küldjük és már van ORD_ORDER rekord.
@@ -336,6 +344,12 @@ namespace MPOrder.BLL
                             ord.ORD_QTY = item.ConfPlannedQtySum;
                             ord.ORD_ORIGQTY1 = item.ConfPlannedQtySum;
                             bllOrderX.UpdateOrder(ord);
+                            res.Add(new SendToCTResult()
+                            {
+                                ResultType = SendToCTResult.RESTYPE.OK,
+                                CustomerOrderNumber = item.CustomerOrderNumber,
+                                Message = string.Format(PMapMessages.E_MPSENDTOCT_UPDATEOK)
+                            });
                         }
 
                         //3.CT-ből töröljük, és már van ORD_ORDER rekord.
@@ -348,11 +362,21 @@ namespace MPOrder.BLL
                                 res.Add(new SendToCTResult()
                                 {
                                     ResultType = SendToCTResult.RESTYPE.ERROR,
+                                    CustomerOrderNumber = item.CustomerOrderNumber,
                                     Message = string.Format(PMapMessages.E_MPSENDTOCT_TOURED, item.ShippAddressCompanyName, string.Join(",", lstPlan.Select(s => s.PLN_NAME).ToList()))
                                 });
                             }
-                            bllPlanX.DeleteTourOrderByOrderID(ord.ID);
-                            bllOrderX.DeleteOrder(ord.ID);
+                            else
+                            {
+                                bllPlanX.DeleteTourOrderByOrderID(ord.ID);
+                                bllOrderX.DeleteOrder(ord.ID);
+                                res.Add(new SendToCTResult()
+                                {
+                                    ResultType = SendToCTResult.RESTYPE.OK,
+                                    CustomerOrderNumber = item.CustomerOrderNumber,
+                                    Message = string.Format(PMapMessages.E_MPSENDTOCT_DELOK)
+                                });
+                            }
                         }
                     }
 

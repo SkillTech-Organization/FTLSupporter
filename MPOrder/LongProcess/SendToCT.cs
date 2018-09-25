@@ -14,8 +14,11 @@ namespace MPOrder.LongProcess
 {
     public class SendToCT : BaseLongProcess
     {
+        public List<SendToCTResult> Result { get; set; } = new List<SendToCTResult>();
+
         private SQLServerAccess m_DB;
         List<boMPOrderF> m_data = new List<boMPOrderF>();
+
         public SendToCT(BaseProgressDialog p_Form, List<boMPOrderF> p_data)
             : base(p_Form, ThreadPriority.Normal)
         {
@@ -28,7 +31,7 @@ namespace MPOrder.LongProcess
             try
             {
                 var bllMPOrderX = new bllMPOrder(m_DB);
-                bllMPOrderX.SendToCT(m_data, ProcessForm);
+                Result = bllMPOrderX.SendToCT(m_data, ProcessForm);
             }
             catch
             {

@@ -17,6 +17,12 @@ namespace MPOrder
 
 
         public RESTYPE ResultType { get; set; }
+
+        public int ResultTypeVal { get { return (int)ResultType; } }
+
+        //Vevő rendelés száma, Customer Order  code
+        public string CustomerOrderNumber { get; set; }
+
         public string Message { get; set; }
 
 

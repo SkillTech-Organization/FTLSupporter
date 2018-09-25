@@ -36,6 +36,7 @@ namespace MPOrder.Forms
             InitializeComponent();
             m_bllMPOrder = new bllMPOrder(PMapCommonVars.Instance.CT_DB);
             m_bllPackUnit = new bllPackUnit(PMapCommonVars.Instance.CT_DB);
+            fillGrids();
         }
 
         private void btnQuit_Click(object sender, EventArgs e)
@@ -297,6 +298,10 @@ namespace MPOrder.Forms
                 var sndproc = new SendToCT(new BaseSilngleProgressDialog(0, m_data.Count, PMapMessages.M_MPORD_SENDTOCT, false), m_data);
                 sndproc.Run();
                 sndproc.ProcessForm.ShowDialog();
+                var dlgRes = new dlgSendToCTResult();
+                dlgRes.Result = sndproc.Result;
+                dlgRes.ShowDialog();
+
             }
         }
     }

@@ -170,6 +170,9 @@ namespace PMapCore.Localize
         public const string E_MPSENDTOCT_TOURED= "A megrendelés túrába van szervezve:{0} túrák:{1}";
         public const string M_MPORD_SENDTOCT = "Küldés CorrectTour-ba";
         public const string Q_MPORD_SENDTOCT = "Adatküldés a CorrectTour-ba ?";
+        public const string E_MPSENDTOCT_ADDOK = "Megrendelés rendben átadva";
+        public const string E_MPSENDTOCT_UPDATEOK = "Megrendelés rendben aktualizálva";
+        public const string E_MPSENDTOCT_DELOK = "Megrendelés rendben visszavonva";
 
 
     }
