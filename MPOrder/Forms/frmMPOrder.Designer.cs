@@ -116,7 +116,7 @@
             this.btnExcelImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnExcelImport.Name = "btnExcelImport";
             this.btnExcelImport.Size = new System.Drawing.Size(24, 22);
-            this.btnExcelImport.Text = "&Export Excelbe";
+            this.btnExcelImport.Text = "&Excel állomány beolvasása";
             this.btnExcelImport.Click += new System.EventHandler(this.btnExcelImport_Click);
             // 
             // tsbExportItems
@@ -201,7 +201,7 @@
             this.btnSend.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(24, 22);
-            this.btnSend.Text = "Küldés CT-be";
+            this.btnSend.Text = "Küldés CorrectTour-ba";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // toolStripSeparator4
@@ -255,6 +255,7 @@
             // gridMegrF
             // 
             this.gridMegrF.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridMegrF.EmbeddedNavigator.TextStringFormat = "Record {0} of {1}";
             this.gridMegrF.Location = new System.Drawing.Point(3, 17);
             this.gridMegrF.MainView = this.gridViewMegrF;
             this.gridMegrF.Name = "gridMegrF";
@@ -479,6 +480,7 @@
             // gridMegrT
             // 
             this.gridMegrT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridMegrT.EmbeddedNavigator.TextStringFormat = "Record {0} of {1}";
             this.gridMegrT.Location = new System.Drawing.Point(0, 0);
             this.gridMegrT.MainView = this.gridViewMegrT;
             this.gridMegrT.Name = "gridMegrT";
@@ -769,7 +771,10 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.tsMegr);
             this.Name = "frmMPOrder";
-            this.Text = "frmMPOrder";
+            this.Text = "Megrendelések előkészítése";
+            this.Activated += new System.EventHandler(this.frmMPOrder_Activated);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMPOrder_FormClosed);
+            this.Load += new System.EventHandler(this.frmMPOrder_Load);
             this.tsMegr.ResumeLayout(false);
             this.tsMegr.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);

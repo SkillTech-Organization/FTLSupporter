@@ -114,6 +114,10 @@ namespace PMapCore.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string ORD_GATE { get; set; }
 
+        [DisplayNameAttributeX("ADR pontok")]
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double ORD_ADRPOINTS { get; set; }
+
         [DisplayNameAttributeX("Megjegyzés")]
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string ORD_COMMENT { get; set; }

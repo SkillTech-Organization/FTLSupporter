@@ -36,6 +36,8 @@ namespace MPOrder.Forms
             InitializeComponent();
             m_bllMPOrder = new bllMPOrder(PMapCommonVars.Instance.CT_DB);
             m_bllPackUnit = new bllPackUnit(PMapCommonVars.Instance.CT_DB);
+            InitForm();
+            RestoreLayout(false);
             fillGrids();
         }
 
@@ -207,7 +209,10 @@ namespace MPOrder.Forms
             if (ADR)
             {
                 double ConfOrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
-                ADRMultiplierX = Math.Round( ADRMultiplier * (ConfOrderQty/ newQty));
+                if (newQty != 0)
+                    ADRMultiplierX = Math.Round(ADRMultiplier * (newQty / ConfOrderQty));
+                else
+                    ADRMultiplierX = 0;
 
                 gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplierX);
             }
@@ -303,6 +308,75 @@ namespace MPOrder.Forms
                 dlgRes.ShowDialog();
 
             }
+        }
+
+        private void SaveLayout()
+        {
+            FormSerializeHelper fs = new FormSerializeHelper(this);
+            string MPP_WINDOW = XMLSerializator.SerializeObject(fs);
+
+            string MPP_TGRID = Util.SaveGridLayoutToString(gridViewMegrF);
+            string MPP_PGRID = Util.SaveGridLayoutToString(gridViewMegrT);
+            bllMapFormPar.SaveParameters(-1, PMapCommonVars.Instance.USR_ID, MPP_WINDOW, "", "", MPP_TGRID, MPP_PGRID, "");
+        }
+
+        private void frmMPOrder_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveLayout();
+        }
+
+        private void RestoreLayout(bool p_reset)
+        {
+            string MPP_WINDOW = "";
+            string MPP_DOCK = "";
+            string MPP_PARAM = "";
+            string MPP_TGRID = "";
+            string MPP_PGRID = "";
+            string MPP_UGRID = "";
+
+
+ 
+            try
+            {
+
+                if (p_reset)
+                    bllMapFormPar.RemoveParameters(-1, PMapCommonVars.Instance.USR_ID);
+
+                bllMapFormPar.RestoreParameters(-1, PMapCommonVars.Instance.USR_ID, out MPP_WINDOW, out MPP_DOCK, out MPP_PARAM, out MPP_TGRID, out MPP_PGRID, out MPP_UGRID);
+
+            
+                if (MPP_WINDOW != "")
+                {
+                    FormSerializeHelper fs = (FormSerializeHelper)XMLSerializator.DeserializeObject(MPP_WINDOW, typeof(FormSerializeHelper));
+
+                    this.WindowState = fs.WindowState;
+                    this.Width = fs.Width;
+                    this.Height = fs.Height;
+                    this.Left = fs.Left;
+                    this.Top = fs.Top;
+
+                }
+                /* Egyelőre a grideket nem töljük vissza */
+                if (MPP_TGRID != "")
+                    Util.RestoreGridLayoutFromString(gridViewMegrF, MPP_TGRID);
+                if (MPP_PGRID != "")
+                    Util.RestoreGridLayoutFromString(gridViewMegrT, MPP_PGRID);
+                
+
+            }
+            catch (Exception e)
+            {
+                Util.ExceptionLog(e);
+            }
+        }
+
+        private void frmMPOrder_Activated(object sender, EventArgs e)
+        {
+        }
+
+        private void frmMPOrder_Load(object sender, EventArgs e)
+        {
+            RestoreLayout(false);
         }
     }
 }

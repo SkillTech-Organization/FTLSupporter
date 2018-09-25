@@ -62,29 +62,7 @@ namespace PMapCore.Forms
         private string m_defaultMPP_UGRID = "";
         private PPlanCommonVars m_PPlanCommonVars;
 
-        public class FormSerializeHelper
-        {
-            public FormWindowState WindowState { get; set; }
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public int Left { get; set; }
-            public int Top { get; set; }
-
-            public FormSerializeHelper()
-            {
-            }
-
-            public FormSerializeHelper(Form p_form)
-            {
-                WindowState = p_form.WindowState;
-                Width = p_form.Width;
-                Height = p_form.Height;
-                Left = p_form.Left;
-                Top = p_form.Top;
-            }
-        }
-
-
+  
         public frmPPlan()
         {
             InitializeComponent();

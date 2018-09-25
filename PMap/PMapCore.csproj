@@ -223,6 +223,7 @@
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\AuthCryptoHelper.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
+    <Compile Include="Common\FormSerializeHelper.cs" />
     <Compile Include="Forms\dlgAddOpenClose.cs">
       <SubType>Form</SubType>
     </Compile>

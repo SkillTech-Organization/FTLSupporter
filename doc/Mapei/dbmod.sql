@@ -1,5 +1,11 @@
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'ORD_ORDER' and  syscolumns.name = 'ORD_ADRPOINTS') begin 
+   ALTER TABLE ORD_ORDER ADD ORD_ADRPOINTS TY_NVALUE default 0 
+End 
+GO
 
-CREATE TYPE [dbo].[TY_TEXT] FROM [nvarchar](max) NULL
+IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TY_TEXT') begin
+   CREATE TYPE [dbo].[TY_TEXT] FROM [nvarchar](max) NULL
+End
 GO
 
 /****** Object:  Table [dbo].[MPO_MPORDER]    Script Date: 2018. 09. 06. 6:03:13 ******/
@@ -8,9 +14,8 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-drop table [MPO_MPORDER]
-go
 
+IF not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MPO_MPORDER]') AND type in (N'U')) BEGIN
 CREATE TABLE [dbo].[MPO_MPORDER](
 	[ID] [dbo].[TY_ID] IDENTITY(1,1) NOT NULL,
 	[SentToCT] [dbo].[TY_BVALUE] NULL,
@@ -57,18 +62,15 @@ CREATE TABLE [dbo].[MPO_MPORDER](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-GO
 CREATE NONCLUSTERED INDEX [IX_MPO_ShippingDate] ON [dbo].[MPO_MPORDER]
 (
 	[ShippingDate] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO 
 CREATE NONCLUSTERED INDEX [IX_MPO_CustProd] ON [dbo].[MPO_MPORDER]
 (
 	[CustomerCode] ASC,
 	[ProductCode] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+end
 GO
-
-
 

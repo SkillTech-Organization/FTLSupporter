@@ -62,6 +62,7 @@ namespace MPOrder.BLL
                             GrossWeightPlanned = Util.getFieldValue<double>(o, "GrossWeightPlanned"),
                             ADR = Util.getFieldValue<bool>(o, "ADR"),
                             ADRMultiplier = Util.getFieldValue<double>(o, "ADRMultiplier"),
+                            ADRMultiplierX = Util.getFieldValue<double>(o, "ADRMultiplierX"),
                             ADRLimitedQuantity = Util.getFieldValue<bool>(o, "ADRLimitedQuantity"),
                             Freeze = Util.getFieldValue<bool>(o, "Freeze"),
                             Melt = Util.getFieldValue<bool>(o, "Melt"),
@@ -319,6 +320,7 @@ namespace MPOrder.BLL
                                 ORD_LENGTH = 0,
                                 ORD_WIDTH = 0,
                                 ORD_HEIGHT = 0,
+                                ORD_ADRPOINTS = item.ADRMultiplierXSum,
                                 ORD_LOCKED = false,
                                 ORD_ISOPT = true,
                                 ORD_GATE = "",
@@ -343,6 +345,7 @@ namespace MPOrder.BLL
                         {
                             ord.ORD_QTY = item.ConfPlannedQtySum;
                             ord.ORD_ORIGQTY1 = item.ConfPlannedQtySum;
+                            ord.ORD_ADRPOINTS = item.ADRMultiplierXSum;
                             bllOrderX.UpdateOrder(ord);
                             res.Add(new SendToCTResult()
                             {
