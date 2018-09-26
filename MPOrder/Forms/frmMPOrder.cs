@@ -137,7 +137,6 @@ namespace MPOrder.Forms
                     gridViewMegrF.FocusedRowHandle = focusedRowF;
                 initMegrTGrid();
 
-
             }
             catch (Exception ex)
             {
@@ -177,18 +176,19 @@ namespace MPOrder.Forms
             {
                 gridMegrT.DataSource = null;
             }
+            setButtons();
         }
 
 
         private void edConfPlannedQty_EditValueChanged(object sender, EventArgs e)
-           {
+        {
 
             //   gridMegrF.DataSource = m_data;
             //   gridViewMegrF.RefreshData();
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcConfPlannedQtySum);
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcGrossWeightPlannedSum);
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcADRMultiplierXSum);
-            
+
             gridViewMegrF.RefreshRow(gridViewMegrF.FocusedRowHandle);
 
         }
@@ -236,7 +236,7 @@ namespace MPOrder.Forms
             if (e.Column == grcADRMultiplierXSum || e.Column == grcGrossWeightPlannedSum || e.Column == grcConfPlannedQtySum)
             {
                 string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(e.RowHandle, grcCustomerOrderNumber);
-                if ( !string.IsNullOrWhiteSpace(CustomerOrderNumber))
+                if (!string.IsNullOrWhiteSpace(CustomerOrderNumber))
                 {
                     var item = m_data.Where(w => w.CustomerOrderNumber == CustomerOrderNumber).FirstOrDefault();
                     if (item == null || item.Items.Any(a => a.UnitWeight == 0))
@@ -335,7 +335,7 @@ namespace MPOrder.Forms
             string MPP_UGRID = "";
 
 
- 
+
             try
             {
 
@@ -344,7 +344,7 @@ namespace MPOrder.Forms
 
                 bllMapFormPar.RestoreParameters(-1, PMapCommonVars.Instance.USR_ID, out MPP_WINDOW, out MPP_DOCK, out MPP_PARAM, out MPP_TGRID, out MPP_PGRID, out MPP_UGRID);
 
-            
+
                 if (MPP_WINDOW != "")
                 {
                     FormSerializeHelper fs = (FormSerializeHelper)XMLSerializator.DeserializeObject(MPP_WINDOW, typeof(FormSerializeHelper));
@@ -361,7 +361,7 @@ namespace MPOrder.Forms
                     Util.RestoreGridLayoutFromString(gridViewMegrF, MPP_TGRID);
                 if (MPP_PGRID != "")
                     Util.RestoreGridLayoutFromString(gridViewMegrT, MPP_PGRID);
-                
+
 
             }
             catch (Exception e)
@@ -377,6 +377,30 @@ namespace MPOrder.Forms
         private void frmMPOrder_Load(object sender, EventArgs e)
         {
             RestoreLayout(false);
+        }
+
+
+
+        private void tbsDelete_Click(object sender, EventArgs e)
+        {
+            if (UI.Confirm(PMapMessages.Q_MPORD_DELITEM))
+            {
+                string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
+
+                m_data.RemoveAll(r => r.CustomerOrderNumber == CustomerOrderNumber);
+                m_bllMPOrder.DeleteItemByCustomerOrderNumber( CustomerOrderNumber);
+                fillGrids();
+            }
+        }
+
+        private void setButtons()
+        {
+            btnExcelImport.Enabled = true;
+            btnSelAll.Enabled = gridViewMegrF.RowCount > 0;
+            btnDeselAll.Enabled = gridViewMegrF.RowCount > 0;
+            btnSend.Enabled = gridViewMegrF.RowCount > 0;
+            tbsDelete.Enabled = gridViewMegrT.RowCount > 0;
+            tsbExportItems.Enabled = gridViewMegrF.RowCount > 0;
         }
     }
 }

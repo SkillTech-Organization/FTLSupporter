@@ -218,7 +218,15 @@ namespace MPOrder.BLL
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CustomerOrderDate=?", p_SentToCT, p_CustomerOrderDate);
         }
+        public void DeleteItem(int p_ID)
+        {
+            DBA.ExecuteNonQuery("delete MPO_MPORDER where id=?", p_ID);
+        }
 
+        public void DeleteItemByCustomerOrderNumber(string p_CustomerOrderNumber)
+        {
+            DBA.ExecuteNonQuery("delete MPO_MPORDER where CustomerOrderNumber=?", p_CustomerOrderNumber);
+        }
         public List<SendToCTResult> SendToCT(List<boMPOrderF> p_data, BaseProgressDialog p_Form = null)
         {
             var res = new List<SendToCTResult>();

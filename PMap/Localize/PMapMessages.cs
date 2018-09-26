@@ -173,6 +173,7 @@ namespace PMapCore.Localize
         public const string E_MPSENDTOCT_ADDOK = "Megrendelés rendben átadva";
         public const string E_MPSENDTOCT_UPDATEOK = "Megrendelés rendben aktualizálva";
         public const string E_MPSENDTOCT_DELOK = "Megrendelés rendben visszavonva";
+        public const string Q_MPORD_DELITEM = "Törölhető a megrendelés ?";
 
 
     }

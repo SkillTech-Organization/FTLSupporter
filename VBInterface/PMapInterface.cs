@@ -25,7 +25,7 @@ using PMapCore.Common.Parse;
 using PMapCore.Licence;
 using PMapCore.Localize;
 using System.Diagnostics;
-using MPOrder.Forms;
+
 
 namespace VBInterface
 {
@@ -673,6 +673,7 @@ namespace VBInterface
 
         #endregion
 
+        /* -nem -kel
         public string MPOrderDialog(string p_iniPath, string p_dbConf)
         {
 
@@ -699,7 +700,7 @@ namespace VBInterface
             //Util.Log2File(">>END:MPOrderDialog()-->" + sRetStatus);
             return sRetStatus;
         }
-
+        */
 
         #region Csak C#-ból hívható szolgáltatások
         public List<dtXResult> ImportDepots(string p_iniPath, string p_dbConf, List<boXDepot> p_depots)

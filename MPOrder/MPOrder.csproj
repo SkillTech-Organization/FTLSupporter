@@ -42,6 +42,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Data.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.v10.1.Linq, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -149,9 +152,14 @@
       <Project>{6e23d5d1-fb6b-450d-8244-34172b60c166}</Project>
       <Name>TabOrder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VBInterface\VBInterface.csproj">
+      <Project>{50aa2c7b-a6da-4eb7-8316-9d87caeba9b7}</Project>
+      <Name>VBInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="bullet_error.png" />
+    <Content Include="delete.png" />
     <Content Include="lightning_add.png" />
     <Content Include="lightning_delete.png" />
     <Content Include="messagebox_warning.png" />

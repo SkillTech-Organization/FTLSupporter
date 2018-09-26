@@ -128,7 +128,7 @@ namespace PMapCore.Common
             Loaded = false;
         }
 
-        public void ReadParams(string p_iniPath, string p_dbConf)
+        public void ReadParams(string p_iniPath, string p_dbConf, string p_iniFileName = "PMap.ini")
         {
   
             if (p_iniPath == "")
@@ -148,7 +148,7 @@ namespace PMapCore.Common
              */
 
 
-            INIFile ini = new INIFile(Path.Combine(p_iniPath, "PMap.ini"));
+            INIFile ini = new INIFile(Path.Combine(p_iniPath, p_iniFileName));
 
             IDFile = ini.ReadString(Global.iniPMap, Global.iniIDFile);
             CTIniFile = ini.ReadString(Global.iniPMap, Global.iniCTIniFile);

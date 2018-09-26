@@ -40,6 +40,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnSend = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbsDelete = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.grpMegrF = new System.Windows.Forms.GroupBox();
@@ -168,6 +170,8 @@
             this.toolStripSeparator3,
             this.btnSend,
             this.toolStripSeparator4,
+            this.tbsDelete,
+            this.toolStripSeparator5,
             this.tsbExportItems});
             this.tsMegr.Location = new System.Drawing.Point(0, 0);
             this.tsMegr.Name = "tsMegr";
@@ -208,6 +212,21 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tbsDelete
+            // 
+            this.tbsDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbsDelete.Image = ((System.Drawing.Image)(resources.GetObject("tbsDelete.Image")));
+            this.tbsDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbsDelete.Name = "tbsDelete";
+            this.tbsDelete.Size = new System.Drawing.Size(24, 22);
+            this.tbsDelete.Text = "Megrendelés törlése";
+            this.tbsDelete.Click += new System.EventHandler(this.tbsDelete_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
             // tableLayoutPanel1
             // 
@@ -860,5 +879,7 @@
         private System.Windows.Forms.ToolStripButton btnSend;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton tbsDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }

@@ -878,7 +878,7 @@ namespace PMapTestApp
             dlgRes.Result = res;
             dlgRes.ShowDialog();
             */
-            (new PMapInterface()).MPOrderDialog("", dbConf);
+        //    (new PMapInterface()).MPOrderDialog("", dbConf);
             
 
         }
