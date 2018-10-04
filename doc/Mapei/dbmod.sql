@@ -39,7 +39,7 @@ CREATE TABLE [dbo].[MPO_MPORDER](
 	[ProdDescription] [dbo].[TY_TEXT] NULL,
 	[ConfOrderQty] [dbo].[TY_NVALUE] NULL,
 	[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,
-	[PalletOrderQty] [dbo].[TY_NVALUE] NULL,
+	[NetWeight] [dbo].[TY_NVALUE] NULL,
 	[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,
 	[PalletBulkQty] [dbo].[TY_NVALUE] NULL,
 	[GrossWeightPlanned] [dbo].[TY_NVALUE] NULL,
@@ -74,3 +74,7 @@ CREATE NONCLUSTERED INDEX [IX_MPO_CustProd] ON [dbo].[MPO_MPORDER]
 end
 GO
 
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'NetWeight') begin 
+   ALTER TABLE MPO_MPORDER ADD NetWeight TY_NVALUE default 0 
+End 
+         

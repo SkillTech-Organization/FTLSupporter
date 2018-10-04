@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -48,61 +49,34 @@ namespace MPOrder.Forms
 
         private void btnExcelImport_Click(object sender, EventArgs e)
         {
-            if (openExcel.ShowDialog() == DialogResult.OK)
+            if (openCSV.ShowDialog() == DialogResult.OK)
             {
-                var excelApp = new Excel.Application();
                 var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
                 var ci = new System.Globalization.CultureInfo("hu-HU");
                 System.Threading.Thread.CurrentThread.CurrentCulture = ci;
 
-                Excel.Workbook excelWorkbook = null;
-
                 try
                 {
-                    excelApp.Visible = false;
+                    var lineCount = File.ReadAllLines( openCSV.FileName).Length;
 
-                    excelWorkbook = excelApp.Workbooks.Open(openExcel.FileName);
-
-                    Excel.Sheets excelSheets = excelWorkbook.Worksheets;
-                    Excel.Worksheet ws = (Excel.Worksheet)excelSheets.get_Item("Sheet1");
-                    if (ws == null)
-                    {
-                        Marshal.ReleaseComObject(excelSheets);
-                        throw new Exception(PMapMessages.E_MPORD_SEETNOTFOUND);
-                    }
-
-
-                    Excel.Range last = ws.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
-                    Excel.Range range = ws.get_Range("A1", last);
-                    var val = range.Value;
-
-                    int lastUsedRow = last.Row;
-                    int lastUsedColumn = last.Column;
-
-
-                    var import = new ImportFromXML(new BaseSilngleProgressDialog(0, lastUsedRow * 2, string.Format(PMapMessages.M_MPORD_EXCELIMP, openExcel.FileName), false), val, lastUsedRow, lastUsedColumn);
+                    var import = new ImportFromCSV(new BaseSilngleProgressDialog(0, lineCount * 2, string.Format(PMapMessages.M_MPORD_CSVLIMP, openCSV.FileName), false), openCSV.FileName);
                     import.Run();
                     import.ProcessForm.ShowDialog();
+                    UI.Message(string.Format(PMapMessages.M_MPORD_CSVLIMP_LOADED, import.AddedCount, import.ItemsCount));
+
                     fillGrids();
                 }
 
                 catch (Exception ex)
                 {
                     Util.ExceptionLog(ex);
-                    UI.Error(string.Format(PMapMessages.E_MPORD_EXCELIMP_ERR, ex.Message));
+                    UI.Error(string.Format(PMapMessages.E_MPORD_CSVIMP_ERR, ex.Message));
                     //throw new Exception(string.Format(PMapMessages.E_MPORD_INTEROP_ERR, ex.Message));
                 }
                 finally
                 {
                     System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
 
-                    if (excelWorkbook != null)
-                        excelWorkbook.Close(0);
-                    if (excelApp != null)
-                    {
-                        excelApp.Quit();
-                        Marshal.FinalReleaseComObject(excelApp);
-                    }
                 }
             }
         }

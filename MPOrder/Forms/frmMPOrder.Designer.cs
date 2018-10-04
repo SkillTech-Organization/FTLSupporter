@@ -90,7 +90,7 @@
             this.dtmOrderDate = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.btnFilter = new System.Windows.Forms.Button();
-            this.openExcel = new System.Windows.Forms.OpenFileDialog();
+            this.openCSV = new System.Windows.Forms.OpenFileDialog();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -118,7 +118,7 @@
             this.btnExcelImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnExcelImport.Name = "btnExcelImport";
             this.btnExcelImport.Size = new System.Drawing.Size(24, 22);
-            this.btnExcelImport.Text = "&Excel állomány beolvasása";
+            this.btnExcelImport.Text = "&CSV állomány beolvasása";
             this.btnExcelImport.Click += new System.EventHandler(this.btnExcelImport_Click);
             // 
             // tsbExportItems
@@ -128,7 +128,7 @@
             this.tsbExportItems.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExportItems.Name = "tsbExportItems";
             this.tsbExportItems.Size = new System.Drawing.Size(24, 22);
-            this.tsbExportItems.Text = "&Tételek exportja Excelbe";
+            this.tsbExportItems.Text = "&Tételek exportja CSV-be";
             this.tsbExportItems.Click += new System.EventHandler(this.tsbExportItems_Click);
             // 
             // toolStripSeparator2
@@ -546,6 +546,8 @@
             this.grcID.FieldName = "ID";
             this.grcID.Name = "grcID";
             this.grcID.OptionsColumn.AllowEdit = false;
+            this.grcID.Visible = true;
+            this.grcID.VisibleIndex = 10;
             // 
             // grcRowNumber
             // 
@@ -776,11 +778,11 @@
             this.btnFilter.UseVisualStyleBackColor = false;
             this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
-            // openExcel
+            // openCSV
             // 
-            this.openExcel.CheckFileExists = false;
-            this.openExcel.DefaultExt = "xls";
-            this.openExcel.Filter = "*.xlsx|*.xlsx";
+            this.openCSV.CheckFileExists = false;
+            this.openCSV.DefaultExt = "xls";
+            this.openCSV.Filter = "*.csv|*.CSV";
             // 
             // frmMPOrder
             // 
@@ -864,7 +866,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplierX;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRLimitedQuantity;
         private System.Windows.Forms.ToolStripButton btnQuit;
-        private System.Windows.Forms.OpenFileDialog openExcel;
+        private System.Windows.Forms.OpenFileDialog openCSV;
         private System.Windows.Forms.DateTimePicker dtmOrderDate;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edConfPlannedQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplierXSum;

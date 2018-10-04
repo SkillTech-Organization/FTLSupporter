@@ -100,7 +100,7 @@
     <Compile Include="Forms\frmMPOrder.Designer.cs">
       <DependentUpon>frmMPOrder.cs</DependentUpon>
     </Compile>
-    <Compile Include="LongProcess\ImportFromXML.cs" />
+    <Compile Include="LongProcess\ImportFromCSV.cs" />
     <Compile Include="LongProcess\SendToCT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

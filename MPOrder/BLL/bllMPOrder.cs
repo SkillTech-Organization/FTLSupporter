@@ -24,9 +24,7 @@ namespace MPOrder.BLL
 
         public List<boMPOrder> GetAllMPOrders(string p_where = "", params object[] p_pars)
         {
-            string sSql = "select * " + Environment.NewLine +
-                          "  from MPO_MPORDER MPO " + Environment.NewLine +
-                         "  left outer join PCU_PACKUNIT PCU on upper(PCU.PCU_NAME1) = upper( MPO.U_M)  " + Environment.NewLine; 
+            string sSql = "select * from MPO_MPORDER MPO ";
             if (p_where != "")
                 sSql += " where " + p_where;
             DataTable dt = DBA.Query2DataTable(sSql, p_pars);
@@ -56,7 +54,6 @@ namespace MPOrder.BLL
                             ProdDescription = Util.getFieldValue<string>(o, "ProdDescription"),
                             ConfOrderQty = Util.getFieldValue<double>(o, "ConfOrderQty"),
                             ConfPlannedQty = Util.getFieldValue<double>(o, "ConfPlannedQty"),
-                            PalletOrderQty = Util.getFieldValue<double>(o, "PalletOrderQty"),
                             PalletPlannedQty = Util.getFieldValue<double>(o, "PalletPlannedQty"),
                             PalletBulkQty = Util.getFieldValue<double>(o, "PalletBulkQty"),
                             GrossWeightPlanned = Util.getFieldValue<double>(o, "GrossWeightPlanned"),
@@ -73,8 +70,7 @@ namespace MPOrder.BLL
                             KM = Util.getFieldValue<double>(o, "KM"),
                             Forfait = Util.getFieldValue<double>(o, "Forfait"),
                             Currency = Util.getFieldValue<string>(o, "Currency"),
-//                            UnitWeight = Util.getFieldValue<double>(o, "UnitWeight"),
-                            UnitWeight = Util.getFieldValue<double>(o, "PCU_EXCVALUE"),
+                            UnitWeight = Util.getFieldValue<double>(o, "UnitWeight")
 
 
                         });
@@ -179,7 +175,6 @@ namespace MPOrder.BLL
                         U_M = s2.U_M,
                         ProdDescription = s2.ProdDescription,
                         ConfOrderQty = s2.ConfOrderQty,
-                        PalletOrderQty = s2.PalletOrderQty,
                         PalletPlannedQty = s2.PalletPlannedQty,
                         PalletBulkQty = s2.PalletBulkQty,
                         ADR = s2.ADR,

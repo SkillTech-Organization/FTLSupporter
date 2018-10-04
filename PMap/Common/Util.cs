@@ -882,6 +882,12 @@ namespace PMapCore.Common
             return value.Length <= length ? value : value.Substring(value.Length - length);
         }
 
+        public static string LeftString(string param, int length)
+        {
+            string result = (param.Length > length ? param.Substring(0, length) : param);
+            return result;
+        }
+
         public static List<T> XmlToObjectList<T>(XmlNode[] p_XMLNodes)
         {
             var returnItemsList = new List<T>();
@@ -1111,6 +1117,7 @@ namespace PMapCore.Common
             else
                 return p_value.ToString();
         }
+
 
 
     }
