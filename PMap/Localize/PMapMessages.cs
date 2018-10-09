@@ -23,8 +23,10 @@ namespace PMapCore.Localize
         public const string E_PEDIT_NOTFITTEDDEP = "A túrapont a jármű tulajdonságai miatt nem illeszthető a tervbe!";
         public const string E_PEDIT_WRONGARR = "A távozás időpontja korábbi az érkezésnél!";
         public const string E_PEDIT_WRONTIME = "Túl nagy vagy túl kicsi időpont megadása! (Minimum:{0}, maximum {1})";
-        public const string E_PEDIT_OPTISNFINISHED = "A tervezés nem futott le!";
-        public const string E_PEDIT_IGNOREDORDERHAPPENED = "A túrára optimalizálás visszavonva, mert  túrapontot hagyott ki:\n{0}";
+        public const string M_PEDIT_OPTOK = "Tervezés rendben megtörtént.";
+        public const string E_PEDIT_OPTERR = "A tervezés nem futott le!";
+        public const string E_PEDIT_IGNOREDORDERHAPPENED1 = "Az optimalizálás során beosztatlan megrendelések keletkeztek!";
+        public const string E_PEDIT_IGNOREDORDERHAPPENED2 = "A túrára optimalizálás visszavonva, mert túrapontot hagyott ki:\n{0}";
         public const string E_PEDIT_LOCKEDTRUCK = "A jármű zárolt!";
         public const string E_PEDIT_OPTANOTHERWS = "Ennek a tervnek az optimalizálása folyik egy másik munkaállomáson!";
         public const string Q_PEDIT_DELPLAN = "Törölhető a megnyitott terv?";

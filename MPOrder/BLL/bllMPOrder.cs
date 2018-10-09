@@ -57,6 +57,7 @@ namespace MPOrder.BLL
                             PalletPlannedQty = Util.getFieldValue<double>(o, "PalletPlannedQty"),
                             PalletBulkQty = Util.getFieldValue<double>(o, "PalletBulkQty"),
                             GrossWeightPlanned = Util.getFieldValue<double>(o, "GrossWeightPlanned"),
+                            GrossWeightPlannedX = Util.getFieldValue<double>(o, "GrossWeightPlannedX"),
                             ADR = Util.getFieldValue<bool>(o, "ADR"),
                             ADRMultiplier = Util.getFieldValue<double>(o, "ADRMultiplier"),
                             ADRMultiplierX = Util.getFieldValue<double>(o, "ADRMultiplierX"),
@@ -182,6 +183,7 @@ namespace MPOrder.BLL
                         ADRLimitedQuantity = s2.ADRLimitedQuantity,
                         ConfPlannedQty = s2.ConfPlannedQty,
                         GrossWeightPlanned = s2.GrossWeightPlanned,
+                        GrossWeightPlannedX = s2.GrossWeightPlannedX,
                         Freeze = s2.Freeze,
                         Melt = s2.Melt,
                         UV = s2.UV,
@@ -199,9 +201,9 @@ namespace MPOrder.BLL
         }
 
 
-        public void SetManualValues( int p_ID, double p_ConfPlannedQty, double p_GrossWeightPlanned, double p_ADRMultiplierX)
+        public void SetManualValues( int p_ID, double p_ConfPlannedQty, double p_GrossWeightPlannedX, double p_ADRMultiplierX)
         {
-            DBA.ExecuteNonQuery("update MPO_MPORDER set ConfPlannedQty = ?, GrossWeightPlanned = ?, ADRMultiplierX = ? where ID=?", p_ConfPlannedQty, p_GrossWeightPlanned, p_ADRMultiplierX, p_ID);
+            DBA.ExecuteNonQuery("update MPO_MPORDER set ConfPlannedQty = ?, GrossWeightPlannedX = ?, ADRMultiplierX = ? where ID=?", p_ConfPlannedQty, p_GrossWeightPlannedX, p_ADRMultiplierX, p_ID);
         }
 
         public void SetSentToCT( string p_CustomerOrderNumber, bool p_SentToCT)
@@ -258,6 +260,7 @@ namespace MPOrder.BLL
                                 int ZIP_ID = 0;
                                 int NOD_ID = 0;
                                 int EDG_ID = 0;
+                                /*
                                 bool bFound = bllRouteX.GeocodingByAddr(fullAddr, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, false);
                                 if (bFound && DEP_IMPADDRSTAT != boDepot.EIMPADDRSTAT.MISSADDR)
                                 {
@@ -272,7 +275,7 @@ namespace MPOrder.BLL
                                         Message = string.Format(PMapMessages.E_MPSENDTOCT_WRONGADDR, item.ShippAddressCompanyName, fullAddr)
                                     });
                                 }
-
+                                */
 
                                 //Lerakó felvitele
                                 dep = new boDepot()

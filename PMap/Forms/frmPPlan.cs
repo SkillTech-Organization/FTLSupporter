@@ -585,14 +585,14 @@ namespace PMapCore.Forms
                     else if(dOpt.Result == TourOptimizerProcess.eOptResult.IgnoredHappened)
                     {
                         m_bllPlan.SetTourUnCompleted(m_PPlanCommonVars.FocusedTour.ID);
-                        UI.Message(PMapMessages.E_PEDIT_IGNOREDORDERHAPPENED, dOpt.IgnoredOrders);
+                        UI.Message(PMapMessages.E_PEDIT_IGNOREDORDERHAPPENED2, dOpt.IgnoredOrders);
                     }
                     RefreshAll(new PlanEventArgs(ePlanEventMode.RefreshOrders));
                 }
                 else
                 {
                     
-                    UI.Message(PMapMessages.E_PEDIT_OPTISNFINISHED);
+                    UI.Message(PMapMessages.E_PEDIT_OPTERR);
                 }
             }
             else
@@ -740,13 +740,25 @@ namespace PMapCore.Forms
         private void btnOptimizeAll_Click(object sender, EventArgs e)
         {
             dlgOptimize dOpt = new dlgOptimize(m_PPlanCommonVars.PLN_ID, 0);
-            if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK && dOpt.Result == TourOptimizerProcess.eOptResult.OK)
+            if (dOpt.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+
                 this.initPPlanForm(m_PPlanCommonVars.PLN_ID, true);
-            }
-            else
-            {
-                MessageBox.Show(this, PMapMessages.E_PEDIT_OPTISNFINISHED);
+
+                if (dOpt.Result == TourOptimizerProcess.eOptResult.OK)
+                {
+                    MessageBox.Show(this, PMapMessages.M_PEDIT_OPTOK);
+                }
+                else if (dOpt.Result == TourOptimizerProcess.eOptResult.IgnoredHappened)
+                {
+                    MessageBox.Show(this, PMapMessages.E_PEDIT_IGNOREDORDERHAPPENED1);
+                }
+                else
+                {
+                    MessageBox.Show(this, PMapMessages.E_PEDIT_OPTERR);
+
+                }
+
             }
         }
 

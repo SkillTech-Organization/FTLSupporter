@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bullet_error.png" />
+    <Content Include="database_refresh.png" />
     <Content Include="delete.png" />
     <Content Include="lightning_add.png" />
     <Content Include="lightning_delete.png" />

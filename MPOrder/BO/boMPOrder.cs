@@ -109,9 +109,13 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double PalletBulkQty { get; set; }
 
-        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
+        // Szállítandó bruttó súly,Gross Weight Planned(Row) EREDETI
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double GrossWeightPlanned { get; set; }
+
+        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double GrossWeightPlannedX { get; set; }
 
         //ADR,ADR
         [WriteFieldAttribute(Insert = true, Update = true)]

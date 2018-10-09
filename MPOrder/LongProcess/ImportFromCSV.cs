@@ -36,27 +36,17 @@ namespace MPOrder.LongProcess
         {
             try
             {
-
+                Encoding ecFile = Encoding.GetEncoding("ISO-8859-2");
                 var items = new List<boMPOrder>();
-                var lines = File.ReadAllLines(m_fileName);
+                var lines = File.ReadAllLines(m_fileName, ecFile);
 
                 foreach (string line in lines)
                 {
                     ProcessForm.NextStep();
 
 
-                    //                Encoding ecFrom = Encoding.GetEncoding("Windows-1250");
-                    Encoding ecFrom = Encoding.GetEncoding("ISO-8859-2");
-                    //Encoding ecFrom = Encoding.UTF8;
-                    //     Encoding ecTo = Encoding.GetEncoding("windows-1250");
-                    Encoding ecTo = Encoding.ASCII;
-
-                    //                    Encoding utf8 = Encoding.UTF8;
-                    byte[] fromBytes = ecFrom.GetBytes(line);
-                    byte[] toBytes = Encoding.Convert(ecFrom, ecTo, fromBytes);
-                    string ln = ecTo.GetString(toBytes);
-
-                        var val = ln.Split(';');
+          
+                        var val = line.Split(';');
 
                     int columnIndex = 0;
                     var CompanyCode = val[columnIndex++];
@@ -119,6 +109,7 @@ namespace MPOrder.LongProcess
                         PalletPlannedQty = PalletPlannedQty,
                         PalletBulkQty = PalletBulkQty,
                         GrossWeightPlanned = GrossWeightPlanned,
+                        GrossWeightPlannedX = GrossWeightPlanned,
                         ADR = (ADR.ToUpper() == "I"),
                         ADRMultiplier = ADRMultiplier,
                         ADRLimitedQuantity = (ADRLimitedQuantity.ToUpper() == "I"),

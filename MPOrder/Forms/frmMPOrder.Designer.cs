@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMPOrder));
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
             this.tsbExportItems = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -60,7 +61,7 @@
             this.gricShippingAddress = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricNote = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcConfPlannedQtySum = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcGrossWeightPlannedSum = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcGrossWeightPlannedXSum = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplierXSum = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcTotalGrossWeightOfOrder = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -81,9 +82,11 @@
             this.grcConfPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.edConfPlannedQty = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.grcUnitWeight = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gricGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcGrossWeightPlannedX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplierX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcResetT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.edResetT = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.gridView3 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.grpFilter = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -91,6 +94,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnFilter = new System.Windows.Forms.Button();
             this.openCSV = new System.Windows.Forms.OpenFileDialog();
+            this.imlRefresh = new System.Windows.Forms.ImageList();
+            this.gridResetF = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repResetF = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
+            this.grcGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcGrossWeightPlannedSum = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcADRMultiplierSum = new DevExpress.XtraGrid.Columns.GridColumn();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -106,9 +115,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edConfPlannedQty)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edResetT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             this.grpFilter.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.repResetF)).BeginInit();
             this.SuspendLayout();
             // 
             // btnExcelImport
@@ -279,7 +290,8 @@
             this.gridMegrF.MainView = this.gridViewMegrF;
             this.gridMegrF.Name = "gridMegrF";
             this.gridMegrF.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.edSentToCT});
+            this.edSentToCT,
+            this.repResetF});
             this.gridMegrF.Size = new System.Drawing.Size(1155, 256);
             this.gridMegrF.TabIndex = 9;
             this.gridMegrF.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -302,9 +314,12 @@
             this.gricShippingAddress,
             this.gricNote,
             this.grcConfPlannedQtySum,
-            this.grcGrossWeightPlannedSum,
+            this.grcGrossWeightPlannedXSum,
             this.grcADRMultiplierXSum,
-            this.grcTotalGrossWeightOfOrder});
+            this.grcTotalGrossWeightOfOrder,
+            this.gridResetF,
+            this.grcGrossWeightPlannedSum,
+            this.grcADRMultiplierSum});
             this.gridViewMegrF.GridControl = this.gridMegrF;
             this.gridViewMegrF.Name = "gridViewMegrF";
             this.gridViewMegrF.OptionsSelection.EnableAppearanceFocusedCell = false;
@@ -342,6 +357,7 @@
             this.grcCustomerCode.OptionsColumn.AllowEdit = false;
             this.grcCustomerCode.Visible = true;
             this.grcCustomerCode.VisibleIndex = 1;
+            this.grcCustomerCode.Width = 76;
             // 
             // grcCustomerOrderNumber
             // 
@@ -351,7 +367,7 @@
             this.grcCustomerOrderNumber.OptionsColumn.AllowEdit = false;
             this.grcCustomerOrderNumber.Visible = true;
             this.grcCustomerOrderNumber.VisibleIndex = 2;
-            this.grcCustomerOrderNumber.Width = 84;
+            this.grcCustomerOrderNumber.Width = 85;
             // 
             // grcCustomerOrderDate
             // 
@@ -361,7 +377,7 @@
             this.grcCustomerOrderDate.OptionsColumn.AllowEdit = false;
             this.grcCustomerOrderDate.Visible = true;
             this.grcCustomerOrderDate.VisibleIndex = 3;
-            this.grcCustomerOrderDate.Width = 84;
+            this.grcCustomerOrderDate.Width = 85;
             // 
             // gricShippingDate
             // 
@@ -371,7 +387,7 @@
             this.gricShippingDate.OptionsColumn.AllowEdit = false;
             this.gricShippingDate.Visible = true;
             this.gricShippingDate.VisibleIndex = 4;
-            this.gricShippingDate.Width = 84;
+            this.gricShippingDate.Width = 85;
             // 
             // gricWarehouseCode
             // 
@@ -381,7 +397,7 @@
             this.gricWarehouseCode.OptionsColumn.AllowEdit = false;
             this.gricWarehouseCode.Visible = true;
             this.gricWarehouseCode.VisibleIndex = 5;
-            this.gricWarehouseCode.Width = 84;
+            this.gricWarehouseCode.Width = 85;
             // 
             // grcNumberOfPalletForDel
             // 
@@ -401,7 +417,7 @@
             this.grcShippAddressID.OptionsColumn.AllowEdit = false;
             this.grcShippAddressID.Visible = true;
             this.grcShippAddressID.VisibleIndex = 6;
-            this.grcShippAddressID.Width = 84;
+            this.grcShippAddressID.Width = 85;
             // 
             // grcShippAddressCompanyName
             // 
@@ -411,7 +427,7 @@
             this.grcShippAddressCompanyName.OptionsColumn.AllowEdit = false;
             this.grcShippAddressCompanyName.Visible = true;
             this.grcShippAddressCompanyName.VisibleIndex = 7;
-            this.grcShippAddressCompanyName.Width = 84;
+            this.grcShippAddressCompanyName.Width = 85;
             // 
             // gricShippingAddress
             // 
@@ -421,7 +437,7 @@
             this.gricShippingAddress.OptionsColumn.AllowEdit = false;
             this.gricShippingAddress.Visible = true;
             this.gricShippingAddress.VisibleIndex = 8;
-            this.gricShippingAddress.Width = 84;
+            this.gricShippingAddress.Width = 85;
             // 
             // gricNote
             // 
@@ -431,7 +447,7 @@
             this.gricNote.OptionsColumn.AllowEdit = false;
             this.gricNote.Visible = true;
             this.gricNote.VisibleIndex = 9;
-            this.gricNote.Width = 84;
+            this.gricNote.Width = 85;
             // 
             // grcConfPlannedQtySum
             // 
@@ -446,22 +462,22 @@
             this.grcConfPlannedQtySum.OptionsColumn.AllowEdit = false;
             this.grcConfPlannedQtySum.Visible = true;
             this.grcConfPlannedQtySum.VisibleIndex = 10;
-            this.grcConfPlannedQtySum.Width = 84;
+            this.grcConfPlannedQtySum.Width = 85;
             // 
-            // grcGrossWeightPlannedSum
+            // grcGrossWeightPlannedXSum
             // 
-            this.grcGrossWeightPlannedSum.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.grcGrossWeightPlannedSum.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.grcGrossWeightPlannedSum.AppearanceCell.Options.UseBackColor = true;
-            this.grcGrossWeightPlannedSum.Caption = "Szállítandó bruttó súly";
-            this.grcGrossWeightPlannedSum.DisplayFormat.FormatString = "#,#0.00";
-            this.grcGrossWeightPlannedSum.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcGrossWeightPlannedSum.FieldName = "GrossWeightPlannedSum";
-            this.grcGrossWeightPlannedSum.Name = "grcGrossWeightPlannedSum";
-            this.grcGrossWeightPlannedSum.OptionsColumn.AllowEdit = false;
-            this.grcGrossWeightPlannedSum.Visible = true;
-            this.grcGrossWeightPlannedSum.VisibleIndex = 11;
-            this.grcGrossWeightPlannedSum.Width = 84;
+            this.grcGrossWeightPlannedXSum.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.grcGrossWeightPlannedXSum.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.grcGrossWeightPlannedXSum.AppearanceCell.Options.UseBackColor = true;
+            this.grcGrossWeightPlannedXSum.Caption = "Szállítandó bruttó súly";
+            this.grcGrossWeightPlannedXSum.DisplayFormat.FormatString = "#,#0.00";
+            this.grcGrossWeightPlannedXSum.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcGrossWeightPlannedXSum.FieldName = "GrossWeightPlannedXSum";
+            this.grcGrossWeightPlannedXSum.Name = "grcGrossWeightPlannedXSum";
+            this.grcGrossWeightPlannedXSum.OptionsColumn.AllowEdit = false;
+            this.grcGrossWeightPlannedXSum.Visible = true;
+            this.grcGrossWeightPlannedXSum.VisibleIndex = 11;
+            this.grcGrossWeightPlannedXSum.Width = 85;
             // 
             // grcADRMultiplierXSum
             // 
@@ -476,7 +492,7 @@
             this.grcADRMultiplierXSum.OptionsColumn.AllowEdit = false;
             this.grcADRMultiplierXSum.Visible = true;
             this.grcADRMultiplierXSum.VisibleIndex = 12;
-            this.grcADRMultiplierXSum.Width = 85;
+            this.grcADRMultiplierXSum.Width = 86;
             // 
             // grcTotalGrossWeightOfOrder
             // 
@@ -504,7 +520,8 @@
             this.gridMegrT.MainView = this.gridViewMegrT;
             this.gridMegrT.Name = "gridMegrT";
             this.gridMegrT.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.edConfPlannedQty});
+            this.edConfPlannedQty,
+            this.edResetT});
             this.gridMegrT.Size = new System.Drawing.Size(1161, 248);
             this.gridMegrT.TabIndex = 10;
             this.gridMegrT.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -527,9 +544,11 @@
             this.grcConfOrderQty,
             this.grcConfPlannedQty,
             this.grcUnitWeight,
-            this.gricGrossWeightPlanned,
+            this.grcGrossWeightPlannedX,
             this.grcADRMultiplierX,
-            this.grcADRMultiplier});
+            this.grcADRMultiplier,
+            this.grcResetT,
+            this.grcGrossWeightPlanned});
             this.gridViewMegrT.GridControl = this.gridMegrT;
             this.gridViewMegrT.Name = "gridViewMegrT";
             this.gridViewMegrT.OptionsCustomization.AllowGroup = false;
@@ -546,8 +565,6 @@
             this.grcID.FieldName = "ID";
             this.grcID.Name = "grcID";
             this.grcID.OptionsColumn.AllowEdit = false;
-            this.grcID.Visible = true;
-            this.grcID.VisibleIndex = 10;
             // 
             // grcRowNumber
             // 
@@ -557,6 +574,7 @@
             this.grcRowNumber.OptionsColumn.AllowEdit = false;
             this.grcRowNumber.Visible = true;
             this.grcRowNumber.VisibleIndex = 0;
+            this.grcRowNumber.Width = 103;
             // 
             // grcProductCode
             // 
@@ -566,6 +584,7 @@
             this.grcProductCode.OptionsColumn.AllowEdit = false;
             this.grcProductCode.Visible = true;
             this.grcProductCode.VisibleIndex = 1;
+            this.grcProductCode.Width = 103;
             // 
             // grcProdDescription
             // 
@@ -575,6 +594,7 @@
             this.grcProdDescription.OptionsColumn.AllowEdit = false;
             this.grcProdDescription.Visible = true;
             this.grcProdDescription.VisibleIndex = 2;
+            this.grcProdDescription.Width = 103;
             // 
             // grcU_M
             // 
@@ -584,6 +604,7 @@
             this.grcU_M.OptionsColumn.AllowEdit = false;
             this.grcU_M.Visible = true;
             this.grcU_M.VisibleIndex = 3;
+            this.grcU_M.Width = 103;
             // 
             // grcPalletOrderQty
             // 
@@ -620,6 +641,7 @@
             this.grcADR.OptionsColumn.AllowEdit = false;
             this.grcADR.Visible = true;
             this.grcADR.VisibleIndex = 9;
+            this.grcADR.Width = 103;
             // 
             // grcADRLimitedQuantity
             // 
@@ -638,6 +660,7 @@
             this.grcConfOrderQty.OptionsColumn.AllowEdit = false;
             this.grcConfOrderQty.Visible = true;
             this.grcConfOrderQty.VisibleIndex = 4;
+            this.grcConfOrderQty.Width = 103;
             // 
             // grcConfPlannedQty
             // 
@@ -652,6 +675,7 @@
             this.grcConfPlannedQty.Name = "grcConfPlannedQty";
             this.grcConfPlannedQty.Visible = true;
             this.grcConfPlannedQty.VisibleIndex = 6;
+            this.grcConfPlannedQty.Width = 103;
             // 
             // edConfPlannedQty
             // 
@@ -673,20 +697,22 @@
             this.grcUnitWeight.OptionsColumn.AllowEdit = false;
             this.grcUnitWeight.Visible = true;
             this.grcUnitWeight.VisibleIndex = 5;
+            this.grcUnitWeight.Width = 103;
             // 
-            // gricGrossWeightPlanned
+            // grcGrossWeightPlannedX
             // 
-            this.gricGrossWeightPlanned.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.gricGrossWeightPlanned.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.gricGrossWeightPlanned.AppearanceCell.Options.UseBackColor = true;
-            this.gricGrossWeightPlanned.Caption = "Súly";
-            this.gricGrossWeightPlanned.DisplayFormat.FormatString = "#,#0.00";
-            this.gricGrossWeightPlanned.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.gricGrossWeightPlanned.FieldName = "GrossWeightPlanned";
-            this.gricGrossWeightPlanned.Name = "gricGrossWeightPlanned";
-            this.gricGrossWeightPlanned.OptionsColumn.AllowEdit = false;
-            this.gricGrossWeightPlanned.Visible = true;
-            this.gricGrossWeightPlanned.VisibleIndex = 7;
+            this.grcGrossWeightPlannedX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.grcGrossWeightPlannedX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.grcGrossWeightPlannedX.AppearanceCell.Options.UseBackColor = true;
+            this.grcGrossWeightPlannedX.Caption = "Súly";
+            this.grcGrossWeightPlannedX.DisplayFormat.FormatString = "#,#0.00";
+            this.grcGrossWeightPlannedX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcGrossWeightPlannedX.FieldName = "GrossWeightPlannedX";
+            this.grcGrossWeightPlannedX.Name = "grcGrossWeightPlannedX";
+            this.grcGrossWeightPlannedX.OptionsColumn.AllowEdit = false;
+            this.grcGrossWeightPlannedX.Visible = true;
+            this.grcGrossWeightPlannedX.VisibleIndex = 7;
+            this.grcGrossWeightPlannedX.Width = 103;
             // 
             // grcADRMultiplierX
             // 
@@ -701,6 +727,7 @@
             this.grcADRMultiplierX.OptionsColumn.AllowEdit = false;
             this.grcADRMultiplierX.Visible = true;
             this.grcADRMultiplierX.VisibleIndex = 8;
+            this.grcADRMultiplierX.Width = 103;
             // 
             // grcADRMultiplier
             // 
@@ -708,6 +735,25 @@
             this.grcADRMultiplier.FieldName = "ADRMultiplier";
             this.grcADRMultiplier.Name = "grcADRMultiplier";
             this.grcADRMultiplier.OptionsColumn.AllowEdit = false;
+            // 
+            // grcResetT
+            // 
+            this.grcResetT.ColumnEdit = this.edResetT;
+            this.grcResetT.MaxWidth = 25;
+            this.grcResetT.MinWidth = 25;
+            this.grcResetT.Name = "grcResetT";
+            this.grcResetT.Visible = true;
+            this.grcResetT.VisibleIndex = 10;
+            this.grcResetT.Width = 25;
+            // 
+            // edResetT
+            // 
+            this.edResetT.AutoHeight = false;
+            this.edResetT.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
+            this.edResetT.Name = "edResetT";
+            this.edResetT.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
+            this.edResetT.Click += new System.EventHandler(this.edResetT_Click);
             // 
             // gridView3
             // 
@@ -784,6 +830,57 @@
             this.openCSV.DefaultExt = "xls";
             this.openCSV.Filter = "*.csv|*.CSV";
             // 
+            // imlRefresh
+            // 
+            this.imlRefresh.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlRefresh.ImageStream")));
+            this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
+            this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
+            // 
+            // gridResetF
+            // 
+            this.gridResetF.Caption = "gridColumn1";
+            this.gridResetF.ColumnEdit = this.repResetF;
+            this.gridResetF.MaxWidth = 25;
+            this.gridResetF.MinWidth = 25;
+            this.gridResetF.Name = "gridResetF";
+            this.gridResetF.Visible = true;
+            this.gridResetF.VisibleIndex = 13;
+            this.gridResetF.Width = 25;
+            // 
+            // repResetF
+            // 
+            this.repResetF.AutoHeight = false;
+            this.repResetF.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo)});
+            this.repResetF.Name = "repResetF";
+            this.repResetF.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
+            this.repResetF.Click += new System.EventHandler(this.repResetF_Click);
+            // 
+            // grcGrossWeightPlanned
+            // 
+            this.grcGrossWeightPlanned.Caption = "Eredeti súly";
+            this.grcGrossWeightPlanned.DisplayFormat.FormatString = "#,#0.00";
+            this.grcGrossWeightPlanned.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcGrossWeightPlanned.FieldName = "GrossWeightPlanned";
+            this.grcGrossWeightPlanned.ImageAlignment = System.Drawing.StringAlignment.Center;
+            this.grcGrossWeightPlanned.Name = "grcGrossWeightPlanned";
+            // 
+            // grcGrossWeightPlannedSum
+            // 
+            this.grcGrossWeightPlannedSum.Caption = "Eredeti szállítandó bruttó súly";
+            this.grcGrossWeightPlannedSum.DisplayFormat.FormatString = "#,#0.00";
+            this.grcGrossWeightPlannedSum.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcGrossWeightPlannedSum.FieldName = "GrossWeightPlannedSum";
+            this.grcGrossWeightPlannedSum.Name = "grcGrossWeightPlannedSum";
+            // 
+            // grcADRMultiplierSum
+            // 
+            this.grcADRMultiplierSum.Caption = "Eredeti ADR össz";
+            this.grcADRMultiplierSum.DisplayFormat.FormatString = "#,#0.00";
+            this.grcADRMultiplierSum.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcADRMultiplierSum.FieldName = "ADRMultiplierSum";
+            this.grcADRMultiplierSum.Name = "grcADRMultiplierSum";
+            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -812,10 +909,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edConfPlannedQty)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edResetT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             this.grpFilter.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.repResetF)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -851,7 +950,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn gricShippingAddress;
         private DevExpress.XtraGrid.Columns.GridColumn gricNote;
         private DevExpress.XtraGrid.Columns.GridColumn grcConfPlannedQtySum;
-        private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlannedSum;
+        private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlannedXSum;
         private DevExpress.XtraGrid.Columns.GridColumn grcID;
         private DevExpress.XtraGrid.Columns.GridColumn grcRowNumber;
         private DevExpress.XtraGrid.Columns.GridColumn grcProductCode;
@@ -861,7 +960,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcPalletOrderQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcPalletPlannedQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcPalletBulkQty;
-        private DevExpress.XtraGrid.Columns.GridColumn gricGrossWeightPlanned;
+        private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlannedX;
         private DevExpress.XtraGrid.Columns.GridColumn grcADR;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplierX;
         private DevExpress.XtraGrid.Columns.GridColumn grcADRLimitedQuantity;
@@ -883,5 +982,13 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton tbsDelete;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private DevExpress.XtraGrid.Columns.GridColumn grcResetT;
+        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit edResetT;
+        private System.Windows.Forms.ImageList imlRefresh;
+        private DevExpress.XtraGrid.Columns.GridColumn gridResetF;
+        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repResetF;
+        private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlanned;
+        private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlannedSum;
+        private DevExpress.XtraGrid.Columns.GridColumn grcADRMultiplierSum;
     }
 }

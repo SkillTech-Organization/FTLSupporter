@@ -53,9 +53,11 @@ namespace MPOrder.BO
         //!!!szállítandó mennyiség(ret.val.),Conf.Planned Qty(Row)  
         public double ConfPlannedQty { get; set; }
 
- 
-        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
+        // Szállítandó bruttó súly,Gross Weight Planned(Row) EREDETI
         public double GrossWeightPlanned { get; set; }
+
+        //!!!Szállítandó bruttó súly,Gross Weight Planned(Row)
+        public double GrossWeightPlannedX { get; set; }
 
         //ADR szorzó, ADR Multiplier (egyelőre csak átadjuk a CT-be)
         [WriteFieldAttribute(Insert = true, Update = true)]
