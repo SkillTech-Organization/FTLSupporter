@@ -77,4 +77,8 @@ GO
 if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'NetWeight') begin 
    ALTER TABLE MPO_MPORDER ADD NetWeight TY_NVALUE default 0 
 End 
-         
+
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'GrossWeightPlannedX') begin 
+   ALTER TABLE MPO_MPORDER ADD GrossWeightPlannedX TY_NVALUE default 0 
+End 
+                  
