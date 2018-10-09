@@ -31,6 +31,9 @@ namespace MPOrder.BO
         //Szállítási dátum, Shipping date
         public DateTime ShippingDate { get; set; }
 
+        //Átadási dátum, Shipping date
+        public DateTime ShippingDateX { get; set; }
+
         //Raktár kód, Warehouse code
         public string WarehouseCode { get; set; }
 
@@ -53,6 +56,12 @@ namespace MPOrder.BO
         public string ShippingAddress { get {
                 return (ShippAddressZipCode + " " + ShippingAddressCity + " " + ShippingAddressStreetAndNumber).Trim();
             } }
+
+        //Szállítandó raklapok száma, Number of pallet for del.
+        public double NumberOfPalletForDel { get; set; }
+
+        //Szállítandó raklapok száma, Number of pallet for del.
+        public double NumberOfPalletForDelX { get; set; }
 
         #region szerkesztendő mezők összesítve
 

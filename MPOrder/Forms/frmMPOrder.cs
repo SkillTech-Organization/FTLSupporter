@@ -31,7 +31,7 @@ namespace MPOrder.Forms
         List<boPackUnit> m_packUnits = new List<boPackUnit>();
         bool m_firstF = false;
         bool m_firstT = false;
-
+        List<boCSVFile> m_CSVFiles = new List<boCSVFile>();
         public frmMPOrder()
         {
             InitializeComponent();
@@ -39,6 +39,13 @@ namespace MPOrder.Forms
             m_bllPackUnit = new bllPackUnit(PMapCommonVars.Instance.CT_DB);
             InitForm();
             RestoreLayout(false);
+
+            m_CSVFiles = m_bllMPOrder.GetFiles();
+            cmbCSVFileName.DisplayMember = "ShortCSVFileName";
+            cmbCSVFileName.ValueMember = "ShortCSVFileName";
+            cmbCSVFileName.Items.Clear();
+            cmbCSVFileName.DataSource = m_CSVFiles;
+
             fillGrids();
         }
 
@@ -49,7 +56,8 @@ namespace MPOrder.Forms
 
         private void btnExcelImport_Click(object sender, EventArgs e)
         {
-            if (openCSV.ShowDialog() == DialogResult.OK)
+            var dlg = new dlgImport();
+            if( dlg.ShowDialog() == DialogResult.OK)
             {
                 var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
                 var ci = new System.Globalization.CultureInfo("hu-HU");
@@ -57,14 +65,19 @@ namespace MPOrder.Forms
 
                 try
                 {
-                    var lineCount = File.ReadAllLines( openCSV.FileName).Length;
+                    var lineCount = File.ReadAllLines(dlg.FileName).Length;
 
-                    var import = new ImportFromCSV(new BaseSilngleProgressDialog(0, lineCount * 2, string.Format(PMapMessages.M_MPORD_CSVLIMP, openCSV.FileName), false), openCSV.FileName);
+                    var import = new ImportFromCSV(new BaseSilngleProgressDialog(0, lineCount * 2, string.Format(PMapMessages.M_MPORD_CSVLIMP, dlg.FileName), false), dlg.FileName, dlg.ShippingDateX);
                     import.Run();
                     import.ProcessForm.ShowDialog();
-                    UI.Message(string.Format(PMapMessages.M_MPORD_CSVLIMP_LOADED, import.AddedCount, import.ItemsCount));
+
+                    m_CSVFiles = m_bllMPOrder.GetFiles();
+                    cmbCSVFileName.Items.Clear();
+                    cmbCSVFileName.DataSource = m_CSVFiles;
+                    cmbCSVFileName.SelectedIndex = cmbCSVFileName.FindStringExact(Path.GetFileName(dlg.FileName));
 
                     fillGrids();
+                    UI.Message(string.Format(PMapMessages.M_MPORD_CSVLIMP_LOADED, import.AddedCount, import.ItemsCount));
                 }
 
                 catch (Exception ex)
@@ -79,6 +92,7 @@ namespace MPOrder.Forms
 
                 }
             }
+
         }
 
         private void btnFilter_Click(object sender, EventArgs e)
@@ -89,15 +103,19 @@ namespace MPOrder.Forms
         private void fillGrids()
         {
 
+            if (cmbCSVFileName.SelectedItem == null)
+                return;
             Cursor oldCursor = Cursor;
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
+                var CSVFile = (boCSVFile)cmbCSVFileName.SelectedItem;
+
                 gridMegrT.DataSource = null;
                 int focusedRowF = gridViewMegrF.FocusedRowHandle;
                 int focusedRowT = gridViewMegrT.FocusedRowHandle;
-                m_data = m_bllMPOrder.GetAllMPOrdersForGrid(dtmOrderDate.Value.Date);
+                m_data = m_bllMPOrder.GetAllMPOrdersForGrid(CSVFile.CSVFileName);
                 gridMegrF.DataSource = m_data;
                 if (m_firstF && m_data.Count > 0)
                 {
@@ -279,14 +297,14 @@ namespace MPOrder.Forms
         private void btnSelAll_Click(object sender, EventArgs e)
         {
             m_data.ForEach(item => item.SentToCT = true);
-            m_bllMPOrder.SetSentToCT2(dtmOrderDate.Value.Date, true);
+            m_bllMPOrder.SetSentToCT2(dtmShippingDateX.Value.Date, true);
             gridViewMegrF.RefreshData();
         }
 
         private void btnDeselAll_Click(object sender, EventArgs e)
         {
             m_data.ForEach(item => item.SentToCT = false);
-            m_bllMPOrder.SetSentToCT2(dtmOrderDate.Value.Date, false);
+            m_bllMPOrder.SetSentToCT2(dtmShippingDateX.Value.Date, false);
             gridViewMegrF.RefreshData();
         }
 
@@ -439,6 +457,21 @@ namespace MPOrder.Forms
                     initMegrTGrid();
                 }
             }
+        }
+
+        private void gridMegrF_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbCSVFileName_TextChanged(object sender, EventArgs e)
+        {
+            fillGrids();
+        }
+
+        private void edNumberOfPalletForDelX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+        {
+
         }
     }
 }

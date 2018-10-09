@@ -39,9 +39,11 @@ namespace MPOrder.BLL
                             CustomerOrderNumber = Util.getFieldValue<string>(o, "CustomerOrderNumber"),
                             CustomerOrderDate = Util.getFieldValue<DateTime>(o, "CustomerOrderDate"),
                             ShippingDate = Util.getFieldValue<DateTime>(o, "ShippingDate"),
+                            ShippingDateX = Util.getFieldValue<DateTime>(o, "ShippingDateX"),
                             WarehouseCode = Util.getFieldValue<string>(o, "WarehouseCode"),
                             TotalGrossWeightOfOrder = Util.getFieldValue<double>(o, "TotalGrossWeightOfOrder"),
                             NumberOfPalletForDel = Util.getFieldValue<double>(o, "NumberOfPalletForDel"),
+                            NumberOfPalletForDelX = Util.getFieldValue<double>(o, "NumberOfPalletForDelX"),
                             ShippAddressID = Util.getFieldValue<string>(o, "ShippAddressID"),
                             ShippAddressCompanyName = Util.getFieldValue<string>(o, "ShippAddressCompanyName"),
                             ShippAddressZipCode = Util.getFieldValue<string>(o, "ShippAddressZipCode"),
@@ -78,6 +80,21 @@ namespace MPOrder.BLL
             return linq.ToList();
         }
 
+
+        public List<boCSVFile> GetFiles()
+        {
+            string sSql = "select CSVFileName, ShippingDateX  from   MPO_MPORDER " + Environment.NewLine +
+                          " group by CSVFileName, ShippingDateX order by ShippingDateX desc ";
+             DataTable dt = DBA.Query2DataTable(sSql);
+            var linq = (from o in dt.AsEnumerable()
+                        select new boCSVFile
+                        {
+                            CSVFileName = Util.getFieldValue<string>(o, "CSVFileName"),
+                            ShippingDateX = Util.getFieldValue<DateTime>(o, "ShippingDateX")
+                        });
+            return linq.ToList();
+
+        }
 
         public boMPOrder GetMPOrder(int p_ID)
         {
@@ -122,9 +139,9 @@ namespace MPOrder.BLL
             return AddItem(p_MPOrder, false);
         }
 
-        public List<boMPOrderF> GetAllMPOrdersForGrid(DateTime p_ShippingDate)
+        public List<boMPOrderF> GetAllMPOrdersForGrid(string p_CSVFileName)
         {
-            var lst = GetAllMPOrders("ShippingDate = ?", p_ShippingDate.Date);
+            var lst = GetAllMPOrders("CSVFileName = ?", p_CSVFileName);
             if (lst != null)
             {
                 var res = lst.GroupBy(g1 => new
@@ -135,12 +152,15 @@ namespace MPOrder.BLL
                     g1.CustomerOrderNumber,
                     g1.CustomerOrderDate,
                     g1.ShippingDate,
+                    g1.ShippingDateX,
                     g1.WarehouseCode,
                     g1.ShippAddressID,
                     g1.ShippAddressCompanyName,
                     g1.ShippAddressZipCode,
                     g1.ShippingAddressCity,
                     g1.ShippingAddressStreetAndNumber,
+                    g1.NumberOfPalletForDel,
+                    g1.NumberOfPalletForDelX,
                     g1.Bordero,
                     g1.Carrier,
                     g1.VehicleType,
@@ -155,12 +175,15 @@ namespace MPOrder.BLL
                     CustomerOrderNumber = s.Key.CustomerOrderNumber,
                     CustomerOrderDate = s.Key.CustomerOrderDate,
                     ShippingDate = s.Key.ShippingDate,
+                    ShippingDateX = s.Key.ShippingDateX,
                     WarehouseCode = s.Key.WarehouseCode,
                     ShippAddressID = s.Key.ShippAddressID,
                     ShippAddressCompanyName = s.Key.ShippAddressCompanyName,
                     ShippAddressZipCode = s.Key.ShippAddressZipCode,
                     ShippingAddressCity = s.Key.ShippingAddressCity,
                     ShippingAddressStreetAndNumber = s.Key.ShippingAddressStreetAndNumber,
+                    NumberOfPalletForDel = s.Key.NumberOfPalletForDel,
+                    NumberOfPalletForDelX = s.Key.NumberOfPalletForDelX,
                     Bordero = s.Key.Bordero,
                     Carrier = s.Key.Carrier,
                     VehicleType = s.Key.VehicleType,
@@ -310,7 +333,7 @@ namespace MPOrder.BLL
                                 WHS_ID = 1,                             //csak központi raktár van
                                 ORD_NUM = item.CustomerOrderNumber,
                                 ORD_ORIGNUM = item.CustomerOrderNumber, //Masterplast mező
-                                ORD_DATE = item.ShippingDate,
+                                ORD_DATE = item.ShippingDateX,
                                 ORD_CLIENTNUM = item.CompanyCode,
                                 //ORD_LOCKDATE                          //Új felvitelkor nem szabad tölteni
                                 ORD_FIRSTDATE = DateTime.Now.Date,

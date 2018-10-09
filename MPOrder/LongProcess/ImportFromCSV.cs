@@ -22,15 +22,18 @@ namespace MPOrder.LongProcess
     {
         private SQLServerAccess m_DB;
         private string m_fileName;
+        private DateTime m_ShippingDateX;
+
         public int AddedCount { get; private set; } = 0;
         public int ItemsCount { get; private set; } = 0;
 
-        public ImportFromCSV(BaseProgressDialog p_Form, string p_fileName)
+        public ImportFromCSV(BaseProgressDialog p_Form, string p_fileName, DateTime p_ShippingDateX)
             : base(p_Form, ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
             m_fileName = p_fileName;
+            m_ShippingDateX = p_ShippingDateX;
         }
         protected override void DoWork()
         {
@@ -85,14 +88,18 @@ namespace MPOrder.LongProcess
 
                     boMPOrder item = new boMPOrder()
                     {
+                        CSVFileName = m_fileName,
+                        SentToCT = (m_ShippingDateX.Date.CompareTo(ShippingDate.Date) == 0),
                         CompanyCode = CompanyCode,
                         CustomerCode = CustomerCode,
                         CustomerOrderNumber = CustomerOrderNumber,
                         CustomerOrderDate = CustomerOrderDate,
                         ShippingDate = ShippingDate,
+                        ShippingDateX = m_ShippingDateX,
                         WarehouseCode = WarehouseCode,
                         TotalGrossWeightOfOrder = TotalGrossWeightOfOrder,
                         NumberOfPalletForDel = NumberOfPalletForDel,
+                        NumberOfPalletForDelX = NumberOfPalletForDel,
                         ShippAddressID = ShippAddressID,
                         ShippAddressCompanyName = ShippAddressCompanyName,
                         ShippAddressZipCode = ShippAddressZipCode,

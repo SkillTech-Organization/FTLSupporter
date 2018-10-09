@@ -1118,7 +1118,30 @@ namespace PMapCore.Common
                 return p_value.ToString();
         }
 
+        public static bool IsWeekEnd(DateTime date)
+        {
+            return date.DayOfWeek == DayOfWeek.Saturday
+                || date.DayOfWeek == DayOfWeek.Sunday;
+        }
 
+
+        public static DateTime GetNextWorkingDay(DateTime date)
+        {
+            List<DateTime> Holidays = new List<DateTime>();
+            Holidays.Add(new DateTime(DateTime.Now.Year, 1, 1));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 3, 15));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 5, 1));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 8, 20));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 10, 23));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 11, 1));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 12, 25));
+            Holidays.Add(new DateTime(DateTime.Now.Year, 12, 26));
+            do
+            {
+                date = date.AddDays(1);
+            } while (Holidays.Contains(date)  || IsWeekEnd(date));
+            return date;
+        }
 
     }
 }

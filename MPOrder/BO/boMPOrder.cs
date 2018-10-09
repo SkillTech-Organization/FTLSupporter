@@ -13,6 +13,10 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
 
+        //importFile
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string CSVFileName { get; set; } = "";
+
         //CT-be küldve ?
         [WriteFieldAttribute(Insert = true, Update = true)]
         public bool SentToCT { get; set; } = false;
@@ -37,6 +41,10 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public DateTime ShippingDate { get; set; }
 
+        //Átadási dátum, Shipping date X
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public DateTime ShippingDateX { get; set; }
+
         //Raktár kód, Warehouse code
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string WarehouseCode { get; set; }
@@ -49,6 +57,10 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double NumberOfPalletForDel { get; set; }
 
+        //Szállítandó raklapok száma, Number of pallet for del.
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public double NumberOfPalletForDelX { get; set; }
+        
         //Szállítási Cím ID, Shipp.Address ID
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string ShippAddressID { get; set; }

@@ -73,6 +73,10 @@ CREATE NONCLUSTERED INDEX [IX_MPO_CustProd] ON [dbo].[MPO_MPORDER]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 end
 GO
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'UnitWeight') begin 
+   ALTER TABLE MPO_MPORDER ADD UnitWeight TY_NVALUE default 0 
+End 
+
 
 if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'NetWeight') begin 
    ALTER TABLE MPO_MPORDER ADD NetWeight TY_NVALUE default 0 
@@ -81,4 +85,22 @@ End
 if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'GrossWeightPlannedX') begin 
    ALTER TABLE MPO_MPORDER ADD GrossWeightPlannedX TY_NVALUE default 0 
 End 
-                  
+     
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'CSVFileName') begin 
+   ALTER TABLE MPO_MPORDER ADD CSVFileName TY_COMMENT default 0 
+End 
+
+if not exists (select * from sysindexes  where id=object_id('MPO_MPORDER') and name='IX_MPO_CSVFileName') begin
+	CREATE NONCLUSTERED INDEX [IX_MPO_CSVFileName] ON [dbo].[MPO_MPORDER]
+	(
+		[CSVFileName] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+end
+	    
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'ShippingDateX') begin 
+   ALTER TABLE MPO_MPORDER ADD ShippingDateX TY_DATETIME default 0 
+End 	
+
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'NumberOfPalletForDelX') begin 
+   ALTER TABLE MPO_MPORDER ADD NumberOfPalletForDelX TY_DATETIME default 0 
+End 	          
