@@ -47,6 +47,7 @@ namespace MPOrder.Forms
             cmbCSVFileName.DataSource = m_CSVFiles;
 
             fillGrids();
+            setButtons();
         }
 
         private void btnQuit_Click(object sender, EventArgs e)
@@ -72,10 +73,10 @@ namespace MPOrder.Forms
                     import.ProcessForm.ShowDialog();
 
                     m_CSVFiles = m_bllMPOrder.GetFiles();
-                    cmbCSVFileName.Items.Clear();
                     cmbCSVFileName.DataSource = m_CSVFiles;
                     cmbCSVFileName.SelectedIndex = cmbCSVFileName.FindStringExact(Path.GetFileName(dlg.FileName));
-
+                    var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+                    dtmShippingDateX.Value = selItem.ShippingDateX;
                     fillGrids();
                     UI.Message(string.Format(PMapMessages.M_MPORD_CSVLIMP_LOADED, import.AddedCount, import.ItemsCount));
                 }
@@ -192,43 +193,7 @@ namespace MPOrder.Forms
             gridViewMegrF.RefreshRow(gridViewMegrF.FocusedRowHandle);
         }
 
-        private void edConfPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
-        {
-            double ADRMultiplierX;
-            double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
-            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
-
-            double UnitWeight = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcUnitWeight);
-            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, newQty);
-            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlannedX, newQty * UnitWeight);
-
-
-            double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
-            bool ADR = (bool)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADR);
-            if (true || ADR)
-            {
-                double ConfOrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
-                if (newQty != 0)
-                    ADRMultiplierX = Math.Round(ADRMultiplier * (newQty / ConfOrderQty));
-                else
-                    ADRMultiplierX = 0;
-
-                gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplierX);
-            }
-            else
-            {
-                ADRMultiplierX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX);
-            }
-
-            m_bllMPOrder.SetManualValues(ID, newQty, newQty * UnitWeight, ADRMultiplierX);
-            refreshCurrentF();
-        }
-
-        private void edConfPlannedQtyX_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
+  
         private void gridViewMegrF_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
 
@@ -422,7 +387,7 @@ namespace MPOrder.Forms
 
         private void edResetT_Click(object sender, EventArgs e)
         {
-
+/*
             int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
             double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
             gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplier);
@@ -437,6 +402,7 @@ namespace MPOrder.Forms
 
             m_bllMPOrder.SetManualValues(ID, OrderQty, GrossWeightPlanned, ADRMultiplier);
             refreshCurrentF();
+            */
         }
 
         private void repResetF_Click(object sender, EventArgs e)
@@ -469,8 +435,90 @@ namespace MPOrder.Forms
             fillGrids();
         }
 
+        private void edConfPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+        {
+            double ADRMultiplierX;
+            double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
+            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
+
+            double UnitWeight = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcUnitWeight);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, newQty);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlannedX, newQty * UnitWeight);
+
+
+            double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
+            bool ADR = (bool)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADR);
+            if (true || ADR)
+            {
+                double ConfOrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
+                if (newQty != 0)
+                    ADRMultiplierX = Math.Round(ADRMultiplier * (newQty / ConfOrderQty));
+                else
+                    ADRMultiplierX = 0;
+
+                gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplierX);
+            }
+            else
+            {
+                ADRMultiplierX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX);
+            }
+
+            var PalletPlannedQtyX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletPlannedQtyX);
+            var PalletBulkQtyX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletBulkQtyX);
+
+
+            m_bllMPOrder.SetManualValuesT(ID, newQty, newQty * UnitWeight, ADRMultiplierX, PalletPlannedQtyX, PalletBulkQtyX);
+            refreshCurrentF();
+        }
+
+        private void edConfPlannedQtyX_ValueChanged(object sender, EventArgs e)
+        {
+        }
+
+
         private void edNumberOfPalletForDelX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+            var CSVFileName = selItem.CSVFileName;
+
+            var CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
+
+            var NumberOfPalletForDelX = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
+
+
+            m_bllMPOrder.SetManualValuesF(CSVFileName, CustomerOrderNumber, NumberOfPalletForDelX);
+
+        }
+
+        private void edPalletBulkQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+        {
+            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
+
+            var ConfPlannedQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty);
+            var GrossWeightPlannedX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlannedX);
+            var ADRMultiplierX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX);
+            var PalletPlannedQtyX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletPlannedQtyX);
+            var PalletBulkQtyX = Double.Parse("0" + e.NewValue.ToString().Replace(".", ",")); ;
+
+
+            m_bllMPOrder.SetManualValuesT(ID, ConfPlannedQty, GrossWeightPlannedX, ADRMultiplierX, PalletPlannedQtyX, PalletBulkQtyX);
+            refreshCurrentF();
+
+        }
+
+        private void edPalletPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+        {
+            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
+
+            var ConfPlannedQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty);
+            var GrossWeightPlannedX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlannedX);
+            var ADRMultiplierX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX);
+            var PalletPlannedQtyX = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
+            var PalletBulkQtyX = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletBulkQtyX);
+
+
+            m_bllMPOrder.SetManualValuesT(ID, ConfPlannedQty, GrossWeightPlannedX, ADRMultiplierX, PalletPlannedQtyX, PalletBulkQtyX);
+            refreshCurrentF();
 
         }
     }

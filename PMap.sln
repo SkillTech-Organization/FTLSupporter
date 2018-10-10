@@ -33,6 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Installer\FTLSupporterInstaller2.nsi = Installer\FTLSupporterInstaller2.nsi
 		Installer\FTLSupporterSetup.exe = Installer\FTLSupporterSetup.exe
 		Templates\MPEmail.htm = Templates\MPEmail.htm
+		Installer\MPOrder2.nsi = Installer\MPOrder2.nsi
 		Installer\PMAdmin2.nsi = Installer\PMAdmin2.nsi
 		Installer\PMAdminSetup.exe = Installer\PMAdminSetup.exe
 		doc\PMap kapcsolat külső rendszerekkel.doc = doc\PMap kapcsolat külső rendszerekkel.doc

@@ -57,7 +57,9 @@ namespace MPOrder.BLL
                             ConfOrderQty = Util.getFieldValue<double>(o, "ConfOrderQty"),
                             ConfPlannedQty = Util.getFieldValue<double>(o, "ConfPlannedQty"),
                             PalletPlannedQty = Util.getFieldValue<double>(o, "PalletPlannedQty"),
+                            PalletPlannedQtyX = Util.getFieldValue<double>(o, "PalletPlannedQtyX"),
                             PalletBulkQty = Util.getFieldValue<double>(o, "PalletBulkQty"),
+                            PalletBulkQtyX = Util.getFieldValue<double>(o, "PalletBulkQtyX"),
                             GrossWeightPlanned = Util.getFieldValue<double>(o, "GrossWeightPlanned"),
                             GrossWeightPlannedX = Util.getFieldValue<double>(o, "GrossWeightPlannedX"),
                             ADR = Util.getFieldValue<bool>(o, "ADR"),
@@ -200,7 +202,9 @@ namespace MPOrder.BLL
                         ProdDescription = s2.ProdDescription,
                         ConfOrderQty = s2.ConfOrderQty,
                         PalletPlannedQty = s2.PalletPlannedQty,
+                        PalletPlannedQtyX= s2.PalletPlannedQtyX,
                         PalletBulkQty = s2.PalletBulkQty,
+                        PalletBulkQtyX = s2.PalletBulkQtyX,
                         ADR = s2.ADR,
                         ADRMultiplier = s2.ADRMultiplier,
                         ADRLimitedQuantity = s2.ADRLimitedQuantity,
@@ -224,9 +228,14 @@ namespace MPOrder.BLL
         }
 
 
-        public void SetManualValues( int p_ID, double p_ConfPlannedQty, double p_GrossWeightPlannedX, double p_ADRMultiplierX)
+        public void SetManualValuesF( string p_CSVFileName, string p_CustomerOrderNumber, double NumberOfPalletForDelX)
         {
-            DBA.ExecuteNonQuery("update MPO_MPORDER set ConfPlannedQty = ?, GrossWeightPlannedX = ?, ADRMultiplierX = ? where ID=?", p_ConfPlannedQty, p_GrossWeightPlannedX, p_ADRMultiplierX, p_ID);
+            DBA.ExecuteNonQuery("update MPO_MPORDER set NumberOfPalletForDelX = ? where CSVFileName= ? and CustomerOrderNumber = ?", NumberOfPalletForDelX, p_CSVFileName, p_CustomerOrderNumber);
+        }
+
+        public void SetManualValuesT(int p_ID, double p_ConfPlannedQty, double p_GrossWeightPlannedX, double p_ADRMultiplierX, double p_PalletPlannedQtyX, double p_PalletBulkQtyX)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set ConfPlannedQty = ?, GrossWeightPlannedX = ?, ADRMultiplierX = ?, PalletPlannedQtyX = ?, PalletBulkQtyX = ? where ID=?", p_ConfPlannedQty, p_GrossWeightPlannedX, p_ADRMultiplierX, p_PalletPlannedQtyX, p_PalletBulkQtyX, p_ID);
         }
 
         public void SetSentToCT( string p_CustomerOrderNumber, bool p_SentToCT)

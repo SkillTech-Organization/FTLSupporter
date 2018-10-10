@@ -116,10 +116,12 @@ namespace MPOrder.BO
          //Raklapok száma (egész és rész raklapok emiatt lehet tört szám is mert csak egy számított érték nem a fizikai összekészítés, de becslésnek jó), 
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double PalletPlannedQty { get; set; }
+        public double PalletPlannedQtyX { get; set; }
 
         //,Pallet ‘Bulk’ qty(Row)
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double PalletBulkQty { get; set; }
+        public double PalletBulkQtyX { get; set; }
 
         // Szállítandó bruttó súly,Gross Weight Planned(Row) EREDETI
         [WriteFieldAttribute(Insert = true, Update = true)]

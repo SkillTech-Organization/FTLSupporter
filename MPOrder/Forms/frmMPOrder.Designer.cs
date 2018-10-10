@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMPOrder));
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
             this.tsbExportItems = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,7 +57,9 @@
             this.gricShippingDate = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricShippingDateX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricWarehouseCode = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcNumberOfPalletForDel = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcNumberOfPalletForDelX = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.edNumberOfPalletForDelX = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.grcShippAddressID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcShippAddressCompanyName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricShippingAddress = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -79,9 +81,6 @@
             this.grcProductCode = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcProdDescription = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcU_M = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcPalletOrderQty = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcPalletPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.grcPalletBulkQty = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADR = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRLimitedQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcConfOrderQty = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -91,6 +90,12 @@
             this.grcGrossWeightPlannedX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplierX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcPalletPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcPalletPlannedQtyX = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.edPalletPlannedQtyX = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
+            this.grcPalletBulkQty = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcPalletBulkQtyX = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.edPalletBulkQtyX = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.grcResetT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.edResetT = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.grcGrossWeightPlanned = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -103,8 +108,6 @@
             this.dtmShippingDateX = new System.Windows.Forms.DateTimePicker();
             this.lblShippingDateX = new System.Windows.Forms.Label();
             this.imlRefresh = new System.Windows.Forms.ImageList(this.components);
-            this.grcNumberOfPalletForDel = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.edNumberOfPalletForDelX = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -115,17 +118,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edSentToCT)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edNumberOfPalletForDelX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repResetF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edConfPlannedQty)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edPalletPlannedQtyX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edPalletBulkQtyX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edResetT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).BeginInit();
             this.grpFilter.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.edNumberOfPalletForDelX)).BeginInit();
             this.SuspendLayout();
             // 
             // btnExcelImport
@@ -417,6 +422,14 @@
             this.gricWarehouseCode.VisibleIndex = 6;
             this.gricWarehouseCode.Width = 85;
             // 
+            // grcNumberOfPalletForDel
+            // 
+            this.grcNumberOfPalletForDel.Caption = "Szállítandó raklapok száma";
+            this.grcNumberOfPalletForDel.DisplayFormat.FormatString = "#,#0.00";
+            this.grcNumberOfPalletForDel.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcNumberOfPalletForDel.FieldName = "NumberOfPalletForDelX";
+            this.grcNumberOfPalletForDel.Name = "grcNumberOfPalletForDel";
+            // 
             // grcNumberOfPalletForDelX
             // 
             this.grcNumberOfPalletForDelX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -428,10 +441,17 @@
             this.grcNumberOfPalletForDelX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcNumberOfPalletForDelX.FieldName = "NumberOfPalletForDelX";
             this.grcNumberOfPalletForDelX.Name = "grcNumberOfPalletForDelX";
-            this.grcNumberOfPalletForDelX.OptionsColumn.AllowEdit = false;
             this.grcNumberOfPalletForDelX.Visible = true;
             this.grcNumberOfPalletForDelX.VisibleIndex = 14;
             this.grcNumberOfPalletForDelX.Width = 84;
+            // 
+            // edNumberOfPalletForDelX
+            // 
+            this.edNumberOfPalletForDelX.AutoHeight = false;
+            this.edNumberOfPalletForDelX.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.edNumberOfPalletForDelX.Name = "edNumberOfPalletForDelX";
+            this.edNumberOfPalletForDelX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edNumberOfPalletForDelX_EditValueChanging);
             // 
             // grcShippAddressID
             // 
@@ -581,7 +601,9 @@
             this.gridMegrT.Name = "gridMegrT";
             this.gridMegrT.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.edConfPlannedQty,
-            this.edResetT});
+            this.edResetT,
+            this.edPalletBulkQtyX,
+            this.edPalletPlannedQtyX});
             this.gridMegrT.Size = new System.Drawing.Size(1161, 248);
             this.gridMegrT.TabIndex = 10;
             this.gridMegrT.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -596,9 +618,6 @@
             this.grcProductCode,
             this.grcProdDescription,
             this.grcU_M,
-            this.grcPalletOrderQty,
-            this.grcPalletPlannedQty,
-            this.grcPalletBulkQty,
             this.grcADR,
             this.grcADRLimitedQuantity,
             this.grcConfOrderQty,
@@ -607,6 +626,10 @@
             this.grcGrossWeightPlannedX,
             this.grcADRMultiplierX,
             this.grcADRMultiplier,
+            this.grcPalletPlannedQty,
+            this.grcPalletPlannedQtyX,
+            this.grcPalletBulkQty,
+            this.grcPalletBulkQtyX,
             this.grcResetT,
             this.grcGrossWeightPlanned});
             this.gridViewMegrT.GridControl = this.gridMegrT;
@@ -665,33 +688,6 @@
             this.grcU_M.Visible = true;
             this.grcU_M.VisibleIndex = 3;
             this.grcU_M.Width = 103;
-            // 
-            // grcPalletOrderQty
-            // 
-            this.grcPalletOrderQty.Caption = "Rendelt raklap";
-            this.grcPalletOrderQty.DisplayFormat.FormatString = "#,#0.00";
-            this.grcPalletOrderQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcPalletOrderQty.FieldName = "PalletOrderQty";
-            this.grcPalletOrderQty.Name = "grcPalletOrderQty";
-            this.grcPalletOrderQty.OptionsColumn.AllowEdit = false;
-            // 
-            // grcPalletPlannedQty
-            // 
-            this.grcPalletPlannedQty.Caption = "Szállítandó raklap";
-            this.grcPalletPlannedQty.DisplayFormat.FormatString = "#,#0.00";
-            this.grcPalletPlannedQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcPalletPlannedQty.FieldName = "PalletPlannedQty";
-            this.grcPalletPlannedQty.Name = "grcPalletPlannedQty";
-            this.grcPalletPlannedQty.OptionsColumn.AllowEdit = false;
-            // 
-            // grcPalletBulkQty
-            // 
-            this.grcPalletBulkQty.Caption = "PalletBulkQty";
-            this.grcPalletBulkQty.DisplayFormat.FormatString = "#,#0.00";
-            this.grcPalletBulkQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcPalletBulkQty.FieldName = "PalletBulkQty";
-            this.grcPalletBulkQty.Name = "grcPalletBulkQty";
-            this.grcPalletBulkQty.OptionsColumn.AllowEdit = false;
             // 
             // grcADR
             // 
@@ -796,6 +792,68 @@
             this.grcADRMultiplier.Name = "grcADRMultiplier";
             this.grcADRMultiplier.OptionsColumn.AllowEdit = false;
             // 
+            // grcPalletPlannedQty
+            // 
+            this.grcPalletPlannedQty.Caption = "Szállítandó raklap";
+            this.grcPalletPlannedQty.DisplayFormat.FormatString = "#,#0.00";
+            this.grcPalletPlannedQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcPalletPlannedQty.FieldName = "PalletPlannedQty";
+            this.grcPalletPlannedQty.Name = "grcPalletPlannedQty";
+            this.grcPalletPlannedQty.OptionsColumn.AllowEdit = false;
+            // 
+            // grcPalletPlannedQtyX
+            // 
+            this.grcPalletPlannedQtyX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.grcPalletPlannedQtyX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.grcPalletPlannedQtyX.AppearanceCell.Options.UseBackColor = true;
+            this.grcPalletPlannedQtyX.Caption = "Szállítandó raklap";
+            this.grcPalletPlannedQtyX.ColumnEdit = this.edPalletPlannedQtyX;
+            this.grcPalletPlannedQtyX.DisplayFormat.FormatString = "#,#0.00";
+            this.grcPalletPlannedQtyX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcPalletPlannedQtyX.FieldName = "PalletPlannedQtyX";
+            this.grcPalletPlannedQtyX.Name = "grcPalletPlannedQtyX";
+            this.grcPalletPlannedQtyX.Visible = true;
+            this.grcPalletPlannedQtyX.VisibleIndex = 10;
+            // 
+            // edPalletPlannedQtyX
+            // 
+            this.edPalletPlannedQtyX.AutoHeight = false;
+            this.edPalletPlannedQtyX.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.edPalletPlannedQtyX.Name = "edPalletPlannedQtyX";
+            this.edPalletPlannedQtyX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edPalletPlannedQtyX_EditValueChanging);
+            // 
+            // grcPalletBulkQty
+            // 
+            this.grcPalletBulkQty.Caption = "Raklapon felüli";
+            this.grcPalletBulkQty.DisplayFormat.FormatString = "#,#0.00";
+            this.grcPalletBulkQty.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcPalletBulkQty.FieldName = "PalletBulkQty";
+            this.grcPalletBulkQty.Name = "grcPalletBulkQty";
+            this.grcPalletBulkQty.OptionsColumn.AllowEdit = false;
+            // 
+            // grcPalletBulkQtyX
+            // 
+            this.grcPalletBulkQtyX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.grcPalletBulkQtyX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.grcPalletBulkQtyX.AppearanceCell.Options.UseBackColor = true;
+            this.grcPalletBulkQtyX.Caption = "Raklapon felüli";
+            this.grcPalletBulkQtyX.ColumnEdit = this.edPalletBulkQtyX;
+            this.grcPalletBulkQtyX.DisplayFormat.FormatString = "#,#0.00";
+            this.grcPalletBulkQtyX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.grcPalletBulkQtyX.FieldName = "PalletBulkQtyX";
+            this.grcPalletBulkQtyX.Name = "grcPalletBulkQtyX";
+            this.grcPalletBulkQtyX.Visible = true;
+            this.grcPalletBulkQtyX.VisibleIndex = 11;
+            // 
+            // edPalletBulkQtyX
+            // 
+            this.edPalletBulkQtyX.AutoHeight = false;
+            this.edPalletBulkQtyX.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.edPalletBulkQtyX.Name = "edPalletBulkQtyX";
+            this.edPalletBulkQtyX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edPalletBulkQtyX_EditValueChanging);
+            // 
             // grcResetT
             // 
             this.grcResetT.ColumnEdit = this.edResetT;
@@ -803,14 +861,14 @@
             this.grcResetT.MinWidth = 25;
             this.grcResetT.Name = "grcResetT";
             this.grcResetT.Visible = true;
-            this.grcResetT.VisibleIndex = 10;
+            this.grcResetT.VisibleIndex = 12;
             this.grcResetT.Width = 25;
             // 
             // edResetT
             // 
             this.edResetT.AutoHeight = false;
             this.edResetT.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
             this.edResetT.Name = "edResetT";
             this.edResetT.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             this.edResetT.Click += new System.EventHandler(this.edResetT_Click);
@@ -923,22 +981,6 @@
             this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
             this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
             // 
-            // grcNumberOfPalletForDel
-            // 
-            this.grcNumberOfPalletForDel.Caption = "Szállítandó raklapok száma";
-            this.grcNumberOfPalletForDel.DisplayFormat.FormatString = "#,#0.00";
-            this.grcNumberOfPalletForDel.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.grcNumberOfPalletForDel.FieldName = "NumberOfPalletForDelX";
-            this.grcNumberOfPalletForDel.Name = "grcNumberOfPalletForDel";
-            // 
-            // edNumberOfPalletForDelX
-            // 
-            this.edNumberOfPalletForDelX.AutoHeight = false;
-            this.edNumberOfPalletForDelX.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.edNumberOfPalletForDelX.Name = "edNumberOfPalletForDelX";
-            this.edNumberOfPalletForDelX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edNumberOfPalletForDelX_EditValueChanging);
-            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -962,18 +1004,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edSentToCT)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edNumberOfPalletForDelX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repResetF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edConfPlannedQty)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edPalletPlannedQtyX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edPalletBulkQtyX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edResetT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView3)).EndInit();
             this.grpFilter.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.edNumberOfPalletForDelX)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1016,7 +1060,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcProdDescription;
         private DevExpress.XtraGrid.Columns.GridColumn grcU_M;
         private DevExpress.XtraGrid.Columns.GridColumn grcConfOrderQty;
-        private DevExpress.XtraGrid.Columns.GridColumn grcPalletOrderQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcPalletPlannedQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcPalletBulkQty;
         private DevExpress.XtraGrid.Columns.GridColumn grcGrossWeightPlannedX;
@@ -1053,5 +1096,9 @@
         private System.Windows.Forms.ComboBox cmbCSVFileName;
         private DevExpress.XtraGrid.Columns.GridColumn grcNumberOfPalletForDel;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edNumberOfPalletForDelX;
+        private DevExpress.XtraGrid.Columns.GridColumn grcPalletPlannedQtyX;
+        private DevExpress.XtraGrid.Columns.GridColumn grcPalletBulkQtyX;
+        private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletBulkQtyX;
+        private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletPlannedQtyX;
     }
 }

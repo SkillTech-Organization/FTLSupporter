@@ -35,9 +35,11 @@ namespace MPOrder.BO
 
         //Szállítandó mennyiség raklap,Pallet Planned Qty(Row)
         public double PalletPlannedQty { get; set; }
+        public double PalletPlannedQtyX { get; set; }
 
         //,Pallet ‘Bulk’ qty(Row)
         public double PalletBulkQty { get; set; }
+        public double PalletBulkQtyX { get; set; }
 
         //ADR,ADR
         public bool ADR { get; set; }
