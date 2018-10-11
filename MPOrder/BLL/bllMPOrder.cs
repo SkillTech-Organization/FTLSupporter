@@ -233,28 +233,41 @@ namespace MPOrder.BLL
             DBA.ExecuteNonQuery("update MPO_MPORDER set NumberOfPalletForDelX = ? where CSVFileName= ? and CustomerOrderNumber = ?", NumberOfPalletForDelX, p_CSVFileName, p_CustomerOrderNumber);
         }
 
+        public void SetShippingDateX(string p_CSVFileName, DateTime p_ShippingDateX)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set ShippingDateX = ?, SentToCT = case when ShippingDate = ? then 1 else SentToCT end where CSVFileName= ? ", p_ShippingDateX, p_ShippingDateX, p_CSVFileName);
+        }
+
         public void SetManualValuesT(int p_ID, double p_ConfPlannedQty, double p_GrossWeightPlannedX, double p_ADRMultiplierX, double p_PalletPlannedQtyX, double p_PalletBulkQtyX)
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set ConfPlannedQty = ?, GrossWeightPlannedX = ?, ADRMultiplierX = ?, PalletPlannedQtyX = ?, PalletBulkQtyX = ? where ID=?", p_ConfPlannedQty, p_GrossWeightPlannedX, p_ADRMultiplierX, p_PalletPlannedQtyX, p_PalletBulkQtyX, p_ID);
         }
 
-        public void SetSentToCT( string p_CustomerOrderNumber, bool p_SentToCT)
+        public void SetSentToCT(string p_CSVFileName, string p_CustomerOrderNumber, bool p_SentToCT)
         {
-            DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CustomerOrderNumber=?", p_SentToCT, p_CustomerOrderNumber);
+            DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CSVFileName= ? and CustomerOrderNumber=?", p_SentToCT, p_CSVFileName, p_CustomerOrderNumber);
+        }
+        public void SetAllSentToCT(string p_CSVFileName, bool p_SentToCT)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CSVFileName= ? ", p_SentToCT, p_CSVFileName);
+            if(!p_SentToCT)
+            {
+                DBA.ExecuteNonQuery("update MPO_MPORDER set NumberOfPalletForDelX = NumberOfPalletForDel, " + Environment.NewLine +
+                                  " ConfPlannedQty = ConfOrderQty, GrossWeightPlannedX = GrossWeightPlanned, ADRMultiplierX = ADRMultiplier, PalletPlannedQtyX = PalletPlannedQty, PalletBulkQtyX = PalletBulkQty " + Environment.NewLine +
+                                    " where CSVFileName= ? ", p_CSVFileName);
+
+            }
         }
 
-        public void SetSentToCT2(DateTime p_CustomerOrderDate, bool p_SentToCT)
-        {
-            DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CustomerOrderDate=?", p_SentToCT, p_CustomerOrderDate);
-        }
+      
         public void DeleteItem(int p_ID)
         {
             DBA.ExecuteNonQuery("delete MPO_MPORDER where id=?", p_ID);
         }
 
-        public void DeleteItemByCustomerOrderNumber(string p_CustomerOrderNumber)
+        public void DeleteItemByCustomerOrderNumber(string p_CSVFileName, string p_CustomerOrderNumber)
         {
-            DBA.ExecuteNonQuery("delete MPO_MPORDER where CustomerOrderNumber=?", p_CustomerOrderNumber);
+            DBA.ExecuteNonQuery("delete MPO_MPORDER where CVFileName= ? and CustomerOrderNumber=?", p_CSVFileName, p_CustomerOrderNumber);
         }
         public List<SendToCTResult> SendToCT(List<boMPOrderF> p_data, BaseProgressDialog p_Form = null)
         {
@@ -318,15 +331,15 @@ namespace MPOrder.BLL
                                     ZIP_ID = ZIP_ID,
                                     DEP_ADRSTREET = item.ShippingAddressStreetAndNumber,
                                     DEP_ADRNUM = "",
-                                    DEP_OPEN = 0,
-                                    DEP_CLOSE = 1439,
+                                    DEP_OPEN = PMapIniParams.Instance.MapeiOpen,
+                                    DEP_CLOSE = PMapIniParams.Instance.MapeiClose,
                                     DEP_COMMENT = "",
-                                    DEP_SRVTIME = 10,
+                                    DEP_SRVTIME = PMapIniParams.Instance.MapeiSrvTime,
                                     NOD_ID = NOD_ID,
                                     EDG_ID = EDG_ID,
                                     DEP_DELETED = false,
                                     REG_ID = 0,
-                                    DEP_QTYSRVTIME = 0.05,
+                                    DEP_QTYSRVTIME = PMapIniParams.Instance.MapeiQtySrvTime,
                                     DEP_CLIENTNUM = item.CustomerCode,
                                     DEP_IMPADDRSTAT = (NOD_ID == 0 ? boDepot.EIMPADDRSTAT.MISSADDR : boDepot.EIMPADDRSTAT.OK),
                                     DEP_LIFETIME = 0
@@ -352,8 +365,8 @@ namespace MPOrder.BLL
                                 ORD_ORIGQTY3 = 0,
                                 ORD_ORIGQTY4 = 0,
                                 ORD_ORIGQTY5 = 0,
-                                ORD_SERVS = 0,
-                                ORD_SERVE = 1439,
+                                ORD_SERVS = PMapIniParams.Instance.MapeiOpen,
+                                ORD_SERVE = PMapIniParams.Instance.MapeiClose,
                                 ORD_VOLUME = 0,
                                 ORD_LENGTH = 0,
                                 ORD_WIDTH = 0,

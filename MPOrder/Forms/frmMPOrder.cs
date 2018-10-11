@@ -45,7 +45,11 @@ namespace MPOrder.Forms
             cmbCSVFileName.ValueMember = "ShortCSVFileName";
             cmbCSVFileName.Items.Clear();
             cmbCSVFileName.DataSource = m_CSVFiles;
-
+            if (m_CSVFiles.Count > 0)
+            {
+                var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+                dtmShippingDateX.Value = selItem.ShippingDateX;
+            }
             fillGrids();
             setButtons();
         }
@@ -58,7 +62,7 @@ namespace MPOrder.Forms
         private void btnExcelImport_Click(object sender, EventArgs e)
         {
             var dlg = new dlgImport();
-            if( dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
                 var ci = new System.Globalization.CultureInfo("hu-HU");
@@ -96,10 +100,6 @@ namespace MPOrder.Forms
 
         }
 
-        private void btnFilter_Click(object sender, EventArgs e)
-        {
-            fillGrids();
-        }
 
         private void fillGrids()
         {
@@ -129,7 +129,7 @@ namespace MPOrder.Forms
                 else
                     gridViewMegrF.FocusedRowHandle = focusedRowF;
                 initMegrTGrid();
-
+                setEditors();
             }
             catch (Exception ex)
             {
@@ -146,6 +146,7 @@ namespace MPOrder.Forms
             if (e.FocusedRowHandle >= 0)
             {
                 initMegrTGrid();
+                setEditors();
             }
         }
 
@@ -189,11 +190,12 @@ namespace MPOrder.Forms
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcConfPlannedQtySum);
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcGrossWeightPlannedXSum);
             gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcADRMultiplierXSum);
+            gridViewMegrF.RefreshRowCell(gridViewMegrF.FocusedRowHandle, grcNumberOfPalletForDelX);
 
             gridViewMegrF.RefreshRow(gridViewMegrF.FocusedRowHandle);
         }
 
-  
+
         private void gridViewMegrF_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
 
@@ -218,6 +220,18 @@ namespace MPOrder.Forms
                     }
                 }
             }
+
+            if (e.Column == grcNumberOfPalletForDelX)
+            {
+                var SentToCT = (bool)gridViewMegrF.GetRowCellValue(e.RowHandle, grcSentToCT);
+                if (SentToCT)
+                {
+                    e.Appearance.BackColor = Color.FromArgb(255, 255, 192);
+                    e.Appearance.BackColor2 = Color.FromArgb(255, 255, 192);
+                    e.Appearance.ForeColor = Color.Black;
+                }
+            }
+
         }
 
         private void gridViewMegrT_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
@@ -240,37 +254,59 @@ namespace MPOrder.Forms
                 }
             }
 
-        }
 
-        private void edSentToCT_EditValueChanged(object sender, EventArgs e)
-        {
-            /*
-            string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
-            bool SentToCT = (bool)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcSentToCT);
-            m_bllMPOrder.SetSentToCT(CustomerOrderNumber, SentToCT);
-            */
+            if (e.Column == grcConfPlannedQty || e.Column == grcPalletBulkQtyX || e.Column == grcPalletPlannedQtyX)
+            {
+                var SentToCT = (bool)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcSentToCT);
+                if (SentToCT)
+                {
+                    e.Appearance.BackColor = Color.FromArgb(255, 255, 192);
+                    e.Appearance.BackColor2 = Color.FromArgb(255, 255, 192);
+                    e.Appearance.ForeColor = Color.Black;
+                }
+            }
+
         }
 
         private void edSentToCT_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+
             string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
             bool SentToCT = (bool)e.NewValue;
-            m_bllMPOrder.SetSentToCT(CustomerOrderNumber, SentToCT);
+            m_bllMPOrder.SetSentToCT(selItem.CSVFileName, CustomerOrderNumber, SentToCT);
 
+            //visszaírjuk a grid adataiba, hogy a EditValueChanged-beli képenyőfrissítés lássa a változást
+            gridViewMegrF.SetRowCellValue(gridViewMegrF.FocusedRowHandle, grcSentToCT, SentToCT);
+
+
+            if ( !SentToCT)
+            {
+                resetF();
+            }
+            gridMegrF.Refresh();
+            gridMegrT.Refresh();
+
+            setEditors();
+        }
+        private void edSentToCT_EditValueChanged(object sender, EventArgs e)
+        {
+
+          
         }
 
         private void btnSelAll_Click(object sender, EventArgs e)
         {
-            m_data.ForEach(item => item.SentToCT = true);
-            m_bllMPOrder.SetSentToCT2(dtmShippingDateX.Value.Date, true);
-            gridViewMegrF.RefreshData();
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+            m_bllMPOrder.SetAllSentToCT(selItem.CSVFileName, true);
+            fillGrids();
         }
 
         private void btnDeselAll_Click(object sender, EventArgs e)
         {
-            m_data.ForEach(item => item.SentToCT = false);
-            m_bllMPOrder.SetSentToCT2(dtmShippingDateX.Value.Date, false);
-            gridViewMegrF.RefreshData();
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+            m_bllMPOrder.SetAllSentToCT(selItem.CSVFileName, false);
+            fillGrids();
         }
 
         private void tsbExportItems_Click(object sender, EventArgs e)
@@ -368,60 +404,78 @@ namespace MPOrder.Forms
             if (UI.Confirm(PMapMessages.Q_MPORD_DELITEM))
             {
                 string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
+                var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+                var CSVFileName = selItem.CSVFileName;
 
                 m_data.RemoveAll(r => r.CustomerOrderNumber == CustomerOrderNumber);
-                m_bllMPOrder.DeleteItemByCustomerOrderNumber( CustomerOrderNumber);
+                m_bllMPOrder.DeleteItemByCustomerOrderNumber(CSVFileName, CustomerOrderNumber);
                 fillGrids();
             }
         }
 
-        private void setButtons()
-        {
-            btnExcelImport.Enabled = true;
-            btnSelAll.Enabled = gridViewMegrF.RowCount > 0;
-            btnDeselAll.Enabled = gridViewMegrF.RowCount > 0;
-            btnSend.Enabled = gridViewMegrF.RowCount > 0;
-            tbsDelete.Enabled = gridViewMegrT.RowCount > 0;
-            tsbExportItems.Enabled = gridViewMegrF.RowCount > 0;
-        }
+     
 
         private void edResetT_Click(object sender, EventArgs e)
         {
-/*
-            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
-            double ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
-            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplier);
+            resetT();
+        }
 
-            double GrossWeightPlanned = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlanned);
+        private void resetT()
+        {
+
+            int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
+
+            var ConfOrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, ConfOrderQty);
+
+            var GrossWeightPlanned = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlanned);
             gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcGrossWeightPlannedX, GrossWeightPlanned);
 
+            var ADRMultiplier = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplier);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcADRMultiplierX, ADRMultiplier);
 
-            double OrderQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfOrderQty);
-            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcConfPlannedQty, OrderQty);
+            var PalletPlannedQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletPlannedQty);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletPlannedQtyX, PalletPlannedQty);
+
+            var PalletBulkQty = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletBulkQty);
+            gridViewMegrT.SetRowCellValue(gridViewMegrT.FocusedRowHandle, grcPalletBulkQtyX, PalletBulkQty);
 
 
-            m_bllMPOrder.SetManualValues(ID, OrderQty, GrossWeightPlanned, ADRMultiplier);
+            m_bllMPOrder.SetManualValuesT(ID, ConfOrderQty, GrossWeightPlanned, ADRMultiplier, PalletPlannedQty, PalletBulkQty);
             refreshCurrentF();
-            */
         }
 
         private void repResetF_Click(object sender, EventArgs e)
         {
-            string CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
-            if (!string.IsNullOrWhiteSpace(CustomerOrderNumber))
+            resetF();
+          }
+
+        private void resetF()
+        {
+
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+            var CSVFileName = selItem.CSVFileName;
+            var CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
+
+
+            var item = m_data.Where(w => w.CustomerOrderNumber == CustomerOrderNumber).FirstOrDefault();
+            if (item != null)
             {
-                var item = m_data.Where(w => w.CustomerOrderNumber == CustomerOrderNumber).FirstOrDefault();
-                if (item != null )
+                item.NumberOfPalletForDelX = item.NumberOfPalletForDel;
+                m_bllMPOrder.SetManualValuesF(CSVFileName, CustomerOrderNumber, item.NumberOfPalletForDelX);
+                foreach (var fe in item.Items)
                 {
-                    item.Items.ForEach(fe =>
-                   {
-                       fe.ADRMultiplierX = fe.ADRMultiplier;
-                       fe.GrossWeightPlannedX = fe.GrossWeightPlanned;
-                       fe.ConfPlannedQty = fe.ConfOrderQty;
-                   });
-                    refreshCurrentF();
-                    initMegrTGrid();
+
+                    fe.ADRMultiplierX = fe.ADRMultiplier;
+                    fe.GrossWeightPlannedX = fe.GrossWeightPlanned;
+                    fe.ConfPlannedQty = fe.ConfOrderQty;
+                    fe.PalletPlannedQtyX = fe.PalletPlannedQty;
+                    fe.PalletBulkQtyX = fe.PalletBulkQty;
+
+                    m_bllMPOrder.SetManualValuesT(fe.ID, fe.ConfPlannedQty, fe.GrossWeightPlannedX, fe.ADRMultiplierX, fe.PalletPlannedQtyX, fe.PalletBulkQtyX);
                 }
+                refreshCurrentF();
+                initMegrTGrid();
             }
         }
 
@@ -432,7 +486,12 @@ namespace MPOrder.Forms
 
         private void cmbCSVFileName_TextChanged(object sender, EventArgs e)
         {
+
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+            dtmShippingDateX.Value = selItem.ShippingDateX;
+
             fillGrids();
+            setButtons();
         }
 
         private void edConfPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
@@ -480,7 +539,6 @@ namespace MPOrder.Forms
         {
             var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
             var CSVFileName = selItem.CSVFileName;
-
             var CustomerOrderNumber = (string)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcCustomerOrderNumber);
 
             var NumberOfPalletForDelX = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
@@ -521,5 +579,41 @@ namespace MPOrder.Forms
             refreshCurrentF();
 
         }
+
+        private void btnSetShippingDateX_Click(object sender, EventArgs e)
+        {
+            var selItem = (boCSVFile)cmbCSVFileName.SelectedItem;
+            var CSVFileName = selItem.CSVFileName;
+            m_bllMPOrder.SetShippingDateX(CSVFileName, dtmShippingDateX.Value.Date);
+            fillGrids();
+        }
+
+        private void setButtons()
+        {
+            btnExcelImport.Enabled = true;
+            btnSelAll.Enabled = gridViewMegrF.RowCount > 0;
+            btnDeselAll.Enabled = gridViewMegrF.RowCount > 0;
+            btnSend.Enabled = gridViewMegrF.RowCount > 0;
+            tbsDelete.Enabled = gridViewMegrT.RowCount > 0;
+            tsbExportItems.Enabled = gridViewMegrF.RowCount > 0;
+            btnSetShippingDateX.Enabled = gridViewMegrF.RowCount > 0;
+            dtmShippingDateX.Enabled = gridViewMegrF.RowCount > 0;
+        }
+
+        private void setEditors()
+        {
+            if (gridViewMegrF.RowCount > 0)
+            {
+                var SentToCT = (bool)gridViewMegrF.GetRowCellValue(gridViewMegrF.FocusedRowHandle, grcSentToCT);
+                grcNumberOfPalletForDelX.OptionsColumn.AllowEdit = SentToCT;
+                grcConfPlannedQty.OptionsColumn.AllowEdit = SentToCT;
+                grcADRMultiplierX.OptionsColumn.AllowEdit = SentToCT;
+                grcPalletBulkQtyX.OptionsColumn.AllowEdit = SentToCT;
+                grcPalletPlannedQtyX.OptionsColumn.AllowEdit = SentToCT;
+
+            }
+        }
+
+    
     }
 }

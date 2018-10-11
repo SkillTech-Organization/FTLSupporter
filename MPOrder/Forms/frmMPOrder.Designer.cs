@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMPOrder));
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
@@ -104,10 +103,10 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cmbCSVFileName = new System.Windows.Forms.ComboBox();
             this.lblCSVFile = new System.Windows.Forms.Label();
-            this.btnFilter = new System.Windows.Forms.Button();
+            this.btnSetShippingDateX = new System.Windows.Forms.Button();
             this.dtmShippingDateX = new System.Windows.Forms.DateTimePicker();
             this.lblShippingDateX = new System.Windows.Forms.Label();
-            this.imlRefresh = new System.Windows.Forms.ImageList(this.components);
+            this.imlRefresh = new System.Windows.Forms.ImageList();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -349,7 +348,7 @@
             this.grcSentToCT.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.grcSentToCT.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.grcSentToCT.AppearanceCell.Options.UseBackColor = true;
-            this.grcSentToCT.Caption = "->CT";
+            this.grcSentToCT.Caption = " ";
             this.grcSentToCT.ColumnEdit = this.edSentToCT;
             this.grcSentToCT.FieldName = "SentToCT";
             this.grcSentToCT.Name = "grcSentToCT";
@@ -432,9 +431,6 @@
             // 
             // grcNumberOfPalletForDelX
             // 
-            this.grcNumberOfPalletForDelX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcNumberOfPalletForDelX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcNumberOfPalletForDelX.AppearanceCell.Options.UseBackColor = true;
             this.grcNumberOfPalletForDelX.Caption = "Szállítandó raklapok száma";
             this.grcNumberOfPalletForDelX.ColumnEdit = this.edNumberOfPalletForDelX;
             this.grcNumberOfPalletForDelX.DisplayFormat.FormatString = "#,#0.00";
@@ -695,8 +691,6 @@
             this.grcADR.FieldName = "ADR";
             this.grcADR.Name = "grcADR";
             this.grcADR.OptionsColumn.AllowEdit = false;
-            this.grcADR.Visible = true;
-            this.grcADR.VisibleIndex = 9;
             this.grcADR.Width = 103;
             // 
             // grcADRLimitedQuantity
@@ -720,9 +714,6 @@
             // 
             // grcConfPlannedQty
             // 
-            this.grcConfPlannedQty.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcConfPlannedQty.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcConfPlannedQty.AppearanceCell.Options.UseBackColor = true;
             this.grcConfPlannedQty.Caption = "Mennyiség";
             this.grcConfPlannedQty.ColumnEdit = this.edConfPlannedQty;
             this.grcConfPlannedQty.DisplayFormat.FormatString = "#,#0.00";
@@ -803,9 +794,6 @@
             // 
             // grcPalletPlannedQtyX
             // 
-            this.grcPalletPlannedQtyX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcPalletPlannedQtyX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcPalletPlannedQtyX.AppearanceCell.Options.UseBackColor = true;
             this.grcPalletPlannedQtyX.Caption = "Szállítandó raklap";
             this.grcPalletPlannedQtyX.ColumnEdit = this.edPalletPlannedQtyX;
             this.grcPalletPlannedQtyX.DisplayFormat.FormatString = "#,#0.00";
@@ -813,7 +801,7 @@
             this.grcPalletPlannedQtyX.FieldName = "PalletPlannedQtyX";
             this.grcPalletPlannedQtyX.Name = "grcPalletPlannedQtyX";
             this.grcPalletPlannedQtyX.Visible = true;
-            this.grcPalletPlannedQtyX.VisibleIndex = 10;
+            this.grcPalletPlannedQtyX.VisibleIndex = 9;
             // 
             // edPalletPlannedQtyX
             // 
@@ -834,9 +822,6 @@
             // 
             // grcPalletBulkQtyX
             // 
-            this.grcPalletBulkQtyX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcPalletBulkQtyX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.grcPalletBulkQtyX.AppearanceCell.Options.UseBackColor = true;
             this.grcPalletBulkQtyX.Caption = "Raklapon felüli";
             this.grcPalletBulkQtyX.ColumnEdit = this.edPalletBulkQtyX;
             this.grcPalletBulkQtyX.DisplayFormat.FormatString = "#,#0.00";
@@ -844,7 +829,7 @@
             this.grcPalletBulkQtyX.FieldName = "PalletBulkQtyX";
             this.grcPalletBulkQtyX.Name = "grcPalletBulkQtyX";
             this.grcPalletBulkQtyX.Visible = true;
-            this.grcPalletBulkQtyX.VisibleIndex = 11;
+            this.grcPalletBulkQtyX.VisibleIndex = 10;
             // 
             // edPalletBulkQtyX
             // 
@@ -861,7 +846,7 @@
             this.grcResetT.MinWidth = 25;
             this.grcResetT.Name = "grcResetT";
             this.grcResetT.Visible = true;
-            this.grcResetT.VisibleIndex = 12;
+            this.grcResetT.VisibleIndex = 11;
             this.grcResetT.Width = 25;
             // 
             // edResetT
@@ -903,14 +888,14 @@
             // 
             this.tableLayoutPanel2.ColumnCount = 6;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 668F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 109F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 138F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.Controls.Add(this.cmbCSVFileName, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblCSVFile, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnFilter, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnSetShippingDateX, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.dtmShippingDateX, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblShippingDateX, 3, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -929,7 +914,7 @@
             this.cmbCSVFileName.FormattingEnabled = true;
             this.cmbCSVFileName.Location = new System.Drawing.Point(123, 6);
             this.cmbCSVFileName.Name = "cmbCSVFileName";
-            this.cmbCSVFileName.Size = new System.Drawing.Size(662, 21);
+            this.cmbCSVFileName.Size = new System.Drawing.Size(711, 21);
             this.cmbCSVFileName.TabIndex = 20;
             this.cmbCSVFileName.TextChanged += new System.EventHandler(this.cmbCSVFileName_TextChanged);
             // 
@@ -943,18 +928,18 @@
             this.lblCSVFile.TabIndex = 12;
             this.lblCSVFile.Text = "CSV állomány";
             // 
-            // btnFilter
+            // btnSetShippingDateX
             // 
-            this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFilter.BackColor = System.Drawing.Color.Yellow;
-            this.btnFilter.Image = ((System.Drawing.Image)(resources.GetObject("btnFilter.Image")));
-            this.btnFilter.Location = new System.Drawing.Point(1123, 4);
-            this.btnFilter.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.btnFilter.Name = "btnFilter";
-            this.btnFilter.Size = new System.Drawing.Size(29, 26);
-            this.btnFilter.TabIndex = 4;
-            this.btnFilter.UseVisualStyleBackColor = false;
-            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
+            this.btnSetShippingDateX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSetShippingDateX.BackColor = System.Drawing.Color.Yellow;
+            this.btnSetShippingDateX.Image = ((System.Drawing.Image)(resources.GetObject("btnSetShippingDateX.Image")));
+            this.btnSetShippingDateX.Location = new System.Drawing.Point(1123, 4);
+            this.btnSetShippingDateX.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.btnSetShippingDateX.Name = "btnSetShippingDateX";
+            this.btnSetShippingDateX.Size = new System.Drawing.Size(29, 26);
+            this.btnSetShippingDateX.TabIndex = 4;
+            this.btnSetShippingDateX.UseVisualStyleBackColor = false;
+            this.btnSetShippingDateX.Click += new System.EventHandler(this.btnSetShippingDateX_Click);
             // 
             // dtmShippingDateX
             // 
@@ -1042,7 +1027,7 @@
         private System.Windows.Forms.GroupBox grpFilter;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label lblShippingDateX;
-        private System.Windows.Forms.Button btnFilter;
+        private System.Windows.Forms.Button btnSetShippingDateX;
         private DevExpress.XtraGrid.Columns.GridColumn grcCustomerOrderNumber;
         private DevExpress.XtraGrid.Columns.GridColumn grcCustomerOrderDate;
         private DevExpress.XtraGrid.Columns.GridColumn gricShippingDateX;

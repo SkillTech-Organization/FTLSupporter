@@ -100,6 +100,12 @@ namespace PMapCore.Common
         public const string iniDBPwd = "DBPwd";
         public const string iniDBCmdTimeOut = "DBCmdTimeOut";
 
+        public const string iniMapei = "Mapei";
+        public const string iniMapeiOpen = "MapeiOpen";
+        public const string iniMapeiClose = "MapeiClose";
+        public const string iniMapeiSrvTime = "MapeiSrvTime";
+        public const string iniMapeiQtySrvTime = "MapeiQtySrvTime";
+
 
         //Kezelt térképtípusok
         public const int mtGMap = 1;

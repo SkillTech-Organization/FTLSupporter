@@ -109,6 +109,13 @@ namespace PMapCore.Common
         public string DBPwd { get; set; }
         public int DBCmdTimeOut { get; set; }
 
+        //Mapei paraméterek
+        //
+        public int MapeiOpen { get; set; }
+        public int MapeiClose { get; set; }
+        public int MapeiSrvTime { get; set; }
+        public double MapeiQtySrvTime { get; set; }
+
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
@@ -380,6 +387,16 @@ namespace PMapCore.Common
             DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
             if (DBCmdTimeOut == 0)
                 DBCmdTimeOut = 60;
+
+
+            // MAPEI paraméterek
+
+            MapeiOpen = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiOpen));
+            MapeiClose = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiClose));
+            MapeiSrvTime = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiSrvTime));
+            MapeiQtySrvTime = Convert.ToDouble("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiQtySrvTime).Replace(',', '.'), CultureInfo.InvariantCulture);
+
+
             Loaded = true;
 
 

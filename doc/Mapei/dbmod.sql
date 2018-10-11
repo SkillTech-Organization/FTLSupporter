@@ -113,4 +113,5 @@ End
 if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'PalletBulkQtyX') begin 
    ALTER TABLE MPO_MPORDER ADD PalletBulkQtyX TY_NVALUE default 0 
 End 	
-
+truncate table MPO_MPORDER
+truncate table MPP_MAPPLANPAR
