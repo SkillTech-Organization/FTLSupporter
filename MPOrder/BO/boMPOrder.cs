@@ -41,7 +41,7 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public DateTime ShippingDate { get; set; }
 
-        //Átadási dátum, Shipping date X
+        //Szállítási terv dátum, Shipping date X
         [WriteFieldAttribute(Insert = true, Update = true)]
         public DateTime ShippingDateX { get; set; }
 

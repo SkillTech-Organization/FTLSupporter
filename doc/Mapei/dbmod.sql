@@ -16,67 +16,58 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 IF not EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MPO_MPORDER]') AND type in (N'U')) BEGIN
-CREATE TABLE [dbo].[MPO_MPORDER](
-	[ID] [dbo].[TY_ID] IDENTITY(1,1) NOT NULL,
-	[SentToCT] [dbo].[TY_BVALUE] NULL,
-	[CompanyCode] [dbo].[TY_NAME] NULL,
-	[CustomerCode] [dbo].[TY_NAME] NULL,
-	[CustomerOrderNumber] [dbo].[TY_NAME] NULL,
-	[CustomerOrderDate] [dbo].[TY_DATETIME] NULL,
-	[ShippingDate] [dbo].[TY_DATETIME] NULL,
-	[WarehouseCode] [dbo].[TY_NAME] NULL,
-	[TotalGrossWeightOfOrder] [dbo].[TY_NVALUE] NULL,
-	[NumberOfPalletForDel] [dbo].[TY_NVALUE] NULL,
-	[ShippAddressID] [dbo].[TY_NAME] NULL,
-	[ShippAddressCompanyName] [dbo].[TY_NAME] NULL,
-	[ShippAddressZipCode] [dbo].[TY_NAME] NULL,
-	[ShippingAddressCity] [dbo].[TY_TEXT] NULL,
-	[ShippingAddressStreetAndNumber] [dbo].[TY_TEXT] NULL,
-	[Note] [dbo].[TY_TEXT] NULL,
-	[RowNumber] [dbo].[TY_NVALUE] NULL,
-	[ProductCode] [dbo].[TY_NAME] NULL,
-	[U_M] [dbo].[TY_NAME] NULL,
-	[ProdDescription] [dbo].[TY_TEXT] NULL,
-	[ConfOrderQty] [dbo].[TY_NVALUE] NULL,
-	[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,
-	[NetWeight] [dbo].[TY_NVALUE] NULL,
-	[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,
-	[PalletBulkQty] [dbo].[TY_NVALUE] NULL,
-	[GrossWeightPlanned] [dbo].[TY_NVALUE] NULL,
-	[ADR] [dbo].[TY_BVALUE] NULL,
-	[ADRMultiplier] [dbo].[TY_NVALUE] NULL,
-	[ADRLimitedQuantity] [dbo].[TY_NVALUE] NULL,
-	[Freeze] [dbo].[TY_BVALUE] NULL,
-	[Melt] [dbo].[TY_BVALUE] NULL,
-	[UV] [dbo].[TY_BVALUE] NULL,
-	[Bordero] [dbo].[TY_NAME] NULL,
-	[Carrier] [dbo].[TY_NAME] NULL,
-	[VehicleType] [dbo].[TY_NAME] NULL,
-	[KM] [dbo].[TY_NVALUE] NULL,
-	[Forfait] [dbo].[TY_NVALUE] NULL,
-	[Currency] [dbo].[TY_NAME] NULL,
-	[ADRMultiplierX] [dbo].[TY_NVALUE] NULL,
- CONSTRAINT [PK_MPO_MPORDER] PRIMARY KEY CLUSTERED 
-(
-	[ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-CREATE NONCLUSTERED INDEX [IX_MPO_ShippingDate] ON [dbo].[MPO_MPORDER]
-(
-	[ShippingDate] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-CREATE NONCLUSTERED INDEX [IX_MPO_CustProd] ON [dbo].[MPO_MPORDER]
-(
-	[CustomerCode] ASC,
-	[ProductCode] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	CREATE TABLE [dbo].[MPO_MPORDER](
+		[ID] [dbo].[TY_ID] IDENTITY(1,1) NOT NULL,
+		[SentToCT] [dbo].[TY_BVALUE] NULL,
+		[CompanyCode] [dbo].[TY_NAME] NULL,
+		[CustomerCode] [dbo].[TY_NAME] NULL,
+		[CustomerOrderNumber] [dbo].[TY_NAME] NULL,
+		[CustomerOrderDate] [dbo].[TY_DATETIME] NULL,
+		[ShippingDate] [dbo].[TY_DATETIME] NULL,
+		[WarehouseCode] [dbo].[TY_NAME] NULL,
+		[TotalGrossWeightOfOrder] [dbo].[TY_NVALUE] NULL,
+		[NumberOfPalletForDel] [dbo].[TY_NVALUE] NULL,
+		[ShippAddressID] [dbo].[TY_NAME] NULL,
+		[ShippAddressCompanyName] [dbo].[TY_NAME] NULL,
+		[ShippAddressZipCode] [dbo].[TY_NAME] NULL,
+		[ShippingAddressCity] [dbo].[TY_TEXT] NULL,
+		[ShippingAddressStreetAndNumber] [dbo].[TY_TEXT] NULL,
+		[Note] [dbo].[TY_TEXT] NULL,
+		[RowNumber] [dbo].[TY_NVALUE] NULL,
+		[ProductCode] [dbo].[TY_NAME] NULL,
+		[U_M] [dbo].[TY_NAME] NULL,
+		[ProdDescription] [dbo].[TY_TEXT] NULL,
+		[ConfOrderQty] [dbo].[TY_NVALUE] NULL,
+		[ConfPlannedQty] [dbo].[TY_NVALUE] NULL,
+		[NetWeight] [dbo].[TY_NVALUE] NULL,
+		[PalletPlannedQty] [dbo].[TY_NVALUE] NULL,
+		[PalletBulkQty] [dbo].[TY_NVALUE] NULL,
+		[GrossWeightPlanned] [dbo].[TY_NVALUE] NULL,
+		[ADR] [dbo].[TY_BVALUE] NULL,
+		[ADRMultiplier] [dbo].[TY_NVALUE] NULL,
+		[ADRLimitedQuantity] [dbo].[TY_NVALUE] NULL,
+		[Freeze] [dbo].[TY_BVALUE] NULL,
+		[Melt] [dbo].[TY_BVALUE] NULL,
+		[UV] [dbo].[TY_BVALUE] NULL,
+		[Bordero] [dbo].[TY_NAME] NULL,
+		[Carrier] [dbo].[TY_NAME] NULL,
+		[VehicleType] [dbo].[TY_NAME] NULL,
+		[KM] [dbo].[TY_NVALUE] NULL,
+		[Forfait] [dbo].[TY_NVALUE] NULL,
+		[Currency] [dbo].[TY_NAME] NULL,
+		[ADRMultiplierX] [dbo].[TY_NVALUE] NULL,
+	 CONSTRAINT [PK_MPO_MPORDER] PRIMARY KEY CLUSTERED 
+	(
+		[ID] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 end
 GO
+
 if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'UnitWeight') begin 
    ALTER TABLE MPO_MPORDER ADD UnitWeight TY_NVALUE default 0 
 End 
-
+go
 
 if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'NetWeight') begin 
    ALTER TABLE MPO_MPORDER ADD NetWeight TY_NVALUE default 0 

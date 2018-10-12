@@ -32,7 +32,7 @@ namespace MPOrder
             frmMPOrder MainForm = null;
             try
             {
-                PMapIniParams.Instance.ReadParams("", "DB0", "MPOrder.ini");
+                PMapIniParams.Instance.ReadParams("", "DB0", "MapeiOrder.ini");
                 PMapCommonVars.Instance.ConnectToDB();
 
                 ChkLic.Check(PMapIniParams.Instance.IDFile);

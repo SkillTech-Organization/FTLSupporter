@@ -108,7 +108,7 @@
             this.lblFile.Name = "lblFile";
             this.lblFile.Size = new System.Drawing.Size(94, 13);
             this.lblFile.TabIndex = 1;
-            this.lblFile.Text = "Excel állomány";
+            this.lblFile.Text = "Fájl";
             // 
             // tableLayoutPanel2
             // 

@@ -139,7 +139,7 @@
             this.btnExcelImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnExcelImport.Name = "btnExcelImport";
             this.btnExcelImport.Size = new System.Drawing.Size(24, 22);
-            this.btnExcelImport.Text = "&CSV állomány beolvasása";
+            this.btnExcelImport.Text = "&Rendelés állomány betöltése";
             this.btnExcelImport.Click += new System.EventHandler(this.btnExcelImport_Click);
             // 
             // tsbExportItems
@@ -149,7 +149,7 @@
             this.tsbExportItems.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExportItems.Name = "tsbExportItems";
             this.tsbExportItems.Size = new System.Drawing.Size(24, 22);
-            this.tsbExportItems.Text = "&Tételek exportja CSV-be";
+            this.tsbExportItems.Text = "&Küldés NetMover-be";
             this.tsbExportItems.Click += new System.EventHandler(this.tsbExportItems_Click);
             // 
             // toolStripSeparator2
@@ -403,7 +403,7 @@
             // 
             // gricShippingDateX
             // 
-            this.gricShippingDateX.Caption = "Átadási dátum";
+            this.gricShippingDateX.Caption = "Szállítási terv dátum";
             this.gricShippingDateX.FieldName = "ShippingDateX";
             this.gricShippingDateX.Name = "gricShippingDateX";
             this.gricShippingDateX.OptionsColumn.AllowEdit = false;
@@ -926,7 +926,7 @@
             this.lblCSVFile.Name = "lblCSVFile";
             this.lblCSVFile.Size = new System.Drawing.Size(114, 13);
             this.lblCSVFile.TabIndex = 12;
-            this.lblCSVFile.Text = "CSV állomány";
+            this.lblCSVFile.Text = "Rendelés állomány";
             // 
             // btnSetShippingDateX
             // 
@@ -958,7 +958,7 @@
             this.lblShippingDateX.Name = "lblShippingDateX";
             this.lblShippingDateX.Size = new System.Drawing.Size(103, 13);
             this.lblShippingDateX.TabIndex = 6;
-            this.lblShippingDateX.Text = "Átadási dátum";
+            this.lblShippingDateX.Text = "Szállítási terv dátum";
             // 
             // imlRefresh
             // 

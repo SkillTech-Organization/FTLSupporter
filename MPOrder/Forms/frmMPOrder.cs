@@ -205,7 +205,10 @@ namespace MPOrder.Forms
 
             if (GrossWeightPlannedSum != GrossWeightPlannedXSum)
             {
-                e.Appearance.ForeColor = Color.Blue;
+                if( e.RowHandle == gridViewMegrF.FocusedRowHandle)
+                    e.Appearance.ForeColor = Color.LightCyan;
+                else
+                    e.Appearance.ForeColor = Color.Blue;
             }
 
             if (e.Column == grcADRMultiplierXSum || e.Column == grcGrossWeightPlannedXSum || e.Column == grcConfPlannedQtySum)
@@ -241,7 +244,10 @@ namespace MPOrder.Forms
 
             if (GrossWeightPlanned != GrossWeightPlannedX)
             {
-                e.Appearance.ForeColor = Color.Blue;
+                if (e.RowHandle == gridViewMegrT.FocusedRowHandle)
+                    e.Appearance.ForeColor = Color.LightCyan;
+                else
+                    e.Appearance.ForeColor = Color.Blue;
             }
 
 

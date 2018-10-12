@@ -31,7 +31,7 @@ namespace MPOrder.BO
         //Szállítási dátum, Shipping date
         public DateTime ShippingDate { get; set; }
 
-        //Átadási dátum, Shipping date
+        //Szállítási terv dátum, Shipping date
         public DateTime ShippingDateX { get; set; }
 
         //Raktár kód, Warehouse code

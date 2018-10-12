@@ -328,7 +328,7 @@ namespace MPOrder.BLL
                                     WHS_ID = 1,             //Csak egy raktárat kezelünk
                                     DEP_CODE = item.CustomerCode,
                                     DEP_NAME = item.ShippAddressCompanyName,
-                                    ZIP_ID = ZIP_ID,
+                                    ZIP_ID = (boZip != null ? boZip.ID : ZIP_ID),      //HA használjuk a GeocodingByAddr-t akkor a ZIP_ID kell ide
                                     DEP_ADRSTREET = item.ShippingAddressStreetAndNumber,
                                     DEP_ADRNUM = "",
                                     DEP_OPEN = PMapIniParams.Instance.MapeiOpen,
