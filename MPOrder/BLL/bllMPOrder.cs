@@ -345,6 +345,7 @@ namespace MPOrder.BLL
                                     DEP_LIFETIME = 0
                                 };
                                 dep.ID = bllDepotX.AddDepot(dep);
+                                bllDepotX.SetAllTruckToDep(dep.ID);
                             }
 
                             boOrder newOrder = new boOrder()

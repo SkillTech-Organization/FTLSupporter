@@ -104,6 +104,12 @@
     <Compile Include="BO\boMPOrder.cs" />
     <Compile Include="BO\boMPOrderF.cs" />
     <Compile Include="BO\boMPOrderT.cs" />
+    <Compile Include="Forms\dlgExportToNetmover.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgExportToNetmover.Designer.cs">
+      <DependentUpon>dlgExportToNetmover.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\dlgImport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,11 +128,15 @@
     <Compile Include="Forms\frmMPOrder.Designer.cs">
       <DependentUpon>frmMPOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="LongProcess\ExportToNetMover.cs" />
     <Compile Include="LongProcess\ImportFromCSV.cs" />
     <Compile Include="LongProcess\SendToCT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendToCTResult.cs" />
+    <EmbeddedResource Include="Forms\dlgExportToNetmover.resx">
+      <DependentUpon>dlgExportToNetmover.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\dlgImport.resx">
       <DependentUpon>dlgImport.cs</DependentUpon>
     </EmbeddedResource>

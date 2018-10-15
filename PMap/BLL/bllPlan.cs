@@ -665,5 +665,22 @@ namespace PMapCore.BLL
             }
         }
 
+
+        /// <summary>
+        /// Tervek, amelyben egy megrendelés szerepel
+        /// </summary>
+        /// <param name="p_ORD_ID"></param>
+        /// <returns></returns>
+        public List<boPlan> GetPlansByDateTime(DateTime p_dateTime)
+        {
+            string sSql = "select * from PLN_PUBLICATEDPLAN PLN " + Environment.NewLine +
+                          "where PLN.PLN_DATE_B >= ? and PLN.PLN_DATE_E <= ?" + Environment.NewLine +
+                          "order by PLN_NAME ";
+            DataTable dt = DBA.Query2DataTable(sSql, p_dateTime, p_dateTime);
+            var linq = (from o in dt.AsEnumerable()
+                        select getPlanRec(o));
+            return linq.ToList();
+        }
+
     }
 }

@@ -148,7 +148,7 @@
             // openCSV
             // 
             this.openCSV.CheckFileExists = false;
-            this.openCSV.DefaultExt = "xls";
+            this.openCSV.DefaultExt = "csv";
             this.openCSV.Filter = "*.csv|*.CSV";
             // 
             // dlgImport

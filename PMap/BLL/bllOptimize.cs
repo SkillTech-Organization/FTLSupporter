@@ -1289,40 +1289,38 @@ namespace PMapCore.BLL
                         }
                         else if (aFn[0] == getIgnoredOrder)
                         {
+                            ignoredOrderHappened = true;
 
                             string[] aArgs = aFn[1].Replace(")", "").Split(',');
-                            if (boOpt.PLN_ID <= 0)
+                            var order = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[1])).First().Value;
+                            if (!String.IsNullOrEmpty(IgnoredOrders))
+                                IgnoredOrders += ",";
+                            IgnoredOrders += order.client.clName;
+
+                            if (boOpt.TPL_ID <= 0)
                             {
 
                                 //ElseIf left(sLine, Len(GETIGNOREDORDER)) = GETIGNOREDORDER And left(sLine, Len(GETIGNOREDORDERSCOUNT)) <> GETIGNOREDORDERSCOUNT Then
                                 //m_oOptimize.AddIgnoredOrder sLine
                                 //End If
-                                int ORD_ID = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[1])).First().Value.ID;
                                 double dQty = Math.Abs(Convert.ToDouble(aArgs[2].Replace(',', '.'), CultureInfo.InvariantCulture) / Global.csQTY_DEC);        //a problémafájl létrehozásakor felszoroztuk, most
                                                                                                                                                               //visszaosztjuk, hogy a valós értékeket kapjuk meg.
-
-
                                 //Opt.dicTruckType.Where( i=>i.Value.RZN_ID_LIST==Util.getFieldValue<string>(r, "RZN_ID_LIST")).ToList().First(),
                                 if (p_notify != null)
                                     p_notify.SetInfoText(PMapMessages.M_OPT_RES_UNPLANNED);
 
-                                ple.CreateUnplannedPlanOrder(boOpt.PLN_ID, ORD_ID, dQty, ple.getNEWTODNUM(boOpt.PLN_ID, ORD_ID));
+                                ple.CreateUnplannedPlanOrder(boOpt.PLN_ID, order.ID, dQty, ple.getNEWTODNUM(boOpt.PLN_ID, order.ID));
                             }
-                            else
-                            {
-                                ignoredOrderHappened = true;
-                                var order = boOpt.dicOrder.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[1])).First().Value;
-                                if (!String.IsNullOrEmpty(IgnoredOrders))
-                                    IgnoredOrders += ",";
-                                IgnoredOrders += order.client.clName;
-                            }
+                            
                         }
 
                         Console.WriteLine(line);
                     }
                     file.Close();
 
-                    if (boOpt.PLN_ID > 0 && ignoredOrderHappened)
+                    //Túraoptimalizálásnál, ha kimarad rendelés
+                    //akkor rollbackolunk.
+                    if (boOpt.TPL_ID > 0 && ignoredOrderHappened)   
                     {
                         DBA.Rollback();
                         return;

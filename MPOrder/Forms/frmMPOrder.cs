@@ -318,6 +318,10 @@ namespace MPOrder.Forms
         private void tsbExportItems_Click(object sender, EventArgs e)
         {
 
+            var CSVFile = (boCSVFile)cmbCSVFileName.SelectedItem;
+
+            var expDlg = new dlgExportToNetmover(CSVFile.CSVFileName, CSVFile.ShippingDateX);
+                
         }
 
         private void btnSend_Click(object sender, EventArgs e)
