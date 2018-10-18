@@ -321,7 +321,20 @@ namespace MPOrder.Forms
             var CSVFile = (boCSVFile)cmbCSVFileName.SelectedItem;
 
             var expDlg = new dlgExportToNetmover(CSVFile.CSVFileName, CSVFile.ShippingDateX);
-                
+            if( expDlg.ShowDialog() == DialogResult.OK)
+            {
+                var sndproc = new SendToNetMover(new BaseSilngleProgressDialog(0, m_data.Count*2, PMapMessages.M_MPORD_SENDTNETMOVER, false), CSVFile.CSVFileName,  expDlg.PLN_ID, expDlg.ExportFile);
+                sndproc.Run();
+                sndproc.ProcessForm.ShowDialog();
+                /*
+                var dlgRes = new dlgSendToCTResult();
+                dlgRes.Result = sndproc.Result;
+                dlgRes.ShowDialog();
+                */
+                fillGrids();
+                UI.Message( PMapMessages.M_MPORD_SENDTONETMOVER_OK);
+            }
+
         }
 
         private void btnSend_Click(object sender, EventArgs e)

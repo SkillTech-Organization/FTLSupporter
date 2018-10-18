@@ -14,7 +14,7 @@ namespace MPOrder.Forms
 {
     public partial class dlgSendToCTResult : BaseDialog
     {
-        public List<SendToCTResult> Result { get; set; } = new List<SendToCTResult>();
+        public List<SendResult> Result { get; set; } = new List<SendResult>();
         public dlgSendToCTResult()
             :base(eEditMode.infomode)
         {

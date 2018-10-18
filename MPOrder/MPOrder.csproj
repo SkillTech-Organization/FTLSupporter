@@ -128,12 +128,12 @@
     <Compile Include="Forms\frmMPOrder.Designer.cs">
       <DependentUpon>frmMPOrder.cs</DependentUpon>
     </Compile>
-    <Compile Include="LongProcess\ExportToNetMover.cs" />
+    <Compile Include="LongProcess\SendToNetMover.cs" />
     <Compile Include="LongProcess\ImportFromCSV.cs" />
     <Compile Include="LongProcess\SendToCT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SendToCTResult.cs" />
+    <Compile Include="SendResult.cs" />
     <EmbeddedResource Include="Forms\dlgExportToNetmover.resx">
       <DependentUpon>dlgExportToNetmover.cs</DependentUpon>
     </EmbeddedResource>

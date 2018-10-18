@@ -30,22 +30,22 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dlgExportToNetmover));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnFile = new System.Windows.Forms.Button();
+            this.lblvFile = new System.Windows.Forms.Label();
+            this.lblFile = new System.Windows.Forms.Label();
             this.gridPlans = new DevExpress.XtraGrid.GridControl();
             this.gridViewPlans = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.grcID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcPLN_NAME = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcPLN_DATE_B = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcPLN_DATE_E = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnFile = new System.Windows.Forms.Button();
-            this.lblvFile = new System.Windows.Forms.Label();
-            this.lblFile = new System.Windows.Forms.Label();
             this.dlgSaveCSV = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridPlans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPlans)).BeginInit();
-            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -62,70 +62,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.23364F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(698, 176);
             this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // gridPlans
-            // 
-            this.gridPlans.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridPlans.EmbeddedNavigator.TextStringFormat = "Record {0} of {1}";
-            this.gridPlans.Location = new System.Drawing.Point(3, 3);
-            this.gridPlans.MainView = this.gridViewPlans;
-            this.gridPlans.Name = "gridPlans";
-            this.gridPlans.Size = new System.Drawing.Size(692, 125);
-            this.gridPlans.TabIndex = 16;
-            this.gridPlans.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.gridViewPlans});
-            // 
-            // gridViewPlans
-            // 
-            this.gridViewPlans.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
-            this.grcID,
-            this.grcPLN_NAME,
-            this.grcPLN_DATE_B,
-            this.grcPLN_DATE_E});
-            this.gridViewPlans.GridControl = this.gridPlans;
-            this.gridViewPlans.Name = "gridViewPlans";
-            this.gridViewPlans.OptionsBehavior.Editable = false;
-            this.gridViewPlans.OptionsCustomization.AllowGroup = false;
-            this.gridViewPlans.OptionsCustomization.AllowSort = false;
-            this.gridViewPlans.OptionsMenu.EnableColumnMenu = false;
-            this.gridViewPlans.OptionsSelection.EnableAppearanceFocusedCell = false;
-            this.gridViewPlans.OptionsView.ShowFooter = true;
-            this.gridViewPlans.OptionsView.ShowGroupPanel = false;
-            this.gridViewPlans.PaintStyleName = "(Default)";
-            // 
-            // grcID
-            // 
-            this.grcID.Caption = "ID";
-            this.grcID.FieldName = "ID";
-            this.grcID.Name = "grcID";
-            this.grcID.OptionsColumn.AllowEdit = false;
-            // 
-            // grcPLN_NAME
-            // 
-            this.grcPLN_NAME.Caption = "Terv neve";
-            this.grcPLN_NAME.FieldName = "PLN_NAME";
-            this.grcPLN_NAME.Name = "grcPLN_NAME";
-            this.grcPLN_NAME.OptionsColumn.AllowEdit = false;
-            this.grcPLN_NAME.Visible = true;
-            this.grcPLN_NAME.VisibleIndex = 0;
-            // 
-            // grcPLN_DATE_B
-            // 
-            this.grcPLN_DATE_B.Caption = "Kezdve";
-            this.grcPLN_DATE_B.FieldName = "PLN_DATE_B";
-            this.grcPLN_DATE_B.Name = "grcPLN_DATE_B";
-            this.grcPLN_DATE_B.OptionsColumn.AllowEdit = false;
-            this.grcPLN_DATE_B.Visible = true;
-            this.grcPLN_DATE_B.VisibleIndex = 1;
-            // 
-            // grcPLN_DATE_E
-            // 
-            this.grcPLN_DATE_E.Caption = "Befejezés";
-            this.grcPLN_DATE_E.FieldName = "PLN_DATE_E";
-            this.grcPLN_DATE_E.Name = "grcPLN_DATE_E";
-            this.grcPLN_DATE_E.OptionsColumn.AllowEdit = false;
-            this.grcPLN_DATE_E.Visible = true;
-            this.grcPLN_DATE_E.VisibleIndex = 2;
             // 
             // tableLayoutPanel3
             // 
@@ -178,6 +114,71 @@
             this.lblFile.TabIndex = 1;
             this.lblFile.Text = "Fájl";
             // 
+            // gridPlans
+            // 
+            this.gridPlans.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridPlans.EmbeddedNavigator.TextStringFormat = "Record {0} of {1}";
+            this.gridPlans.Location = new System.Drawing.Point(3, 3);
+            this.gridPlans.MainView = this.gridViewPlans;
+            this.gridPlans.Name = "gridPlans";
+            this.gridPlans.Size = new System.Drawing.Size(692, 125);
+            this.gridPlans.TabIndex = 16;
+            this.gridPlans.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridViewPlans});
+            // 
+            // gridViewPlans
+            // 
+            this.gridViewPlans.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.grcID,
+            this.grcPLN_NAME,
+            this.grcPLN_DATE_B,
+            this.grcPLN_DATE_E});
+            this.gridViewPlans.GridControl = this.gridPlans;
+            this.gridViewPlans.Name = "gridViewPlans";
+            this.gridViewPlans.OptionsBehavior.Editable = false;
+            this.gridViewPlans.OptionsCustomization.AllowGroup = false;
+            this.gridViewPlans.OptionsCustomization.AllowSort = false;
+            this.gridViewPlans.OptionsMenu.EnableColumnMenu = false;
+            this.gridViewPlans.OptionsSelection.EnableAppearanceFocusedCell = false;
+            this.gridViewPlans.OptionsView.ShowFooter = true;
+            this.gridViewPlans.OptionsView.ShowGroupPanel = false;
+            this.gridViewPlans.PaintStyleName = "(Default)";
+            this.gridViewPlans.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewPlans_FocusedRowChanged);
+            // 
+            // grcID
+            // 
+            this.grcID.Caption = "ID";
+            this.grcID.FieldName = "ID";
+            this.grcID.Name = "grcID";
+            this.grcID.OptionsColumn.AllowEdit = false;
+            // 
+            // grcPLN_NAME
+            // 
+            this.grcPLN_NAME.Caption = "Terv neve";
+            this.grcPLN_NAME.FieldName = "PLN_NAME";
+            this.grcPLN_NAME.Name = "grcPLN_NAME";
+            this.grcPLN_NAME.OptionsColumn.AllowEdit = false;
+            this.grcPLN_NAME.Visible = true;
+            this.grcPLN_NAME.VisibleIndex = 0;
+            // 
+            // grcPLN_DATE_B
+            // 
+            this.grcPLN_DATE_B.Caption = "Kezdve";
+            this.grcPLN_DATE_B.FieldName = "PLN_DATE_B";
+            this.grcPLN_DATE_B.Name = "grcPLN_DATE_B";
+            this.grcPLN_DATE_B.OptionsColumn.AllowEdit = false;
+            this.grcPLN_DATE_B.Visible = true;
+            this.grcPLN_DATE_B.VisibleIndex = 1;
+            // 
+            // grcPLN_DATE_E
+            // 
+            this.grcPLN_DATE_E.Caption = "Befejezés";
+            this.grcPLN_DATE_E.FieldName = "PLN_DATE_E";
+            this.grcPLN_DATE_E.Name = "grcPLN_DATE_E";
+            this.grcPLN_DATE_E.OptionsColumn.AllowEdit = false;
+            this.grcPLN_DATE_E.Visible = true;
+            this.grcPLN_DATE_E.VisibleIndex = 2;
+            // 
             // dlgSaveCSV
             // 
             this.dlgSaveCSV.DefaultExt = "csv";
@@ -191,15 +192,15 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "dlgExportToNetmover";
             this.tabSchemeProvider.SetTabScheme(this, SMcMaster.TabOrderManager.TabScheme.AcrossFirst);
-            this.Text = "dlgExportToNetmover";
+            this.Text = "Küldés Netmover-be";
             this.Load += new System.EventHandler(this.dlgExportToNetmover_Load);
             this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridPlans)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridViewPlans)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridPlans)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewPlans)).EndInit();
             this.ResumeLayout(false);
 
         }

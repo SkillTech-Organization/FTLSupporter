@@ -72,7 +72,7 @@ namespace MPOrder.LongProcess
                     var ProdDescription = val[columnIndex++];
                     var ConfOrderQty = csvDouble(val[columnIndex++]);
                     var ConfPlannedQty = csvDouble(val[columnIndex++]);
-                    var NetWeight = csvDouble(val[columnIndex++]);
+                    var NetWeight = csvDouble(val[columnIndex++]);              
                     var PalletPlannedQty = csvDouble(val[columnIndex++]);
                     var PalletBulkQty = csvDouble(val[columnIndex++]);
                     var GrossWeightPlanned = csvDouble(val[columnIndex++]);

@@ -1,5 +1,4 @@
 ﻿using MPOrder.BLL;
-using MPOrder.BO;
 using PMapCore.Common;
 using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
@@ -12,26 +11,31 @@ using System.Threading.Tasks;
 
 namespace MPOrder.LongProcess
 {
-    public class SendToCT : BaseLongProcess
+    public class SendToNetMover : BaseLongProcess
     {
         public List<SendResult> Result { get; set; } = new List<SendResult>();
-
         private SQLServerAccess m_DB;
-        List<boMPOrderF> m_data = new List<boMPOrderF>();
+        private string m_CSVFile;
+        private int m_PLN_ID;
+        private string m_ExportFile;
 
-        public SendToCT(BaseProgressDialog p_Form, List<boMPOrderF> p_data)
+        public SendToNetMover(BaseProgressDialog p_Form, string p_CSVFile, int p_PLN_ID, string p_ExportFile)
             : base(p_Form, ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_data = p_data;
+            m_CSVFile = p_CSVFile;
+            m_PLN_ID = p_PLN_ID;
+            m_ExportFile = p_ExportFile;
         }
+
+
         protected override void DoWork()
         {
             try
             {
                 var bllMPOrderX = new bllMPOrder(m_DB);
-                Result = bllMPOrderX.SendToCT(m_data, ProcessForm);
+                Result = bllMPOrderX.SendToNetMover(m_CSVFile, m_PLN_ID, m_ExportFile, ProcessForm);
             }
             catch
             {

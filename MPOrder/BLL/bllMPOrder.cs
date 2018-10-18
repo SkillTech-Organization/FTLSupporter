@@ -9,6 +9,7 @@ using PMapCore.LongProcess.Base;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,64 +31,71 @@ namespace MPOrder.BLL
             DataTable dt = DBA.Query2DataTable(sSql, p_pars);
             var linq = (from o in dt.AsEnumerable()
                         orderby o.Field<int>("ID")
-                        select new boMPOrder
-                        {
-                            ID = Util.getFieldValue<int>(o, "ID"),
-                            SentToCT = Util.getFieldValue<bool>(o, "SentToCT"),
-                            CompanyCode = Util.getFieldValue<string>(o, "CompanyCode"),
-                            CustomerCode = Util.getFieldValue<string>(o, "CustomerCode"),
-                            CustomerOrderNumber = Util.getFieldValue<string>(o, "CustomerOrderNumber"),
-                            CustomerOrderDate = Util.getFieldValue<DateTime>(o, "CustomerOrderDate"),
-                            ShippingDate = Util.getFieldValue<DateTime>(o, "ShippingDate"),
-                            ShippingDateX = Util.getFieldValue<DateTime>(o, "ShippingDateX"),
-                            WarehouseCode = Util.getFieldValue<string>(o, "WarehouseCode"),
-                            TotalGrossWeightOfOrder = Util.getFieldValue<double>(o, "TotalGrossWeightOfOrder"),
-                            NumberOfPalletForDel = Util.getFieldValue<double>(o, "NumberOfPalletForDel"),
-                            NumberOfPalletForDelX = Util.getFieldValue<double>(o, "NumberOfPalletForDelX"),
-                            ShippAddressID = Util.getFieldValue<string>(o, "ShippAddressID"),
-                            ShippAddressCompanyName = Util.getFieldValue<string>(o, "ShippAddressCompanyName"),
-                            ShippAddressZipCode = Util.getFieldValue<string>(o, "ShippAddressZipCode"),
-                            ShippingAddressCity = Util.getFieldValue<string>(o, "ShippingAddressCity"),
-                            ShippingAddressStreetAndNumber = Util.getFieldValue<string>(o, "ShippingAddressStreetAndNumber"),
-                            Note = Util.getFieldValue<string>(o, "Note"),
-                            RowNumber = Util.getFieldValue<int>(o, "RowNumber"),
-                            ProductCode = Util.getFieldValue<string>(o, "ProductCode"),
-                            U_M = Util.getFieldValue<string>(o, "U_M"),
-                            ProdDescription = Util.getFieldValue<string>(o, "ProdDescription"),
-                            ConfOrderQty = Util.getFieldValue<double>(o, "ConfOrderQty"),
-                            ConfPlannedQty = Util.getFieldValue<double>(o, "ConfPlannedQty"),
-                            PalletPlannedQty = Util.getFieldValue<double>(o, "PalletPlannedQty"),
-                            PalletPlannedQtyX = Util.getFieldValue<double>(o, "PalletPlannedQtyX"),
-                            PalletBulkQty = Util.getFieldValue<double>(o, "PalletBulkQty"),
-                            PalletBulkQtyX = Util.getFieldValue<double>(o, "PalletBulkQtyX"),
-                            GrossWeightPlanned = Util.getFieldValue<double>(o, "GrossWeightPlanned"),
-                            GrossWeightPlannedX = Util.getFieldValue<double>(o, "GrossWeightPlannedX"),
-                            ADR = Util.getFieldValue<bool>(o, "ADR"),
-                            ADRMultiplier = Util.getFieldValue<double>(o, "ADRMultiplier"),
-                            ADRMultiplierX = Util.getFieldValue<double>(o, "ADRMultiplierX"),
-                            ADRLimitedQuantity = Util.getFieldValue<bool>(o, "ADRLimitedQuantity"),
-                            Freeze = Util.getFieldValue<bool>(o, "Freeze"),
-                            Melt = Util.getFieldValue<bool>(o, "Melt"),
-                            UV = Util.getFieldValue<bool>(o, "UV"),
-                            Bordero = Util.getFieldValue<string>(o, "Bordero"),
-                            Carrier = Util.getFieldValue<string>(o, "Carrier"),
-                            VehicleType = Util.getFieldValue<string>(o, "VehicleType"),
-                            KM = Util.getFieldValue<double>(o, "KM"),
-                            Forfait = Util.getFieldValue<double>(o, "Forfait"),
-                            Currency = Util.getFieldValue<string>(o, "Currency"),
-                            UnitWeight = Util.getFieldValue<double>(o, "UnitWeight")
-
-
-                        });
+                        select fillMPOrder(o));
             return linq.ToList();
         }
 
+        private boMPOrder fillMPOrder(DataRow p_dr)
+        {
+            var res = new boMPOrder
+            {
+                ID = Util.getFieldValue<int>(p_dr, "ID"),
+                CSVFileName = Util.getFieldValue<string>(p_dr, "CSVFileName"),
+                SentToCT = Util.getFieldValue<bool>(p_dr, "SentToCT"),
+                CompanyCode = Util.getFieldValue<string>(p_dr, "CompanyCode"),
+                CustomerCode = Util.getFieldValue<string>(p_dr, "CustomerCode"),
+                CustomerOrderNumber = Util.getFieldValue<string>(p_dr, "CustomerOrderNumber"),
+                CustomerOrderDate = Util.getFieldValue<DateTime>(p_dr, "CustomerOrderDate"),
+                ShippingDate = Util.getFieldValue<DateTime>(p_dr, "ShippingDate"),
+                ShippingDateX = Util.getFieldValue<DateTime>(p_dr, "ShippingDateX"),
+                WarehouseCode = Util.getFieldValue<string>(p_dr, "WarehouseCode"),
+                TotalGrossWeightOfOrder = Util.getFieldValue<double>(p_dr, "TotalGrossWeightOfOrder"),
+                NumberOfPalletForDel = Util.getFieldValue<double>(p_dr, "NumberOfPalletForDel"),
+                NumberOfPalletForDelX = Util.getFieldValue<double>(p_dr, "NumberOfPalletForDelX"),
+                ShippAddressID = Util.getFieldValue<string>(p_dr, "ShippAddressID"),
+                ShippAddressCompanyName = Util.getFieldValue<string>(p_dr, "ShippAddressCompanyName"),
+                ShippAddressZipCode = Util.getFieldValue<string>(p_dr, "ShippAddressZipCode"),
+                ShippingAddressCity = Util.getFieldValue<string>(p_dr, "ShippingAddressCity"),
+                ShippingAddressStreetAndNumber = Util.getFieldValue<string>(p_dr, "ShippingAddressStreetAndNumber"),
+                Note = Util.getFieldValue<string>(p_dr, "Note"),
+                RowNumber = Util.getFieldValue<int>(p_dr, "RowNumber"),
+                ProductCode = Util.getFieldValue<string>(p_dr, "ProductCode"),
+                U_M = Util.getFieldValue<string>(p_dr, "U_M"),
+                ProdDescription = Util.getFieldValue<string>(p_dr, "ProdDescription"),
+                ConfOrderQty = Util.getFieldValue<double>(p_dr, "ConfOrderQty"),
+                ConfPlannedQty = Util.getFieldValue<double>(p_dr, "ConfPlannedQty"),
+                NetWeight = Util.getFieldValue<double>(p_dr, "NetWeight"),
+                PalletPlannedQty = Util.getFieldValue<double>(p_dr, "PalletPlannedQty"),
+                PalletPlannedQtyX = Util.getFieldValue<double>(p_dr, "PalletPlannedQtyX"),
+                PalletBulkQty = Util.getFieldValue<double>(p_dr, "PalletBulkQty"),
+                PalletBulkQtyX = Util.getFieldValue<double>(p_dr, "PalletBulkQtyX"),
+                GrossWeightPlanned = Util.getFieldValue<double>(p_dr, "GrossWeightPlanned"),
+                GrossWeightPlannedX = Util.getFieldValue<double>(p_dr, "GrossWeightPlannedX"),
+                ADR = Util.getFieldValue<bool>(p_dr, "ADR"),
+                ADRMultiplier = Util.getFieldValue<double>(p_dr, "ADRMultiplier"),
+                ADRMultiplierX = Util.getFieldValue<double>(p_dr, "ADRMultiplierX"),
+                ADRLimitedQuantity = Util.getFieldValue<bool>(p_dr, "ADRLimitedQuantity"),
+                Freeze = Util.getFieldValue<bool>(p_dr, "Freeze"),
+                Melt = Util.getFieldValue<bool>(p_dr, "Melt"),
+                UV = Util.getFieldValue<bool>(p_dr, "UV"),
+
+                Bordero = Util.getFieldValue<string>(p_dr, "Bordero"),
+                Carrier = Util.getFieldValue<string>(p_dr, "Carrier"),
+                VehicleType = Util.getFieldValue<string>(p_dr, "VehicleType"),
+                KM = Util.getFieldValue<double>(p_dr, "KM"),
+                Forfait = Util.getFieldValue<double>(p_dr, "Forfait"),
+                Currency = Util.getFieldValue<string>(p_dr, "Currency"),
+
+                UnitWeight = Util.getFieldValue<double>(p_dr, "UnitWeight")
+            };
+            return res;
+        }
 
         public List<boCSVFile> GetFiles()
         {
             string sSql = "select CSVFileName, ShippingDateX  from   MPO_MPORDER " + Environment.NewLine +
                           " group by CSVFileName, ShippingDateX order by ShippingDateX desc ";
-             DataTable dt = DBA.Query2DataTable(sSql);
+            DataTable dt = DBA.Query2DataTable(sSql);
             var linq = (from o in dt.AsEnumerable()
                         select new boCSVFile
                         {
@@ -202,7 +210,7 @@ namespace MPOrder.BLL
                         ProdDescription = s2.ProdDescription,
                         ConfOrderQty = s2.ConfOrderQty,
                         PalletPlannedQty = s2.PalletPlannedQty,
-                        PalletPlannedQtyX= s2.PalletPlannedQtyX,
+                        PalletPlannedQtyX = s2.PalletPlannedQtyX,
                         PalletBulkQty = s2.PalletBulkQty,
                         PalletBulkQtyX = s2.PalletBulkQtyX,
                         ADR = s2.ADR,
@@ -228,7 +236,7 @@ namespace MPOrder.BLL
         }
 
 
-        public void SetManualValuesF( string p_CSVFileName, string p_CustomerOrderNumber, double NumberOfPalletForDelX)
+        public void SetManualValuesF(string p_CSVFileName, string p_CustomerOrderNumber, double NumberOfPalletForDelX)
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set NumberOfPalletForDelX = ? where CSVFileName= ? and CustomerOrderNumber = ?", NumberOfPalletForDelX, p_CSVFileName, p_CustomerOrderNumber);
         }
@@ -250,7 +258,7 @@ namespace MPOrder.BLL
         public void SetAllSentToCT(string p_CSVFileName, bool p_SentToCT)
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set SentToCT = ? where CSVFileName= ? ", p_SentToCT, p_CSVFileName);
-            if(!p_SentToCT)
+            if (!p_SentToCT)
             {
                 DBA.ExecuteNonQuery("update MPO_MPORDER set NumberOfPalletForDelX = NumberOfPalletForDel, " + Environment.NewLine +
                                   " ConfPlannedQty = ConfOrderQty, GrossWeightPlannedX = GrossWeightPlanned, ADRMultiplierX = ADRMultiplier, PalletPlannedQtyX = PalletPlannedQty, PalletBulkQtyX = PalletBulkQty " + Environment.NewLine +
@@ -259,7 +267,10 @@ namespace MPOrder.BLL
             }
         }
 
-      
+        public void SetBordero(int p_ID, string p_Bordero)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set Bordero = ? where ID= ? ", p_Bordero, p_ID);
+        }
         public void DeleteItem(int p_ID)
         {
             DBA.ExecuteNonQuery("delete MPO_MPORDER where id=?", p_ID);
@@ -269,9 +280,9 @@ namespace MPOrder.BLL
         {
             DBA.ExecuteNonQuery("delete MPO_MPORDER where CVFileName= ? and CustomerOrderNumber=?", p_CSVFileName, p_CustomerOrderNumber);
         }
-        public List<SendToCTResult> SendToCT(List<boMPOrderF> p_data, BaseProgressDialog p_Form = null)
+        public List<SendResult> SendToCT(List<boMPOrderF> p_data, BaseProgressDialog p_Form = null)
         {
-            var res = new List<SendToCTResult>();
+            var res = new List<SendResult>();
             var bllOrderX = new bllOrder(DBA);
             var bllPlanX = new bllPlan(DBA);
             var bllZipX = new bllZIP(DBA);
@@ -322,8 +333,8 @@ namespace MPOrder.BLL
                                 }
                                 */
 
-                                //Lerakó felvitele
-                                dep = new boDepot()
+                //Lerakó felvitele
+                dep = new boDepot()
                                 {
                                     WHS_ID = 1,             //Csak egy raktárat kezelünk
                                     DEP_CODE = item.CustomerCode,
@@ -383,9 +394,9 @@ namespace MPOrder.BLL
                             };
                             newOrder.ID = bllOrderX.AddOrder(newOrder);
 
-                            res.Add(new SendToCTResult()
+                            res.Add(new SendResult()
                             {
-                                ResultType = SendToCTResult.RESTYPE.OK,
+                                ResultType = SendResult.RESTYPE.OK,
                                 CustomerOrderNumber = item.CustomerOrderNumber,
                                 Message = string.Format(PMapMessages.E_MPSENDTOCT_ADDOK)
                             });
@@ -399,9 +410,9 @@ namespace MPOrder.BLL
                             ord.ORD_ORIGQTY1 = item.ConfPlannedQtySum;
                             ord.ORD_ADRPOINTS = item.ADRMultiplierXSum;
                             bllOrderX.UpdateOrder(ord);
-                            res.Add(new SendToCTResult()
+                            res.Add(new SendResult()
                             {
-                                ResultType = SendToCTResult.RESTYPE.OK,
+                                ResultType = SendResult.RESTYPE.OK,
                                 CustomerOrderNumber = item.CustomerOrderNumber,
                                 Message = string.Format(PMapMessages.E_MPSENDTOCT_UPDATEOK)
                             });
@@ -414,9 +425,9 @@ namespace MPOrder.BLL
                             lstPlan = bllPlanX.GetTouredPlansByOrderID(ord.ID);
                             if (lstPlan.Count > 0)
                             {
-                                res.Add(new SendToCTResult()
+                                res.Add(new SendResult()
                                 {
-                                    ResultType = SendToCTResult.RESTYPE.ERROR,
+                                    ResultType = SendResult.RESTYPE.ERROR,
                                     CustomerOrderNumber = item.CustomerOrderNumber,
                                     Message = string.Format(PMapMessages.E_MPSENDTOCT_TOURED, item.ShippAddressCompanyName, string.Join(",", lstPlan.Select(s => s.PLN_NAME).ToList()))
                                 });
@@ -425,9 +436,9 @@ namespace MPOrder.BLL
                             {
                                 bllPlanX.DeleteTourOrderByOrderID(ord.ID);
                                 bllOrderX.DeleteOrder(ord.ID);
-                                res.Add(new SendToCTResult()
+                                res.Add(new SendResult()
                                 {
-                                    ResultType = SendToCTResult.RESTYPE.OK,
+                                    ResultType = SendResult.RESTYPE.OK,
                                     CustomerOrderNumber = item.CustomerOrderNumber,
                                     Message = string.Format(PMapMessages.E_MPSENDTOCT_DELOK)
                                 });
@@ -444,5 +455,132 @@ namespace MPOrder.BLL
             }
             return res;
         }
+
+        public List<SendResult> SendToNetMover(string p_CSVFileName, int p_PLN_ID, string p_exportFile, BaseProgressDialog p_Form = null)
+        {
+            try
+            {
+                var bllIdGen = new bllIDGen(DBA);
+                var res = new List<SendResult>();
+
+
+                string sSql = "update MPO_MPORDER " + Environment.NewLine +
+                        "set Bordero = '', Carrier = case when SentToCT = 1 then CarrierX else '' end, " + Environment.NewLine +
+                        "VehicleType = case when SentToCT = 1 then VehicleTypeX else '' end, " + Environment.NewLine +
+                        "KM = case when SentToCT = 1 then KMX else 0 end, " + Environment.NewLine +
+                        "Forfait = case when SentToCT = 1 then ForfaitX else 0 end, " + Environment.NewLine +
+                        "Currency = case when SentToCT = 1 then CurrencyX else '' end " + Environment.NewLine +
+                        "from(select MPO.ID, CRR_NAME as CarrierX, TFP_NAME1 as VehicleTypeX, xKMCOST.DIST / 1000 KMX, TPLANTOLL as ForfaitX, 'HUF' as CurrencyX " + Environment.NewLine +
+                        "from MPO_MPORDER MPO " + Environment.NewLine +
+                        "inner join		ORD_ORDER ORD on ORD.ORD_NUM = MPO.CustomerOrderNumber " + Environment.NewLine +
+                        "inner join     TOD_TOURORDER TOD on TOD.ORD_ID = ORD.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                        "inner join		PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                        "inner join		TPL_TRUCKPLAN TPL on TPL.PLN_ID = PLN.ID " + Environment.NewLine +
+                        "inner join		v_PLTOURKMCOST xKMCOST on xKMCOST.TPL_ID = TPL.ID " + Environment.NewLine +
+                        "inner join		v_TPLANTOLL xTOLL on xTOLL.TPL_ID = TPL.ID " + Environment.NewLine +
+                        "inner join		PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID and PTP.TOD_ID=TOD.ID " + Environment.NewLine +
+                        "inner join		 TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                        "left outer join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
+                        "left outer join CPP_CAPACITYPROF CPP on CPP.ID = TRK.CPP_ID " + Environment.NewLine +
+                        "left outer join TFP_TARIFFPROF TFP on TFP.ID = TRK.TFP_ID " + Environment.NewLine +
+                        "where MPO.CSVFileName = ? " + Environment.NewLine +
+                        "and PLN.ID = ?) oo " + Environment.NewLine +
+                        "where MPO_MPORDER.ID = oo.ID";
+                DBA.ExecuteNonQuery(sSql, p_PLN_ID, p_CSVFileName, p_PLN_ID);
+
+                sSql = "select  MPO.ID as MPO_ID, MPO.SentToCt,  MPO.Bordero, MPO.ShippingDateX, TPL.ID as TPL_ID, MPO.CustomerOrderNumber " + Environment.NewLine +
+                        "from MPO_MPORDER MPO " + Environment.NewLine +
+                        "inner join      ORD_ORDER ORD on ORD.ORD_NUM = MPO.CustomerOrderNumber " + Environment.NewLine +
+                        "inner join      TOD_TOURORDER TOD on TOD.ORD_ID = ORD.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                        "inner join      PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                        "inner join      TPL_TRUCKPLAN TPL on TPL.PLN_ID = PLN.ID " + Environment.NewLine +
+                        "inner join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID and PTP.TOD_ID = TOD.ID" + Environment.NewLine +
+                        "where MPO.CSVFileName = ? " + Environment.NewLine +
+                        "and(PLN.ID = ?) " + Environment.NewLine +
+                        "order by TPL.ID ";
+                DataTable dt = DBA.Query2DataTable(sSql, p_PLN_ID, p_CSVFileName, p_PLN_ID);
+
+                int lastTPL_ID = -1;
+                int BorderoNumber = -1;
+                foreach (DataRow rw in dt.Rows)
+                {
+                    if (p_Form != null)
+                        p_Form.NextStep();
+                    if (Util.getFieldValue<int>(rw, "SentToCt") != 0)
+                    {
+                        //&& string.IsNullOrWhiteSpace(Util.getFieldValue<string>(rw, "Bordero")) &&
+                        if (Util.getFieldValue<int>(rw, "TPL_ID") != 0 &&
+                            Util.getFieldValue<int>(rw, "TPL_ID") != lastTPL_ID)
+                        {
+                            BorderoNumber = bllIdGen.GetNextValueByName("BORDERO");
+                            lastTPL_ID = Util.getFieldValue<int>(rw, "TPL_ID");
+                        }
+                        string sBordero = Util.RightString(Util.getFieldValue<DateTime>(rw, "ShippingDateX").Date.Year.ToString(), 2) + "H"
+                                 + BorderoNumber.ToString().PadLeft(6, '0');
+                        SetBordero(Util.getFieldValue<int>(rw, "MPO_ID"), sBordero);
+                    }
+                }
+
+              
+
+                Encoding ecFile = Encoding.GetEncoding("ISO-8859-2");
+                StreamWriter writer = new StreamWriter(p_exportFile, false, ecFile);
+                var lstAll = GetAllMPOrders("CSVFileName = ?", p_CSVFileName);
+                foreach (var item in lstAll)
+                {
+                    if (p_Form != null)
+                        p_Form.NextStep();
+
+                    var sLine = item.CompanyCode + ";" +
+                                item.CustomerCode + ";" +
+                                item.CustomerOrderNumber + ";" +
+                                item.CustomerOrderDate.ToString("yyyyMMdd") + ";" +
+                                (item.SentToCT ? item.ShippingDateX.ToString("yyyyMMdd") : item.ShippingDate.ToString("yyyyMMdd")) + ";" +
+                                item.WarehouseCode + ";" +
+                                item.TotalGrossWeightOfOrder.ToString().Replace(".", ",") + ";" +
+                                (item.SentToCT ? item.NumberOfPalletForDelX : item.NumberOfPalletForDel).ToString().Replace(".", ",") + ";" +
+                                item.ShippAddressID + ";" +
+                                item.ShippAddressCompanyName + ";" +
+                                item.ShippAddressZipCode + ";" +
+                                item.ShippingAddressCity + ";" +
+                                item.ShippingAddressStreetAndNumber + ";" +
+                                item.Note + ";" +
+                                item.RowNumber.ToString() + ";" +
+                                item.ProductCode + ";" +
+                                item.U_M + ";" +
+                                item.ProdDescription + ";" +
+                                item.ConfOrderQty.ToString().Replace(".", ",") + ";" +
+                                item.ConfPlannedQty.ToString().Replace(".", ",") + ";" +
+                                item.NetWeight.ToString().Replace(".", ",") + ";" +
+                                (item.SentToCT ? item.PalletPlannedQtyX : item.PalletPlannedQty).ToString().Replace(".", ",") + ";" +
+                                (item.SentToCT ? item.PalletBulkQtyX : item.PalletBulkQty).ToString().Replace(".", ",") + ";" +
+                                (item.SentToCT ? item.GrossWeightPlannedX : item.GrossWeightPlanned).ToString().Replace(".", ",") + ";" +
+                                (item.ADR ? "Y" : "N") + ";" +
+                                (item.SentToCT ? item.ADRMultiplierX : item.ADRMultiplier).ToString().Replace(".", ",") + ";" +
+                                (item.Freeze ? "Y" : "N") + ";" +
+                                (item.Melt ? "Y" : "N") + ";" +
+                                (item.UV ? "Y" : "N") + ";" +
+                                (item.SentToCT ? item.Bordero : "") + ";" +
+                                (item.SentToCT ? item.Carrier : "") + ";" +
+                                (item.SentToCT ? item.VehicleType : "") + ";" +
+                                (item.SentToCT ? item.KM.ToString().Replace(".", ",") : "") + ";" +
+                                (item.SentToCT ? item.Forfait.ToString().Replace(".", ",") : "") + ";" +
+                                (item.SentToCT ? item.Currency : "");
+                    writer.WriteLine(sLine);
+                }
+                writer.Flush();
+                writer.Close();
+
+                return res;
+            }
+
+
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+
     }
 }

@@ -117,9 +117,9 @@ namespace PMapCore.Common
         /// <param name="p_s"></param>
         /// <param name="p_file"></param>
         /// <returns></returns>
-        public static string String2File(string p_s, string p_file)
+        public static string String2File(string p_s, string p_file, Encoding p_enc = null)
         {
-            return String2File(p_s, p_file, false);
+            return String2File(p_s, p_file, false, p_enc);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace PMapCore.Common
         /// <param name="p_file">filename, ha ures tempfajlt csinal</param>
         /// <param name="p_append">hozzafuzze-e</param>
         /// <returns>fajlnevet visszaadja (tempfile miatt)</returns>
-        public static string String2File(string p_s, string p_file, bool p_append)
+        public static string String2File(string p_s, string p_file, bool p_append, Encoding p_enc = null)
         {
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObject))
             {
@@ -140,9 +140,12 @@ namespace PMapCore.Common
                 if (!System.IO.Directory.Exists(path))
                     System.IO.Directory.CreateDirectory(path);
 
+                if (p_enc == null)
+                    p_enc = Encoding.Default;
+
                 try
                 {
-                    TextWriter tw = new StreamWriter(p_file, p_append);
+                    TextWriter tw = new StreamWriter(p_file, p_append, p_enc);
                     tw.Write(p_s);
                     tw.Close();
                 }

@@ -213,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\Base\bllBase.cs" />
+    <Compile Include="BLL\bllIDGen.cs" />
     <Compile Include="BLL\bllPackUnit.cs" />
     <Compile Include="BLL\bllUser.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MPOrder
 {
-    public class SendToCTResult
+    public class SendResult
     {
         public enum RESTYPE
         {
