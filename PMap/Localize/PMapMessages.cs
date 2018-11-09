@@ -168,6 +168,8 @@ namespace PMapCore.Localize
         public const string E_MPORD_CSVIMP_ERR = "Hiba történt a CSV import közben:{0}";
         public const string M_MPORD_CSVLIMP_LOADED = "Hibamentes beolvasás. Betöltve {0}/{1} db. tétel. ";
         public const string M_MPORD_CSVLIMP = "CSV import:{0}";
+        public const string E_MPORD_CSVIMP_DPL = "Létező vevő rendelés szám!";
+
 
         public const string E_MPSENDTOCT_WRONGADDR = "Nem lehet geokódolni:{0} cím:{1}";
         public const string E_MPSENDTOCT_TOURED= "A megrendelés túrába van szervezve:{0} túrák:{1}";

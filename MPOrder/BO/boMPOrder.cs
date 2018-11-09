@@ -167,10 +167,10 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string Carrier { get; set; }
 
-        //!!!Szállítóeszköz típus, VEHICLE TYPE
+        // !!!Szállítóeszköz típus, VEHICLE TYPE Update: 
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string VehicleType { get; set; }
-
+          
         //!!!Teljes Fuvar km, KM
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double KM { get; set; }

@@ -88,7 +88,6 @@ namespace MPOrder.BO
         //!!!Fuvaros,CARRIER
         public string Carrier { get; set; }
 
-        //!!!Szállítóeszköz típus, VEHICLE TYPE
         public string VehicleType { get; set; }
 
         //!!!Teljes Fuvar km, KM

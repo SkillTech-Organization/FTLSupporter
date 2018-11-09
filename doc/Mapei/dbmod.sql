@@ -106,3 +106,18 @@ if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumn
 End 	
 truncate table MPO_MPORDER
 truncate table MPP_MAPPLANPAR
+/*
+if not exists(select syscolumns.id from syscolumns join sysobjects on  syscolumns.ID = sysobjects.ID  where  sysobjects.name = 'MPO_MPORDER' and  syscolumns.name = 'CargoType') begin 
+   ALTER TABLE MPO_MPORDER ADD CargoType TY_NAME default ''
+End 
+go
+*/
+
+insert CTP_CARGOTYPE (CTP_NAME1, CTP_VALUE, CTP_DELETED, CTP_CODE) VALUES ('HUNBE', 100, 0, 'HUNBE')
+insert CTP_CARGOTYPE (CTP_NAME1, CTP_VALUE, CTP_DELETED, CTP_CODE) VALUES ('HUNDA', 101, 0, 'HUNDA')
+insert CTP_CARGOTYPE (CTP_NAME1, CTP_VALUE, CTP_DELETED, CTP_CODE) VALUES ('HUNHA', 102, 0, 'HUNHA')
+insert CTP_CARGOTYPE (CTP_NAME1, CTP_VALUE, CTP_DELETED, CTP_CODE) VALUES ('HUNSD', 103, 0, 'HUNSD')
+insert CTP_CARGOTYPE (CTP_NAME1, CTP_VALUE, CTP_DELETED, CTP_CODE) VALUES ('HUNSH', 104, 0, 'HUNSH')
+insert CTP_CARGOTYPE (CTP_NAME1, CTP_VALUE, CTP_DELETED, CTP_CODE) VALUES ('HUNSZ', 105, 0, 'HUNSZ')
+
+go

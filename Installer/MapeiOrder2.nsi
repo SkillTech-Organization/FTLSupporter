@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "MapeiOrder"
-!define PRODUCT_VERSION "4.8.4"
+!define PRODUCT_VERSION "4.8.5"
 !define PRODUCT_PUBLISHER "Pratix Kft."
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"

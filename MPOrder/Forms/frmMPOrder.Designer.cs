@@ -107,6 +107,7 @@
             this.dtmShippingDateX = new System.Windows.Forms.DateTimePicker();
             this.lblShippingDateX = new System.Windows.Forms.Label();
             this.imlRefresh = new System.Windows.Forms.ImageList();
+            this.grcVehicleType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -333,7 +334,8 @@
             this.grcTotalGrossWeightOfOrder,
             this.gridResetF,
             this.grcGrossWeightPlannedSum,
-            this.grcADRMultiplierSum});
+            this.grcADRMultiplierSum,
+            this.grcVehicleType});
             this.gridViewMegrF.GridControl = this.gridMegrF;
             this.gridViewMegrF.Name = "gridViewMegrF";
             this.gridViewMegrF.OptionsSelection.EnableAppearanceFocusedCell = false;
@@ -966,6 +968,12 @@
             this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
             this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
             // 
+            // grcVehicleType
+            // 
+            this.grcVehicleType.Caption = "Szállító járműtípus";
+            this.grcVehicleType.FieldName = "VehicleType";
+            this.grcVehicleType.Name = "grcVehicleType";
+            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1085,5 +1093,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn grcPalletBulkQtyX;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletBulkQtyX;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletPlannedQtyX;
+        private DevExpress.XtraGrid.Columns.GridColumn grcVehicleType;
     }
 }

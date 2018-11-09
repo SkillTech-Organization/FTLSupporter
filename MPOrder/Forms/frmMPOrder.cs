@@ -83,6 +83,14 @@ namespace MPOrder.Forms
                     dtmShippingDateX.Value = selItem.ShippingDateX;
                     fillGrids();
                     UI.Message(string.Format(PMapMessages.M_MPORD_CSVLIMP_LOADED, import.AddedCount, import.ItemsCount));
+
+                    if (import.ErrResult.Count > 0)
+                    {
+                        var dlgRes = new dlgSendToCTResult();
+                        dlgRes.Text = "CSV beolvasás eredménye";
+                        dlgRes.Result = import.ErrResult;
+                        dlgRes.ShowDialog();
+                    }
                 }
 
                 catch (Exception ex)
@@ -333,6 +341,7 @@ namespace MPOrder.Forms
                 */
                 fillGrids();
                 UI.Message( PMapMessages.M_MPORD_SENDTONETMOVER_OK);
+
             }
 
         }

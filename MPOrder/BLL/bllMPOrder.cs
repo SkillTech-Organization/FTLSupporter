@@ -288,6 +288,7 @@ namespace MPOrder.BLL
             var bllZipX = new bllZIP(DBA);
             var bllDepotX = new bllDepot(DBA);
             var bllRouteX = new bllRoute(DBA);
+            var bllCargoTypeX = new bllCargoType(DBA);
 
             foreach (var item in p_data)
             {
@@ -313,7 +314,7 @@ namespace MPOrder.BLL
 
                                 string fullAddr = (item.ShippAddressZipCode + " " + item.ShippingAddressCity + " " + item.ShippingAddressStreetAndNumber).Trim();
                                 boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                                int ZIP_ID = 0;
+                                int ZIP_ID = (boZip != null ? boZip.ID : 0);
                                 int NOD_ID = 0;
                                 int EDG_ID = 0;
                                 /*
@@ -333,8 +334,8 @@ namespace MPOrder.BLL
                                 }
                                 */
 
-                //Lerakó felvitele
-                dep = new boDepot()
+                                //Lerakó felvitele
+                                dep = new boDepot()
                                 {
                                     WHS_ID = 1,             //Csak egy raktárat kezelünk
                                     DEP_CODE = item.CustomerCode,
@@ -359,10 +360,12 @@ namespace MPOrder.BLL
                                 bllDepotX.SetAllTruckToDep(dep.ID);
                             }
 
+                            var cargoType = bllCargoTypeX.GetCargoTypeByCODE(item.VehicleType);
+
                             boOrder newOrder = new boOrder()
                             {
                                 OTP_ID = Global.OTP_OUTPUT,
-                                CTP_ID = 1,                             //csak egyféle árutípust kezelünk
+                                CTP_ID = (cargoType != null ? cargoType.ID : 1),                             //csak egyféle árutípust kezelünk
                                 DEP_ID = dep.ID,
                                 WHS_ID = 1,                             //csak központi raktár van
                                 ORD_NUM = item.CustomerOrderNumber,
@@ -466,11 +469,10 @@ namespace MPOrder.BLL
 
                 string sSql = "update MPO_MPORDER " + Environment.NewLine +
                         "set Bordero = '', Carrier = case when SentToCT = 1 then CarrierX else '' end, " + Environment.NewLine +
-                        "VehicleType = case when SentToCT = 1 then VehicleTypeX else '' end, " + Environment.NewLine +
                         "KM = case when SentToCT = 1 then KMX else 0 end, " + Environment.NewLine +
                         "Forfait = case when SentToCT = 1 then ForfaitX else 0 end, " + Environment.NewLine +
                         "Currency = case when SentToCT = 1 then CurrencyX else '' end " + Environment.NewLine +
-                        "from(select MPO.ID, CRR_NAME as CarrierX, TFP_NAME1 as VehicleTypeX, xKMCOST.DIST / 1000 KMX, TPLANTOLL as ForfaitX, 'HUF' as CurrencyX " + Environment.NewLine +
+                        "from(select MPO.ID, CRR_NAME as CarrierX, xKMCOST.DIST / 1000 KMX, TPLANTOLL as ForfaitX, 'HUF' as CurrencyX " + Environment.NewLine +
                         "from MPO_MPORDER MPO " + Environment.NewLine +
                         "inner join		ORD_ORDER ORD on ORD.ORD_NUM = MPO.CustomerOrderNumber " + Environment.NewLine +
                         "inner join     TOD_TOURORDER TOD on TOD.ORD_ID = ORD.ID and TOD.PLN_ID = ? " + Environment.NewLine +
@@ -482,7 +484,6 @@ namespace MPOrder.BLL
                         "inner join		 TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                         "left outer join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                         "left outer join CPP_CAPACITYPROF CPP on CPP.ID = TRK.CPP_ID " + Environment.NewLine +
-                        "left outer join TFP_TARIFFPROF TFP on TFP.ID = TRK.TFP_ID " + Environment.NewLine +
                         "where MPO.CSVFileName = ? " + Environment.NewLine +
                         "and PLN.ID = ?) oo " + Environment.NewLine +
                         "where MPO_MPORDER.ID = oo.ID";
@@ -521,7 +522,7 @@ namespace MPOrder.BLL
                     }
                 }
 
-              
+
 
                 Encoding ecFile = Encoding.GetEncoding("ISO-8859-2");
                 StreamWriter writer = new StreamWriter(p_exportFile, false, ecFile);
@@ -530,10 +531,13 @@ namespace MPOrder.BLL
                 {
                     if (p_Form != null)
                         p_Form.NextStep();
+                    
+                    //levágjuk a suffixet
 
+                    var CustomerOrderNumber = item.CustomerOrderNumber.Substring(0, item.CustomerOrderNumber.Length - 4);
                     var sLine = item.CompanyCode + ";" +
                                 item.CustomerCode + ";" +
-                                item.CustomerOrderNumber + ";" +
+                                CustomerOrderNumber + ";" +
                                 item.CustomerOrderDate.ToString("yyyyMMdd") + ";" +
                                 (item.SentToCT ? item.ShippingDateX.ToString("yyyyMMdd") : item.ShippingDate.ToString("yyyyMMdd")) + ";" +
                                 item.WarehouseCode + ";" +
@@ -557,12 +561,13 @@ namespace MPOrder.BLL
                                 (item.SentToCT ? item.GrossWeightPlannedX : item.GrossWeightPlanned).ToString().Replace(".", ",") + ";" +
                                 (item.ADR ? "Y" : "N") + ";" +
                                 (item.SentToCT ? item.ADRMultiplierX : item.ADRMultiplier).ToString().Replace(".", ",") + ";" +
+                                (item.ADRLimitedQuantity ? "Y" : "N") + ";" +
                                 (item.Freeze ? "Y" : "N") + ";" +
                                 (item.Melt ? "Y" : "N") + ";" +
                                 (item.UV ? "Y" : "N") + ";" +
                                 (item.SentToCT ? item.Bordero : "") + ";" +
                                 (item.SentToCT ? item.Carrier : "") + ";" +
-                                (item.SentToCT ? item.VehicleType : "") + ";" +
+                                item.VehicleType  + ";" +
                                 (item.SentToCT ? item.KM.ToString().Replace(".", ",") : "") + ";" +
                                 (item.SentToCT ? item.Forfait.ToString().Replace(".", ",") : "") + ";" +
                                 (item.SentToCT ? item.Currency : "");
@@ -580,7 +585,5 @@ namespace MPOrder.BLL
                 throw;
             }
         }
-
-
     }
 }

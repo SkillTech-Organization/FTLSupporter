@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.8.4.0")]
-[assembly: AssemblyFileVersion("4.8.4.0")]
+[assembly: AssemblyVersion("4.8.5.0")]
+[assembly: AssemblyFileVersion("4.8.5.0")]
 
 //https://stackoverflow.com/questions/30943342/how-to-use-internalsvisibleto-attribute-with-strongly-named-assembly
 [assembly: InternalsVisibleTo("FTLSupporter, PublicKey=002400000480000094000000060200000024000052534131000400000100010051bbad77b4135b777941004eed2d93867c8dad46d9517e812cea230c7d115878decb6e4fd0bc5507565496dbd41bcaed41f36093a488bb44e766f9f783304898d53d8cdf21ee6c77bdc08f64c740dc5d4b227270684253b23df3dfed0d0bfa3f87783c4abee4076eb88129255e47a047dd199ce69f1d58f0cb5067e84048f5a8")]

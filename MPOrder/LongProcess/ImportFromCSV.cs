@@ -26,6 +26,7 @@ namespace MPOrder.LongProcess
 
         public int AddedCount { get; private set; } = 0;
         public int ItemsCount { get; private set; } = 0;
+        public List<SendResult> ErrResult { get; set; } = new List<SendResult>();
 
         public ImportFromCSV(BaseProgressDialog p_Form, string p_fileName, DateTime p_ShippingDateX)
             : base(p_Form, ThreadPriority.Normal)
@@ -39,6 +40,9 @@ namespace MPOrder.LongProcess
         {
             try
             {
+
+                //              var OrdNumSuffix = "_" + DateTime.Now.ToString("MM.dd");
+                var OrdNumSuffix = "_" + m_ShippingDateX.DayOfYear.ToString().PadLeft( 3, '0');
                 Encoding ecFile = Encoding.GetEncoding("ISO-8859-2");
                 var items = new List<boMPOrder>();
                 var lines = File.ReadAllLines(m_fileName, ecFile);
@@ -54,7 +58,7 @@ namespace MPOrder.LongProcess
                     int columnIndex = 0;
                     var CompanyCode = val[columnIndex++];
                     var CustomerCode = val[columnIndex++];
-                    var CustomerOrderNumber = val[columnIndex++];
+                    var CustomerOrderNumber = val[columnIndex++] + OrdNumSuffix;
                     var CustomerOrderDate = csvDate(val[columnIndex++]);
                     var ShippingDate = csvDate(val[columnIndex++]);
                     var WarehouseCode = val[columnIndex++];
@@ -82,7 +86,9 @@ namespace MPOrder.LongProcess
                     var Freeze = val[columnIndex++];
                     var Melt = val[columnIndex++];
                     var UV = val[columnIndex++];
-
+                    columnIndex++;
+                    columnIndex++;
+                    var VehicleType = val[columnIndex++];
 
                     double UnitWeight = GrossWeightPlanned / ConfOrderQty;
 
@@ -127,7 +133,7 @@ namespace MPOrder.LongProcess
                         UV = (UV.ToUpper() == "I"),
                         Bordero = "",
                         Carrier = "",
-                        VehicleType = "",
+                        VehicleType = VehicleType,
                         KM = 0,
                         Forfait = 0,
                         Currency = "HUF",
@@ -145,12 +151,23 @@ namespace MPOrder.LongProcess
                 foreach (var item in items)
                 {
                     ProcessForm.NextStep();
-                    if (!bllMPOrderx.IsExist(item.CustomerOrderNumber, item.ProductCode))
+        //lehetnek duplikátumok            if (!bllMPOrderx.IsExist(item.CustomerOrderNumber, item.ProductCode))
                     {
 
                         bllMPOrderx.AddMPOrder(item);
                         added++;
                     }
+                    /*
+                    else
+                    {
+                        ErrResult.Add(new SendResult()
+                        {
+                            ResultType = SendResult.RESTYPE.ERROR,
+                            CustomerOrderNumber = item.CustomerOrderNumber,
+                            Message = string.Format(PMapMessages.E_MPORD_CSVIMP_DPL)
+                        });
+                    }
+                    */
                 }
                 AddedCount = added;
                 ItemsCount = items.Count;

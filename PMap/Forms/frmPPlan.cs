@@ -170,6 +170,8 @@ namespace PMapCore.Forms
             btnTurnTour.Enabled = (p_PLN_ID > 0);
             btnToCloud.Enabled = (p_PLN_ID > 0);
 
+            btnCompleteTourRoutes.Visible = PMapIniParams.Instance.TourRoute;
+
 
             m_PPlanCommonVars.PLN_ID = p_PLN_ID;
             PMapCommonVars.Instance.USR_ID = m_USR_ID;

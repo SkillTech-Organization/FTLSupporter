@@ -50,6 +50,8 @@ namespace PMapCore.BLL
 
         public boCargoType GetCargoTypeByCODE(string p_CTP_CODE)
         {
+            if (p_CTP_CODE == null)
+                p_CTP_CODE = "";
             List<boCargoType> lstCargoType = GetAllCargoTypes("upper(CTP_CODE) = ? ", p_CTP_CODE.ToUpper());
             if (lstCargoType.Count == 0)
             {
