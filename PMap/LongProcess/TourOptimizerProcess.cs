@@ -59,7 +59,7 @@ namespace PMapCore.LongProcess
             ProcessForm.SetInfoText(PMapMessages.M_OPT_CREATEFILE);
             m_optimize.MakeOptContent();
 
-            Util.String2File(m_optimize.boOpt.OptimizerContent, PMapIniParams.Instance.PlanFile);
+            Util.String2File(m_optimize.boOpt.OptimizerContent, PMapIniParams.Instance.PlanFile, Encoding.GetEncoding( Global.PM_ENCODING));
 
             if (System.IO.File.Exists(PMapIniParams.Instance.PlanOK))
                 System.IO.File.Delete(PMapIniParams.Instance.PlanOK);
@@ -84,6 +84,9 @@ namespace PMapCore.LongProcess
                 m_procOptimizer.StartInfo.RedirectStandardOutput = false;
             }
 
+            m_procOptimizer.EnableRaisingEvents = true;
+            m_procOptimizer.Exited += M_procOptimizer_Exited;
+
             m_procOptimizer.Start();
 
             {
@@ -92,9 +95,6 @@ namespace PMapCore.LongProcess
                 {
                     ProcessForm.SetInfoText(String.Format(PMapMessages.M_OPT_OPT, m_turn, PMapIniParams.Instance.OptimizeTimeOutSec));
 
-                    if (m_turn == 10)
-                        Console.WriteLine("c");
-
                     if (System.IO.File.Exists(PMapIniParams.Instance.PlanOK))
                     {
                         finalize(eOptResult.OK);
@@ -102,9 +102,9 @@ namespace PMapCore.LongProcess
                     }
                     if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
                     {
-                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding("iso-8859-1"));
+                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding(Global.PM_ENCODING));
                         string content = file.ReadToEnd();
-                        if (content.CompareTo("Errors that occured during the computation:\r\n") != 0)
+                        if (content.CompareTo(Global.OPT_NOERROR) != 0)
                         {
                             m_optimize = null;
                             finalize(eOptResult.Error);
@@ -136,6 +136,38 @@ namespace PMapCore.LongProcess
                 m_DB.Close();
 
 
+            }
+        }
+
+        private void M_procOptimizer_Exited(object sender, EventArgs e)
+        {
+            if (!System.IO.File.Exists(PMapIniParams.Instance.PlanOK))  //leállt a process és nincs OK file
+            {
+
+                bool errHappened = false;
+
+                if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
+                {
+                    System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding(Global.PM_ENCODING));
+                    string content = file.ReadToEnd();
+                    errHappened = content.CompareTo(Global.OPT_NOERROR) != 0;
+                }
+
+
+                //leállt a process és van eredményfájl, készítünk egy OK.dat-ot
+                if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile)            //van már eredmény
+                    && !errHappened)                  //nicns error   
+                {
+                    Util.String2File("Optimizer process has exited!", PMapIniParams.Instance.PlanOK);
+                    return;
+                }
+
+                //leállt a process és NINCS eredményfájl, készítünk egy Error.dat-ot
+                if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                {
+                    Util.String2File("Optimizer process has stopped!", PMapIniParams.Instance.PlanErr);
+                    return;
+                }
             }
         }
 

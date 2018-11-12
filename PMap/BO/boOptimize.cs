@@ -333,10 +333,10 @@ namespace PMapCore.BO
                 CDepot dp = (CDepot)kp.Value;
 
                 //Létrehoz egy ügyfelet
-                OptimizerContent += String.Format("createClient(\"{0}\", {1}, {2})\n", dp.clName, dp.x, dp.y);
+                OptimizerContent += String.Format("createClient(\"{0}\", {1}, {2})\n", dp.clName.Replace("\"", "'"), dp.x, dp.y);
 
                 //Raktár
-                OptimizerContent += String.Format("createDepot(\"{0}\", {1})\n", dp.clName, dp.innerID);
+                OptimizerContent += String.Format("createDepot(\"{0}\", {1})\n", dp.clName.Replace("\"", "'"), dp.innerID);
 
                 OptimizerContent += String.Format("setDepotInformation( {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})\n",
                                     dp.innerID, dp.isCentral, dp.serviceFix, dp.serviceVar, dp.planstart, dp.pc2, dp.pc3, dp.pc4, dp.pc5);
@@ -382,7 +382,7 @@ namespace PMapCore.BO
                 CClient cl = (CClient)kp.Value;
 
                 //Létrehoz egy ügyfelet
-                OptimizerContent += String.Format("createClient(\"{0}\", {1}, {2})\n", cl.clName, cl.x, cl.y);
+                OptimizerContent += String.Format("createClient(\"{0}\", {1}, {2})\n", cl.clName.Replace("\"", "'"), cl.x, cl.y);
 
 
                 OptimizerContent += String.Format("setClientInformation( {0}, {1}, {2}, {3}, {4}, {5}, {6})\n",

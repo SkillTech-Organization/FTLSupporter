@@ -218,6 +218,9 @@ namespace PMapCore.Common
         public static Color DISABLEDFONTCOLOR = Color.Black;
         public static Color UNPLANNEDITEMCOLOR = Color.Azure;
 
+        public const string PM_ENCODING = "iso-8859-1";
+
+
 //        public static string ETOLLCAT_Prefix = "J";
         public static int ETOLLCAT_J0 = 0;      //nincs útdíj
         public static int ETOLLCAT_J2 = 2;
@@ -237,7 +240,10 @@ namespace PMapCore.Common
 
         public const string COMPLETEDTOUR = "COMPLETEDTOUR";            //Útvonalszámításnak jelezzük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak
 
-        public const string DEF_BUDAPEST = "BUDAPEST";            
+        public const string DEF_BUDAPEST = "BUDAPEST";
+
+        public const string OPT_NOERROR = "Errors that occured during the computation:\r\n";
+
 
     }
 }
