@@ -42,8 +42,8 @@ namespace MPOrder.LongProcess
             {
 
                 //              var OrdNumSuffix = "_" + DateTime.Now.ToString("MM.dd");
-                var OrdNumSuffix = "_" + m_ShippingDateX.DayOfYear.ToString().PadLeft( 3, '0');
-                Encoding ecFile = Encoding.GetEncoding("ISO-8859-2");
+                var OrdNumSuffix = "_" + m_ShippingDateX.DayOfYear.ToString().PadLeft(3, '0');
+                Encoding ecFile = Encoding.GetEncoding(Global.PM_ENCODING);
                 var items = new List<boMPOrder>();
                 var lines = File.ReadAllLines(m_fileName, ecFile);
 
@@ -52,8 +52,8 @@ namespace MPOrder.LongProcess
                     ProcessForm.NextStep();
 
 
-          
-                        var val = line.Split(';');
+
+                    var val = line.Split(';');
 
                     int columnIndex = 0;
                     var CompanyCode = val[columnIndex++];
@@ -76,7 +76,7 @@ namespace MPOrder.LongProcess
                     var ProdDescription = val[columnIndex++];
                     var ConfOrderQty = csvDouble(val[columnIndex++]);
                     var ConfPlannedQty = csvDouble(val[columnIndex++]);
-                    var NetWeight = csvDouble(val[columnIndex++]);              
+                    var NetWeight = csvDouble(val[columnIndex++]);
                     var PalletPlannedQty = csvDouble(val[columnIndex++]);
                     var PalletBulkQty = csvDouble(val[columnIndex++]);
                     var GrossWeightPlanned = csvDouble(val[columnIndex++]);
@@ -151,7 +151,7 @@ namespace MPOrder.LongProcess
                 foreach (var item in items)
                 {
                     ProcessForm.NextStep();
-        //lehetnek duplikátumok            if (!bllMPOrderx.IsExist(item.CustomerOrderNumber, item.ProductCode))
+                    //lehetnek duplikátumok            if (!bllMPOrderx.IsExist(item.CustomerOrderNumber, item.ProductCode))
                     {
 
                         bllMPOrderx.AddMPOrder(item);
@@ -180,17 +180,17 @@ namespace MPOrder.LongProcess
 
         }
 
-        private DateTime csvDate( string p_strDate)
+        private DateTime csvDate(string p_strDate)
         {
             var ret = DateTime.MinValue;
-            if( !string.IsNullOrWhiteSpace( p_strDate) && p_strDate.Length == 8)
+            if (!string.IsNullOrWhiteSpace(p_strDate) && p_strDate.Length == 8)
             {
                 ret = DateTime.Parse(Util.LeftString(p_strDate, 4) + "." + p_strDate.Substring(4, 2) + "." + Util.RightString(p_strDate, 2));
             }
 
             return ret;
         }
-        private double csvDouble( string p_strDouble)
+        private double csvDouble(string p_strDouble)
         {
             double ret = 0;
             if (Double.TryParse(p_strDouble, out ret))

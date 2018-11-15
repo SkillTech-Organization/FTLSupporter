@@ -20,14 +20,18 @@ namespace PMapTestApp
             //Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-      
-                       //Többszörös indítás kivédése
+
+            //Többszörös indítás kivédése
+
+            /*
+
             if (ProcessUtils.ThisProcessIsAlreadyRunning())
             {
                 ProcessUtils.SetFocusToPreviousInstance(Application.ProductName);
                 Application.Exit();
                 return;
             }
+            */
             frmPMapTest MainForm = null;
             try
             {

@@ -874,7 +874,7 @@ namespace PMapCore.BLL
 
 
             int lastSPP_ID = 0;
-            int lastDuration = 0;
+            double lastDuration = 0;
             int lastDistance = -1;
             int itemNo = 0;
             List<boEdge> lstSelEdges = new List<boEdge>();
@@ -888,7 +888,7 @@ namespace PMapCore.BLL
                 if (++itemNo % 100 == 0 && p_notify != null)
                     p_notify.SetInfoText(String.Format(PMapMessages.M_OPT_DST_PROC, itemNo, dt.Rows.Count));
 
-                int duration = lastDuration;
+                double duration = lastDuration;
                 if (lastNOD_ID_FROM != Util.getFieldValue<int>(dr, "NOD_ID_FROM") ||
                     lastNOD_ID_TO != Util.getFieldValue<int>(dr, "NOD_ID_TO") ||
                     lastRZN_ID_LIST != Util.getFieldValue<string>(dr, "RZN_ID_LIST") ||
@@ -934,7 +934,28 @@ namespace PMapCore.BLL
                 if (lastSPP_ID != Util.getFieldValue<int>(dr, "SPP_ID"))
                 {
                     lastSPP_ID = Util.getFieldValue<int>(dr, "SPP_ID");
-                    duration = (int)Math.Round(lstSelEdges.Sum(i => i.EDG_LENGTH / (dicSPV[i.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60)));
+                    /* a háromszög-egyenlőtlenségek elkerülése miatt az ideális sebességprofillal számolt 
+                     menetidőket kell átadni
+                     */
+
+                    /*
+                    if (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 3 &&
+                         boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 33)
+                        Console.WriteLine("ss");
+                    */
+
+                    duration = lstSelEdges.Sum(i => (double)i.EDG_LENGTH / (double)(dicSPV[i.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60));
+
+                    /*
+                    double dd = 0;
+                    foreach( var ws in lstSelEdges)
+                    {
+                        Util.String2File(ws.EDG_NAME + ";" + ws.EDG_LENGTH.ToString() + ";" + dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE.ToString() + ";" + ((double)ws.EDG_LENGTH / (double)(dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60)).ToString() +"\n",
+                            @"d:\temp\1109\aa.log", true);
+
+                        dd += ((double)ws.EDG_LENGTH / (double)(dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60));
+                    }
+                    */
                 }
 
                 lastDuration = duration;
@@ -963,13 +984,13 @@ namespace PMapCore.BLL
 
                 string sKey = ttype.innerID.ToString() + Global.SEP_POINT + Util.getFieldValue<int>(dr, "ID_FROM").ToString() + Global.SEP_POINT + Util.getFieldValue<int>(dr, "ID_TO").ToString();
 
-                boOpt.lstRelationAccess.Add(new boOptimize.CRelationAccess()
+                 boOpt.lstRelationAccess.Add(new boOptimize.CRelationAccess()
                 {
                     ttId = boOpt.dicTruckType[ttKey].innerID,
                     clIdStart = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID,
                     clIdEnd = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID,
                     clDistance = lastDistance,
-                    clTime = lastDuration
+                    clTime = (int)Math.Round(lastDuration)
                 });
 
             }

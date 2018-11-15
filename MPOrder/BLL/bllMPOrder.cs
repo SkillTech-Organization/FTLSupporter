@@ -374,8 +374,8 @@ namespace MPOrder.BLL
                                 ORD_CLIENTNUM = item.CompanyCode,
                                 //ORD_LOCKDATE                          //Új felvitelkor nem szabad tölteni
                                 ORD_FIRSTDATE = DateTime.Now.Date,
-                                ORD_QTY = item.ConfPlannedQtySum,
-                                ORD_ORIGQTY1 = item.ConfPlannedQtySum,
+                                ORD_QTY = item.GrossWeightPlannedXSum,
+                                ORD_ORIGQTY1 = item.GrossWeightPlannedXSum,
                                 ORD_ORIGQTY2 = 0,
                                 ORD_ORIGQTY3 = 0,
                                 ORD_ORIGQTY4 = 0,
@@ -524,7 +524,7 @@ namespace MPOrder.BLL
 
 
 
-                Encoding ecFile = Encoding.GetEncoding("ISO-8859-2");
+                Encoding ecFile = Encoding.GetEncoding(Global.PM_ENCODING);
                 StreamWriter writer = new StreamWriter(p_exportFile, false, ecFile);
                 var lstAll = GetAllMPOrders("CSVFileName = ?", p_CSVFileName);
                 foreach (var item in lstAll)

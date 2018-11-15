@@ -262,7 +262,7 @@ namespace PMapCore.LongProcess
 
         private void writeExpFile(string p_FileName, List<CResult> p_result)
         {
-            TextWriter tw = new StreamWriter(p_FileName, false, Encoding.GetEncoding("iso-8859-1"));
+            TextWriter tw = new StreamWriter(p_FileName, false, Encoding.GetEncoding(Global.PM_ENCODING));
   
             tw.Write("Indulás megnevezés;" +
                 "Érkezés megnevezés;" +
@@ -284,7 +284,7 @@ namespace PMapCore.LongProcess
                 "\r\n");
             tw.Close();
 
-            tw = new StreamWriter(p_FileName, true, Encoding.GetEncoding("iso-8859-1"));
+            tw = new StreamWriter(p_FileName, true, Encoding.GetEncoding(Global.PM_ENCODING));
             foreach (var item in p_result)
             {
 

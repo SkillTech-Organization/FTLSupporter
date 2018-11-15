@@ -218,7 +218,7 @@ namespace PMapCore.Common
         public static Color DISABLEDFONTCOLOR = Color.Black;
         public static Color UNPLANNEDITEMCOLOR = Color.Azure;
 
-        public const string PM_ENCODING = "iso-8859-1";
+        public const string PM_ENCODING = "iso-8859-2";
 
 
 //        public static string ETOLLCAT_Prefix = "J";
