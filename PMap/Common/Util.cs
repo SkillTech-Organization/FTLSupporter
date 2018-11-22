@@ -149,7 +149,7 @@ namespace PMapCore.Common
                     tw.Write(p_s);
                     tw.Close();
                 }
-                catch (Exception e) { }
+                catch (Exception e) { throw; }
                 return p_file;
             }
         }

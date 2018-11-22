@@ -16,6 +16,7 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "ID", Order = 1)]
         public int ID { get; set; }             //-->más objektumból TPL_ID -vel hivatkozunk rá
 
+        public int TPL_ID { get { return ID; }}             //-->más objektumból TPL_ID -vel hivatkozunk rá
 
         [DisplayNameAttributeX(Name = "Zárolva?", Order = 2)]
         public bool LOCKED { get; set; }

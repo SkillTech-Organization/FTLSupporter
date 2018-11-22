@@ -106,7 +106,7 @@ namespace MPOrder.LongProcess
                         TotalGrossWeightOfOrder = TotalGrossWeightOfOrder,
                         NumberOfPalletForDel = NumberOfPalletForDel,
                         NumberOfPalletForDelX = NumberOfPalletForDel,
-                        ShippAddressID = ShippAddressID,
+                        ShippAddressID_DEP_CODE = ShippAddressID,
                         ShippAddressCompanyName = ShippAddressCompanyName,
                         ShippAddressZipCode = ShippAddressZipCode,
                         ShippingAddressCity = ShippingAddressCity,

@@ -52,7 +52,7 @@ namespace MPOrder.BLL
                 TotalGrossWeightOfOrder = Util.getFieldValue<double>(p_dr, "TotalGrossWeightOfOrder"),
                 NumberOfPalletForDel = Util.getFieldValue<double>(p_dr, "NumberOfPalletForDel"),
                 NumberOfPalletForDelX = Util.getFieldValue<double>(p_dr, "NumberOfPalletForDelX"),
-                ShippAddressID = Util.getFieldValue<string>(p_dr, "ShippAddressID"),
+                ShippAddressID_DEP_CODE = Util.getFieldValue<string>(p_dr, "ShippAddressID_DEP_CODE"),
                 ShippAddressCompanyName = Util.getFieldValue<string>(p_dr, "ShippAddressCompanyName"),
                 ShippAddressZipCode = Util.getFieldValue<string>(p_dr, "ShippAddressZipCode"),
                 ShippingAddressCity = Util.getFieldValue<string>(p_dr, "ShippingAddressCity"),
@@ -164,7 +164,7 @@ namespace MPOrder.BLL
                     g1.ShippingDate,
                     g1.ShippingDateX,
                     g1.WarehouseCode,
-                    g1.ShippAddressID,
+                    g1.ShippAddressID_DEP_CODE,
                     g1.ShippAddressCompanyName,
                     g1.ShippAddressZipCode,
                     g1.ShippingAddressCity,
@@ -187,7 +187,7 @@ namespace MPOrder.BLL
                     ShippingDate = s.Key.ShippingDate,
                     ShippingDateX = s.Key.ShippingDateX,
                     WarehouseCode = s.Key.WarehouseCode,
-                    ShippAddressID = s.Key.ShippAddressID,
+                    ShippAddressID_DEP_CODE = s.Key.ShippAddressID_DEP_CODE,
                     ShippAddressCompanyName = s.Key.ShippAddressCompanyName,
                     ShippAddressZipCode = s.Key.ShippAddressZipCode,
                     ShippingAddressCity = s.Key.ShippingAddressCity,
@@ -278,7 +278,7 @@ namespace MPOrder.BLL
 
         public void DeleteItemByCustomerOrderNumber(string p_CSVFileName, string p_CustomerOrderNumber)
         {
-            DBA.ExecuteNonQuery("delete MPO_MPORDER where CVFileName= ? and CustomerOrderNumber=?", p_CSVFileName, p_CustomerOrderNumber);
+            DBA.ExecuteNonQuery("delete MPO_MPORDER where CSVFileName= ? and CustomerOrderNumber=?", p_CSVFileName, p_CustomerOrderNumber);
         }
         public List<SendResult> SendToCT(List<boMPOrderF> p_data, BaseProgressDialog p_Form = null)
         {
@@ -306,11 +306,11 @@ namespace MPOrder.BLL
                         if (item.SentToCT && ord == null)
                         {
 
-                            boDepot dep = bllDepotX.GetDepotByDEP_CODE(item.CustomerCode);
+                            boDepot dep = bllDepotX.GetDepotByDEP_CODE(item.ShippAddressID_DEP_CODE);
                             if (dep == null)
                             {
                                 //ZIP ID megállapítása
-                                var boZip = bllZipX.GetZIPbyNum(Int32.Parse("0" + item.ShippAddressZipCode));
+                                var boZip = bllZipX.GetZIPbyNum(Int32.Parse("0" + item.ShippAddressZipCode.Replace(".", "")));
 
                                 string fullAddr = (item.ShippAddressZipCode + " " + item.ShippingAddressCity + " " + item.ShippingAddressStreetAndNumber).Trim();
                                 boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
@@ -338,7 +338,7 @@ namespace MPOrder.BLL
                                 dep = new boDepot()
                                 {
                                     WHS_ID = 1,             //Csak egy raktárat kezelünk
-                                    DEP_CODE = item.CustomerCode,
+                                    DEP_CODE = item.ShippAddressID_DEP_CODE,
                                     DEP_NAME = item.ShippAddressCompanyName,
                                     ZIP_ID = (boZip != null ? boZip.ID : ZIP_ID),      //HA használjuk a GeocodingByAddr-t akkor a ZIP_ID kell ide
                                     DEP_ADRSTREET = item.ShippingAddressStreetAndNumber,
@@ -409,8 +409,8 @@ namespace MPOrder.BLL
                         //2.CT-be küldjük és már van ORD_ORDER rekord.
                         if (item.SentToCT && ord != null)
                         {
-                            ord.ORD_QTY = item.ConfPlannedQtySum;
-                            ord.ORD_ORIGQTY1 = item.ConfPlannedQtySum;
+                            ord.ORD_QTY = item.GrossWeightPlannedXSum;
+                            ord.ORD_ORIGQTY1 = item.GrossWeightPlannedXSum;
                             ord.ORD_ADRPOINTS = item.ADRMultiplierXSum;
                             bllOrderX.UpdateOrder(ord);
                             res.Add(new SendResult()
@@ -543,7 +543,7 @@ namespace MPOrder.BLL
                                 item.WarehouseCode + ";" +
                                 item.TotalGrossWeightOfOrder.ToString().Replace(".", ",") + ";" +
                                 (item.SentToCT ? item.NumberOfPalletForDelX : item.NumberOfPalletForDel).ToString().Replace(".", ",") + ";" +
-                                item.ShippAddressID + ";" +
+                                item.ShippAddressID_DEP_CODE + ";" +
                                 item.ShippAddressCompanyName + ";" +
                                 item.ShippAddressZipCode + ";" +
                                 item.ShippingAddressCity + ";" +
@@ -568,8 +568,8 @@ namespace MPOrder.BLL
                                 (item.SentToCT ? item.Bordero : "") + ";" +
                                 (item.SentToCT ? item.Carrier : "") + ";" +
                                 item.VehicleType  + ";" +
-                                (item.SentToCT ? item.KM.ToString().Replace(".", ",") : "") + ";" +
-                                (item.SentToCT ? item.Forfait.ToString().Replace(".", ",") : "") + ";" +
+                                (item.SentToCT ? Math.Round(item.KM).ToString().Replace(".", ",") : "") + ";" +
+                                (item.SentToCT ? Math.Round(item.Forfait).ToString().Replace(".", ",") : "") + ";" +
                                 (item.SentToCT ? item.Currency : "");
                     writer.WriteLine(sLine);
                 }

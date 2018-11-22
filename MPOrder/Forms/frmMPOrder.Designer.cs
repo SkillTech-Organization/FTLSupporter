@@ -59,7 +59,7 @@
             this.grcNumberOfPalletForDel = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcNumberOfPalletForDelX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.edNumberOfPalletForDelX = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
-            this.grcShippAddressID = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcShippAddressID_DEP_CODE = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcShippAddressCompanyName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricShippingAddress = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gricNote = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -324,7 +324,7 @@
             this.gricWarehouseCode,
             this.grcNumberOfPalletForDel,
             this.grcNumberOfPalletForDelX,
-            this.grcShippAddressID,
+            this.grcShippAddressID_DEP_CODE,
             this.grcShippAddressCompanyName,
             this.gricShippingAddress,
             this.gricNote,
@@ -451,15 +451,15 @@
             this.edNumberOfPalletForDelX.Name = "edNumberOfPalletForDelX";
             this.edNumberOfPalletForDelX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edNumberOfPalletForDelX_EditValueChanging);
             // 
-            // grcShippAddressID
+            // grcShippAddressID_DEP_CODE
             // 
-            this.grcShippAddressID.Caption = "Szállítási Cím ID";
-            this.grcShippAddressID.FieldName = "ShippAddressID";
-            this.grcShippAddressID.Name = "grcShippAddressID";
-            this.grcShippAddressID.OptionsColumn.AllowEdit = false;
-            this.grcShippAddressID.Visible = true;
-            this.grcShippAddressID.VisibleIndex = 7;
-            this.grcShippAddressID.Width = 85;
+            this.grcShippAddressID_DEP_CODE.Caption = "Szállítási Cím ID";
+            this.grcShippAddressID_DEP_CODE.FieldName = "ShippAddressID_DEP_CODE";
+            this.grcShippAddressID_DEP_CODE.Name = "grcShippAddressID_DEP_CODE";
+            this.grcShippAddressID_DEP_CODE.OptionsColumn.AllowEdit = false;
+            this.grcShippAddressID_DEP_CODE.Visible = true;
+            this.grcShippAddressID_DEP_CODE.VisibleIndex = 7;
+            this.grcShippAddressID_DEP_CODE.Width = 85;
             // 
             // grcShippAddressCompanyName
             // 
@@ -1041,7 +1041,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn gricShippingDateX;
         private DevExpress.XtraGrid.Columns.GridColumn gricWarehouseCode;
         private DevExpress.XtraGrid.Columns.GridColumn grcNumberOfPalletForDelX;
-        private DevExpress.XtraGrid.Columns.GridColumn grcShippAddressID;
+        private DevExpress.XtraGrid.Columns.GridColumn grcShippAddressID_DEP_CODE;
         private DevExpress.XtraGrid.Columns.GridColumn grcShippAddressCompanyName;
         private DevExpress.XtraGrid.Columns.GridColumn gricShippingAddress;
         private DevExpress.XtraGrid.Columns.GridColumn gricNote;

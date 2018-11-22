@@ -63,7 +63,7 @@ namespace MPOrder.BO
         
         //Szállítási Cím ID, Shipp.Address ID
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public string ShippAddressID { get; set; }
+        public string ShippAddressID_DEP_CODE { get; set; }
 
         //Szállítási cím cégnév, ShippAddre- Company name
         [WriteFieldAttribute(Insert = true, Update = true)]

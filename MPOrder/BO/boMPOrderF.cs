@@ -38,7 +38,7 @@ namespace MPOrder.BO
         public string WarehouseCode { get; set; }
 
         //Szállítási Cím ID, Shipp.Address ID
-        public string ShippAddressID { get; set; }
+        public string ShippAddressID_DEP_CODE { get; set; }
 
         //Szállítási cím cégnév, ShippAddre- Company name
         public string ShippAddressCompanyName { get; set; }

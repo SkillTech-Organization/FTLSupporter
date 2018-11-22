@@ -1061,7 +1061,7 @@ namespace PMapCore.Forms
 
         }
 
-        private void  recalcCompletedTour( boPlanTour p_tour)
+        private void recalcCompletedTour(boPlanTour p_tour)
         {
 
             RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
@@ -1075,7 +1075,7 @@ namespace PMapCore.Forms
             {
                 UI.Message(PMapMessages.E_TOURCOMPL_ABORTED);
                 m_bllPlan.SetTourUnCompleted(p_tour);
-               // PMapCommonVars.Instance.CT_DB.Rollback();
+                // PMapCommonVars.Instance.CT_DB.Rollback();
             }
 
             if (rpp.CompleteCode == CalcRoutesForTours.eCompleteCode.NoRouteOccured)
@@ -1087,6 +1087,10 @@ namespace PMapCore.Forms
             }
 
 
+            m_bllPlanEdit.RecalcTour(0, p_tour.ID, Global.defWeather);
+
+            m_PlanEditFuncs.RefreshToursAfterModify(p_tour.ID, 0);
+            
         }
 
         private void btnOpenClose_Click(object sender, EventArgs e)
