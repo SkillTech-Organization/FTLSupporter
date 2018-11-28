@@ -105,7 +105,7 @@ namespace PMapCore.Common
         public const string iniMapeiClose = "MapeiClose";
         public const string iniMapeiSrvTime = "MapeiSrvTime";
         public const string iniMapeiQtySrvTime = "MapeiQtySrvTime";
-
+        public const string iniMapeiDefCargoType = "MapeiDefCargoType";
 
         //Kezelt térképtípusok
         public const int mtGMap = 1;

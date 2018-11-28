@@ -360,51 +360,65 @@ namespace MPOrder.BLL
                                 bllDepotX.SetAllTruckToDep(dep.ID);
                             }
 
-                            var cargoType = bllCargoTypeX.GetCargoTypeByCODE(item.VehicleType);
-
-                            boOrder newOrder = new boOrder()
+                            var cargoTypeStr = !string.IsNullOrWhiteSpace(item.VehicleType) ? item.VehicleType : PMapIniParams.Instance.MapeiDefCargoType;
+                            var cargoType = bllCargoTypeX.GetCargoTypeByCODE(cargoTypeStr);
+                            if (cargoType == null)
                             {
-                                OTP_ID = Global.OTP_OUTPUT,
-                                CTP_ID = (cargoType != null ? cargoType.ID : 1),                             //csak egyféle árutípust kezelünk
-                                DEP_ID = dep.ID,
-                                WHS_ID = 1,                             //csak központi raktár van
-                                ORD_NUM = item.CustomerOrderNumber,
-                                ORD_ORIGNUM = item.CustomerOrderNumber, //Masterplast mező
-                                ORD_DATE = item.ShippingDateX,
-                                ORD_CLIENTNUM = item.CompanyCode,
-                                //ORD_LOCKDATE                          //Új felvitelkor nem szabad tölteni
-                                ORD_FIRSTDATE = DateTime.Now.Date,
-                                ORD_QTY = item.GrossWeightPlannedXSum,
-                                ORD_ORIGQTY1 = item.GrossWeightPlannedXSum,
-                                ORD_ORIGQTY2 = 0,
-                                ORD_ORIGQTY3 = 0,
-                                ORD_ORIGQTY4 = 0,
-                                ORD_ORIGQTY5 = 0,
-                                ORD_SERVS = PMapIniParams.Instance.MapeiOpen,
-                                ORD_SERVE = PMapIniParams.Instance.MapeiClose,
-                                ORD_VOLUME = 0,
-                                ORD_LENGTH = 0,
-                                ORD_WIDTH = 0,
-                                ORD_HEIGHT = 0,
-                                ORD_ADRPOINTS = item.ADRMultiplierXSum,
-                                ORD_LOCKED = false,
-                                ORD_ISOPT = true,
-                                ORD_GATE = "",
-                                ORD_COMMENT = "",
-                                ORD_UPDATED = true,
-                                ORD_ACTIVE = true
-
-                            };
-                            newOrder.ID = bllOrderX.AddOrder(newOrder);
-
-                            res.Add(new SendResult()
+                                res.Add(new SendResult()
+                                {
+                                    ResultType = SendResult.RESTYPE.ERROR,
+                                    CustomerOrderNumber = item.CustomerOrderNumber,
+                                    Message = string.Format(PMapMessages.E_MPSENDTOCT_INVCARGOTYPE, cargoTypeStr)
+                                });
+                            }
+                            else
                             {
-                                ResultType = SendResult.RESTYPE.OK,
-                                CustomerOrderNumber = item.CustomerOrderNumber,
-                                Message = string.Format(PMapMessages.E_MPSENDTOCT_ADDOK)
-                            });
 
+                                boOrder newOrder = new boOrder()
+                                {
+                                    OTP_ID = Global.OTP_OUTPUT,
+                                    CTP_ID = (cargoType != null ? cargoType.ID : 1),                             //csak egyféle árutípust kezelünk
+                                    DEP_ID = dep.ID,
+                                    WHS_ID = 1,                             //csak központi raktár van
+                                    ORD_NUM = item.CustomerOrderNumber,
+                                    ORD_ORIGNUM = item.CustomerOrderNumber, //Masterplast mező
+                                    ORD_DATE = item.ShippingDateX,
+                                    ORD_CLIENTNUM = item.CompanyCode,
+                                    //ORD_LOCKDATE                          //Új felvitelkor nem szabad tölteni
+                                    ORD_FIRSTDATE = DateTime.Now.Date,
+                                    ORD_QTY = item.GrossWeightPlannedXSum,
+                                    ORD_ORIGQTY1 = item.GrossWeightPlannedXSum,
+                                    ORD_ORIGQTY2 = 0,
+                                    ORD_ORIGQTY3 = 0,
+                                    ORD_ORIGQTY4 = 0,
+                                    ORD_ORIGQTY5 = 0,
+                                    ORD_SERVS = PMapIniParams.Instance.MapeiOpen,
+                                    ORD_SERVE = PMapIniParams.Instance.MapeiClose,
+                                    ORD_VOLUME = 0,
+                                    ORD_LENGTH = 0,
+                                    ORD_WIDTH = 0,
+                                    ORD_HEIGHT = 0,
+                                    ORD_ADRPOINTS = item.ADRMultiplierXSum,
+                                    ORD_LOCKED = false,
+                                    ORD_ISOPT = true,
+                                    ORD_GATE = "",
+                                    ORD_COMMENT = "",
+                                    ORD_UPDATED = true,
+                                    ORD_ACTIVE = true
+
+                                };
+                                newOrder.ID = bllOrderX.AddOrder(newOrder);
+
+                                res.Add(new SendResult()
+                                {
+                                    ResultType = SendResult.RESTYPE.OK,
+                                    CustomerOrderNumber = item.CustomerOrderNumber,
+                                    Message = string.Format(PMapMessages.E_MPSENDTOCT_ADDOK)
+                                });
+
+                            }
                         }
+
 
                         //2.CT-be küldjük és már van ORD_ORDER rekord.
                         if (item.SentToCT && ord != null)
@@ -447,8 +461,8 @@ namespace MPOrder.BLL
                                 });
                             }
                         }
-                    }
 
+                    }
                     catch (Exception e)
                     {
                         DBA.Rollback();

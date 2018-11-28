@@ -129,7 +129,8 @@ namespace PMapCore.LongProcess
                     ProcessForm.NextStep();
                 }
 
-                if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                var resultLen = new System.IO.FileInfo(PMapIniParams.Instance.PlanResultFile).Length;
+                if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile) && resultLen > 0)  ////Előrdulhat, hogy elszáll a PVRP és üres a result.dat!
                     finalize(eOptResult.OK);
                 else
                     finalize(eOptResult.Cancel);
@@ -145,27 +146,41 @@ namespace PMapCore.LongProcess
             {
 
                 bool errHappened = false;
-
-                if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
+                try
                 {
-                    System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding(Global.PM_ENCODING));
-                    string content = file.ReadToEnd();
-                    errHappened = content.CompareTo(Global.OPT_NOERROR) != 0;
+                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
+                    {
+                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding(Global.PM_ENCODING));
+                        string content = file.ReadToEnd();
+                        errHappened = content.CompareTo(Global.OPT_NOERROR) != 0;
+                    }
+
+
+                    //leállt a process és van eredményfájl, készítünk egy OK.dat-ot
+                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile)            //van már eredmény
+                        && !errHappened)                  //nicns error   
+                    {
+                        Util.String2File("Optimizer process has exited!", PMapIniParams.Instance.PlanOK);
+                        return;
+                    }
+
+                    //leállt a process és NINCS eredményfájl és errorfájl, készítünk egy Error.dat-ot
+                    if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                    {
+                        Util.String2File("Optimizer process has stopped!", PMapIniParams.Instance.PlanErr);
+                        return;
+                    }
                 }
-
-
-                //leállt a process és van eredményfájl, készítünk egy OK.dat-ot
-                if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile)            //van már eredmény
-                    && !errHappened)                  //nicns error   
+                catch( Exception ex)
                 {
-                    Util.String2File("Optimizer process has exited!", PMapIniParams.Instance.PlanOK);
-                    return;
-                }
-
-                //leállt a process és NINCS eredményfájl, készítünk egy Error.dat-ot
-                if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
-                {
-                    Util.String2File("Optimizer process has stopped!", PMapIniParams.Instance.PlanErr);
+                    //A PVRP elszállhat akkor is, amikor fogja az error.dat-ot amiben a Global.OPT_NOERROR szöveg van.
+                    //Nincs még result file sem. 
+                    //Jobb híjján készítünk egy OK.dat-ot és egy üres resultot, hogy az optimizerprocess be tudjon fejeződni
+                    if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                    {
+                        Util.String2File("Optimizer process has an Exception:" + ex.Message, PMapIniParams.Instance.PlanResultFile);
+                        Util.String2File("" + ex.Message, PMapIniParams.Instance.PlanOK);
+                    }
                     return;
                 }
             }
@@ -180,6 +195,7 @@ namespace PMapCore.LongProcess
             if (PMapIniParams.Instance.LogVerbose >= PMapIniParams.eLogVerbose.debug && m_procOptimizer.StartInfo.RedirectStandardOutput)
                 Util.Log2File(String.Format(PMapMessages.M_OPT_OPTRESULT, m_procOptimizer.StandardOutput.ReadToEnd()));
 
+
             if (p_result == eOptResult.OK && m_optimize != null)
             {
                 m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile, ProcessForm);
@@ -189,7 +205,6 @@ namespace PMapCore.LongProcess
                     Result = eOptResult.IgnoredHappened;
                 }
             }
-
             return;
         }
 

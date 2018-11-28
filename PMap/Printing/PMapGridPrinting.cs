@@ -12,7 +12,7 @@ namespace PMapCore.Printing
     public class PMapGridPrinting : BaseGridPrinting
     {
         public PMapGridPrinting(GridControl p_grid, string p_header, bool p_landscape)
-            : base(p_grid, PaperKind.A4, p_landscape, p_header, "", "PMap - Pratix Kft.,2011-2018", Global.DATETIMEFORMAT, true)
+            : base(p_grid, PaperKind.A4, p_landscape, p_header, "", "PMap - Pratix Kft.,2011-2019", Global.DATETIMEFORMAT, true)
         {
         }
 

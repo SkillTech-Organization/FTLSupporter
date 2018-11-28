@@ -115,6 +115,7 @@ namespace PMapCore.Common
         public int MapeiClose { get; set; }
         public int MapeiSrvTime { get; set; }
         public double MapeiQtySrvTime { get; set; }
+        public string MapeiDefCargoType { get; set; }
 
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
@@ -395,7 +396,7 @@ namespace PMapCore.Common
             MapeiClose = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiClose));
             MapeiSrvTime = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiSrvTime));
             MapeiQtySrvTime = Convert.ToDouble("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiQtySrvTime).Replace(',', '.'), CultureInfo.InvariantCulture);
-
+            MapeiDefCargoType = ini.ReadString(Global.iniMapei, Global.iniMapeiDefCargoType);
 
             Loaded = true;
 

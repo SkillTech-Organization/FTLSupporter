@@ -693,6 +693,8 @@ namespace PMapCore.BLL
 
             }
 
+
+            //REGION-ra szűrést belevegyük?
             sSql += "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                  "inner join v_trk_RZN_ID_LIST RZN on RZN.TRK_ID=TRK.ID " + Environment.NewLine +
                  "inner join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +
@@ -1135,8 +1137,12 @@ namespace PMapCore.BLL
         public const int par_DepTime = 7;
         public const int par_quantity = 8;
 
-        public void ProcessResult(string p_resultFile, BaseProgressDialog p_notify)
+       public void ProcessResult(string p_resultFile, BaseProgressDialog p_notify)
         {
+            var resultLen = new System.IO.FileInfo(p_resultFile).Length;
+            if (resultLen == 0)          //Előrdulhat, hogy elszáll a PVRP és üres a result.dat!
+                return;
+
             bool ignoredOrderHappened = false;
             using (TransactionBlock transObj = new TransactionBlock(DBA))
             {
@@ -1326,13 +1332,13 @@ namespace PMapCore.BLL
                                 //End If
                                 double dQty = Math.Abs(Convert.ToDouble(aArgs[2].Replace(',', '.'), CultureInfo.InvariantCulture) / Global.csQTY_DEC);        //a problémafájl létrehozásakor felszoroztuk, most
                                                                                                                                                               //visszaosztjuk, hogy a valós értékeket kapjuk meg.
-                                //Opt.dicTruckType.Where( i=>i.Value.RZN_ID_LIST==Util.getFieldValue<string>(r, "RZN_ID_LIST")).ToList().First(),
+                                                                                                                                                              //Opt.dicTruckType.Where( i=>i.Value.RZN_ID_LIST==Util.getFieldValue<string>(r, "RZN_ID_LIST")).ToList().First(),
                                 if (p_notify != null)
                                     p_notify.SetInfoText(PMapMessages.M_OPT_RES_UNPLANNED);
 
                                 ple.CreateUnplannedPlanOrder(boOpt.PLN_ID, order.ID, dQty, ple.getNEWTODNUM(boOpt.PLN_ID, order.ID));
                             }
-                            
+
                         }
 
                         Console.WriteLine(line);
@@ -1341,7 +1347,7 @@ namespace PMapCore.BLL
 
                     //Túraoptimalizálásnál, ha kimarad rendelés
                     //akkor rollbackolunk.
-                    if (boOpt.TPL_ID > 0 && ignoredOrderHappened)   
+                    if (boOpt.TPL_ID > 0 && ignoredOrderHappened)
                     {
                         DBA.Rollback();
                         return;
