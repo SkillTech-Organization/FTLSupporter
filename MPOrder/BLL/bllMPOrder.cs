@@ -361,7 +361,7 @@ namespace MPOrder.BLL
                             }
 
                             var cargoTypeStr = !string.IsNullOrWhiteSpace(item.VehicleType) ? item.VehicleType : PMapIniParams.Instance.MapeiDefCargoType;
-                            var cargoType = bllCargoTypeX.GetCargoTypeByCODE(cargoTypeStr);
+                            var cargoType = bllCargoTypeX.GetCargoTypeByName1(cargoTypeStr);
                             if (cargoType == null)
                             {
                                 res.Add(new SendResult()
