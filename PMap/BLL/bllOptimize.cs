@@ -693,8 +693,6 @@ namespace PMapCore.BLL
 
             }
 
-
-            //REGION-ra szűrést belevegyük?
             sSql += "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                  "inner join v_trk_RZN_ID_LIST RZN on RZN.TRK_ID=TRK.ID " + Environment.NewLine +
                  "inner join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +

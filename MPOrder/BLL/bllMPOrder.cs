@@ -530,7 +530,7 @@ namespace MPOrder.BLL
                             BorderoNumber = bllIdGen.GetNextValueByName("BORDERO");
                             lastTPL_ID = Util.getFieldValue<int>(rw, "TPL_ID");
                         }
-                        string sBordero = Util.RightString(Util.getFieldValue<DateTime>(rw, "ShippingDateX").Date.Year.ToString(), 2) + "H"
+                        string sBordero = Util.RightString(Util.getFieldValue<DateTime>(rw, "ShippingDateX").Date.Year.ToString(), 2) + "0"
                                  + BorderoNumber.ToString().PadLeft(6, '0');
                         SetBordero(Util.getFieldValue<int>(rw, "MPO_ID"), sBordero);
                     }

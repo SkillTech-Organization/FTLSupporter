@@ -66,6 +66,23 @@ namespace PMapCore.BLL
                 throw new DuplicatedCTP_CODEException();
             }
         }
-
+        public boCargoType GetCargoTypeByName1(string p_CTP_NAME1)
+        {
+            if (p_CTP_NAME1 == null)
+                p_CTP_NAME1 = "";
+            List<boCargoType> lstCargoType = GetAllCargoTypes("upper(CTP_NAME1) = ? ", p_CTP_NAME1.ToUpper());
+            if (lstCargoType.Count == 0)
+            {
+                return null;
+            }
+            else if (lstCargoType.Count == 1)
+            {
+                return lstCargoType[0];
+            }
+            else
+            {
+                throw new DuplicatedCTP_CODEException();
+            }
+        }
     }
 }
