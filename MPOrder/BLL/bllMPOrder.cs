@@ -503,6 +503,7 @@ namespace MPOrder.BLL
                         "where MPO_MPORDER.ID = oo.ID";
                 DBA.ExecuteNonQuery(sSql, p_PLN_ID, p_CSVFileName, p_PLN_ID);
 
+                /*
                 sSql = "select  MPO.ID as MPO_ID, MPO.SentToCt,  MPO.Bordero, MPO.ShippingDateX, TPL.ID as TPL_ID, MPO.CustomerOrderNumber " + Environment.NewLine +
                         "from MPO_MPORDER MPO " + Environment.NewLine +
                         "inner join      ORD_ORDER ORD on ORD.ORD_NUM = MPO.CustomerOrderNumber " + Environment.NewLine +
@@ -512,31 +513,51 @@ namespace MPOrder.BLL
                         "inner join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID and PTP.TOD_ID = TOD.ID" + Environment.NewLine +
                         "where MPO.CSVFileName = ? " + Environment.NewLine +
                         "and(PLN.ID = ?) " + Environment.NewLine +
-                        "order by TPL.ID ";
-                DataTable dt = DBA.Query2DataTable(sSql, p_PLN_ID, p_CSVFileName, p_PLN_ID);
+                        "order by TPL.ID,PTP_ORDER ";
+                */
 
-                int lastTPL_ID = -1;
+                sSql = "select MPO.ID as MPO_ID, MPO.SentToCt,  MPO.Bordero, MPO.ShippingDateX, TPL.ID as TPL_ID, MPO.CustomerOrderNumber, PTP_ORDER, PTP_TYPE " + Environment.NewLine +
+                       "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
+                       "inner join      TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
+                       "left outer join TOD_TOURORDER TOD on TOD.ID = PTP.TOD_ID " + Environment.NewLine +
+                       "left outer join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +
+                       "left outer join MPO_MPORDER MPO on  MPO.CustomerOrderNumber = ORD.ORD_NUM " + Environment.NewLine +
+                       "where (MPO.CSVFileName is null or MPO.CSVFileName = ? ) " + Environment.NewLine +
+                       " and TPL.PLN_ID = ? " + Environment.NewLine +
+                       "order by TPL.ID,PTP_ORDER";
+                DataTable dt = DBA.Query2DataTable(sSql, p_CSVFileName, p_PLN_ID);
+
                 int BorderoNumber = -1;
+                string sBordero = "";
                 foreach (DataRow rw in dt.Rows)
                 {
                     if (p_Form != null)
                         p_Form.NextStep();
-                    if (Util.getFieldValue<int>(rw, "SentToCt") != 0)
+
+                    var PTP_TYPE = Util.getFieldValue<int>(rw, "PTP_TYPE");
+                    if (PTP_TYPE == Global.PTP_TYPE_WHS_S)
                     {
-                        //&& string.IsNullOrWhiteSpace(Util.getFieldValue<string>(rw, "Bordero")) &&
-                        if (Util.getFieldValue<int>(rw, "TPL_ID") != 0 &&
-                            Util.getFieldValue<int>(rw, "TPL_ID") != lastTPL_ID)
-                        {
-                            BorderoNumber = bllIdGen.GetNextValueByName("BORDERO");
-                            lastTPL_ID = Util.getFieldValue<int>(rw, "TPL_ID");
-                        }
-                        string sBordero = Util.RightString(Util.getFieldValue<DateTime>(rw, "ShippingDateX").Date.Year.ToString(), 2) + "0"
-                                 + BorderoNumber.ToString().PadLeft(6, '0');
-                        SetBordero(Util.getFieldValue<int>(rw, "MPO_ID"), sBordero);
+                        sBordero = "";
                     }
+
+                    if (Util.getFieldValue<int>(rw, "SentToCt") != 0 && PTP_TYPE == Global.PTP_TYPE_DEP)
+                    {
+
+                        if (string.IsNullOrWhiteSpace(Util.getFieldValue<string>(rw, "Bordero")))
+
+                        {
+                            if (string.IsNullOrWhiteSpace(sBordero))
+                            {
+                                BorderoNumber = bllIdGen.GetNextValueByName("BORDERO");
+                                sBordero = Util.RightString(Util.getFieldValue<DateTime>(rw, "ShippingDateX").Date.Year.ToString(), 2) + "0"
+                                         + BorderoNumber.ToString().PadLeft(6, '0');
+
+                            }
+                            SetBordero(Util.getFieldValue<int>(rw, "MPO_ID"), sBordero);
+                        }
+                    }
+                    
                 }
-
-
 
                 Encoding ecFile = Encoding.GetEncoding(Global.PM_ENCODING);
                 StreamWriter writer = new StreamWriter(p_exportFile, false, ecFile);
