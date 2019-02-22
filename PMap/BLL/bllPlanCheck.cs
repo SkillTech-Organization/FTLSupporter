@@ -304,7 +304,7 @@ namespace PMapCore.BLL
 
             checkDistanceResult res = checkDistanceResult.NoCoumputedDist;
 
-            string sSql = "select DST_DISTANCE,DST_EDGES from DST_DISTANCE DST " +
+            string sSql = "select distinct DST_DISTANCE,DST_EDGES from DST_DISTANCE DST " +
                            "where RZN_ID_LIST=? and DST_MAXWEIGHT=? and DST_MAXHEIGHT=? and DST_MAXWIDTH=? and NOD_ID_FROM = ? and NOD_ID_TO = ? ";
             DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql, p_RZN_ID_LIST, DST_MAXWEIGHT, DST_MAXHEIGHT, DST_MAXWIDTH, p_NOD_ID_FROM, p_NOD_ID_TO);
 

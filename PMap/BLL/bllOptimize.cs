@@ -1005,7 +1005,7 @@ namespace PMapCore.BLL
             string sSql = "select PTP.TPL_ID, PTP.PTP_ORDER, PTP.PTP_TYPE, TOD.ORD_ID, DATEDIFF(n, PLN_DATE_B, PTP_ARRTIME) AS ARR, " + Environment.NewLine +
                 "DATEDIFF(n, PLN_DATE_B, PTP_SERVTIME) AS SRV, DATEDIFF(n, PLN_DATE_B, PTP_DEPTIME) AS DEP, " + Environment.NewLine +
                 "TOD.TOD_QTY, PTP.PTP_DISTANCE, PTP.PTP_TIME, TOD.ORD_ID," + Environment.NewLine +
-                "isnull( KMCOST,0) + isnull( HOURCOST,0)  AS COST, PTPE_ORDER - PTP.PTP_ORDER + 1 AS NODECNT, TOURCOUNT, OTP_VALUE, " + Environment.NewLine +
+                "isnull( KMCOST,0) + isnull( HOURCOST,0)  AS COST, PTPE_ORDER - PTP.PTP_ORDER + 1 AS NODECNT,  OTP_VALUE, " + Environment.NewLine +
                 "TPL.TRK_ID " + Environment.NewLine +
                 "from PTP_PLANTOURPOINT (NOLOCK) PTP " + Environment.NewLine +
                 "left join TOD_TOURORDER (NOLOCK) TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -1015,8 +1015,7 @@ namespace PMapCore.BLL
                 "left join PLN_PUBLICATEDPLAN (NOLOCK) PLN on TPL.PLN_ID = PLN.ID " + Environment.NewLine +
                 "left join v_PLTOURKMCOST (NOLOCK) KMC on TPL.ID = KMC.TPL_ID and PTP.PTP_ORDER = KMC.PTP_ORDER " + Environment.NewLine +
                 "left join v_PLTOURHOURCOST (NOLOCK) HRC on TPL.ID = HRC.TPL_ID and HRC.START_PTP_ID = PTP.ID " + Environment.NewLine +
-                "left join v_PLTOURQTY (NOLOCK) PTQ on TPL.ID = PTQ.TPL_ID AND PTP.PTP_ORDER = PTQ.PTP_ORDER " + Environment.NewLine +
-                "left join v_PLTOUR_COUNT (NOLOCK) PTC on PTC.TPL_ID = TPL.ID " + Environment.NewLine;
+                "left join v_PLTOURQTY (NOLOCK) PTQ on TPL.ID = PTQ.TPL_ID AND PTP.PTP_ORDER = PTQ.PTP_ORDER " + Environment.NewLine;
 
             DataTable dt;
             if (boOpt.TPL_ID <= 0)
@@ -1033,31 +1032,40 @@ namespace PMapCore.BLL
             }
 
             int TPL_ID = 0;
-            int RouteNodeIndex = 0;
             boOptimize.CPlanTours pt = null;
+
+            int tkRouteIndex = 1;           //a körút sorszáma
+            int tkRouteNodeIndex = 1;       //a kért csomópont sorszáma(1 - től getRouteNodesCount(tkId, tkRouteIndex) - ig)
             foreach (DataRow dr in dt.Rows)
             {
-                if (Util.getFieldValue<int>(dr, "PTP_ORDER") == 0)
+
+                if (Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_WHS_S)
                 {
+                    tkRouteNodeIndex = 0;
 
                     if (TPL_ID != Util.getFieldValue<int>(dr, "TPL_ID"))
+                        tkRouteIndex = 1;
+                    else
+                        tkRouteIndex++;
+
+                    TPL_ID = Util.getFieldValue<int>(dr, "TPL_ID");
+
+                    pt = new boOptimize.CPlanTours()
                     {
-                        pt = new boOptimize.CPlanTours()
-                            {
-                                TRK_ID = Util.getFieldValue<int>(dr, "TRK_ID"),
-                                TOURCOUNT = Util.getFieldValue<int>(dr, "TOURCOUNT"),
-                                Cost = Util.getFieldValue<double>(dr, "COST")
-                            };
-                        pt.RouteExe = new List<boOptimize.CPlanTours.CRouteExe>();
-                        boOpt.lstPlanTours.Add(pt);
-                    }
-                    RouteNodeIndex = 0;
+                        TRK_ID = Util.getFieldValue<int>(dr, "TRK_ID"),
+                        TOURCOUNT = tkRouteIndex,
+                        Cost = Util.getFieldValue<double>(dr, "COST")
+                    };
+                    pt.RouteExe = new List<boOptimize.CPlanTours.CRouteExe>();
+                    boOpt.lstPlanTours.Add(pt);
                 }
+                tkRouteNodeIndex++;
+
 
                 boOptimize.CPlanTours.CRouteExe rex = new boOptimize.CPlanTours.CRouteExe()
                 {
                     tkRouteIndex = pt.TOURCOUNT,                                //a körút sorszáma
-                    tkRouteNodeIndex = RouteNodeIndex,                          //a kért csomópont sorszáma (1-től getRouteNodesCount(tkId,tkRouteIndex) -ig)
+                    tkRouteNodeIndex = tkRouteNodeIndex,                          //a kért csomópont sorszáma (1-től getRouteNodesCount(tkId,tkRouteIndex) -ig)
                     NodeType = Util.getFieldValue<int>(dr, "PTP_TYPE") == 2 ? 0 : 1, //csomópont típusa. 0 = megrendelés, 1 = telephely. Ha OrId nagyobb mint 1000 akkor a NodeType a céldepó azonosítóját tartalmazza.
                     OrId = Util.getFieldValue<int>(dr, "ORD_ID"),               //telephely vagy megrendelés azonosító. Ha áttárolásos megrendelésről van szó, amit a motor automatikusan létrehozott, akkor az eredeti megrendelés azonosítójához hozzáad 1000-t, így az eredeti megrendelés is beazonosítható (feltételezzük, hogy a normál megrendelésszám kisebb, mint 1000).
                     ArrTime = Util.getFieldValue<int>(dr, "PTP_TYPE") == 0 ? -1 : Util.getFieldValue<int>(dr, "ARR"),  //érkezési időpont a csomóponthoz (időegységben), vagy -1 ha a kamion telephelyéről van szó (nap kezdete)

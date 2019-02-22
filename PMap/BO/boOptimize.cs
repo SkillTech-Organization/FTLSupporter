@@ -441,7 +441,7 @@ namespace PMapCore.BO
 
                 OptimizerContent += String.Format("getRouteNodesCount({0},{1}, {2})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, tour.RouteExe.Count);
                 int exIndex = 1;
-                foreach (CPlanTours.CRouteExe ex in tour.RouteExe)
+                foreach (CPlanTours.CRouteExe ex in tour.RouteExe.OrderBy( o=>  o.tkRouteIndex*100000+ o.tkRouteNodeIndex))
                 {
                     OptimizerContent += String.Format("getRouteNodeExe({0},{1},{2},{3},{4},{5},{6},{7},{8})\n", dicTruck[tour.TRK_ID].innerID, tkRouteIndex, exIndex, 0,
                         ex.NodeType, ex.NodeType == 0 ? dicOrder[ex.OrId].innerID :  WHS_ID, ex.ArrTime, ex.DepTime, Convert.ToInt32( ex.quantity));

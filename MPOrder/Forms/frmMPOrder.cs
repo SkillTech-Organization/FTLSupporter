@@ -529,7 +529,11 @@ namespace MPOrder.Forms
         private void edConfPlannedQtyX_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
             double ADRMultiplierX;
-            double newQty = Double.Parse("0" + e.NewValue.ToString().Replace(".", ","));
+
+            double newQty = 0;
+            if (!Double.TryParse("0" + e.NewValue.ToString().Replace(".", ","), out newQty))
+                e.NewValue = 0;
+
             int ID = (int)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcID);
 
             double UnitWeight = (double)gridViewMegrT.GetRowCellValue(gridViewMegrT.FocusedRowHandle, grcUnitWeight);

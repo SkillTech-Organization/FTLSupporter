@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMPOrder));
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
             this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
             this.tsbExportItems = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -71,6 +72,7 @@
             this.repResetF = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.grcGrossWeightPlannedSum = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplierSum = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.grcVehicleType = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridMegrT = new DevExpress.XtraGrid.GridControl();
@@ -87,6 +89,7 @@
             this.edConfPlannedQty = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.grcUnitWeight = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcGrossWeightPlannedX = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.edAdrMul = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.grcADRMultiplierX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcADRMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.grcPalletPlannedQty = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -106,8 +109,7 @@
             this.btnSetShippingDateX = new System.Windows.Forms.Button();
             this.dtmShippingDateX = new System.Windows.Forms.DateTimePicker();
             this.lblShippingDateX = new System.Windows.Forms.Label();
-            this.imlRefresh = new System.Windows.Forms.ImageList();
-            this.grcVehicleType = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.imlRefresh = new System.Windows.Forms.ImageList(this.components);
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -125,6 +127,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edConfPlannedQty)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edAdrMul)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edPalletPlannedQtyX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edPalletBulkQtyX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edResetT)).BeginInit();
@@ -296,7 +299,6 @@
             // gridMegrF
             // 
             this.gridMegrF.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridMegrF.EmbeddedNavigator.TextStringFormat = "Record {0} of {1}";
             this.gridMegrF.Location = new System.Drawing.Point(3, 17);
             this.gridMegrF.MainView = this.gridViewMegrF;
             this.gridMegrF.Name = "gridMegrF";
@@ -580,6 +582,12 @@
             this.grcADRMultiplierSum.FieldName = "ADRMultiplierSum";
             this.grcADRMultiplierSum.Name = "grcADRMultiplierSum";
             // 
+            // grcVehicleType
+            // 
+            this.grcVehicleType.Caption = "Szállító járműtípus";
+            this.grcVehicleType.FieldName = "VehicleType";
+            this.grcVehicleType.Name = "grcVehicleType";
+            // 
             // gridView1
             // 
             this.gridView1.GridControl = this.gridMegrF;
@@ -593,7 +601,6 @@
             // gridMegrT
             // 
             this.gridMegrT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridMegrT.EmbeddedNavigator.TextStringFormat = "Record {0} of {1}";
             this.gridMegrT.Location = new System.Drawing.Point(0, 0);
             this.gridMegrT.MainView = this.gridViewMegrT;
             this.gridMegrT.Name = "gridMegrT";
@@ -601,7 +608,8 @@
             this.edConfPlannedQty,
             this.edResetT,
             this.edPalletBulkQtyX,
-            this.edPalletPlannedQtyX});
+            this.edPalletPlannedQtyX,
+            this.edAdrMul});
             this.gridMegrT.Size = new System.Drawing.Size(1161, 248);
             this.gridMegrT.TabIndex = 10;
             this.gridMegrT.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -754,6 +762,7 @@
             this.grcGrossWeightPlannedX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.grcGrossWeightPlannedX.AppearanceCell.Options.UseBackColor = true;
             this.grcGrossWeightPlannedX.Caption = "Súly";
+            this.grcGrossWeightPlannedX.ColumnEdit = this.edAdrMul;
             this.grcGrossWeightPlannedX.DisplayFormat.FormatString = "#,#0.00";
             this.grcGrossWeightPlannedX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcGrossWeightPlannedX.FieldName = "GrossWeightPlannedX";
@@ -763,12 +772,25 @@
             this.grcGrossWeightPlannedX.VisibleIndex = 7;
             this.grcGrossWeightPlannedX.Width = 103;
             // 
+            // edAdrMul
+            // 
+            this.edAdrMul.AutoHeight = false;
+            this.edAdrMul.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.edAdrMul.MaxValue = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.edAdrMul.Name = "edAdrMul";
+            // 
             // grcADRMultiplierX
             // 
             this.grcADRMultiplierX.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.grcADRMultiplierX.AppearanceCell.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.grcADRMultiplierX.AppearanceCell.Options.UseBackColor = true;
             this.grcADRMultiplierX.Caption = "ADR szorzó";
+            this.grcADRMultiplierX.ColumnEdit = this.edAdrMul;
             this.grcADRMultiplierX.DisplayFormat.FormatString = "#,#0.00";
             this.grcADRMultiplierX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcADRMultiplierX.FieldName = "ADRMultiplierX";
@@ -781,6 +803,9 @@
             // grcADRMultiplier
             // 
             this.grcADRMultiplier.Caption = "Eredeti ADR szorzó";
+            this.grcADRMultiplier.ColumnEdit = this.edAdrMul;
+            this.grcADRMultiplier.DisplayFormat.FormatString = "#,#0.00";
+            this.grcADRMultiplier.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
             this.grcADRMultiplier.FieldName = "ADRMultiplier";
             this.grcADRMultiplier.Name = "grcADRMultiplier";
             this.grcADRMultiplier.OptionsColumn.AllowEdit = false;
@@ -810,6 +835,11 @@
             this.edPalletPlannedQtyX.AutoHeight = false;
             this.edPalletPlannedQtyX.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.edPalletPlannedQtyX.MaxValue = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
             this.edPalletPlannedQtyX.Name = "edPalletPlannedQtyX";
             this.edPalletPlannedQtyX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edPalletPlannedQtyX_EditValueChanging);
             // 
@@ -838,6 +868,11 @@
             this.edPalletBulkQtyX.AutoHeight = false;
             this.edPalletBulkQtyX.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.edPalletBulkQtyX.MaxValue = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
             this.edPalletBulkQtyX.Name = "edPalletBulkQtyX";
             this.edPalletBulkQtyX.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.edPalletBulkQtyX_EditValueChanging);
             // 
@@ -855,7 +890,7 @@
             // 
             this.edResetT.AutoHeight = false;
             this.edResetT.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true)});
             this.edResetT.Name = "edResetT";
             this.edResetT.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             this.edResetT.Click += new System.EventHandler(this.edResetT_Click);
@@ -968,12 +1003,6 @@
             this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
             this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
             // 
-            // grcVehicleType
-            // 
-            this.grcVehicleType.Caption = "Szállító járműtípus";
-            this.grcVehicleType.FieldName = "VehicleType";
-            this.grcVehicleType.Name = "grcVehicleType";
-            // 
             // frmMPOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1004,6 +1033,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridMegrT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewMegrT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edConfPlannedQty)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edAdrMul)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edPalletPlannedQtyX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edPalletBulkQtyX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edResetT)).EndInit();
@@ -1094,5 +1124,6 @@
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletBulkQtyX;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletPlannedQtyX;
         private DevExpress.XtraGrid.Columns.GridColumn grcVehicleType;
+        private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edAdrMul;
     }
 }
