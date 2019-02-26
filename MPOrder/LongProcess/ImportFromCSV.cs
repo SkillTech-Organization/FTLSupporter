@@ -56,39 +56,39 @@ namespace MPOrder.LongProcess
                     var val = line.Split(';');
 
                     int columnIndex = 0;
-                    var CompanyCode = val[columnIndex++];
-                    var CustomerCode = val[columnIndex++];
-                    var CustomerOrderNumber = val[columnIndex++] + OrdNumSuffix;
-                    var CustomerOrderDate = csvDate(val[columnIndex++]);
-                    var ShippingDate = csvDate(val[columnIndex++]);
-                    var WarehouseCode = val[columnIndex++];
-                    var TotalGrossWeightOfOrder = csvDouble(val[columnIndex++]);
-                    var NumberOfPalletForDel = csvDouble(val[columnIndex++]);
-                    var ShippAddressID = val[columnIndex++];
-                    var ShippAddressCompanyName = val[columnIndex++];
-                    var ShippAddressZipCode = val[columnIndex++];
-                    var ShippingAddressCity = val[columnIndex++];
-                    var ShippingAddressStreetAndNumber = val[columnIndex++];
-                    var Note = val[columnIndex++];
-                    var RowNumber = csvInt(val[columnIndex++]);
-                    var ProductCode = val[columnIndex++];
-                    var U_M = val[columnIndex++];
-                    var ProdDescription = val[columnIndex++];
-                    var ConfOrderQty = csvDouble(val[columnIndex++]);
-                    var ConfPlannedQty = csvDouble(val[columnIndex++]);
-                    var NetWeight = csvDouble(val[columnIndex++]);
-                    var PalletPlannedQty = csvDouble(val[columnIndex++]);
-                    var PalletBulkQty = csvDouble(val[columnIndex++]);
-                    var GrossWeightPlanned = csvDouble(val[columnIndex++]);
-                    var ADR = val[columnIndex++];
-                    var ADRMultiplier = csvDouble(val[columnIndex++]);
-                    var ADRLimitedQuantity = val[columnIndex++];
-                    var Freeze = val[columnIndex++];
-                    var Melt = val[columnIndex++];
-                    var UV = val[columnIndex++];
-                    columnIndex++;
-                    columnIndex++;
-                    var VehicleType = val[columnIndex++];
+                    var CompanyCode = val[columnIndex++];                           //A
+                    var CustomerCode = val[columnIndex++];                          //B
+                    var CustomerOrderNumber = val[columnIndex++] + OrdNumSuffix;    //C
+                    var CustomerOrderDate = csvDate(val[columnIndex++]);            //D
+                    var ShippingDate = csvDate(val[columnIndex++]);                 //E
+                    var WarehouseCode = val[columnIndex++];                         //F
+                    var TotalGrossWeightOfOrder = csvDouble(val[columnIndex++]);    //G
+                    var NumberOfPalletForDel = csvDouble(val[columnIndex++]);       //H
+                    var ShippAddressID = val[columnIndex++];                        //I
+                    var ShippAddressCompanyName = val[columnIndex++];               //J
+                    var ShippAddressZipCode = val[columnIndex++];                   //K
+                    var ShippingAddressCity = val[columnIndex++];                   //L
+                    var ShippingAddressStreetAndNumber = val[columnIndex++];        //M
+                    var Note = val[columnIndex++];                                  //N
+                    var RowNumber = csvInt(val[columnIndex++]);                     //O
+                    var ProductCode = val[columnIndex++];                           //P
+                    var U_M = val[columnIndex++];                                   //Q
+                    var ProdDescription = val[columnIndex++];                       //R
+                    var ConfOrderQty = csvDouble(val[columnIndex++]);               //S
+                    var ConfPlannedQty = csvDouble(val[columnIndex++]);             //T
+                    var NetWeight = csvDouble(val[columnIndex++]);                  //U
+                    var PalletPlannedQty = csvDouble(val[columnIndex++]);           //V
+                    var PalletBulkQty = csvDouble(val[columnIndex++]);              //W
+                    var GrossWeightPlanned = csvDouble(val[columnIndex++]);         //X
+                    var ADR = val[columnIndex++];                                   //Y
+                    var ADRMultiplier = csvDouble(val[columnIndex++]);              //Z
+                    var ADRLimitedQuantity = val[columnIndex++];                    //AA
+                    var Freeze = val[columnIndex++];                                //AB
+                    var Melt = val[columnIndex++];                                  //AC
+                    var UV = val[columnIndex++];                                    //AD
+                    columnIndex++;                                                  //AE
+                    columnIndex++;                                                  //AF
+                    var VehicleType = val[columnIndex++];                           //AG
 
                     double UnitWeight = GrossWeightPlanned / ConfOrderQty;
 
