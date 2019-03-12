@@ -200,6 +200,7 @@ namespace PMapCore.BO
             public int clIdEnd { get; set; } 	//a beérkezési ügyfél (lerakó, raktár) azonosítója
             public int clDistance { get; set; } //a kiindulásitól a beérkezési ügyfél között mért távolság
             public int clTime { get; set; } 	//a kiindulásitól a beérkezési ügyfél között mért távolság megtételéhez szükséges idő percben
+            public double clTimeCalc { get; set; } 	//az ideális tarifaprofillal számított időtartam
         }
 
         //Újratervezés esetén a már elkészült túrák
@@ -421,7 +422,9 @@ namespace PMapCore.BO
             StringBuilder sb = new StringBuilder();
             foreach (CRelationAccess ra in lstRelationAccess)
             {
-                 sb.AppendFormat("setRelationAccess( {0}, {1}, {2}, {3}, {4})\n", ra.ttId, ra.clIdStart, ra.clIdEnd, ra.clDistance, ra.clTime);
+                 sb.AppendFormat("setRelationAccess( {0}, {1}, {2}, {3}, {4})\n", ra.ttId, ra.clIdStart, ra.clIdEnd,
+                     (PMapIniParams.Instance.FastestPath ? Math.Ceiling( ra.clTimeCalc * 100) : ra.clDistance),       //Ha leggyorsabb úttal számolunk, a menetidőket kell itt átadnunk
+                     ra.clTime);
             }
             OptimizerContent += sb.ToString();
         }

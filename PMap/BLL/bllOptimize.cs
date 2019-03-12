@@ -875,6 +875,7 @@ namespace PMapCore.BLL
 
             int lastSPP_ID = 0;
             double lastDuration = 0;
+            double lastDurationCalc = 0;
             int lastDistance = -1;
             int itemNo = 0;
             List<boEdge> lstSelEdges = new List<boEdge>();
@@ -889,6 +890,8 @@ namespace PMapCore.BLL
                     p_notify.SetInfoText(String.Format(PMapMessages.M_OPT_DST_PROC, itemNo, dt.Rows.Count));
 
                 double duration = lastDuration;
+                double durationCalc = lastDurationCalc;
+
                 if (lastNOD_ID_FROM != Util.getFieldValue<int>(dr, "NOD_ID_FROM") ||
                     lastNOD_ID_TO != Util.getFieldValue<int>(dr, "NOD_ID_TO") ||
                     lastRZN_ID_LIST != Util.getFieldValue<string>(dr, "RZN_ID_LIST") ||
@@ -938,39 +941,54 @@ namespace PMapCore.BLL
                      menetidőket kell átadni
                      */
 
-                    /*
-                    if (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 3 &&
-                         boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 33)
-                        Console.WriteLine("ss");
-                    */
 
                     duration = lstSelEdges.Sum(i => (double)i.EDG_LENGTH / (double)(dicSPV[i.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60));
+                    durationCalc = lstSelEdges.Sum(i => (double)i.EDG_LENGTH / ((double)PMapIniParams.Instance.dicSpeed[i.RDT_VALUE] / 3.6 * 60));
+                    if ( (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 2 &&
+                         boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 73)
+                        ||
+                        (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 2 &&
+                        boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 1)
+                        ||
+                        (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 1 &&
+                         boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 73)
+                        )
+                       Console.WriteLine("ss");
+
 
                     /*
-                    double dd = 0;
-                    foreach( var ws in lstSelEdges)
-                    {
-                        Util.String2File(ws.EDG_NAME + ";" + ws.EDG_LENGTH.ToString() + ";" + dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE.ToString() + ";" + ((double)ws.EDG_LENGTH / (double)(dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60)).ToString() +"\n",
-                            @"d:\temp\1109\aa.log", true);
+                                        if (boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID == 71 &&
+                                            boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID == 2)
+                                        {
+                                            double dd = 0;
+                                            foreach (var ws in lstSelEdges)
+                                            {
 
-                        dd += ((double)ws.EDG_LENGTH / (double)(dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60));
-                    }
+                                    Util.String2File(ws.EDG_NAME + ";" + ws.EDG_LENGTH.ToString() + ";" + dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE.ToString() + ";" + ((double)ws.EDG_LENGTH / (double)(dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60)).ToString() + "\n",
+                                                    @"d:\work\source\Correct-Tour_RB\P-VRP\kell\aa.log", true);
+                                                    z
+                                                dd += ((double)ws.EDG_LENGTH / (double)(dicSPV[ws.RDT_VALUE + Global.SEP_COORD + lastSPP_ID.ToString()].SPV_VALUE / 3.6 * 60));
+                                            }
+                                        }
                     */
+
                 }
 
                 lastDuration = duration;
+                lastDurationCalc = durationCalc;
 
                 //lastEdges = edges;
 
                 lastDistance = Util.getFieldValue<int>(dr, "DST_DISTANCE");
 
-                //ha nincs távolság a két pont között, akkor max értéket adumk meg. 
+                //ha nincs távolság a két pont között, akkor max értéket adunk meg. 
                 //evvel azt érjük el, hogy a nyitva tartási időn belül ne lehessen
                 //kiszolgálni egy túrapontot.
                 if (lastDistance == 0)
                 {
                     lastDistance = 9999999;
                     lastDuration = 1440 * 2;
+                    lastDurationCalc = 1440 * 2;
                 }
 
                 var ttKey = String.Format("{0}_{1}_{2}_{3}", Util.getFieldValue<string>(dr, "RZN_ID_LIST"),
@@ -990,7 +1008,8 @@ namespace PMapCore.BLL
                     clIdStart = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID,
                     clIdEnd = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID,
                     clDistance = lastDistance,
-                    clTime = (int)Math.Round(lastDuration)
+                    clTime = (int)Math.Floor(lastDuration),
+                    clTimeCalc = lastDurationCalc
                 });
 
             }

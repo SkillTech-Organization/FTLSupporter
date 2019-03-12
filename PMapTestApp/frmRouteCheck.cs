@@ -206,10 +206,7 @@ namespace PMapTestApp
         {
             PointLatLng pt = gMapControl.FromLocalToLatLng(e.X, e.Y);
 
-            this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
-            this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
-            this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
-            this.numLngTo.ValueChanged -= new System.EventHandler(this.numLngTo_ValueChanged);
+            setFiledTriggersOff();
             if (rdbFrom.Checked)
             {
                 MarkerFrom.Position = pt;
@@ -223,11 +220,7 @@ namespace PMapTestApp
                 numLatTo.Value = Convert.ToDecimal(pt.Lat);
                 numLngTo.Value = Convert.ToDecimal(pt.Lng);
             }
-
-            this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
-            this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
-            this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
-            this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
+            setFiledTriggersOn();
             //    gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
 
         }
@@ -244,9 +237,8 @@ namespace PMapTestApp
             if (NOD_ID > 0)
             {
 
-                this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
-                this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
-                this.numFromNOD_ID.ValueChanged -= new System.EventHandler(this.numFromNOD_ID_ValueChanged);
+                setFiledTriggersOff();
+
                 numFromNOD_ID.Value = NOD_ID;
 
                 boNode nd = m_bllRoute.GetNode(NOD_ID);
@@ -254,9 +246,7 @@ namespace PMapTestApp
 
                 numLatFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lat);
                 numLngFrom.Value = Convert.ToDecimal(MarkerFrom.Position.Lng);
-                this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
-                this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
-                this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
+                setFiledTriggersOn();
                 UpdateControls();
            //     UI.Message("Diff:"+ diff.ToString());
 
@@ -273,9 +263,7 @@ namespace PMapTestApp
       //      int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
             {
-                this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
-                this.numLngTo.ValueChanged -= new System.EventHandler(this.numLngTo_ValueChanged);
-                this.numToNOD_ID.ValueChanged -= new System.EventHandler(this.numToNOD_ID_ValueChanged);
+                setFiledTriggersOff();
                 numToNOD_ID.Value = NOD_ID;
 
                 boNode nd = m_bllRoute.GetNode(NOD_ID);
@@ -284,9 +272,7 @@ namespace PMapTestApp
                 numLatTo.Value = Convert.ToDecimal(MarkerTo.Position.Lat);
                 numLngTo.Value = Convert.ToDecimal(MarkerTo.Position.Lng);
 
-                this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
-                this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
-                this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
+                setFiledTriggersOn();
                 UpdateControls();
             }
 
@@ -603,12 +589,13 @@ namespace PMapTestApp
             dlgSelWHSDEP d = new dlgSelWHSDEP();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
+                setFiledTriggersOff();
                 lblFrom.Text = d.m_XNAME;
                 numFromNOD_ID.Value = d.m_NOD_ID;
                 numLatFrom.Value = d.m_NOD_XPOS/Global.LatLngDivider;
                 numLngFrom.Value = d.m_NOD_YPOS / Global.LatLngDivider;
-                this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
+                MarkerFrom.Position = new PointLatLng((double)numLngFrom.Value, (double)numLatFrom.Value);
+                setFiledTriggersOn();
 
             }
         }
@@ -617,12 +604,13 @@ namespace PMapTestApp
             dlgSelWHSDEP d = new dlgSelWHSDEP();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+                setFiledTriggersOff();
                 lblTo.Text = d.m_XNAME;
-                numToNOD_ID.Value = d.m_NOD_ID / Global.LatLngDivider;
+                numToNOD_ID.Value = d.m_NOD_ID ;
                 numLatTo.Value = d.m_NOD_XPOS / Global.LatLngDivider;
                 numLngTo.Value = d.m_NOD_YPOS / Global.LatLngDivider;
-                this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
+                MarkerTo.Position = new PointLatLng((double)numLngTo.Value, (double)numLatTo.Value);
+                setFiledTriggersOn();
 
             }
         }
@@ -800,6 +788,28 @@ namespace PMapTestApp
         {
             UpdateControls();
 
+        }
+
+        private void setFiledTriggersOff()
+        {
+            this.numLatFrom.ValueChanged -= new System.EventHandler(this.numLatFrom_ValueChanged);
+            this.numLngFrom.ValueChanged -= new System.EventHandler(this.numLngFrom_ValueChanged);
+            this.numFromNOD_ID.ValueChanged -= new System.EventHandler(this.numFromNOD_ID_ValueChanged);
+
+            this.numLatTo.ValueChanged -= new System.EventHandler(this.numLatTo_ValueChanged);
+            this.numLngTo.ValueChanged -= new System.EventHandler(this.numLngTo_ValueChanged);
+            this.numToNOD_ID.ValueChanged -= new System.EventHandler(this.numToNOD_ID_ValueChanged);
+        }
+
+        private void setFiledTriggersOn()
+        {
+            this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
+            this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
+            this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
+
+            this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
+            this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
+            this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
         }
     }
 }
