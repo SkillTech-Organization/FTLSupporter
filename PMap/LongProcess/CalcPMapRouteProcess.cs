@@ -18,15 +18,22 @@ using PMapCore.Common;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.LongProcess
 {
+    //https://stackoverflow.com/questions/14186256/net-out-of-memory-exception-used-1-3gb-but-have-16gb-installed
+    //https://blogs.msdn.microsoft.com/calvin_hsia/2010/09/27/out-of-memory-easy-ways-to-increase-the-memory-available-to-your-program/
+
 
     /// <summary>
     /// Útvonalszámítás process
     /// </summary>
     class CalcPMapRouteProcess : BaseLongProcess
     {
+        private const int FLUSH_MIN = 3000;
+        private const int FLUSH_MAX = 7000;
+
         public bool Completed { get; set; }
 
         private List<boRoute> m_CalcDistances = null;
@@ -73,14 +80,16 @@ namespace PMapCore.LongProcess
                 Util.Log2File("CalcPMapRouteProcess Allocated: " + allocated.ToString());
 
                 Completed = false;
-
+                
+                /*
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-
+                */
 
                 DateTime dtStart = DateTime.Now;
                 TimeSpan tspDiff;
+                TimeSpan tspFlush;
 
                 if (ProcessForm != null)
                 {
@@ -111,11 +120,12 @@ namespace PMapCore.LongProcess
                 DateTime dtStartX2 = DateTime.Now;
 
                 var maxCnt = m_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).Count();
-                Random random = new Random();
-                int flushcnt = random.Next(9000, 12000);
+                Random random = new Random((int)DateTime.Now.Millisecond);
+                int flushcnt = random.Next(FLUSH_MIN, FLUSH_MAX);
 
                 List<boRoute> results = new List<boRoute>();
                 int itemNo = 0;
+                int flushNo = 0;
 
 
     /*
@@ -126,6 +136,11 @@ namespace PMapCore.LongProcess
 
                 foreach (var routePar in routePars)
                 {
+
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+
                     List<int>[] MapFull = null;
                     List<int>[] MapCut = null;
                     RouteData.Instance.PrepareMap(routePar, ref MapFull, ref MapCut, boundary, null);
@@ -141,7 +156,6 @@ namespace PMapCore.LongProcess
                     {
  
                         dtStart = DateTime.Now;
-                        itemNo++;
 
 
                         List<int> lstToNodes = calcNode.Value;
@@ -158,11 +172,12 @@ namespace PMapCore.LongProcess
 
                         if (results.Count() >= flushcnt)
                         {
-                            ProcessForm.SetInfoText("Kiírás...");
-                            m_bllRoute.WriteRoutesBulk(results, m_savePoints);
+                            FlushData(results, ++flushNo);
                             results = new List<boRoute>();
-                            Util.Log2File("CalcPMapRouteProcess WriteRoutesBulk: " + GC.GetTotalMemory(false).ToString());
+                            flushcnt = random.Next(FLUSH_MIN, FLUSH_MAX);
                         }
+                        
+
                         /*
                         //Eredmény ellenőrzése Google-al
                         foreach (var ri in results)
@@ -209,7 +224,7 @@ namespace PMapCore.LongProcess
                         */
 
 
-                        if (EventStop != null && EventStop.WaitOne(0, true))
+                        if (itemNo % 10 == 0 && EventStop != null && EventStop.WaitOne(0, true))    //gyorsítás:minden 10-re nézzük  leállás signal-t
                         {
 
                             EventStopped.Set();
@@ -218,25 +233,29 @@ namespace PMapCore.LongProcess
                         }
 
 
-
-                        tspDiff = DateTime.Now - dtStart;
-                        string infoText1 = itemNo.ToString() + "/" + (maxCnt.ToString());
-                        if (PMapIniParams.Instance.TestMode)
-                            infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
-                        //                ProcessForm.SetInfoText(m_Hint.Trim() + "=>" + Util.GetSysInfo().PadRight(15) + " " + infoText1.PadRight(25) + " NODE_ID:" + item.Key.ToString());
-                        if (ProcessForm != null)
+                        itemNo++;
+                        if (itemNo % random.Next(5, 15) == 0)
                         {
-                            ProcessForm.SetInfoText(m_Hint.Trim() + infoText1);
-                            ProcessForm.NextStep();
+
+                            tspDiff = DateTime.Now - dtStart;
+                            string infoText1 = itemNo.ToString() + "/" + (maxCnt.ToString());
+                            if (PMapIniParams.Instance.TestMode)
+                                infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
+                            //                ProcessForm.SetInfoText(m_Hint.Trim() + "=>" + Util.GetSysInfo().PadRight(15) + " " + infoText1.PadRight(25) + " NODE_ID:" + item.Key.ToString());
+                            if (ProcessForm != null)
+                            {
+                                ProcessForm.SetInfoText(m_Hint.Trim() + infoText1);
+                                ProcessForm.NextStep();
+                            }
+                            this.SetNotifyIconText(m_Hint.Trim() + infoText1);
                         }
-                        this.SetNotifyIconText(m_Hint.Trim() + infoText1);
                     }
                 }
 
 
-                //Eredmény adatbázisba írása
-                ProcessForm.SetInfoText("Kiírás...");
-                m_bllRoute.WriteRoutesBulk(results, m_savePoints);
+                //Maradék adatok adatbázisba írása
+                FlushData(results, ++flushNo);
+
                 Completed = true;
                 m_DB.Close();
 
@@ -245,16 +264,19 @@ namespace PMapCore.LongProcess
             {
                Util.ExceptionLog(ex);
                 Util.Log2File("CalcPMapRouteProcess InsufficientMemoryException AVAILABLE:" + GC.GetTotalMemory(false).ToString());
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
             catch (OutOfMemoryException ex)
             {
                 Util.ExceptionLog(ex);
                 Util.Log2File("CalcPMapRouteProcess OutOfMemoryException AVAILABLE:" + GC.GetTotalMemory(false).ToString());
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             finally
@@ -265,6 +287,18 @@ namespace PMapCore.LongProcess
                 }
             }
         }
+        private void FlushData(List<boRoute> results, int p_flushCnt)
+        {
+            DateTime dtStartFlush = DateTime.Now;
+            ProcessForm.SetInfoText(m_Hint.Trim() + "Kiírás..." + p_flushCnt.ToString());
+            m_bllRoute.WriteRoutesBulk(results, m_savePoints);
+            results = new List<boRoute>();
+            Util.Log2File("CalcPMapRouteProcess WriteRoutesBulk: Mmry:" + GC.GetTotalMemory(false).ToString() + ",duration:" +
+                " " + (DateTime.Now - dtStartFlush).Duration().TotalMilliseconds.ToString("#0") +  " ms"
+                );
+        }
 
     }
+
+
 }

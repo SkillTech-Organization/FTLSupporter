@@ -12,6 +12,7 @@ using PMapCore.Common.PPlan;
 using PMapCore.WebTrace;
 using System.Drawing;
 using System.Web.Script.Serialization;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -661,6 +662,7 @@ namespace PMapCore.BLL
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

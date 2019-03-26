@@ -19,6 +19,7 @@ using Microsoft.WindowsAzure.Storage.Table.Queryable;
 using System.Threading.Tasks;
 using PMapCore.Common.Attrib;
 using Newtonsoft.Json;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Common.Azure
 {
@@ -89,6 +90,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
         }
@@ -189,12 +191,14 @@ namespace PMapCore.Common.Azure
                     }
                     catch (Exception ex)
                     {
+                        ExceptionDispatchInfo.Capture(ex).Throw();
                         throw;
                     }     //szebben megoldani!
                 }
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
 
             }     //szebben megoldani
@@ -324,7 +328,10 @@ namespace PMapCore.Common.Azure
 
                     }
                 }
-                catch (Exception ex) { throw; }     //szebben megoldani!
+                catch (Exception ex) {
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                    throw;
+                }     //szebben megoldani!
             }
             return result;
         }
@@ -378,6 +385,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
         }
@@ -583,6 +591,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
         }
@@ -626,6 +635,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
         }
@@ -703,6 +713,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
             return true;
@@ -793,6 +804,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
 
@@ -879,6 +891,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
             return lstResult;
@@ -1000,6 +1013,7 @@ namespace PMapCore.Common.Azure
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
             return result;

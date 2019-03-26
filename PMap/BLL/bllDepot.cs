@@ -10,6 +10,7 @@ using PMapCore.Common;
 using GMap.NET;
 using System.Data.Common;
 using System.Collections;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -142,6 +143,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
 

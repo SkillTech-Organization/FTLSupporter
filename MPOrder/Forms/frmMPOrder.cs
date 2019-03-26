@@ -14,6 +14,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -141,6 +142,7 @@ namespace MPOrder.Forms
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
             finally

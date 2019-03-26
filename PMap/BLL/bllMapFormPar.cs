@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using PMapCore.DB.Base;
 using PMapCore.Common;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -59,6 +60,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     PMapCommonVars.Instance.CT_DB.Rollback();
+                    System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -107,6 +109,7 @@ namespace PMapCore.BLL
             catch (Exception e)
             {
                 PMapCommonVars.Instance.CT_DB.Rollback();
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

@@ -8,6 +8,7 @@ using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Localize;
 using PMapCore.BO.DataXChange;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL.DataXChange
 {
@@ -191,6 +192,7 @@ namespace PMapCore.BLL.DataXChange
                                 catch (Exception e)
                                 {
                                     DBA.Rollback();
+                                    ExceptionDispatchInfo.Capture(e).Throw();
                                     throw;
                                 }
                             }

@@ -25,6 +25,7 @@ using PMapCore.Forms.Base;
 using PMapCore.Common.PPlan;
 using PMapCore.DB.Base;
 using PMapCore.Route;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms.Panels.frmPPlan
 {
@@ -192,6 +193,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 
@@ -293,6 +295,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
                 gMapControl.ResumeLayout();
                 gMapControl.Refresh();
 
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             return CreateCompleted;
@@ -331,6 +334,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
                 gMapControl.ResumeLayout();
                 gMapControl.Refresh();
 
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 
@@ -573,6 +577,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -605,6 +610,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             catch (Exception e)
             {
                 gMapControl.HoldInvalidation = false;
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -622,6 +628,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             catch (Exception e)
             {
                 gMapControl.HoldInvalidation = false;
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -1300,7 +1307,8 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception ex)
             {
-                Util.ExceptionLog(ex);
+       //         Util.ExceptionLog(ex);
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
 
@@ -1418,7 +1426,8 @@ namespace PMapCore.Forms.Panels.frmPPlan
                     return;
                 boPlanTour tooltipedTour = null;
                 boPlanOrder tooltipedPlanOrder = null;
-                if (m_PPlanCommonVars.TooltipMode == MarkerTooltipMode.Always)
+                if (m_PPlanCommonVars.TooltipMode == MarkerTooltipMode.Always &&
+                    item.ToolTipText != null)
                 {
                     //Ha minden tooltipet megjelenítünk, akkor a kapott item első sora lesz megjelenítve a státuszsorban
                     string[] aToolTipText = item.ToolTipText.Split('\n');
@@ -1433,7 +1442,8 @@ namespace PMapCore.Forms.Panels.frmPPlan
                     //fókuszált pont tooltipjének begyűjtése
                     if (m_PPlanCommonVars.FocusedPoint != null &&
                         m_PPlanCommonVars.FocusedPoint.Marker != null &&
-                        m_PPlanCommonVars.FocusedPoint.Marker.Position == item.Position)
+                        m_PPlanCommonVars.FocusedPoint.Marker.Position == item.Position &&
+                        m_PPlanCommonVars.FocusedPoint.ToolTipText != null)
                     {
                         sToolTipText = m_PPlanCommonVars.FocusedPoint.ToolTipText.Replace("\\n", "\n");
                         tooltipedTour = m_PPlanCommonVars.FocusedPoint.Tour;
@@ -1441,12 +1451,15 @@ namespace PMapCore.Forms.Panels.frmPPlan
 
                     if (m_PPlanCommonVars.FocusedUnplannedOrder != null &&
                         m_PPlanCommonVars.FocusedUnplannedOrder.Marker != null &&
-                        m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position == item.Position)
+                        m_PPlanCommonVars.FocusedUnplannedOrder.Marker.Position == item.Position &&
+                        m_PPlanCommonVars.FocusedUnplannedOrder.ToolTipText != null)
                     {
                         sToolTipText = m_PPlanCommonVars.FocusedUnplannedOrder.ToolTipText.Replace("\\n", "\n");
                         tooltipedPlanOrder = m_PPlanCommonVars.FocusedUnplannedOrder;
                     }
-                    if (m_EditedTourPoint != null && m_EditedTourPoint.Marker != null && m_EditedTourPoint.Marker.Position == item.Position)
+                    if (m_EditedTourPoint != null && m_EditedTourPoint.Marker != null && 
+                        m_EditedTourPoint.Marker.Position == item.Position &&
+                        m_EditedTourPoint.ToolTipText != null)
                     {
                         sToolTipText = m_EditedTourPoint.ToolTipText.Replace("\\n", "\n");
                         tooltipedTour = m_EditedTourPoint.Tour;
@@ -1610,6 +1623,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception ex)
             {
+                ExceptionDispatchInfo.Capture(ex).Throw();
                 throw;
             }
 

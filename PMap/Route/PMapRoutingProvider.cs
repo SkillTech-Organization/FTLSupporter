@@ -13,6 +13,7 @@ using System.Data.Odbc;
 using PMapCore.DB;
 using PMapCore.BO;
 using PMapCore.Common;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.MapProvider
 {
@@ -239,6 +240,7 @@ namespace PMapCore.MapProvider
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             finally
@@ -276,6 +278,7 @@ namespace PMapCore.MapProvider
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             return float.MaxValue;

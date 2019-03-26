@@ -7,6 +7,7 @@ using PMapCore.DB.Base;
 using PMapCore.BO;
 using System.Data;
 using PMapCore.Common;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -121,6 +122,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
 

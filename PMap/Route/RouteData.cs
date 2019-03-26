@@ -13,6 +13,7 @@ using PMapCore.Localize;
 using PMapCore.Common;
 using System.IO;
 using Newtonsoft.Json;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Route
 {
@@ -238,6 +239,7 @@ namespace PMapCore.Route
                     }
                     catch (Exception e)
                     {
+                        ExceptionDispatchInfo.Capture(e).Throw();
                         throw;
                     }
 

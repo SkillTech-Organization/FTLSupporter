@@ -13,6 +13,7 @@ using PMapCore.BO;
 using PMapCore.Localize;
 using PMapCore.Forms.Base;
 using PMapCore.Common;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms
 {
@@ -82,6 +83,7 @@ namespace PMapCore.Forms
 
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             finally

@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using PMapCore.Localize;
 using PMapCore.Common;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -77,6 +78,7 @@ namespace PMapCore.BLL
             catch (Exception e)
             {
                 PMapCommonVars.Instance.CT_DB.Rollback();
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 
@@ -157,12 +159,13 @@ namespace PMapCore.BLL
             {
                 //Ha van ilyen korlátozás
 
-                sSQLStr = "select DPT.ID " +
+                sSQLStr = "select count(*) as DEPCNT " +
                           "from DPT_DEPTRUCK DPT " +
                           "inner join TPL_TRUCKPLAN TPL on DPT.TRK_ID = TPL.TRK_ID and DPT.DEP_ID = ? " +
                           "where TPL.ID = ?";
                 dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lDEP_ID, p_TPL_ID);
-                retVal = dt.Rows.Count != 0;
+                iDepCnt = Util.getFieldValue<int>(dt.Rows[0], "DEPCNT");
+                retVal = iDepCnt != 0;
             }
 
             return retVal;
@@ -187,13 +190,14 @@ namespace PMapCore.BLL
             if (dt.Rows.Count == 1)
             {
                 sRZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
-                sSQL = "select * from TOD_TOURORDER TOD "  +
+                sSQL = "select count(*) as cnt from TOD_TOURORDER TOD " +
                        "inner join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + 
                        "inner join DEP_DEPOT DEP on DEP.ID = TOD.DEP_ID " +
                        "inner join DST_DISTANCE DST on DST.RZN_ID_LIST = ? and (DST.NOD_ID_FROM=DEP.NOD_ID or DST.NOD_ID_TO=DEP.NOD_ID) and DST.DST_DISTANCE >= 0 " +
                        "where TOD.ID= ? ";
                 dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQL, sRZN_ID_LIST, p_TOD_ID);
-                return dt.Rows.Count > 0;
+                var cnt = Util.getFieldValue<int>(dt.Rows[0], "cnt");
+                return cnt > 0;
             }
             else
                 return false;

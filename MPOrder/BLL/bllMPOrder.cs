@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -466,6 +467,7 @@ namespace MPOrder.BLL
                     catch (Exception e)
                     {
                         DBA.Rollback();
+                        ExceptionDispatchInfo.Capture(e).Throw();
                         throw;
                     }
                 }
@@ -617,6 +619,7 @@ namespace MPOrder.BLL
 
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

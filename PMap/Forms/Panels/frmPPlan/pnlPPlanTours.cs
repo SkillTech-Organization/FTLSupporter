@@ -15,6 +15,7 @@ using PMapCore.BLL;
 using PMapCore.Forms.Base;
 using PMapCore.Common;
 using PMapCore.Common.PPlan;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms.Panels.frmPPlan
 {
@@ -53,6 +54,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

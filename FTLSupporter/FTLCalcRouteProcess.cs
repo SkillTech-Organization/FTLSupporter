@@ -9,6 +9,7 @@ using PMapCore.Route;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 
 namespace FTLSupporter
@@ -43,7 +44,7 @@ namespace FTLSupporter
             {
                 Completed = false;
 
-                int i = 0;
+                int itemNo = 0;
                 DateTime dtStart = DateTime.Now;
                 TimeSpan tspDiff;
 
@@ -74,6 +75,7 @@ namespace FTLSupporter
 
                 DateTime dtStartX2 = DateTime.Now;
                 List<boRoute> writeRoute = new List<boRoute>();
+
                 foreach (var calcNode in lstCalcNodes.AsEnumerable())
                 {
 
@@ -81,7 +83,6 @@ namespace FTLSupporter
                                                     w.Weight == calcNode.Key.GVWR &&
                                                     w.Height == calcNode.Key.Height &&
                                                     w.Width == calcNode.Key.Width).FirstOrDefault();
-                    i++;
                     dtStart = DateTime.Now;
 
                     List<int> lstToNodes = calcNode.Value;
@@ -89,6 +90,7 @@ namespace FTLSupporter
                                             NeighborsArrFull[routePar.Hash], 
                                             PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ?  NeighborsArrCut[routePar.Hash] : null,
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
+                    Random random = new Random((int)DateTime.Now.Millisecond);
 
                     //A kiszámolt eredmények 'bedolgozása'
                     foreach (boRoute route in results)
@@ -120,17 +122,21 @@ namespace FTLSupporter
                         Completed = false;
                         break;
                     }
-                
-                    tspDiff = DateTime.Now - dtStart;
-                    string infoText1 = i.ToString() + "/" + fromNodes.Count();
-                    if (PMapIniParams.Instance.TestMode)
-                        infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
-                    if (ProcessForm != null)
+
+                    itemNo++;
+                    if (itemNo % random.Next(5,15) == 0)
                     {
-                        ProcessForm.SetInfoText( infoText1);
-                        ProcessForm.NextStep();
+                        tspDiff = DateTime.Now - dtStart;
+                        string infoText1 = itemNo.ToString() + "/" + fromNodes.Count();
+                        if (PMapIniParams.Instance.TestMode)
+                            infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
+                        if (ProcessForm != null)
+                        {
+                            ProcessForm.SetInfoText(infoText1);
+                            ProcessForm.NextStep();
+                        }
+                        this.SetNotifyIconText(infoText1);
                     }
-                    this.SetNotifyIconText(infoText1);
                 }
 
                 m_bllRoute.WriteRoutesBulk(writeRoute, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
@@ -140,6 +146,7 @@ namespace FTLSupporter
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             finally

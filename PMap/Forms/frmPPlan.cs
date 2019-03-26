@@ -30,6 +30,7 @@ using PMapCore.Route;
 using PMapCore.WebTrace;
 using PMapCore.Common.Azure;
 using PMapCore.DB.Base;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms
 {
@@ -122,6 +123,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

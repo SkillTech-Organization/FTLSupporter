@@ -12,6 +12,7 @@ using PMapCore.BO;
 using PMapCore.BLL;
 using PMapCore.Route;
 using PMapCore.Common;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.LongProcess
 {
@@ -80,6 +81,7 @@ namespace PMapCore.LongProcess
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

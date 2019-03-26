@@ -171,7 +171,7 @@ namespace PMapCore.LongProcess.Base
             }
             catch (Exception e)
             {
-                Util.ExceptionLog(e);
+               // Util.ExceptionLog(e);
             }
         }
 

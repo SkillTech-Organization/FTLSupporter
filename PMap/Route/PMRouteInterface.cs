@@ -15,6 +15,7 @@ using PMapCore.BO;
 using PMapCore.Localize;
 using PMapCore.Common;
 using PMapCore.Licence;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Route
 {
@@ -43,6 +44,7 @@ namespace PMapCore.Route
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -110,6 +112,7 @@ namespace PMapCore.Route
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             tspDiff = DateTime.Now - dtStart;
@@ -224,6 +227,7 @@ namespace PMapCore.Route
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             finally

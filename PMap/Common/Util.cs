@@ -26,6 +26,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Common
 {
@@ -149,7 +150,10 @@ namespace PMapCore.Common
                     tw.Write(p_s);
                     tw.Close();
                 }
-                catch (Exception e) { throw; }
+                catch (Exception e) {
+                    ExceptionDispatchInfo.Capture(e).Throw();
+                    throw;
+                }
                 return p_file;
             }
         }

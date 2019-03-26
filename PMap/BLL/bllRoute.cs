@@ -20,6 +20,7 @@ using FastMember;
 using PMapCore.Cache;
 using PMapCore.BLL;
 using PMapCore.Localize;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -142,6 +143,7 @@ namespace PMapCore.BLL
                     catch (Exception e)
                     {
                         DBA.Rollback();
+                        ExceptionDispatchInfo.Capture(e).Throw();
                         throw;
                     }
 
@@ -929,6 +931,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
 

@@ -16,6 +16,7 @@ using PMapCore.MapProvider;
 using PMapCore.Cache;
 using GMap.NET.WindowsForms.Markers;
 using PMapCore.Markers;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Common.PPlan
 {
@@ -224,6 +225,7 @@ namespace PMapCore.Common.PPlan
                 {
                     PMapCommonVars.Instance.CT_DB.Rollback();
                     Util.ExceptionLog(exc);
+                    ExceptionDispatchInfo.Capture(exc).Throw();
                     throw;
                 }
 

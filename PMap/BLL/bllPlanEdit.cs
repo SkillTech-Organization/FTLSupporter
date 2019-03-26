@@ -15,6 +15,7 @@ using PMapCore.Localize;
 using PMapCore.Common.PPlan;
 using System.Windows.Forms;
 using PMapCore.BO.DataXChange;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -87,6 +88,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -160,6 +162,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -463,6 +466,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -481,6 +485,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -497,6 +502,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -533,6 +539,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -559,6 +566,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -597,6 +605,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -663,6 +672,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -681,6 +691,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -697,6 +708,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -714,6 +726,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -752,6 +765,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -842,6 +856,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -1062,6 +1077,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
 
@@ -1389,6 +1405,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -1409,6 +1426,7 @@ namespace PMapCore.BLL
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -1449,6 +1467,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }
@@ -1467,6 +1486,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }

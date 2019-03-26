@@ -18,6 +18,7 @@ using PMapCore.Localize;
 using PMapCore.BLL;
 using PMapCore.Common;
 using System.Globalization;
+using System.Runtime.ExceptionServices;
 
 namespace PMapTestApp
 {
@@ -153,6 +154,7 @@ namespace PMapTestApp
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

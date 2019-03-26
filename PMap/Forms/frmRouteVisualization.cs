@@ -24,6 +24,7 @@ using PMapCore.Markers;
 using Map.LongProcess;
 using PMapCore.BO.DataXChange;
 using PMapCore.Common.PPlan;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms
 {
@@ -71,6 +72,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

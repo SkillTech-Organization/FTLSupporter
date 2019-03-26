@@ -27,6 +27,7 @@ using PMapCore.Localize;
 using PMapCore.Common;
 using PMapCore.Forms.Base;
 using PMapCore.Common.PPlan;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms
 {
@@ -126,6 +127,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 
@@ -204,6 +206,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             return res;
@@ -238,6 +241,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             return true;
@@ -314,6 +318,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             return true;
@@ -373,6 +378,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -399,6 +405,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }
@@ -485,6 +492,7 @@ namespace PMapCore.Forms
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

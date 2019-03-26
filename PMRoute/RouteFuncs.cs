@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,9 +44,10 @@ namespace PMRoute
             }
             catch (Exception e)
             {
-                Util.ExceptionLog(e);
+            //    Util.ExceptionLog(e);
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
-                    }
+             }
 
             //Util.Log2File(">>END:InitPMapRouteData() -->" + sRet);
 
@@ -150,7 +152,8 @@ namespace PMRoute
             }
            catch (Exception e)
             {
-                Util.ExceptionLog(e);
+                //Util.ExceptionLog(e);
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
             finally

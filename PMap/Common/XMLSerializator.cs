@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Common
 {
@@ -61,6 +62,7 @@ namespace PMapCore.Common
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

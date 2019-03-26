@@ -6,6 +6,7 @@ using PMapCore.LongProcess.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,8 +34,9 @@ namespace MPOrder.LongProcess
                 var bllMPOrderX = new bllMPOrder(m_DB);
                 Result = bllMPOrderX.SendToCT(m_data, ProcessForm);
             }
-            catch
+            catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

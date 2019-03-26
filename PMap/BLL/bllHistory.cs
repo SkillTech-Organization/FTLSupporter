@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using System.Globalization;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
 {
@@ -94,6 +95,7 @@ namespace PMapCore.BLL
                 catch (Exception e)
                 {
                     PMapCommonVars.Instance.CT_DB.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
             }

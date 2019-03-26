@@ -17,6 +17,7 @@ using PMapCore.Common.PPlan;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Base;
 using PMapCore.BLL;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms.Panels.frmPPlan
 {
@@ -48,6 +49,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

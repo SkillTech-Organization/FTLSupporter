@@ -26,9 +26,20 @@ namespace PMapCore.LongProcess.Base
 
         public override void _setInfoText(string p_infoText)
         {
-            lstInfoText.Items.Add(p_infoText);
+            
             int itemsPerPage = (int)(lstInfoText.Height / lstInfoText.ItemHeight);
-            lstInfoText.TopIndex = lstInfoText.Items.Count - itemsPerPage;
+            if (lstInfoText.Items.Count <= itemsPerPage)
+            {
+                lstInfoText.Items.Add(p_infoText);
+            }
+            else
+            {
+                lstInfoText.Items.RemoveAt(0);
+                lstInfoText.Items.Insert(itemsPerPage, p_infoText);
+            }
+
+            lstInfoText.TopIndex = lstInfoText.Items.Count;
+            
         }
 
         public override void _nextProgressValue()

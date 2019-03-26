@@ -5,6 +5,7 @@ using PMapCore.LongProcess.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,8 +38,9 @@ namespace MPOrder.LongProcess
                 var bllMPOrderX = new bllMPOrder(m_DB);
                 Result = bllMPOrderX.SendToNetMover(m_CSVFile, m_PLN_ID, m_ExportFile, ProcessForm);
             }
-            catch
+            catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
         }

@@ -17,6 +17,7 @@ using PMapCore.BLL;
 using PMapCore.Localize;
 using PMapCore.Common.PPlan;
 using DevExpress.XtraEditors;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms.Panels.frmPPlan
 {
@@ -70,6 +71,7 @@ namespace PMapCore.Forms.Panels.frmPPlan
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

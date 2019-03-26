@@ -18,6 +18,7 @@ using PMapCore.Common.PPlan;
 using Map.LongProcess;
 using PMapCore.BLL;
 using PMapCore.BO.DataXChange;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms.Panels.frmRouteVisualization
 {
@@ -147,6 +148,7 @@ namespace PMapCore.Forms.Panels.frmRouteVisualization
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 

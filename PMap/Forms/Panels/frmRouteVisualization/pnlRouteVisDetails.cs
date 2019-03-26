@@ -12,6 +12,7 @@ using GMap.NET.WindowsForms;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
 using DevExpress.XtraEditors.Repository;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Forms.Panels.frmRouteVisualization
 {
@@ -71,6 +72,7 @@ namespace PMapCore.Forms.Panels.frmRouteVisualization
             }
             catch (Exception e)
             {
+                ExceptionDispatchInfo.Capture(e).Throw();
                 throw;
             }
 
