@@ -396,14 +396,22 @@ namespace PMapCore.BLL
             DBA.ExecuteNonQuery("update TPL_TRUCKPLAN set TPL_COMPLETED=0 where ID=?", p_TPL_ID);
         }
 
-        public List<boPlanOrder> GetPlanOrders(int p_PLN_ID)
+        public List<boPlanOrder> GetPlanOrders(int p_PLN_ID = -1, int p_TOD_ID = -1)
         {
+
+            //Ez a default
+            string sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP_CITY + ' ' +DEP_ADRSTREET";
+
+            sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP_CITY + ' ' +DEP_ADRSTREET + " +
+                    "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
+
             string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
                           "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
-                          "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM " + Environment.NewLine +
-                          "from TOD_TOURORDER TOD " + Environment.NewLine +
+                          "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM," + Environment.NewLine +
+                          sTooltipText + " as TOOLTIPTEXT" + Environment.NewLine +
+                         "from TOD_TOURORDER TOD " + Environment.NewLine +
                           "   inner join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                           "   inner join NOD_NODE  NOD on DEP.NOD_ID = NOD.ID " + Environment.NewLine +
                           "   left join ZIP_ZIPCODE ZIP on DEP.ZIP_ID = ZIP.ID " + Environment.NewLine +
@@ -412,9 +420,19 @@ namespace PMapCore.BLL
                           "   left join PTP_PLANTOURPOINT PTP on PTP.TOD_ID = TOD.ID  " + Environment.NewLine +
                           "   left join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
                           "   left join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
-                          "where TOD.PLN_ID = ? ";
+                          "where  ";
+            DataTable dt;
+            if (p_PLN_ID > 0)
+            {
+                sSql += "TOD.PLN_ID = ? ";
+                dt = DBA.Query2DataTable(sSql, p_PLN_ID);
+            }
+            else
+            {
+                sSql += "  TOD.ID = ? and PTP.TPL_ID is null";
+                dt = DBA.Query2DataTable(sSql, p_TOD_ID);
+            }
 
-            DataTable dt = DBA.Query2DataTable(sSql, p_PLN_ID);
             var linq = (from o in dt.AsEnumerable()
                         orderby Util.getFieldValue<string>(o, "DEP_NAME")
                         select getPlanOrderRec(o)
@@ -426,30 +444,12 @@ namespace PMapCore.BLL
 
         public boPlanOrder GetPlanOrder(int p_TOD_ID)
         {
-            boPlanOrder retVal = null;
+            var orderList = GetPlanOrders(-1, p_TOD_ID);
+            
+            if (orderList != null && orderList.Count > 0)
+                return orderList.FirstOrDefault();
 
-            string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
-                          "case when OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
-                          "case when OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
-                          "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
-                          "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM " + Environment.NewLine +
-                          "from TOD_TOURORDER TOD " + Environment.NewLine +
-                          "   inner join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
-                          "   inner join NOD_NODE  NOD on DEP.NOD_ID = NOD.ID " + Environment.NewLine +
-                          "   left join ZIP_ZIPCODE ZIP on DEP.ZIP_ID = ZIP.ID " + Environment.NewLine +
-                          "   inner join ORD_ORDER ORD on TOD.ORD_ID = ORD.ID  " + Environment.NewLine +
-                          "   left join OTP_ORDERTYPE OTP on ORD.OTP_ID = OTP.ID " + Environment.NewLine +
-                          "   left join PTP_PLANTOURPOINT PTP on PTP.TOD_ID = TOD.ID  " + Environment.NewLine +
-                          "   left join TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
-                          "   left join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
-                          "where TOD.ID = ? and PTP.TPL_ID is null";
-
-            DataTable dt = DBA.Query2DataTable(sSql, p_TOD_ID);
-
-            if (dt.Rows.Count == 1)
-                retVal = getPlanOrderRec(dt.Rows[0]);
-
-            return retVal;
+            return null;
         }
 
         private boPlanOrder getPlanOrderRec(DataRow p_dr)
@@ -478,7 +478,8 @@ namespace PMapCore.BLL
                 ORD_HEIGHT = Util.getFieldValue<double>(p_dr, "ORD_HEIGHT"),
                 ORD_COMMENT = Util.getFieldValue<string>(p_dr, "ORD_COMMENT"),
                 OPENCLOSE = getOpenClose(p_dr, true),
-                ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
+ //KIVEYETNI               ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
+                ToolTipText = Util.getFieldValue<string>(p_dr, "TOOLTIPTEXT"),
 
                 PTP_ID = Util.getFieldValue<int>(p_dr, "PTP_ID"),
                 TPL_ID = Util.getFieldValue<int>(p_dr, "TPL_ID"),
@@ -488,10 +489,12 @@ namespace PMapCore.BLL
                 TOD_SERVS = Util.getFieldValue<int>(p_dr, "TOD_SERVS"),
                 TOD_SERVE = Util.getFieldValue<int>(p_dr, "TOD_SERVE")
             };
+            /*KIVEYETNI
             if (PMapIniParams.Instance.OrdCommentInTooltip)
                 ret.ToolTipText += "\n" +
                     "Térfogat:" + ret.ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + ret.TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
                     ret.ORD_COMMENT;
+            */
             return ret;
         }
 

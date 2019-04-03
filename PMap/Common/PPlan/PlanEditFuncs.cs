@@ -98,6 +98,8 @@ namespace PMapCore.Common.PPlan
                 if (res == bllPlanCheck.checkOrderResult.OK && m_bllPlanEdit.RemoveOrderFromTour(p_ReorganizedTourPoint, Global.defWeather, true))
                 {
                     boPlanOrder upo = m_bllPlan.GetPlanOrder(p_ReorganizedTourPoint.TOD_ID);
+                    if (upo == null)
+                        throw new Exception("Unkown TOD_ID:" + p_ReorganizedTourPoint.TOD_ID.ToString());
 
                     int PTP_ID = m_bllPlanEdit.AddOrderToTour(p_Tour.ID, upo, p_InsertionPoint, Global.defWeather);
 

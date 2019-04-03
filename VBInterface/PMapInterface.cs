@@ -512,7 +512,7 @@ namespace VBInterface
             return bOK;
         }
 
-        private static void waitMessageThread()
+        private void waitMessageThread()
         {
             dlgWait d = new dlgWait();
             d.ShowDialog();

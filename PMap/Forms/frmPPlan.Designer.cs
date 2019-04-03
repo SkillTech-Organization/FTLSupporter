@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPPlan));
             WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
             WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
@@ -44,7 +45,7 @@
             WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            this.dmPPlan = new DevExpress.XtraBars.Docking.DockManager();
+            this.dmPPlan = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.btnExit = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnQuit = new System.Windows.Forms.ToolStripButton();
@@ -79,6 +80,7 @@
             this.btnOpenClose = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.btnPrint = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dmPPlan)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -134,6 +136,7 @@
             this.toolStripSeparator2,
             this.btnSaveLayout,
             this.btnRestoreLayout,
+            this.btnPrint,
             this.btnResetScreen,
             this.btnOpenClose});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -487,6 +490,15 @@
             this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 3;
             // 
+            // btnPrint
+            // 
+            this.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.Image")));
+            this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(23, 22);
+            this.btnPrint.Text = "Összesítő nyomtatás";
+            // 
             // frmPPlan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -545,5 +557,6 @@
         private System.Windows.Forms.ToolStripButton btnCompleteTourRoutes;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton btnOpenClose;
+        private System.Windows.Forms.ToolStripButton btnPrint;
     }
 }

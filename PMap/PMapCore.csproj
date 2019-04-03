@@ -759,6 +759,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="map.ico" />
+    <Content Include="Resources\printer.png" />
     <None Include="Resources\tray\11.ico" />
     <None Include="Resources\tray\10.ico" />
     <None Include="Resources\tray\8.ico" />

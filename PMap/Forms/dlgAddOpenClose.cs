@@ -27,6 +27,9 @@ namespace PMapCore.Forms
             m_TOD_ID = p_TOD_ID;
             InitializeComponent();
             var boPlanOrder = m_bllPlan.GetPlanOrder(p_TOD_ID);
+            if (boPlanOrder == null)
+                throw new Exception("Unkown TOD_ID:" + p_TOD_ID.ToString());
+
             txtName.Text = boPlanOrder.ORD_NUM + " " + boPlanOrder.DEP_NAME;
             dtpOpen.Value = new DateTime(1980, 01, 01, (int)(boPlanOrder.TOD_SERVS / 60), (int)(boPlanOrder.TOD_SERVS % 60), 0, 0);
             dtpClose.Value = new DateTime(1980, 01, 01, (int)(boPlanOrder.TOD_SERVE / 60), (int)(boPlanOrder.TOD_SERVE % 60), 0, 0);
