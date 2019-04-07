@@ -272,6 +272,11 @@ namespace MPOrder.BLL
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set Bordero = ? where ID= ? ", p_Bordero, p_ID);
         }
+
+        public void SetORD_IDByCustomerOrderNumber(string p_CustomerOrderNumber, int p_ID)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set ORD_ID = ? where CustomerOrderNumber= ? ", p_ID, p_CustomerOrderNumber);
+        }
         public void DeleteItem(int p_ID)
         {
             DBA.ExecuteNonQuery("delete MPO_MPORDER where id=?", p_ID);
@@ -281,6 +286,7 @@ namespace MPOrder.BLL
         {
             DBA.ExecuteNonQuery("delete MPO_MPORDER where CSVFileName= ? and CustomerOrderNumber=?", p_CSVFileName, p_CustomerOrderNumber);
         }
+
         public List<SendResult> SendToCT(List<boMPOrderF> p_data, BaseProgressDialog p_Form = null)
         {
             var res = new List<SendResult>();
@@ -291,7 +297,36 @@ namespace MPOrder.BLL
             var bllRouteX = new bllRoute(DBA);
             var bllCargoTypeX = new bllCargoType(DBA);
 
-            foreach (var item in p_data)
+            /*
+             * Azonos lerakóhelyre menő rendeléseket vonja össze 23.500kg-ig és egyben küldje tovább Correct Tourba.
+             * Netmoverbe visszaküldeni a fuvarszámot viszont az eredeti rendelésszámokkal kell, tehát az eredeti rendelésszámot 
+             * is meg kell tartani.
+             * */
+
+            List<boMPOrderF> aggregated = new List<boMPOrderF>();
+            var sorted = p_data.OrderBy(o => o.CustomerCode).ThenByDescending(o2=>o2.GrossWeightPlannedXSum).ToList();
+           
+            double GrossWeightPlannedXSum = 0;
+            string sCustomerCode = "";
+
+            foreach (var item in sorted)
+            {
+                if (sCustomerCode != item.CustomerCode || GrossWeightPlannedXSum >= PMapIniParams.Instance.MapeiSumOrderKg)
+                {
+                    aggregated.Add(item.Clone());
+                    GrossWeightPlannedXSum = item.GrossWeightPlannedXSum;
+                    sCustomerCode = item.CustomerCode;
+                }
+                else
+                {
+                    aggregated.Last().Items.AddRange(item.Items);
+                    GrossWeightPlannedXSum += item.GrossWeightPlannedXSum;
+                }
+                aggregated.Last().aggregated_CustomerOrderNumbers.Add(item.CustomerOrderNumber);
+            }
+
+
+            foreach (var item in aggregated.OrderBy( o=>o.CustomerOrderNumber).ToList())
             {
                 if (p_Form != null)
                     p_Form.NextStep();
@@ -409,6 +444,10 @@ namespace MPOrder.BLL
 
                                 };
                                 newOrder.ID = bllOrderX.AddOrder(newOrder);
+                                foreach( var CustomerOrderNumber in item.aggregated_CustomerOrderNumbers)
+                                {
+                                    SetORD_IDByCustomerOrderNumber(  CustomerOrderNumber, newOrder.ID);
+                                }
 
                                 res.Add(new SendResult()
                                 {
@@ -475,7 +514,9 @@ namespace MPOrder.BLL
             return res;
         }
 
-        public List<SendResult> SendToNetMover(string p_CSVFileName, int p_PLN_ID, string p_exportFile, BaseProgressDialog p_Form = null)
+     
+
+      public List<SendResult> SendToNetMover(string p_CSVFileName, int p_PLN_ID, string p_exportFile, BaseProgressDialog p_Form = null)
         {
             try
             {
@@ -490,7 +531,7 @@ namespace MPOrder.BLL
                         "Currency = case when SentToCT = 1 then CurrencyX else '' end " + Environment.NewLine +
                         "from(select MPO.ID, CRR_NAME as CarrierX, xKMCOST.DIST / 1000 KMX, TPLANTOLL as ForfaitX, 'HUF' as CurrencyX " + Environment.NewLine +
                         "from MPO_MPORDER MPO " + Environment.NewLine +
-                        "inner join		ORD_ORDER ORD on ORD.ORD_NUM = MPO.CustomerOrderNumber " + Environment.NewLine +
+                        "inner join		ORD_ORDER ORD on ORD.ID = MPO.ORD_ID " + Environment.NewLine +
                         "inner join     TOD_TOURORDER TOD on TOD.ORD_ID = ORD.ID and TOD.PLN_ID = ? " + Environment.NewLine +
                         "inner join		PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
                         "inner join		TPL_TRUCKPLAN TPL on TPL.PLN_ID = PLN.ID " + Environment.NewLine +
@@ -523,7 +564,7 @@ namespace MPOrder.BLL
                        "inner join      TPL_TRUCKPLAN TPL on TPL.ID = PTP.TPL_ID " + Environment.NewLine +
                        "left outer join TOD_TOURORDER TOD on TOD.ID = PTP.TOD_ID " + Environment.NewLine +
                        "left outer join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +
-                       "left outer join MPO_MPORDER MPO on  MPO.CustomerOrderNumber = ORD.ORD_NUM " + Environment.NewLine +
+                       "left outer join MPO_MPORDER MPO on  MPO.ORD_ID = ORD.ID" + Environment.NewLine +
                        "where (MPO.CSVFileName is null or MPO.CSVFileName = ? ) " + Environment.NewLine +
                        " and TPL.PLN_ID = ? " + Environment.NewLine +
                        "order by TPL.ID,PTP_ORDER";

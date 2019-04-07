@@ -190,6 +190,9 @@ namespace MPOrder.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public double ADRMultiplierX { get; set; }
 
+        //kapcsolt megrendelés szám
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public int ORD_ID { get; set; }
 
 
         #region joinolt mezők 

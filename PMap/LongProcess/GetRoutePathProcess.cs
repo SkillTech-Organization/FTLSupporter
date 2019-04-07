@@ -215,6 +215,8 @@ namespace PMapCore.LongProcess
                                 PPlanMarker mrkTourPoint = new PPlanMarker(end, p_tour.PCOLOR, p_tour.TourPoints[i]);
                                 mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                 mrkTourPoint.Size = new System.Drawing.Size(20, 20);
+                                p_tour.TourPoints[i + 1].ToolTipText = p_tour.TourPoints[i + 1].TIME + ' ' + p_tour.TourPoints[i + 1].ToolTipText;
+                                /*
 
                                 if (PMapIniParams.Instance.DepCodeInToolTip)
                                     p_tour.TourPoints[i + 1].ToolTipText = p_tour.TourPoints[i + 1].DEP_CODE + "  ";
@@ -227,7 +229,7 @@ namespace PMapCore.LongProcess
                                         "Térfogat:" + p_tour.TourPoints[i + 1].ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + p_tour.TourPoints[i + 1].TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
                                         p_tour.TourPoints[i + 1].ORD_COMMENT;
                                 }
-                              
+                              */
                                 p_tour.Layer.Markers.Add(mrkTourPoint);
                                 p_tour.TourPoints[i + 1].Marker = mrkTourPoint;
                                 m_baseLayer.Markers.Add(mrkTourPoint);

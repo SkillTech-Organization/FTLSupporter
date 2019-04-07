@@ -203,6 +203,8 @@
     <Content Include="monitor_go.png" />
     <Content Include="ok.png" />
     <Content Include="page_go.png" />
+    <Content Include="page_white_excel.png" />
+    <Content Include="page_white_magnify.png" />
     <Content Include="tick.png" />
   </ItemGroup>
   <ItemGroup>

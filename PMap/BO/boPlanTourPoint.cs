@@ -35,6 +35,7 @@ namespace PMapCore.BO
         public DateTime PTP_ARRTIME_T { get; set; }
         public DateTime PTP_SERVTIME_T { get; set; }
         public DateTime PTP_DEPTIME_T { get; set; }
+        public string TIME { get; set; }
         public string TIME_AND_NAME { get; set; }
         public string CLT_NAME { get; set; }
         public string CLT_CODE { get; set; }

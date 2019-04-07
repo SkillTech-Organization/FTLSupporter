@@ -39,6 +39,7 @@ namespace MPOrder
 
 
                 MainForm = new frmMPOrder();
+
                 Application.Run(MainForm);
             }
             catch (Exception e)

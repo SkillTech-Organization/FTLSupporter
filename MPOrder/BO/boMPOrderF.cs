@@ -9,7 +9,7 @@ namespace MPOrder.BO
 {
     [Serializable]
 
-    public class boMPOrderF
+    public class boMPOrderF 
     {
         public int ID { get; set; }
 
@@ -100,8 +100,23 @@ namespace MPOrder.BO
         public string Currency { get; set; }
 
         public List<boMPOrderT> Items { get; set; } = new List<boMPOrderT>();
- 
+
+
+
+        internal boMPOrderF Clone()
+        {
+            boMPOrderF cl = (boMPOrderF) this.MemberwiseClone();
+
+            cl.Items = new List<boMPOrderT>(this.Items);
+            return cl;
+        }
+
         #region joinolt mezők 
+        #endregion
+
+
+        #region munka mezők 
+        public List<string> aggregated_CustomerOrderNumbers { get; set; } = new List<string>();
         #endregion
 
     }

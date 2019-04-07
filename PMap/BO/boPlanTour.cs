@@ -207,6 +207,8 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "Megjelenítés réteg", Order = 100)]
         public bool PSelect { get; set; }
 
+      
+
     }
 
 }

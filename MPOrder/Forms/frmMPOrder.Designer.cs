@@ -109,7 +109,10 @@
             this.btnSetShippingDateX = new System.Windows.Forms.Button();
             this.dtmShippingDateX = new System.Windows.Forms.DateTimePicker();
             this.lblShippingDateX = new System.Windows.Forms.Label();
+            this.lblProduct = new System.Windows.Forms.Label();
             this.imlRefresh = new System.Windows.Forms.ImageList(this.components);
+            this.txtProduct = new System.Windows.Forms.TextBox();
+            this.btnFilter = new System.Windows.Forms.Button();
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -923,18 +926,24 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnCount = 9;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 109F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 138F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.Controls.Add(this.cmbCSVFileName, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblCSVFile, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnSetShippingDateX, 5, 0);
-            this.tableLayoutPanel2.Controls.Add(this.dtmShippingDateX, 4, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lblShippingDateX, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblProduct, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.txtProduct, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnSetShippingDateX, 8, 0);
+            this.tableLayoutPanel2.Controls.Add(this.dtmShippingDateX, 7, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblShippingDateX, 6, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnFilter, 5, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -951,7 +960,7 @@
             this.cmbCSVFileName.FormattingEnabled = true;
             this.cmbCSVFileName.Location = new System.Drawing.Point(123, 6);
             this.cmbCSVFileName.Name = "cmbCSVFileName";
-            this.cmbCSVFileName.Size = new System.Drawing.Size(711, 21);
+            this.cmbCSVFileName.Size = new System.Drawing.Size(366, 21);
             this.cmbCSVFileName.TabIndex = 20;
             this.cmbCSVFileName.TextChanged += new System.EventHandler(this.cmbCSVFileName_TextChanged);
             // 
@@ -975,6 +984,7 @@
             this.btnSetShippingDateX.Name = "btnSetShippingDateX";
             this.btnSetShippingDateX.Size = new System.Drawing.Size(29, 26);
             this.btnSetShippingDateX.TabIndex = 4;
+            this.btnSetShippingDateX.Text = "Szállítási terv dátum aktualizálás";
             this.btnSetShippingDateX.UseVisualStyleBackColor = false;
             this.btnSetShippingDateX.Click += new System.EventHandler(this.btnSetShippingDateX_Click);
             // 
@@ -997,11 +1007,43 @@
             this.lblShippingDateX.TabIndex = 6;
             this.lblShippingDateX.Text = "Szállítási terv dátum";
             // 
+            // lblProduct
+            // 
+            this.lblProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProduct.AutoSize = true;
+            this.lblProduct.Location = new System.Drawing.Point(531, 10);
+            this.lblProduct.Name = "lblProduct";
+            this.lblProduct.Size = new System.Drawing.Size(144, 13);
+            this.lblProduct.TabIndex = 21;
+            this.lblProduct.Text = "Termékkód/megnevezés";
+            // 
             // imlRefresh
             // 
             this.imlRefresh.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlRefresh.ImageStream")));
             this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
             this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
+            // 
+            // txtProduct
+            // 
+            this.txtProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProduct.Location = new System.Drawing.Point(681, 6);
+            this.txtProduct.Name = "txtProduct";
+            this.txtProduct.Size = new System.Drawing.Size(154, 21);
+            this.txtProduct.TabIndex = 22;
+            // 
+            // btnFilter
+            // 
+            this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFilter.BackColor = System.Drawing.Color.Yellow;
+            this.btnFilter.Image = ((System.Drawing.Image)(resources.GetObject("btnFilter.Image")));
+            this.btnFilter.Location = new System.Drawing.Point(841, 4);
+            this.btnFilter.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.btnFilter.Name = "btnFilter";
+            this.btnFilter.Size = new System.Drawing.Size(29, 26);
+            this.btnFilter.TabIndex = 23;
+            this.btnFilter.Text = "Szűrés";
+            this.btnFilter.UseVisualStyleBackColor = false;
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
             // frmMPOrder
             // 
@@ -1125,5 +1167,8 @@
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edPalletPlannedQtyX;
         private DevExpress.XtraGrid.Columns.GridColumn grcVehicleType;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit edAdrMul;
+        private System.Windows.Forms.Label lblProduct;
+        private System.Windows.Forms.TextBox txtProduct;
+        private System.Windows.Forms.Button btnFilter;
     }
 }

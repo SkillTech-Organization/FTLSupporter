@@ -113,11 +113,18 @@ namespace PMapCore.BLL
 
         public List<boPlanTourPoint> GetPlTourPoints(int p_TPL_ID)
         {
+
+            string sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
+
+            sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
+                    "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
+
             string sSql = "SELECT PTP.ID, TPL.ID as TPL_ID, PTP_ORDER, PTP_BUNDLE, " + Environment.NewLine +
                     "PTP_TIME, PTP_DISTANCE, PTP_ARRTIME, PTP_SERVTIME, PTP_DEPTIME, NOD_NAME, PTP.NOD_ID, " + Environment.NewLine +
                     "CASE WHEN OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
                     "CASE WHEN OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
                     "TOD_VOLUME,CTP_NAME1,PTP.TOD_ID, PTP_ARRTIME AS PTP_ARRTIME_T, PTP_SERVTIME AS PTP_SERVTIME_T, PTP_DEPTIME AS PTP_DEPTIME_T, " + Environment.NewLine +
+                    "REPLACE(SUBSTRING(CONVERT(char, PTP_ARRTIME, 120),1,17), '-', '.')  as TIME, " + Environment.NewLine +
                     "REPLACE(SUBSTRING(CONVERT(char, PTP_ARRTIME, 120),1,17), '-', '.') + ' ' + CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME ELSE WHS.WHS_NAME END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP.PTP_TOLL, " + Environment.NewLine +
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_CODE      ELSE WHS.WHS_CODE      END as CLT_CODE, " + Environment.NewLine +
@@ -127,7 +134,8 @@ namespace PMapCore.BLL
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_ADRSTREET ELSE WHS.WHS_ADRSTREET END as ADRSTREET, " + Environment.NewLine +
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
-                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL " + Environment.NewLine +
+                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
+                    sTooltipText + " as TOOLTIPTEXT " + Environment.NewLine +
                     "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                     "INNER JOIN TPL_TRUCKPLAN TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
                     "LEFT JOIN TOD_TOURORDER TOD ON PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -166,7 +174,7 @@ namespace PMapCore.BLL
                             PTP_ARRTIME_T = Util.getFieldValue<DateTime>(o, "PTP_ARRTIME_T"),
                             PTP_SERVTIME_T = Util.getFieldValue<DateTime>(o, "PTP_SERVTIME_T"),
                             PTP_DEPTIME_T = Util.getFieldValue<DateTime>(o, "PTP_DEPTIME_T"),
-                            //                            TIME_AND_NAME = Util.getFieldValue<int>(o, "ID").ToString() + "*" + Util.GetStringField(o, "TIME_AND_NAME"),
+                            TIME = Util.getFieldValue<string>(o, "TIME"),
                             TIME_AND_NAME = Util.getFieldValue<string>(o, "TIME_AND_NAME") + '\n' + (Util.getFieldValue<string>(o, "ADRZIPNUM") + " " + Util.getFieldValue<string>(o, "ADRCITY") + " " + Util.getFieldValue<string>(o, "ADRSTREET")).Trim(),
                             CLT_CODE = Util.getFieldValue<string>(o, "CLT_CODE"),
                             CLT_NAME = Util.getFieldValue<string>(o, "CLT_NAME"),
@@ -187,7 +195,8 @@ namespace PMapCore.BLL
                             ORD_HEIGHT = Util.getFieldValue<double>(o, "ORD_HEIGHT"),
                             ORD_COMMENT = Util.getFieldValue<string>(o, "ORD_COMMENT"),
                             TOD_SENTEMAIL = Util.getFieldValue<bool>(o, "TOD_SENTEMAIL"),
-                            ORD_EMAIL = Util.getFieldValue<string>(o, "ORD_EMAIL")
+                            ORD_EMAIL = Util.getFieldValue<string>(o, "ORD_EMAIL"),
+                            ToolTipText = Util.getFieldValue<string>(o, "TOOLTIPTEXT")
                         }
                         );
             return linq.ToList();
@@ -222,6 +231,8 @@ namespace PMapCore.BLL
 
         public List<boPlanTour> GetPlanTours(int p_PLN_ID)
         {
+
+
             string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
                           " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, TPL_COMPLETED, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
@@ -256,11 +267,11 @@ namespace PMapCore.BLL
         public boPlanTour GetPlanTour(int p_TPL_ID)
         {
             boPlanTour retVal = null;
-
+   
             string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
                           "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
                           "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME, " + Environment.NewLine +
-                          "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
+                          "COUNT(PTP_S.TPL_ID) TOURPOINTCNT  " + Environment.NewLine +
                           "from TRK_TRUCK TRK  " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join v_TPLANQTY TPQ ON TPQ.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -330,7 +341,7 @@ namespace PMapCore.BLL
                 QTYErr = false,
                 VOLErr = false,
                 TDURATION = new DateTime(0).AddMinutes(Util.getFieldValue<int>(p_dr, "TDURATION")),
-                CRR_NAME = Util.getFieldValue<string>(p_dr, "CRR_NAME")
+                CRR_NAME = Util.getFieldValue<string>(p_dr, "CRR_NAME") 
             };
 
             foreach (boPlanTourPoint tp in ret.TourPoints)
@@ -400,9 +411,9 @@ namespace PMapCore.BLL
         {
 
             //Ez a default
-            string sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP_CITY + ' ' +DEP_ADRSTREET";
+            string sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
 
-            sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP_CITY + ' ' +DEP_ADRSTREET + " +
+            sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
                     "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
 
             string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
@@ -489,7 +500,7 @@ namespace PMapCore.BLL
                 TOD_SERVS = Util.getFieldValue<int>(p_dr, "TOD_SERVS"),
                 TOD_SERVE = Util.getFieldValue<int>(p_dr, "TOD_SERVE")
             };
-            /*KIVEYETNI
+            /*KIVEZETNI
             if (PMapIniParams.Instance.OrdCommentInTooltip)
                 ret.ToolTipText += "\n" +
                     "Térfogat:" + ret.ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + ret.TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +

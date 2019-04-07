@@ -126,17 +126,29 @@ namespace MPOrder.Forms
                 int focusedRowF = gridViewMegrF.FocusedRowHandle;
                 int focusedRowT = gridViewMegrT.FocusedRowHandle;
                 m_data = m_bllMPOrder.GetAllMPOrdersForGrid(CSVFile.CSVFileName);
-                gridMegrF.DataSource = m_data;
-                if (m_firstF && m_data.Count > 0)
-                {
-                    gridViewMegrF.BestFitColumns();
-                    m_firstF = false;
-                }
 
-                if (gridViewMegrF.RowCount <= focusedRowF)
-                    gridViewMegrF.FocusedRowHandle = gridViewMegrF.RowCount - 1;
+                if (m_data != null)
+                {
+                    gridMegrF.DataSource = String.IsNullOrWhiteSpace(txtProduct.Text) ?
+                                        m_data : m_data.Where(w => w.Items.Any(a => a.ProductCode.ToUpper().Contains(txtProduct.Text) ||
+                                                             a.ProdDescription.ToUpper().Contains(txtProduct.Text))).ToList();
+
+
+                    if (m_firstF && gridViewMegrF.RowCount > 0)
+                    {
+                        gridViewMegrF.BestFitColumns();
+                        m_firstF = false;
+                    }
+
+                    if (gridViewMegrF.RowCount <= focusedRowF)
+                        gridViewMegrF.FocusedRowHandle = gridViewMegrF.RowCount - 1;
+                    else
+                        gridViewMegrF.FocusedRowHandle = focusedRowF;
+                }
                 else
-                    gridViewMegrF.FocusedRowHandle = focusedRowF;
+                {
+                    gridMegrF.DataSource = null;
+                }
                 initMegrTGrid();
                 setEditors();
             }
@@ -172,7 +184,12 @@ namespace MPOrder.Forms
                 if (row != null)
                 {
                     gridMegrT.DataSource = null;
-                    gridMegrT.DataSource = row.Items;
+                    //           gridMegrT.DataSource = row.Items;
+
+                    gridMegrT.DataSource = String.IsNullOrWhiteSpace(txtProduct.Text) ?
+                                             row.Items : row.Items.Where(w => w.ProductCode.ToUpper().Contains(txtProduct.Text) ||
+                                                                  w.ProdDescription.ToUpper().Contains(txtProduct.Text)).ToList();
+
                     if (m_firstT && row.Items.Count > 0)
                     {
                         gridViewMegrF.BestFitColumns();
@@ -652,6 +669,9 @@ namespace MPOrder.Forms
             }
         }
 
-    
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            fillGrids();
+        }
     }
 }

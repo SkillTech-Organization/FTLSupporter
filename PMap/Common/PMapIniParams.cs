@@ -116,7 +116,7 @@ namespace PMapCore.Common
         public int MapeiSrvTime { get; set; }
         public double MapeiQtySrvTime { get; set; }
         public string MapeiDefCargoType { get; set; }
-
+        public int MapeiSumOrderKg { get; set; }
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
@@ -397,7 +397,9 @@ namespace PMapCore.Common
             MapeiSrvTime = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiSrvTime));
             MapeiQtySrvTime = Convert.ToDouble("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiQtySrvTime).Replace(',', '.'), CultureInfo.InvariantCulture);
             MapeiDefCargoType = ini.ReadString(Global.iniMapei, Global.iniMapeiDefCargoType);
-
+            MapeiSumOrderKg = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiSumOrderKg));
+            if (MapeiSumOrderKg <= 0)
+                MapeiSumOrderKg = 23500;
             Loaded = true;
 
 
