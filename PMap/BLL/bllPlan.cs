@@ -113,12 +113,6 @@ namespace PMapCore.BLL
 
         public List<boPlanTourPoint> GetPlTourPoints(int p_TPL_ID)
         {
-
-            string sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
-
-            sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
-                    "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
-
             string sSql = "SELECT PTP.ID, TPL.ID as TPL_ID, PTP_ORDER, PTP_BUNDLE, " + Environment.NewLine +
                     "PTP_TIME, PTP_DISTANCE, PTP_ARRTIME, PTP_SERVTIME, PTP_DEPTIME, NOD_NAME, PTP.NOD_ID, " + Environment.NewLine +
                     "CASE WHEN OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
@@ -135,7 +129,7 @@ namespace PMapCore.BLL
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
                     "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
-                    sTooltipText + " as TOOLTIPTEXT " + Environment.NewLine +
+                    PMapIniParams.Instance.TourpointToolTip + " as TOOLTIPTEXT " + Environment.NewLine +
                     "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                     "INNER JOIN TPL_TRUCKPLAN TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
                     "LEFT JOIN TOD_TOURORDER TOD ON PTP.TOD_ID = TOD.ID " + Environment.NewLine +
@@ -228,14 +222,19 @@ namespace PMapCore.BLL
 
         }
 
-
-        public List<boPlanTour> GetPlanTours(int p_PLN_ID)
+        public boPlanTour GetPlanTour(int p_TPL_ID)
         {
+            return GetPlanTours(-1, p_TPL_ID).FirstOrDefault();
+        }
 
+        public List<boPlanTour> GetPlanTours(int p_PLN_ID = -1, int p_TPL_ID = -1)
+        {
 
             string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
-                          " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, TPL_COMPLETED, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
+                          " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, TPL_COMPLETED, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, " + Environment.NewLine +
+                           PMapIniParams.Instance.TruckCode + " as TRUCK, " + Environment.NewLine +
+                          "COUNT(PTP_S.TPL_ID) TOURPOINTCNT " + Environment.NewLine +
                           "from TRK_TRUCK TRK " + Environment.NewLine +
                           "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join v_TPLANQTY TPQ ON TPQ.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -249,56 +248,37 @@ namespace PMapCore.BLL
                           "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
                           "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
                           "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
-                          "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.PLN_ID = ? " + Environment.NewLine +
+                          "left join SPP_SPEEDPROF SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
+                          "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and %%KEY  " + Environment.NewLine +
                           "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE,  TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
-                          " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME " + Environment.NewLine +
+                          " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME," + Environment.NewLine +
+                          PMapIniParams.Instance.TruckCode + " " + Environment.NewLine +
                           "order by TRK_REG_NUM, TRK_TRAILER ";
 
+            DataTable dt = null;
+            if (p_PLN_ID > 0)           //egy terv járműi
+            {
+                sSql = sSql.Replace("%%KEY", "TPL.PLN_ID = ?");
+                dt = DBA.Query2DataTable(sSql, p_PLN_ID);
+            }
+            else
+            {   
+                //egy jármű a tervben
+                sSql = sSql.Replace("%%KEY", "TPL.ID = ?");
+                dt = DBA.Query2DataTable(sSql, p_TPL_ID);
+            }
 
-
-            DataTable dt = DBA.Query2DataTable(sSql, p_PLN_ID);
-            var linq = (from o in dt.AsEnumerable()
-                        orderby o.Field<string>("TRK_REG_NUM") + "/" + o.Field<string>("TRK_TRAILER") ascending
-                        select getPlanTourRec(o));
-            return linq.ToList();
+            if (dt != null)
+            {
+                var linq = (from o in dt.AsEnumerable()
+                            orderby o.Field<string>("TRK_REG_NUM") + "/" + o.Field<string>("TRK_TRAILER") ascending
+                            select getPlanTourRec(o));
+                return linq.ToList();
+            }
+            return new List<boPlanTour>();
         }
 
-
-        public boPlanTour GetPlanTour(int p_TPL_ID)
-        {
-            boPlanTour retVal = null;
-   
-            string sSql = "select TPL.ID as ID, TPL_LOCKED, TPL.TRK_ID, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
-                          "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID, RESTZ.RZN_ID_LIST, CRR_NAME, " + Environment.NewLine +
-                          "COUNT(PTP_S.TPL_ID) TOURPOINTCNT  " + Environment.NewLine +
-                          "from TRK_TRUCK TRK  " + Environment.NewLine +
-                          "left join TPL_TRUCKPLAN TPL on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
-                          "left join v_TPLANQTY TPQ ON TPQ.TPL_ID = TPL.ID " + Environment.NewLine +
-                          "left join v_TPLANVOL TPV ON TPV.TPL_ID = TPL.ID " + Environment.NewLine +
-                          "left join v_TPLANTOLL TPT ON TPT.TPL_ID = TPL.ID " + Environment.NewLine +
-                          "left join PTP_PLANTOURPOINT PTP_S ON PTP_S.ID in ( select min(ID) from  PTP_PLANTOURPOINT where TPL_ID = TPL.ID AND PTP_TYPE = 0) " + Environment.NewLine +
-                          "left join PTP_PLANTOURPOINT PTP_E ON PTP_E.ID in ( select max(ID) from  PTP_PLANTOURPOINT where TPL_ID = TPL.ID AND PTP_TYPE = 1) " + Environment.NewLine +
-                          "left join (select TPL_ID, SUM( PTP_DISTANCE) as DST " + Environment.NewLine +
-                          "           from PTP_PLANTOURPOINT " + Environment.NewLine +
-                          "           group by  TPL_ID) PTP_DST on PTP_DST.TPL_ID = TPL.ID " + Environment.NewLine +
-                          "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
-                          "left join v_trk_RZN_ID_LIST RESTZ on RESTZ.TRK_ID = TRK.ID " + Environment.NewLine +
-                          "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
-                          "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and TPL.ID = ? " + Environment.NewLine +
-                          "group by TPL.TRK_ID, TPL_LOCKED, TPL.ID, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, " + Environment.NewLine +
-                          "TRK_ETOLLCAT, TRK_ENGINEEURO, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME),  " + Environment.NewLine +
-                          "TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR,TPL_COMPLETED,TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, SPP_ID,RESTZ.RZN_ID_LIST, CRR_NAME    ";
-
-
-            Random rnd = new Random((int)DateTime.Now.Millisecond);
-
-            DataTable dt = DBA.Query2DataTable(sSql, p_TPL_ID);
-            if (dt.Rows.Count == 1)
-                retVal = getPlanTourRec(dt.Rows[0]);
-            return retVal;
-        }
-
+        
         private boPlanTour getPlanTourRec(DataRow p_dr)
         {
             boPlanTour ret = new boPlanTour
@@ -308,7 +288,7 @@ namespace PMapCore.BLL
                 SPP_ID = Util.getFieldValue<int>(p_dr, "SPP_ID"),
                 RZN_ID_LIST = Util.getFieldValue<string>(p_dr, "RZN_ID_LIST"),
                 LOCKED = Util.getFieldValue<bool>(p_dr, "TPL_LOCKED"),
-                TRUCK = Util.getFieldValue<string>(p_dr, "TRK_REG_NUM") + (Util.getFieldValue<string>(p_dr, "TRK_TRAILER").Length > 0 ? "/" + Util.getFieldValue<string>(p_dr, "TRK_TRAILER") : ""),
+                TRUCK = Util.getFieldValue<string>(p_dr, "TRUCK"),
                 TRK_CODE = Util.getFieldValue<string>(p_dr, "TRK_CODE"),
                 TRK_LENGTH = Util.getFieldValue<double>(p_dr, "TRK_LENGTH"),
                 TRK_WIDTH = Util.getFieldValue<int>(p_dr, "TRK_WIDTH"),
@@ -410,18 +390,13 @@ namespace PMapCore.BLL
         public List<boPlanOrder> GetPlanOrders(int p_PLN_ID = -1, int p_TOD_ID = -1)
         {
 
-            //Ez a default
-            string sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
-
-            sTooltipText = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
-                    "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
-
+ 
             string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
                           "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
                           "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM," + Environment.NewLine +
-                          sTooltipText + " as TOOLTIPTEXT" + Environment.NewLine +
+                          PMapIniParams.Instance.TourpointToolTip + " as TOOLTIPTEXT" + Environment.NewLine +
                          "from TOD_TOURORDER TOD " + Environment.NewLine +
                           "   inner join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                           "   inner join NOD_NODE  NOD on DEP.NOD_ID = NOD.ID " + Environment.NewLine +
@@ -489,7 +464,6 @@ namespace PMapCore.BLL
                 ORD_HEIGHT = Util.getFieldValue<double>(p_dr, "ORD_HEIGHT"),
                 ORD_COMMENT = Util.getFieldValue<string>(p_dr, "ORD_COMMENT"),
                 OPENCLOSE = getOpenClose(p_dr, true),
- //KIVEYETNI               ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
                 ToolTipText = Util.getFieldValue<string>(p_dr, "TOOLTIPTEXT"),
 
                 PTP_ID = Util.getFieldValue<int>(p_dr, "PTP_ID"),
@@ -500,20 +474,18 @@ namespace PMapCore.BLL
                 TOD_SERVS = Util.getFieldValue<int>(p_dr, "TOD_SERVS"),
                 TOD_SERVE = Util.getFieldValue<int>(p_dr, "TOD_SERVE")
             };
-            /*KIVEZETNI
-            if (PMapIniParams.Instance.OrdCommentInTooltip)
-                ret.ToolTipText += "\n" +
-                    "Térfogat:" + ret.ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + ret.TOD_QTY.ToString(Global.NUMFORMAT) + "\n" +
-                    ret.ORD_COMMENT;
-            */
+ 
             return ret;
         }
 
         public DataTable GetUnplannedTrucks(int p_PLN_ID)
         {
-            string sSql = "select TPL.ID as TPL_ID, TRK_ID, TRK_CODE, TRK_REG_NUM + ' / ' + TRK_TRAILER as TRK_DISP, TRK_COLOR " + Environment.NewLine +
+            string sSql = "select TPL.ID as TPL_ID, TRK_ID, TRK_CODE, "+ PMapIniParams.Instance.TruckCode + " as TRK_DISP, TRK_COLOR " + Environment.NewLine +
                            "from TPL_TRUCKPLAN TPL " + Environment.NewLine +
                            "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                           "left join CPP_CAPACITYPROF CPP on TRK.CPP_ID = CPP.ID " + Environment.NewLine +
+                           "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
+                           "left join SPP_SPEEDPROF SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
                            "where TPL.PLN_ID = ? and TPL.ID not in " + Environment.NewLine +
                            "             ( SELECT distinct TPL.ID  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
                            "               inner join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID  " + Environment.NewLine +

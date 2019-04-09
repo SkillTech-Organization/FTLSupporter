@@ -44,11 +44,12 @@ namespace PMapCore.Common
         public string CTIniFile { get; private set; }
         public string LogDir { get; private set; }
         public eLogVerbose LogVerbose { get; private set; }
-        public bool DepCodeInToolTip { get; private set; }
         public bool TestMode { get; private set; }
         public bool ParseLog { get; private set; }
         public bool ALog { get; private set; }
         public bool TourRoute { get; private set; }     //Egyedi túraútvonalak
+        public string TourpointToolTip { get; private set; }     //Túrapont tooltip
+        public string TruckCode { get; private set; }           //Járműkód
 
 
         public string AzureAccount { get; private set; }
@@ -86,9 +87,6 @@ namespace PMapCore.Common
         public int OptimizeTimeOutSec { get; private set; }
         public int TrkMaxWorkTime { get; private set; }
         public double OrdVolumeMultiplier { get; private set; }
-        public bool OrdCommentInTooltip { get; private set; } = false;
-
-
 
         public bool UseProxy { get; private set; }
         public string ProxyServer { get; private set; }
@@ -195,11 +193,6 @@ namespace PMapCore.Common
                 Debug.Listeners.AddRange(listeners);
             }
 
-
-
-            string sDepCodeInToolTip = ini.ReadString(Global.iniPMap, Global.iniDepCodeInToolTip);
-            DepCodeInToolTip = (sDepCodeInToolTip == "1" || sDepCodeInToolTip.ToLower() == "true");
-
             string sTestMode = ini.ReadString(Global.iniPMap, Global.iniTestMode);
             TestMode = (sTestMode == "1" || sTestMode.ToLower() == "true");
 
@@ -211,6 +204,27 @@ namespace PMapCore.Common
 
             string sTourRoute = ini.ReadString(Global.iniPMap, Global.iniTourRoute);
             TourRoute = (sTourRoute == "1" || sTourRoute.ToLower() == "true");
+
+
+
+            string sTourpointToolTip = ini.ReadString(Global.iniPMap, Global.iniTourpointToolTip);
+            if( string.IsNullOrWhiteSpace(sTourpointToolTip))
+            {
+
+          //      sTourpointToolTip = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET";
+                sTourpointToolTip = "DEP_CODE + '  ' + DEP_NAME + '\\n' + CAST(ZIP.ZIP_NUM  AS VARCHAR) + ' ' + ZIP.ZIP_CITY + ' ' +DEP_ADRSTREET + " +
+                        "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
+            }
+            TourpointToolTip = sTourpointToolTip;
+
+            string sTruckCode = ini.ReadString(Global.iniPMap, Global.iniTruckCode);
+            if (string.IsNullOrWhiteSpace(sTruckCode))
+            {
+
+                sTruckCode = "TRK_REG_NUM + case when isnull(TRK_TRAILER, '') <> '' then '/' + TRK_TRAILER else '' end";
+            }
+            TruckCode = sTruckCode;
+            
 
             AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
             AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);
@@ -351,9 +365,6 @@ namespace PMapCore.Common
             OrdVolumeMultiplier = Convert.ToDouble("0" + ini.ReadString(Global.iniPlan, Global.iniOrdVolumeMultiplier).Replace(',', '.'), CultureInfo.InvariantCulture);
             if (OrdVolumeMultiplier == 0)
                 OrdVolumeMultiplier = 0.001;         //alapértelmezés 0.001 a dm3 --> m3 konverzióhoz
-
-            string sOrdCommentInTooltip = ini.ReadString(Global.iniPMap, Global.iniOrdCommentInTooltip);
-            OrdCommentInTooltip = (sOrdCommentInTooltip == "1" || sOrdCommentInTooltip.ToLower() == "true");
 
             string sUseProxy = ini.ReadString(Global.iniProxy, Global.UseProxy);
             UseProxy = (sUseProxy == "1" || sUseProxy.ToLower() == "true");

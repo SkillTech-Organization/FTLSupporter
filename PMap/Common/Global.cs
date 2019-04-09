@@ -33,11 +33,12 @@ namespace PMapCore.Common
         public const string iniCTIniFile = "CTIniFile";
         public const string iniLogDir = "LogDir";
         public const string iniLogVerbose = "LogVerbose";
-        public const string iniDepCodeInToolTip = "DepCodeInToolTip";
         public const string iniTestMode = "TestMode";
         public const string iniParseLog = "ParseLog";
         public const string iniALog = "ALog";
         public const string iniTourRoute = "TourRoute";
+        public const string iniTourpointToolTip = "TourpointToolTip";
+        public const string iniTruckCode = "TruckCode";
 
         public const string iniWeb = "Web";
         public const string iniAzureAccount = "AzureAccount";
@@ -81,7 +82,6 @@ namespace PMapCore.Common
         public const string iniOptimizeTimeOutSec = "OptimizeTimeOutSec";
         public const string iniTrkMaxWorkTime = "TrkMaxWorkTime";
         public const string iniOrdVolumeMultiplier = "OrdVolumeMultiplier";
-        public const string iniOrdCommentInTooltip = "OrdCommentInTooltip";
 
         public const string iniProxy = "Proxy";
         public const string UseProxy = "UseProxy";

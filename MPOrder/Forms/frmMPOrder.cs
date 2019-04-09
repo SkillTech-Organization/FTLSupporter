@@ -130,8 +130,8 @@ namespace MPOrder.Forms
                 if (m_data != null)
                 {
                     gridMegrF.DataSource = String.IsNullOrWhiteSpace(txtProduct.Text) ?
-                                        m_data : m_data.Where(w => w.Items.Any(a => a.ProductCode.ToUpper().Contains(txtProduct.Text) ||
-                                                             a.ProdDescription.ToUpper().Contains(txtProduct.Text))).ToList();
+                                        m_data : m_data.Where(w => w.Items.Any(a => a.ProductCode.ToUpper().Contains(txtProduct.Text.ToUpper()) ||
+                                                             a.ProdDescription.ToUpper().Contains(txtProduct.Text.ToUpper()))).ToList();
 
 
                     if (m_firstF && gridViewMegrF.RowCount > 0)
@@ -187,8 +187,8 @@ namespace MPOrder.Forms
                     //           gridMegrT.DataSource = row.Items;
 
                     gridMegrT.DataSource = String.IsNullOrWhiteSpace(txtProduct.Text) ?
-                                             row.Items : row.Items.Where(w => w.ProductCode.ToUpper().Contains(txtProduct.Text) ||
-                                                                  w.ProdDescription.ToUpper().Contains(txtProduct.Text)).ToList();
+                                             row.Items : row.Items.Where(w => w.ProductCode.ToUpper().Contains(txtProduct.Text.ToUpper()) ||
+                                                                  w.ProdDescription.ToUpper().Contains(txtProduct.Text.ToUpper())).ToList();
 
                     if (m_firstT && row.Items.Count > 0)
                     {

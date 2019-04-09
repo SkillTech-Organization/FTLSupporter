@@ -467,17 +467,7 @@ namespace PMapCore.Forms
                                     mrkTourPoint.ToolTipMode = m_PPlanCommonVars.TooltipMode;
                                     mrkTourPoint.Size = new System.Drawing.Size(20, 20);
 
-                                    if (PMapIniParams.Instance.OrdCommentInTooltip)
-                                        tour.TourPoints[i + 1].ToolTipText = tour.TourPoints[i + 1].DEP_CODE + "  ";
-                                    tour.TourPoints[i + 1].ToolTipText += tour.TourPoints[i + 1].TIME_AND_NAME;
-
-                                    if (PMapIniParams.Instance.OrdCommentInTooltip)
-                                    {
-                                        tour.TourPoints[i + 1].ToolTipText += "\n" + 
-                                            "Térfogat:" + tour.TourPoints[i + 1].ORD_VOLUME.ToString(Global.NUMFORMAT) + ", Mennyiség:" + tour.TourPoints[i + 1].TOD_QTY.ToString(Global.NUMFORMAT) +
-                                            "\n" + tour.TourPoints[i + 1].ORD_COMMENT;
-                                    }
-
+                               
                                     tour.TourPoints[i + 1].Marker = mrkTourPoint;
                                     m_routeLayer.Markers.Add(mrkTourPoint);
 
