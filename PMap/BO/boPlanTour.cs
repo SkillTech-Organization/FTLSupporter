@@ -196,6 +196,9 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "Szállító neve", Order = 39)]
         public string CRR_NAME { get; set; }
 
+        [DisplayNameAttributeX(Name = "Fuvarszám", Order = 40)]
+        public string Bordero { get; set; }                             //MAPEI spec.
+
 
         //Technikai mezők
         //

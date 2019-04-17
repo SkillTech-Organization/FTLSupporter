@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMPOrder));
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             this.btnExcelImport = new System.Windows.Forms.ToolStripButton();
             this.tsbExportItems = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -106,13 +106,13 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cmbCSVFileName = new System.Windows.Forms.ComboBox();
             this.lblCSVFile = new System.Windows.Forms.Label();
+            this.lblProduct = new System.Windows.Forms.Label();
+            this.txtProduct = new System.Windows.Forms.TextBox();
             this.btnSetShippingDateX = new System.Windows.Forms.Button();
             this.dtmShippingDateX = new System.Windows.Forms.DateTimePicker();
             this.lblShippingDateX = new System.Windows.Forms.Label();
-            this.lblProduct = new System.Windows.Forms.Label();
-            this.imlRefresh = new System.Windows.Forms.ImageList(this.components);
-            this.txtProduct = new System.Windows.Forms.TextBox();
             this.btnFilter = new System.Windows.Forms.Button();
+            this.imlRefresh = new System.Windows.Forms.ImageList(this.components);
             this.tsMegr.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -893,7 +893,7 @@
             // 
             this.edResetT.AutoHeight = false;
             this.edResetT.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject2, "", null, null, true)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Undo, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("edResetT.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
             this.edResetT.Name = "edResetT";
             this.edResetT.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
             this.edResetT.Click += new System.EventHandler(this.edResetT_Click);
@@ -974,6 +974,24 @@
             this.lblCSVFile.TabIndex = 12;
             this.lblCSVFile.Text = "Rendelés állomány";
             // 
+            // lblProduct
+            // 
+            this.lblProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProduct.AutoSize = true;
+            this.lblProduct.Location = new System.Drawing.Point(531, 10);
+            this.lblProduct.Name = "lblProduct";
+            this.lblProduct.Size = new System.Drawing.Size(144, 13);
+            this.lblProduct.TabIndex = 21;
+            this.lblProduct.Text = "Termékkód/megnevezés";
+            // 
+            // txtProduct
+            // 
+            this.txtProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProduct.Location = new System.Drawing.Point(681, 6);
+            this.txtProduct.Name = "txtProduct";
+            this.txtProduct.Size = new System.Drawing.Size(154, 21);
+            this.txtProduct.TabIndex = 22;
+            // 
             // btnSetShippingDateX
             // 
             this.btnSetShippingDateX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -984,7 +1002,6 @@
             this.btnSetShippingDateX.Name = "btnSetShippingDateX";
             this.btnSetShippingDateX.Size = new System.Drawing.Size(29, 26);
             this.btnSetShippingDateX.TabIndex = 4;
-            this.btnSetShippingDateX.Text = "Szállítási terv dátum aktualizálás";
             this.btnSetShippingDateX.UseVisualStyleBackColor = false;
             this.btnSetShippingDateX.Click += new System.EventHandler(this.btnSetShippingDateX_Click);
             // 
@@ -1007,30 +1024,6 @@
             this.lblShippingDateX.TabIndex = 6;
             this.lblShippingDateX.Text = "Szállítási terv dátum";
             // 
-            // lblProduct
-            // 
-            this.lblProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblProduct.AutoSize = true;
-            this.lblProduct.Location = new System.Drawing.Point(531, 10);
-            this.lblProduct.Name = "lblProduct";
-            this.lblProduct.Size = new System.Drawing.Size(144, 13);
-            this.lblProduct.TabIndex = 21;
-            this.lblProduct.Text = "Termékkód/megnevezés";
-            // 
-            // imlRefresh
-            // 
-            this.imlRefresh.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlRefresh.ImageStream")));
-            this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
-            this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
-            // 
-            // txtProduct
-            // 
-            this.txtProduct.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProduct.Location = new System.Drawing.Point(681, 6);
-            this.txtProduct.Name = "txtProduct";
-            this.txtProduct.Size = new System.Drawing.Size(154, 21);
-            this.txtProduct.TabIndex = 22;
-            // 
             // btnFilter
             // 
             this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -1041,9 +1034,14 @@
             this.btnFilter.Name = "btnFilter";
             this.btnFilter.Size = new System.Drawing.Size(29, 26);
             this.btnFilter.TabIndex = 23;
-            this.btnFilter.Text = "Szűrés";
             this.btnFilter.UseVisualStyleBackColor = false;
             this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
+            // 
+            // imlRefresh
+            // 
+            this.imlRefresh.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlRefresh.ImageStream")));
+            this.imlRefresh.TransparentColor = System.Drawing.Color.Transparent;
+            this.imlRefresh.Images.SetKeyName(0, "database_refresh.png");
             // 
             // frmMPOrder
             // 

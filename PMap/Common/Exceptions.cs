@@ -6,9 +6,9 @@ using System.Text;
 namespace PMapCore.Common
 {
 
-    public class EmptyTableNameException : Exception
+    public class NoMappedTableNameException : Exception
     {
-        public EmptyTableNameException()
+        public NoMappedTableNameException()
         {
         }
     }

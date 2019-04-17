@@ -21,11 +21,11 @@ namespace PMapCore.BLL.Base
         public const string FIELD_LASTDATE = "LASTDATE";
 
         public SQLServerAccess DBA { get; private set; }
-        public string TableName  { get; private set; }
-        public bllBase(SQLServerAccess p_DBA, string p_TableName)
+        public string MappedTableName  { get; private set; }
+        public bllBase(SQLServerAccess p_DBA, string p_MappedTableName)
         {
             DBA = p_DBA;
-            TableName = p_TableName;
+            MappedTableName = p_MappedTableName;
         }
 
         private Hashtable getValues(object p_boObject, bool p_insert)
@@ -90,8 +90,8 @@ namespace PMapCore.BLL.Base
         protected int AddItem(object p_boObject, bool p_history = true)
         {
             // ha nincs táblanév definiálva, exception
-            if (TableName == "")
-                throw new EmptyTableNameException();
+            if (MappedTableName == "")
+                throw new NoMappedTableNameException();
 
             using (TransactionBlock transObj = new TransactionBlock(DBA))
             {
@@ -99,9 +99,9 @@ namespace PMapCore.BLL.Base
                 {
                     Hashtable values = getValues(p_boObject, true);
                     string IDName = getIDName(p_boObject);
-                    int ID = DBA.InsertHash(TableName, IDName, values, true);
+                    int ID = DBA.InsertHash(MappedTableName, IDName, values, true);
                     if(p_history)
-                        bllHistory.WriteHistory(0, this.TableName, ID, bllHistory.EMsgCodes.ADD, p_boObject);
+                        bllHistory.WriteHistory(0, this.MappedTableName, ID, bllHistory.EMsgCodes.ADD, p_boObject);
 
                     return ID;
 
@@ -123,8 +123,8 @@ namespace PMapCore.BLL.Base
         {
 
             // ha nincs táblanév definiálva, exception
-            if (TableName == "")
-                throw new EmptyTableNameException();
+            if (MappedTableName == "")
+                throw new NoMappedTableNameException();
 
             string IDName = getIDName(p_boObject);
             int ID = (int)p_boObject.GetType().GetProperties()
@@ -138,8 +138,8 @@ namespace PMapCore.BLL.Base
                     //TODO:naplózást megoldani
                     Hashtable values = getValues(p_boObject,false);
 
-                    DBA.UpdateHash(TableName, IDName, ID, values);
-                    bllHistory.WriteHistory(0, this.TableName, ID, bllHistory.EMsgCodes.UPD, p_boObject);
+                    DBA.UpdateHash(MappedTableName, IDName, ID, values);
+                    bllHistory.WriteHistory(0, this.MappedTableName, ID, bllHistory.EMsgCodes.UPD, p_boObject);
                 }
 
                 catch (Exception e)

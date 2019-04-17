@@ -201,23 +201,17 @@ namespace PMapCore.BLL
         private string getOpenClose(DataRow p_dr, bool p_noChkType)
         {
             string result = "";
+           
             if (p_noChkType || Util.getFieldValue<int>(p_dr, "PTP_TYPE") == Global.PTP_TYPE_DEP)
             {
                 int iOpen = Util.getFieldValue<int>(p_dr, "TOD_SERVS");
-                string sHour = "0" + Math.Truncate((double)(iOpen / 60)).ToString();
-                string sMin = "0" + Math.Truncate((double)(iOpen % 60)).ToString();
-                result = sHour.Substring(sHour.Length - 2, 2) + ":" + sMin.Substring(sMin.Length - 2, 2);
+                result = Util.GetTimeStringFromInt(iOpen);
 
                 int iClose = Util.getFieldValue<int>(p_dr, "TOD_SERVE");
                 //                if (lClose == 1440)
                 //                    lClose--;
-
-                sHour = "0" + (iClose / 60).ToString();
-                sMin = "0" + (iClose % 60).ToString();
-                result += "-" + sHour.Substring(sHour.Length - 2, 2) + ":" + sMin.Substring(sMin.Length - 2, 2);
-
+                result += "-" + Util.GetTimeStringFromInt(iClose);
             }
-
             return result;
 
         }

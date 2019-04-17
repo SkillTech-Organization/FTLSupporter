@@ -217,9 +217,11 @@
     <Compile Include="BLL\bllPackUnit.cs" />
     <Compile Include="BLL\bllUser.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
+    <Compile Include="BLL\Report\bllRepPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
     <Compile Include="BO\boPackUnit.cs" />
     <Compile Include="BO\boUser.cs" />
+    <Compile Include="BO\Report\boRepPlan.cs" />
     <Compile Include="Cache\LogForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\AuthCryptoHelper.cs" />
@@ -239,6 +241,9 @@
     </Compile>
     <Compile Include="Common\AESCryptoHelper.cs" />
     <Compile Include="LongProcess\CalcRoutesForTour.cs" />
+    <Compile Include="Printing\RepPlanDetails.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
     <Compile Include="WebTrace\NotificationMail.cs" />

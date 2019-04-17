@@ -304,18 +304,18 @@ namespace MPOrder.BLL
              * */
 
             List<boMPOrderF> aggregated = new List<boMPOrderF>();
-            var sorted = p_data.OrderBy(o => o.CustomerCode).ThenByDescending(o2=>o2.GrossWeightPlannedXSum).ToList();
+            var sorted = p_data.OrderBy(o => o.ShippAddressID_DEP_CODE).ThenByDescending(o2=>o2.GrossWeightPlannedXSum).ToList();
            
             double GrossWeightPlannedXSum = 0;
-            string sCustomerCode = "";
+            string sShippAddressID_DEP_CODE = "";
 
             foreach (var item in sorted)
             {
-                if (sCustomerCode != item.CustomerCode || GrossWeightPlannedXSum >= PMapIniParams.Instance.MapeiSumOrderKg)
+                if (sShippAddressID_DEP_CODE != item.ShippAddressID_DEP_CODE || (GrossWeightPlannedXSum + item.GrossWeightPlannedXSum) >= PMapIniParams.Instance.MapeiSumOrderKg)
                 {
                     aggregated.Add(item.Clone());
                     GrossWeightPlannedXSum = item.GrossWeightPlannedXSum;
-                    sCustomerCode = item.CustomerCode;
+                    sShippAddressID_DEP_CODE = item.ShippAddressID_DEP_CODE;
                 }
                 else
                 {

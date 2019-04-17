@@ -31,6 +31,9 @@ using PMapCore.WebTrace;
 using PMapCore.Common.Azure;
 using PMapCore.DB.Base;
 using System.Runtime.ExceptionServices;
+using PMapCore.Printing;
+using PMapCore.BLL.Report;
+using PMapCore.BO.Report;
 
 namespace PMapCore.Forms
 {
@@ -1107,6 +1110,29 @@ namespace PMapCore.Forms
                     m_PPlanCommonVars.PlanOrderList = bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);
                     m_pnlPlanOrders.RefreshAll(true);
                 }
+            }
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+
+            try
+
+            {
+
+                var bllRepPlan = new bllRepPlan(PMapCommonVars.Instance.CT_DB);
+                List<boRepPlan> tourList = new List<boRepPlan>();
+                using (new WaitCursor())
+                {
+                    tourList = bllRepPlan.GetRepPlanData(m_PPlanCommonVars.PLN_ID);
+                }
+
+                 var rep = new RepPlanDetails(tourList);
+                rep.ShowPreview();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

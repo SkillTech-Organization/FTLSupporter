@@ -1083,16 +1083,15 @@ namespace PMapCore.BLL
                 }
                 tkRouteNodeIndex++;
 
-
                 boOptimize.CPlanTours.CRouteExe rex = new boOptimize.CPlanTours.CRouteExe()
                 {
                     tkRouteIndex = pt.TOURCOUNT,                                //a körút sorszáma
                     tkRouteNodeIndex = tkRouteNodeIndex,                          //a kért csomópont sorszáma (1-től getRouteNodesCount(tkId,tkRouteIndex) -ig)
-                    NodeType = Util.getFieldValue<int>(dr, "PTP_TYPE") == 2 ? 0 : 1, //csomópont típusa. 0 = megrendelés, 1 = telephely. Ha OrId nagyobb mint 1000 akkor a NodeType a céldepó azonosítóját tartalmazza.
+                    NodeType = Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_DEP ? 0 : 1, //csomópont típusa. 0 = megrendelés, 1 = telephely. Ha OrId nagyobb mint 1000 akkor a NodeType a céldepó azonosítóját tartalmazza.
                     OrId = Util.getFieldValue<int>(dr, "ORD_ID"),               //telephely vagy megrendelés azonosító. Ha áttárolásos megrendelésről van szó, amit a motor automatikusan létrehozott, akkor az eredeti megrendelés azonosítójához hozzáad 1000-t, így az eredeti megrendelés is beazonosítható (feltételezzük, hogy a normál megrendelésszám kisebb, mint 1000).
-                    ArrTime = Util.getFieldValue<int>(dr, "PTP_TYPE") == 0 ? -1 : Util.getFieldValue<int>(dr, "ARR"),  //érkezési időpont a csomóponthoz (időegységben), vagy -1 ha a kamion telephelyéről van szó (nap kezdete)
-                    DepTime = Util.getFieldValue<int>(dr, "PTP_TYPE") == 1 ? -1 : Util.getFieldValue<int>(dr, "DEP"),   //indulási időpont a csomóponttól (időegységben), vagy -1 ha a kamion telephelyéről van szó (nap vége)
-                    quantity = Util.getFieldValue<int>(dr, "PTP_TYPE") == 2 ? Util.getFieldValue<double>(dr, "TOD_QTY") : 0, //a túrában szállított mennyiség az OrId azonosítójú megrendelésből. Ha a „megrendelésosztás” funkció nincs bekapcsolva, akkor az eredeti mennyiség jelenik meg itt. Telephely esetén az érték 0
+                    ArrTime = Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_WHS_S ? -1 : Util.getFieldValue<int>(dr, "ARR"),  //érkezési időpont a csomóponthoz (időegységben), vagy -1 ha a kamion telephelyéről van szó (nap kezdete)
+                    DepTime = Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_WHS_E ? -1 : Util.getFieldValue<int>(dr, "DEP"),   //indulási időpont a csomóponttól (időegységben), vagy -1 ha a kamion telephelyéről van szó (nap vége)
+                    quantity = Util.getFieldValue<int>(dr, "PTP_TYPE") == Global.PTP_TYPE_DEP ? Util.getFieldValue<double>(dr, "TOD_QTY") : 0, //a túrában szállított mennyiség az OrId azonosítójú megrendelésből. Ha a „megrendelésosztás” funkció nincs bekapcsolva, akkor az eredeti mennyiség jelenik meg itt. Telephely esetén az érték 0
                 };
                 pt.RouteExe.Add(rex);
                 pt.Qty += Util.getFieldValue<double>(dr, "TOD_QTY");

@@ -134,9 +134,9 @@
             this.btnCheckMapOn,
             this.btnCheckMapOff,
             this.toolStripSeparator2,
+            this.btnPrint,
             this.btnSaveLayout,
             this.btnRestoreLayout,
-            this.btnPrint,
             this.btnResetScreen,
             this.btnOpenClose});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -408,7 +408,7 @@
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(23, 22);
             this.btnPrint.Text = "Összesítő nyomtatás";
-            this.btnPrint.Visible = false;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
             // btnResetScreen
             // 

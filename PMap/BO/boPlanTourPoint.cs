@@ -65,7 +65,7 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "EMail kiküldve?", Order = 38)]
         public bool TOD_SENTEMAIL { get; set; }
 
-        [DisplayNameAttributeX(Name = "Szállító neve", Order = 39)]
+        [DisplayNameAttributeX(Name = "Email cím", Order = 39)]
         public string ORD_EMAIL { get; set; }
 
         [ScriptIgnore]

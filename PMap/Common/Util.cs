@@ -1150,6 +1150,13 @@ namespace PMapCore.Common
             return date;
         }
 
+        public static string GetTimeStringFromInt(int p_time)
+        {
+            string sHour = "0" + Math.Truncate((double)(p_time / 60)).ToString();
+            string sMin = "0" + Math.Truncate((double)(p_time % 60)).ToString();
+            return sHour.Substring(sHour.Length - 2, 2) + ":" + sMin.Substring(sMin.Length - 2, 2);
+        }
+
     }
 }
 

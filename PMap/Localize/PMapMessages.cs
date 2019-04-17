@@ -183,6 +183,9 @@ namespace PMapCore.Localize
         public const string E_MPSENDTOCT_INVCARGOTYPE = "Érvénytelen járműtípus:{0}";
 
         public const string M_MPORD_SENDTONETMOVER_OK = "Az adatküldés a Netmover-be rendben megtörtént.";
+
+        public const string REP_PAGE = "Lap:{0}/{1}";
+
     }
 
 }
