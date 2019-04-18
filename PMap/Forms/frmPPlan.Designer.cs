@@ -74,9 +74,9 @@
             this.btnCheckMapOn = new System.Windows.Forms.ToolStripButton();
             this.btnCheckMapOff = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnPrint = new System.Windows.Forms.ToolStripButton();
             this.btnSaveLayout = new System.Windows.Forms.ToolStripButton();
             this.btnRestoreLayout = new System.Windows.Forms.ToolStripButton();
-            this.btnPrint = new System.Windows.Forms.ToolStripButton();
             this.btnResetScreen = new System.Windows.Forms.ToolStripButton();
             this.btnOpenClose = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -380,6 +380,16 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // btnPrint
+            // 
+            this.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.Image")));
+            this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(23, 22);
+            this.btnPrint.Text = "Fuvarösszesítő lap";
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // btnSaveLayout
             // 
             this.btnSaveLayout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -399,16 +409,6 @@
             this.btnRestoreLayout.Size = new System.Drawing.Size(23, 22);
             this.btnRestoreLayout.Text = "Képernyőbeállítások visszaállítása";
             this.btnRestoreLayout.Click += new System.EventHandler(this.btnRestoreLayout_Click);
-            // 
-            // btnPrint
-            // 
-            this.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.Image")));
-            this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(23, 22);
-            this.btnPrint.Text = "Összesítő nyomtatás";
-            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
             // btnResetScreen
             // 
