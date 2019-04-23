@@ -67,7 +67,7 @@ namespace PMapCore.BLL.Report
                             "left join CPP_CAPACITYPROF CPP on CPP.ID = TRK.CPP_ID " + Environment.NewLine +
                             //"where PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " " + Environment.NewLine +
                             ") " + Environment.NewLine +
-                            "select CTE.* " + Environment.NewLine +
+                            "select distinct CTE.* " + Environment.NewLine +
                             ",case when CTEX2.TRUCK is not null then CTEX2.BorderoX else CTE.BorderoX end as Bordero " + Environment.NewLine +
                             ",isnull(stuff " + Environment.NewLine +
                             "   ((SELECT distinct    ',' + RZN.RZN_ZoneCode " + Environment.NewLine +

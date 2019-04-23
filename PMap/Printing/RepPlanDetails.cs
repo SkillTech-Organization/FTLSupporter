@@ -183,7 +183,7 @@ namespace PMapCore.Printing
                 var col = 0;
                 var sides = BorderSide.None;
 
-                var sORD_NUM = item.ORD_NUM.Replace("HUN", "");
+                var sORD_NUM = item.ORD_NUM;
 
                 if (sORD_NUM.Contains(MAPEI_ORDPREFIX))
                 {
