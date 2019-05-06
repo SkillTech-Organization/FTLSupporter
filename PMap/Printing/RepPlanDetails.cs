@@ -183,7 +183,7 @@ namespace PMapCore.Printing
                 var col = 0;
                 var sides = BorderSide.None;
 
-                var sORD_NUM = item.ORD_NUM;
+                var sORD_NUM = item.ORD_NUM.Trim();
 
                 if (sORD_NUM.Contains(MAPEI_ORDPREFIX))
                 {
@@ -192,7 +192,7 @@ namespace PMapCore.Printing
                     sORD_NUM = xItems.First();
                 }
 
-                graph.DrawString(item.ORD_NUM, foreColor, new Rectangle(col, row, wORD_NUM, height), sides);
+                graph.DrawString(sORD_NUM, foreColor, new Rectangle(col, row, wORD_NUM, height), sides);
                 col += wORD_NUM;
 
                 graph.DrawString(item.CLIENT, foreColor, new Rectangle(col, row, wClient, height), sides);

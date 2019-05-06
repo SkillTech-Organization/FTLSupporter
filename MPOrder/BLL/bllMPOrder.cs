@@ -237,6 +237,25 @@ namespace MPOrder.BLL
         }
 
 
+        /// <summary>
+        /// 
+        //  Ha DA(Darus) árutípus van egy fuvarban akkor a Netmovernek küldött fájlban az összes adott fuvarhoz tartozó rendelésen meg kell változtatni az 
+        //árutípust DA-ra akkor is ha eredetileg nem az volt az árutípus hanem bármi más.
+        //  Ha SD (Szóló darus) van egy fuvarban akkor a Netmovernek küldött fájlban az összes adott fuvarhoz tartozó rendelésen meg kell változtatni az 
+        //árutípust SD-re akkor is ha eredetileg nem az volt az árutípus hanem bármi más.Ha a fenti kettő (DA és SD) együtt van az SD az erősebb, 
+        //tehát SD legyen mindenhol.
+        /// </summary>
+        public void PostProcessVehicleType(string p_CSVFileName, string p_VehicleType)
+        {
+            string sSql = ";with CTE as ( select distinct VehicleType, CustomerOrderNumber from MPO_MPORDER where CSVFileName = ? and VehicleType = ?) " + Environment.NewLine +
+                           "update MPO set VehicleType = ? " + Environment.NewLine +
+                           "from MPO_MPORDER MPO " + Environment.NewLine +
+                           "inner join CTE on CTE.CustomerOrderNumber = MPO.CustomerOrderNumber " + Environment.NewLine +
+                           "where MPO.CSVFileName = ?";
+
+            DBA.ExecuteNonQuery(sSql, p_CSVFileName, p_VehicleType, p_VehicleType, p_CSVFileName);
+        }
+
         public void SetManualValuesF(string p_CSVFileName, string p_CustomerOrderNumber, double NumberOfPalletForDelX)
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set NumberOfPalletForDelX = ? where CSVFileName= ? and CustomerOrderNumber = ?", NumberOfPalletForDelX, p_CSVFileName, p_CustomerOrderNumber);
@@ -335,7 +354,6 @@ namespace MPOrder.BLL
                 {
                     try
                     {
-
                         boOrder ord = bllOrderX.GetOrderByORD_NUM(item.CustomerOrderNumber);
 
                         //1.CT-be küldjük és nincs még ORD_ORDER rekord.
@@ -444,9 +462,9 @@ namespace MPOrder.BLL
 
                                 };
                                 newOrder.ID = bllOrderX.AddOrder(newOrder);
-                                foreach( var CustomerOrderNumber in item.aggregated_CustomerOrderNumbers)
+                                foreach( var custordnum in item.aggregated_CustomerOrderNumbers)
                                 {
-                                    SetORD_IDByCustomerOrderNumber(  CustomerOrderNumber, newOrder.ID);
+                                    SetORD_IDByCustomerOrderNumber(custordnum, newOrder.ID);
                                 }
 
                                 res.Add(new SendResult()
@@ -613,6 +631,30 @@ namespace MPOrder.BLL
                     //levágjuk a suffixet
 
                     var CustomerOrderNumber = item.CustomerOrderNumber.Substring(0, item.CustomerOrderNumber.Length - 4);
+
+                    //  Ha DA(Darus) árutípus van egy fuvarban akkor a Netmovernek küldött fájlban az összes adott fuvarhoz tartozó rendelésen meg kell változtatni az 
+                    //árutípust DA-ra akkor is ha eredetileg nem az volt az árutípus hanem bármi más.
+                    //  Ha SD (Szóló darus) van egy fuvarban akkor a Netmovernek küldött fájlban az összes adott fuvarhoz tartozó rendelésen meg kell változtatni az 
+                    //árutípust SD-re akkor is ha eredetileg nem az volt az árutípus hanem bármi más.Ha a fenti kettő (DA és SD) együtt van az SD az erősebb, 
+                    //tehát SD legyen mindenhol.
+
+                    string VehicleType = (!string.IsNullOrWhiteSpace(item.VehicleType) ? item.VehicleType : PMapIniParams.Instance.MapeiDefCargoType);
+                    var bSD = lstAll.Any(a => a.Bordero == item.Bordero && a.VehicleType == "HUNSD");
+                    var bDA = lstAll.Any(a => a.Bordero == item.Bordero && a.VehicleType == "HUNDA");
+
+                    if(bSD)
+                    { 
+                        VehicleType = "HUNSD";
+                    }
+                    else if (bDA)
+                    {
+                        VehicleType = "HUNDA";
+                    }
+
+                    //visszaupdate-oljuk a járműtípust
+                    if(bSD || bDA)
+                        lstAll.Where(w => w.Bordero == item.Bordero).ToList().ForEach(e => e.VehicleType = VehicleType);
+
                     var sLine = item.CompanyCode + ";" +
                                 item.CustomerCode + ";" +
                                 CustomerOrderNumber + ";" +
@@ -645,7 +687,7 @@ namespace MPOrder.BLL
                                 (item.UV ? "Y" : "N") + ";" +
                                 (item.SentToCT ? item.Bordero : "") + ";" +
                                 (item.SentToCT ? item.Carrier : "") + ";" +
-                                item.VehicleType  + ";" +
+                                VehicleType  + ";" +
                                 (item.SentToCT ? Math.Round(item.KM).ToString().Replace(".", ",") : "") + ";" +
                                 (item.SentToCT ? Math.Round(item.Forfait).ToString().Replace(".", ",") : "") + ";" +
                                 (item.SentToCT ? item.Currency : "");

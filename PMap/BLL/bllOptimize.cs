@@ -756,9 +756,9 @@ namespace PMapCore.BLL
 
 
                 //teljes tervezés
-                sSql = "select * from " + Environment.NewLine +
+                sSql = "select NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.RZN_ID_LIST,TRK_WEIGHT,TRK_XHEIGHT,TRK_XWIDTH,DST_DISTANCE,DST_EDGES, NODES.SPP_ID,ID_FROM,ID_TO from " + Environment.NewLine +
                         "		( " + Environment.NewLine +
-                        "		select  * from  " + Environment.NewLine +
+                        "		select  NOD_ID_FROM, NOD_ID_TO,RZN_ID_LIST,TRK_WEIGHT,TRK_XHEIGHT,TRK_XWIDTH,SPP_ID,ID_FROM,ID_TO from  " + Environment.NewLine +
                         "			(select NOD_FROM.ID as ID_FROM, NOD_TO.ID as ID_TO, NOD_FROM.NOD_ID as NOD_ID_FROM, NOD_TO.NOD_ID as NOD_ID_TO   " + Environment.NewLine +
                         "			 from (select distinct ID * -1 as ID, NOD_ID from WHS_WAREHOUSE (NOLOCK) WHS  " + Environment.NewLine +
                         "				   union  " + Environment.NewLine +
@@ -810,9 +810,9 @@ namespace PMapCore.BLL
             {
                 //Csak egy jármûre tervezés
 
-                sSql = "select * from " + Environment.NewLine +
+                sSql = "select NODES.NOD_ID_FROM, NODES.NOD_ID_TO, NODES.RZN_ID_LIST,TRK_WEIGHT,TRK_XHEIGHT,TRK_XWIDTH,DST_DISTANCE,DST_EDGES, NODES.SPP_ID,ID_FROM,ID_TO from " + Environment.NewLine +
                         "	( " + Environment.NewLine +
-                        "	select * from " + Environment.NewLine +
+                        "	select NOD_ID_FROM, NOD_ID_TO,RZN_ID_LIST,TRK_WEIGHT,TRK_XHEIGHT,TRK_XWIDTH,SPP_ID,ID_FROM,ID_TO from " + Environment.NewLine +
                         "     (select distinct NOD_FROM.ID as ID_FROM, NOD_TO.ID as ID_TO, NOD_FROM.NOD_ID as NOD_ID_FROM, NOD_TO.NOD_ID as NOD_ID_TO  from " + Environment.NewLine +
                         "		(select ISNULL( DEP.ID, WHS.ID*-1) as ID,  PTP.NOD_ID " + Environment.NewLine +
                         "			from PTP_PLANTOURPOINT (NOLOCK)  PTP " + Environment.NewLine +
@@ -900,7 +900,7 @@ namespace PMapCore.BLL
                     lastRZN_ID_LIST != Util.getFieldValue<string>(dr, "RZN_ID_LIST") ||
                     lastTRK_WEIGHT != Util.getFieldValue<int>(dr, "TRK_WEIGHT") ||
                     lastTRK_XHEIGHT != Util.getFieldValue<int>(dr, "TRK_XHEIGHT") ||
-                    lastTRK_XWIDTH != Util.getFieldValue<int>(dr, "TRK_XHEIGHT") ||
+                    lastTRK_XWIDTH != Util.getFieldValue<int>(dr, "TRK_XWIDTH") ||
                     lastDistance != Util.getFieldValue<int>(dr, "DST_DISTANCE"))
                 {
                     lastNOD_ID_FROM = Util.getFieldValue<int>(dr, "NOD_ID_FROM");
@@ -908,7 +908,7 @@ namespace PMapCore.BLL
                     lastRZN_ID_LIST = Util.getFieldValue<string>(dr, "RZN_ID_LIST");
                     lastTRK_WEIGHT = Util.getFieldValue<int>(dr, "TRK_WEIGHT");
                     lastTRK_XHEIGHT = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
-                    lastTRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XHEIGHT");
+                    lastTRK_XWIDTH = Util.getFieldValue<int>(dr, "TRK_XWIDTH");
 
 
                     lastSPP_ID = -1;

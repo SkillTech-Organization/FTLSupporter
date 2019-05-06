@@ -91,6 +91,8 @@ namespace MPOrder.LongProcess
                     columnIndex++;                                                  //AF
                     var VehicleType = val[columnIndex++];                           //AG
 
+                    
+
                     double UnitWeight = GrossWeightPlanned / ConfOrderQty;
 
                     boMPOrder item = new boMPOrder()
@@ -134,7 +136,7 @@ namespace MPOrder.LongProcess
                         UV = (UV.ToUpper() == "I"),
                         Bordero = "",
                         Carrier = "",
-                        VehicleType = VehicleType,
+                        VehicleType = (!string.IsNullOrWhiteSpace(VehicleType) ? VehicleType : PMapIniParams.Instance.MapeiDefCargoType),
                         KM = 0,
                         Forfait = 0,
                         Currency = "HUF",
@@ -172,6 +174,9 @@ namespace MPOrder.LongProcess
                 }
                 AddedCount = added;
                 ItemsCount = items.Count;
+
+    //            bllMPOrderx.PostProcessVehicleType(p_fileName, "HUNSD");
+    //            bllMPOrderx.PostProcessVehicleType(p_fileName, "HUNDA");
             }
 
             catch (Exception e)

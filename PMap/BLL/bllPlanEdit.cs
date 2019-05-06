@@ -864,33 +864,34 @@ namespace PMapCore.BLL
 
         //Környezetvédelmi kategóriánkénti szorzók (J1 kategória = 0)
         //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória    
-        //A kategória (≥EURO III.)	        0,85	            0,8
+        //A kategória (≥EURO III.)	        0,85	            0,85
         //B kategória (EURO II.)	        1	                  1   
         //C kategória (≤ EURO I.)	        1,15	            1,2
+
+
+        //2019:https://hu-go.hu/articles/article/a-dijszamitasrol
+
+
         public static double GetTollMultiplier(int p_TRK_ETOLLCAT, int p_TRK_ENGINEEURO)
         {
             if (p_TRK_ETOLLCAT == 1)
-                return 0;
+                return 1;
 
             double dMultiplier = 1;
-            if (p_TRK_ETOLLCAT == 2 || p_TRK_ETOLLCAT == 3)
-            {
-                if (p_TRK_ENGINEEURO >= 3)
-                    dMultiplier = 0.85;
-                else if (p_TRK_ENGINEEURO == 2)
-                    dMultiplier = 1;
-                else
-                    dMultiplier = 1.15;
-            }
+            if (p_TRK_ENGINEEURO >= 3)
+                dMultiplier = 0.85;
+            else if (p_TRK_ENGINEEURO == 2)
+                dMultiplier = 1;
             else
             {
-                if (p_TRK_ENGINEEURO >= 3)
-                    dMultiplier = 0.8;
-                else if (p_TRK_ENGINEEURO == 2)
-                    dMultiplier = 1;
+                //p_TRK_ENGINEEURO == 1
+                if (p_TRK_ETOLLCAT == 2 || p_TRK_ETOLLCAT == 3)
+                    dMultiplier = 1.15;
                 else
                     dMultiplier = 1.2;
+
             }
+             
             return dMultiplier;
         }
 
