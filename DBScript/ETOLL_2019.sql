@@ -8,6 +8,19 @@ select * into ETL_ETOLL_2018 from ETL_ETOLL
 6 Város (utca)
 7 Fel/lehajtók, rámpák
 */
+update	EDG
+set RDT_VALUE = 3
+from ETL_ETOLL ETL
+inner join EDG_EDGE EDG on EDG_ETLCODE = ETL.ETL_CODE
+where EDG_ETLCODE in ('47u215k641m', '47u215k641m', '47u215k641m', '47u215k641m', '47u218k76m', '47u218k76m', '47u218k76m', '47u218k76m', '4u140k441m', '4u141k265m', '4u151k191m', '6u137k300m', '6u139k86m')
+
+
+update	EDG
+set RDT_VALUE = 1
+from ETL_ETOLL ETL
+inner join EDG_EDGE EDG on EDG_ETLCODE = ETL.ETL_CODE
+where EDG_ETLCODE in ('M5u16k500m', 'M5u13k0m', 'M5u13k635m', 'M5u16k500m', 'M5u16k500m', 'M5u14k460m', 'M5u14k460m', 'M30u1k550m', 'M30u1k550m', 'M5u13k0m', 'M5u13k0m', 'M5u13k635m', 'M5u13k635m', 'M5u14k460m', 'M5u14k460m', 'M5u16k500m')
+
 
 select RDT_VALUE, * from ETL_ETOLL ETL
 inner join EDG_EDGE EDG on EDG.EDG_ETLCODE = ETL.ETL_CODE
