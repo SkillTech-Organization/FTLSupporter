@@ -14,7 +14,6 @@ using System.Reflection;
 using Microsoft.Win32;
 using System.Security.AccessControl;
 using System.Windows.Forms;
-using DevExpress.XtraGrid.Views.Grid;
 using System.IO.Compression;
 using System.Globalization;
 using System.Net;
@@ -355,24 +354,7 @@ namespace PMapCore.Common
             return temp;
         }
 
-        public static string SaveGridLayoutToString(GridView p_gw)
-        {
-
-            MemoryStream ms = new MemoryStream();
-            p_gw.SaveLayoutToStream(ms);
-            string retVal = Encoding.UTF8.GetString(ms.GetBuffer(), 0, Convert.ToInt32(ms.Length));
-            ms.Dispose();
-            return retVal;
-        }
-
-        public static void RestoreGridLayoutFromString(GridView p_gw, string p_XMLLayout)
-        {
-            byte[] byteArray = Encoding.UTF8.GetBytes(p_XMLLayout);
-            MemoryStream ms = new MemoryStream(byteArray);
-            p_gw.RestoreLayoutFromStream(ms);
-            ms.Close();
-        }
-
+     
         /// <summary>
         /// Decimal-e egy string
         /// </summary>

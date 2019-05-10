@@ -11,7 +11,6 @@ using System.Xml.Serialization;
 using GMap.NET.MapProviders;
 using PMapCore.Route;
 using PMapCore.BO;
-using DevExpress.XtraGrid;
 
 
 namespace PMapCore.Common.PPlan
@@ -37,7 +36,7 @@ namespace PMapCore.Common.PPlan
             public int ID { get; set; }
             public ESourceDataObjectType SourceDataObjectType { get; private set; }
             public object DataObject { get; set; }
-            public DevExpress.XtraGrid.GridControl SrcGridControl { get; set; }
+            public object SrcGridControl { get; set; }  //DevExpress.XtraGrid.GridControl -re kell castolni !!!
         }
 
         // *** Lock ***

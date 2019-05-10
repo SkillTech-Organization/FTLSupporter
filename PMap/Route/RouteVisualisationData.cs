@@ -14,14 +14,13 @@ namespace PMapCore.Route
 {
     public class RouteVisualisationData
     {
-        public static bool FillData(List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, int p_CalcTRK_ETOLLCAT, bool p_GetRouteWithTruckSpeeds, bool p_UI, out string sError)
+        public static bool FillData(List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, int p_CalcTRK_ETOLLCAT, bool p_GetRouteWithTruckSpeeds, out string sError)
         {
             sError = "";
             if (p_lstRouteSection.Count <= 1)
             {
                 sError = PMapMessages.E_ROUTVIS_EMPTYINPUT;
-                if (p_UI)
-                    UI.Error(sError);
+                return false;
             }
             bllRouteVis bllRouteVis;
             bllDepot bllDepot;
@@ -37,8 +36,6 @@ namespace PMapCore.Route
             sError = bllRouteVis.checkIDList(p_lstRouteSection.Select( i=>i.Start_DEP_ID).ToList());
             if (sError != "")
             {
-                if (p_UI)
-                    UI.Error(sError);
                 return false;
             }
             RouteVisCommonVars.Instance.GetRouteWithTruckSpeeds = p_GetRouteWithTruckSpeeds;
@@ -46,8 +43,6 @@ namespace PMapCore.Route
             if (RouteVisCommonVars.Instance.Truck == null)
             {
                 sError = String.Format(PMapMessages.E_ROUTVIS_MISSINGTRK, p_TRK_ID);
-                if (p_UI)
-                    UI.Error(sError);
                 return false;
             }
 

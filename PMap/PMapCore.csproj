@@ -108,21 +108,6 @@
       <HintPath>..\packages\BCrypt.Net-Next.StrongName.2.1.0\lib\net452\BCrypt.Net-Next.StrongName.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Data.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Data.v10.1.Compact, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Data.v10.1.Linq, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Utils.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraBars.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraEditors.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraLayout.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraNavBar.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraPivotGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraPrinting.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraReports.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraRichEdit.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraTreeList.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraVerticalGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
@@ -146,8 +131,8 @@
       <HintPath>..\packages\WindowsAzure.Storage.8.6.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SendGrid, Version=9.8.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
@@ -239,12 +224,8 @@
       <DependentUpon>dlgWait.cs</DependentUpon>
     </Compile>
     <Compile Include="LongProcess\CalcRoutesForTour.cs" />
-    <Compile Include="Printing\RepPlanDetails.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
-    <Compile Include="WebTrace\NotificationMail.cs" />
     <Compile Include="WebTrace\PMMapPoint.cs" />
     <Compile Include="WebTrace\PMToken.cs" />
     <Compile Include="WebTrace\PMTourPoint.cs" />
@@ -355,9 +336,6 @@
     <Compile Include="Common\GlobalLocker.cs" />
     <Compile Include="Licence\AES.cs" />
     <Compile Include="Licence\PMapLicWarn.cs" />
-    <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
-    <Compile Include="Localize\Base\DXGridLocalizer.cs" />
-    <Compile Include="Localize\Base\DXPrintPreviewLocalizer.cs" />
     <Compile Include="Strings\Base\Messages.cs" />
     <Compile Include="Strings\DXMessages.cs" />
     <Compile Include="LongProcess\Base\ProcessNotifyIcon.cs">
@@ -408,13 +386,6 @@
     <Compile Include="Common\INIFile.cs" />
     <Compile Include="Markers\PPlanMarker.cs" />
     <Compile Include="Markers\PPlanMarkerFlag.cs" />
-    <Compile Include="Printing\base\BaseGridPrinting.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Printing\base\PrintingCommon.cs" />
-    <Compile Include="Printing\PMapGridPrinting.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="LongProcess\Base\BaseMultiProgressDialog.resx">
       <DependentUpon>BaseMultiProgressDialog.cs</DependentUpon>
@@ -456,7 +427,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Common\UI.cs" />
     <Compile Include="Common\Util.cs" />
     <Compile Include="Route\RouteVisualisationData.cs" />
     <Compile Include="WebTrace\PMTracedTour.cs" />

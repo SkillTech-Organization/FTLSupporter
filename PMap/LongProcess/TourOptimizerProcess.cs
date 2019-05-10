@@ -27,6 +27,8 @@ namespace PMapCore.LongProcess
         }
 
         public eOptResult Result { get; set; }
+        public string ErrorMsg { get; set; }
+
         public string IgnoredOrders { get; private set; } = "";
 
 
@@ -107,9 +109,8 @@ namespace PMapCore.LongProcess
                         if (content.CompareTo(Global.OPT_NOERROR) != 0)
                         {
                             m_optimize = null;
-                            finalize(eOptResult.Error);
+                            finalize(eOptResult.Error, String.Format(PMapMessages.E_PVRP_ERR, content));
                             ProcessForm.SetVisible( false);
-                            UI.Error( String.Format( PMapMessages.E_PVRP_ERR,  content));
                             return;
                         }
                     }
@@ -186,10 +187,12 @@ namespace PMapCore.LongProcess
             }
         }
 
-        private void finalize(eOptResult p_result)
+        private void finalize(eOptResult p_result, string p_ErrorMsg = "")
         {
 
             Result = p_result;
+            ErrorMsg = p_ErrorMsg;
+
             if (!m_procOptimizer.HasExited)
                 m_procOptimizer.Kill();
             if (PMapIniParams.Instance.LogVerbose >= PMapIniParams.eLogVerbose.debug && m_procOptimizer.StartInfo.RedirectStandardOutput)

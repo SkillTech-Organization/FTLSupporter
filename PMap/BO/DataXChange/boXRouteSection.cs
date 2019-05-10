@@ -7,7 +7,6 @@ using PMapCore.Strings;
 using System.ComponentModel;
 using PMapCore.BO.Base;
 using PMapCore.Common.Attrib;
-using PMapCore.Strings;
 
 namespace PMapCore.BO.DataXChange
 {

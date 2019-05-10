@@ -7,7 +7,6 @@ using PMapCore.DB.Base;
 using System.Data;
 using PMapCore.Common;
 using PMapCore.Strings;
-using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {

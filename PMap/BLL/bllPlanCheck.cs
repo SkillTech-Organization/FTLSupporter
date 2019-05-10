@@ -6,7 +6,6 @@ using System.Data;
 using PMapCore.Strings;
 using PMapCore.Common;
 using System.Runtime.ExceptionServices;
-using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {

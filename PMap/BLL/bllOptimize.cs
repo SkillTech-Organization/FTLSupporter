@@ -13,7 +13,6 @@ using PMapCore.Common;
 using System.IO;
 using System.Globalization;
 using System.Runtime.ExceptionServices;
-using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {
@@ -1388,8 +1387,10 @@ namespace PMapCore.BLL
                 catch (FileNotFoundException fe)
                 {
                     DBA.Rollback();
-                    Util.ExceptionLog(fe);
-                    UI.Error(fe.Message);
+                    ExceptionDispatchInfo.Capture(fe).Throw();
+
+                    //Util.ExceptionLog(fe);
+                    //UI.Error(fe.Message);
 
                 }
 
