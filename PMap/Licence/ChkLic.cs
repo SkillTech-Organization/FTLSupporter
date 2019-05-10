@@ -1,6 +1,6 @@
 ﻿using PMapCore.Common;
 using PMapCore.Common.Azure;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using System;
 using System.Collections.Generic;
 using System.IO;

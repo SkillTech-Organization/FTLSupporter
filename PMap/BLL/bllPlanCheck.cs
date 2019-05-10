@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 using System.Runtime.ExceptionServices;
+using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {

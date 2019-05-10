@@ -12,7 +12,7 @@ using PMapCore.MapProvider;
 using PMapCore.Route;
 using Map.LongProcess;
 using PMapCore.BO;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 using PMapCore.Licence;
 using System.Runtime.ExceptionServices;

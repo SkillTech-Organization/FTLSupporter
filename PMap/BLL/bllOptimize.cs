@@ -6,13 +6,14 @@ using PMapCore.BO;
 using System.Data;
 using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Route;
 using PMapCore.BLL.Base;
 using PMapCore.Common;
 using System.IO;
 using System.Globalization;
 using System.Runtime.ExceptionServices;
+using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {

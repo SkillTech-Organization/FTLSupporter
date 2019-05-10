@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using PMapCore.LongProcess.Base;
 using PMapCore.DB.Base;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 using PMapCore.BLL;
 using PMapCore.BO;
@@ -16,7 +16,7 @@ using PMapCore.BO.DataXChange;
 namespace Map.LongProcess
 {
 
-    class RouteVisDataProcess : BaseLongProcess
+   public class RouteVisDataProcess : BaseLongProcess
     {
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bllRouteVis m_bllRouteVis;

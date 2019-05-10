@@ -6,7 +6,6 @@ using System.Threading;
 using PMapCore.DB;
 using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
-using PMapCore.Forms;
 using GMap.NET;
 using PMapCore.BO;
 using PMapCore.BLL;

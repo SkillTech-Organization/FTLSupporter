@@ -10,7 +10,6 @@ using System.Reflection;
 using PMapCore.Route;
 using PMapCore.MapProvider;
 using PMapCore.DB;
-using PMapCore.Forms;
 using PMapCore.Markers;
 using System.Globalization;
 using System.Threading;
@@ -23,9 +22,9 @@ using PMapCore.Common.PPlan;
 using PMapCore.BO.DataXChange;
 using PMapCore.Common.Parse;
 using PMapCore.Licence;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using System.Diagnostics;
-
+using PMapUI.Forms;
 
 namespace VBInterface
 {

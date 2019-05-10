@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PMapCore.Common;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;

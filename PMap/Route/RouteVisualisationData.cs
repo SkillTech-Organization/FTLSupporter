@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using PMapCore.Common;
 using PMapCore.BLL;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.LongProcess;
 using Map.LongProcess;
 using PMapCore.BO;

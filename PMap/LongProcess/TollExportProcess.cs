@@ -8,7 +8,7 @@ using PMapCore.DB.Base;
 using PMapCore.BLL;
 using PMapCore.BO;
 using System.Data;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using System.IO;
 using System.Windows.Forms;
 using PMapCore.Common;

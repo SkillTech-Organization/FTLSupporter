@@ -10,8 +10,6 @@ using PMapCore.DB.Base;
 using System.Data.SqlClient;
 using GMap.NET;
 using System.Threading;
-using PMapCore.Forms;
-using Map.LongProcess;
 using PMapCore.BO;
 using PMapCore.BLL;
 using PMapCore.Common;

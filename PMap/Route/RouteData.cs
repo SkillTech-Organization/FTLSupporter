@@ -9,7 +9,7 @@ using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
 using PMapCore.BO;
 using PMapCore.BLL;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 using System.IO;
 using Newtonsoft.Json;

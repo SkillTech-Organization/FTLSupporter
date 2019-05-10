@@ -17,7 +17,7 @@ using PMapCore.BLL;
 using PMapCore.DB.Base;
 using PMapCore.Common;
 using PMapCore.Common.PPlan;
-using PMapCore.Localize;
+using PMapCore.Strings;
 
 namespace PMapCore.LongProcess
 {

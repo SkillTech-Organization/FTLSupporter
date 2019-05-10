@@ -5,7 +5,7 @@ using System.Text;
 using PMapCore.LongProcess.Base;
 using PMapCore.DB.Base;
 using PMapCore.Route;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 
 namespace PMapCore.LongProcess

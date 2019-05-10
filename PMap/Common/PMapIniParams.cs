@@ -216,7 +216,7 @@ namespace PMapCore.Common
                         "'\\nTérfogat:'+CAST(ORD_VOLUME AS VARCHAR)+', Mennyiség:' + CAST(TOD_QTY AS VARCHAR)+'\\n'+ ORD_COMMENT";
             }
             TourpointToolTip = sTourpointToolTip;
-
+            //ToolTipText = (PMapIniParams.Instance.DepCodeInToolTip ? Util.getFieldValue<string>(p_dr, "DEP_CODE") + "  " : "") + Util.getFieldValue<string>(p_dr, "DEP_NAME") + "\n" + Util.getFieldValue<int>(p_dr, "ZIP_NUM") + " " + Util.getFieldValue<string>(p_dr, "ZIP_CITY") + " " + Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
             string sTruckCode = ini.ReadString(Global.iniPMap, Global.iniTruckCode);
             if (string.IsNullOrWhiteSpace(sTruckCode))
             {

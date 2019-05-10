@@ -5,7 +5,7 @@ using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Forms.Base;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.LongProcess.Base;
 using System;
 using System.Collections.Generic;

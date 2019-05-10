@@ -14,7 +14,7 @@ using PMapCore.MapProvider;
 using System.Drawing.Drawing2D;
 using PMapCore.Route;
 using PMapCore.BO;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.BLL;
 using PMapCore.Common;
 using System.Globalization;

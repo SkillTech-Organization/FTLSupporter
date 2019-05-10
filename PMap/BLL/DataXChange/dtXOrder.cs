@@ -6,7 +6,7 @@ using PMapCore.BLL.Base;
 using PMapCore.DB.Base;
 using PMapCore.BO;
 using PMapCore.Common;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.BO.DataXChange;
 using System.Runtime.ExceptionServices;
 

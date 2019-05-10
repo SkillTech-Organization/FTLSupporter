@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.BO.Base;
 using PMapCore.Common.Attrib;
+using PMapCore.Strings;
 
 namespace PMapCore.BO.DataXChange
 {

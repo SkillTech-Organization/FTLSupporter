@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 using FastMember;
 using PMapCore.Cache;
 using PMapCore.BLL;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL

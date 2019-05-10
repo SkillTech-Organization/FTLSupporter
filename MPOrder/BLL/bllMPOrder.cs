@@ -6,6 +6,7 @@ using PMapCore.Common;
 using PMapCore.DB.Base;
 using PMapCore.Localize;
 using PMapCore.LongProcess.Base;
+using PMapCore.Strings;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -83,6 +83,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapeiDocs", "MapeiDocs", "{
 		doc\Mapei\SQLQuery5.sql = doc\Mapei\SQLQuery5.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMapUI", "PMapUI\PMapUI.csproj", "{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -314,6 +316,22 @@ Global
 		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x64.Build.0 = Release|Any CPU
 		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x86.ActiveCfg = Release|Any CPU
 		{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}.Release|x86.Build.0 = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|x64.Build.0 = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Debug|x86.Build.0 = Debug|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|x64.ActiveCfg = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|x64.Build.0 = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,7 +340,7 @@ Global
 		{5B599073-8416-4A3C-8D92-B15B9E57E410} = {DE152D52-1346-4F9C-A0D3-0CD98319DD14}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://gyorgyiantal.visualstudio.com/
 		SccLocalPath0 = .
@@ -371,5 +389,8 @@ Global
 		SccProjectUniqueName15 = PMap\\PMapCore.csproj
 		SccProjectName15 = PMap
 		SccLocalPath15 = PMap
+		SccProjectUniqueName16 = PMapUI\\PMapUI.csproj
+		SccProjectName16 = PMapUI
+		SccLocalPath16 = PMapUI
 	EndGlobalSection
 EndGlobal

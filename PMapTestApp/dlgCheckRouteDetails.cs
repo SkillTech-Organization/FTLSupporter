@@ -10,7 +10,7 @@ using PMapCore.Route;
 using PMapCore.Printing;
 using PMapCore.BO;
 using PMapCore.BLL;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 
 namespace PMapTestApp

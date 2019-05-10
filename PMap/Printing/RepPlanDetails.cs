@@ -4,7 +4,7 @@ using PMapCore.BO;
 using PMapCore.BO.Report;
 using PMapCore.Common;
 using PMapCore.DB.Base;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

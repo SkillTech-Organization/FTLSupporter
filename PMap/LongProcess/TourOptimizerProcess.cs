@@ -7,7 +7,7 @@ using PMapCore.DB;
 using System.Threading;
 using PMapCore.BLL;
 using PMapCore.BO;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.DB.Base;
 using System.Diagnostics;
 using PMapCore.Common;

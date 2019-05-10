@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace PMapCore.Common  
 {
-    class CSVParser
+    public class CSVParser
     {
         public static ArrayList Parse(string strInputString)
 		{

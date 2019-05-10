@@ -227,19 +227,17 @@
     <Compile Include="Common\AuthCryptoHelper.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />
     <Compile Include="Common\FormSerializeHelper.cs" />
-    <Compile Include="Forms\dlgAddOpenClose.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgAddOpenClose.Designer.cs">
-      <DependentUpon>dlgAddOpenClose.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgSendEMail.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgSendEMail.Designer.cs">
-      <DependentUpon>dlgSendEMail.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\AESCryptoHelper.cs" />
+    <Compile Include="Common\PPlan\CTourDetails.cs" />
+    <Compile Include="Common\PPlan\PlanEventArgs.cs" />
+    <Compile Include="Common\PPlan\PlanParams.cs" />
+    <Compile Include="Common\PPlan\PPlanCommonVars.cs" />
+    <Compile Include="LongProcess\Base\dlgWait.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LongProcess\Base\dlgWait.Designer.cs">
+      <DependentUpon>dlgWait.cs</DependentUpon>
+    </Compile>
     <Compile Include="LongProcess\CalcRoutesForTour.cs" />
     <Compile Include="Printing\RepPlanDetails.cs">
       <SubType>Component</SubType>
@@ -337,20 +335,9 @@
     <Compile Include="Licence\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />
     <Compile Include="Common\Parse\PMapCalls.cs" />
-    <Compile Include="Common\PPlan\PlanEditFuncs.cs" />
-    <Compile Include="Common\PPlan\PlanParams.cs" />
     <Compile Include="Common\RouteVisEventArgs.cs" />
     <Compile Include="Common\RouteVisCommonVars.cs" />
     <Compile Include="Common\WaitCursor.cs" />
-    <Compile Include="Controls\ColorComboBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorComboBox.designer.cs">
-      <DependentUpon>ColorComboBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PropertyGridCtrl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="BLL\DataXChange\dtXResult.cs" />
     <Compile Include="BLL\DataXChange\dtXDepot.cs" />
     <Compile Include="DB\Base\DBAccess.cs" />
@@ -365,104 +352,14 @@
     <Compile Include="BLL\bllSemaphore.cs" />
     <Compile Include="BLL\bllTruck.cs" />
     <Compile Include="DB\DBLockHolder.cs" />
-    <Compile Include="Forms\Base\BaseDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Base\BaseDialog.designer.cs">
-      <DependentUpon>BaseDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Base\BaseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Base\BaseForm.Designer.cs">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Base\BasePanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Base\BasePanel.Designer.cs">
-      <DependentUpon>BasePanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgFindORD_NUM.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgFindORD_NUM.Designer.cs">
-      <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgNewPlan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgNewPlan.Designer.cs">
-      <DependentUpon>dlgNewPlan.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgNewTour.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgNewTour.Designer.cs">
-      <DependentUpon>dlgNewTour.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgRouteVisDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgRouteVisDetails.Designer.cs">
-      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgTourDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgTourDetails.Designer.cs">
-      <DependentUpon>dlgTourDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgTruckChg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgTruckChg.Designer.cs">
-      <DependentUpon>dlgTruckChg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgWait.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgWait.Designer.cs">
-      <DependentUpon>dlgWait.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgOptimize.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgOptimize.Designer.cs">
-      <DependentUpon>dlgOptimize.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmRouteVisualization.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmRouteVisualization.Designer.cs">
-      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\dlgDepotList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgDepotList.Designer.cs">
-      <DependentUpon>dlgDepotList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.Designer.cs">
-      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.Designer.cs">
-      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\GlobalLocker.cs" />
     <Compile Include="Licence\AES.cs" />
     <Compile Include="Licence\PMapLicWarn.cs" />
     <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
     <Compile Include="Localize\Base\DXGridLocalizer.cs" />
     <Compile Include="Localize\Base\DXPrintPreviewLocalizer.cs" />
-    <Compile Include="Localize\Base\Messages.cs" />
-    <Compile Include="Localize\DXMessages.cs" />
+    <Compile Include="Strings\Base\Messages.cs" />
+    <Compile Include="Strings\DXMessages.cs" />
     <Compile Include="LongProcess\Base\ProcessNotifyIcon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -476,7 +373,7 @@
     <Compile Include="LongProcess\TourOptimizerProcess.cs" />
     <Compile Include="Markers\PMapMarker.cs" />
     <Compile Include="LongProcess\RouteVisDataProcess.cs" />
-    <Compile Include="Localize\PMapMessages.cs" />
+    <Compile Include="Strings\PMapMessages.cs" />
     <Compile Include="Common\PMapCommonVars.cs" />
     <Compile Include="Common\ProcessUtils.cs" />
     <Compile Include="Route\CRoutePars.cs" />
@@ -486,26 +383,6 @@
     <Compile Include="Route\BasicHeap.cs" />
     <Compile Include="Route\RouteCalculator.cs" />
     <Compile Include="Route\HeapNode.cs" />
-    <Compile Include="Common\PPlan\PlanEventArgs.cs" />
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanOrders.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanOrders.Designer.cs">
-      <DependentUpon>pnlPPlanOrders.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\PPlan\PPlanCommonVars.cs" />
-    <Compile Include="Forms\frmPMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmPMap.Designer.cs">
-      <DependentUpon>frmPMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmPPlan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmPPlan.Designer.cs">
-      <DependentUpon>frmPPlan.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Global.cs" />
     <Compile Include="Common\PMapIniParams.cs" />
     <Compile Include="LongProcess\Base\BaseLongProcess.cs" />
@@ -529,30 +406,6 @@
     </Compile>
     <Compile Include="Route\PMRouteInterface.cs" />
     <Compile Include="Common\INIFile.cs" />
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.Designer.cs">
-      <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanSettings.Designer.cs">
-      <DependentUpon>pnlPPlanSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.Designer.cs">
-      <DependentUpon>pnlPPlanTourPoints.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.Designer.cs">
-      <DependentUpon>pnlPPlanTours.cs</DependentUpon>
-    </Compile>
     <Compile Include="Markers\PPlanMarker.cs" />
     <Compile Include="Markers\PPlanMarkerFlag.cs" />
     <Compile Include="Printing\base\BaseGridPrinting.cs">
@@ -563,75 +416,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\ColorComboBox.resx">
-      <DependentUpon>ColorComboBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Base\BaseDialog.resx">
-      <DependentUpon>BaseDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Base\BaseForm.resx">
-      <DependentUpon>BaseForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Base\BasePanel.resx">
-      <DependentUpon>BasePanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgAddOpenClose.resx">
-      <DependentUpon>dlgAddOpenClose.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgFindORD_NUM.resx">
-      <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgNewPlan.resx">
-      <DependentUpon>dlgNewPlan.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgNewTour.resx">
-      <DependentUpon>dlgNewTour.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgRouteVisDetails.resx">
-      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgSendEMail.resx">
-      <DependentUpon>dlgSendEMail.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgTourDetails.resx">
-      <DependentUpon>dlgTourDetails.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgTruckChg.resx">
-      <DependentUpon>dlgTruckChg.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgWait.resx">
-      <DependentUpon>dlgWait.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgOptimize.resx">
-      <DependentUpon>dlgOptimize.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmPMap.resx">
-      <DependentUpon>frmPMap.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmPPlan.resx">
-      <DependentUpon>frmPPlan.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmRouteVisualization.resx">
-      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgDepotList.resx">
-      <DependentUpon>dlgDepotList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.resx">
-      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.resx">
-      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LongProcess\Base\BaseMultiProgressDialog.resx">
       <DependentUpon>BaseMultiProgressDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -644,23 +428,9 @@
       <DependentUpon>BaseSilngleProgressDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanEditor.resx">
-      <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
+    <EmbeddedResource Include="LongProcess\Base\dlgWait.resx">
+      <DependentUpon>dlgWait.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanSettings.resx">
-      <DependentUpon>pnlPPlanSettings.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.resx">
-      <DependentUpon>pnlPPlanTourPoints.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTours.resx">
-      <DependentUpon>pnlPPlanTours.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanOrders.resx">
-      <DependentUpon>pnlPPlanOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -764,6 +534,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="map.ico" />
+    <None Include="Resources\editorloc_hu1.txt" />
+    <None Include="Resources\gridloc_hu1.txt" />
+    <None Include="Resources\ppreviewloc_hu1.txt" />
     <Content Include="Resources\printer.png" />
     <None Include="Resources\tray\11.ico" />
     <None Include="Resources\tray\10.ico" />

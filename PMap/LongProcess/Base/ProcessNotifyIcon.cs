@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AnimatedNotifyIconNS;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.Common;
 
 namespace PMapCore.LongProcess.Base

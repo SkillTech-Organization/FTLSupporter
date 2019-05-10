@@ -6,7 +6,7 @@ using PMapCore.BLL;
 using PMapCore.DB.Base;
 using PMapCore.BO;
 using PMapCore.Common;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using GMap.NET;
 using PMapCore.BLL.Base;
 using PMapCore.BO.DataXChange;

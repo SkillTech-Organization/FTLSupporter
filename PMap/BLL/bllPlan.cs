@@ -8,7 +8,6 @@ using PMapCore.BO;
 using PMapCore.BLL;
 using PMapCore.BLL.Base;
 using PMapCore.Common;
-using PMapCore.Common.PPlan;
 using PMapCore.WebTrace;
 using System.Drawing;
 using System.Web.Script.Serialization;

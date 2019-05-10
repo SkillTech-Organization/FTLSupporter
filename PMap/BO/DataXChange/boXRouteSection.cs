@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using System.ComponentModel;
 using PMapCore.BO.Base;
 using PMapCore.Common.Attrib;
+using PMapCore.Strings;
 
 namespace PMapCore.BO.DataXChange
 {

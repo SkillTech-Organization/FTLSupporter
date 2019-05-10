@@ -7,21 +7,21 @@ using PMapCore.DB;
 using System.Globalization;
 using GMap.NET;
 using PMapCore.MapProvider;
-using PMapCore.Forms;
 using PMapCore.Route;
 using System.Threading;
 using PMapCore.DB.Base;
 using PMapCore.BO;
-using PMapCore.Localize;
+using PMapCore.Strings;
 using PMapCore.BLL;
 using PMapCore.Common;
+using PMapCore.Common.PPlan;
 
 namespace PMapCore.LongProcess
 {
     public class GetTourDetailsProcess : BaseLongProcess
     {
         public bool Completed { get; set; }
-        public List<dlgTourDetails.CTourDetails> TourDetails { get; set; }
+        public List<CTourDetails> TourDetails { get; set; }
         private boPlanTour m_Tour;
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
 
@@ -32,7 +32,7 @@ namespace PMapCore.LongProcess
             : base(p_Form, ThreadPriority.Normal)
         {
             Completed = true;
-            TourDetails = new List<dlgTourDetails.CTourDetails>();
+            TourDetails = new List<CTourDetails>();
             m_Tour = p_Tour;
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
@@ -121,7 +121,7 @@ namespace PMapCore.LongProcess
                              LastWZone != edge.WZONE ||
                              LastETLCODE != edge.EDG_ETLCODE)
                             {
-                                dlgTourDetails.CTourDetails td = new dlgTourDetails.CTourDetails
+                                CTourDetails td = new CTourDetails
                                 {
                                     Type = iType,
                                     Text = xedge.EDG_NAME,
@@ -166,7 +166,7 @@ namespace PMapCore.LongProcess
                             }
                         }
 
-                        dlgTourDetails.CTourDetails td2 = new dlgTourDetails.CTourDetails
+                        CTourDetails td2 = new CTourDetails
                         {
                             Type = iType,
                             Text = xedge.EDG_NAME,
