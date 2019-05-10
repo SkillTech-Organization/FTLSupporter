@@ -1,0 +1,442 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PMapUI</RootNamespace>
+    <AssemblyName>PMapUI</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v10.1.Compact, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v10.1.Linq, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraBars.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraNavBar.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPivotGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraRichEdit.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraTreeList.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraVerticalGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\ColorComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorComboBox.designer.cs">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyGridCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Base\BaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Base\BaseDialog.designer.cs">
+      <DependentUpon>BaseDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Base\BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Base\BaseForm.Designer.cs">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Base\BasePanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Base\BasePanel.Designer.cs">
+      <DependentUpon>BasePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgAddOpenClose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgAddOpenClose.Designer.cs">
+      <DependentUpon>dlgAddOpenClose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgDepotList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgDepotList.Designer.cs">
+      <DependentUpon>dlgDepotList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgFindORD_NUM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgFindORD_NUM.Designer.cs">
+      <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgNewPlan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgNewPlan.Designer.cs">
+      <DependentUpon>dlgNewPlan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgNewTour.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgNewTour.Designer.cs">
+      <DependentUpon>dlgNewTour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgOptimize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgOptimize.Designer.cs">
+      <DependentUpon>dlgOptimize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgRouteVisDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgRouteVisDetails.Designer.cs">
+      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgSendEMail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgSendEMail.Designer.cs">
+      <DependentUpon>dlgSendEMail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgTourDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgTourDetails.Designer.cs">
+      <DependentUpon>dlgTourDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgTruckChg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgTruckChg.Designer.cs">
+      <DependentUpon>dlgTruckChg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\dlgWait.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\dlgWait.Designer.cs">
+      <DependentUpon>dlgWait.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPMap.Designer.cs">
+      <DependentUpon>frmPMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPPlan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPPlan.Designer.cs">
+      <DependentUpon>frmPPlan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRouteVisualization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmRouteVisualization.Designer.cs">
+      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Funcs\PlanEditFuncs.cs" />
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.Designer.cs">
+      <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanOrders.Designer.cs">
+      <DependentUpon>pnlPPlanOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanSettings.Designer.cs">
+      <DependentUpon>pnlPPlanSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.Designer.cs">
+      <DependentUpon>pnlPPlanTourPoints.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.Designer.cs">
+      <DependentUpon>pnlPPlanTours.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.Designer.cs">
+      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.Designer.cs">
+      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
+    <Compile Include="Localize\Base\DXGridLocalizer.cs" />
+    <Compile Include="Localize\Base\DXPrintPreviewLocalizer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\ColorComboBox.resx">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Base\BaseDialog.resx">
+      <DependentUpon>BaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Base\BaseForm.resx">
+      <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Base\BasePanel.resx">
+      <DependentUpon>BasePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgAddOpenClose.resx">
+      <DependentUpon>dlgAddOpenClose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgDepotList.resx">
+      <DependentUpon>dlgDepotList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgFindORD_NUM.resx">
+      <DependentUpon>dlgFindORD_NUM.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgNewPlan.resx">
+      <DependentUpon>dlgNewPlan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgNewTour.resx">
+      <DependentUpon>dlgNewTour.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgOptimize.resx">
+      <DependentUpon>dlgOptimize.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgRouteVisDetails.resx">
+      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgSendEMail.resx">
+      <DependentUpon>dlgSendEMail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgTourDetails.resx">
+      <DependentUpon>dlgTourDetails.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgTruckChg.resx">
+      <DependentUpon>dlgTruckChg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\dlgWait.resx">
+      <DependentUpon>dlgWait.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPMap.resx">
+      <DependentUpon>frmPMap.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPPlan.resx">
+      <DependentUpon>frmPPlan.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmRouteVisualization.resx">
+      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanEditor.resx">
+      <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanOrders.resx">
+      <DependentUpon>pnlPPlanOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanSettings.resx">
+      <DependentUpon>pnlPPlanSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTourPoints.resx">
+      <DependentUpon>pnlPPlanTourPoints.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTours.resx">
+      <DependentUpon>pnlPPlanTours.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.resx">
+      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.resx">
+      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DTPicker\DTPicker.vbproj">
+      <Project>{05dc0418-566f-47f1-aa53-190009dd01f7}</Project>
+      <Name>DTPicker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FrcNumericTextBox\FrcNumericTextBox.csproj">
+      <Project>{ff4cd9f3-db53-4fd9-8541-5777947745e9}</Project>
+      <Name>FrcNumericTextBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
+      <Project>{e06def77-f933-42fb-afd7-db2d0d8d6a98}</Project>
+      <Name>GMap.NET.WindowsForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PMap\PMapCore.csproj">
+      <Project>{3e3fe032-b237-479b-938b-63f693265432}</Project>
+      <Name>PMapCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TabOrder\TabOrder.csproj">
+      <Project>{6e23d5d1-fb6b-450d-8244-34172b60c166}</Project>
+      <Name>TabOrder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WinFormsUI\WinFormsUI.csproj">
+      <Project>{c75532c4-765b-418e-b09b-46d36b2abdb1}</Project>
+      <Name>WinFormsUI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\editorloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gridloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ppreviewloc_hu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flag2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flag3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shadow50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\10.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\11.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\13.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\map.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
