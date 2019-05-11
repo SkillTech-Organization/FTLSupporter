@@ -315,6 +315,10 @@
       <Project>{26639170-a1f0-40f1-9750-c857c55f3434}</Project>
       <Name>PMRoute</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SWHInterface\SWHInterface.csproj">
+      <Project>{98c43645-5b84-44da-af53-34d540a3bd3b}</Project>
+      <Name>SWHInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VBInterface\VBInterface.csproj">
       <Project>{50AA2C7B-A6DA-4EB7-8316-9D87CAEBA9B7}</Project>
       <Name>VBInterface</Name>

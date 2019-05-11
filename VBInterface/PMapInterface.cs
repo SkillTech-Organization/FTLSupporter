@@ -1158,8 +1158,8 @@ namespace VBInterface
         }
 
         /// <summary>
-        /// Menetlevél ellenőrzés 
-        /// MEGJ.:A menetlevél ellenőrzés nem használ súly- és méretkorlátozásokat !
+        /// Útvonal ellenőrzés 
+        /// MEGJ.:Az útvonalellenőrzés nem használ súly- és méretkorlátozásokat !
         /// </summary>
         /// <param name="p_iniPath"></param>
         /// <param name="p_dbConf"></param>
