@@ -4,7 +4,7 @@ using PMapCore.BLL.Base;
 using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.DB.Base;
-using PMapCore.Localize;
+using PMapUI.Localize;
 using PMapCore.LongProcess.Base;
 using PMapCore.Strings;
 using System;

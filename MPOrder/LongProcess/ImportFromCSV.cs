@@ -3,7 +3,6 @@ using MPOrder.BO;
 using PMapCore.BLL;
 using PMapCore.Common;
 using PMapCore.DB.Base;
-using PMapCore.Localize;
 using PMapCore.LongProcess.Base;
 using System;
 using System.Collections.Generic;

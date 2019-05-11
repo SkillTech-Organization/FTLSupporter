@@ -1,7 +1,7 @@
 ﻿using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
-using PMapCore.Forms.Base;
+using PMapUI.Forms.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -4,7 +4,6 @@ using MPOrder.LongProcess;
 using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
-using PMapCore.Forms.Base;
 using PMapCore.Strings;
 using PMapCore.LongProcess.Base;
 using System;
@@ -20,7 +19,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
-
+using PMapUI.Forms.Base;
+using PMapUI.Common;
 
 namespace MPOrder.Forms
 {
@@ -384,8 +384,8 @@ namespace MPOrder.Forms
             FormSerializeHelper fs = new FormSerializeHelper(this);
             string MPP_WINDOW = XMLSerializator.SerializeObject(fs);
 
-            string MPP_TGRID = Util.SaveGridLayoutToString(gridViewMegrF);
-            string MPP_PGRID = Util.SaveGridLayoutToString(gridViewMegrT);
+            string MPP_TGRID = UI.SaveGridLayoutToString(gridViewMegrF);
+            string MPP_PGRID = UI.SaveGridLayoutToString(gridViewMegrT);
             bllMapFormPar.SaveParameters(-1, PMapCommonVars.Instance.USR_ID, MPP_WINDOW, "", "", MPP_TGRID, MPP_PGRID, "");
         }
 
@@ -427,9 +427,9 @@ namespace MPOrder.Forms
                 }
                 /* Egyelőre a grideket nem töljük vissza */
                 if (MPP_TGRID != "")
-                    Util.RestoreGridLayoutFromString(gridViewMegrF, MPP_TGRID);
+                    UI.RestoreGridLayoutFromString(gridViewMegrF, MPP_TGRID);
                 if (MPP_PGRID != "")
-                    Util.RestoreGridLayoutFromString(gridViewMegrT, MPP_PGRID);
+                    UI.RestoreGridLayoutFromString(gridViewMegrT, MPP_PGRID);
 
 
             }

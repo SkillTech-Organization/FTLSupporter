@@ -1,5 +1,5 @@
-﻿using PMapCore.Forms.Base;
-using PMapCore.Printing;
+﻿using PMapUI.Forms.Base;
+using PMapUI.Printing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
