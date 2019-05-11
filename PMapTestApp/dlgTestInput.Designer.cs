@@ -57,7 +57,7 @@
             this.repositoryItemDateEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
             this.repositoryItemSpinEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.repositoryItemSpinEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
-            this.propertyGridCtrl1 = new PMapCore.Controls.PropertyGridCtrl();
+            this.propertyGridCtrl1 = new PMapUI.Controls.PropertyGridCtrl();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit6)).BeginInit();
@@ -382,6 +382,6 @@
         private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit6;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit11;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit12;
-        public PMapCore.Controls.PropertyGridCtrl propertyGridCtrl1;
+        public PMapUI.Controls.PropertyGridCtrl propertyGridCtrl1;
     }
 }

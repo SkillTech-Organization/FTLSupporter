@@ -39,7 +39,7 @@
             this.repositoryItemSpinEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.tblDlgButtons = new System.Windows.Forms.TableLayoutPanel();
             this.buttonOK = new System.Windows.Forms.Button();
-            this.propertyGridCtrl1 = new PMapCore.Controls.PropertyGridCtrl();
+            this.propertyGridCtrl1 = new PMapUI.Controls.PropertyGridCtrl();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
@@ -177,7 +177,7 @@
 
         public System.Windows.Forms.TableLayoutPanel tblDlgButtons;
         public System.Windows.Forms.Button buttonOK;
-        public PMapCore.Controls.PropertyGridCtrl propertyGridCtrl1;
+        public PMapUI.Controls.PropertyGridCtrl propertyGridCtrl1;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
         private DevExpress.XtraEditors.Repository.RepositoryItemDateEdit repositoryItemDateEdit1;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEdit1;

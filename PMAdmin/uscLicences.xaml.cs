@@ -4,6 +4,7 @@ using PMAdmin.Model;
 using PMapCore.Common;
 using PMapCore.Common.Azure;
 using PMapCore.Licence;
+using PMapUI.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

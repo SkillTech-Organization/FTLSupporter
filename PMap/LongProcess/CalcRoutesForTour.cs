@@ -40,8 +40,6 @@ namespace PMapCore.LongProcess
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bllRoute m_bllRoute;
 
-        private PPlanCommonVars m_PPlanCommonVars;
-
 
         public CalcRoutesForTours(BaseProgressDialog p_Form, boPlanTour p_Tour)
             : base(p_Form, ThreadPriority.Normal)

@@ -28,8 +28,7 @@ using PMapCore.Common.Azure;
 using System.Net;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using MPOrder.Forms;
-using MPOrder;
+using PMapUI.Common;
 
 namespace PMapTestApp
 {
@@ -183,6 +182,11 @@ namespace PMapTestApp
                 TourOptimizerProcess top = new TourOptimizerProcess(pd, 12, 0, true, false);
                 top.Run();
                 pd.ShowDialog();
+
+                if( top.Result == TourOptimizerProcess.eOptResult.Error && !string.IsNullOrWhiteSpace(top.ErrorMsg))
+                {
+                    UI.Error(top.ErrorMsg);
+                }
 
                 PMapCommonVars.Instance.CT_DB.Close();
 

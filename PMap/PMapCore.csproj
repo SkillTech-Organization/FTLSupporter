@@ -314,7 +314,6 @@
     <Compile Include="Common\Parse\PMapCalls.cs" />
     <Compile Include="Common\RouteVisEventArgs.cs" />
     <Compile Include="Common\RouteVisCommonVars.cs" />
-    <Compile Include="Common\WaitCursor.cs" />
     <Compile Include="BLL\DataXChange\dtXResult.cs" />
     <Compile Include="BLL\DataXChange\dtXDepot.cs" />
     <Compile Include="DB\Base\DBAccess.cs" />

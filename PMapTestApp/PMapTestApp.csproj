@@ -123,8 +123,8 @@
     <Reference Include="DevExpress.XtraRichEdit.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraTreeList.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraVerticalGrid.v10.1, Version=10.1.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenCage.Geocode, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
@@ -302,6 +302,10 @@
     <ProjectReference Include="..\MPOrder\MPOrder.csproj">
       <Project>{AAEC2B18-3FC5-47CA-A308-8CF76E77B9EF}</Project>
       <Name>MPOrder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PMapUI\PMapUI.csproj">
+      <Project>{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}</Project>
+      <Name>PMapUI</Name>
     </ProjectReference>
     <ProjectReference Include="..\PMap\PMapCore.csproj">
       <Project>{3E3FE032-B237-479B-938B-63F693265432}</Project>

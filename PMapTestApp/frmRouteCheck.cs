@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET;
 using GMap.NET.WindowsForms.Markers;
-using PMapCore.DB;
 using PMapCore.MapProvider;
 using System.Drawing.Drawing2D;
 using PMapCore.Route;
@@ -19,6 +18,7 @@ using PMapCore.BLL;
 using PMapCore.Common;
 using System.Globalization;
 using System.Runtime.ExceptionServices;
+using PMapUI.Common;
 
 namespace PMapTestApp
 {

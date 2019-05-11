@@ -220,6 +220,10 @@
       <Project>{05DC0418-566F-47F1-AA53-190009DD01F7}</Project>
       <Name>DTPicker</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PMapUI\PMapUI.csproj">
+      <Project>{5C0C2FE2-A4CA-4C14-8C25-E5D5A4AE04B2}</Project>
+      <Name>PMapUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PMap\PMapCore.csproj">
       <Project>{3e3fe032-b237-479b-938b-63f693265432}</Project>
       <Name>PMapCore</Name>

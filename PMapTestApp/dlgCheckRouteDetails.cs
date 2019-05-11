@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using PMapCore.Route;
-using PMapCore.Printing;
 using PMapCore.BO;
 using PMapCore.BLL;
 using PMapCore.Strings;
 using PMapCore.Common;
+using PMapUI.Printing;
 
 namespace PMapTestApp
 {
