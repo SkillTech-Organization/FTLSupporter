@@ -14,6 +14,7 @@ using PMapCore.Strings;
 using PMapUI.Forms.Base;
 using PMapCore.Common;
 using System.Runtime.ExceptionServices;
+using PMapUI.Common;
 
 namespace PMapUI.Forms
 {

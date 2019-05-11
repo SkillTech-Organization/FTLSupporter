@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using PMapCore.DB;
 using System.Globalization;
 using GMap.NET;
-using PMapCore.Printing;
+using PMapUI.Printing;
 using PMapCore.BO;
 using PMapUI.Forms.Base;
 using PMapCore.Common;

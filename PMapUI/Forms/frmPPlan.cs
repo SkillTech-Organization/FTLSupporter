@@ -23,10 +23,11 @@ using PMapCore.WebTrace;
 using PMapCore.Common.Azure;
 using PMapCore.DB.Base;
 using System.Runtime.ExceptionServices;
-using PMapCore.Printing;
+using PMapUI.Printing;
 using PMapCore.BLL.Report;
 using PMapCore.BO.Report;
 using PMapCore.Common.PPlan;
+using PMapUI.Common;
 
 namespace PMapUI.Forms
 {
@@ -267,9 +268,9 @@ namespace PMapUI.Forms
             msDock.Close();
 
             string MPP_PARAM = XMLSerializator.SerializeObject(m_PPlanCommonVars);
-            string MPP_TGRID = Util.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
-            string MPP_PGRID = Util.SaveGridLayoutToString(m_pnlPPlanTourPoints.gridViewTourPoints);
-            string MPP_UGRID = Util.SaveGridLayoutToString(m_pnlPlanOrders.gridViewPlanOrders);
+            string MPP_TGRID = UI.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
+            string MPP_PGRID = UI.SaveGridLayoutToString(m_pnlPPlanTourPoints.gridViewTourPoints);
+            string MPP_UGRID = UI.SaveGridLayoutToString(m_pnlPlanOrders.gridViewPlanOrders);
             bllMapFormPar.SaveParameters(m_PPlanCommonVars.PLN_ID, PMapCommonVars.Instance.USR_ID, MPP_WINDOW, MPP_DOCK, MPP_PARAM, MPP_TGRID, MPP_PGRID, MPP_UGRID);
         }
 
@@ -360,11 +361,11 @@ namespace PMapUI.Forms
                 dockPanel.Refresh();
 
                 if (MPP_TGRID != "")
-                    Util.RestoreGridLayoutFromString(m_pnlPPlanTours.gridViewTours, MPP_TGRID);
+                    UI.RestoreGridLayoutFromString(m_pnlPPlanTours.gridViewTours, MPP_TGRID);
                 if (MPP_PGRID != "")
-                    Util.RestoreGridLayoutFromString(m_pnlPPlanTourPoints.gridViewTourPoints, MPP_PGRID);
+                    UI.RestoreGridLayoutFromString(m_pnlPPlanTourPoints.gridViewTourPoints, MPP_PGRID);
                 if (MPP_UGRID != "")
-                    Util.RestoreGridLayoutFromString(m_pnlPlanOrders.gridViewPlanOrders, MPP_UGRID);
+                    UI.RestoreGridLayoutFromString(m_pnlPlanOrders.gridViewPlanOrders, MPP_UGRID);
 
                 //befrissítjük a túra és túrapont grideket (a layout betöltéssel megváltozott a rendezettség)
                 m_pnlPPlanTours.RefreshPanel(new PlanEventArgs(ePlanEventMode.FirstTour));
@@ -480,7 +481,7 @@ namespace PMapUI.Forms
                 m_pnlPlanOrders.NotifyDataChanged += new EventHandler<EventArgs>(m_pnlUnplannedOrders_NotifyDataChanged);
 
                 //letároljuk a default beállítást
-                m_defaultMPP_UGRID = Util.SaveGridLayoutToString(m_pnlPlanOrders.gridViewPlanOrders);
+                m_defaultMPP_UGRID = UI.SaveGridLayoutToString(m_pnlPlanOrders.gridViewPlanOrders);
 
             }
 
@@ -500,7 +501,7 @@ namespace PMapUI.Forms
                 btnChgTruck.Enabled = m_PPlanCommonVars.FocusedTour != null && m_pnlPPlanEditor != null && m_pnlPPlanEditor.EditMode;
 
                 //letároljuk a default beállítást
-                m_defaultMPP_TGRID = Util.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
+                m_defaultMPP_TGRID = UI.SaveGridLayoutToString(m_pnlPPlanTours.gridViewTours);
 
             }
 
@@ -513,7 +514,7 @@ namespace PMapUI.Forms
                 m_pnlPPlanTourPoints.NotifyDataChanged += new EventHandler<EventArgs>(m_pnlPPlanTourPoints_NotifyDataChanged);
 
                 //letároljuk a default beállítást
-                m_defaultMPP_PGRID = Util.SaveGridLayoutToString(m_pnlPPlanTourPoints.gridViewTourPoints);
+                m_defaultMPP_PGRID = UI.SaveGridLayoutToString(m_pnlPPlanTourPoints.gridViewTourPoints);
 
             }
 

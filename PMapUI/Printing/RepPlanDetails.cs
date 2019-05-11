@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMapCore.Printing
+namespace PMapUI.Printing
 {
     public class RepPlanDetails : Link
     {

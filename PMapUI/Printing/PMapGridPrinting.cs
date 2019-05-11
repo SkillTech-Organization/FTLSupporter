@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using DevExpress.XtraGrid;
 using System.Drawing.Printing;
-using PMapCore.Printing.Base;
+using PMapUI.Printing.Base;
 using PMapCore.Common;
 
-namespace PMapCore.Printing
+namespace PMapUI.Printing
 {
     public class PMapGridPrinting : BaseGridPrinting
     {

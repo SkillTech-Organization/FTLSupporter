@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PMapCore.Common;
 using PMapCore.Strings;
+using PMapCore.WebTrace;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -13,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace PMapCore.WebTrace
+namespace PMapUI.Common
 {
     public static class NotificationMail
     {

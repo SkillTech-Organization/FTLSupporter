@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using PMapUI.Forms.Base;
 using PMapCore.BO;
-using PMapCore.Printing;
+using PMapUI.Printing;
 
 namespace PMapUI.Forms
 {

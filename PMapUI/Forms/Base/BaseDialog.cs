@@ -18,6 +18,7 @@ using PMapCore.Strings;
 using DevExpress.Utils;
 using DevExpress.XtraNavBar;
 using PMapCore.Common;
+using PMapUI.Common;
 
 namespace PMapUI.Forms.Base
 {

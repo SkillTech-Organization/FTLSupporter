@@ -14,6 +14,7 @@ using PMapCore.BO;
 using PMapCore.Strings;
 using PMapCore.BO.DataXChange;
 using PMapCore.Common.PPlan;
+using PMapUI.Common;
 
 namespace PMapUI.Forms
 {

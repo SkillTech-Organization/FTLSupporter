@@ -13,7 +13,7 @@ using System.Collections;
 using DevExpress.Utils;
 using PMapCore.Base.Printing;
 
-namespace PMapCore.Printing.Base
+namespace PMapUI.Printing.Base
 {
     public class BaseGridPrinting : PrintableComponentLink
     {

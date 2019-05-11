@@ -15,6 +15,7 @@ using PMapUI.Forms.Base;
 using PMapCore.Strings;
 using PMapUI.Forms.Funcs;
 using PMapCore.Common.PPlan;
+using PMapUI.Common;
 
 namespace PMapUI.Forms
 {

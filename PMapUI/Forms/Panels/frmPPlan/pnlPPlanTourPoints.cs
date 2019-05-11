@@ -306,8 +306,9 @@ namespace PMapUI.Forms.Panels.frmPPlan
 
                     int itemID = (int)gridViewTourPoints.GetRowCellValue(insPosHandle, gridColumnID);
                     boPlanTourPoint insPoint = m_PPlanCommonVars.GetTourPointByID(itemID);
+                    var SrcGridControl = (DevExpress.XtraGrid.GridControl)m_PPlanCommonVars.DraggedObj.SrcGridControl;
 
-                    if (m_PPlanCommonVars.DraggedObj.SrcGridControl == gridTourPoints)
+                    if (SrcGridControl == gridTourPoints)
                     {
 
                         // A griden belül mozogtunk el
@@ -317,7 +318,7 @@ namespace PMapUI.Forms.Panels.frmPPlan
                             m_PlanEditFuncs.ReorganizeTour(draggedPoint, insPoint.Tour, insPoint);
 
                     }
-                    else if (m_PPlanCommonVars.DraggedObj.SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
+                    else if (SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
                     {
                         //a megrendelés gridről jöttünk
                         boPlanOrder draggedOrder = (boPlanOrder)m_PPlanCommonVars.DraggedObj.DataObject;
@@ -345,7 +346,9 @@ namespace PMapUI.Forms.Panels.frmPPlan
         {
             if (m_PPlanCommonVars.DraggedObj != null )
             {
-                if (m_PPlanCommonVars.DraggedObj.SrcGridControl == gridTourPoints)
+                var SrcGridControl = (DevExpress.XtraGrid.GridControl)m_PPlanCommonVars.DraggedObj.SrcGridControl;
+
+                if (SrcGridControl == gridTourPoints)
                 {
 
                     boPlanTourPoint draggedPoint = (boPlanTourPoint)m_PPlanCommonVars.DraggedObj.DataObject;
@@ -353,7 +356,7 @@ namespace PMapUI.Forms.Panels.frmPPlan
 
                     m_PPlanCommonVars.DraggedObj= null;
                 }
-                else if (m_PPlanCommonVars.DraggedObj.SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
+                else if (SrcGridControl.Name.ToUpper() == "GRIDPLANORDERS")
                 {
 
                     m_PPlanCommonVars.DraggedObj = null;
