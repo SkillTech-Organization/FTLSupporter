@@ -16,7 +16,6 @@ using System.Threading;
 using PMapCore.LongProcess;
 using PMapCore.BO;
 using PMapCore.BLL;
-using PMapCore.Common;
 using PMapCore.BLL.DataXChange;
 using PMapCore.Common.PPlan;
 using PMapCore.BO.DataXChange;
@@ -25,6 +24,8 @@ using PMapCore.Licence;
 using PMapCore.Strings;
 using System.Diagnostics;
 using PMapUI.Forms;
+using PMapUI.Common;
+using PMapCore.Common;
 
 namespace VBInterface
 {
@@ -826,8 +827,9 @@ namespace VBInterface
 
 
                 string sErr;
-                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, true, out sErr))
+                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, out sErr))
                 {
+
                     frmRouteVisualization v = new frmRouteVisualization(p_lstRouteSection, p_TRK_ID);
                     v.ShowDialog();
 
@@ -842,6 +844,7 @@ namespace VBInterface
                 }
                 else
                 {
+                    UI.Error(sErr);
                     res.Status = dtXResult.EStatus.ERROR;
                     res.ErrMessage = sErr;
                 }
@@ -889,7 +892,7 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
 
                 string sErr;
-                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, false, out sErr))
+                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds,  out sErr))
                 {
                     res.Status = dtXResult.EStatus.OK;
                     res.Data = fillSummary();
