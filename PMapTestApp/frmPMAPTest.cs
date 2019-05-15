@@ -283,11 +283,26 @@ namespace PMapTestApp
             d.txtAddr.Text = "Csorna  Táncsics utca 19";
             d.txtAddr.Text = "Szeged Vedres utca 19";
             d.txtAddr.Text = "Domoszló  Mező I. utca 2 ";
+
+
+            d.txtAddr.Text = "7400 Kaposvár/Zselickislak, Raktár utca 25";
+            d.txtAddr.Text = "7000 Sárbogárd, Ady E. utca  9 - 11.";
+            d.txtAddr.Text = "8960 Lenti/Gosztola, Petőfi utca 33";
+            d.txtAddr.Text = "9941 Őriszentpéter/Ispánk, Városszer  17";
+            d.txtAddr.Text = "9941 Őriszentpéter/Ispánk, Városszer  17";
+           // d.txtAddr.Text = "9941 Ispánk, Városszer  17";
+            d.txtAddr.Text = "3994 Pálháza/Bózsva/Filkeháza/Füzérkajata/Kishuta/Nagyhuta, Vásártéri utca 2";
+            d.txtAddr.Text = "7960 Sellye/Zengővárkony/Drávaiványi/Drávasztára/Marócsa/Sumony, Dráva út 4";
+            d.txtAddr.Text = "7960  Drávaiványi/Drávasztára , Dráva út 4";
+            /*
+            d.txtAddr.Text = "7720 Pécsvárad/Zengővárkony/Apátvarasd/Lovászhetény/Martonfa, Erzsébeti út 24";
+            */
+
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();
 
-                UI.Message("Geocoding->" + vbintf.GeocodingFulAddr(d.txtAddr.Text, "", dbConf));
+       //         UI.Message("Geocoding->" + vbintf.GeocodingFulAddr(d.txtAddr.Text, "", dbConf));
 
 
                 PMapCommonVars.Instance.ConnectToDB();
@@ -299,7 +314,7 @@ namespace PMapTestApp
                 int NOD_ID = 0;
                 int EDG_ID = 0;
                 boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                bool bFound = route.GeocodingByAddr(d.txtAddr.Text, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT);
+                bool bFound = route.GeocodingByAddr(d.txtAddr.Text, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, true);
                 if (bFound)
                 {
                     string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +

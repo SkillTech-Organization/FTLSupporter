@@ -297,6 +297,11 @@ namespace MPOrder.BLL
         {
             DBA.ExecuteNonQuery("update MPO_MPORDER set ORD_ID = ? where CustomerOrderNumber= ? ", p_ID, p_CustomerOrderNumber);
         }
+
+        public void DelORD_ID(int p_ID)
+        {
+            DBA.ExecuteNonQuery("update MPO_MPORDER set ORD_ID = 0 where ORD_ID  = ? ", p_ID);
+        }
         public void DeleteItem(int p_ID)
         {
             DBA.ExecuteNonQuery("delete MPO_MPORDER where id=?", p_ID);
@@ -324,18 +329,22 @@ namespace MPOrder.BLL
              * */
 
             List<boMPOrderF> aggregated = new List<boMPOrderF>();
-            var sorted = p_data.OrderBy(o => o.ShippAddressID_DEP_CODE).ThenByDescending(o2=>o2.GrossWeightPlannedXSum).ToList();
+            var sorted = p_data.OrderBy(o => o.ShippAddressID_DEP_CODE).OrderBy(o => o.VehicleType).ThenByDescending(o2=>o2.GrossWeightPlannedXSum).ToList();
            
             double GrossWeightPlannedXSum = 0;
             string sShippAddressID_DEP_CODE = "";
+            string sVehicleType = "";
 
             foreach (var item in sorted)
             {
-                if (sShippAddressID_DEP_CODE != item.ShippAddressID_DEP_CODE || (GrossWeightPlannedXSum + item.GrossWeightPlannedXSum) >= PMapIniParams.Instance.MapeiSumOrderKg)
+                if (sShippAddressID_DEP_CODE != item.ShippAddressID_DEP_CODE 
+                    || sVehicleType != item.VehicleType
+                    || (GrossWeightPlannedXSum + item.GrossWeightPlannedXSum) >= PMapIniParams.Instance.MapeiSumOrderKg)
                 {
                     aggregated.Add(item.Clone());
                     GrossWeightPlannedXSum = item.GrossWeightPlannedXSum;
                     sShippAddressID_DEP_CODE = item.ShippAddressID_DEP_CODE;
+                    sVehicleType = item.VehicleType;
                 }
                 else
                 {
@@ -519,6 +528,7 @@ namespace MPOrder.BLL
                                     Message = string.Format(PMapMessages.E_MPSENDTOCT_DELOK)
                                 });
                             }
+                            DelORD_ID( ord.ID);
                         }
 
                     }

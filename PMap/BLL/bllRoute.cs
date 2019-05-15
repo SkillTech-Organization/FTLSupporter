@@ -1284,10 +1284,7 @@ namespace PMapCore.BLL
                     DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_WITHOUT_HNUM;
                     return true;
                 }
-            }
-
-            if (!p_onlyFullAddr)
-            {
+            
                 //keresés irányítószám és házszám nélkül
                 //Ha van irányítószám, akkor az ahhoz legközelebb lévőt vesszük
                 //                sqlCmd.CommandText = sSql + (sWhereAddr != "" ? " where " + sWhereAddr : "") + (sZIP_NUM != "" ? " order by ABS( cc.ZIP_NUM - " + sZIP_NUM + ") " : "");
@@ -1319,6 +1316,22 @@ namespace PMapCore.BLL
 
             //utolsó lehetőség a google-hoz fordulni.
             if (PMapIniParams.Instance.GeocodingByGoogle && GeocodingByGoogle(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID))
+            {
+                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE;
+                return true;
+            }
+
+
+            //Google irányítószám nélkül
+            var xAddr = sCity + " " +  sStreet + " " + sStreetType  + " " + (nAddrNum>0 ? nAddrNum.ToString():"");
+            if (PMapIniParams.Instance.GeocodingByGoogle && GeocodingByGoogle(xAddr, out ZIP_ID, out NOD_ID, out EDG_ID))
+            {
+                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE;
+                return true;
+            }
+            //Google város nélkül
+            xAddr = sZIP_NUM + " " + sStreet + " " + sStreetType + " " + (nAddrNum > 0 ? nAddrNum.ToString() : "");
+            if (PMapIniParams.Instance.GeocodingByGoogle && GeocodingByGoogle(xAddr, out ZIP_ID, out NOD_ID, out EDG_ID))
             {
                 DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_GOOGLE;
                 return true;
@@ -1460,7 +1473,7 @@ namespace PMapCore.BLL
             if (ResultPt.Lat != 0 && ResultPt.Lng != 0)
             {
                 NOD_ID = GetNearestNOD_ID(ResultPt, street_name);
-                if(NOD_ID == 0)
+                if (NOD_ID == 0)
                     NOD_ID = GetNearestNOD_ID(ResultPt);
 
                 boNode nod = GetNode(NOD_ID);
@@ -1478,13 +1491,15 @@ namespace PMapCore.BLL
 
                 // város ellenőrzése
 
+
+                /* nem kell !!!
                 string sZIP_NUM = "";
                 string sCity = "";
                 string sStreet = "";
                 string sStreetType = "";
                 int nAddrNum = 0;
                 Util.ParseAddress(p_addr, out sZIP_NUM, out sCity, out sStreet, out sStreetType, out nAddrNum);
-                sCity = sCity.Trim().ToUpper();
+                sCity = sCity.Trim().ToUpper().Replace(",", "");
 
 
                 var zip1 = m_bllZip.GetZIPbyNum(edg.ZIP_NUM_FROM);
@@ -1495,13 +1510,19 @@ namespace PMapCore.BLL
                 //       if (zip2 == null)
                 //            throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_TO));
 
+
                 city_name = city_name.Trim().ToUpper();
+
+
+                var zip1City = (zip1 != null ? zip1.ZIP_CITY.Trim().ToUpper() + "/" : "");
+                var zip2City = (zip2 != null ? zip2.ZIP_CITY.Trim().ToUpper() + "/" : "");
+
                 if ((zip1 != null && !( 
                                 (sCity == Global.DEF_BUDAPEST &&  zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
-                                 || zip1.ZIP_CITY.Trim().ToUpper() == sCity)))
+                                 || zip1.ZIP_CITY.Trim().ToUpper() + "/" == sCity)))
                     && (zip2 != null && !(
                                 (sCity == Global.DEF_BUDAPEST && zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
-                                 || zip2.ZIP_CITY.Trim().ToUpper() == sCity)))
+                                 || zip2.ZIP_CITY.Trim().ToUpper() + "/" == sCity)))
                    )
                 {
                     ZIP_ID = 0;
@@ -1519,6 +1540,7 @@ namespace PMapCore.BLL
                     EDG_ID = 0;
                     return false;
                 }
+                */
 
                 return true;
             }

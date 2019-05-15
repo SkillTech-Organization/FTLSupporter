@@ -41,6 +41,7 @@ namespace MPOrder
 
                 MainForm = new frmMPOrder();
 
+                string sShippAddressID_DEP_CODE = "";
                 Application.Run(MainForm);
             }
             catch (Exception e)
