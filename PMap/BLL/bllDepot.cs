@@ -136,8 +136,45 @@ namespace PMapCore.BLL
                                    "left outer join DPT_DEPTRUCK DPT on DPT.DEP_ID = ? and DPT.TRK_ID = TRK.ID  " + Environment.NewLine +
                                    "where DPT.ID is null and TRK.TRK_DELETED = 0 ";
                     DBA.ExecuteNonQuery(sSQL, p_DEP_ID, p_DEP_ID);
-                    bllHistory.WriteHistory(0, "DPT_DEPTRUCK", p_DEP_ID, bllHistory.EMsgCodes.ADD, "DEP_ID=" + p_DEP_ID.ToString());
+                    bllHistory.WriteHistory(0, "DPT_DEPTRUCK", p_DEP_ID, bllHistory.EMsgCodes.ADD, "SetAllTruckToDep, DEP_ID=" + p_DEP_ID.ToString());
                     
+                }
+
+                catch (Exception e)
+                {
+                    DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
+                    throw;
+                }
+
+                finally
+                {
+                }
+            }
+        }
+
+
+        /*
+            Public Sub SetRegTruckToDep(plDepID As Long, Optional pbTrans As Boolean = True)
+      
+         */
+        public void SetRegTruckToDep(int p_DEP_ID)
+        {
+            using (TransactionBlock transObj = new TransactionBlock(DBA))
+            {
+                try
+                {
+                    String sSQL = "insert into DPT_DEPTRUCK  (TRK_ID, DEP_ID) " + Environment.NewLine +
+                        "select TRK.ID as TRK_ID, DEP.ID as DEP_ID from TRK_TRUCK TRK " + Environment.NewLine +
+                        "inner join RGT_REGTRUCK RGT on RGT.TRK_ID = TRK.ID " + Environment.NewLine +
+                        "inner join RGZ_REGZIP   RGZ on RGZ.REG_ID = RGT.REG_ID " + Environment.NewLine +
+                        "inner join DEP_DEPOT    DEP on DEP.ZIP_ID = RGZ.ZIP_ID " + Environment.NewLine +
+                        "left outer join DPT_DEPTRUCK  DPT on DPT.TRK_ID = TRK.ID  and DPT.DEP_ID=DEP.ID " + Environment.NewLine +
+                        "where TRK_DELETED = 0 and DPT.ID is null and DEP.ID = ? ";
+
+                    DBA.ExecuteNonQuery(sSQL, p_DEP_ID);
+                    bllHistory.WriteHistory(0, "DPT_DEPTRUCK", p_DEP_ID, bllHistory.EMsgCodes.ADD, "SetEnabledTruckToDep, DEP_ID=" + p_DEP_ID.ToString());
+
                 }
 
                 catch (Exception e)

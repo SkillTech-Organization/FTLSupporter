@@ -329,12 +329,14 @@ namespace MPOrder.BLL
              * */
 
             List<boMPOrderF> aggregated = new List<boMPOrderF>();
-            var sorted = p_data.OrderBy(o => o.ShippAddressID_DEP_CODE).OrderBy(o => o.VehicleType).ThenByDescending(o2=>o2.GrossWeightPlannedXSum).ToList();
-           
+            // sVehicleType-re is csoportosítunk...           var sorted = p_data.OrderBy(o => o.ShippAddressID_DEP_CODE).OrderBy(o => o.VehicleType).ThenByDescending(o2 => o2.GrossWeightPlannedXSum).ToList();
+            var sorted = p_data.OrderBy(o => o.ShippAddressID_DEP_CODE).ThenByDescending(o2 => o2.GrossWeightPlannedXSum).ToList();
+
             double GrossWeightPlannedXSum = 0;
             string sShippAddressID_DEP_CODE = "";
             string sVehicleType = "";
 
+            /* sVehicleType-re is csoportosítunk...
             foreach (var item in sorted)
             {
                 if (sShippAddressID_DEP_CODE != item.ShippAddressID_DEP_CODE 
@@ -353,7 +355,24 @@ namespace MPOrder.BLL
                 }
                 aggregated.Last().aggregated_CustomerOrderNumbers.Add(item.CustomerOrderNumber);
             }
+            */
 
+            foreach (var item in sorted)
+            {
+                if (sShippAddressID_DEP_CODE != item.ShippAddressID_DEP_CODE
+                    || (GrossWeightPlannedXSum + item.GrossWeightPlannedXSum) >= PMapIniParams.Instance.MapeiSumOrderKg)
+                {
+                    aggregated.Add(item.Clone());
+                    GrossWeightPlannedXSum = item.GrossWeightPlannedXSum;
+                    sShippAddressID_DEP_CODE = item.ShippAddressID_DEP_CODE;
+                }
+                else
+                {
+                    aggregated.Last().Items.AddRange(item.Items);
+                    GrossWeightPlannedXSum += item.GrossWeightPlannedXSum;
+                }
+                aggregated.Last().aggregated_CustomerOrderNumbers.Add(item.CustomerOrderNumber);
+            }
 
             foreach (var item in aggregated.OrderBy( o=>o.CustomerOrderNumber).ToList())
             {
@@ -421,7 +440,7 @@ namespace MPOrder.BLL
                                     DEP_LIFETIME = 0
                                 };
                                 dep.ID = bllDepotX.AddDepot(dep);
-                                bllDepotX.SetAllTruckToDep(dep.ID);
+                                bllDepotX.SetRegTruckToDep(dep.ID);
                             }
 
                             var cargoTypeStr = !string.IsNullOrWhiteSpace(item.VehicleType) ? item.VehicleType : PMapIniParams.Instance.MapeiDefCargoType;
@@ -501,6 +520,8 @@ namespace MPOrder.BLL
                                 CustomerOrderNumber = item.CustomerOrderNumber,
                                 Message = string.Format(PMapMessages.E_MPSENDTOCT_UPDATEOK)
                             });
+                            SetORD_IDByCustomerOrderNumber(item.CustomerOrderNumber, ord.ID);
+
                         }
 
                         //3.CT-ből töröljük, és már van ORD_ORDER rekord.
@@ -650,21 +671,24 @@ namespace MPOrder.BLL
                     //tehát SD legyen mindenhol.
 
                     string VehicleType = (!string.IsNullOrWhiteSpace(item.VehicleType) ? item.VehicleType : PMapIniParams.Instance.MapeiDefCargoType);
-                    var bSD = lstAll.Any(a => a.Bordero == item.Bordero && a.VehicleType == "HUNSD");
-                    var bDA = lstAll.Any(a => a.Bordero == item.Bordero && a.VehicleType == "HUNDA");
-
-                    if(bSD)
-                    { 
-                        VehicleType = "HUNSD";
-                    }
-                    else if (bDA)
+                    if (!string.IsNullOrWhiteSpace(item.Bordero))
                     {
-                        VehicleType = "HUNDA";
-                    }
+                        var bSD = lstAll.Any(a => a.Bordero == item.Bordero && a.VehicleType == "HUNSD");
+                        var bDA = lstAll.Any(a => a.Bordero == item.Bordero && a.VehicleType == "HUNDA");
 
-                    //visszaupdate-oljuk a járműtípust
-                    if(bSD || bDA)
-                        lstAll.Where(w => w.Bordero == item.Bordero).ToList().ForEach(e => e.VehicleType = VehicleType);
+                        if (bSD)
+                        {
+                            VehicleType = "HUNSD";
+                        }
+                        else if (bDA)
+                        {
+                            VehicleType = "HUNDA";
+                        }
+
+                        //visszaupdate-oljuk a járműtípust
+                        if (bSD || bDA)
+                            lstAll.Where(w => w.Bordero == item.Bordero).ToList().ForEach(e => e.VehicleType = VehicleType);
+                    }
 
                     var sLine = item.CompanyCode + ";" +
                                 item.CustomerCode + ";" +

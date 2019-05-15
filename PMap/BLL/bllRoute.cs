@@ -1492,7 +1492,6 @@ namespace PMapCore.BLL
                 // város ellenőrzése
 
 
-                /* nem kell !!!
                 string sZIP_NUM = "";
                 string sCity = "";
                 string sStreet = "";
@@ -1514,15 +1513,15 @@ namespace PMapCore.BLL
                 city_name = city_name.Trim().ToUpper();
 
 
-                var zip1City = (zip1 != null ? zip1.ZIP_CITY.Trim().ToUpper() + "/" : "");
-                var zip2City = (zip2 != null ? zip2.ZIP_CITY.Trim().ToUpper() + "/" : "");
+              //  var zip1City = (zip1 != null ? zip1.ZIP_CITY.Trim().ToUpper() + "/" : "");
+              //  var zip2City = (zip2 != null ? zip2.ZIP_CITY.Trim().ToUpper() + "/" : "");
 
                 if ((zip1 != null && !( 
                                 (sCity == Global.DEF_BUDAPEST &&  zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
-                                 || zip1.ZIP_CITY.Trim().ToUpper() + "/" == sCity)))
+                                 || zip1.ZIP_CITY.Trim().ToUpper()  == sCity)))
                     && (zip2 != null && !(
                                 (sCity == Global.DEF_BUDAPEST && zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
-                                 || zip2.ZIP_CITY.Trim().ToUpper() + "/" == sCity)))
+                                 || zip2.ZIP_CITY.Trim().ToUpper()  == sCity)))
                    )
                 {
                     ZIP_ID = 0;
@@ -1540,7 +1539,6 @@ namespace PMapCore.BLL
                     EDG_ID = 0;
                     return false;
                 }
-                */
 
                 return true;
             }
