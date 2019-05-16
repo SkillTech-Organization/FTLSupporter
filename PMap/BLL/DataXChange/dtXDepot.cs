@@ -21,7 +21,7 @@ namespace PMapCore.BLL.DataXChange
         {
         }
 
-        public List<dtXResult> ImportDepots(List<boXDepot> p_depots)
+        public List<dtXResult> ImportDepots(List<boXDepot> p_depots, bool p_addAllTrucksToDepot = true)
         {
 
             List<dtXResult> result = new List<dtXResult>();
@@ -180,7 +180,11 @@ namespace PMapCore.BLL.DataXChange
                                     {
 
                                         int DEP_ID = bllDepot.AddDepot(depot);
-                                        bllDepot.SetAllTruckToDep(DEP_ID);
+                                        if(p_addAllTrucksToDepot)
+                                            bllDepot.SetAllTruckToDep(DEP_ID);
+                                        else
+                                            bllDepot.SetRegTruckToDep(DEP_ID);
+
                                         boXDepotRes res = new boXDepotRes() { ID = DEP_ID, Lat = 0, Lng = 0 };
                                           boNode nod = bllRoute.GetNode(NOD_ID);
                                           if (nod != null)

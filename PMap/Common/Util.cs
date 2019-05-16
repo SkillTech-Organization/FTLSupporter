@@ -1048,6 +1048,7 @@ namespace PMapCore.Common
             if (parts.Length > nCurrPart)
             {
                 o_City = parts[nCurrPart];
+                o_City = o_City.Replace(",", "");
                 nCurrPart++;
             }
 

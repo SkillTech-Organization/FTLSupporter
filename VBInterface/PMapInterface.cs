@@ -703,7 +703,7 @@ namespace VBInterface
         */
 
         #region Csak C#-ból hívható szolgáltatások
-        public List<dtXResult> ImportDepots(string p_iniPath, string p_dbConf, List<boXDepot> p_depots)
+        public List<dtXResult> ImportDepots(string p_iniPath, string p_dbConf, List<boXDepot> p_depots, bool p_addAllTrucksToDepot = true)
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
@@ -719,7 +719,7 @@ namespace VBInterface
 
 
                 dtXDepot xdep = new dtXDepot(PMapCommonVars.Instance.CT_DB);
-                result = xdep.ImportDepots(p_depots);
+                result = xdep.ImportDepots(p_depots, p_addAllTrucksToDepot);
             }
             catch (Exception e)
             {
