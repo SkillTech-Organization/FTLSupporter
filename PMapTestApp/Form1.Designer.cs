@@ -69,6 +69,7 @@
             this.button32 = new System.Windows.Forms.Button();
             this.button33 = new System.Windows.Forms.Button();
             this.button34 = new System.Windows.Forms.Button();
+            this.button35 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
@@ -400,7 +401,7 @@
             // 
             // button29
             // 
-            this.button29.Location = new System.Drawing.Point(728, 275);
+            this.button29.Location = new System.Drawing.Point(728, 315);
             this.button29.Name = "button29";
             this.button29.Size = new System.Drawing.Size(223, 34);
             this.button29.TabIndex = 34;
@@ -410,7 +411,7 @@
             // 
             // button30
             // 
-            this.button30.Location = new System.Drawing.Point(728, 315);
+            this.button30.Location = new System.Drawing.Point(728, 355);
             this.button30.Name = "button30";
             this.button30.Size = new System.Drawing.Size(223, 34);
             this.button30.TabIndex = 35;
@@ -458,11 +459,22 @@
             this.button34.UseVisualStyleBackColor = true;
             this.button34.Click += new System.EventHandler(this.button34_Click);
             // 
+            // button35
+            // 
+            this.button35.Location = new System.Drawing.Point(728, 275);
+            this.button35.Name = "button35";
+            this.button35.Size = new System.Drawing.Size(223, 34);
+            this.button35.TabIndex = 40;
+            this.button35.Text = "Menetlevél ellenőrzés SWH teszt";
+            this.button35.UseVisualStyleBackColor = true;
+            this.button35.Click += new System.EventHandler(this.button35_Click);
+            // 
             // frmPMapTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(989, 446);
+            this.Controls.Add(this.button35);
             this.Controls.Add(this.button34);
             this.Controls.Add(this.button33);
             this.Controls.Add(this.button32);
@@ -555,6 +567,7 @@
         private System.Windows.Forms.Button button32;
         private System.Windows.Forms.Button button33;
         private System.Windows.Forms.Button button34;
+        private System.Windows.Forms.Button button35;
     }
 }
 

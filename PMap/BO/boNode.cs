@@ -13,8 +13,8 @@ namespace PMapCore.BO
         public string NOD_NAME { get; set; }
         public int ZIP_ID { get; set; }
         public int ZIP_NUM { get; set; }
-        public double NOD_XPOS { get; set; }
-        public double NOD_YPOS { get; set; }
+        public double NOD_YPOS { get; set; }        //Lat
+        public double NOD_XPOS { get; set; }        //Lng
         public bool NOD_DELETED { get; set; }
         public DateTime LASTDATE { get; set; }
     }

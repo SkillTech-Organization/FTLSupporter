@@ -36,7 +36,7 @@ namespace VBInterface
     /// <summary>
     /// CT <--> PMap hívás interface. Minden PMap funckió ezen a rétegen keresztül van kivülről elérve.
     /// </summary>
-    public class PMapInterface
+    public class SWHInterface
     {
 
         private const string retOK = "OK";

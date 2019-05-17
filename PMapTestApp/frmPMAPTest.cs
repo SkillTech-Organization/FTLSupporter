@@ -49,14 +49,14 @@ namespace PMapTestApp
             //String sParam = "47.49194|19.14414|1106 Raktár (Budapest 10.ker)|47.496263|19.068621|1085 SPAR MAGYARORSZÁG KFT.8259 % 8259 KAISER' SZUPERMARKET (Budapest 8.ker)|47.501556|19.081227|1077 SZEZÁM HUNGARY KFT. % RONI ABC (Budapest 7.ker)|47.50671|19.092574|1146 CBA VÖRÖSVÁR KFT. % RÉCSEI BEVÁSÁRLÓKÖZPONT (Budapest 14.ker)|47.49194|19.14414|1106 Raktár (Budapest 10.ker)";
             //String sParam = "47.49194|19.14414|1106 Raktár (Budapest 10.ker)|47.449019|19.113298|1205 CBA CURIOSUM KFT. % ÁSZ PLUSZ (Budapest 20.ker)|47.440924|19.095694|1203 SPAR MAGYARORSZÁG KFT.103. % 103. SPAR SZUPERMARKET (Budapest 20.ker)|47.420968|19.067596|1215 CSEP-KER 21 KER. ÉS ÉRT. ZRT. 7. % ABC (Budapest 21.ker)|47.415001|19.063438|1214 RAVEL-TRADE KFT. % REÁL ÉLELMISZER (Budapest 21.ker)|47.40763|19.079396|1213 CBA BÁNSA KFT. % SZIGET ÉLELMISZERÜZLET (Budapest 21.ker)|47.416645|19.077999|1212 RAVEL-TRADE KFT. % REÁL ÉLELMISZER (Budapest 21.ker)|47.435764|19.099449|1203 CBA REMIZ-KER.99 KFT. % ERZSÉBET ÁRUHÁZ (Budapest 20.ker)|47.437385|19.127032|1202 LAKI MIHÁLYNÉ % BOROZÓ (Budapest 20.ker)|47.443059|19.121877|1205 CBA CURIOSUM KFT. % ÁSZ-NET ÉLELMISZER (Budapest 20.ker)|47.457329|19.17812|1183 ARZENÁL KFT. % REÁL SÁRKÁNY DISZKONT (Budapest 18.ker)|47.475924|19.164744|1108 CSEMEGE MATCH ZRT. 604. % 604.SMATCH (Budapest 10.ker)|47.49194|19.14414|1106 Raktár (Budapest 10.ker)";
             String sParam = "47.197178|18.4144592|SZFEHERVAR|48.1028460|20.7875061|MISK";
-            MessageBox.Show("Route eredmény:" + (new PMapInterface()).ShowRoute(sParam, "", dbConf));
+            MessageBox.Show("Route eredmény:" + (new VBInterface.SWHInterface()).ShowRoute(sParam, "", dbConf));
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             //            string selpos = pmi.SelectPosition("46.3", "20.1", "Kiválasztott DEPO<NL>sortörés", "");
-            string selpos = (new PMapInterface()).SelectPosition("47,4983569", "19.0404224", "Kiválasztott DEPO<NL>sortörés", "", dbConf);
+            string selpos = (new VBInterface.SWHInterface()).SelectPosition("47,4983569", "19.0404224", "Kiválasztott DEPO<NL>sortörés", "", dbConf);
             if (selpos != "")
                 MessageBox.Show("Kiválasztva:" + selpos);
             else
@@ -71,7 +71,7 @@ namespace PMapTestApp
             sParam = "46,90357|19,700399|BUDAPEST BAROSS TÉR 9. 2767028<NL>Rábakecöl BAROSS TÉR 9. |0|48,546077|21,35137|ACSA KOSSUTH U. 51 2766460<NL>Kéked KOSSUTH U. 51 |0";
             sParam = "47,923971|16,868939|corner1|0|47,93082000|16,868939|corner2|0|47,93082000|16,877319|corner3|0|47,923971|16,877319|corner4|0|47,925685|16,870908|pont1|0";
             sParam = "48,033194|21,747552|Vadász Csárda<NL>Nyíregyháza Kemecsei út 1. |0";
-            MessageBox.Show("ShowDepot eredmény:" + (new PMapInterface()).ShowDepots(sParam, "", dbConf));
+            MessageBox.Show("ShowDepot eredmény:" + (new VBInterface.SWHInterface()).ShowDepots(sParam, "", dbConf));
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -79,7 +79,7 @@ namespace PMapTestApp
             string sDepot = "46,90357|19,700399|BUDAPEST BAROSS TÉR 9. 2767028<NL>Rábakecöl BAROSS TÉR 9. |1|48,546077|21,35137|ACSA KOSSUTH U. 51 2766460<NL>Kéked KOSSUTH U. 51 |0";
             String sRoute = "46.3|20.1|egy|46.2064|19.785|kettő|46.1855|18.95555|Három|46.076|18.234|Négy";
 
-            (new PMapInterface()).ShowDepotsAndRoute("679", "12133", "", dbConf);
+            (new VBInterface.SWHInterface()).ShowDepotsAndRoute("679", "12133", "", dbConf);
             MessageBox.Show("OK");
 
         }
@@ -100,7 +100,7 @@ namespace PMapTestApp
                 testPlanParams.EnabledTrucksInNewPlan.Add(new PlanParams.CEnabledTruck() { TRK_ID = 4 });
                 testPlanParams.EnabledTrucksInNewPlan.Add(new PlanParams.CEnabledTruck() { TRK_ID = 5 });
                 testPlanParams.EnabledTrucksInNewPlan.Add(new PlanParams.CEnabledTruck() { TRK_ID = 6 });
-                (new PMapInterface()).PlanToursVB("" + d.m_PLN_ID, "1", testPlanParams, "", dbConf);
+                (new VBInterface.SWHInterface()).PlanToursVB("" + d.m_PLN_ID, "1", testPlanParams, "", dbConf);
             }
         }
 
@@ -118,7 +118,7 @@ namespace PMapTestApp
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                (new PMapInterface()).CalcPMapRoutesByPlan("", dbConf, d.m_PLN_ID, true);
+                (new VBInterface.SWHInterface()).CalcPMapRoutesByPlan("", dbConf, d.m_PLN_ID, true);
             }
 
         }
@@ -150,7 +150,7 @@ namespace PMapTestApp
                 db.Close();
 
 
-                (new PMapInterface()).CalcPMapRoutesByOrders("", dbConf, "2013.03.22", "2013.03.22");
+                (new VBInterface.SWHInterface()).CalcPMapRoutesByOrders("", dbConf, "2013.03.22", "2013.03.22");
 
             }
             catch (Exception ex)
@@ -162,7 +162,7 @@ namespace PMapTestApp
 
         private void button11_Click(object sender, EventArgs e)
         {
-            (new PMapInterface()).CalcTOLL("", dbConf,
+            (new VBInterface.SWHInterface()).CalcTOLL("", dbConf,
                 "12277,12278,12279,12280,12281,12282,12283,12284,12285,12286,12287,12288,12289,12290,12291,12292,12293,12294");
 
         }
@@ -227,7 +227,7 @@ namespace PMapTestApp
 
         private void button12_Click(object sender, EventArgs e)
         {
-            (new PMapInterface()).InitPMapRouteData("", dbConf);
+            (new VBInterface.SWHInterface()).InitPMapRouteData("", dbConf);
 
         }
 
@@ -300,7 +300,7 @@ namespace PMapTestApp
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                var vbintf = new VBInterface.PMapInterface();
+                var vbintf = new VBInterface.SWHInterface();
 
        //         UI.Message("Geocoding->" + vbintf.GeocodingFulAddr(d.txtAddr.Text, "", dbConf));
 
@@ -392,7 +392,7 @@ namespace PMapTestApp
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 depots.Add(dep);
-                List<dtXResult> res = (new PMapInterface()).ImportDepots("", dbConf, depots);
+                List<dtXResult> res = (new VBInterface.SWHInterface()).ImportDepots("", dbConf, depots);
                 dlgImportResult ir = new dlgImportResult();
 
                 int i = 1;
@@ -452,7 +452,7 @@ namespace PMapTestApp
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 trks.Add(trk);
-                List<dtXResult> res = (new PMapInterface()).ImportTrucks("", dbConf, trks);
+                List<dtXResult> res = (new VBInterface.SWHInterface()).ImportTrucks("", dbConf, trks);
 
                 dlgImportResult ir = new dlgImportResult();
 
@@ -476,7 +476,7 @@ namespace PMapTestApp
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 List<string> lstDepotID = new List<string>(d.txtDEPID.Text.Split(','));
-                List<dtXResult> res = (new PMapInterface()).RouteVisualization("", dbConf,
+                List<dtXResult> res = (new VBInterface.SWHInterface()).RouteVisualization("", dbConf,
                     lstDepotID.Select(i => new boXRouteSection()
                     {
                         Start_DEP_ID = Convert.ToInt32(i.Split(';')[0]),
@@ -498,7 +498,7 @@ namespace PMapTestApp
             SQLServerAccess db = new SQLServerAccess();
             db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
-            List<dtXResult> res = (new PMapInterface()).CreateNewPlan("", dbConf, "2X20170828", 1, new DateTime(2017, 08, 29), new DateTime(2017, 08, 30), false, new DateTime(2017, 08, 29), new DateTime(2017, 08, 30));
+            List<dtXResult> res = (new VBInterface.SWHInterface()).CreateNewPlan("", dbConf, "2X20170828", 1, new DateTime(2017, 08, 29), new DateTime(2017, 08, 30), false, new DateTime(2017, 08, 29), new DateTime(2017, 08, 30));
             dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
             var pp = res.First();
             dd.propertyGridCtrl1.SetObject(pp);
@@ -510,11 +510,11 @@ namespace PMapTestApp
 
         private void button19_Click(object sender, EventArgs e)
         {
-            dlgTestRouteVis d = new dlgTestRouteVis();
+             dlgTestRouteVis d = new dlgTestRouteVis();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 List<string> lstDepotID = new List<string>(d.txtDEPID.Text.Split(','));
-                List<dtXResult> res = (new PMapInterface()).RouteVisualizationCalc("", dbConf,
+                List<dtXResult> res = (new VBInterface.SWHInterface()).RouteVisualizationCalc("", dbConf,
                     lstDepotID.Select(i => new boXRouteSection()
                     {
                         Start_DEP_ID = Convert.ToInt32(i.Split(';')[0]),
@@ -572,7 +572,7 @@ namespace PMapTestApp
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 orders.Add(ord);
-                List<dtXResult> res = (new PMapInterface()).ImportOrders("", dbConf, orders);
+                List<dtXResult> res = (new VBInterface.SWHInterface()).ImportOrders("", dbConf, orders);
                 dlgImportResult ir = new dlgImportResult();
 
                 int i = 1;
@@ -597,7 +597,7 @@ namespace PMapTestApp
                 testPlanParams.EnabledTrucksInNewPlan.Add(new PlanParams.CEnabledTruck() { TRK_ID = i });
             }
 
-            (new PMapInterface()).PlanToursVB("", "1", testPlanParams, "", dbConf);
+            (new VBInterface.SWHInterface()).PlanToursVB("", "1", testPlanParams, "", dbConf);
         }
 
         private void button22_Click(object sender, EventArgs e)
@@ -612,7 +612,7 @@ namespace PMapTestApp
             dlgSelPlan d = new dlgSelPlan();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                List<dtXResult> res = (new PMapInterface()).GetPlan("", dbConf, d.m_PLN_ID);
+                List<dtXResult> res = (new VBInterface.SWHInterface()).GetPlan("", dbConf, d.m_PLN_ID);
                 dlgRouteVisCalcRes ir = new dlgRouteVisCalcRes();
                 dtXResult rr = res.First();
                 ir.propertyGridCtrl1.SetObject(rr);
@@ -626,7 +626,7 @@ namespace PMapTestApp
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
 
-            List<dtXResult> res = (new PMapInterface()).GetPlans("", dbConf, 0, DateTime.MinValue, DateTime.MinValue);
+            List<dtXResult> res = (new VBInterface.SWHInterface()).GetPlans("", dbConf, 0, DateTime.MinValue, DateTime.MinValue);
             dlgRouteVisCalcRes ir = new dlgRouteVisCalcRes();
             dtXResult rr = res.First();
             ir.propertyGridCtrl1.SetObject(rr);
@@ -643,7 +643,7 @@ namespace PMapTestApp
 
         private void button26_Click(object sender, EventArgs e)
         {
-            string sRes = (new PMapInterface()).CheckLicence("", dbConf);
+            string sRes = (new VBInterface.SWHInterface()).CheckLicence("", dbConf);
             MessageBox.Show("Licence eredmény:" + sRes);
         }
 
@@ -651,7 +651,7 @@ namespace PMapTestApp
         {
             List<boXChkRoute> lstRoutes = new List<boXChkRoute>();
             lstRoutes.Add(new boXChkRoute() { FromLat = 46.232789, FromLng = 20.1404686, ToLat = 47.492975, ToLng = 19.1200849, RZones = "B35,CS12,CS7,DB1,DP1,DP3,DP7,ÉB1,ÉB7,ÉP1,HB1,KP1,KV3,P35,P75" });
-            List<boXChkRes> res = (new PMapInterface()).CheckRoutes("", dbConf, lstRoutes);
+            List<boXChkRes> res = (new VBInterface.SWHInterface()).CheckRoutes("", dbConf, lstRoutes);
             dlgImportResult ir = new dlgImportResult();
             int i = 1;
             foreach (var rr in res)
@@ -899,6 +899,57 @@ namespace PMapTestApp
             */
         //    (new PMapInterface()).MPOrderDialog("", dbConf);
             
+
+        }
+
+        private void button35_Click(object sender, EventArgs e)
+        {
+            PMapIniParams.Instance.ReadParams("", dbConf);
+            SQLServerAccess db = new SQLServerAccess();
+            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            bllDepot depot = new bllDepot(db);
+            bllTruck truck = new bllTruck(db);
+
+
+
+
+
+            dlgTestRouteVis d = new dlgTestRouteVis();
+            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                List<string> lstDepotID = new List<string>(d.txtDEPID.Text.Split(','));
+                var lstRouteSection = new List<boXRouteSection>();
+                foreach (var depItem in lstDepotID)
+                {
+                    var dep = depot.GetDepot(Convert.ToInt32(depItem.Split(';')[0]));
+                    var item = new boXRouteSection()
+                    {
+                        Start_DEP_ID = -1,
+                        RouteSectionType = (boXRouteSection.ERouteSectionType)Enum.Parse(typeof(boXRouteSection.ERouteSectionType), depItem.Split(';')[1]),
+                        DEP_NAME = dep.DEP_NAME,
+                        ZIP_NUM = dep.ZIP_NUM,
+                        ZIP_CITY = dep.ZIP_CITY,
+                        DEP_ADRSTREET = dep.DEP_ADRSTREET,
+                        DEP_ADRNUM = dep.DEP_ADRNUM
+                    };
+
+                   lstRouteSection.Add(item);
+                }
+                var trk = truck.GetTruck(Convert.ToInt32(d.txtTRKID.Text));
+
+                boXTruck Xtrk = new boXTruck();
+                Util.CopyByProperties(trk, Xtrk);
+
+                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk, false, 1);
+
+                dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
+
+                dd.propertyGridCtrl1.SetObject(res.First());
+                var rr = (boXRouteSummary)res.First().Data;
+                dd.propertyGridCtrl2.SetObject(rr.FastestRoute);
+                dd.propertyGridCtrl3.SetObject(rr.ShortestRoute);
+                dd.ShowDialog();
+            }
 
         }
     }

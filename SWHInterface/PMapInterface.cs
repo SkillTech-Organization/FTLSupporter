@@ -7,8 +7,10 @@ using PMapCore.Common;
 using PMapCore.Common.Parse;
 using PMapCore.Common.PPlan;
 using PMapCore.Licence;
+using PMapCore.LongProcess.Base;
 using PMapCore.MapProvider;
 using PMapCore.Route;
+using SWHInterface.LongProcess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +36,7 @@ namespace SWHInterface
         /// <param name="p_GetRouteWithTruckSpeeds"></param>
         /// <param name="p_CalcTRK_ETOLLCAT"></param>
         /// <returns></returns>
-        public List<dtXResult> RouteVisualizationCalc(string p_iniPath, string p_dbConf, List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
+        public List<dtXResult> JourneyFormCheck(string p_iniPath, string p_dbConf, List<boXRouteSection> p_lstRouteSection, boXTruck p_XTruck, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
@@ -44,11 +46,18 @@ namespace SWHInterface
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
+                
+//1. geokódolás
+                ProcessNotifyIcon ni = new ProcessNotifyIcon();
+                DepotGeocodingProcess dp = new DepotGeocodingProcess(ni, p_lstRouteSection);
+                dp.RunWait();
+
+
 
                 //logVersion();
-                Util.Log2File(">>START:RouteVisualizationCalc( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_TRK_ID=" + p_TRK_ID.ToString() + "')");
+                Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "')");
                 PMapCommonVars.Instance.ConnectToDB();
-
+                /*
                 string sErr;
                 if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, out sErr))
                 {
@@ -62,6 +71,7 @@ namespace SWHInterface
                     res.ErrMessage = sErr;
                     sRetStatus = retErr;
                 }
+                */
             }
             catch (Exception e)
             {
@@ -75,8 +85,6 @@ namespace SWHInterface
             List<dtXResult> resArr = new List<dtXResult>();
             resArr.Add(res);
 
-            if (!PMapIniParams.Instance.TestMode)
-                ParseLogX.CallsToParse(System.Reflection.MethodBase.GetCurrentMethod().Name, sRetStatus, DateTime.Now - dt, p_lstRouteSection.Count(), p_TRK_ID, p_GetRouteWithTruckSpeeds, p_CalcTRK_ETOLLCAT);
             return resArr;
         }
 

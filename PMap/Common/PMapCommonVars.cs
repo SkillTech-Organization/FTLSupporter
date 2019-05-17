@@ -72,6 +72,7 @@ namespace PMapCore.Common
                 }
                 return m_LstEToll;
             }
+            set { m_LstEToll = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
