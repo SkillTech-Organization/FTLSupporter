@@ -929,7 +929,6 @@ namespace PMapTestApp
                     var dep = depot.GetDepot(Convert.ToInt32(depItem.Split(';')[0]));
                     var item = new boXRouteSection()
                     {
-                        Start_DEP_ID = -1,
                         RouteSectionType = (boXRouteSection.ERouteSectionType)Enum.Parse(typeof(boXRouteSection.ERouteSectionType), depItem.Split(';')[1]),
                         DEP_NAME = dep.DEP_NAME,
                         ZIP_NUM = dep.ZIP_NUM,

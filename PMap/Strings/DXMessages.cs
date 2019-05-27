@@ -25,7 +25,7 @@ namespace PMapCore.Strings
         public const string RQ_TRK_CODE = "A járműkód kitöltése kötelező!";
         public const string RQ_TRK_REG_NUM = "A rendszám kitöltése kötelező!";
         public const string RQ_TRK_ETOLLCAT = "Útdíjkategória kitöltése kötelező!";
-        public const string RQ_TRK_ETOLLCAT_VALUE = "Útdíjkategória értéke 2-4 lehet!";
+        public const string RQ_TRK_ETOLLCAT_VALUE = "Útdíjkategória értéke 0-4 lehet!";
         public const string RQ_TRK_ENGINEEURO = "A motor EURO besorolás kitöltése kötelező!";
         public const string RQ_TRK_ENGINEEURO_VALUE = "A motor EURO besorolás értéke 1-6 lehet";
         public const string RQ_TRK_WEIGHT = "Az összsúly kitöltése kötelező!";

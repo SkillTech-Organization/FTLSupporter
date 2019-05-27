@@ -103,12 +103,12 @@ namespace PMapCore.BO
         public int TRK_ENGINEEURO { get; set; }
 
         [WriteFieldAttribute(Insert = true, Update = true)]
-        public int TRK_ETOLLCAT { get; set; }                       //A díjszámításnál használandó járműkategória:
+        public int TRK_ETOLLCAT { get; set; }                       //Jármű díjkategória
+                                                                    // 0 => nem kell útdíjat számolni (3,5t alatti)
                                                                     // 2 => J2
                                                                     // 3 => J3
                                                                     // 4 => J4
 
-                              
         [WriteFieldAttribute(Insert = true, Update = true)]
         public string TRK_COMMENT { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]

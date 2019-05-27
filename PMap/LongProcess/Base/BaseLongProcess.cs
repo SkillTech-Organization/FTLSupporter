@@ -23,8 +23,8 @@ namespace PMapCore.LongProcess.Base
         protected Thread m_WorkingThread = null;
 
 
-        private BaseProgressDialog m_processForm;
-        protected ProcessNotifyIcon m_notifyIcon;
+        private BaseProgressDialog m_processForm = null;
+        protected ProcessNotifyIcon m_notifyIcon = null;
         protected ThreadPriority m_ThreadPriority;
         /*
         public BaseLongProcess(ThreadPriority p_ThreadPriority)

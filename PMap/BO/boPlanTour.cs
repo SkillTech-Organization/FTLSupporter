@@ -185,8 +185,11 @@ namespace PMapCore.BO
         public string TRK_CODE { get; set; }
 
         [DisplayNameAttributeX(Name = "E útdíj kategória", Order = 36)]
-        public int TRK_ETOLLCAT { get; set; }                               //Jármű díjkategória, 0: nincs útdíj
-
+        public int TRK_ETOLLCAT { get; set; }                               //Jármű díjkategória
+                                                                            // 0 => nem kell útdíjat számolni (3,5t alatti)
+                                                                            // 2 => J2
+                                                                            // 3 => J3
+                                                                            // 4 => J4
         [DisplayNameAttributeX(Name = "EURO besorolás", Order = 37)]
         public int TRK_ENGINEEURO { get; set; }
 

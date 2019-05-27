@@ -14,8 +14,6 @@ namespace SWHInterface.BO
 
         public class boXRouteSummaryDetails
         {
-            [DisplayNameAttributeX(Name = "Kiválasztva", Order = 1)]
-            public bool Selected { get; set; }
             [DisplayNameAttributeX(Name = "Távolság", Order = 2)]
             public double SumDistance { get; set; }
             [DisplayNameAttributeX(Name = "Menetidő", Order = 3)]
@@ -50,9 +48,7 @@ namespace SWHInterface.BO
         public boXRouteSummary()
         {
             ShortestRoute = new boXRouteSummaryDetails();
-            ShortestRoute.Selected = false;
             FastestRoute = new boXRouteSummaryDetails();
-            FastestRoute.Selected = false;
         }
     }
 }

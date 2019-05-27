@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Installer\PMAdminSetup.exe = Installer\PMAdminSetup.exe
 		doc\PMap kapcsolat külső rendszerekkel.doc = doc\PMap kapcsolat külső rendszerekkel.doc
 		doc\PMap tervezés modul felhasználói leírása.docx = doc\PMap tervezés modul felhasználói leírása.docx
+		doc\PMap-SWH kapcsolat.doc = doc\PMap-SWH kapcsolat.doc
 		PMAP.ini = PMAP.ini
 		Installer\PMAP.ini = Installer\PMAP.ini
 		doc\PMap2.fazis1 = doc\PMap2.fazis1
@@ -54,6 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Installer\RegAsm.exe = Installer\RegAsm.exe
 		doc\SWH_RDP.txt = doc\SWH_RDP.txt
 		doc\SWH_TEST.RDP = doc\SWH_TEST.RDP
+		Installer\SWHInterfaceInstaller2.nsi = Installer\SWHInterfaceInstaller2.nsi
 		doc\utvonalszam.txt = doc\utvonalszam.txt
 	EndProjectSection
 EndProject

@@ -63,7 +63,7 @@ namespace SWHInterface
                 p_XTruck.CPP_LOADVOL = p_XTruck.CPP_LOADVOL == 0 ? 1 : p_XTruck.CPP_LOADVOL;
                 p_XTruck.TFP_KMCOST = p_XTruck.TFP_KMCOST == 0 ? 1 : p_XTruck.TFP_KMCOST;
                 p_XTruck.TFP_HOURCOST = p_XTruck.TFP_HOURCOST == 0 ? 1 : p_XTruck.TFP_HOURCOST;
-
+                
                 /* Ezeket a mezőket kötelező kitölteni :
                     kell TRK_WEIGHT 
                     kell TRK_XHEIGHT 
@@ -126,17 +126,15 @@ namespace SWHInterface
 
                 //2. RouteData.Instance singleton feltoltese
 
-                InitRouteDataProcess irdp = new InitRouteDataProcess();
-                irdp.Run();
-                irdp.ProcessForm.ShowDialog();
+                InitRouteDataProcess irdp = new InitRouteDataProcess(ni);
+                irdp.RunWait();
 
                 //Az utolsó elemre rárakjuk a finish-t
                 p_lstRouteSection.Last().RouteSectionType = boXRouteSection.ERouteSectionType.Finish;
 
 
                 //
-                ProcessNotifyIcon ni2 = new ProcessNotifyIcon();
-                JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni2, p_lstRouteSection, p_XTruck);
+                JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni, p_lstRouteSection, p_XTruck);
                 rvdp.RunWait();
 
                 if (rvdp.Result != null)

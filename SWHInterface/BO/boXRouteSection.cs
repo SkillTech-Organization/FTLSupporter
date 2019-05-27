@@ -29,11 +29,6 @@ namespace SWHInterface.BO
             RouteSectionType = ERouteSectionType.Untyped;
         }
 
-        [Required(ErrorMessage = DXMessages.RQ_DEP_ID)]
-        [DisplayNameAttributeX(Name = "Szakasz induló lerakó ID", Order = 1)]
-        public int Start_DEP_ID { get; set; } = -1;
-
-
         [Required(ErrorMessage = DXMessages.RQ_TourSection)]
         [DisplayNameAttributeX(Name = "Útvonal-szakasz típus", Order = 2)]
         public ERouteSectionType RouteSectionType { get; set; }

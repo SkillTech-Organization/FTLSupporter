@@ -105,14 +105,18 @@ namespace PMapCore.BO.DataXChange
         public int TRK_AXLENUM { get; set; }
 
         [DisplayNameAttributeX(Name = "Útdíjkategória", Order = 15)]
-        [Range(2, 4, ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT_VALUE)]
-        [Required(ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT)]
-        public int TRK_ETOLLCAT { get; set; }   
+        [Range(0, 4, ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT_VALUE)]
+        //[Required(ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT)]
+        public int TRK_ETOLLCAT { get; set; }  //Jármű díjkategória
+                                               // 0 => nem kell útdíjat számolni (3,5t alatti)
+                                               // 2 => J2
+                                               // 3 => J3
+                                               // 4 => J4
 
         [DisplayNameAttributeX(Name = "Motor EURO besorolás", Order = 16)]
         [Range(1, 6, ErrorMessage = DXMessages.RQ_TRK_ENGINEEURO_VALUE)]
         [Required(ErrorMessage = DXMessages.RQ_TRK_ENGINEEURO)]
-        public int TRK_ENGINEEURO { get; set; }
+        public int TRK_ENGINEEURO { get; set; }             //https://hu.wikipedia.org/wiki/Eur%C3%B3pai_kibocs%C3%A1t%C3%A1si_norm%C3%A1k
 
         [DisplayNameAttributeX(Name = "Alapértelmezett pihenőidő", Order = 17)]
         [Range(0, 14400)]

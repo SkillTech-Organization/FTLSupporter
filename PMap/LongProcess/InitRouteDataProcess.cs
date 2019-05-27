@@ -22,7 +22,13 @@ namespace PMapCore.LongProcess
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
         }
+        public InitRouteDataProcess(ProcessNotifyIcon p_NotifyIcon)
+        : base(p_NotifyIcon, PMapIniParams.Instance.InitRouteDataProcess)
+        {
+            m_DB = new SQLServerAccess();
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
+        }
         protected override void DoWork()
         {
             RouteData.Instance.Init(m_DB, this.ProcessForm, true);

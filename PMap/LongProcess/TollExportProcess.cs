@@ -40,9 +40,12 @@ namespace PMapCore.LongProcess
             public double DST_DISTANCE { get; set; }
             public double Duration { get; set; }            //az útvonalszámolási tarifaprofillal (ini paraméter)
 
+            //Tarifa 2019:
+            //2019:https://hu-go.hu/articles/article/a-dijszamitasrol
+
             //Környezetvédelmi kategóriánkénti szorzók
             //Környezetvédelmi kategória	J2-J3 díjkategória	J4 díjkategória
-            //A kategória (≥EURO III.)	        0,85	            0,8
+            //A kategória (≥EURO III.)	        0,85 	            0,85
             //B kategória (EURO II.)	        1	                  1   
             //C kategória (≤ EURO I.)	        1,15	            1,2
 
