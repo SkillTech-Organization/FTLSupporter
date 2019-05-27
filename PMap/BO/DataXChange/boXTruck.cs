@@ -105,11 +105,13 @@ namespace PMapCore.BO.DataXChange
         public int TRK_AXLENUM { get; set; }
 
         [DisplayNameAttributeX(Name = "Útdíjkategória", Order = 15)]
-        [Range(2, 4, ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT)]
-        public int TRK_ETOLLCAT { get; set; }
+        [Range(2, 4, ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT_VALUE)]
+        [Required(ErrorMessage = DXMessages.RQ_TRK_ETOLLCAT)]
+        public int TRK_ETOLLCAT { get; set; }   
 
         [DisplayNameAttributeX(Name = "Motor EURO besorolás", Order = 16)]
-        [Range(1, 6, ErrorMessage = DXMessages.RQ_TRK_ENGINEEURO)]
+        [Range(1, 6, ErrorMessage = DXMessages.RQ_TRK_ENGINEEURO_VALUE)]
+        [Required(ErrorMessage = DXMessages.RQ_TRK_ENGINEEURO)]
         public int TRK_ENGINEEURO { get; set; }
 
         [DisplayNameAttributeX(Name = "Alapértelmezett pihenőidő", Order = 17)]
@@ -132,38 +134,38 @@ namespace PMapCore.BO.DataXChange
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Autópálya", Order = 22)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE1 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE1 { get; set; }                                 //RDT_ID=1
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Autóút", Order = 23)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE2 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE2 { get; set; }                                 //RDT_ID=2 
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Főútvonal", Order = 24)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE3 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE3 { get; set; }                                 //RDT_ID=3
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Egyéb (kétszámjegyű) út", Order = 25)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE4 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE4 { get; set; }                                 //RDT_ID=4
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Alsóbbrendű út", Order = 26)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE5 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE5 { get; set; }                                 //RDT_ID=5
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Város", Order = 27)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE6 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE6 { get; set; }                                 //RDT_ID=6
 
         [DisplayNameAttributeX(Name = "Sebességprofil: Speciális utak", Order = 28)]
         [Required(ErrorMessage = DXMessages.RQ_SPV_VALUE)]
-        [Range(0, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
-        public int SPV_VALUE7 { get; set; }
+        [Range(1, 130, ErrorMessage = DXMessages.RG_SPV_VALUE)]
+        public int SPV_VALUE7 { get; set; }                                 //RDT_ID=7
 
         [DisplayNameAttributeX(Name = "Súlyokrlát (kg)", Order = 29)]
         [Required(ErrorMessage = DXMessages.RQ_CPP_LOADQTY)]
@@ -176,7 +178,7 @@ namespace PMapCore.BO.DataXChange
         public double CPP_LOADVOL { get; set; }
 
         [DisplayNameAttributeX(Name = "Fix túraköltség", Order = 31)]
-        [Required(ErrorMessage = DXMessages.RQ_TFP_FIXCOST)]
+       // [Required(ErrorMessage = DXMessages.RQ_TFP_FIXCOST)]
         [Range(0, 10000000)]
         public double TFP_FIXCOST { get; set; }
 

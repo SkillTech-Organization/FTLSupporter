@@ -66,8 +66,8 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
 
                     gMapControl.MinZoom = Global.DefMinZoom;
                     gMapControl.MaxZoom = Global.DefMaxZoom;
-                    gMapControl.Zoom = RouteVisCommonVars.Instance.Zoom;
-                    gMapControl.Position = RouteVisCommonVars.Instance.CurrentPosition;
+                    gMapControl.Zoom = RouteVisCommonVars_DEPRECATED.Instance.Zoom;
+                    gMapControl.Position = RouteVisCommonVars_DEPRECATED.Instance.CurrentPosition;
 
 
                     if (m_fastestLayer == null)
@@ -100,25 +100,25 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                     else
                         m_depotsLayer.Clear();
 
-                    if (RouteVisCommonVars.Instance.lstDetails.Count > 0)
+                    if (RouteVisCommonVars_DEPRECATED.Instance.lstDetails.Count > 0)
                     {
 
-                        foreach (RouteVisCommonVars.CRouteVisDetails detail in RouteVisCommonVars.Instance.lstDetails[RouteVisCommonVars.TY_SHORTEST].Details)
+                        foreach (RouteVisCommonVars_DEPRECATED.CRouteVisDetails detail in RouteVisCommonVars_DEPRECATED.Instance.lstDetails[RouteVisCommonVars_DEPRECATED.TY_SHORTEST].Details)
                         {
                             GMapRoute r = new GMapRoute(detail.Route.Route.Points, detail.Route.Route.Name);
 
                             Pen pen = new Pen(Util.GetSemiTransparentColor(Color.Blue), Global.TourLineWidthNormal);
-                            pen.DashStyle = detail.RouteSectionType == boXRouteSection.ERouteSectionType.Empty ? DashStyle.DashDot : DashStyle.Solid;
+                            pen.DashStyle = detail.RouteSectionType == boXRouteSection_DEPRECATED.ERouteSectionType.Empty ? DashStyle.DashDot : DashStyle.Solid;
                             r.Stroke = pen;
                             m_shortestLayer.Routes.Add(r);
                         }
 
-                        foreach (RouteVisCommonVars.CRouteVisDetails detail in RouteVisCommonVars.Instance.lstDetails[RouteVisCommonVars.TY_FASTEST].Details)
+                        foreach (RouteVisCommonVars_DEPRECATED.CRouteVisDetails detail in RouteVisCommonVars_DEPRECATED.Instance.lstDetails[RouteVisCommonVars_DEPRECATED.TY_FASTEST].Details)
                         {
                             GMapRoute r = new GMapRoute(detail.Route.Route.Points, detail.Route.Route.Name);
 
                             Pen pen = new Pen(Util.GetSemiTransparentColor(Color.Red), Global.TourLineWidthNormal);
-                            pen.DashStyle = detail.RouteSectionType == boXRouteSection.ERouteSectionType.Empty ? DashStyle.DashDot : DashStyle.Solid;
+                            pen.DashStyle = detail.RouteSectionType == boXRouteSection_DEPRECATED.ERouteSectionType.Empty ? DashStyle.DashDot : DashStyle.Solid;
                             r.Stroke = pen;
                             m_fastestLayer.Routes.Add(r);
                         }
@@ -126,7 +126,7 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                         m_MovedMarker = null;
                     }
 
-                    foreach (RouteVisCommonVars.CRouteDepots rtDep in RouteVisCommonVars.Instance.lstRouteDepots)
+                    foreach (RouteVisCommonVars_DEPRECATED.CRouteDepots rtDep in RouteVisCommonVars_DEPRECATED.Instance.lstRouteDepots)
                     {
 
                         boPlanTourPoint tp = new boPlanTourPoint();
@@ -165,7 +165,7 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
             }
         }
 
-        public void RefreshPanel(RouteVisEventArgs p_evtArgs)
+        public void RefreshPanel(RouteVisEventArgs_DEPRECATED p_evtArgs)
         {
             switch (p_evtArgs.EventMode)
             {
@@ -174,7 +174,7 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                     break;
                 case eRouteVisEventMode.ChgZoom:
                     gMapControl.OnMapZoomChanged -= new MapZoomChanged(gMapControl_OnMapZoomChanged);
-                    gMapControl.Zoom = RouteVisCommonVars.Instance.Zoom;
+                    gMapControl.Zoom = RouteVisCommonVars_DEPRECATED.Instance.Zoom;
                     gMapControl.Refresh();
                     gMapControl.OnMapZoomChanged += new MapZoomChanged(gMapControl_OnMapZoomChanged);
                     break;
@@ -185,15 +185,15 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                 case eRouteVisEventMode.ChgRouteVisible:
 
                     foreach (var rt in m_shortestLayer.Routes)
-                        rt.IsVisible = RouteVisCommonVars.Instance.lstDetails[RouteVisCommonVars.TY_SHORTEST].Visible;
+                        rt.IsVisible = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[RouteVisCommonVars_DEPRECATED.TY_SHORTEST].Visible;
                     foreach (var rt in m_fastestLayer.Routes)
-                        rt.IsVisible = RouteVisCommonVars.Instance.lstDetails[RouteVisCommonVars.TY_FASTEST].Visible;
+                        rt.IsVisible = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[RouteVisCommonVars_DEPRECATED.TY_FASTEST].Visible;
                     break;
                 case eRouteVisEventMode.ChgDepotSelected:
                     int ID = -1;
                     foreach (PPlanMarker mrk in m_depotsLayer.Markers)
                     {
-                        if (mrk.TourPoint.ID == RouteVisCommonVars.Instance.SelectedDepID)
+                        if (mrk.TourPoint.ID == RouteVisCommonVars_DEPRECATED.Instance.SelectedDepID)
                         {
                             m_FocusedMarker = mrk;
                             gMapControl.Refresh();
@@ -208,14 +208,14 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
 
         private void zoomChanged()
         {
-            RouteVisCommonVars.Instance.Zoom = (int)(gMapControl.Zoom);
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgZoom));
+            RouteVisCommonVars_DEPRECATED.Instance.Zoom = (int)(gMapControl.Zoom);
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgZoom));
         }
         private void setToolTipMode()
         {
             foreach (var mrk in m_depotsLayer.Markers)
             {
-                mrk.ToolTipMode = RouteVisCommonVars.Instance.TooltipMode;
+                mrk.ToolTipMode = RouteVisCommonVars_DEPRECATED.Instance.TooltipMode;
             }
         }
         private void gMapControl_OnMapZoomChanged()
@@ -230,8 +230,8 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
             gMapControl.Refresh();
 
             PPlanMarker mrk = (PPlanMarker)item;
-            RouteVisCommonVars.Instance.SelectedDepID = mrk.TourPoint.ID;   //az ID-ben a DEP_ID van tárolva
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgDepotSelected));
+            RouteVisCommonVars_DEPRECATED.Instance.SelectedDepID = mrk.TourPoint.ID;   //az ID-ben a DEP_ID van tárolva
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgDepotSelected));
 
         }
 
@@ -309,10 +309,10 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                 m_FocusedMarker.Position = m_Route.GetPointLatLng(NOD_ID);
 
                 PPlanMarker mrk = (PPlanMarker)m_FocusedMarker;
-                RouteVisCommonVars.Instance.SelectedDepID = mrk.TourPoint.ID;   //az ID-ben a DEP_ID van tárolva
+                RouteVisCommonVars_DEPRECATED.Instance.SelectedDepID = mrk.TourPoint.ID;   //az ID-ben a DEP_ID van tárolva
                 mrk.TourPoint.NOD_ID = NOD_ID;
 
-                RouteVisCommonVars.CRouteDepots dep = RouteVisCommonVars.Instance.lstRouteDepots.Where(i => i.Depot.ID == mrk.TourPoint.ID).SingleOrDefault();
+                RouteVisCommonVars_DEPRECATED.CRouteDepots dep = RouteVisCommonVars_DEPRECATED.Instance.lstRouteDepots.Where(i => i.Depot.ID == mrk.TourPoint.ID).SingleOrDefault();
                 if (dep != null)
                 {
                     dep.Depot.NOD_ID = NOD_ID;
@@ -322,7 +322,7 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                 }
 
                 
-                RouteVisDataProcess rvdp = new RouteVisDataProcess();
+                RouteVisDataProcess_DEPRECATED rvdp = new RouteVisDataProcess_DEPRECATED();
                 rvdp.Run();
                 rvdp.ProcessForm.ShowDialog();
 
@@ -347,7 +347,7 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
 
                 m_fastestLayer.IsVisibile = true;
                 m_shortestLayer.IsVisibile = true;
-                this.RefreshPanel(new RouteVisEventArgs(eRouteVisEventMode.ReInit));
+                this.RefreshPanel(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ReInit));
             }
         }
     }

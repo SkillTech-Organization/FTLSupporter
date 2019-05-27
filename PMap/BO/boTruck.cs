@@ -6,12 +6,17 @@ using System.Drawing;
 using PMapCore.BLL.Base;
 using PMapCore.Common;
 using PMapCore.Common.Attrib;
+using System.ComponentModel;
 
 namespace PMapCore.BO
 {
+
+
+
     [Serializable]
     public class boTruck
     {
+
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int ID { get; set; }
         [WriteFieldAttribute(Insert = true, Update = true)]

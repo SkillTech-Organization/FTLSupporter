@@ -5,6 +5,7 @@ using PMapCore.BO.DataXChange;
 using PMapCore.Common;
 using PMapCore.DB.Base;
 using PMapCore.LongProcess.Base;
+using SWHInterface.BO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

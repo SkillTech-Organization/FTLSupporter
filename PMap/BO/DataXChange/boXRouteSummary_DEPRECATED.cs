@@ -9,7 +9,7 @@ using PMapCore.Common.Attrib;
 
 namespace PMapCore.BLL.DataXChange
 {
-    public class boXRouteSummary : boXBase
+    public class boXRouteSummary_DEPRECATED : boXBase
     {
 
         public class boXRouteSummaryDetails
@@ -47,7 +47,7 @@ namespace PMapCore.BLL.DataXChange
         [Browsable(false)]
         public boXRouteSummaryDetails FastestRoute { get; set; }
 
-        public boXRouteSummary()
+        public boXRouteSummary_DEPRECATED()
         {
             ShortestRoute = new boXRouteSummaryDetails();
             ShortestRoute.Selected = false;

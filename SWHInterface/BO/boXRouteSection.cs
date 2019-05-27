@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ComponentModel.DataAnnotations;
 using PMapCore.Strings;
 using System.ComponentModel;
 using PMapCore.BO.Base;
 using PMapCore.Common.Attrib;
 using PMapCore.BLL.DataXChange;
+using System.ComponentModel.DataAnnotations;
 
-namespace PMapCore.BO.DataXChange
+namespace SWHInterface.BO
 {
     public class boXRouteSection : boXBase
     {

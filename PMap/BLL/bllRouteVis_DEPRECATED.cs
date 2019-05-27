@@ -10,9 +10,9 @@ using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {
-    public class bllRouteVis : bllBase
+    public class bllRouteVis_DEPRECATED : bllBase
     {
-        public bllRouteVis(SQLServerAccess p_DBA)
+        public bllRouteVis_DEPRECATED(SQLServerAccess p_DBA)
             : base(p_DBA, "")
         {
         }
@@ -29,7 +29,7 @@ namespace PMapCore.BLL
             var diff = p_lstDepotID.Except(linq.ToArray());
             string sMissing = string.Join(",", diff.ToArray());
             if (sMissing != "")
-                result = String.Format(PMapMessages.E_ROUTVIS_MISSINGDEPOTS, sMissing);
+                result = String.Format(PMapMessages.E_ROUTVIS_MISSINGDEPOTS_DEPRECATED, sMissing);
 
             sSql = "select DEP.ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
                     "left outer join NOD_NODE NOD on NOD.ID = DEP.NOD_ID  " + Environment.NewLine +
@@ -43,7 +43,7 @@ namespace PMapCore.BLL
             {
                 if (result != "")
                     result += Environment.NewLine;
-                result += String.Format(PMapMessages.E_ROUTVIS_MISSINGNODES, sMissing);
+                result += String.Format(PMapMessages.E_ROUTVIS_MISSINGNODES_DEPRECATED, sMissing);
             }
             return result;
         }

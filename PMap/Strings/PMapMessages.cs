@@ -128,17 +128,24 @@ namespace PMapCore.Strings
 
         public const string T_ROUTECHK = "Útvonal ellenőrzése";
 
-        public const string E_ROUTVIS_FATALERRINSTART = "RouteVisualization - Végzetes hiba programindulásnál!";
-        public const string E_ROUTVIS_NOINTERNETCONN = "RouteVisualization - Nincs Internetkapcsolat!";
-        public const string E_ROUTVIS_MISSINGDEPOTS = "Nem létező lerakó azonosítók:{0}";
-        public const string E_ROUTVIS_MISSINGNODES = "Nincs geokódolva:{0}";
-        public const string E_ROUTVIS_MISSINGTRK = "Nem létező jármű azonosító:{0}";
-        public const string E_ROUTVIS_EMPTYINPUT = "Az lerakók listájának minimum 2 eleműnek kell lennie!";
+        public const string E_ROUTVIS_FATALERRINSTART_DEPRECATED = "RouteVisualization - Végzetes hiba programindulásnál!";
+        public const string E_ROUTVIS_NOINTERNETCONN_DEPRECATED = "RouteVisualization - Nincs Internetkapcsolat!";
+        public const string E_ROUTVIS_MISSINGDEPOTS_DEPRECATED = "Nem létező lerakó azonosítók:{0}";
+        public const string E_ROUTVIS_MISSINGNODES_DEPRECATED = "Nincs geokódolva:{0}";
+        public const string E_ROUTVIS_MISSINGTRK_DEPRECATED = "Nem létező jármű azonosító:{0}";
+        public const string E_ROUTVIS_EMPTYINPUT_DEPRECATED = "Az lerakók listájának minimum 2 eleműnek kell lennie!";
 
-        public const string M_ROUTVIS_LOADDATA = "Adatok betöltése";
-        public const string E_ROUTVIS_INIT_ROUTECALC = "Útvonalszámítás inicializálás";
-        public const string M_ROUTVIS_SHORTEST = "Legrövidebb";
-        public const string M_ROUTVIS_FASTEST = "Leggyorsabb";
+        public const string M_ROUTVIS_LOADDATA_DEPRECATED = "Adatok betöltése";
+        public const string E_ROUTVIS_INIT_ROUTECALC_DEPRECATED = "Útvonalszámítás inicializálás";
+
+
+        public const string M_PATH_SHORTEST = "Legrövidebb";
+        public const string M_PATH_FASTEST = "Leggyorsabb";
+        public const string E_JRNFORM_NORESULT = "A feldolgozás megszakítása miatt nincs eredmény!";
+
+
+        public const string E_JFORM_NEED_GEOCODING = "Nem lehet geokódolni:{0}";
+
 
         public const string E_NEWPLAN_EMPTY_PLNAME = "A terv megnevezését kötelező kitölteni!";
         public const string M_NEWPLAN_GEOCODELESS_DEP = "Geokokódolás hiánya miatt nem szereplő lerakók";

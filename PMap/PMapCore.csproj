@@ -237,7 +237,7 @@
     <Compile Include="BLL\bllEtoll.cs" />
     <Compile Include="BLL\bllOrder.cs" />
     <Compile Include="BLL\bllOrderType.cs" />
-    <Compile Include="BLL\bllRouteVis.cs" />
+    <Compile Include="BLL\bllRouteVis_DEPRECATED.cs" />
     <Compile Include="BLL\bllSpeedProf.cs" />
     <Compile Include="BLL\bllTariffProf.cs" />
     <Compile Include="BLL\bllZIP.cs" />
@@ -258,8 +258,8 @@
     <Compile Include="BO\DataXChange\boXPlan.cs" />
     <Compile Include="BO\DataXChange\boXPlanOrder.cs" />
     <Compile Include="BO\DataXChange\boXPlanTour.cs" />
-    <Compile Include="BO\DataXChange\boXRouteSection.cs" />
-    <Compile Include="BO\DataXChange\boXRouteSummary.cs" />
+    <Compile Include="BO\DataXChange\boXRouteSection_DEPRECATED.cs" />
+    <Compile Include="BO\DataXChange\boXRouteSummary_DEPRECATED.cs" />
     <Compile Include="BLL\DataXChange\dtXTruck.cs" />
     <Compile Include="BO\boApp.cs" />
     <Compile Include="BO\boCapacityProf.cs" />
@@ -312,8 +312,8 @@
     <Compile Include="Licence\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />
     <Compile Include="Common\Parse\PMapCalls.cs" />
-    <Compile Include="Common\RouteVisEventArgs.cs" />
-    <Compile Include="Common\RouteVisCommonVars.cs" />
+    <Compile Include="Common\RouteVisEventArgs_DEPRECATED.cs" />
+    <Compile Include="Common\RouteVisCommonVars_Deprecated.cs" />
     <Compile Include="BLL\DataXChange\dtXResult.cs" />
     <Compile Include="BLL\DataXChange\dtXDepot.cs" />
     <Compile Include="DB\Base\DBAccess.cs" />
@@ -345,7 +345,7 @@
     <Compile Include="LongProcess\TollExportProcess.cs" />
     <Compile Include="LongProcess\TourOptimizerProcess.cs" />
     <Compile Include="Markers\PMapMarker.cs" />
-    <Compile Include="LongProcess\RouteVisDataProcess.cs" />
+    <Compile Include="LongProcess\RouteVisDataProcess_DEPRECATED.cs" />
     <Compile Include="Strings\PMapMessages.cs" />
     <Compile Include="Common\PMapCommonVars.cs" />
     <Compile Include="Common\ProcessUtils.cs" />
@@ -423,7 +423,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Common\Util.cs" />
-    <Compile Include="Route\RouteVisualisationData.cs" />
+    <Compile Include="Route\RouteVisualisationData_DEPRECATED.cs" />
     <Compile Include="WebTrace\PMTracedTour.cs" />
     <Compile Include="WebTrace\PMUser.cs" />
     <Compile Include="Common\XMLSerializator.cs" />

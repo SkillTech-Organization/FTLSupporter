@@ -171,6 +171,11 @@ namespace PMapCore.Common
         public const int RST_MAX75T = 4;        //4:max 7.5 tonna
         public const int RST_MAX35T = 5;        //5.max 3.5 tonna
 
+        public const int RST_WEIGHT35 = 3500;        //3.5 tonna
+        public const int RST_WEIGHT75 = 7500;        //7.5 tonna
+        public const int RST_WEIGHT120 = 12000;      //12  tonna
+
+
         public const int CTP_VALUE_DRY = 1;      //TODO:Ez csak a Pfenninges alkalmazásnál volt igaz. Árutípus-törzs mezővel kell megoldani!
 
         public static DateTime SQLMINDATE = new DateTime(1753, 1, 1);

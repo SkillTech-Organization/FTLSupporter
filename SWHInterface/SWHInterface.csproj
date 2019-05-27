@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -52,10 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JourneyFormData.cs" />
+    <Compile Include="BO\boXRouteSection.cs" />
+    <Compile Include="BO\boXRouteSummary.cs" />
     <Compile Include="LongProcess\DepotGeocodingProcess.cs" />
+    <Compile Include="LongProcess\JourneyFormDataProcess.cs" />
     <Compile Include="PMapInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XRoute.cs" />
+    <Compile Include="XRouteDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Animated Notify Icon\Animated Notify Icon.csproj">

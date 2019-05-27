@@ -36,7 +36,7 @@ namespace VBInterface
     /// <summary>
     /// CT <--> PMap hívás interface. Minden PMap funckió ezen a rétegen keresztül van kivülről elérve.
     /// </summary>
-    public class SWHInterface
+    public class PMapInterface
     {
 
         private const string retOK = "OK";
@@ -673,7 +673,7 @@ namespace VBInterface
 
         #endregion
 
-        /* -nem -kel
+        /* DEPRECATED -nem -kel
         public string MPOrderDialog(string p_iniPath, string p_dbConf)
         {
 
@@ -809,13 +809,13 @@ namespace VBInterface
         /// <param name="p_GetRouteWithTruckSpeeds"></param>
         /// <param name="p_CalcTRK_ETOLLCAT"></param>
         /// <returns></returns>
-        public List<dtXResult> RouteVisualization(string p_iniPath, string p_dbConf, List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
+        public List<dtXResult> RouteVisualization_DEPRECATED(string p_iniPath, string p_dbConf, List<boXRouteSection_DEPRECATED> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
 
             dtXResult res = new dtXResult();
-            boXRouteSummary rSummary = new boXRouteSummary();
+            boXRouteSummary_DEPRECATED rSummary = new boXRouteSummary_DEPRECATED();
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
@@ -827,14 +827,14 @@ namespace VBInterface
 
 
                 string sErr;
-                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, out sErr))
+                if (RouteVisualisationData_DEPRECATED.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, out sErr))
                 {
 
                     frmRouteVisualization v = new frmRouteVisualization(p_lstRouteSection, p_TRK_ID);
                     v.ShowDialog();
 
-                    rSummary = fillSummary();
-                    if (RouteVisCommonVars.Instance.SelectedType == RouteVisCommonVars.TY_FASTEST)
+                    rSummary = fillSummary_DEPRECATED();
+                    if (RouteVisCommonVars_DEPRECATED.Instance.SelectedType == RouteVisCommonVars_DEPRECATED.TY_FASTEST)
                         rSummary.FastestRoute.Selected = true;
                     else
                         rSummary.ShortestRoute.Selected = true;
@@ -876,7 +876,7 @@ namespace VBInterface
         /// <param name="p_GetRouteWithTruckSpeeds"></param>
         /// <param name="p_CalcTRK_ETOLLCAT"></param>
         /// <returns></returns>
-        public List<dtXResult> RouteVisualizationCalc(string p_iniPath, string p_dbConf, List<boXRouteSection> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
+        public List<dtXResult> RouteVisualizationCalc_DEPRECATED(string p_iniPath, string p_dbConf, List<boXRouteSection_DEPRECATED> p_lstRouteSection, int p_TRK_ID, bool p_GetRouteWithTruckSpeeds, int p_CalcTRK_ETOLLCAT = 0)
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
@@ -892,10 +892,10 @@ namespace VBInterface
                 PMapCommonVars.Instance.ConnectToDB();
 
                 string sErr;
-                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds,  out sErr))
+                if (RouteVisualisationData_DEPRECATED.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds,  out sErr))
                 {
                     res.Status = dtXResult.EStatus.OK;
-                    res.Data = fillSummary();
+                    res.Data = fillSummary_DEPRECATED();
 
                 }
                 else
@@ -926,28 +926,28 @@ namespace VBInterface
         /// Menetlevél ellenőrzés eredmény felépítése
         /// </summary>
         /// <returns></returns>
-        private boXRouteSummary fillSummary()
+        private boXRouteSummary_DEPRECATED fillSummary_DEPRECATED()
         {
-            boXRouteSummary ret = new boXRouteSummary();
-            ret.ShortestRoute.SumDistance = RouteVisCommonVars.Instance.lstDetails[0].SumDistance;
-            ret.ShortestRoute.SumDuration = RouteVisCommonVars.Instance.lstDetails[0].SumDuration;
-            ret.ShortestRoute.SumToll = RouteVisCommonVars.Instance.lstDetails[0].SumToll;
-            ret.ShortestRoute.SumDistanceEmpty = RouteVisCommonVars.Instance.lstDetails[0].SumDistanceEmpty;
-            ret.ShortestRoute.SumDurationEmpty = RouteVisCommonVars.Instance.lstDetails[0].SumDurationEmpty;
-            ret.ShortestRoute.SumTollEmpty = RouteVisCommonVars.Instance.lstDetails[0].SumTollEmpty;
-            ret.ShortestRoute.SumDistanceLoaded = RouteVisCommonVars.Instance.lstDetails[0].SumDistanceLoaded;
-            ret.ShortestRoute.SumDurationLoaded = RouteVisCommonVars.Instance.lstDetails[0].SumDurationLoaded;
-            ret.ShortestRoute.SumTollLoaded = RouteVisCommonVars.Instance.lstDetails[0].SumTollLoaded;
+            boXRouteSummary_DEPRECATED ret = new boXRouteSummary_DEPRECATED();
+            ret.ShortestRoute.SumDistance = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDistance;
+            ret.ShortestRoute.SumDuration = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDuration;
+            ret.ShortestRoute.SumToll = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumToll;
+            ret.ShortestRoute.SumDistanceEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDistanceEmpty;
+            ret.ShortestRoute.SumDurationEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDurationEmpty;
+            ret.ShortestRoute.SumTollEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumTollEmpty;
+            ret.ShortestRoute.SumDistanceLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDistanceLoaded;
+            ret.ShortestRoute.SumDurationLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDurationLoaded;
+            ret.ShortestRoute.SumTollLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumTollLoaded;
 
-            ret.FastestRoute.SumDistance = RouteVisCommonVars.Instance.lstDetails[1].SumDistance;
-            ret.FastestRoute.SumDuration = RouteVisCommonVars.Instance.lstDetails[1].SumDuration;
-            ret.FastestRoute.SumToll = RouteVisCommonVars.Instance.lstDetails[1].SumToll;
-            ret.FastestRoute.SumDistanceEmpty = RouteVisCommonVars.Instance.lstDetails[1].SumDistanceEmpty;
-            ret.FastestRoute.SumDurationEmpty = RouteVisCommonVars.Instance.lstDetails[1].SumDurationEmpty;
-            ret.FastestRoute.SumTollEmpty = RouteVisCommonVars.Instance.lstDetails[1].SumTollEmpty;
-            ret.FastestRoute.SumDistanceLoaded = RouteVisCommonVars.Instance.lstDetails[1].SumDistanceLoaded;
-            ret.FastestRoute.SumDurationLoaded = RouteVisCommonVars.Instance.lstDetails[1].SumDurationLoaded;
-            ret.FastestRoute.SumTollLoaded = RouteVisCommonVars.Instance.lstDetails[1].SumTollLoaded;
+            ret.FastestRoute.SumDistance = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDistance;
+            ret.FastestRoute.SumDuration = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDuration;
+            ret.FastestRoute.SumToll = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumToll;
+            ret.FastestRoute.SumDistanceEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDistanceEmpty;
+            ret.FastestRoute.SumDurationEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDurationEmpty;
+            ret.FastestRoute.SumTollEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumTollEmpty;
+            ret.FastestRoute.SumDistanceLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDistanceLoaded;
+            ret.FastestRoute.SumDurationLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDurationLoaded;
+            ret.FastestRoute.SumTollLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumTollLoaded;
             return ret;
 
         }

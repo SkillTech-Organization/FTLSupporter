@@ -16,9 +16,9 @@ namespace PMapUI.Forms
     public partial class dlgRouteVisDetails : BaseDialog
     {
 
-        private List<RouteVisCommonVars.CRouteVisDetails> m_details = new List<RouteVisCommonVars.CRouteVisDetails>();
+        private List<RouteVisCommonVars_DEPRECATED.CRouteVisDetails> m_details = new List<RouteVisCommonVars_DEPRECATED.CRouteVisDetails>();
 
-        public dlgRouteVisDetails(List<RouteVisCommonVars.CRouteVisDetails> p_details, string p_caption)
+        public dlgRouteVisDetails(List<RouteVisCommonVars_DEPRECATED.CRouteVisDetails> p_details, string p_caption)
             : base(eEditMode.infomode)
 
         {

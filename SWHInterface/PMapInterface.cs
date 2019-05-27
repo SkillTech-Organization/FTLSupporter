@@ -7,9 +7,12 @@ using PMapCore.Common;
 using PMapCore.Common.Parse;
 using PMapCore.Common.PPlan;
 using PMapCore.Licence;
+using PMapCore.LongProcess;
 using PMapCore.LongProcess.Base;
 using PMapCore.MapProvider;
 using PMapCore.Route;
+using PMapCore.Strings;
+using SWHInterface.BO;
 using SWHInterface.LongProcess;
 using System;
 using System.Collections.Generic;
@@ -40,84 +43,139 @@ namespace SWHInterface
         {
             DateTime dt = DateTime.Now;
             string sRetStatus = retOK;
+            List<dtXResult> resultArr = new List<dtXResult>();
 
-            dtXResult res = new dtXResult();
             try
             {
+                Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "')");
+
+
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
-                
-//1. geokódolás
+
+                //kicsit átverjük a validátort. Feltöltjük azokat a mezőket, amleyek egyébként kötelezőek, de nem szükésges a 
+                //menetlevél ellenőrzéshez
+                p_XTruck.TRK_CODE = string.IsNullOrWhiteSpace(p_XTruck.TRK_CODE) ? "TRK_CODE" : p_XTruck.TRK_CODE;
+                p_XTruck.TRK_REG_NUM = string.IsNullOrWhiteSpace(p_XTruck.TRK_REG_NUM) ? "TRK_REG_NUM" : p_XTruck.TRK_REG_NUM;
+                p_XTruck.CRR_CODE = string.IsNullOrWhiteSpace(p_XTruck.CRR_CODE) ? "CRR_CODE" : p_XTruck.CRR_CODE;
+                p_XTruck.WHS_CODE = string.IsNullOrWhiteSpace(p_XTruck.WHS_CODE) ? "WHS_CODE" : p_XTruck.WHS_CODE;
+                p_XTruck.CPP_LOADQTY = p_XTruck.CPP_LOADQTY == 0 ? 1 : p_XTruck.CPP_LOADQTY;
+                p_XTruck.CPP_LOADVOL = p_XTruck.CPP_LOADVOL == 0 ? 1 : p_XTruck.CPP_LOADVOL;
+                p_XTruck.TFP_KMCOST = p_XTruck.TFP_KMCOST == 0 ? 1 : p_XTruck.TFP_KMCOST;
+                p_XTruck.TFP_HOURCOST = p_XTruck.TFP_HOURCOST == 0 ? 1 : p_XTruck.TFP_HOURCOST;
+
+                /* Ezeket a mezőket kötelező kitölteni :
+                    kell TRK_WEIGHT 
+                    kell TRK_XHEIGHT 
+                    kell TRK_XWIDTH 
+                    kell TRK_ETOLLCAT 
+                    kell TRK_ENGINEEURO 
+                    kell SPV_VALUE1
+                    kell SPV_VALUE2
+                    kell SPV_VALUE3
+                    kell SPV_VALUE4
+                    kell SPV_VALUE5
+                    kell SPV_VALUE6
+                    kell SPV_VALUE7
+                */
+
+                List<ObjectValidator.ValidationError> validationErros = ObjectValidator.ValidateObject(p_XTruck);
+                if (validationErros.Count > 0)
+                {
+                    foreach (var err in validationErros)
+                    {
+                        dtXResult trkErrRes = new dtXResult()
+                        {
+                            ItemNo = 0,
+                            Field = err.Field,
+                            Status = dtXResult.EStatus.VALIDATIONERROR,
+                            ErrMessage = err.Message
+
+                        };
+                        resultArr.Add(trkErrRes);
+                        return resultArr;
+                    }
+                }
+
+                //1. geokódolás
                 ProcessNotifyIcon ni = new ProcessNotifyIcon();
                 DepotGeocodingProcess dp = new DepotGeocodingProcess(ni, p_lstRouteSection);
                 dp.RunWait();
 
-
-
-                //logVersion();
-                Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "')");
-                PMapCommonVars.Instance.ConnectToDB();
-                /*
-                string sErr;
-                if (RouteVisualisationData.FillData(p_lstRouteSection, p_TRK_ID, p_CalcTRK_ETOLLCAT, p_GetRouteWithTruckSpeeds, out sErr))
+                //1.1 geokódolás eredménye
+                string errResult = "";
+                foreach (var item in p_lstRouteSection)
                 {
-                    res.Status = dtXResult.EStatus.OK;
-                    res.Data = fillSummary();
 
+
+                    if (item.EDG_ID <= 0)
+                    {
+                        dtXResult errRes = new dtXResult();
+                        errRes.Status = dtXResult.EStatus.ERROR;
+                        errRes.ErrMessage = errResult;
+                        resultArr.Add(errRes);
+
+                        sRetStatus = retErr;
+                    }
+                }
+                if (sRetStatus == retErr)
+                {
+                    return resultArr;
+                }
+
+
+                //2. RouteData.Instance singleton feltoltese
+
+                InitRouteDataProcess irdp = new InitRouteDataProcess();
+                irdp.Run();
+                irdp.ProcessForm.ShowDialog();
+
+                //Az utolsó elemre rárakjuk a finish-t
+                p_lstRouteSection.Last().RouteSectionType = boXRouteSection.ERouteSectionType.Finish;
+
+
+                //
+                ProcessNotifyIcon ni2 = new ProcessNotifyIcon();
+                JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni2, p_lstRouteSection, p_XTruck);
+                rvdp.RunWait();
+
+                if (rvdp.Result != null)
+                {
+                    dtXResult OKRes = new dtXResult()
+                    {
+                        ItemNo = 0,
+                        Field = "",
+                        Status = dtXResult.EStatus.OK,
+                        ErrMessage = "",
+                        Data = rvdp.Result
+                    };
+                    resultArr.Add(OKRes);
                 }
                 else
                 {
-                    res.Status = dtXResult.EStatus.ERROR;
-                    res.ErrMessage = sErr;
-                    sRetStatus = retErr;
+                    dtXResult errRes = new dtXResult()
+                    {
+                        ItemNo = 0,
+                        Field = "",
+                        Status = dtXResult.EStatus.ERROR,
+                        ErrMessage = PMapMessages.E_JRNFORM_NORESULT
+                    };
+                    resultArr.Add(errRes);
                 }
-                */
+                return resultArr;
             }
             catch (Exception e)
             {
                 Util.ExceptionLog(e);
-                res.Status = dtXResult.EStatus.EXCEPTION;
-                res.ErrMessage = e.Message;
+                dtXResult expRes = new dtXResult();
+                expRes.Status = dtXResult.EStatus.EXCEPTION;
+                expRes.ErrMessage = e.Message;
                 sRetStatus = retErr;
+                resultArr.Add(expRes);
             }
-            //Util.Log2File(">>END:RouteVisualizationCalc()");
-
-            List<dtXResult> resArr = new List<dtXResult>();
-            resArr.Add(res);
-
-            return resArr;
+            //Util.Log2File(">>END:JourneyFormCheck()");
+            return resultArr;
         }
-
-        /// <summary>
-        /// Menetlevél ellenőrzés eredmény felépítése
-        /// </summary>
-        /// <returns></returns>
-        private boXRouteSummary fillSummary()
-        {
-            boXRouteSummary ret = new boXRouteSummary();
-            ret.ShortestRoute.SumDistance = RouteVisCommonVars.Instance.lstDetails[0].SumDistance;
-            ret.ShortestRoute.SumDuration = RouteVisCommonVars.Instance.lstDetails[0].SumDuration;
-            ret.ShortestRoute.SumToll = RouteVisCommonVars.Instance.lstDetails[0].SumToll;
-            ret.ShortestRoute.SumDistanceEmpty = RouteVisCommonVars.Instance.lstDetails[0].SumDistanceEmpty;
-            ret.ShortestRoute.SumDurationEmpty = RouteVisCommonVars.Instance.lstDetails[0].SumDurationEmpty;
-            ret.ShortestRoute.SumTollEmpty = RouteVisCommonVars.Instance.lstDetails[0].SumTollEmpty;
-            ret.ShortestRoute.SumDistanceLoaded = RouteVisCommonVars.Instance.lstDetails[0].SumDistanceLoaded;
-            ret.ShortestRoute.SumDurationLoaded = RouteVisCommonVars.Instance.lstDetails[0].SumDurationLoaded;
-            ret.ShortestRoute.SumTollLoaded = RouteVisCommonVars.Instance.lstDetails[0].SumTollLoaded;
-
-            ret.FastestRoute.SumDistance = RouteVisCommonVars.Instance.lstDetails[1].SumDistance;
-            ret.FastestRoute.SumDuration = RouteVisCommonVars.Instance.lstDetails[1].SumDuration;
-            ret.FastestRoute.SumToll = RouteVisCommonVars.Instance.lstDetails[1].SumToll;
-            ret.FastestRoute.SumDistanceEmpty = RouteVisCommonVars.Instance.lstDetails[1].SumDistanceEmpty;
-            ret.FastestRoute.SumDurationEmpty = RouteVisCommonVars.Instance.lstDetails[1].SumDurationEmpty;
-            ret.FastestRoute.SumTollEmpty = RouteVisCommonVars.Instance.lstDetails[1].SumTollEmpty;
-            ret.FastestRoute.SumDistanceLoaded = RouteVisCommonVars.Instance.lstDetails[1].SumDistanceLoaded;
-            ret.FastestRoute.SumDurationLoaded = RouteVisCommonVars.Instance.lstDetails[1].SumDurationLoaded;
-            ret.FastestRoute.SumTollLoaded = RouteVisCommonVars.Instance.lstDetails[1].SumTollLoaded;
-            return ret;
-
-        }
-
 
 
     }

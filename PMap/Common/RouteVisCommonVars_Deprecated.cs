@@ -11,7 +11,7 @@ using PMapCore.BO.DataXChange;
 namespace PMapCore.Common
 {
 
-    public sealed class RouteVisCommonVars
+    public sealed class RouteVisCommonVars_DEPRECATED
     {
         public const int TY_SHORTEST = 0;
         public const int TY_FASTEST = 1;
@@ -35,9 +35,9 @@ namespace PMapCore.Common
             public int EDG_MAXWIDTH { get; set; }
             public double Toll { get; set; }
             public boRoute Route { get; private set; }
-            public boXRouteSection.ERouteSectionType RouteSectionType { get; private set; }
+            public boXRouteSection_DEPRECATED.ERouteSectionType RouteSectionType { get; private set; }
             public int RouteSectionTypeInt { get { return (int)RouteSectionType; } }
-            public CRouteVisDetails(boRoute p_Route, boXRouteSection.ERouteSectionType p_RouteSectionType)
+            public CRouteVisDetails(boRoute p_Route, boXRouteSection_DEPRECATED.ERouteSectionType p_RouteSectionType)
             {
                 Route = p_Route;
                 RouteSectionType = p_RouteSectionType;
@@ -49,7 +49,7 @@ namespace PMapCore.Common
         {
             public boDepot Depot { get; set; }
             public int RouteSectionTypeInt { get { return (int)RouteSectionType; } }
-            public boXRouteSection.ERouteSectionType RouteSectionType { get; set; }
+            public boXRouteSection_DEPRECATED.ERouteSectionType RouteSectionType { get; set; }
             public int xxx { get { return 2; } }
             public bool ValidRoute { get; set; }
 
@@ -109,9 +109,9 @@ namespace PMapCore.Common
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
-        private static readonly Lazy<RouteVisCommonVars> m_instance = new Lazy<RouteVisCommonVars>(() => new RouteVisCommonVars(), true);
+        private static readonly Lazy<RouteVisCommonVars_DEPRECATED> m_instance = new Lazy<RouteVisCommonVars_DEPRECATED>(() => new RouteVisCommonVars_DEPRECATED(), true);
 
-        static public RouteVisCommonVars Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
+        static public RouteVisCommonVars_DEPRECATED Instance                                  //inicializálódik, ezért biztos létrejon az instance osztály)
         {
             get
             {
@@ -120,7 +120,7 @@ namespace PMapCore.Common
 
         }
 
-        private RouteVisCommonVars()
+        private RouteVisCommonVars_DEPRECATED()
         {
             GetRouteWithTruckSpeeds = true;
             lstRouteDepots = new List<CRouteDepots>();
@@ -135,7 +135,7 @@ namespace PMapCore.Common
         public PointLatLng CurrentPosition { get; set; }
         public List<CRouteDepots> lstRouteDepots { get; set; }
         public boTruck Truck { get; set; }
-        public int CalcTRK_ETOLLCAT { get; set; }
+        public int CalcTRK_ETOLLCAT { get; set; }               //
         public List<CRouteVis> lstDetails { get; set; }
         public int SelectedType { get; set; }
         public int SelectedDepID { get; set; }

@@ -14,10 +14,10 @@ namespace PMapCore.Common
         ChgDepotSelected                //Változott egy lerakó kiválasztottsága
     }
 
-    public class RouteVisEventArgs : EventArgs
+    public class RouteVisEventArgs_DEPRECATED : EventArgs
     {
         public eRouteVisEventMode EventMode { get; set; }
-        public RouteVisEventArgs(eRouteVisEventMode p_eventMode)
+        public RouteVisEventArgs_DEPRECATED(eRouteVisEventMode p_eventMode)
         {
             EventMode = p_eventMode;
         }

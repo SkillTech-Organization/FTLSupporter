@@ -38,8 +38,8 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
 
                     tbZoom.Minimum = Global.DefMinZoom;
                     tbZoom.Maximum = Global.DefMaxZoom;
-                    tbZoom.Value = RouteVisCommonVars.Instance.Zoom;
-                    switch (RouteVisCommonVars.Instance.TooltipMode)
+                    tbZoom.Value = RouteVisCommonVars_DEPRECATED.Instance.Zoom;
+                    switch (RouteVisCommonVars_DEPRECATED.Instance.TooltipMode)
                     {
                         case MarkerTooltipMode.OnMouseOver:
                             rdbOnMouseOver.Checked = true;
@@ -53,10 +53,10 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                         default:
                             break;
                     }
-                    gridDetails.DataSource = RouteVisCommonVars.Instance.lstDetails;
+                    gridDetails.DataSource = RouteVisCommonVars_DEPRECATED.Instance.lstDetails;
                     gridViewDetails.FocusedRowHandle = 0;
                     //                    gridDepots.DataSource = RouteVisCommonVars.Instance.lstRouteDepots.Select(i => i.Depot).ToList();
-                    gridDepots.DataSource = RouteVisCommonVars.Instance.lstRouteDepots;
+                    gridDepots.DataSource = RouteVisCommonVars_DEPRECATED.Instance.lstRouteDepots;
                     RepositoryItemImageComboBox itemImageComboBox = new RepositoryItemImageComboBox();
                     itemImageComboBox.Items.AddRange(new object[] {
 															  new DevExpress.XtraEditors.Controls.ImageComboBoxItem("Sports", "SPORTS", 1),
@@ -80,11 +80,11 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
 
         private void tbZoom_ValueChanged(object sender, EventArgs e)
         {
-            RouteVisCommonVars.Instance.Zoom = (tbZoom.Value);
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgZoom));
+            RouteVisCommonVars_DEPRECATED.Instance.Zoom = (tbZoom.Value);
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgZoom));
         }
 
-        public void RefreshPanel(RouteVisEventArgs p_evtArgs)
+        public void RefreshPanel(RouteVisEventArgs_DEPRECATED p_evtArgs)
         {
             switch (p_evtArgs.EventMode)
             {
@@ -93,12 +93,12 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
                     break;
                 case eRouteVisEventMode.ChgZoom:
                     tbZoom.ValueChanged -= new EventHandler(tbZoom_ValueChanged);
-                    tbZoom.Value = RouteVisCommonVars.Instance.Zoom;
+                    tbZoom.Value = RouteVisCommonVars_DEPRECATED.Instance.Zoom;
                     tbZoom.ValueChanged += new EventHandler(tbZoom_ValueChanged);
                     break;
                 case eRouteVisEventMode.ChgDepotSelected:
                     gridViewDepots.FocusedRowChanged -= new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewDepots_FocusedRowChanged);
-                    int rowHandle = gridViewDepots.LocateByValue(0, gridColumnID, RouteVisCommonVars.Instance.SelectedDepID);
+                    int rowHandle = gridViewDepots.LocateByValue(0, gridColumnID, RouteVisCommonVars_DEPRECATED.Instance.SelectedDepID);
                     if (rowHandle != GridControl.InvalidRowHandle)
                     {
                         gridViewDepots.FocusedRowHandle = rowHandle;
@@ -113,21 +113,21 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
 
         private void rdbNever_CheckedChanged(object sender, EventArgs e)
         {
-            RouteVisCommonVars.Instance.TooltipMode = MarkerTooltipMode.Never;
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
+            RouteVisCommonVars_DEPRECATED.Instance.TooltipMode = MarkerTooltipMode.Never;
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgTooltipMode));
         }
 
         private void rdbOnMouseOver_CheckedChanged(object sender, EventArgs e)
         {
-            RouteVisCommonVars.Instance.TooltipMode = MarkerTooltipMode.OnMouseOver;
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
+            RouteVisCommonVars_DEPRECATED.Instance.TooltipMode = MarkerTooltipMode.OnMouseOver;
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgTooltipMode));
 
         }
 
         private void rdbAlways_CheckedChanged(object sender, EventArgs e)
         {
-            RouteVisCommonVars.Instance.TooltipMode = MarkerTooltipMode.Always;
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgTooltipMode));
+            RouteVisCommonVars_DEPRECATED.Instance.TooltipMode = MarkerTooltipMode.Always;
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgTooltipMode));
         }
 
 
@@ -135,7 +135,7 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
         {
             if (e.FocusedRowHandle >= 0)
             {
-                RouteVisCommonVars.Instance.SelectedType = (int)gridViewDetails.GetRowCellValue(e.FocusedRowHandle, gridColumnType);
+                RouteVisCommonVars_DEPRECATED.Instance.SelectedType = (int)gridViewDetails.GetRowCellValue(e.FocusedRowHandle, gridColumnType);
             }
 
         }
@@ -147,8 +147,8 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
             int type = (int)gridViewDetails.GetRowCellValue(gridViewDetails.FocusedRowHandle, gridColumnType);
 
             CheckEdit chkEdt = (CheckEdit)sender;
-            RouteVisCommonVars.Instance.lstDetails[type].Visible = chkEdt.Checked;
-            DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgRouteVisible));
+            RouteVisCommonVars_DEPRECATED.Instance.lstDetails[type].Visible = chkEdt.Checked;
+            DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgRouteVisible));
 
         }
 
@@ -157,8 +157,8 @@ namespace PMapUI.Forms.Panels.frmRouteVisualization
             if (gridViewDepots.FocusedRowHandle >= 0)
             {
                 int ID = (int)gridViewDepots.GetRowCellValue(gridViewDepots.FocusedRowHandle, gridColumnID);
-                RouteVisCommonVars.Instance.SelectedDepID = ID;
-                DoNotifyDataChanged(new RouteVisEventArgs(eRouteVisEventMode.ChgDepotSelected));
+                RouteVisCommonVars_DEPRECATED.Instance.SelectedDepID = ID;
+                DoNotifyDataChanged(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ChgDepotSelected));
             }
         }
     }

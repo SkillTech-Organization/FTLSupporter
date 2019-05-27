@@ -451,6 +451,11 @@ namespace PMapCore.BLL
             return sRZN_ID_LIST;
         }
 
+        /// <summary>
+        /// RST_RESTRICTTYPE -hoz tartozó behajtási övezetek listája
+        /// </summary>
+        /// <param name="p_RST_ID"></param>
+        /// <returns></returns>
         public string GetRestZonesByRST_ID(int p_RST_ID)
         {
             string sRZN_ID_LIST = "";

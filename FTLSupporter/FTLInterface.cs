@@ -160,13 +160,13 @@ namespace FTLSupporter
                     }
                     else
                     {
-                        if (trk.GVWR <= 3500)
+                        if (trk.GVWR <= Global.RST_WEIGHT35)
                             trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_MAX35T);
-                        else if (trk.GVWR <= 7500)
+                        else if (trk.GVWR <= Global.RST_WEIGHT75)
                             trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_MAX75T);
-                        else if (trk.GVWR <= 12000)
+                        else if (trk.GVWR <= Global.RST_WEIGHT120)
                             trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_MAX12T);
-                        else if (trk.GVWR > 12000)
+                        else if (trk.GVWR > Global.RST_WEIGHT120)
                             trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_BIGGER12T);
                         else
                             trk.RZN_ID_LIST = FTLGetRestZonesByRST_ID(route, Global.RST_NORESTRICT);

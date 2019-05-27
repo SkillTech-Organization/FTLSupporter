@@ -885,7 +885,7 @@ namespace PMapCore.BLL
             else
             {
                 //p_TRK_ENGINEEURO == 1
-                if (p_TRK_ETOLLCAT == 2 || p_TRK_ETOLLCAT == 3)
+                if (p_TRK_ETOLLCAT == Global.ETOLLCAT_J2 || p_TRK_ETOLLCAT == Global.ETOLLCAT_J3)
                     dMultiplier = 1.15;
                 else
                     dMultiplier = 1.2;

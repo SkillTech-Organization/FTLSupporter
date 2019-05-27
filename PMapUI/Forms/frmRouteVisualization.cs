@@ -33,7 +33,7 @@ namespace PMapUI.Forms
     {
         private pnlRouteVisMap m_pnlRouteVisMap = null;
         private pnlRouteVisDetails m_pnlRouteVisDetails = null;
-        private List<boXRouteSection> m_lstRouteSection;
+        private List<boXRouteSection_DEPRECATED> m_lstRouteSection;
 
         private int m_TRK_ID;
 
@@ -41,7 +41,7 @@ namespace PMapUI.Forms
 
 
 
-        public frmRouteVisualization(List<boXRouteSection> p_lstRouteSection, int p_TRK_ID)
+        public frmRouteVisualization(List<boXRouteSection_DEPRECATED> p_lstRouteSection, int p_TRK_ID)
         {
             InitializeComponent();
             InitForm();
@@ -63,9 +63,9 @@ namespace PMapUI.Forms
 
                     PMapCommonVars.Instance.ConnectToDB();
                     
-                    RouteVisCommonVars.Instance.Zoom = Global.DefZoom;
-                    RouteVisCommonVars.Instance.TooltipMode = GMap.NET.WindowsForms.MarkerTooltipMode.OnMouseOver;
-                    RouteVisCommonVars.Instance.CurrentPosition = new PointLatLng(Global.DefPosLat, Global.DefPosLng);
+                    RouteVisCommonVars_DEPRECATED.Instance.Zoom = Global.DefZoom;
+                    RouteVisCommonVars_DEPRECATED.Instance.TooltipMode = GMap.NET.WindowsForms.MarkerTooltipMode.OnMouseOver;
+                    RouteVisCommonVars_DEPRECATED.Instance.CurrentPosition = new PointLatLng(Global.DefPosLat, Global.DefPosLng);
 
                     this.Text += "<< DB=" + PMapIniParams.Instance.DBConfigName + ">>";
                     RestoreLayout(true);
@@ -142,12 +142,12 @@ namespace PMapUI.Forms
 
         void m_pnlRouteVisDetails_NotifyDataChanged(object sender, EventArgs e)
         {
-            m_pnlRouteVisMap.RefreshPanel( (RouteVisEventArgs)e);
+            m_pnlRouteVisMap.RefreshPanel( (RouteVisEventArgs_DEPRECATED)e);
         }
 
         void m_pnlRouteVisMap_NotifyDataChanged(object sender, EventArgs e)
         {
-            m_pnlRouteVisDetails.RefreshPanel( (RouteVisEventArgs)e);
+            m_pnlRouteVisDetails.RefreshPanel( (RouteVisEventArgs_DEPRECATED)e);
         }
 
 
@@ -159,15 +159,15 @@ namespace PMapUI.Forms
 
         private void frmRouteVisualization_Load(object sender, EventArgs e)
         {
-            m_pnlRouteVisDetails.RefreshPanel(new RouteVisEventArgs(eRouteVisEventMode.ReInit));
-            m_pnlRouteVisMap.RefreshPanel(new RouteVisEventArgs(eRouteVisEventMode.ReInit));
+            m_pnlRouteVisDetails.RefreshPanel(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ReInit));
+            m_pnlRouteVisMap.RefreshPanel(new RouteVisEventArgs_DEPRECATED(eRouteVisEventMode.ReInit));
         }
 
         private void btnTourDetails_Click(object sender, EventArgs e)
         {
 
-            dlgRouteVisDetails dtl = new dlgRouteVisDetails(RouteVisCommonVars.Instance.lstDetails[RouteVisCommonVars.Instance.SelectedType].Details,
-                                    RouteVisCommonVars.Instance.SelectedType == RouteVisCommonVars.TY_FASTEST ? PMapMessages.M_ROUTVIS_FASTEST : PMapMessages.M_ROUTVIS_SHORTEST);
+            dlgRouteVisDetails dtl = new dlgRouteVisDetails(RouteVisCommonVars_DEPRECATED.Instance.lstDetails[RouteVisCommonVars_DEPRECATED.Instance.SelectedType].Details,
+                                    RouteVisCommonVars_DEPRECATED.Instance.SelectedType == RouteVisCommonVars_DEPRECATED.TY_FASTEST ? PMapMessages.M_PATH_FASTEST : PMapMessages.M_PATH_SHORTEST);
             dtl.ShowDialog();
         }
 
