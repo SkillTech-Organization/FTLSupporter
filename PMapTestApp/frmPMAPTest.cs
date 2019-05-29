@@ -951,7 +951,7 @@ namespace PMapTestApp
                 Xtrk.SPV_VALUE6 = PMapIniParams.Instance.dicSpeed[6];
                 Xtrk.SPV_VALUE7 = PMapIniParams.Instance.dicSpeed[7];
 
-                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk, false, 1);
+                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
 
                 dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
 

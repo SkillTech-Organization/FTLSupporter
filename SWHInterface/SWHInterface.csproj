@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="BO\boXRouteSection.cs" />
     <Compile Include="BO\boXRouteSummary.cs" />
+    <Compile Include="JourneyFormCheckX.cs" />
     <Compile Include="LongProcess\DepotGeocodingProcess.cs" />
     <Compile Include="LongProcess\JourneyFormDataProcess.cs" />
     <Compile Include="PMapInterface.cs" />
