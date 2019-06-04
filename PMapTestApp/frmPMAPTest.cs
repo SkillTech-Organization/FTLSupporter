@@ -513,27 +513,6 @@ namespace PMapTestApp
 
         private void button19_Click(object sender, EventArgs e)
         {
-            /* DEPRECATED
-             dlgTestRouteVis d = new dlgTestRouteVis();
-            if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                List<string> lstDepotID = new List<string>(d.txtDEPID.Text.Split(','));
-                List<dtXResult> res = (new VBInterface.PMapInterface()).RouteVisualizationCalc("", dbConf,
-                    lstDepotID.Select(i => new boXRouteSection_DEPRECATED()
-                    {
-                        Start_DEP_ID = Convert.ToInt32(i.Split(';')[0]),
-                        RouteSectionType = (boXRouteSection_DEPRECATED.ERouteSectionType)Enum.Parse(typeof(boXRouteSection_DEPRECATED.ERouteSectionType), i.Split(';')[1])
-                    }).ToList(), Convert.ToInt32(d.txtTRKID.Text), false, 1);
-                dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
-
-                dd.propertyGridCtrl1.SetObject(res.First());
-                var rr = (boXRouteSummary_DEPRECATED)res.First().Data;
-                dd.propertyGridCtrl2.SetObject(rr.FastestRoute);
-                dd.propertyGridCtrl3.SetObject(rr.ShortestRoute);
-                dd.ShowDialog();
-
-            }
-            */
         }
 
         private void button20_Click(object sender, EventArgs e)

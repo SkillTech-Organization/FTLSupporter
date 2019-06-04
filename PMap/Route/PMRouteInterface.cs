@@ -10,7 +10,6 @@ using GMap.NET.Internals;
 using System.Threading;
 using PMapCore.MapProvider;
 using PMapCore.Route;
-using Map.LongProcess;
 using PMapCore.BO;
 using PMapCore.Strings;
 using PMapCore.Common;

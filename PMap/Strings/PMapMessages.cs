@@ -127,12 +127,13 @@ namespace PMapCore.Strings
 
 
         public const string T_ROUTECHK = "Útvonal ellenőrzése";
-
+        /*
         public const string E_ROUTVIS_FATALERRINSTART_DEPRECATED = "RouteVisualization - Végzetes hiba programindulásnál!";
         public const string E_ROUTVIS_NOINTERNETCONN_DEPRECATED = "RouteVisualization - Nincs Internetkapcsolat!";
         public const string E_ROUTVIS_MISSINGDEPOTS_DEPRECATED = "Nem létező lerakó azonosítók:{0}";
         public const string E_ROUTVIS_MISSINGNODES_DEPRECATED = "Nincs geokódolva:{0}";
         public const string E_ROUTVIS_MISSINGTRK_DEPRECATED = "Nem létező jármű azonosító:{0}";
+        */
         public const string E_ROUTVIS_EMPTYINPUT_DEPRECATED = "Az lerakók listájának minimum 2 eleműnek kell lennie!";
 
         public const string M_ROUTVIS_LOADDATA_DEPRECATED = "Adatok betöltése";

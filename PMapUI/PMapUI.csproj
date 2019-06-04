@@ -150,12 +150,6 @@
     <Compile Include="Forms\dlgOptimize.Designer.cs">
       <DependentUpon>dlgOptimize.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\dlgRouteVisDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\dlgRouteVisDetails.Designer.cs">
-      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\dlgSendEMail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -192,12 +186,6 @@
     <Compile Include="Forms\frmPPlan.Designer.cs">
       <DependentUpon>frmPPlan.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmRouteVisualization.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmRouteVisualization.Designer.cs">
-      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Funcs\PlanEditFuncs.cs" />
     <Compile Include="Forms\Panels\frmPPlan\pnlPPlanEditor.cs">
       <SubType>Form</SubType>
@@ -228,18 +216,6 @@
     </Compile>
     <Compile Include="Forms\Panels\frmPPlan\pnlPPlanTours.Designer.cs">
       <DependentUpon>pnlPPlanTours.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.Designer.cs">
-      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.Designer.cs">
-      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
     </Compile>
     <Compile Include="Localize\Base\DXEditorLocalizer.cs" />
     <Compile Include="Localize\Base\DXGridLocalizer.cs" />
@@ -289,9 +265,6 @@
       <DependentUpon>dlgOptimize.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\dlgRouteVisDetails.resx">
-      <DependentUpon>dlgRouteVisDetails.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\dlgSendEMail.resx">
       <DependentUpon>dlgSendEMail.cs</DependentUpon>
     </EmbeddedResource>
@@ -315,9 +288,6 @@
       <DependentUpon>frmPPlan.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmRouteVisualization.resx">
-      <DependentUpon>frmRouteVisualization.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanEditor.resx">
       <DependentUpon>pnlPPlanEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -335,12 +305,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Panels\frmPPlan\pnlPPlanTours.resx">
       <DependentUpon>pnlPPlanTours.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisDetails.resx">
-      <DependentUpon>pnlRouteVisDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Panels\frmRouteVisualization\pnlRouteVisMap.resx">
-      <DependentUpon>pnlRouteVisMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

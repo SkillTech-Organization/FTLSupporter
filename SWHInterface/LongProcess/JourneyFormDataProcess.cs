@@ -301,31 +301,6 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
             return RZN_ID_LIST;
 
         }
-        private boXRouteSummary fillSummary()
-        {
-            boXRouteSummary ret = new boXRouteSummary();
-            ret.ShortestRoute.SumDistance = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDistance;
-            ret.ShortestRoute.SumDuration = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDuration;
-            ret.ShortestRoute.SumToll = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumToll;
-            ret.ShortestRoute.SumDistanceEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDistanceEmpty;
-            ret.ShortestRoute.SumDurationEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDurationEmpty;
-            ret.ShortestRoute.SumTollEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumTollEmpty;
-            ret.ShortestRoute.SumDistanceLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDistanceLoaded;
-            ret.ShortestRoute.SumDurationLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumDurationLoaded;
-            ret.ShortestRoute.SumTollLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[0].SumTollLoaded;
-
-            ret.FastestRoute.SumDistance = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDistance;
-            ret.FastestRoute.SumDuration = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDuration;
-            ret.FastestRoute.SumToll = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumToll;
-            ret.FastestRoute.SumDistanceEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDistanceEmpty;
-            ret.FastestRoute.SumDurationEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDurationEmpty;
-            ret.FastestRoute.SumTollEmpty = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumTollEmpty;
-            ret.FastestRoute.SumDistanceLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDistanceLoaded;
-            ret.FastestRoute.SumDurationLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumDurationLoaded;
-            ret.FastestRoute.SumTollLoaded = RouteVisCommonVars_DEPRECATED.Instance.lstDetails[1].SumTollLoaded;
-            return ret;
-
-        }
-
+ 
     }
 }
