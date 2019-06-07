@@ -58,7 +58,7 @@ namespace PMapCore.BLL.Report
                             "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
                             "left join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                             "left join NOD_NODE NOD on NOD.ID = Dep.NOD_ID " + Environment.NewLine +
-                            "left join ZIP_ZIPCODE ZIP on NOD.ZIP_NUM = ZIP.ZIP_NUM " + Environment.NewLine +
+                            "left join ZIP_ZIPCODE ZIP on NOD.ZIP_ID = ZIP.ID " + Environment.NewLine +
                             "left join WHS_WAREHOUSE WHS ON PTP.WHS_ID = WHS.ID " + Environment.NewLine +
                             "left join ORD_ORDER ORD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
                             "left join CTE_MPO MPO on MPO.ORD_ID = ORD.ID " + Environment.NewLine +

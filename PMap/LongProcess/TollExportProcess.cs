@@ -126,10 +126,10 @@ namespace PMapCore.LongProcess
                "DST.DST_DISTANCE, DST.DST_EDGES, NOD_FROM.NOD_XPOS as NOD_XPOS_FROM, NOD_FROM.NOD_YPOS as NOD_YPOS_FROM, NOD_TO.NOD_XPOS as NOD_XPOS_TO, NOD_TO.NOD_YPOS as NOD_YPOS_TO   " + Environment.NewLine +
                "from DEP_DEPOT DEP_FROM " + Environment.NewLine +
                "inner join NOD_NODE NOD_FROM on NOD_FROM.ID = DEP_FROM.NOD_ID " + Environment.NewLine +
-               "inner join ZIP_ZIPCODE ZIP_FROM on ZIP_FROM.ZIP_NUM = NOD_FROM.ZIP_NUM " + Environment.NewLine +
+               "inner join ZIP_ZIPCODE ZIP_FROM on ZIP_FROM.ID = NOD_FROM.ZIP_ID " + Environment.NewLine +
                "inner join DEP_DEPOT DEP_TO on DEP_TO.ID != DEP_FROM.ID " + Environment.NewLine +
                "inner join NOD_NODE NOD_TO on NOD_TO.ID = DEP_TO.NOD_ID " + Environment.NewLine +
-               "inner join ZIP_ZIPCODE ZIP_TO on ZIP_TO.ZIP_NUM = NOD_TO.ZIP_NUM " + Environment.NewLine +
+               "inner join ZIP_ZIPCODE ZIP_TO on ZIP_TO.ID = NOD_TO.ZIP_ID " + Environment.NewLine +
                "inner join DST_DISTANCE DST on DST.NOD_ID_FROM = DEP_FROM.NOD_ID and DST.NOD_ID_TO = DEP_TO.NOD_ID and " + Environment.NewLine +
                "							   DST.RZN_ID_LIST = ( select distinct   " + Environment.NewLine +
                "													isnull( stuff( (  select ',' + convert( varchar(MAX), RZN.ID )  " + Environment.NewLine +

@@ -671,9 +671,31 @@ namespace VBInterface
             return sRetStatus;
         }
 
+
+
+        public string DeleteOldDistances(string p_iniPath, string p_dbConf, int p_expiredIndays = -1)
+        {
+            string sRetStatus = retOK;
+            try
+            {
+                if (!PMapIniParams.Instance.Loaded)
+                    PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                    return retErr;
+
+
+            }
+            catch (Exception ex)
+            {
+                Util.ExceptionLog(ex);
+                UI.Error(ex.Message);
+                sRetStatus = retErr;
+            }
+            return sRetStatus;
+        }
         #endregion
 
- 
+
         #region Csak C#-ból hívható szolgáltatások
         public List<dtXResult> ImportDepots(string p_iniPath, string p_dbConf, List<boXDepot> p_depots, bool p_addAllTrucksToDepot = true)
         {

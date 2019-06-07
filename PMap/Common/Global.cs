@@ -38,6 +38,7 @@ namespace PMapCore.Common
         public const string iniTourRoute = "TourRoute";
         public const string iniTourpointToolTip = "TourpointToolTip";
         public const string iniTruckCode = "TruckCode";
+        public const string iniRoutesExpire = "RoutesExpire";
 
         public const string iniWeb = "Web";
         public const string iniAzureAccount = "AzureAccount";

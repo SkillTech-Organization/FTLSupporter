@@ -50,6 +50,7 @@ namespace PMapCore.Common
         public bool TourRoute { get; private set; }     //Egyedi túraútvonalak
         public string TourpointToolTip { get; private set; }     //Túrapont tooltip
         public string TruckCode { get; private set; }           //Járműkód
+        public int RoutesExpire { get; private set; }           //DST_DISTANCE érvényességei
 
 
         public string AzureAccount { get; private set; }
@@ -224,7 +225,14 @@ namespace PMapCore.Common
                 sTruckCode = "TRK_REG_NUM + case when isnull(TRK_TRAILER, '') <> '' then '/' + TRK_TRAILER else '' end";
             }
             TruckCode = sTruckCode;
-            
+
+
+            string sRoutesExpire = ini.ReadString(Global.iniPMap, Global.iniRoutesExpire);
+            if (sRoutesExpire != "")
+                RoutesExpire = Convert.ToInt32(sRoutesExpire);
+            else
+                RoutesExpire = -1;
+
 
             AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
             AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);

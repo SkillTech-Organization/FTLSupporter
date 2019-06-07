@@ -323,7 +323,7 @@ namespace PMapTestApp
                                    "EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4 " + Environment.NewLine +
                                    "from NOD_NODE NOD " + Environment.NewLine +
                                    "inner join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID or EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +
-                                   "inner join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = NOD.ZIP_NUM " + Environment.NewLine +
+                                   "inner join ZIP_ZIPCODE ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
                                    "where NOD.ID = " + NOD_ID.ToString() + " and EDG.ID=" + EDG_ID.ToString();
                     DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql);
                     if (dt.Rows.Count == 1)
@@ -335,7 +335,7 @@ namespace PMapTestApp
 
                     }
                     else
-                        UI.Message("Hiba a cím lekérdezésében! rekordszám:" + dt.Rows.Count.ToString());
+                        UI.Message("Hiba a cím lekérdezésében! Tételszám:" + dt.Rows.Count.ToString());
                 }
                 else
                 {
@@ -513,6 +513,10 @@ namespace PMapTestApp
 
         private void button19_Click(object sender, EventArgs e)
         {
+            PMapIniParams.Instance.ReadParams("", dbConf);
+            SQLServerAccess db = new SQLServerAccess();
+            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+
         }
 
         private void button20_Click(object sender, EventArgs e)

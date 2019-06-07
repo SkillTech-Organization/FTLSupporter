@@ -194,6 +194,10 @@ namespace PMapCore.Strings
 
         public const string REP_PAGE = "Lap:{0}/{1}";
 
+        public const string M_ROUTE_DELEXPIRED = "Adatbázis-karbantartás";
+
+        public const string E_DuplicatedZIP_NUM = "Az irányítószám nem állapítható meg egyértelműen! Irsz:{0}, város:{1}";
+
     }
 
 }

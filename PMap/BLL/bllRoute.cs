@@ -1038,7 +1038,7 @@ namespace PMapCore.BLL
         public boNode GetNode(int p_NOD_ID)
         {
 
-            string sSql = "select NOD.ID as NODID, ZIP.ID as ZIP_ID, * from NOD_NODE NOD left outer join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = nod.ZIP_NUM" + Environment.NewLine +
+            string sSql = "select NOD.ID as NODID, ZIP.ID as ZIP_ID, * from NOD_NODE NOD left outer join ZIP_ZIPCODE ZIP on ZIP.ID = NOD.ZIP_ID" + Environment.NewLine +
                    " where NOD.ID = ? ";
 
             DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID);
@@ -1236,13 +1236,13 @@ namespace PMapCore.BLL
                           "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
                           "  from NOD_NODE NOD " + Environment.NewLine +
                           "  inner join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID " + Environment.NewLine +
-                          "  inner join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = NOD.ZIP_NUM " + Environment.NewLine +
+                          "  inner join ZIP_ZIPCODE ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
                           " WHERECITY " + Environment.NewLine +
                           " UNION " + Environment.NewLine +
                           "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
                           "  from NOD_NODE NOD " + Environment.NewLine +
                           "  inner join EDG_EDGE EDG on EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +
-                          "  inner join ZIP_ZIPCODE ZIP on ZIP.ZIP_NUM = NOD.ZIP_NUM " + Environment.NewLine +
+                          "  inner join ZIP_ZIPCODE ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
                           " WHERECITY " + Environment.NewLine +
                           ") " + Environment.NewLine +
                           "select *, convert(varchar(max), decryptbykey(EDG_NAME_ENC)) as EDG_NAMEX, " + Environment.NewLine +
@@ -1506,11 +1506,11 @@ namespace PMapCore.BLL
                 sCity = sCity.Trim().ToUpper().Replace(",", "");
 
 
-                var zip1 = m_bllZip.GetZIPbyNum(edg.ZIP_NUM_FROM);
+                var zip1 = m_bllZip.GetZIPbyNumAndCity(edg.ZIP_NUM_FROM, sCity);
                 //       if (zip1 == null)
                 //           throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_FROM));
 
-                var zip2 = m_bllZip.GetZIPbyNum(edg.ZIP_NUM_TO);
+                var zip2 = m_bllZip.GetZIPbyNumAndCity(edg.ZIP_NUM_TO, sCity);
                 //       if (zip2 == null)
                 //            throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_TO));
 
@@ -1597,7 +1597,7 @@ namespace PMapCore.BLL
         public void UpdateNodeAddress(int ID, string p_NOD_NAME, string p_ZIP_NUM)
         {
             string sSQL = "update NOD_NODE set NODE_NAME=?, ZIP_NUM=? where ID=?";
-            PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQL, p_NOD_NAME, p_ZIP_NUM, ID);
+            DBA.ExecuteNonQuery(sSQL, p_NOD_NAME, p_ZIP_NUM, ID);
         }
 
         //"ENCRYPTBYKEY(KEY_GUID('EDGKey')," & getStr(EDG_NAME) & ")
@@ -1607,6 +1607,32 @@ namespace PMapCore.BLL
         public string EDG_STRNUM3 { get; set; }                     //páros oldal számozás kezdet
         public string EDG_STRNUM4 )
         open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************'
-        */  
+        */
+
+        public void DeleteOldDistances(int p_expiredIndays)
+        {
+            string sSQL = $"delete DST_DISTANCE from DST_DISTANCE " + Environment.NewLine +
+                            $"inner join ( select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO from DST_DISTANCE DST  " + Environment.NewLine +
+                            $"EXCEPT " + Environment.NewLine +
+                            $"select  NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO from " + Environment.NewLine +
+                            $"(select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
+                            $"  union  " + Environment.NewLine +
+                            $" select distinct dep.NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
+                            $" inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                            $" inner join PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                            $" where datediff( dd, PLN.PLN_DATE_E, getdate()) < {p_expiredIndays} " + Environment.NewLine +
+                            $") NOD_FROM  " + Environment.NewLine +
+                            $"inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                            $" union  " + Environment.NewLine +
+                            $" select distinct dep.NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
+                            $" inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                            $" inner join PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                            $" where datediff( dd, PLN.PLN_DATE_E, getdate()) < { p_expiredIndays} " + Environment.NewLine +
+                            $") NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
+                            $") delDST on delDST.NOD_ID_FROM=DST_DISTANCE.NOD_ID_FROM and delDST.NOD_ID_TO=DST_DISTANCE.NOD_ID_TO";
+
+            DBA.ExecuteNonQuery(sSQL);
+        }
+
     }
 }

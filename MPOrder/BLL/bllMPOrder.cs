@@ -393,7 +393,7 @@ namespace MPOrder.BLL
                             if (dep == null)
                             {
                                 //ZIP ID megállapítása
-                                var boZip = bllZipX.GetZIPbyNum(Int32.Parse("0" + item.ShippAddressZipCode.Replace(".", "")));
+                                var boZip = bllZipX.GetZIPbyNumAndCity(Int32.Parse("0" + item.ShippAddressZipCode.Replace(".", "")), item.ShippingAddressCity);
 
                                 string fullAddr = (item.ShippAddressZipCode + " " + item.ShippingAddressCity + " " + item.ShippingAddressStreetAndNumber).Trim();
                                 boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;

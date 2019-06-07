@@ -72,7 +72,7 @@ namespace PMapCore.BLL.DataXChange
                             result.Add(itemRes);
                         }
 
-                        zip = bllZIP.GetZIPbyNum(xDepot.ZIP_NUM);
+                        zip = bllZIP.GetZIPbyNumAndCity(xDepot.ZIP_NUM, xDepot.ZIP_CITY);
 
                         if (zip == null)
                         {

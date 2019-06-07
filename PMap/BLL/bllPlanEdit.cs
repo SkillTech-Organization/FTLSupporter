@@ -614,7 +614,7 @@ namespace PMapCore.BLL
         public void CreateNewTour(int p_PLN_ID, int p_WHS_ID, int p_TPL_ID, Color p_color, DateTime p_WhsS, DateTime p_WhsE, int p_srvTime)
         {
 
-            using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
+            using (TransactionBlock transObj = new TransactionBlock(DBA))
             {
                 try
                 {
@@ -636,7 +636,7 @@ namespace PMapCore.BLL
                 }
                 catch (Exception exc)
                 {
-                    PMapCommonVars.Instance.CT_DB.Rollback();
+                    DBA.Rollback();
                     throw;
                 }
             }
@@ -1281,7 +1281,7 @@ namespace PMapCore.BLL
             {
                 try
                 {
-                    bllPlan pl = new bllPlan(PMapCommonVars.Instance.CT_DB);
+                    bllPlan pl = new bllPlan(DBA);
                     if (pl.GetPlanByName(p_PLN_NAME) != null)
                     {
                         ret.Status = boXNewPlan.EStatus.ERROR;
@@ -1391,7 +1391,7 @@ namespace PMapCore.BLL
 
 
                     //A geokódolás nélküli lerakókat összegyűjtöm
-                    bllDepot dep = new bllDepot(PMapCommonVars.Instance.CT_DB);
+                    bllDepot dep = new bllDepot(DBA);
                     ret.lstDepWithoutGeoCoding = dep.GetDeptosWithoutGeocodingByPlan(PLN_ID);
 
                     //kitöröljük a problémás tételeket

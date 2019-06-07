@@ -10,10 +10,11 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using PMapCore.BLL.Base;
 
 namespace PMapCore.BLL
 {
-    public static class bllHistory
+    public static class bllHistory 
     {
         public enum EMsgCodes
         {

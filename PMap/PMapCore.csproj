@@ -220,6 +220,7 @@
       <DependentUpon>dlgWait.cs</DependentUpon>
     </Compile>
     <Compile Include="LongProcess\CalcRoutesForTour.cs" />
+    <Compile Include="LongProcess\DeleteExpiredRoutesProcess.cs" />
     <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
     <Compile Include="WebTrace\BllWebTraceTour.cs" />
     <Compile Include="WebTrace\PMMapPoint.cs" />

@@ -7,6 +7,7 @@ using PMapCore.BLL.Base;
 using PMapCore.BO;
 using System.Data;
 using PMapCore.Common;
+using PMapCore.Strings;
 
 namespace PMapCore.BLL
 {
@@ -38,15 +39,23 @@ namespace PMapCore.BLL
         }
 
 
-        public boZIP GetZIPbyNum(int p_ZIP_NUM)
+        public boZIP GetZIPbyNumAndCity(int p_ZIP_NUM, string ZIP_CITY)
         {
-            List<boZIP> res = GetAllZips("ZIP.ZIP_NUM=?", p_ZIP_NUM);
+            List<boZIP> res = GetAllZips("ZIP.ZIP_NUM=? and upper(ZIP_CITY) like ?", p_ZIP_NUM, ZIP_CITY.ToUpper());
             if (res.Count == 0)
-                return null;
+            {
+                List<boZIP> res2 = GetAllZips("ZIP.ZIP_NUM=? ", p_ZIP_NUM);
+                if (res2.Count == 0)
+                    return null;
+                else if (res2.Count == 1)
+                    return res2[0];
+                else
+                    throw new DuplicatedZIP_NUMException(string.Format( PMapMessages.E_DuplicatedZIP_NUM, p_ZIP_NUM, ZIP_CITY));
+            }
             else if (res.Count == 1)
                 return res[0];
             else
-                throw new DuplicatedZIP_NUMException();
+                throw new DuplicatedZIP_NUMException(string.Format(PMapMessages.E_DuplicatedZIP_NUM, p_ZIP_NUM, ZIP_CITY));
         }
         public boZIP GetZIPbyID(int p_ID)
         {

@@ -87,7 +87,7 @@ namespace PMapCore.BLL
 
 
                     sSQLStr = "delete  SEM_SEMAPHORE where SEM_CODE=? and  PLN_ID = ? and SEM_OWNER = ?";
-                    PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQLStr,SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
+                   DBA.ExecuteNonQuery(sSQLStr,SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
 
                     int newPTP_ID = DBA.InsertPar("SEM_SEMAPHORE",
                         "SEM_CODE", SEM_CODE_PLAN,
@@ -114,13 +114,13 @@ namespace PMapCore.BLL
                 try
                 {
                     String sSQLStr = "delete  SEM_SEMAPHORE where SEM_CODE=? and  PLN_ID = ? and SEM_OWNER = ?";
-                    PMapCommonVars.Instance.CT_DB.ExecuteNonQuery(sSQLStr, SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
+                    DBA.ExecuteNonQuery(sSQLStr, SEM_CODE_PLAN, p_PLN_ID, System.Environment.MachineName);
 
                     return SEMValues.SMV_FREE;
                 }
                 catch (Exception e)
                 {
-                    PMapCommonVars.Instance.CT_DB.Rollback();
+                    DBA.Rollback();
                     ExceptionDispatchInfo.Capture(e).Throw();
                     throw;
                 }
