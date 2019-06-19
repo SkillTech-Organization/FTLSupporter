@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BO\boJourneyFormResult.cs" />
     <Compile Include="BO\boXRouteSection.cs" />
     <Compile Include="BO\boXRouteSummary.cs" />
     <Compile Include="JourneyFormCheckX.cs" />

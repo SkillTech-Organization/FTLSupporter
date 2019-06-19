@@ -913,7 +913,9 @@ namespace PMapTestApp
                         ZIP_NUM = dep.ZIP_NUM,
                         ZIP_CITY = dep.ZIP_CITY,
                         DEP_ADRSTREET = dep.DEP_ADRSTREET,
-                        DEP_ADRNUM = dep.DEP_ADRNUM
+                        DEP_ADRNUM = dep.DEP_ADRNUM,
+                        Lat = dep.NOD_YPOS / Global.LatLngDivider,
+                        Lng = dep.NOD_XPOS / Global.LatLngDivider
                     };
 
                    lstRouteSection.Add(item);
@@ -930,17 +932,79 @@ namespace PMapTestApp
                 Xtrk.SPV_VALUE6 = PMapIniParams.Instance.dicSpeed[6];
                 Xtrk.SPV_VALUE7 = PMapIniParams.Instance.dicSpeed[7];
 
-                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
+                /*
+                lstRouteSection.Clear();
+                var item1 = new boXRouteSection()
+                {
+                    RouteSectionType = boXRouteSection.ERouteSectionType.Loaded,
+                    DEP_NAME = "Service",
+                    ZIP_NUM = 2800,
+                    ZIP_CITY = "Tatabánya",
+                    DEP_ADRSTREET = "Táncsis Mihály út",
+                    DEP_ADRNUM = "2"
+                };
+                lstRouteSection.Add(item1);
+
+                var item2 = new boXRouteSection()
+                {
+                    RouteSectionType = boXRouteSection.ERouteSectionType.Loaded,
+                    DEP_NAME = "XY",
+                    ZIP_NUM = 3100,
+                    ZIP_CITY = "Salgótarján",
+                    DEP_ADRSTREET = "Pesti út",
+                    DEP_ADRNUM = "32"
+                };
+                lstRouteSection.Add(item2);
+                
+
+                Xtrk = new boXTruck
+                {
+                    TRK_CODE = "LDV-718",
+                    TRK_REG_NUM = null,
+                    TRK_TRAILER = null,
+                    TRK_WEIGHT = 14700,
+                    TRK_XHEIGHT = 0,
+                    TRK_XWIDTH = 0,
+                    TRK_HEIGHT = 0,
+                    TRK_WIDTH = 0,
+                    TRK_LENGTH = 0,
+                    TRK_GPS = false,
+                    TRK_BACKPANEL = false,
+                    TRK_LOGO = false,
+                    TRK_AXLENUM = 0,
+                    TRK_ETOLLCAT = 4,
+                    TRK_ENGINEEURO = 2,
+                    TRK_IDLETIME = 0,
+                    TRK_ACTIVE = false,
+                    TRK_COMMENT = null,
+                    CRR_CODE = null,
+                    WHS_CODE = null,
+                    SPV_VALUE1 = 70,
+                    SPV_VALUE2 = 60,
+                    SPV_VALUE3 = 50,
+                    SPV_VALUE4 = 40,
+                    SPV_VALUE5 = 35,
+                    SPV_VALUE6 = 15,
+                    SPV_VALUE7 = 15,
+                    CPP_LOADQTY = 0,
+                    CPP_LOADVOL = 0,
+                    TFP_FIXCOST = 0,
+                    TFP_KMCOST = 0,
+                    TFP_HOURCOST = 0
+                };
+                */
+                    List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
 
                 dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
-
                 dd.propertyGridCtrl1.SetObject(res.First());
                 if (res.First().Data != null)
                 {
-                    var rr = (boXRouteSummary)res.First().Data;
-                    dd.propertyGridCtrl2.SetObject(rr.FastestRoute);
-                    dd.propertyGridCtrl3.SetObject(rr.ShortestRoute);
+                   var rr = (boJourneyFormResult)res.First().Data;
+                    dd.propertyGridCtrl2.SetObject(rr.TotalSummary.FastestRoute);
+                    dd.propertyGridCtrl3.SetObject(rr.TotalSummary.ShortestRoute);
                 }
+                var json = new JavaScriptSerializer().Serialize(res);
+
                 dd.ShowDialog();
             }
 

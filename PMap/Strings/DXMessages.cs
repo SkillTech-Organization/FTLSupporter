@@ -61,6 +61,8 @@ namespace PMapCore.Strings
         public const string E_PLN_TOOIBIG_INTERVAL = "Túl nagy intervallum!";
 
         public const string RQ_TourSection = "Az útvonal-szakasz típus megadása kötelező!";
+        public const string RQ_LAT = "Hosszúsági fok megadása kötelező!";
+        public const string RQ_LNG = "Szélességi fok megadása kötelező!";
 
     }
 }

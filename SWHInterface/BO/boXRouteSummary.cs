@@ -14,6 +14,8 @@ namespace SWHInterface.BO
 
         public class boXRouteSummaryDetails
         {
+
+
             [DisplayNameAttributeX(Name = "Távolság", Order = 2)]
             public double SumDistance { get; set; }
             [DisplayNameAttributeX(Name = "Menetidő", Order = 3)]
@@ -39,6 +41,11 @@ namespace SWHInterface.BO
         }
 
 
+        [Browsable(false)]
+        public boXRouteSection FromPoint { get; set; } = null;
+
+        [Browsable(false)]
+        public boXRouteSection ToPoint { get; set; } = null;
 
         [Browsable(false)]
         public boXRouteSummaryDetails ShortestRoute { get; set; }

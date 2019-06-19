@@ -16,6 +16,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static SWHInterface.BO.boXRouteSummary;
 
 namespace SWHInterface.LongProcess
 {
@@ -45,12 +46,12 @@ Feladat lépései:
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         private bllRoute m_bllRoute = null;
         private Dictionary<int, string> m_rdt = null;   //Úttípusok
-
+        private string m_RZN_ID_LIST;
 
         //ebből kell kiolvasni az eredményt
-        public boXRouteSummary Result { get; set; } = null;
+        public boJourneyFormResult Result { get; set; } = new boJourneyFormResult();
 
-        public JourneyFormDataProcess(ProcessNotifyIcon p_NotifyIcon, List<boXRouteSection> p_lstRouteSection, boXTruck p_XTruck)
+        public JourneyFormDataProcess(ProcessNotifyIcon p_NotifyIcon, List<boXRouteSection> p_lstRouteSection, boXTruck p_XTruck, string p_RZN_ID_LIST)
             : base(p_NotifyIcon, ThreadPriority.Normal)
         {
             m_lstRouteSection = p_lstRouteSection;
@@ -58,6 +59,7 @@ Feladat lépései:
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
             m_bllRoute = new bllRoute(m_DB);
+            m_RZN_ID_LIST = p_RZN_ID_LIST;
         }
         protected override void DoWork()
         {
@@ -65,17 +67,6 @@ Feladat lépései:
             {
                 //Súly alapján megállapítjuk a behajtási övezeteket (RZN_ID_LIST)
                 //
-                string RZN_ID_LIST = "";
-                if (m_XTruck.TRK_WEIGHT <= Global.RST_WEIGHT35)
-                    RZN_ID_LIST = GetRestZonesByRST_ID(Global.RST_MAX35T);
-                else if (m_XTruck.TRK_WEIGHT <= Global.RST_WEIGHT75)
-                    RZN_ID_LIST = GetRestZonesByRST_ID(Global.RST_MAX75T);
-                else if (m_XTruck.TRK_WEIGHT <= Global.RST_WEIGHT120)
-                    RZN_ID_LIST = GetRestZonesByRST_ID(Global.RST_MAX12T);
-                else if (m_XTruck.TRK_WEIGHT > Global.RST_WEIGHT120)
-                    RZN_ID_LIST = GetRestZonesByRST_ID(Global.RST_BIGGER12T);
-                else
-                    RZN_ID_LIST = GetRestZonesByRST_ID(Global.RST_NORESTRICT);
 
                 m_rdt = m_bllRoute.GetRoadTypesToDict();
 
@@ -88,7 +79,7 @@ Feladat lépései:
                 Dictionary<string, List<int>[]> NeighborsFull = null;
                 Dictionary<string, List<int>[]> NeighborsCut = null;
 
-                var routePar = new CRoutePars() { RZN_ID_LIST = RZN_ID_LIST, Weight = m_XTruck.TRK_WEIGHT, Height = m_XTruck.TRK_XHEIGHT, Width = m_XTruck.TRK_XWIDTH };
+                var routePar = new CRoutePars() { RZN_ID_LIST = m_RZN_ID_LIST, Weight = m_XTruck.TRK_WEIGHT, Height = m_XTruck.TRK_XHEIGHT, Width = m_XTruck.TRK_XWIDTH };
 
                 RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary, null);
 
@@ -102,6 +93,11 @@ Feladat lépései:
                 {
 Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
 
+                    var itemResult = new boXRouteSummary();
+                    itemResult.FromPoint = m_lstRouteSection[i];
+                    itemResult.ToPoint = m_lstRouteSection[i+1];
+
+
                     //Legrövidebb út
                     boRoute routeS = provider.GetRoute(m_lstRouteSection[i].NOD_ID, m_lstRouteSection[i + 1].NOD_ID, routePar,
                                     NeighborsFull[routePar.Hash],
@@ -110,7 +106,7 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
 
                     if (routeS != null)
                     {
-                        genData(RouteVisS, routeS,
+                        itemResult.ShortestRoute = genData(RouteVisS, routeS,
                             m_lstRouteSection[i].NOD_ID, m_lstRouteSection[i + 1].NOD_ID,
                             m_XTruck, m_lstRouteSection[i].RouteSectionType, ref lastETLCODE_S);
                     }
@@ -123,12 +119,12 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
 
                     if (routeF != null)
                     {
-                        genData(RouteVisF, routeF,
+                        itemResult.FastestRoute = genData(RouteVisF, routeF,
                             m_lstRouteSection[i].NOD_ID, m_lstRouteSection[i + 1].NOD_ID,
                             m_XTruck, m_lstRouteSection[i].RouteSectionType, ref lastETLCODE_F);
                     }
 
-
+                    Result.SectionSummaries.Add(itemResult);
                     if (EventStop != null && EventStop.WaitOne(0, true))
                     {
                         EventStopped.Set();
@@ -137,28 +133,25 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
                 }
 
                 //Az eredmény összeállítsa
-                Result = new boXRouteSummary();
-                Result.ShortestRoute.SumDistance = RouteVisS.SumDistance;
-                Result.ShortestRoute.SumDuration = RouteVisS.SumDuration;
-                Result.ShortestRoute.SumToll = RouteVisS.SumToll;
-                Result.ShortestRoute.SumDistanceEmpty = RouteVisS.SumDistanceEmpty;
-                Result.ShortestRoute.SumDurationEmpty = RouteVisS.SumDurationEmpty;
-                Result.ShortestRoute.SumTollEmpty = RouteVisS.SumTollEmpty;
-                Result.ShortestRoute.SumDistanceLoaded = RouteVisS.SumDistanceLoaded;
-                Result.ShortestRoute.SumDurationLoaded = RouteVisS.SumDurationLoaded;
-                Result.ShortestRoute.SumTollLoaded = RouteVisS.SumTollLoaded;
+                Result.TotalSummary.ShortestRoute.SumDistance = RouteVisS.SumDistance;
+                Result.TotalSummary.ShortestRoute.SumDuration = RouteVisS.SumDuration;
+                Result.TotalSummary.ShortestRoute.SumToll = RouteVisS.SumToll;
+                Result.TotalSummary.ShortestRoute.SumDistanceEmpty = RouteVisS.SumDistanceEmpty;
+                Result.TotalSummary.ShortestRoute.SumDurationEmpty = RouteVisS.SumDurationEmpty;
+                Result.TotalSummary.ShortestRoute.SumTollEmpty = RouteVisS.SumTollEmpty;
+                Result.TotalSummary.ShortestRoute.SumDistanceLoaded = RouteVisS.SumDistanceLoaded;
+                Result.TotalSummary.ShortestRoute.SumDurationLoaded = RouteVisS.SumDurationLoaded;
+                Result.TotalSummary.ShortestRoute.SumTollLoaded = RouteVisS.SumTollLoaded;
 
-                Result.FastestRoute.SumDistance = RouteVisF.SumDistance;
-                Result.FastestRoute.SumDuration = RouteVisF.SumDuration;
-                Result.FastestRoute.SumToll = RouteVisF.SumToll;
-                Result.FastestRoute.SumDistanceEmpty = RouteVisF.SumDistanceEmpty;
-                Result.FastestRoute.SumDurationEmpty = RouteVisF.SumDurationEmpty;
-                Result.FastestRoute.SumTollEmpty = RouteVisF.SumTollEmpty;
-                Result.FastestRoute.SumDistanceLoaded = RouteVisF.SumDistanceLoaded;
-                Result.FastestRoute.SumDurationLoaded = RouteVisF.SumDurationLoaded;
-                Result.FastestRoute.SumTollLoaded = RouteVisF.SumTollLoaded;
-
-
+                Result.TotalSummary.FastestRoute.SumDistance = RouteVisF.SumDistance;
+                Result.TotalSummary.FastestRoute.SumDuration = RouteVisF.SumDuration;
+                Result.TotalSummary.FastestRoute.SumToll = RouteVisF.SumToll;
+                Result.TotalSummary.FastestRoute.SumDistanceEmpty = RouteVisF.SumDistanceEmpty;
+                Result.TotalSummary.FastestRoute.SumDurationEmpty = RouteVisF.SumDurationEmpty;
+                Result.TotalSummary.FastestRoute.SumTollEmpty = RouteVisF.SumTollEmpty;
+                Result.TotalSummary.FastestRoute.SumDistanceLoaded = RouteVisF.SumDistanceLoaded;
+                Result.TotalSummary.FastestRoute.SumDurationLoaded = RouteVisF.SumDurationLoaded;
+                Result.TotalSummary.FastestRoute.SumTollLoaded = RouteVisF.SumTollLoaded;
             }
 
             catch (Exception e)
@@ -175,10 +168,11 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
             }
 
         }
-        private void genData(XRoute p_RouteVis, boRoute p_route,
+        private boXRouteSummaryDetails genData(XRoute p_RouteVisSummary, boRoute p_route,
                 int p_NOD_ID_FROM, int p_NOD_ID_TO, boXTruck p_Truck,
                boXRouteSection.ERouteSectionType p_RouteSectionType, ref string p_lastETLCODE)
         {
+            boXRouteSummaryDetails res = new boXRouteSummaryDetails();
             Dictionary<int, int> speeds = new Dictionary<int, int>();
             speeds.Add(1, p_Truck.SPV_VALUE1);
             speeds.Add(2, p_Truck.SPV_VALUE2);
@@ -189,24 +183,34 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
             speeds.Add(7, p_Truck.SPV_VALUE7);
             double dTollMultiplier = bllPlanEdit.GetTollMultiplier(p_Truck.TRK_ETOLLCAT, p_Truck.TRK_ENGINEEURO);
 
-            p_RouteVis.SumDistance += p_route.DST_DISTANCE;
+            p_RouteVisSummary.SumDistance += p_route.DST_DISTANCE;
+            res.SumDistance = p_route.DST_DISTANCE;
 
-            p_RouteVis.SumDuration += bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+            p_RouteVisSummary.SumDuration += bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+            res.SumDuration = bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
 
 
             /*******/
             if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Empty)
             {
-                p_RouteVis.SumDistanceEmpty += p_route.DST_DISTANCE;
-                p_RouteVis.SumDurationEmpty += bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+                p_RouteVisSummary.SumDistanceEmpty += p_route.DST_DISTANCE;
+                p_RouteVisSummary.SumDurationEmpty += bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+
+                res.SumDistanceEmpty = p_route.DST_DISTANCE;
+                res.SumDurationEmpty = bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+
             }
 
 
             /*******/
             if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Loaded)
             {
-                p_RouteVis.SumDistanceLoaded += p_route.DST_DISTANCE;
-                p_RouteVis.SumDurationLoaded += bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+                p_RouteVisSummary.SumDistanceLoaded += p_route.DST_DISTANCE;
+                p_RouteVisSummary.SumDurationLoaded += bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+
+                res.SumDistanceLoaded = p_route.DST_DISTANCE;
+                res.SumDurationLoaded = bllPlanEdit.GetDuration(p_route.Edges, speeds, Global.defWeather);
+
             }
 
 
@@ -234,7 +238,7 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
                     LastETLCODE != edge.EDG_ETLCODE)
                 {
                     detail = new XRouteDetails(p_route, p_RouteSectionType);
-                    p_RouteVis.Details.Add(detail);
+                    p_RouteVisSummary.Details.Add(detail);
                     //Részletező
                     detail.NOD_ID_FROM = p_NOD_ID_FROM;
                     detail.NOD_ID_TO = p_NOD_ID_TO;
@@ -272,34 +276,24 @@ Console.WriteLine($"{i} --> {m_lstRouteSection[i].DEP_NAME}");
 
                     if (edge.EDG_ETLCODE.Length > 0)
                     {
-                        p_RouteVis.SumToll += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                        p_RouteVisSummary.SumToll += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                        res.SumToll += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
 
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Empty)
-                            p_RouteVis.SumTollEmpty += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                        {
+                            p_RouteVisSummary.SumTollEmpty += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                            res.SumTollEmpty += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                        }
                         if (p_RouteSectionType == boXRouteSection.ERouteSectionType.Loaded)
-                            p_RouteVis.SumTollLoaded += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
-
+                        {
+                            p_RouteVisSummary.SumTollLoaded += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                            res.SumTollLoaded += edge.Tolls[p_Truck.TRK_ETOLLCAT] * dTollMultiplier;
+                        }
                     }
                     p_lastETLCODE = edge.EDG_ETLCODE;
                 }
             }
-        }
-
-
-        private string GetRestZonesByRST_ID(int p_RST)
-        {
-            string RZN_ID_LIST = "";
-            if (PMapCommonVars.Instance.RZN_ID_LISTCahce.ContainsKey(p_RST))
-            {
-                RZN_ID_LIST = PMapCommonVars.Instance.RZN_ID_LISTCahce[p_RST];
-            }
-            else
-            {
-                RZN_ID_LIST = m_bllRoute.GetRestZonesByRST_ID(p_RST);
-                PMapCommonVars.Instance.RZN_ID_LISTCahce.Add(p_RST, RZN_ID_LIST);
-            }
-            return RZN_ID_LIST;
-
+            return res;
         }
  
     }

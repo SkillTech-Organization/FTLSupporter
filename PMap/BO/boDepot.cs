@@ -105,10 +105,10 @@ namespace PMapCore.BO
 
 
         [WriteFieldAttribute(Insert = false, Update = false)]
-        public double NOD_XPOS { get; set; }
+        public double NOD_XPOS { get; set; }                    //LNG
 
         [WriteFieldAttribute(Insert = false, Update = false)]
-        public double NOD_YPOS { get; set; }
+        public double NOD_YPOS { get; set; }                    //LAT
 
         [WriteFieldAttribute(Insert = false, Update = false)]
         [ScriptIgnore]

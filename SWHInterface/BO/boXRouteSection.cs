@@ -39,27 +39,28 @@ namespace SWHInterface.BO
         [DisplayNameAttributeX(Name = "Lerakónév", Order = 2)]
         public string DEP_NAME { get; set; }
 
-        //[Required(ErrorMessage = DXMessages.RQ_ZIP_NUM)]
+
+        [Required(ErrorMessage = DXMessages.RQ_LAT)]
+        [DisplayNameAttributeX(Name = "Hosszúsági fok", Order = 14)]
+        public double Lat { get; set; }
+
+        [Required(ErrorMessage = DXMessages.RQ_LNG)]
+        [DisplayNameAttributeX(Name = "Szélességi fok", Order = 15)]
+        public double Lng { get; set; }
+
+        /*A címadatok csak tájékoztató jellegűek, nem kötelező tölteni*/
         [DisplayNameAttributeX(Name = "Irányítószám", Order = 3)]
         public int ZIP_NUM { get; set; }
 
         [DisplayNameAttributeX(Name = "Város", Order = 4)]
         public string ZIP_CITY { get; set; }
 
-        [Required(ErrorMessage = DXMessages.RQ_DEP_ADRSTREET)]
         [DisplayNameAttributeX(Name = "Utca/közterület", Order = 5)]
         public string DEP_ADRSTREET { get; set; }
 
         [DisplayNameAttributeX(Name = "Házszám", Order = 6)]
         public string DEP_ADRNUM { get; set; }
-
-
-
-        [DisplayNameAttributeX(Name = "Hosszúsági fok", Order = 14)]
-        internal double Lat { get; set; }
-
-        [DisplayNameAttributeX(Name = "Szélességi fok", Order = 15)]
-        internal double Lng { get; set; }
+        
 
         internal int ZIP_ID { get; set; } = -1;
         internal int NOD_ID { get; set; } = -1;
