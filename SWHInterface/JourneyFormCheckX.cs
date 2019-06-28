@@ -93,12 +93,42 @@ namespace SWHInterface
                             Field = err.Field,
                             Status = dtXResult.EStatus.VALIDATIONERROR,
                             ErrMessage = err.Message
+                            //Data = p_XTruck
 
                         };
                         resultArr.Add(trkErrRes);
                         return resultArr;
                     }
                 }
+
+                var ItemNo = 0;
+                foreach (var item in p_lstRouteSection)
+                {
+                    var validationErrosRoute = ObjectValidator.ValidateObject(item);
+                    if (validationErrosRoute.Count > 0)
+                    {
+                        foreach (var err in validationErrosRoute)
+                        {
+                            dtXResult routeErrRes = new dtXResult()
+                            {
+                                ItemNo = ItemNo,
+                                Field = err.Field,
+                                Status = dtXResult.EStatus.VALIDATIONERROR,
+                                ErrMessage = err.Message
+                                //Data = item
+                            };
+                            resultArr.Add(routeErrRes);
+                            sRetStatus = retErr;
+                        }
+                    }
+                    ItemNo++;
+                }
+
+                if (sRetStatus == retErr)
+                {
+                    return resultArr;
+                }
+
 
                 ProcessNotifyIcon ni = new ProcessNotifyIcon();
 
@@ -147,7 +177,7 @@ namespace SWHInterface
                 else
                     RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_NORESTRICT);
 
-
+                ItemNo = 0;
                 foreach (var item in p_lstRouteSection)
                 {
                     var NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(item.Lat, item.Lng), RZN_ID_LIST, p_XTruck.TRK_WEIGHT, p_XTruck.TRK_HEIGHT, p_XTruck.TRK_WIDTH);
@@ -161,13 +191,15 @@ namespace SWHInterface
                     {
                         dtXResult errRes = new dtXResult();
                         errRes.Status = dtXResult.EStatus.ERROR;
-                        errRes.Field = item.itemRes.Field;
+                        //errRes.Field = item.itemRes.Field;
                         errRes.ErrMessage = PMapMessages.E_JRNFORM_WRONGLATLNG;
+                        //errRes.Data = item;
+                        errRes.ItemNo = ItemNo;
                         resultArr.Add(errRes);
 
                         sRetStatus = retErr;
                     }
-
+                    ItemNo++;
                 }
 
                 if (sRetStatus == retErr)

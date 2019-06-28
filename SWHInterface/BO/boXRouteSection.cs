@@ -39,12 +39,11 @@ namespace SWHInterface.BO
         [DisplayNameAttributeX(Name = "Lerakónév", Order = 2)]
         public string DEP_NAME { get; set; }
 
-
-        [Required(ErrorMessage = DXMessages.RQ_LAT)]
+        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqual, 0, DXMessages.RQ_LAT)]
         [DisplayNameAttributeX(Name = "Hosszúsági fok", Order = 14)]
         public double Lat { get; set; }
 
-        [Required(ErrorMessage = DXMessages.RQ_LNG)]
+        [ErrorIfConstAttrX(EvalMode.IsSmallerOrEqual, 0, DXMessages.RQ_LNG)]
         [DisplayNameAttributeX(Name = "Szélességi fok", Order = 15)]
         public double Lng { get; set; }
 
