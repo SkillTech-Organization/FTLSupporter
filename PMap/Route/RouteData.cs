@@ -301,11 +301,9 @@ namespace PMapCore.Route
             bool CalcForCompletedTour = false;
 
 
-            Util.Log2File("PrepareMap available 1: " + GC.GetTotalMemory(false).ToString());
+            Util.Log2File($"PrepareMap available { (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K");
 
             int nEdgCnt = 0;
-
-            Util.Log2File("PrepareMap available 2: " + GC.GetTotalMemory(false).ToString());
 
             string[] aRZN = aRZN = p_RoutePar.RZN_ID_LIST.Split(',');
             List<int> tourPointsRzn = new List<int>();

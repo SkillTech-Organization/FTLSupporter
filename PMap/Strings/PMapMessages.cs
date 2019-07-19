@@ -93,7 +93,10 @@ namespace PMapCore.Strings
         public const string M_OPT_DST_PROC = "Inicializálás: távolságok-feldolgozás {0}/{1}";
         public const string M_OPT_TOURS = "Inicializálás: létező túrák betöltése";
         public const string M_OPT_LOADMAPDATA = "Térképadatok betöltése";
-        
+
+        public const string E_OPT_ERREXITED = "Optimizer process has exited!";
+        public const string E_OPT_OPTSTOPPED = "Optimizer process has stopped!";
+        public const string E_OPT_OPTEXCEPTION = "Optimizer process has an Exception:{0}";
 
         public const string M_OPT_CREATEFILE = "Problémafájl létrehozása";
 

@@ -33,7 +33,8 @@ namespace PMapCore.BLL.Report
                             "CTE as (" + Environment.NewLine +
                             "select distinct " + sTruck + " as TRUCK, TRK_ID, " + Environment.NewLine +
                             "coalesce(MPO.CustomerOrderNumber, ORD_NUM, '') AS ORD_NUM, " + Environment.NewLine +
-                            "coalesce(MPO.sumGrossWeightPlannedX, ORD_QTY, '') AS ORD_QTY, " + Environment.NewLine +
+//                            "coalesce(MPO.sumGrossWeightPlannedX, ORD_QTY, '') AS ORD_QTY, " + Environment.NewLine +
+                            "ORD_QTY AS ORD_QTY, " + Environment.NewLine +
                             "case when PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " then coalesce(MPO.CustomerCode, DEP_NAME, '') else WHS_NAME end AS CLIENT,  " + Environment.NewLine +
                             "case when PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " then isnull(convert(varchar(max), ZIP.ZIP_NUM), '') +' ' + isnull(ZIP.ZIP_CITY, '') + ' ' + DEP_ADRSTREET else '' end AS DEP_ADRSTREET,  " + Environment.NewLine +
                             "case when PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " then DEP_ADRNUM else '' end AS DEP_ADRNUM, " + Environment.NewLine +
@@ -50,8 +51,8 @@ namespace PMapCore.BLL.Report
                             "PTP.PTP_ARRTIME, PTP.PTP_TOLL, PTP.PTP_DISTANCE, " + Environment.NewLine +
                             "PTP_TYPE, TPL.PLN_ID as PLN_ID , " + Environment.NewLine +
                             "MPO.Bordero as BorderoX, " + Environment.NewLine +
-                            "case when PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " then DEP.NOD_ID else WHS.NOD_ID end AS NODID, PTP_ORDER," + Environment.NewLine +
-                            "MPO.ORD_ID, MPO.CustomerOrderNumber, MPO.ADR, NOD.NOD_NUM " + Environment.NewLine +
+                            "case when PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " then DEP.NOD_ID else WHS.NOD_ID end AS NOD_ID, PTP_ORDER," + Environment.NewLine +
+                            "ORD.ID as ORD_ID, MPO.CustomerOrderNumber, MPO.ADR, NOD.NOD_NUM " + Environment.NewLine +
                             "FROM CTE_TPL TPL " + Environment.NewLine +
                             "inner join TRK_TRUCK TRK on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
                             "inner join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -99,7 +100,9 @@ namespace PMapCore.BLL.Report
                             PTP_TOLL = Util.getFieldValue<double>(o, "PTP_TOLL"),
                             PTP_DISTANCE = Util.getFieldValue<double>(o, "PTP_DISTANCE"),
                             Bordero = Util.getFieldValue<string>(o, "Bordero"),
-                            ADR = Util.getFieldValue<bool>(o, "ADR")
+                            ADR = Util.getFieldValue<bool>(o, "ADR"),
+                            NOD_ID = Util.getFieldValue<int>(o, "NOD_ID"),
+                            ORD_ID = Util.getFieldValue<int>(o, "ORD_ID")
                         });
             return linq.ToList();
         }

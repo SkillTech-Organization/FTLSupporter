@@ -17,7 +17,7 @@ namespace PMapCore.LongProcess
     {
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         public DeleteExpiredRoutesProcess()
-            : base(new BaseSilngleProgressDialog(1, 2, PMapMessages.M_OPT_LOADMAPDATA, false), System.Threading.ThreadPriority.Normal)
+            : base(new BaseSilngleProgressDialog(1, 3, PMapMessages.M_ROUTE_DELEXPIRED, false), System.Threading.ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
@@ -25,11 +25,15 @@ namespace PMapCore.LongProcess
         }
         protected override void DoWork()
         {
-            bllRoute route = new bllRoute(m_DB);
-            route.DeleteOldDistances(PMapIniParams.Instance.RoutesExpire);
-            this.ProcessForm.NextStep();
-
-
+            if (PMapIniParams.Instance.RoutesExpire > 0)
+            {
+                bllRoute route = new bllRoute(m_DB);
+                this.ProcessForm.NextStep();
+                route.DeleteOldDistances(PMapIniParams.Instance.RoutesExpire);
+                this.ProcessForm.NextStep();
+        //Egyelőre nem használjuk        m_DB.ExecuteNonQuery("DBCC SHRINKDATABASE("+m_DB.Conn.Database +", 20)");
+                this.ProcessForm.NextStep();
+            }
         }
     }
 

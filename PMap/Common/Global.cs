@@ -13,6 +13,7 @@ namespace PMapCore.Common
         public static object lockObjectInit = new object();
         //        public static CalcRouteLocker lockObjectCalc = new CalcRouteLocker();
         public static object lockObjectCalc = new object();
+        public static object lockForOptimizerFiles = new object();
 
         public const string PMapName = "PMap";
         public const string IniFileName = "PMap.ini";
@@ -61,6 +62,8 @@ namespace PMapCore.Common
         public const string iniDestTraffic = "DestTraffic";
         public const string iniCutMapForRouting = "CutMapForRouting";
         public const string iniCutExtDegree = "CutExtDegree";
+        public const string CalcPMapRoutesMemTreshold = "CalcPMapRoutesMemTreshold";
+
 
         public const string iniSpeeds = "Speeds";
         public const string iniSpeed = "Speed";
@@ -250,6 +253,7 @@ namespace PMapCore.Common
 
         public const string OPT_NOERROR = "Errors that occured during the computation:\r\n";
 
+        public const string CLCROUTE_OWNER = "calculatePMapRoutes";
 
     }
 }

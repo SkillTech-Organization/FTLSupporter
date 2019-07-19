@@ -460,6 +460,7 @@ namespace VBInterface
 
                             PMapCommonVars.Instance.ConnectToDB();
 
+   
                             sRetStatus = calculatePMapRoutesByPlan(p_PLN_ID, p_savePoints) ? retOK : retFailed;
 
 
@@ -498,15 +499,22 @@ namespace VBInterface
         private bool calculatePMapRoutesByPlan(int p_PLN_ID, bool p_savePoints)
         {
             bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            bllSemaphore bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
             List<boRoute> res = bllRoute.GetDistancelessPlanNodes(p_PLN_ID);
             if (res.Count == 0)
                 return true;
 
             bool bOK = false;
+
+            bllSemaphore.SetCalcRoutePlanSemaphore(p_PLN_ID, Global.CLCROUTE_OWNER);
+
             if (PMapIniParams.Instance.RouteThreadNum > 1)
                 bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, p_savePoints);
             else
                 bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, p_savePoints);
+
+            if(bOK)
+                bllSemaphore.FreeCalcRoutePlanSemaphore(p_PLN_ID, Global.CLCROUTE_OWNER);
 
             System.GC.Collect();
             return bOK;
@@ -673,7 +681,7 @@ namespace VBInterface
 
 
 
-        public string DeleteOldDistances(string p_iniPath, string p_dbConf, int p_expiredIndays = -1)
+        public string DeleteExpiredRoutes(string p_iniPath, string p_dbConf)
         {
             string sRetStatus = retOK;
             try
@@ -683,6 +691,9 @@ namespace VBInterface
                 if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
                     return retErr;
 
+                DeleteExpiredRoutesProcess derp = new DeleteExpiredRoutesProcess();
+                derp.Run();
+                derp.ProcessForm.ShowDialog();
 
             }
             catch (Exception ex)

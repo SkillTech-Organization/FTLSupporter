@@ -809,10 +809,14 @@ namespace PMapUI.Forms
         {
             bllRoute bllRoute = new bllRoute(PMapCommonVars.Instance.CT_DB);
             List<boRoute> res = bllRoute.GetDistancelessPlanNodes(m_PPlanCommonVars.PLN_ID);
+            bllSemaphore bllSemaphore = new bllSemaphore(PMapCommonVars.Instance.CT_DB);
+
             if (res.Count == 0)
                 return;
 
             bool bOK = false;
+
+            bllSemaphore.SetCalcRoutePlanSemaphore(m_PPlanCommonVars.PLN_ID, Global.CLCROUTE_OWNER);
 
             if (PMapIniParams.Instance.RouteThreadNum > 1)
                 bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
@@ -821,6 +825,7 @@ namespace PMapUI.Forms
 
             if (bOK)
             {
+                bllSemaphore.FreeCalcRoutePlanSemaphore(m_PPlanCommonVars.PLN_ID, Global.CLCROUTE_OWNER);
                 //                    UI.Message(PMapMessages.M_PEDIT_CALCDST_END);
             }
         }

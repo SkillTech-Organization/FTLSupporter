@@ -7,15 +7,15 @@ using System.Text;
 namespace PMapCore.Cache
 {
   
-    public class LogForRouteCache : LockHolder<object>
+    public class LockForRouteCache : LockHolder<object>
     {
-        public LogForRouteCache(object handle, int milliSecondTimeout)
+        public LockForRouteCache(object handle, int milliSecondTimeout)
             : base(handle, milliSecondTimeout)
         {
 
         }
 
-        public LogForRouteCache(object handle)
+        public LockForRouteCache(object handle)
             : base(handle)
         {
         }

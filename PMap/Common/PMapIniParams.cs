@@ -63,6 +63,7 @@ namespace PMapCore.Common
         public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
         public ThreadPriority CalcPMapRoutesByOrders { get; private set; }
 
+
         public bool GeocodingByGoogle { get; private set; }
 
         public int RouteThreadNum { get; private set; }
@@ -70,6 +71,7 @@ namespace PMapCore.Common
         public bool DestTraffic { get; private set; }
         public bool CutMapForRouting { get;  set; }           //Útvonalszámítás vágja-e a térképet?
         public double CutExtDegree { get; private set; }               //A kivágásnál mekkora ráhagyással kel dolgozni? (fokban megadva)
+        public int CalcPMapRoutesMemTreshold { get; private set; }      //Útvonalszámítás memória KB-ben 
 
         public Dictionary<int, int> dicSpeed { get; private set; }
 
@@ -259,7 +261,6 @@ namespace PMapCore.Common
             else
                 CalcPMapRoutesByOrders = ThreadPriority.Normal;
 
-
             string sGeocodingByGoogle = ini.ReadString(Global.iniGeocoding, Global.iniGeocodeByGoogle);
             GeocodingByGoogle = (sGeocodingByGoogle == "1" || sGeocodingByGoogle.ToLower() == "true");
 
@@ -283,6 +284,13 @@ namespace PMapCore.Common
             CutExtDegree = Convert.ToDouble("0" + sCutExtDegree.Replace(',', '.'), CultureInfo.InvariantCulture);
             if (CutExtDegree <= 0)
                 CutExtDegree = 0.05;
+
+
+            string sCalcPMapRoutesMemTreshold = ini.ReadString(Global.iniRoute, Global.CalcPMapRoutesMemTreshold);
+            if (sCalcPMapRoutesMemTreshold != "")
+                CalcPMapRoutesMemTreshold = Convert.ToInt32(sCalcPMapRoutesMemTreshold);
+            else
+                CalcPMapRoutesMemTreshold = 100;
 
 
             dicSpeed = new Dictionary<int, int>();

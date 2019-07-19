@@ -18,9 +18,10 @@ namespace PMapUI.Printing
     {
 
 
+        private const int wINX = 40;
         private const int wORD_NUM = 150;
         private const int wClient = 270;
-        private const int wFullAddr = 410;
+        private const int wFullAddr = 370;
         private const int wORD_QTY = 100;
         private const string reportFont = "Microsoft Sans Serif";
         private const string MAPEI_ORDPREFIX = "HUN ";
@@ -94,6 +95,10 @@ namespace PMapUI.Printing
 
             var col = 0;
             var sides = BorderSide.All;
+
+            graph.DrawString("", foreColor, new Rectangle(col, 0, wINX, 25), sides);
+            col += wINX;
+
             graph.DrawString("Megrendelés száma", foreColor, new Rectangle(col, 0, wORD_NUM, 25), sides);
             col += wORD_NUM;
 
@@ -132,7 +137,10 @@ namespace PMapUI.Printing
             double dToll = 0;
             double dDistance = 0;
             List<string> lstRZN = new List<string>();
-
+            string prevBordero = "";
+            int index = 1;
+            int NOD_ID = -1;
+            int ORD_ID = -1;
             foreach (var item in m_tourList)
             {
 
@@ -146,17 +154,23 @@ namespace PMapUI.Printing
                         this.PrintingSystem.InsertPageBreak(row);
                         row += 2;
                     }
+                }
 
-                    if (!string.IsNullOrWhiteSpace(item.Bordero))
-                    {
+                if (!string.IsNullOrWhiteSpace(item.Bordero) && item.Bordero != prevBordero)
+                {
 
-                        var fwMeasure = graph.MeasureString(DEF_BORDERO_LABEL);
-                        var brick1 = graph.DrawString(DEF_BORDERO_LABEL, foreColor, new Rectangle(0, row, (int)fwMeasure.Width + 1, height), BorderSide.None);
-                        var brick2 = graph.DrawString(item.Bordero, foreColor, new Rectangle((int)fwMeasure.Width + 1, row, wORD_NUM / 2, height), BorderSide.None);
-                        brick2.Font = new Font(reportFont, 8, FontStyle.Bold);
-                        row += height;
-                    }
+                    var fwMeasure = graph.MeasureString(DEF_BORDERO_LABEL);
+                    var brick1 = graph.DrawString(DEF_BORDERO_LABEL, foreColor, new Rectangle(0, row, (int)fwMeasure.Width + 1, height), BorderSide.None);
+                    var brick2 = graph.DrawString(item.Bordero, foreColor, new Rectangle((int)fwMeasure.Width + 1, row, wORD_NUM / 2, height), BorderSide.None);
+                    brick2.Font = new Font(reportFont, 8, FontStyle.Bold);
+                    row += height;
 
+                    prevBordero = item.Bordero;
+                }
+
+
+                if (sTRUCK != item.TRUCK)
+                {
                     graph.DrawString("Jármű:", foreColor, new Rectangle(0, row, wORD_NUM / 2, height), BorderSide.None);
                     var brTruck = graph.DrawString(item.TRUCK, foreColor, new Rectangle(wORD_NUM / 2, row, wORD_NUM, height), BorderSide.None);
                     brTruck.Font = new Font(reportFont, 8, FontStyle.Bold);
@@ -180,6 +194,14 @@ namespace PMapUI.Printing
                     lstRZN = new List<string>();
 
                 }
+
+                if (item.PTP_TYPE == Global.PTP_TYPE_WHS_S)
+                {
+                    index = 0;
+                    NOD_ID = -1;
+                    ORD_ID = -1;
+                }
+
                 var col = 0;
                 var sides = BorderSide.None;
 
@@ -192,6 +214,14 @@ namespace PMapUI.Printing
                     sORD_NUM = xItems.First();
                 }
 
+                if (item.PTP_TYPE == Global.PTP_TYPE_DEP)
+                {
+                    var txtInx = graph.DrawString(index.ToString(), foreColor, new Rectangle(col, row, wINX, height), sides);
+                    txtInx.HorzAlignment = DevExpress.Utils.HorzAlignment.Far;
+                }
+                col += wINX;
+                index++;
+
                 graph.DrawString(sORD_NUM, foreColor, new Rectangle(col, row, wORD_NUM, height), sides);
                 col += wORD_NUM;
 
@@ -201,16 +231,32 @@ namespace PMapUI.Printing
                 graph.DrawString(item.FullAddr, foreColor, new Rectangle(col, row, wFullAddr, height), sides);
                 col += wFullAddr;
 
-                var txtBrick = graph.DrawString(item.ORD_QTY.ToString(Global.NUMFORMAT), foreColor, new Rectangle(col, row, wORD_QTY, height), sides);
-                txtBrick.HorzAlignment = DevExpress.Utils.HorzAlignment.Far;
+                TextBrick txtBrickORD_QTY;
+                if (ORD_ID != item.ORD_ID)
+                {
+                    txtBrickORD_QTY = graph.DrawString(item.ORD_QTY.ToString(Global.NUMFORMAT), foreColor, new Rectangle(col, row, wORD_QTY, height), sides);
+                }
+                else
+                {
+                    txtBrickORD_QTY  = graph.DrawString("-\"-" , foreColor, new Rectangle(col, row, wORD_QTY, height), sides);
+                }
+                txtBrickORD_QTY.HorzAlignment = DevExpress.Utils.HorzAlignment.Far;
 
                 col += wORD_QTY;
 
 
-                Qty += item.ORD_QTY;
-                dToll += item.PTP_TOLL;
-                dDistance += item.PTP_DISTANCE;
+                if (ORD_ID != item.ORD_ID)
+                {
+                    Qty += item.ORD_QTY;
+                }
 
+                if (NOD_ID != item.NOD_ID)
+                {
+                    dToll += item.PTP_TOLL;
+                    dDistance += item.PTP_DISTANCE;
+                }
+                NOD_ID = item.NOD_ID;
+                ORD_ID = item.ORD_ID;
                 var lstRZNWrk = item.RZN_Code_List.Split(',');
                 foreach (var rzn in lstRZNWrk)
                 {

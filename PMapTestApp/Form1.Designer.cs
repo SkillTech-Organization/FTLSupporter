@@ -285,7 +285,7 @@
             this.button19.Name = "button19";
             this.button19.Size = new System.Drawing.Size(223, 34);
             this.button19.TabIndex = 21;
-            this.button19.Text = "RoutesExpored teszt";
+            this.button19.Text = "DeleteExpiredRoutes teszt";
             this.button19.UseVisualStyleBackColor = true;
             this.button19.Click += new System.EventHandler(this.button19_Click);
             // 

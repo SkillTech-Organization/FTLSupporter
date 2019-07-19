@@ -134,7 +134,7 @@ namespace PMapCore.Route
             bool bCompleted = true;
 
             DateTime dtStart = DateTime.Now;
-            TimeSpan tspDiff;
+            TimeSpan tspDiff = new TimeSpan();
 
 
             Util.Log2File("GetPMapRoutesMulti START " + Util.GetSysInfo());
@@ -189,7 +189,7 @@ namespace PMapCore.Route
 
 
                 List<CalcPMapRouteProcess> distList = new List<CalcPMapRouteProcess>();
-                List<CalcPMapRouteProcess> lstGdp = new List<CalcPMapRouteProcess>();
+                    List<CalcPMapRouteProcess> lstGdp = new List<CalcPMapRouteProcess>();
                 for (int i = 0; i < PMapIniParams.Instance.RouteThreadNum; i++)
                 {
                     CalcPMapRouteProcess gdp = null;
@@ -223,17 +223,20 @@ namespace PMapCore.Route
                 System.GC.Collect();
                 System.GC.WaitForPendingFinalizers();
 
+                Util.Log2File("GetPMapRoutesMulti  END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
+
             }
             catch (Exception e)
             {
-                ExceptionDispatchInfo.Capture(e).Throw();
-                throw;
+                Util.ExceptionLog(e);
+                Util.Log2File("GetPMapRoutesMulti  EXCEPTION :  " + e.Message);
+                //ExceptionDispatchInfo.Capture(e).Throw();
+                //throw;
             }
             finally
             {
                 GMaps.Instance.UseRouteCache = bUseRouteCache;
             }
-            Util.Log2File("GetPMapRoutesMulti  END   " + Util.GetSysInfo() + " Időtartam:" + tspDiff.ToString() + " Átlag(ms):" + (tspDiff.Duration().TotalMilliseconds / p_CalcDistances.Count));
             return bCompleted;
         }
     }

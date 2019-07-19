@@ -256,7 +256,7 @@ namespace PMapCore.BLL
                 p_RZN_ID_LIST = "";
 
             boRoute result = null;
-            using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+            using (LockForRouteCache lockObj = new LockForRouteCache(RouteCache.Locker))
             {
                 result = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
                                     w.NOD_ID_TO == p_NOD_ID_TO &&
@@ -341,7 +341,7 @@ namespace PMapCore.BLL
 
                 if (result != null)
                 {
-                    using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+                    using (LockForRouteCache lockObj = new LockForRouteCache(RouteCache.Locker))
                     {
                         RouteCache.Instance.Items.Add(result);
                     }
@@ -362,7 +362,7 @@ namespace PMapCore.BLL
 
             MapRoute result = null;
 
-            using (LogForRouteCache lockObj = new LogForRouteCache(RouteCache.Locker))
+            using (LockForRouteCache lockObj = new LockForRouteCache(RouteCache.Locker))
             {
                 var boResult = RouteCache.Instance.Items.Where(w => w.NOD_ID_FROM == p_NOD_ID_FROM &&
                                     w.NOD_ID_TO == p_NOD_ID_TO &&

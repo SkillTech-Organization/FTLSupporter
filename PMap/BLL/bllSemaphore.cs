@@ -15,6 +15,7 @@ namespace PMapCore.BLL
     public class bllSemaphore : bllBase
     {
         private const string SEM_CODE_PLAN = "PLAN";
+        private const string SEM_CODE_CALCROUTEPLAN = "CALCROUTEPLAN";
 
         // lehetseges szemafor ertekek
         /*
@@ -127,6 +128,52 @@ namespace PMapCore.BLL
             }
 
         }
+
+        public SEMValues SetCalcRoutePlanSemaphore(long p_PLN_ID, string p_OWNER)
+        {
+            using (TransactionBlock transObj = new TransactionBlock(DBA))
+            {
+                try
+                {
+                    int newPTP_ID = DBA.InsertPar("SEM_SEMAPHORE",
+                        "SEM_CODE", SEM_CODE_CALCROUTEPLAN,
+                        "PLN_ID", p_PLN_ID,
+                        "SEM_VALUE", SEMValues.SMV_LOCKED,
+                        "SEM_OWNER", p_OWNER);
+                    DBA.Commit();
+
+                    return SEMValues.SMV_FREE;
+                }
+                catch (Exception e)
+                {
+                    DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
+                    throw;
+                }
+            }
+        }
+        public SEMValues FreeCalcRoutePlanSemaphore(long p_PLN_ID,string p_OWNER)
+        {
+            using (TransactionBlock transObj = new TransactionBlock(DBA))
+            {
+                try
+                {
+                    String sSQLStr = "delete  SEM_SEMAPHORE where SEM_CODE=? and  PLN_ID = ? and SEM_OWNER = ?";
+                    DBA.ExecuteNonQuery(sSQLStr, SEM_CODE_CALCROUTEPLAN, p_PLN_ID, p_OWNER);
+
+                    return SEMValues.SMV_FREE;
+                }
+                catch (Exception e)
+                {
+                    DBA.Rollback();
+                    ExceptionDispatchInfo.Capture(e).Throw();
+                    throw;
+                }
+            }
+
+        }
+
+
     }
 }
 

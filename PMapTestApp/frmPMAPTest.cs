@@ -514,8 +514,7 @@ namespace PMapTestApp
         private void button19_Click(object sender, EventArgs e)
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
-            SQLServerAccess db = new SQLServerAccess();
-            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            var res =  (new VBInterface.PMapInterface()).DeleteExpiredRoutes("", dbConf);
 
         }
 

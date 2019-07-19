@@ -60,5 +60,8 @@ namespace PMapCore.BO.Report
         [DisplayNameAttributeX(Name = "ADR", Order = 15)]      //MAPEI spec
         public bool ADR { get; set; }
 
+        public int NOD_ID { get; set; }
+        public int ORD_ID { get; set; }
+
     }
 }

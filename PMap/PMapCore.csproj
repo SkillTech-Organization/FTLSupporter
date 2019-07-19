@@ -203,7 +203,7 @@
     <Compile Include="BO\boPackUnit.cs" />
     <Compile Include="BO\boUser.cs" />
     <Compile Include="BO\Report\boRepPlan.cs" />
-    <Compile Include="Cache\LogForRouteCache.cs" />
+    <Compile Include="Cache\LockForRouteCache.cs" />
     <Compile Include="Cache\RouteCache.cs" />
     <Compile Include="Common\AuthCryptoHelper.cs" />
     <Compile Include="Common\Azure\AzureBllBase.cs" />

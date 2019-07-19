@@ -12,6 +12,7 @@ using PMapCore.DB.Base;
 using System.Diagnostics;
 using PMapCore.Common;
 using System.Windows.Forms;
+using System.Runtime.ExceptionServices;
 
 namespace PMapCore.LongProcess
 {
@@ -102,26 +103,45 @@ namespace PMapCore.LongProcess
                         finalize(eOptResult.OK);
                         return;
                     }
-                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
+                    using (GlobalLocker lockObj = new GlobalLocker(Global.lockForOptimizerFiles))
                     {
-                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding(Global.PM_ENCODING));
-                        string content = file.ReadToEnd();
-                        if (content.CompareTo(Global.OPT_NOERROR) != 0)
+                        if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
                         {
-                            m_optimize = null;
-                            finalize(eOptResult.Error, String.Format(PMapMessages.E_PVRP_ERR, content));
-                            ProcessForm.SetVisible( false);
-                            return;
+
+                            try
+                            {
+                                if(System.IO.File.Exists(PMapIniParams.Instance.PlanErr + "X"))
+                                    System.IO.File.Delete(PMapIniParams.Instance.PlanErr+ "X");
+
+                                System.IO.File.Copy(PMapIniParams.Instance.PlanErr, PMapIniParams.Instance.PlanErr + "X");
+                                System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr + "X", Encoding.GetEncoding(Global.PM_ENCODING));
+                                string content = file.ReadToEnd();
+                                file.Close();
+                                if (content.Replace(Global.OPT_NOERROR, "").Length != 0)
+                                {
+                                    m_optimize = null;
+                                    finalize(eOptResult.Error, String.Format(PMapMessages.E_PVRP_ERR, content));
+                                    ProcessForm.SetVisible(false);
+                                    return;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                           //     ExceptionDispatchInfo.Capture(ex).Throw();
+                           //     throw;
+
+                            }
                         }
                     }
                     if (EventStop != null && EventStop.WaitOne(0, true))
                     {
-                        // && UI.Confirm(PMapMessages.Q_OPT_READRESULT)
-                        if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
-                            finalize(eOptResult.OK);
-                        else
-                            finalize(eOptResult.Cancel);
-
+                        using (GlobalLocker lockObj = new GlobalLocker(Global.lockForOptimizerFiles))
+                        {  // && UI.Confirm(PMapMessages.Q_OPT_READRESULT)
+                            if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                                finalize(eOptResult.OK);
+                            else
+                                finalize(eOptResult.Cancel);
+                        }
                         EventStopped.Set();
                         return;
                     }
@@ -130,11 +150,14 @@ namespace PMapCore.LongProcess
                     ProcessForm.NextStep();
                 }
 
-                var resultLen = new System.IO.FileInfo(PMapIniParams.Instance.PlanResultFile).Length;
-                if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile) && resultLen > 0)  ////Előrdulhat, hogy elszáll a PVRP és üres a result.dat!
-                    finalize(eOptResult.OK);
-                else
-                    finalize(eOptResult.Cancel);
+                using (GlobalLocker lockObj = new GlobalLocker(Global.lockForOptimizerFiles))
+                {
+                    var resultLen = new System.IO.FileInfo(PMapIniParams.Instance.PlanResultFile).Length;
+                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile) && resultLen > 0)  ////Előrdulhat, hogy elszáll a PVRP és üres a result.dat!
+                        finalize(eOptResult.OK);
+                    else
+                        finalize(eOptResult.Cancel);
+                }
                 m_DB.Close();
 
 
@@ -149,38 +172,52 @@ namespace PMapCore.LongProcess
                 bool errHappened = false;
                 try
                 {
-                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
+                    using (GlobalLocker lockObj = new GlobalLocker(Global.lockForOptimizerFiles))
                     {
-                        System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr, Encoding.GetEncoding(Global.PM_ENCODING));
-                        string content = file.ReadToEnd();
-                        errHappened = content.CompareTo(Global.OPT_NOERROR) != 0;
-                    }
+
+                        if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
+                        {
+                            if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr + "X"))
+                                System.IO.File.Delete(PMapIniParams.Instance.PlanErr + "X");
+
+                            System.IO.File.Copy(PMapIniParams.Instance.PlanErr, PMapIniParams.Instance.PlanErr + "X");
+                            System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanErr + "X", Encoding.GetEncoding(Global.PM_ENCODING));
+                            string content = file.ReadToEnd();
+                            file.Close();
+                            errHappened = content.CompareTo(Global.OPT_NOERROR) >= 0;
+                        }
 
 
-                    //leállt a process és van eredményfájl, készítünk egy OK.dat-ot
-                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile)            //van már eredmény
-                        && !errHappened)                  //nicns error   
-                    {
-                        Util.String2File("Optimizer process has exited!", PMapIniParams.Instance.PlanOK);
-                        return;
+
+                        //leállt a process és van eredményfájl, készítünk egy OK.dat-ot
+                        if (System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile)            //van már eredmény
+                            && !errHappened)                  //nicns error   
+                        {
+                            Util.String2File(PMapMessages.E_OPT_ERREXITED, PMapIniParams.Instance.PlanOK);
+                            return;
+                        }
+
+                        //leállt a process és NINCS eredményfájl és errorfájl, készítünk egy Error.dat-ot
+                        if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                        {
+                            Util.String2File(PMapMessages.E_OPT_OPTSTOPPED, PMapIniParams.Instance.PlanErr);
+                            return;
+                        }
                     }
 
-                    //leállt a process és NINCS eredményfájl és errorfájl, készítünk egy Error.dat-ot
-                    if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
-                    {
-                        Util.String2File("Optimizer process has stopped!", PMapIniParams.Instance.PlanErr);
-                        return;
-                    }
                 }
-                catch( Exception ex)
+                catch (Exception ex)
                 {
                     //A PVRP elszállhat akkor is, amikor fogja az error.dat-ot amiben a Global.OPT_NOERROR szöveg van.
                     //Nincs még result file sem. 
                     //Jobb híjján készítünk egy OK.dat-ot és egy üres resultot, hogy az optimizerprocess be tudjon fejeződni
-                    if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                    if (System.IO.File.Exists(PMapIniParams.Instance.PlanErr))
                     {
-                        Util.String2File("Optimizer process has an Exception:" + ex.Message, PMapIniParams.Instance.PlanResultFile);
-                        Util.String2File("" + ex.Message, PMapIniParams.Instance.PlanOK);
+                        if (!System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
+                        {
+                            Util.String2File(string.Format(PMapMessages.E_OPT_OPTEXCEPTION, ex.Message), PMapIniParams.Instance.PlanResultFile);
+                            Util.String2File("" + ex.Message, PMapIniParams.Instance.PlanOK);
+                        }
                     }
                     return;
                 }
@@ -199,13 +236,23 @@ namespace PMapCore.LongProcess
                 Util.Log2File(String.Format(PMapMessages.M_OPT_OPTRESULT, m_procOptimizer.StandardOutput.ReadToEnd()));
 
 
-            if (p_result == eOptResult.OK && m_optimize != null)
+            if (p_result == eOptResult.OK && m_optimize != null && System.IO.File.Exists(PMapIniParams.Instance.PlanResultFile))
             {
-                m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile, ProcessForm);
-                if (!string.IsNullOrEmpty(m_optimize.IgnoredOrders))
+
+                System.IO.StreamReader file = new System.IO.StreamReader(PMapIniParams.Instance.PlanResultFile, Encoding.GetEncoding(Global.PM_ENCODING));
+                string content = file.ReadToEnd();
+                var errHappened = content.CompareTo(PMapMessages.E_OPT_OPTEXCEPTION.Replace("{0}", "")) >= 0;
+                file.Close();
+
+
+                if (!errHappened)
                 {
-                    IgnoredOrders = m_optimize.IgnoredOrders;
-                    Result = eOptResult.IgnoredHappened;
+                    m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile, ProcessForm);
+                    if (!string.IsNullOrEmpty(m_optimize.IgnoredOrders))
+                    {
+                        IgnoredOrders = m_optimize.IgnoredOrders;
+                        Result = eOptResult.IgnoredHappened;
+                    }
                 }
             }
             return;
