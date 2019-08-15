@@ -207,8 +207,6 @@ namespace PMapCore.Common
         public const string DATETIMEFORMAT = "yyyy.MM.dd HH:mm:ss";
         public const string DATETIMEFORMAT_PLAN = "yyyy.MM.dd HH:mm";
 
-        public const double VAT = 1.27;
-
         public const string SMP_PLAN = "PLAN";
 
         public const string SEP_EDGE = ",";

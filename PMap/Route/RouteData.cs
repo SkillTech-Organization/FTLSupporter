@@ -438,7 +438,15 @@ namespace PMapCore.Route
             //X --> lng, Y --> lat
             var lstRZN = p_RZN_ID_LIST.Split(',');
 
-          
+
+            //TODO: Nézzük meg, hogy koordiáta alaján pontosan megtaláljuk-e node-ot. (utána lenne a legközelebbi élhez található móka)
+
+
+
+            //A legközlebbi élhez található közelebb eső node megkeresése. Azért van így megoldva, mert hosszú országúti szakaszoknál,
+            //egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi 
+            //település pontja (ami közelebb van, mint az országúti szakasz kezdő- vagy végpontja) Hortobágy és Balmazújváros problémakör
+
             var nearest = RouteData.Instance.Edges.Where(
                 w => (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
                     (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?

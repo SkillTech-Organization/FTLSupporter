@@ -405,7 +405,7 @@ namespace PMapCore.BLL
                     p_lastETLCODE = edge.EDG_ETLCODE;
                 }
             }
-            return dToll * Global.VAT;
+            return dToll;
         }
 
         public bool IsBundleInTour(int pTPL_ID, int pLastPoint)
@@ -843,8 +843,6 @@ namespace PMapCore.BLL
                             }
                             lastNOD_ID = NOD_ID;
 
-                            // Áfával felszorozzuk
-                            dToll = dToll * Global.VAT;
                             //Útdíj beírása
                             sSQL = "update PTP_PLANTOURPOINT set PTP_TOLL=? where ID=?";
                             DBA.ExecuteNonQuery(sSQL, dToll, Util.getFieldValue<int>(dr, "ID"));
@@ -992,8 +990,6 @@ namespace PMapCore.BLL
                             }
                             lastNOD_ID = NOD_ID;
 
-                            // Áfával felszorozzuk
-                            dToll = dToll * Global.VAT;
                         }
 
 

@@ -669,22 +669,20 @@ namespace PMapTestApp
              /*       foreach (var edg in RouteData.Instance.Edges.Where(
                                     w => (Math.Abs(w.Value.toLatLng.Lng - MarkerTo.Position.Lng) + Math.Abs(w.Value.toLatLng.Lat - MarkerTo.Position.Lat) < (double)Global.EdgeApproachHighway / 2)))
 */
-
+/*
                     foreach (var edg in RouteData.Instance.Edges.Where(
                                      w => int.Parse( w.Value.EDG_STRNUM4 ) > 1000))
-
-                    /*
+*/
                 foreach (var edg in RouteData.Instance.Edges.Where(
                             w =>(Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
                                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                                ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) ||
+                                ((double)Global.EdgeApproachCity*4 / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway*2 / Global.LatLngDivider)) ||
                                 Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
                                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                                ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
+                                ((double)Global.EdgeApproachCity*4 / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway*2 / Global.LatLngDivider)))
                                 ))
                  
                 //              (x.Value.EDG_STRNUM1 != "0" || x.Value.EDG_STRNUM2 != "0" || x.Value.EDG_STRNUM3 != "0" || x.Value.EDG_STRNUM4 != "0")))
-                */
                     {
 
                         var edge = edg.Value;
