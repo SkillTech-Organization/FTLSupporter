@@ -146,6 +146,7 @@ namespace PMapCore.Strings
         public const string M_PATH_SHORTEST = "Legrövidebb";
         public const string M_PATH_FASTEST = "Leggyorsabb";
         public const string E_JRNFORM_NORESULT = "A feldolgozás megszakítása miatt nincs eredmény!";
+        public const string E_JRNFORM_WRONGLATLNG = "Helytelen koordináták vannak megadva!";
 
 
         public const string E_JFORM_NEED_GEOCODING = "Nem lehet geokódolni:{0}";

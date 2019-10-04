@@ -897,15 +897,12 @@ namespace PMapTestApp
             bllDepot depot = new bllDepot(db);
             bllTruck truck = new bllTruck(db);
 
-
-
-
-
             dlgTestRouteVis d = new dlgTestRouteVis();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 List<string> lstDepotID = new List<string>(d.txtDEPID.Text.Split(','));
                 var lstRouteSection = new List<boXRouteSection>();
+                /*
                 foreach (var depItem in lstDepotID)
                 {
                     var dep = depot.GetDepot(Convert.ToInt32(depItem.Split(';')[0]));
@@ -916,11 +913,15 @@ namespace PMapTestApp
                         ZIP_NUM = dep.ZIP_NUM,
                         ZIP_CITY = dep.ZIP_CITY,
                         DEP_ADRSTREET = dep.DEP_ADRSTREET,
-                        DEP_ADRNUM = dep.DEP_ADRNUM
+                        DEP_ADRNUM = dep.DEP_ADRNUM,
+                        Lat = dep.NOD_YPOS / Global.LatLngDivider,
+                        Lng = dep.NOD_XPOS / Global.LatLngDivider
                     };
 
                    lstRouteSection.Add(item);
+                   
                 }
+                
                 var trk = truck.GetTruck(Convert.ToInt32(d.txtTRKID.Text));
 
                 boXTruck Xtrk = new boXTruck();
@@ -932,18 +933,114 @@ namespace PMapTestApp
                 Xtrk.SPV_VALUE5 = PMapIniParams.Instance.dicSpeed[5];
                 Xtrk.SPV_VALUE6 = PMapIniParams.Instance.dicSpeed[6];
                 Xtrk.SPV_VALUE7 = PMapIniParams.Instance.dicSpeed[7];
+                */
+                lstRouteSection.Clear();
+                var item1 = new boXRouteSection()
+                {
+                    RouteSectionType = boXRouteSection.ERouteSectionType.Loaded,
+                    DEP_NAME = "12455575",
+                    ZIP_NUM = 1239,
+                    ZIP_CITY = "BUDAPEST",
+                    DEP_ADRSTREET = "Európa utca 6.",
+                    DEP_ADRNUM = null,
+                    Lat = 1,
+                    Lng = 1 
+                };
+                lstRouteSection.Add(item1);
 
-                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
+                var item2 = new boXRouteSection()
+                {
+                    RouteSectionType = boXRouteSection.ERouteSectionType.Loaded,
+                    DEP_NAME = "12455575",
+                    ZIP_NUM = 1054,
+                    ZIP_CITY = "BUDAPEST",
+                    DEP_ADRSTREET = "KÁLMÁN I. U. 18",
+                    DEP_ADRNUM = null,
+                    Lat = 2,
+                    Lng = 2
+                };
+                lstRouteSection.Add(item2);
+
+                var item3 = new boXRouteSection()
+                {
+                    RouteSectionType = boXRouteSection.ERouteSectionType.Loaded,
+                    DEP_NAME = "12455577",
+                    ZIP_NUM = 1054,
+                    ZIP_CITY = "BUDAPEST",
+                    DEP_ADRSTREET = "KÁLMÁN I. U. 18",
+                    DEP_ADRNUM = null,
+                    Lat = 3,
+                    Lng = 3
+                };
+                lstRouteSection.Add(item3);
+
+                var item4 = new boXRouteSection()
+                {
+                    RouteSectionType = boXRouteSection.ERouteSectionType.Loaded,
+                    DEP_NAME = "12455577",
+                    ZIP_NUM = 1239,
+                    ZIP_CITY = "BUDAPEST",
+                    DEP_ADRSTREET = "Európa utca 6.",
+                    DEP_ADRNUM = null,
+                    Lat = 1,
+                    Lng = 1
+                };
+                lstRouteSection.Add(item4);
+
+
+                var Xtrk = new boXTruck
+                {
+                    TRK_CODE = "LDV-718",
+                    TRK_REG_NUM = null,
+                    TRK_TRAILER = null,
+                    TRK_WEIGHT = 14700,
+                    TRK_XHEIGHT = 0,
+                    TRK_XWIDTH = 0,
+                    TRK_HEIGHT = 0,
+                    TRK_WIDTH = 0,
+                    TRK_LENGTH = 0,
+                    TRK_GPS = false,
+                    TRK_BACKPANEL = false,
+                    TRK_LOGO = false,
+                    TRK_AXLENUM = 0,
+                    TRK_ETOLLCAT = 4,
+                    TRK_ENGINEEURO = 2,
+                    TRK_IDLETIME = 0,
+                    TRK_ACTIVE = false,
+                    TRK_COMMENT = null,
+                    CRR_CODE = null,
+                    WHS_CODE = null,
+                    SPV_VALUE1 = 70,
+                    SPV_VALUE2 = 60,
+                    SPV_VALUE3 = 50,
+                    SPV_VALUE4 = 40,
+                    SPV_VALUE5 = 35,
+                    SPV_VALUE6 = 15,
+                    SPV_VALUE7 = 15,
+                    CPP_LOADQTY = 0,
+                    CPP_LOADVOL = 0,
+                    TFP_FIXCOST = 0,
+                    TFP_KMCOST = 0,
+                    TFP_HOURCOST = 0
+                };
+                
+                /*
+                var sxtrk = "{\"TRK_CODE\":\"MCE-204\",\"TRK_REG_NUM\":null,\"TRK_TRAILER\":null,\"TRK_WEIGHT\":0,\"TRK_XHEIGHT\":0,\"TRK_XWIDTH\":0,\"TRK_HEIGHT\":0,\"TRK_WIDTH\":0,\"TRK_LENGTH\":0,\"TRK_COLOR\":\"\",\"TRK_GPS\":false,\"TRK_BACKPANEL\":false,\"TRK_LOGO\":false,\"TRK_AXLENUM\":0,\"TRK_ETOLLCAT\":4,\"TRK_ENGINEEURO\":3,\"TRK_IDLETIME\":0,\"TRK_ACTIVE\":false,\"TRK_COMMENT\":null,\"CRR_CODE\":null,\"WHS_CODE\":null,\"SPV_VALUE1\":70,\"SPV_VALUE2\":60,\"SPV_VALUE3\":50,\"SPV_VALUE4\":40,\"SPV_VALUE5\":35,\"SPV_VALUE6\":15,\"SPV_VALUE7\":15,\"CPP_LOADQTY\":0.0,\"CPP_LOADVOL\":0.0,\"TFP_FIXCOST\":0.0,\"TFP_KMCOST\":0.0,\"TFP_HOURCOST\":0.0}";
+                Xtrk = JsonConvert.DeserializeObject<boXTruck>(sxtrk);
+                */
+
+                    List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
 
                 dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
-
                 dd.propertyGridCtrl1.SetObject(res.First());
                 if (res.First().Data != null)
                 {
-                    var rr = (boXRouteSummary)res.First().Data;
-                    dd.propertyGridCtrl2.SetObject(rr.FastestRoute);
-                    dd.propertyGridCtrl3.SetObject(rr.ShortestRoute);
+                   var rr = (boJourneyFormResult)res.First().Data;
+                    dd.propertyGridCtrl2.SetObject(rr.TotalSummary.FastestRoute);
+                    dd.propertyGridCtrl3.SetObject(rr.TotalSummary.ShortestRoute);
                 }
+                var json = new JavaScriptSerializer().Serialize(res);
+
                 dd.ShowDialog();
             }
 

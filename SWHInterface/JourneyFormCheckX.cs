@@ -1,9 +1,12 @@
-﻿using PMapCore.BLL.DataXChange;
+﻿using PMapCore.BLL;
+using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
 using PMapCore.Common;
+using PMapCore.DB.Base;
 using PMapCore.Licence;
 using PMapCore.LongProcess;
 using PMapCore.LongProcess.Base;
+using PMapCore.Route;
 using PMapCore.Strings;
 using SWHInterface.BO;
 using SWHInterface.LongProcess;
@@ -45,6 +48,14 @@ namespace SWHInterface
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
 
+                var DB = new SQLServerAccess();
+                DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+                var bllRoute = new bllRoute(DB);
+                var etbllEtoll = new bllEtoll(DB);
+
+                PMapCommonVars.Instance.LstEToll = etbllEtoll.GetAllEtolls();
+
+
                 //kicsit átverjük a validátort. Feltöltjük azokat a mezőket, amleyek egyébként kötelezőek, de nem szükésges a 
                 //menetlevél ellenőrzéshez
                 p_XTruck.TRK_CODE = string.IsNullOrWhiteSpace(p_XTruck.TRK_CODE) ? "TRK_CODE" : p_XTruck.TRK_CODE;
@@ -82,6 +93,7 @@ namespace SWHInterface
                             Field = err.Field,
                             Status = dtXResult.EStatus.VALIDATIONERROR,
                             ErrMessage = err.Message
+                            //Data = p_XTruck
 
                         };
                         resultArr.Add(trkErrRes);
@@ -89,8 +101,39 @@ namespace SWHInterface
                     }
                 }
 
-                //1. geokódolás
+                var ItemNo = 0;
+                foreach (var item in p_lstRouteSection)
+                {
+                    var validationErrosRoute = ObjectValidator.ValidateObject(item);
+                    if (validationErrosRoute.Count > 0)
+                    {
+                        foreach (var err in validationErrosRoute)
+                        {
+                            dtXResult routeErrRes = new dtXResult()
+                            {
+                                ItemNo = ItemNo,
+                                Field = err.Field,
+                                Status = dtXResult.EStatus.VALIDATIONERROR,
+                                ErrMessage = err.Message
+                                //Data = item
+                            };
+                            resultArr.Add(routeErrRes);
+                            sRetStatus = retErr;
+                        }
+                    }
+                    ItemNo++;
+                }
+
+                if (sRetStatus == retErr)
+                {
+                    return resultArr;
+                }
+
+
                 ProcessNotifyIcon ni = new ProcessNotifyIcon();
+
+                /* NEM KELL GEOKÓDOLÁS !! HElyette térképre illesztés
+                //1. geokódolás - 
                 DepotGeocodingProcess dp = new DepotGeocodingProcess(ni, p_lstRouteSection);
                 dp.RunWait();
 
@@ -104,7 +147,8 @@ namespace SWHInterface
                     {
                         dtXResult errRes = new dtXResult();
                         errRes.Status = dtXResult.EStatus.ERROR;
-                        errRes.ErrMessage = errResult;
+                        errRes.Field = item.itemRes.Field;
+                        errRes.ErrMessage = item.itemRes.ErrMessage;
                         resultArr.Add(errRes);
 
                         sRetStatus = retErr;
@@ -114,19 +158,60 @@ namespace SWHInterface
                 {
                     return resultArr;
                 }
-
+                */
 
                 //2. RouteData.Instance singleton feltoltese
-
                 InitRouteDataProcess irdp = new InitRouteDataProcess(ni);
                 irdp.RunWait();
 
+
+                string RZN_ID_LIST = "";
+                if (p_XTruck.TRK_WEIGHT <= Global.RST_WEIGHT35)
+                    RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_MAX35T);
+                else if (p_XTruck.TRK_WEIGHT <= Global.RST_WEIGHT75)
+                    RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_MAX75T);
+                else if (p_XTruck.TRK_WEIGHT <= Global.RST_WEIGHT120)
+                    RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_MAX12T);
+                else if (p_XTruck.TRK_WEIGHT > Global.RST_WEIGHT120)
+                    RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_BIGGER12T);
+                else
+                    RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_NORESTRICT);
+
+                ItemNo = 0;
+                foreach (var item in p_lstRouteSection)
+                {
+                    var NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(item.Lat, item.Lng), RZN_ID_LIST, p_XTruck.TRK_WEIGHT, p_XTruck.TRK_HEIGHT, p_XTruck.TRK_WIDTH);
+                    if (NOD_ID > 0)
+                    {
+                        var edg = bllRoute.GetEdgeByNOD_ID(NOD_ID);
+                        item.NOD_ID = NOD_ID;
+                        item.EDG_ID = edg.ID;
+                            }
+                    else
+                    {
+                        dtXResult errRes = new dtXResult();
+                        errRes.Status = dtXResult.EStatus.ERROR;
+                        //errRes.Field = item.itemRes.Field;
+                        errRes.ErrMessage = PMapMessages.E_JRNFORM_WRONGLATLNG;
+                        //errRes.Data = item;
+                        errRes.ItemNo = ItemNo;
+                        resultArr.Add(errRes);
+
+                        sRetStatus = retErr;
+                    }
+                    ItemNo++;
+                }
+
+                if (sRetStatus == retErr)
+                {
+                    return resultArr;
+                }
                 //Az utolsó elemre rárakjuk a finish-t
                 p_lstRouteSection.Last().RouteSectionType = boXRouteSection.ERouteSectionType.Finish;
 
 
                 //
-                JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni, p_lstRouteSection, p_XTruck);
+                JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni, p_lstRouteSection, p_XTruck, RZN_ID_LIST);
                 rvdp.RunWait();
 
                 if (rvdp.Result != null)
@@ -167,6 +252,19 @@ namespace SWHInterface
             return resultArr;
         }
 
-
+        private static string GetRestZonesByRST_ID(bllRoute p_bllRoute, int p_RST)
+        {
+            string RZN_ID_LIST = "";
+            if (PMapCommonVars.Instance.RZN_ID_LISTCahce.ContainsKey(p_RST))
+            {
+                RZN_ID_LIST = PMapCommonVars.Instance.RZN_ID_LISTCahce[p_RST];
+            }
+            else
+            {
+                RZN_ID_LIST = p_bllRoute.GetRestZonesByRST_ID(p_RST);
+                PMapCommonVars.Instance.RZN_ID_LISTCahce.Add(p_RST, RZN_ID_LIST);
+            }
+            return RZN_ID_LIST;
+        }
     }
 }

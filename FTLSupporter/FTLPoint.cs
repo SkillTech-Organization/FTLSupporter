@@ -31,7 +31,7 @@ namespace FTLSupporter
         public DateTime Close { get; set; }
 
         [DisplayNameAttributeX(Name = "Kiszolgálás időtartama", Order = 6)]
-        [ErrorIfConstAttrX(EvalMode.IsSmaller, 0, "Kötelező mező:Lng")]
+        [ErrorIfConstAttrX(EvalMode.IsSmaller, 0, "Kötelező mező:SrvDuration")]
         public int SrvDuration { get; set; }
 
         [DisplayNameAttributeX(Name = "Türelmi idő", Order = 7)]
