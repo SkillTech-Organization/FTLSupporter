@@ -189,11 +189,13 @@ namespace PMapCore.Common
         //
         public const int NearestNOD_ID_Approach = 100000;         //Mekkora körzetben keressen lehetséges node-okat
         public const int NearestNOD_ID_ApproachBig = 80000;       //Nagyobb körzet a II. menetes keresésnek
-        public const int EdgeApproachCity = 10000;                //Közelítő tűrése városon belül (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
-        public const int EdgeApproachHighway = 100000;            //Közelítő tűrése városon kivül !(EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
+        public const int EdgeApproachCity = 5000;                //Közelítő tűrése városon belül (EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
+        public const int EdgeApproachHighway = 50000;            //Közelítő tűrése városon kivül !(EDG.RDT_VALUE=6 or EDG.EDG_STRNUM1!=0 or EDG.EDG_STRNUM2!=0 or EDG.EDG_STRNUM3!=0 or EDG.EDG_STRNUM4!=0)
 
 
         public const int LatLngDivider = 1000000;               //Adatbázis koordináta -> GPS koordiánta osztó
+
+        public const double WEIGHTAREA_DEGREE = 0.003;          //Súlykorlátozás környezet fokban- Ez 4-3 utca a környéken
 
         public const int CostDivider = 10;
 
@@ -252,6 +254,7 @@ namespace PMapCore.Common
         public const string OPT_NOERROR = "Errors that occured during the computation:\r\n";
 
         public const string CLCROUTE_OWNER = "calculatePMapRoutes";
+
 
     }
 }

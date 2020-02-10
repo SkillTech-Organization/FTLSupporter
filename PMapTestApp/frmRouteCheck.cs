@@ -136,6 +136,7 @@ namespace PMapTestApp
                     CurrentPos.Position = from;
                     lblCurrLat.Text = CurrentPos.Position.Lat.ToString("0.0000000");
                     lblCurrLng.Text = CurrentPos.Position.Lng.ToString("0.0000000");
+                    lblDst.Text = Util.GetDistanceOfTwoPoints_Meter(from.Lng, from.Lat, to.Lng, to.Lat).ToString(Global.NUMFORMAT);
 
                     MarkerFrom.Position = from;
                     MarkerTo.Position = to;
@@ -193,6 +194,7 @@ namespace PMapTestApp
                 m_boundaryLayer.Polygons.Add(new GMapPolygon(p, PMapMessages.S_PCHK_BOUNDARY));
                 //       m_boundaryLayer.Polygons.Add(new GMapPolygon(p2, "lehatárolás"));
             }
+            lblDst.Text = Util.GetDistanceOfTwoPoints_Meter(MarkerFrom.Position.Lng, MarkerFrom.Position.Lat, MarkerTo.Position.Lng, MarkerTo.Position.Lat).ToString(Global.NUMFORMAT);
 
 
         }
@@ -206,25 +208,36 @@ namespace PMapTestApp
 
         void gMapControl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            PointLatLng pt = gMapControl.FromLocalToLatLng(e.X, e.Y);
-
-            setFiledTriggersOff();
-            if (rdbFrom.Checked)
+            if (e.Button == MouseButtons.Left)
             {
-                MarkerFrom.Position = pt;
+                PointLatLng pt = gMapControl.FromLocalToLatLng(e.X, e.Y);
 
-                numLatFrom.Value = Convert.ToDecimal(pt.Lat);
-                numLngFrom.Value = Convert.ToDecimal(pt.Lng);
+                setFiledTriggersOff();
+                if (rdbFrom.Checked)
+                {
+                    MarkerFrom.Position = pt;
+
+                    numLatFrom.Value = Convert.ToDecimal(pt.Lat);
+                    numLngFrom.Value = Convert.ToDecimal(pt.Lng);
+                }
+                else
+                {
+                    MarkerTo.Position = pt;
+                    numLatTo.Value = Convert.ToDecimal(pt.Lat);
+                    numLngTo.Value = Convert.ToDecimal(pt.Lng);
+                }
+                setFiledTriggersOn();
+                //    gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             }
-            else
+            if (e.Button == MouseButtons.Middle)
             {
-                MarkerTo.Position = pt;
-                numLatTo.Value = Convert.ToDecimal(pt.Lat);
-                numLngTo.Value = Convert.ToDecimal(pt.Lng);
-            }
-            setFiledTriggersOn();
-            //    gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
 
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
+                PointLatLng pt2 = gMapControl.FromLocalToLatLng(e.X, e.Y);
+                var res = bllDepot.GetWeightsNear(pt2.Lng * Global.LatLngDivider, pt2.Lat * Global.LatLngDivider);
+                UI.Message("Közeli korlátozások:" + res);
+            }
         }
 
         private void setFromToMap()
@@ -331,13 +344,13 @@ namespace PMapTestApp
 
             MarkerFrom.Position = new PointLatLng(Convert.ToDouble(numLatFrom.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngFrom.Value, CultureInfo.InvariantCulture));
             numFromNOD_ID.Value = 0;
-            /*
+            /*  
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerFrom.Position);
             if (NOD_ID > 0)
                 numFromNOD_ID.Value = NOD_ID;
             else
                 numFromNOD_ID.Value = 0;
-                */
+            */
             this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
             gMapControl.ZoomAndCenterMarkers(m_selectorLayer.Id);
             UpdateControls();
@@ -353,7 +366,6 @@ namespace PMapTestApp
             this.numToNOD_ID.ValueChanged -= new System.EventHandler(this.numToNOD_ID_ValueChanged);
             MarkerTo.Position = new PointLatLng(Convert.ToDouble(numLatTo.Value, CultureInfo.InvariantCulture), Convert.ToDouble(numLngTo.Value, CultureInfo.InvariantCulture));
             numToNOD_ID.Value = 0;
-
             /*
             int NOD_ID = m_bllRoute.GetNearestNOD_ID(MarkerTo.Position);
             if (NOD_ID > 0)
@@ -810,6 +822,87 @@ namespace PMapTestApp
             this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
             this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
             this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
+        }
+
+        private void btnWeight_Click(object sender, EventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                ckhShowEdges.Checked = false;
+                PointLatLng p_pt = MarkerTo.Position;
+
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
+                m_edgesLayer.Routes.Clear();
+                m_edgesLayer.Polygons.Clear();
+                m_edgesLayer.Markers.Clear();
+                m_edgesMarkerLayer.Markers.Clear();
+
+                m_edgesMarkerLayer.IsVisibile = true;
+                
+                HashSet<PointLatLng> markersPts = new HashSet<PointLatLng>();
+
+                foreach (var edg in RouteData.Instance.Edges.Where(
+                            w => w.Value.EDG_MAXWEIGHT > 0 ))
+                {
+
+                    var edge = edg.Value;
+
+                    Pen p;
+                    switch (edge.EDG_MAXWEIGHT)
+                    {
+                        case 0:
+                            p = new Pen(Color.Green, 1);
+                            break;
+                        case Global.RST_WEIGHT35:
+                            p = new Pen(Color.Red, 1);
+                            break;
+                        case Global.RST_WEIGHT75:
+                            p = new Pen(Color.HotPink, 1);
+                            break;
+                        case Global.RST_WEIGHT120:
+                            p = new Pen(Color.Yellow, 1);
+                            break;
+                       
+                        default:
+                            p = new Pen(Color.Tomato, 1);
+                            break;
+                    }
+
+                    /*
+                    GMapRoute r = new GMapRoute(new List<PointLatLng> { edge.fromLatLng, edge.toLatLng }, "xx");
+
+                    r.Stroke = p;
+
+                    m_edgesLayer.Routes.Add(r);
+                    */
+                    GMapPolygon px = new GMapPolygon(new List<PointLatLng> { edge.fromLatLng, edge.toLatLng }, "xx");
+                    px.Stroke = p;
+                    m_edgesLayer.Polygons.Add(px);
+
+                    GMapMarker gm = null;
+                    if (markersPts.Contains(edge.fromLatLng))
+                    {
+                        gm = m_edgesMarkerLayer.Markers.FirstOrDefault(x => x.Position == edge.fromLatLng);
+                        gm.ToolTipText += "\n";
+
+                    }
+                    else
+                    {
+                        gm = new GMarkerGoogle(edge.fromLatLng, GMarkerGoogleType.blue_small);
+                        m_edgesMarkerLayer.Markers.Add(gm);
+                    }
+                    gm.ToolTipText += String.Format("ID:{0} weight{1}, height:{2}, width:{3}\nname:{4}, fromNOD:{5}, toNOD:{6}", edge.ID, edge.EDG_MAXWEIGHT, edge.EDG_MAXHEIGHT, edge.EDG_MAXWIDTH, edge.EDG_NAME, edge.NOD_ID_FROM, edge.NOD_ID_TO);
+
+                }
+                ckhShowEdges.Checked = true;
+            }
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

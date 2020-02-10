@@ -862,14 +862,17 @@ namespace FTLSupporterTest
             //    lstTrk.RemoveRange(1, lstTrk.Count-1);
             //            lstTsk = lstTsk.Where( w=>w.TaskID  != "2143461").ToList();
 
-           lstTrk = lstTrk.Where(w => w.TruckID == "MPT-130").ToList();
+            //       lstTrk = lstTrk.Where(w => w.TruckID == "RXD-499").ToList();
+ //           lstTrk.RemoveRange(0, lstTrk.Count / 2);
+ //           lstTsk = new List<FTLTask>( lstTsk.OrderByDescending(o => o.TPoints.Count).Take(1));
 
             List<FTLResult> res;
             Console.BufferHeight =600;
+            p_bestTruck = false;
             if (p_bestTruck)
-                res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true);
+                res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true, 10000);
             else
-                res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true);
+                res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true, 10000);
             Console.WriteLine("FTLSupport  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
 
             int i = 1;

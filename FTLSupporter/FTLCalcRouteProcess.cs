@@ -14,7 +14,7 @@ using System.Text;
 
 namespace FTLSupporter
 {
-    public class FTLCalcRouteProcess : BaseLongProcess
+    internal class FTLCalcRouteProcess : BaseLongProcess
     {
 
         public bool Completed { get; set; }

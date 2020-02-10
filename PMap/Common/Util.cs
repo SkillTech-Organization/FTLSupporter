@@ -584,6 +584,17 @@ namespace PMapCore.Common
             return Color.FromArgb(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255));
         }
 
+        public static double GetDistanceOfTwoPoints_Meter(double longitude, double latitude, double otherLongitude, double otherLatitude)
+        {
+            var d1 = latitude * (Math.PI / 180.0);
+            var num1 = longitude * (Math.PI / 180.0);
+            var d2 = otherLatitude * (Math.PI / 180.0);
+            var num2 = otherLongitude * (Math.PI / 180.0) - num1;
+            var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) + Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
+
+            return 6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)));
+        }
+
         /// <summary>
         ///  http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
         /// </summary>
@@ -637,9 +648,10 @@ namespace PMapCore.Common
             return Math.Abs((Xp * (Ya - Yb) + Yp * (Xb - Xa) + (Xa * Yb - Xb * Ya))
                     / div);
         }
+      
 
-        private static double FindDistanceToSegment(
-    PointF pt, PointF p1, PointF p2, out PointF closest)
+
+        private static double FindDistanceToSegment(PointF pt, PointF p1, PointF p2, out PointF closest)
         {
             float dx = p2.X - p1.X;
             float dy = p2.Y - p1.Y;

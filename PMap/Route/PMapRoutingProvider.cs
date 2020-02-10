@@ -104,7 +104,7 @@ namespace PMapCore.MapProvider
 
                 result.Add(getRouteInfo(p_NOD_ID_FROM, NOD_ID_TO, p_RoutePars, optimizedPath));
             }
-            Console.WriteLine("GetAllRoutes " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
+         //   Console.WriteLine("GetAllRoutes " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
             return result;
         }
 

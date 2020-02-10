@@ -11,6 +11,7 @@ using GMap.NET;
 using System.Data.Common;
 using System.Collections;
 using System.Runtime.ExceptionServices;
+using PMapCore.Route;
 
 namespace PMapCore.BLL
 {
@@ -25,7 +26,7 @@ namespace PMapCore.BLL
 
         public int AddDepot(boDepot p_depot)
         {
-           return AddItem( p_depot);
+            return AddItem(p_depot);
         }
 
         public List<boDepot> GetAllDepots(string p_where = "", params object[] p_pars)
@@ -73,35 +74,35 @@ namespace PMapCore.BLL
         private boDepot createDepotObj(DataRow p_dr)
         {
             return new boDepot()
-                         {
-                             ID = Util.getFieldValue<int>(p_dr, "ID"),
-                             ZIP_ID = Util.getFieldValue<int>(p_dr, "ZIP_ID"),
-                             NOD_ID = Util.getFieldValue<int>(p_dr, "NOD_ID"),
-                             EDG_ID = Util.getFieldValue<int>(p_dr, "EDG_ID"),
-                             REG_ID = Util.getFieldValue<int>(p_dr, "REG_ID"),
-                             WHS_ID = Util.getFieldValue<int>(p_dr, "WHS_ID"),
-                             DEP_CODE = Util.getFieldValue<string>(p_dr, "DEP_CODE"),
-                             DEP_NAME = Util.getFieldValue<string>(p_dr, "DEP_NAME"),
-                             DEP_ADRSTREET = Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
-                             DEP_ADRNUM = Util.getFieldValue<string>(p_dr, "DEP_ADRNUM"),
-                             DEP_OPEN = Util.getFieldValue<int>(p_dr, "DEP_OPEN"),
-                             DEP_CLOSE = Util.getFieldValue<int>(p_dr, "DEP_CLOSE"),
-                             DEP_COMMENT = Util.getFieldValue<string>(p_dr, "DEP_COMMENT"),
-                             DEP_SRVTIME = Util.getFieldValue<int>(p_dr, "DEP_SRVTIME"),
-                             DEP_QTYSRVTIME = Util.getFieldValue<double>(p_dr, "DEP_QTYSRVTIME"),
-                             DEP_CLIENTNUM = Util.getFieldValue<string>(p_dr, "DEP_CLIENTNUM"),
-                             DEP_IMPADDRSTAT = (boDepot.EIMPADDRSTAT)(Util.getFieldValue<int>(p_dr, "DEP_IMPADDRSTAT")),
-                             DEP_LIFETIME = Util.getFieldValue<int>(p_dr, "DEP_LIFETIME"),
-                             DEP_OLDX = Util.getFieldValue<int>(p_dr, "DEP_OLDX"),
-                             DEP_OLDY = Util.getFieldValue<int>(p_dr, "DEP_OLDY"),
-                             DEP_OLD_NOD_ID = Util.getFieldValue<int>(p_dr, "DEP_OLD_NOD_ID"),
-                             LASTDATE = Util.getFieldValue<DateTime>(p_dr, "LASTDATE"),
-                             DEP_DELETED = Util.getFieldValue<bool>(p_dr, "DEP_DELETED"),
-                             ZIP_NUM = Util.getFieldValue<int>(p_dr, "ZIP_NUM"),
-                             ZIP_CITY = Util.getFieldValue<string>(p_dr, "ZIP_CITY"),
-                             NOD_XPOS = Util.getFieldValue<double>(p_dr, "NOD_XPOS"),
-                             NOD_YPOS = Util.getFieldValue<double>(p_dr, "NOD_YPOS")
-                         };
+            {
+                ID = Util.getFieldValue<int>(p_dr, "ID"),
+                ZIP_ID = Util.getFieldValue<int>(p_dr, "ZIP_ID"),
+                NOD_ID = Util.getFieldValue<int>(p_dr, "NOD_ID"),
+                EDG_ID = Util.getFieldValue<int>(p_dr, "EDG_ID"),
+                REG_ID = Util.getFieldValue<int>(p_dr, "REG_ID"),
+                WHS_ID = Util.getFieldValue<int>(p_dr, "WHS_ID"),
+                DEP_CODE = Util.getFieldValue<string>(p_dr, "DEP_CODE"),
+                DEP_NAME = Util.getFieldValue<string>(p_dr, "DEP_NAME"),
+                DEP_ADRSTREET = Util.getFieldValue<string>(p_dr, "DEP_ADRSTREET"),
+                DEP_ADRNUM = Util.getFieldValue<string>(p_dr, "DEP_ADRNUM"),
+                DEP_OPEN = Util.getFieldValue<int>(p_dr, "DEP_OPEN"),
+                DEP_CLOSE = Util.getFieldValue<int>(p_dr, "DEP_CLOSE"),
+                DEP_COMMENT = Util.getFieldValue<string>(p_dr, "DEP_COMMENT"),
+                DEP_SRVTIME = Util.getFieldValue<int>(p_dr, "DEP_SRVTIME"),
+                DEP_QTYSRVTIME = Util.getFieldValue<double>(p_dr, "DEP_QTYSRVTIME"),
+                DEP_CLIENTNUM = Util.getFieldValue<string>(p_dr, "DEP_CLIENTNUM"),
+                DEP_IMPADDRSTAT = (boDepot.EIMPADDRSTAT)(Util.getFieldValue<int>(p_dr, "DEP_IMPADDRSTAT")),
+                DEP_LIFETIME = Util.getFieldValue<int>(p_dr, "DEP_LIFETIME"),
+                DEP_OLDX = Util.getFieldValue<int>(p_dr, "DEP_OLDX"),
+                DEP_OLDY = Util.getFieldValue<int>(p_dr, "DEP_OLDY"),
+                DEP_OLD_NOD_ID = Util.getFieldValue<int>(p_dr, "DEP_OLD_NOD_ID"),
+                LASTDATE = Util.getFieldValue<DateTime>(p_dr, "LASTDATE"),
+                DEP_DELETED = Util.getFieldValue<bool>(p_dr, "DEP_DELETED"),
+                ZIP_NUM = Util.getFieldValue<int>(p_dr, "ZIP_NUM"),
+                ZIP_CITY = Util.getFieldValue<string>(p_dr, "ZIP_CITY"),
+                NOD_XPOS = Util.getFieldValue<double>(p_dr, "NOD_XPOS"),
+                NOD_YPOS = Util.getFieldValue<double>(p_dr, "NOD_YPOS")
+            };
         }
 
         public List<boDepot> GetDeptosWithoutGeocodingByPlan(int p_PLN_ID)
@@ -137,7 +138,7 @@ namespace PMapCore.BLL
                                    "where DPT.ID is null and TRK.TRK_DELETED = 0 ";
                     DBA.ExecuteNonQuery(sSQL, p_DEP_ID, p_DEP_ID);
                     bllHistory.WriteHistory(0, "DPT_DEPTRUCK", p_DEP_ID, bllHistory.EMsgCodes.ADD, "SetAllTruckToDep, DEP_ID=" + p_DEP_ID.ToString());
-                    
+
                 }
 
                 catch (Exception e)
@@ -188,6 +189,24 @@ namespace PMapCore.BLL
                 {
                 }
             }
+        }
+        public static string GetWeightsNear(double NOD_XPOS /*LNG*/, double NOD_YPOS /*LAT*/)
+        {
+            string sRet = "";
+            double dXPOS = NOD_XPOS / Global.LatLngDivider;
+            double dYPOS = NOD_YPOS / Global.LatLngDivider;
+            var res = RouteData.Instance.Edges.Where(
+                            w => w.Value.EDG_MAXWEIGHT > 0 &&
+                                 (
+                                 (Math.Abs(w.Value.fromLatLng.Lng - dXPOS) < Global.WEIGHTAREA_DEGREE &&
+                                 Math.Abs(w.Value.fromLatLng.Lat - dYPOS) < Global.WEIGHTAREA_DEGREE) ||
+                                 (Math.Abs(w.Value.toLatLng.Lng - dXPOS) < Global.WEIGHTAREA_DEGREE &&
+                                 Math.Abs(w.Value.toLatLng.Lat - dYPOS) < Global.WEIGHTAREA_DEGREE)
+                                 )).Select(s => s.Value.EDG_MAXWEIGHT).Distinct().ToList();
+            
+            if( res != null && res.Count > 0)
+                sRet = String.Join(",", res.OrderBy(o=>o));
+            return sRet;
         }
     }
 }
