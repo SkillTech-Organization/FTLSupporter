@@ -47,10 +47,12 @@ namespace PMapCore.Common
         public bool TestMode { get; private set; }
         public bool ParseLog { get; private set; }
         public bool ALog { get; private set; }
-        public bool TourRoute { get; private set; }     //Egyedi túraútvonalak
-        public string TourpointToolTip { get; private set; }     //Túrapont tooltip
+        public bool TourRoute { get; private set; }             //Egyedi túraútvonalak
+        public string TourpointToolTip { get; private set; }    //Túrapont tooltip
         public string TruckCode { get; private set; }           //Járműkód
         public int RoutesExpire { get; private set; }           //DST_DISTANCE érvényességei
+        public double WeightAreaDegree { get; private set; }       //Lerakó környéke súlykrolátozás gyűjtése fokban. 1 fok Ez É-D irányban 111 km, K-Ny irányban kb 40-54 km.
+
 
 
         public string AzureAccount { get; private set; }
@@ -235,6 +237,11 @@ namespace PMapCore.Common
             else
                 RoutesExpire = -1;
 
+
+            string sWeightAreaDegree = ini.ReadString(Global.iniPMap, Global.iniWeightAreaDegree);
+            WeightAreaDegree = Convert.ToDouble("0" + sWeightAreaDegree.Replace(',', '.'), CultureInfo.InvariantCulture);
+            if (WeightAreaDegree <= 0)
+                WeightAreaDegree = Global.WEIGHTAREA_DEGREE;
 
             AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
             AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);

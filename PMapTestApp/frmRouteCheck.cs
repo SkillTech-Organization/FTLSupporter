@@ -904,5 +904,10 @@ namespace PMapTestApp
         {
 
         }
+
+        private void gMapControl_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

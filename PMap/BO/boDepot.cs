@@ -81,6 +81,9 @@ namespace PMapCore.BO
         [WriteFieldAttribute(Insert = true, Update = true)]
         public int DEP_LIFETIME { get; set; }
 
+        [WriteFieldAttribute(Insert = true, Update = true)]
+        public string DEP_WEIGHTAREA { get; set; }
+
         [WriteFieldAttribute(Insert = false, Update = false)]
         public int DEP_OLDX { get; set; }
 

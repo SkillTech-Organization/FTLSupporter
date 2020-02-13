@@ -298,6 +298,7 @@ namespace PMapTestApp
             /*
             d.txtAddr.Text = "7720 Pécsvárad/Zengővárkony/Apátvarasd/Lovászhetény/Martonfa, Erzsébeti út 24";
             */
+            d.txtAddr.Text = "Budapest, Széchenyi tér 2";
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -308,8 +309,8 @@ namespace PMapTestApp
 
                 PMapCommonVars.Instance.ConnectToDB();
 
-
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+
                 bllDepot depot = new bllDepot(PMapCommonVars.Instance.CT_DB);
                 int ZIP_ID = 0;
                 int NOD_ID = 0;
@@ -328,14 +329,22 @@ namespace PMapTestApp
                     DataTable dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSql);
                     if (dt.Rows.Count == 1)
                     {
+                        (new VBInterface.PMapInterface()).InitPMapRouteData("", dbConf);
+
+                        boNode nod = route.GetNode(NOD_ID);
+
                         UI.Message("NOD.ID = " + NOD_ID.ToString() + ",EDG_ID=" + EDG_ID.ToString() + ",Addr=" +
                             (Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM")).ToString() + " " +
                             Util.getFieldValue<string>(dt.Rows[0], "ZIP_CITY") + " " +
-                            Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME"));
+                            Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") 
+                            + ",Weights:" + bllDepot.GetWeightsNear(nod.NOD_XPOS, nod.NOD_YPOS)
+                            );
+
 
                     }
                     else
                         UI.Message("Hiba a cím lekérdezésében! Tételszám:" + dt.Rows.Count.ToString());
+
                 }
                 else
                 {

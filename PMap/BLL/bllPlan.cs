@@ -387,7 +387,7 @@ namespace PMapCore.BLL
             string sSql = "select  TOD.ID as ID, DEP.DEP_NAME,  DEP.DEP_ADRSTREET, ZIP.ZIP_NUM, ZIP.ZIP_CITY, DEP.NOD_ID, NOD.NOD_YPOS,  NOD.NOD_XPOS, PTP.ID as PTP_ID, TOD_VOLUME, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_OUTPUT.ToString() + " or OTP_VALUE = " + Global.OTP_LOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY, " + Environment.NewLine +
                           "case when OTP_VALUE = " + Global.OTP_INPUT.ToString() + " or OTP_VALUE = " + Global.OTP_UNLOAD.ToString() + " THEN TOD_QTY ELSE 0 END AS TOD_QTY_INC, " + Environment.NewLine +
-                          "DEP.DEP_CODE, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
+                          "DEP.DEP_CODE, DEP.DEP_WEIGHTAREA, ORD.ORD_NUM, ORD.ORD_QTY, ORD.ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD.TOD_SERVS, TOD.TOD_SERVE, " + Environment.NewLine +
                           "PTP.ID as PTP_ID, TPL.ID as TPL_ID, TRK.ID as TRK_ID, TRK.TRK_CODE, TRK.TRK_REG_NUM," + Environment.NewLine +
                           PMapIniParams.Instance.TourpointToolTip + " as TOOLTIPTEXT" + Environment.NewLine +
                          "from TOD_TOURORDER TOD " + Environment.NewLine +
@@ -456,6 +456,7 @@ namespace PMapCore.BLL
                 ORD_WIDTH = Util.getFieldValue<double>(p_dr, "ORD_WIDTH"),
                 ORD_HEIGHT = Util.getFieldValue<double>(p_dr, "ORD_HEIGHT"),
                 ORD_COMMENT = Util.getFieldValue<string>(p_dr, "ORD_COMMENT"),
+                DEP_WEIGHTAREA = Util.getFieldValue<string>(p_dr, "DEP_WEIGHTAREA"),
                 OPENCLOSE = getOpenClose(p_dr, true),
                 ToolTipText = Util.getFieldValue<string>(p_dr, "TOOLTIPTEXT"),
 

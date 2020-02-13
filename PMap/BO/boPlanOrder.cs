@@ -95,6 +95,9 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "Megjegyzés", Order = 26)]
         public string ORD_COMMENT { get; set; }
 
+        [DisplayNameAttributeX(Name = "Súlykorlátozások", Order = 26)]
+        public string DEP_WEIGHTAREA { get; set; }
+
         //Technikai mezők
         [ScriptIgnore]
         public PPlanMarkerUnPlanned Marker { get; set; }

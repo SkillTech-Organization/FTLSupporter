@@ -46,6 +46,7 @@
             this.gridColumnTRK_CODE = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTRK_REG_NUM = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnORD_COMMENT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnDEP_WEIGHTAREA = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTPL_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnPTP_ID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.reChkVisible = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
@@ -93,6 +94,7 @@
             this.gridColumnTRK_CODE,
             this.gridColumnTRK_REG_NUM,
             this.gridColumnORD_COMMENT,
+            this.gridColumnDEP_WEIGHTAREA,
             this.gridColumnTPL_ID,
             this.gridColumnPTP_ID});
             this.gridViewPlanOrders.GridControl = this.gridPlanOrders;
@@ -108,6 +110,7 @@
             this.gridViewPlanOrders.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never;
             this.gridViewPlanOrders.OptionsView.ShowGroupPanel = false;
             this.gridViewPlanOrders.PaintStyleName = "MixedXP";
+            this.gridViewPlanOrders.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridViewPlanOrders_CustomDrawCell);
             this.gridViewPlanOrders.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.gridViewPlanOrders_RowStyle);
             this.gridViewPlanOrders.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewUnplannedOrders_FocusedRowChanged);
             this.gridViewPlanOrders.DoubleClick += new System.EventHandler(this.gridViewPlanOrders_DoubleClick);
@@ -255,6 +258,15 @@
             this.gridColumnORD_COMMENT.Visible = true;
             this.gridColumnORD_COMMENT.VisibleIndex = 13;
             // 
+            // gridColumnDEP_WEIGHTAREA
+            // 
+            this.gridColumnDEP_WEIGHTAREA.Caption = "Súlykorlát";
+            this.gridColumnDEP_WEIGHTAREA.FieldName = "DEP_WEIGHTAREA";
+            this.gridColumnDEP_WEIGHTAREA.Name = "gridColumnDEP_WEIGHTAREA";
+            this.gridColumnDEP_WEIGHTAREA.OptionsColumn.AllowEdit = false;
+            this.gridColumnDEP_WEIGHTAREA.Visible = true;
+            this.gridColumnDEP_WEIGHTAREA.VisibleIndex = 14;
+            // 
             // gridColumnTPL_ID
             // 
             this.gridColumnTPL_ID.FieldName = "TPL_ID";
@@ -280,7 +292,7 @@
             this.Controls.Add(this.gridPlanOrders);
             this.Name = "pnlPPlanOrders";
             this.Text = "Megrendelések";
-             ((System.ComponentModel.ISupportInitialize)(this.gridPlanOrders)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridPlanOrders)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewPlanOrders)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkVisible)).EndInit();
             this.ResumeLayout(false);
@@ -310,5 +322,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTPL_ID;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnPTP_ID;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnORD_COMMENT;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnDEP_WEIGHTAREA;
     }
 }

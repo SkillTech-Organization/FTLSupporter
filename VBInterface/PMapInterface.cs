@@ -651,7 +651,13 @@ namespace VBInterface
             return sRetStatus;
         }
 
-
+        /// <summary>
+        /// Licence ellenőrzés
+        /// </summary>
+        /// <param name="p_iniPath"></param>
+        /// <param name="p_dbConf"></param>
+        /// <param name="p_showMessage"></param>
+        /// <returns></returns>
         public string CheckLicence(string p_iniPath, string p_dbConf, bool p_showMessage = true)
         {
             string sRetStatus = retOK;
@@ -680,7 +686,12 @@ namespace VBInterface
         }
 
 
-
+        /// <summary>
+        /// Lejárt lerakók törlése
+        /// </summary>
+        /// <param name="p_iniPath">CT iniállomány</param>
+        /// <param name="p_dbConf">Adatbázis konfig sorszáma</param>
+        /// <returns></returns>
         public string DeleteExpiredRoutes(string p_iniPath, string p_dbConf)
         {
             string sRetStatus = retOK;
@@ -689,7 +700,7 @@ namespace VBInterface
                 if (!PMapIniParams.Instance.Loaded)
                     PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
-                    return retErr;
+                   return retErr;
 
                 DeleteExpiredRoutesProcess derp = new DeleteExpiredRoutesProcess();
                 derp.Run();
@@ -704,7 +715,103 @@ namespace VBInterface
             }
             return sRetStatus;
         }
+
+        /// <summary>
+        /// Egy pont közelében lévő súlykorlátozások listája
+        /// </summary>
+        /// <param name="p_iniPath">CT iniállomány</param>
+        /// <param name="p_dbConf">Adatbázis konfig sorszáma</param>
+        /// <param name="p_NOD_XPOS"></param>
+        /// <param name="p_NOD_YPOS"></param>
+        /// <returns></returns>
+        public string GetWeightsNear(string p_iniPath, string p_dbConf, double p_NOD_XPOS /*LNG*/, double p_NOD_YPOS /*LAT*/)
+        {
+            string sRetStatus = "";
+            try
+            {
+                if (!PMapIniParams.Instance.Loaded)
+                    PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+   //             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+   //                 return retErr;
+
+                PMapCommonVars.Instance.ConnectToDB();
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
+                sRetStatus = bllDepot.GetWeightsNear(p_NOD_XPOS, p_NOD_YPOS);
+
+            }
+            catch (Exception ex)
+            {
+                Util.ExceptionLog(ex);
+                UI.Error(ex.Message);
+                sRetStatus = retErr;
+            }
+            return sRetStatus;
+        }
+
+        /// <summary>
+        /// Egy NOD_ID közelében lévő súlykorlátozások listája
+        /// </summary>
+        /// <param name="p_iniPath">CT iniállomány</param>
+        /// <param name="p_dbConf">Adatbázis konfig sorszáma</param>
+        /// <param name="p_NOD_XPOS"></param>
+        /// <param name="p_NOD_YPOS"></param>
+        /// <returns></returns>
+        public string GetWeightsNearNOD_ID(string p_iniPath, string p_dbConf, int p_NOD_ID)
+        {
+            string sRetStatus = "";
+            try
+            {
+                if (!PMapIniParams.Instance.Loaded)
+                    PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+   //             if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+   //                 return retErr;
+
+                PMapCommonVars.Instance.ConnectToDB();
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
+                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                boNode nod = route.GetNode(p_NOD_ID);
+                if (nod != null)
+                {
+                    sRetStatus = bllDepot.GetWeightsNear(nod.NOD_XPOS, nod.NOD_YPOS);
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ExceptionLog(ex);
+                UI.Error(ex.Message);
+                sRetStatus = retErr;
+            }
+            return sRetStatus;
+        }
+
+        public string ReloadRouteCache(string p_iniPath, string p_dbConf)
+        {
+            string sRetStatus = retOK;
+            try
+            {
+                if (!PMapIniParams.Instance.Loaded)
+                    PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                //if (CheckLicence(p_iniPath, p_dbConf, true) != retOK)
+                //    return retErr;
+
+                PMapCommonVars.Instance.ConnectToDB();
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null, true);
+
+            }
+            catch (Exception ex)
+            {
+                Util.ExceptionLog(ex);
+                UI.Error(ex.Message);
+                sRetStatus = retErr;
+            }
+            return sRetStatus;
+        }
+
         #endregion
+
+
 
 
         #region Csak C#-ból hívható szolgáltatások

@@ -437,7 +437,9 @@ namespace MPOrder.BLL
                                     DEP_QTYSRVTIME = PMapIniParams.Instance.MapeiQtySrvTime,
                                     DEP_CLIENTNUM = item.CustomerCode,
                                     DEP_IMPADDRSTAT = (NOD_ID == 0 ? boDepot.EIMPADDRSTAT.MISSADDR : boDepot.EIMPADDRSTAT.OK),
-                                    DEP_LIFETIME = 0
+                                    DEP_LIFETIME = 0,
+                                    DEP_WEIGHTAREA = ""
+                                    
                                 };
                                 dep.ID = bllDepotX.AddDepot(dep);
                                 bllDepotX.SetRegTruckToDep(dep.ID);

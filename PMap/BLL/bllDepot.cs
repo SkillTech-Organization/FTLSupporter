@@ -198,10 +198,10 @@ namespace PMapCore.BLL
             var res = RouteData.Instance.Edges.Where(
                             w => w.Value.EDG_MAXWEIGHT > 0 &&
                                  (
-                                 (Math.Abs(w.Value.fromLatLng.Lng - dXPOS) < Global.WEIGHTAREA_DEGREE &&
-                                 Math.Abs(w.Value.fromLatLng.Lat - dYPOS) < Global.WEIGHTAREA_DEGREE) ||
-                                 (Math.Abs(w.Value.toLatLng.Lng - dXPOS) < Global.WEIGHTAREA_DEGREE &&
-                                 Math.Abs(w.Value.toLatLng.Lat - dYPOS) < Global.WEIGHTAREA_DEGREE)
+                                 (Math.Abs(w.Value.fromLatLng.Lng - dXPOS) < PMapIniParams.Instance.WeightAreaDegree &&
+                                 Math.Abs(w.Value.fromLatLng.Lat - dYPOS) < PMapIniParams.Instance.WeightAreaDegree) ||
+                                 (Math.Abs(w.Value.toLatLng.Lng - dXPOS) < PMapIniParams.Instance.WeightAreaDegree &&
+                                 Math.Abs(w.Value.toLatLng.Lat - dYPOS) < PMapIniParams.Instance.WeightAreaDegree)
                                  )).Select(s => s.Value.EDG_MAXWEIGHT).Distinct().ToList();
             
             if( res != null && res.Count > 0)

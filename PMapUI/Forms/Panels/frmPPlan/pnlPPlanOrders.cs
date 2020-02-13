@@ -181,7 +181,6 @@ namespace PMapUI.Forms.Panels.frmPPlan
             {
                 e.Appearance.BackColor = Global.UNPLANNEDITEMCOLOR;
             }
-
         }
 
         private void gridPlanOrders_DragDrop(object sender, DragEventArgs e)
@@ -261,6 +260,18 @@ namespace PMapUI.Forms.Panels.frmPPlan
                     m_PPlanCommonVars.PlanOrderList = bllPlan.GetPlanOrders(m_PPlanCommonVars.PLN_ID);
                     RefreshAll(true);
                 }
+            }
+        }
+
+        private void gridViewPlanOrders_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.Column == gridColumnDEP_WEIGHTAREA)
+            {
+                if( !string.IsNullOrWhiteSpace((string)gridViewPlanOrders.GetRowCellValue(e.RowHandle, gridColumnDEP_WEIGHTAREA)))
+                {
+                    e.Appearance.ForeColor = Global.WEIGHTAREACOLOR;
+                }
+
             }
         }
     }

@@ -40,6 +40,7 @@ namespace PMapCore.Common
         public const string iniTourpointToolTip = "TourpointToolTip";
         public const string iniTruckCode = "TruckCode";
         public const string iniRoutesExpire = "RoutesExpire";
+        public const string iniWeightAreaDegree = "WeightAreaDegree";
 
         public const string iniWeb = "Web";
         public const string iniAzureAccount = "AzureAccount";
@@ -226,6 +227,7 @@ namespace PMapCore.Common
         public static Color DISABLEDCOLOR = Color.AliceBlue;
         public static Color DISABLEDFONTCOLOR = Color.Black;
         public static Color UNPLANNEDITEMCOLOR = Color.Azure;
+        public static Color WEIGHTAREACOLOR = Color.OrangeRed;
 
         public const string PM_ENCODING = "iso-8859-2";
 
