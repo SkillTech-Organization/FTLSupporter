@@ -1,4 +1,5 @@
-﻿using PMapCore.BLL;
+﻿using FTLSupporter;
+using PMapCore.BLL;
 using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
 using PMapCore.Common;
@@ -43,7 +44,6 @@ namespace SWHInterface
             try
             {
                 Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "')");
-
 
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
@@ -161,8 +161,14 @@ namespace SWHInterface
                 */
 
                 //2. RouteData.Instance singleton feltoltese
+                var dtXDate = DateTime.Now;
                 InitRouteDataProcess irdp = new InitRouteDataProcess(ni);
                 irdp.RunWait();
+                Util.Log2File(String.Format("JourneyFormCheck térkép feltöltés időtartam:{0}", (DateTime.Now - dtXDate).ToString()));
+                //gyors térképre illesztéshez...
+                dtXDate = DateTime.Now;
+                var EdgesArr = RouteData.Instance.Edges.Select(s => s.Value).ToArray();
+                Util.Log2File(String.Format("JourneyFormCheck térkép tömb előkészítés időtartam:{0}", (DateTime.Now - dtXDate).ToString()));
 
 
                 string RZN_ID_LIST = "";
@@ -178,9 +184,26 @@ namespace SWHInterface
                     RZN_ID_LIST = GetRestZonesByRST_ID(bllRoute, Global.RST_NORESTRICT);
 
                 ItemNo = 0;
+
+
+                dtXDate = DateTime.Now;
+
                 foreach (var item in p_lstRouteSection)
                 {
-                    var NOD_ID = RouteData.Instance.GetNearestReachableNOD_IDForTruck(new GMap.NET.PointLatLng(item.Lat, item.Lng), RZN_ID_LIST, p_XTruck.TRK_WEIGHT, p_XTruck.TRK_HEIGHT, p_XTruck.TRK_WIDTH);
+                    int NOD_ID = 0;
+                    var pt = new GMap.NET.PointLatLng(item.Lat, item.Lng);
+                    var ptKey = pt.ToString();
+                    if (FTLNodePtCache.Instance.Items.ContainsKey(ptKey))
+                    {
+
+                        NOD_ID = FTLNodePtCache.Instance.Items[ptKey];
+                    }
+                    else
+                    {
+                        NOD_ID = FTLSupporter.FTLInterface.GetNearestReachableNOD_IDForTruck_FAST(EdgesArr, pt, RZN_ID_LIST, p_XTruck.TRK_WEIGHT, p_XTruck.TRK_HEIGHT, p_XTruck.TRK_WIDTH);
+                        if(NOD_ID > 0)
+                            FTLNodePtCache.Instance.Items.TryAdd(ptKey, NOD_ID);
+                    }
                     if (NOD_ID > 0)
                     {
                         var edg = bllRoute.GetEdgeByNOD_ID(NOD_ID);
@@ -202,6 +225,8 @@ namespace SWHInterface
                     ItemNo++;
                 }
 
+                Util.Log2File(String.Format("JourneyFormCheck térképre illesztés időtartam:{0}", (DateTime.Now - dtXDate).ToString()));
+
                 if (sRetStatus == retErr)
                 {
                     return resultArr;
@@ -211,8 +236,10 @@ namespace SWHInterface
 
 
                 //
+                dtXDate = DateTime.Now;
                 JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni, p_lstRouteSection, p_XTruck, RZN_ID_LIST);
                 rvdp.RunWait();
+                Util.Log2File(String.Format("JourneyFormCheck feldolgozás időtartam:{0}", (DateTime.Now - dtXDate).ToString()));
 
                 if (rvdp.Result != null)
                 {
@@ -266,5 +293,8 @@ namespace SWHInterface
             }
             return RZN_ID_LIST;
         }
+
+
+
     }
 }

@@ -952,8 +952,8 @@ namespace PMapTestApp
                     ZIP_CITY = "BUDAPEST",
                     DEP_ADRSTREET = "Európa utca 6.",
                     DEP_ADRNUM = null,
-                    Lat = 1,
-                    Lng = 1 
+                    Lat = 47.3773972,
+                    Lng = 19.1201348
                 };
                 lstRouteSection.Add(item1);
 
@@ -965,8 +965,8 @@ namespace PMapTestApp
                     ZIP_CITY = "BUDAPEST",
                     DEP_ADRSTREET = "KÁLMÁN I. U. 18",
                     DEP_ADRNUM = null,
-                    Lat = 2,
-                    Lng = 2
+                    Lat = 47.5071895,
+                    Lng = 19.0881848
                 };
                 lstRouteSection.Add(item2);
 
@@ -978,8 +978,8 @@ namespace PMapTestApp
                     ZIP_CITY = "BUDAPEST",
                     DEP_ADRSTREET = "KÁLMÁN I. U. 18",
                     DEP_ADRNUM = null,
-                    Lat = 3,
-                    Lng = 3
+                    Lat = 47.4813602,
+                    Lng = 18.9902183
                 };
                 lstRouteSection.Add(item3);
 
@@ -991,8 +991,8 @@ namespace PMapTestApp
                     ZIP_CITY = "BUDAPEST",
                     DEP_ADRSTREET = "Európa utca 6.",
                     DEP_ADRNUM = null,
-                    Lat = 1,
-                    Lng = 1
+                    Lat = 47.3773972,
+                    Lng = 19.1201348
                 };
                 lstRouteSection.Add(item4);
 

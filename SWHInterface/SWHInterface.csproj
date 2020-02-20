@@ -69,6 +69,10 @@
       <Project>{735b55e9-0bb8-43e9-b3b7-959029ede369}</Project>
       <Name>Animated Notify Icon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj">
+      <Project>{b4fe3066-f14f-4625-85bb-57ea97751a6e}</Project>
+      <Name>FTLSupporter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
       <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
       <Name>GMap.NET.Core</Name>

@@ -8,7 +8,7 @@ namespace FTLSupporter
 {
 
 
-    internal class FTLNodePtCache
+    public class FTLNodePtCache
     {
         public static object Locker = new object();
 
