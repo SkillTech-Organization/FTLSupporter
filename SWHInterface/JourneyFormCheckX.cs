@@ -263,7 +263,10 @@ namespace SWHInterface
                         ErrMessage = PMapMessages.E_JRNFORM_NORESULT
                     };
                     resultArr.Add(errRes);
+                    Util.Log2File(">>ERROR:JourneyFormCheck()");
                 }
+                Util.Log2File(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString());
+
                 return resultArr;
             }
             catch (Exception e)
