@@ -900,11 +900,11 @@ namespace PMapTestApp
 
         private void button35_Click(object sender, EventArgs e)
         {
-            PMapIniParams.Instance.ReadParams("", dbConf);
-            SQLServerAccess db = new SQLServerAccess();
-            db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            bllDepot depot = new bllDepot(db);
-            bllTruck truck = new bllTruck(db);
+   //         PMapIniParams.Instance.ReadParams("", dbConf);
+   //         SQLServerAccess db = new SQLServerAccess();
+   //         db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+   //         bllDepot depot = new bllDepot(db);
+  //          bllTruck truck = new bllTruck(db);
 
             dlgTestRouteVis d = new dlgTestRouteVis();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)

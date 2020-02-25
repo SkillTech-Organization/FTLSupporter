@@ -43,9 +43,10 @@ namespace SWHInterface
 
             try
             {
+                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+
                 Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "')");
 
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 var DB = new SQLServerAccess();
@@ -265,7 +266,7 @@ namespace SWHInterface
                     resultArr.Add(errRes);
                     Util.Log2File(">>ERROR:JourneyFormCheck()");
                 }
-                Util.Log2File(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString());
+                Util.Log2File(String.Format(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString()));
 
                 return resultArr;
             }
