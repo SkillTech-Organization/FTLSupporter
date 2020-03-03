@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.gMapControl = new GMap.NET.WindowsForms.GMapControl();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
@@ -95,6 +94,7 @@
             this.numWeigtht = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.gMapControl = new GMap.NET.WindowsForms.GMapControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -148,35 +148,9 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
             this.splitContainer1.Size = new System.Drawing.Size(977, 724);
-            this.splitContainer1.SplitterDistance = 464;
+            this.splitContainer1.SplitterDistance = 462;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 1;
-            // 
-            // gMapControl
-            // 
-            this.gMapControl.Bearing = 0F;
-            this.gMapControl.CanDragMap = true;
-            this.gMapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gMapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.gMapControl.GrayScaleMode = false;
-            this.gMapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.gMapControl.LevelsKeepInMemmory = 5;
-            this.gMapControl.Location = new System.Drawing.Point(0, 0);
-            this.gMapControl.MarkersEnabled = true;
-            this.gMapControl.MaxZoom = 25;
-            this.gMapControl.MinZoom = 0;
-            this.gMapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.gMapControl.Name = "gMapControl";
-            this.gMapControl.NegativeMode = false;
-            this.gMapControl.PolygonsEnabled = true;
-            this.gMapControl.RetryLoadTile = 0;
-            this.gMapControl.RoutesEnabled = true;
-            this.gMapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.gMapControl.ShowTileGridLines = false;
-            this.gMapControl.Size = new System.Drawing.Size(462, 722);
-            this.gMapControl.TabIndex = 0;
-            this.gMapControl.Zoom = 0D;
-            this.gMapControl.Load += new System.EventHandler(this.gMapControl_Load);
             // 
             // tableLayoutPanel2
             // 
@@ -212,7 +186,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 78.5124F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.4876F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(505, 722);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(507, 722);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // panel4
@@ -222,7 +196,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 363);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(499, 34);
+            this.panel4.Size = new System.Drawing.Size(501, 34);
             this.panel4.TabIndex = 49;
             // 
             // tableLayoutPanel10
@@ -237,13 +211,13 @@
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(497, 32);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(499, 32);
             this.tableLayoutPanel10.TabIndex = 1;
             // 
             // btnTo
             // 
             this.btnTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTo.Location = new System.Drawing.Point(420, 4);
+            this.btnTo.Location = new System.Drawing.Point(422, 4);
             this.btnTo.Name = "btnTo";
             this.btnTo.Size = new System.Drawing.Size(74, 23);
             this.btnTo.TabIndex = 2;
@@ -258,7 +232,7 @@
             this.lblTo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblTo.Location = new System.Drawing.Point(3, 8);
             this.lblTo.Name = "lblTo";
-            this.lblTo.Size = new System.Drawing.Size(411, 15);
+            this.lblTo.Size = new System.Drawing.Size(413, 15);
             this.lblTo.TabIndex = 1;
             // 
             // groupBox1
@@ -268,7 +242,7 @@
             this.groupBox1.Location = new System.Drawing.Point(0, 400);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(505, 48);
+            this.groupBox1.Size = new System.Drawing.Size(507, 48);
             this.groupBox1.TabIndex = 42;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Útvonaltípus";
@@ -287,14 +261,14 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(499, 29);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(501, 29);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // rdbFastestPath
             // 
             this.rdbFastestPath.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rdbFastestPath.AutoSize = true;
-            this.rdbFastestPath.Location = new System.Drawing.Point(325, 6);
+            this.rdbFastestPath.Location = new System.Drawing.Point(326, 6);
             this.rdbFastestPath.Name = "rdbFastestPath";
             this.rdbFastestPath.Size = new System.Drawing.Size(98, 17);
             this.rdbFastestPath.TabIndex = 1;
@@ -306,7 +280,7 @@
             // 
             this.rdShortestPath.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rdShortestPath.AutoSize = true;
-            this.rdShortestPath.Location = new System.Drawing.Point(76, 6);
+            this.rdShortestPath.Location = new System.Drawing.Point(77, 6);
             this.rdShortestPath.Name = "rdShortestPath";
             this.rdShortestPath.Size = new System.Drawing.Size(96, 17);
             this.rdShortestPath.TabIndex = 0;
@@ -331,7 +305,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(499, 40);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(501, 40);
             this.tableLayoutPanel8.TabIndex = 43;
             // 
             // label6
@@ -369,7 +343,7 @@
             0,
             -2147483648});
             this.numFromNOD_ID.Name = "numFromNOD_ID";
-            this.numFromNOD_ID.Size = new System.Drawing.Size(349, 20);
+            this.numFromNOD_ID.Size = new System.Drawing.Size(351, 20);
             this.numFromNOD_ID.TabIndex = 3;
             this.numFromNOD_ID.ValueChanged += new System.EventHandler(this.numFromNOD_ID_ValueChanged);
             // 
@@ -388,7 +362,7 @@
             0,
             -2147483648});
             this.numToNOD_ID.Name = "numToNOD_ID";
-            this.numToNOD_ID.Size = new System.Drawing.Size(349, 20);
+            this.numToNOD_ID.Size = new System.Drawing.Size(351, 20);
             this.numToNOD_ID.TabIndex = 4;
             this.numToNOD_ID.ValueChanged += new System.EventHandler(this.numToNOD_ID_ValueChanged);
             // 
@@ -399,7 +373,7 @@
             this.grpCurrPos.Controls.Add(this.tableLayoutPanel3);
             this.grpCurrPos.Location = new System.Drawing.Point(3, 3);
             this.grpCurrPos.Name = "grpCurrPos";
-            this.grpCurrPos.Size = new System.Drawing.Size(499, 59);
+            this.grpCurrPos.Size = new System.Drawing.Size(501, 59);
             this.grpCurrPos.TabIndex = 3;
             this.grpCurrPos.TabStop = false;
             this.grpCurrPos.Text = "Aktuális pozíció";
@@ -424,7 +398,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(493, 40);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(495, 40);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // label1
@@ -442,9 +416,9 @@
             this.lblCurrLng.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrLng.AutoSize = true;
             this.lblCurrLng.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCurrLng.Location = new System.Drawing.Point(299, 2);
+            this.lblCurrLng.Location = new System.Drawing.Point(300, 2);
             this.lblCurrLng.Name = "lblCurrLng";
-            this.lblCurrLng.Size = new System.Drawing.Size(191, 15);
+            this.lblCurrLng.Size = new System.Drawing.Size(192, 15);
             this.lblCurrLng.TabIndex = 3;
             this.lblCurrLng.Text = "lblCurrLng";
             this.lblCurrLng.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -453,7 +427,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(249, 3);
+            this.label2.Location = new System.Drawing.Point(250, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 1;
@@ -466,7 +440,7 @@
             this.lblDst.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDst.Location = new System.Drawing.Point(53, 22);
             this.lblDst.Name = "lblDst";
-            this.lblDst.Size = new System.Drawing.Size(190, 15);
+            this.lblDst.Size = new System.Drawing.Size(191, 15);
             this.lblDst.TabIndex = 5;
             this.lblDst.Text = "lblDst";
             this.lblDst.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -489,7 +463,7 @@
             this.lblCurrLat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCurrLat.Location = new System.Drawing.Point(53, 2);
             this.lblCurrLat.Name = "lblCurrLat";
-            this.lblCurrLat.Size = new System.Drawing.Size(190, 15);
+            this.lblCurrLat.Size = new System.Drawing.Size(191, 15);
             this.lblCurrLat.TabIndex = 2;
             this.lblCurrLat.Text = "lblCurrLat";
             this.lblCurrLat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -500,7 +474,7 @@
             this.pZoom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pZoom.Location = new System.Drawing.Point(3, 68);
             this.pZoom.Name = "pZoom";
-            this.pZoom.Size = new System.Drawing.Size(499, 49);
+            this.pZoom.Size = new System.Drawing.Size(501, 49);
             this.pZoom.TabIndex = 32;
             this.pZoom.TabStop = false;
             this.pZoom.Text = "Nagyítás";
@@ -512,7 +486,7 @@
             this.tbZoom.Location = new System.Drawing.Point(3, 16);
             this.tbZoom.Maximum = 25;
             this.tbZoom.Name = "tbZoom";
-            this.tbZoom.Size = new System.Drawing.Size(493, 30);
+            this.tbZoom.Size = new System.Drawing.Size(495, 45);
             this.tbZoom.TabIndex = 0;
             this.tbZoom.Value = 2;
             this.tbZoom.Scroll += new System.EventHandler(this.tbZoom_Scroll);
@@ -523,7 +497,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(3, 123);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(499, 69);
+            this.groupBox2.Size = new System.Drawing.Size(501, 69);
             this.groupBox2.TabIndex = 41;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Kijelölés";
@@ -544,7 +518,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(493, 50);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(495, 50);
             this.tableLayoutPanel4.TabIndex = 1;
             // 
             // rdbTo
@@ -587,14 +561,14 @@
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.RowCount = 1;
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(408, 25);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(410, 25);
             this.tableLayoutPanel12.TabIndex = 3;
             // 
             // btnWeight
             // 
             this.btnWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnWeight.BackColor = System.Drawing.SystemColors.Control;
-            this.btnWeight.Location = new System.Drawing.Point(355, 3);
+            this.btnWeight.Location = new System.Drawing.Point(357, 3);
             this.btnWeight.Margin = new System.Windows.Forms.Padding(2);
             this.btnWeight.Name = "btnWeight";
             this.btnWeight.Size = new System.Drawing.Size(50, 19);
@@ -611,7 +585,7 @@
             this.panel5.Location = new System.Drawing.Point(184, 1);
             this.panel5.Margin = new System.Windows.Forms.Padding(0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(168, 23);
+            this.panel5.Size = new System.Drawing.Size(170, 23);
             this.panel5.TabIndex = 4;
             // 
             // ckhShowMarkers
@@ -664,7 +638,7 @@
             this.tableLayoutPanel13.Name = "tableLayoutPanel13";
             this.tableLayoutPanel13.RowCount = 1;
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(408, 25);
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(410, 25);
             this.tableLayoutPanel13.TabIndex = 4;
             // 
             // chkBoundary
@@ -673,7 +647,7 @@
             this.chkBoundary.AutoSize = true;
             this.chkBoundary.Location = new System.Drawing.Point(3, 4);
             this.chkBoundary.Name = "chkBoundary";
-            this.chkBoundary.Size = new System.Drawing.Size(198, 17);
+            this.chkBoundary.Size = new System.Drawing.Size(199, 17);
             this.chkBoundary.TabIndex = 3;
             this.chkBoundary.Text = "Lehatárolás ell.";
             this.chkBoundary.UseVisualStyleBackColor = true;
@@ -682,10 +656,10 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(206, 3);
+            this.button4.Location = new System.Drawing.Point(207, 3);
             this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(200, 19);
+            this.button4.Size = new System.Drawing.Size(201, 19);
             this.button4.TabIndex = 4;
             this.button4.Text = "Térképre igazítás";
             this.button4.UseVisualStyleBackColor = true;
@@ -703,7 +677,7 @@
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(499, 79);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(501, 79);
             this.tableLayoutPanel9.TabIndex = 42;
             // 
             // tableLayoutPanel7
@@ -722,7 +696,7 @@
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.93617F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.06383F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(499, 40);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(501, 40);
             this.tableLayoutPanel7.TabIndex = 3;
             // 
             // label8
@@ -761,7 +735,7 @@
             0,
             -2147483648});
             this.numLatTo.Name = "numLatTo";
-            this.numLatTo.Size = new System.Drawing.Size(350, 20);
+            this.numLatTo.Size = new System.Drawing.Size(352, 20);
             this.numLatTo.TabIndex = 2;
             this.numLatTo.ValueChanged += new System.EventHandler(this.numLatTo_ValueChanged);
             // 
@@ -781,7 +755,7 @@
             0,
             -2147483648});
             this.numLngTo.Name = "numLngTo";
-            this.numLngTo.Size = new System.Drawing.Size(350, 20);
+            this.numLngTo.Size = new System.Drawing.Size(352, 20);
             this.numLngTo.TabIndex = 3;
             this.numLngTo.ValueChanged += new System.EventHandler(this.numLngTo_ValueChanged);
             // 
@@ -801,7 +775,7 @@
             this.tableLayoutPanel6.RowCount = 2;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(499, 39);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(501, 39);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
             // label5
@@ -830,7 +804,7 @@
             0,
             -2147483648});
             this.numLatFrom.Name = "numLatFrom";
-            this.numLatFrom.Size = new System.Drawing.Size(350, 20);
+            this.numLatFrom.Size = new System.Drawing.Size(352, 20);
             this.numLatFrom.TabIndex = 2;
             this.numLatFrom.ValueChanged += new System.EventHandler(this.numLatFrom_ValueChanged);
             // 
@@ -850,7 +824,7 @@
             0,
             -2147483648});
             this.numLngFrom.Name = "numLngFrom";
-            this.numLngFrom.Size = new System.Drawing.Size(350, 20);
+            this.numLngFrom.Size = new System.Drawing.Size(352, 20);
             this.numLngFrom.TabIndex = 3;
             this.numLngFrom.ValueChanged += new System.EventHandler(this.numLngFrom_ValueChanged);
             // 
@@ -871,7 +845,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 323);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(499, 34);
+            this.panel1.Size = new System.Drawing.Size(501, 34);
             this.panel1.TabIndex = 46;
             // 
             // tableLayoutPanel5
@@ -886,7 +860,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(497, 32);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(499, 32);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // lblFrom
@@ -896,14 +870,14 @@
             this.lblFrom.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblFrom.Location = new System.Drawing.Point(3, 8);
             this.lblFrom.Name = "lblFrom";
-            this.lblFrom.Size = new System.Drawing.Size(411, 15);
+            this.lblFrom.Size = new System.Drawing.Size(413, 15);
             this.lblFrom.TabIndex = 0;
             this.lblFrom.Click += new System.EventHandler(this.lblFrom_Click);
             // 
             // btnFrom
             // 
             this.btnFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFrom.Location = new System.Drawing.Point(420, 4);
+            this.btnFrom.Location = new System.Drawing.Point(422, 4);
             this.btnFrom.Name = "btnFrom";
             this.btnFrom.Size = new System.Drawing.Size(74, 23);
             this.btnFrom.TabIndex = 1;
@@ -917,7 +891,7 @@
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(3, 692);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(499, 20);
+            this.btnOK.Size = new System.Drawing.Size(501, 20);
             this.btnOK.TabIndex = 1;
             this.btnOK.Text = "Bezár";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -930,7 +904,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(3, 544);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(499, 136);
+            this.panel3.Size = new System.Drawing.Size(501, 136);
             this.panel3.TabIndex = 48;
             // 
             // txtDierctRoute
@@ -939,7 +913,7 @@
             this.txtDierctRoute.Location = new System.Drawing.Point(0, 0);
             this.txtDierctRoute.Multiline = true;
             this.txtDierctRoute.Name = "txtDierctRoute";
-            this.txtDierctRoute.Size = new System.Drawing.Size(497, 114);
+            this.txtDierctRoute.Size = new System.Drawing.Size(499, 114);
             this.txtDierctRoute.TabIndex = 0;
             this.txtDierctRoute.TextChanged += new System.EventHandler(this.txtDierctRoute_TextChanged);
             // 
@@ -948,7 +922,7 @@
             this.button3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.button3.Location = new System.Drawing.Point(0, 114);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(497, 20);
+            this.button3.Size = new System.Drawing.Size(499, 20);
             this.button3.TabIndex = 1;
             this.button3.Text = "Beírt útvonal megjelenítése";
             this.button3.UseVisualStyleBackColor = true;
@@ -961,7 +935,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 479);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(499, 30);
+            this.panel2.Size = new System.Drawing.Size(501, 30);
             this.panel2.TabIndex = 47;
             // 
             // tableLayoutPanel11
@@ -977,7 +951,7 @@
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(497, 28);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(499, 28);
             this.tableLayoutPanel11.TabIndex = 0;
             // 
             // label7
@@ -997,7 +971,7 @@
             this.cmbRST_ID_LIST.FormattingEnabled = true;
             this.cmbRST_ID_LIST.Location = new System.Drawing.Point(53, 3);
             this.cmbRST_ID_LIST.Name = "cmbRST_ID_LIST";
-            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(441, 21);
+            this.cmbRST_ID_LIST.Size = new System.Drawing.Size(443, 21);
             this.cmbRST_ID_LIST.TabIndex = 4;
             this.cmbRST_ID_LIST.SelectedIndexChanged += new System.EventHandler(this.cmbRST_ID_LIST_SelectedIndexChanged);
             // 
@@ -1006,7 +980,7 @@
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(3, 516);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(499, 21);
+            this.button2.Size = new System.Drawing.Size(501, 21);
             this.button2.TabIndex = 45;
             this.button2.Text = "Útvonal részletező";
             this.button2.UseVisualStyleBackColor = true;
@@ -1027,13 +1001,13 @@
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
             this.tableLayoutPanel14.RowCount = 1;
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(505, 28);
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(507, 28);
             this.tableLayoutPanel14.TabIndex = 50;
             // 
             // numWeigtht
             // 
             this.numWeigtht.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.numWeigtht.Location = new System.Drawing.Point(171, 4);
+            this.numWeigtht.Location = new System.Drawing.Point(172, 4);
             this.numWeigtht.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -1045,7 +1019,7 @@
             0,
             -2147483648});
             this.numWeigtht.Name = "numWeigtht";
-            this.numWeigtht.Size = new System.Drawing.Size(162, 20);
+            this.numWeigtht.Size = new System.Drawing.Size(163, 20);
             this.numWeigtht.TabIndex = 46;
             // 
             // label10
@@ -1054,20 +1028,46 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(3, 7);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(162, 13);
+            this.label10.Size = new System.Drawing.Size(163, 13);
             this.label10.TabIndex = 45;
             this.label10.Text = "Súly";
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(339, 3);
+            this.button1.Location = new System.Drawing.Point(341, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(163, 21);
             this.button1.TabIndex = 44;
             this.button1.Text = "Útvonal számítása";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // gMapControl
+            // 
+            this.gMapControl.Bearing = 0F;
+            this.gMapControl.CanDragMap = true;
+            this.gMapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gMapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.gMapControl.GrayScaleMode = false;
+            this.gMapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.gMapControl.LevelsKeepInMemmory = 5;
+            this.gMapControl.Location = new System.Drawing.Point(0, 0);
+            this.gMapControl.MarkersEnabled = true;
+            this.gMapControl.MaxZoom = 25;
+            this.gMapControl.MinZoom = 0;
+            this.gMapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.gMapControl.Name = "gMapControl";
+            this.gMapControl.NegativeMode = false;
+            this.gMapControl.PolygonsEnabled = true;
+            this.gMapControl.RetryLoadTile = 0;
+            this.gMapControl.RoutesEnabled = true;
+            this.gMapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.gMapControl.ShowTileGridLines = false;
+            this.gMapControl.Size = new System.Drawing.Size(460, 722);
+            this.gMapControl.TabIndex = 0;
+            this.gMapControl.Zoom = 0D;
+            this.gMapControl.Load += new System.EventHandler(this.gMapControl_Load);
             // 
             // frmRouteCheck
             // 

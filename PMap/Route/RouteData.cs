@@ -301,7 +301,7 @@ namespace PMapCore.Route
             bool CalcForCompletedTour = false;
 
 
-            Util.Log2File($"PrepareMap available { (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K");
+           // Util.Log2File($"PrepareMap available { (int)(GC.GetTotalMemory(false) / 1024 / 1024)} K, Treshold:{PMapIniParams.Instance.CalcPMapRoutesMemTreshold} K");
 
             int nEdgCnt = 0;
 
