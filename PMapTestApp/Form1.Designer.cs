@@ -70,6 +70,7 @@
             this.button33 = new System.Windows.Forms.Button();
             this.button34 = new System.Windows.Forms.Button();
             this.button35 = new System.Windows.Forms.Button();
+            this.button36 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.VistaTimeProperties)).BeginInit();
@@ -391,7 +392,7 @@
             // 
             // button28
             // 
-            this.button28.Location = new System.Drawing.Point(728, 225);
+            this.button28.Location = new System.Drawing.Point(728, 275);
             this.button28.Name = "button28";
             this.button28.Size = new System.Drawing.Size(223, 34);
             this.button28.TabIndex = 33;
@@ -441,7 +442,7 @@
             // 
             // button33
             // 
-            this.button33.Location = new System.Drawing.Point(737, 108);
+            this.button33.Location = new System.Drawing.Point(728, 108);
             this.button33.Name = "button33";
             this.button33.Size = new System.Drawing.Size(223, 34);
             this.button33.TabIndex = 38;
@@ -461,7 +462,7 @@
             // 
             // button35
             // 
-            this.button35.Location = new System.Drawing.Point(728, 275);
+            this.button35.Location = new System.Drawing.Point(728, 185);
             this.button35.Name = "button35";
             this.button35.Size = new System.Drawing.Size(223, 34);
             this.button35.TabIndex = 40;
@@ -469,11 +470,22 @@
             this.button35.UseVisualStyleBackColor = true;
             this.button35.Click += new System.EventHandler(this.button35_Click);
             // 
+            // button36
+            // 
+            this.button36.Location = new System.Drawing.Point(728, 225);
+            this.button36.Name = "button36";
+            this.button36.Size = new System.Drawing.Size(223, 34);
+            this.button36.TabIndex = 41;
+            this.button36.Text = "Tömeges Menetlevél ellenőrzés SWH teszt";
+            this.button36.UseVisualStyleBackColor = true;
+            this.button36.Click += new System.EventHandler(this.button36_Click);
+            // 
             // frmPMapTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(989, 446);
+            this.Controls.Add(this.button36);
             this.Controls.Add(this.button35);
             this.Controls.Add(this.button34);
             this.Controls.Add(this.button33);
@@ -568,6 +580,7 @@
         private System.Windows.Forms.Button button33;
         private System.Windows.Forms.Button button34;
         private System.Windows.Forms.Button button35;
+        private System.Windows.Forms.Button button36;
     }
 }
 

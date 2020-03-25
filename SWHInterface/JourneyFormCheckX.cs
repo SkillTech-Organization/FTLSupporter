@@ -267,6 +267,7 @@ namespace SWHInterface
                     Util.Log2File(">>ERROR:JourneyFormCheck()");
                 }
                 Util.Log2File(String.Format(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString()));
+               
 
                 return resultArr;
             }

@@ -8,6 +8,7 @@ using System.Drawing;
 using System.ComponentModel;
 using PMapCore.BO.Base;
 using PMapCore.Common.Attrib;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO.DataXChange
 {
@@ -87,7 +88,8 @@ namespace PMapCore.BO.DataXChange
         public int TRK_WIDTH { get; set; }
         [DisplayNameAttributeX(Name = "Raktér hosszúsága", Order = 9)]
         public int TRK_LENGTH { get; set; }
-
+        
+        [JsonIgnore]
         [DisplayNameAttributeX(Name = "Szín", Order = 10)]
         public Color TRK_COLOR { get; set; }
 

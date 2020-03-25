@@ -184,7 +184,7 @@ namespace PMapTestApp
                 top.Run();
                 pd.ShowDialog();
 
-                if( top.Result == TourOptimizerProcess.eOptResult.Error && !string.IsNullOrWhiteSpace(top.ErrorMsg))
+                if (top.Result == TourOptimizerProcess.eOptResult.Error && !string.IsNullOrWhiteSpace(top.ErrorMsg))
                 {
                     UI.Error(top.ErrorMsg);
                 }
@@ -291,7 +291,7 @@ namespace PMapTestApp
             d.txtAddr.Text = "8960 Lenti/Gosztola, Petőfi utca 33";
             d.txtAddr.Text = "9941 Őriszentpéter/Ispánk, Városszer  17";
             d.txtAddr.Text = "9941 Őriszentpéter/Ispánk, Városszer  17";
-           // d.txtAddr.Text = "9941 Ispánk, Városszer  17";
+            // d.txtAddr.Text = "9941 Ispánk, Városszer  17";
             d.txtAddr.Text = "3994 Pálháza/Bózsva/Filkeháza/Füzérkajata/Kishuta/Nagyhuta, Vásártéri utca 2";
             d.txtAddr.Text = "7960 Sellye/Zengővárkony/Drávaiványi/Drávasztára/Marócsa/Sumony, Dráva út 4";
             d.txtAddr.Text = "7960  Drávaiványi/Drávasztára , Dráva út 4";
@@ -304,7 +304,7 @@ namespace PMapTestApp
             {
                 var vbintf = new VBInterface.PMapInterface();
 
-       //         UI.Message("Geocoding->" + vbintf.GeocodingFulAddr(d.txtAddr.Text, "", dbConf));
+                //         UI.Message("Geocoding->" + vbintf.GeocodingFulAddr(d.txtAddr.Text, "", dbConf));
 
 
                 PMapCommonVars.Instance.ConnectToDB();
@@ -336,7 +336,7 @@ namespace PMapTestApp
                         UI.Message("NOD.ID = " + NOD_ID.ToString() + ",EDG_ID=" + EDG_ID.ToString() + ",Addr=" +
                             (Util.getFieldValue<int>(dt.Rows[0], "ZIP_NUM")).ToString() + " " +
                             Util.getFieldValue<string>(dt.Rows[0], "ZIP_CITY") + " " +
-                            Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME") 
+                            Util.getFieldValue<string>(dt.Rows[0], "EDG_NAME")
                             + ",Weights:" + bllDepot.GetWeightsNear(nod.NOD_XPOS, nod.NOD_YPOS)
                             );
 
@@ -523,7 +523,7 @@ namespace PMapTestApp
         private void button19_Click(object sender, EventArgs e)
         {
             PMapIniParams.Instance.ReadParams("", dbConf);
-            var res =  (new VBInterface.PMapInterface()).DeleteExpiredRoutes("", dbConf);
+            var res = (new VBInterface.PMapInterface()).DeleteExpiredRoutes("", dbConf);
 
         }
 
@@ -729,7 +729,7 @@ namespace PMapTestApp
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
- 
+
                 SQLServerAccess db = new SQLServerAccess();
                 db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
                 bllPlan bllPlan = new bllPlan(db);
@@ -741,7 +741,7 @@ namespace PMapTestApp
 
                 AzureTableStore.Instance.AzureAccount = "petawebdbtest";
                 AzureTableStore.Instance.AzureKey = "ucXUpxndw4j+73Ygjk7Cg3I93voioqGC5PCCelVr4g8aSpub+AEfk99YG6c/8768Exzv9wXDcQQd/o7xenoxzQ==";
-                      BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
+                BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                 BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
 
                 AzureTableStore.Instance.DeleteTable("PMTour");
@@ -749,7 +749,7 @@ namespace PMapTestApp
                 foreach (var xTr in TourList)
                 {
                     bllWebTrace.MaintainItem(xTr);
-                    foreach( var xTp in xTr.TourPoints)
+                    foreach (var xTp in xTr.TourPoints)
                     {
                         bllWebTraceTourPoint.MaintainItem(xTp);
                     }
@@ -783,7 +783,7 @@ namespace PMapTestApp
             lstRegNo.Add("LSN-700");
             lstRegNo.Add("PEK-064");
             lstRegNo.Add("PEB-687");
-            
+
             /*
             < add key = "AuthTokenCryptAESKey" value = "VhHe1F6DExaWl1T0bcOxdok58CyIXnjwCDQmojbwpH4=" />
             < add key = "AuthTokenCryptAESIV" value = "GFXXSSi7IQFN0bgbwuuVng==" />
@@ -801,7 +801,7 @@ namespace PMapTestApp
             Console.WriteLine(base64);
 
 
-            string url = @"http://mplastwebtest.azurewebsites.net/Auth/GenerateTempUserToken?tokencontent="+ base64;
+            string url = @"http://mplastwebtest.azurewebsites.net/Auth/GenerateTempUserToken?tokencontent=" + base64;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.AutomaticDecompression = DecompressionMethods.GZip;
 
@@ -814,12 +814,12 @@ namespace PMapTestApp
             }
 
             Console.WriteLine(html);
-            
+
             //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr
 
         }
 
-//        private async void button30_Click(object sender, EventArgs e)
+        //        private async void button30_Click(object sender, EventArgs e)
         private void button30_Click(object sender, EventArgs e)
         {
             /*
@@ -838,7 +838,7 @@ namespace PMapTestApp
             var response = await client.SendEmailAsync(msg);
             */
         }
-        
+
 
         private void button31_Click(object sender, EventArgs e)
         {
@@ -866,7 +866,7 @@ namespace PMapTestApp
                 Lng = 20.1646350 //18.3439433611111
             };
 
-           
+
             PMRoute.RouteFuncs.GetDistance("", dbConf, @"d:\temp\ct",
             testPoint1.Lat, testPoint1.Lng, testPoint2.Lat, testPoint2.Lng, "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24", 0, 0, 0, out dist, out durat);
             UI.Message("dist:" + dist.ToString() + ", dur:" + durat.ToString());
@@ -893,18 +893,18 @@ namespace PMapTestApp
             dlgRes.Result = res;
             dlgRes.ShowDialog();
             */
-        //    (new PMapInterface()).MPOrderDialog("", dbConf);
-            
+            //    (new PMapInterface()).MPOrderDialog("", dbConf);
+
 
         }
 
         private void button35_Click(object sender, EventArgs e)
         {
-   //         PMapIniParams.Instance.ReadParams("", dbConf);
-   //         SQLServerAccess db = new SQLServerAccess();
-   //         db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-   //         bllDepot depot = new bllDepot(db);
-  //          bllTruck truck = new bllTruck(db);
+            //         PMapIniParams.Instance.ReadParams("", dbConf);
+            //         SQLServerAccess db = new SQLServerAccess();
+            //         db.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
+            //         bllDepot depot = new bllDepot(db);
+            //          bllTruck truck = new bllTruck(db);
 
             dlgTestRouteVis d = new dlgTestRouteVis();
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -1032,19 +1032,26 @@ namespace PMapTestApp
                     TFP_KMCOST = 0,
                     TFP_HOURCOST = 0
                 };
-                
+
                 /*
                 var sxtrk = "{\"TRK_CODE\":\"MCE-204\",\"TRK_REG_NUM\":null,\"TRK_TRAILER\":null,\"TRK_WEIGHT\":0,\"TRK_XHEIGHT\":0,\"TRK_XWIDTH\":0,\"TRK_HEIGHT\":0,\"TRK_WIDTH\":0,\"TRK_LENGTH\":0,\"TRK_COLOR\":\"\",\"TRK_GPS\":false,\"TRK_BACKPANEL\":false,\"TRK_LOGO\":false,\"TRK_AXLENUM\":0,\"TRK_ETOLLCAT\":4,\"TRK_ENGINEEURO\":3,\"TRK_IDLETIME\":0,\"TRK_ACTIVE\":false,\"TRK_COMMENT\":null,\"CRR_CODE\":null,\"WHS_CODE\":null,\"SPV_VALUE1\":70,\"SPV_VALUE2\":60,\"SPV_VALUE3\":50,\"SPV_VALUE4\":40,\"SPV_VALUE5\":35,\"SPV_VALUE6\":15,\"SPV_VALUE7\":15,\"CPP_LOADQTY\":0.0,\"CPP_LOADVOL\":0.0,\"TFP_FIXCOST\":0.0,\"TFP_KMCOST\":0.0,\"TFP_HOURCOST\":0.0}";
                 Xtrk = JsonConvert.DeserializeObject<boXTruck>(sxtrk);
                 */
 
-                    List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
+                /*
+                var trk = Util.FileToString(@"d:\Temp\SWH\4029964_truck.json");
+                Xtrk = JSONHelper.Deserialize<boXTruck>(trk.Replace("\"TRK_COLOR\":{\"R\":0,\"G\":0,\"B\":0,\"A\":0,\"IsKnownColor\":false,\"IsEmpty\":true,\"IsNamedColor\":false,\"IsSystemColor\":false,\"Name\":\"0\"},", ""));
+
+                var rt = Util.FileToString(@"d:\Temp\SWH\4029964_routes.json ");
+                lstRouteSection = JSONHelper.Deserialize<List<boXRouteSection>>(rt);
+                */
+                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
 
                 dlgRouteVisCalcRes dd = new dlgRouteVisCalcRes();
                 dd.propertyGridCtrl1.SetObject(res.First());
                 if (res.First().Data != null)
                 {
-                   var rr = (boJourneyFormResult)res.First().Data;
+                    var rr = (boJourneyFormResult)res.First().Data;
                     dd.propertyGridCtrl2.SetObject(rr.TotalSummary.FastestRoute);
                     dd.propertyGridCtrl3.SetObject(rr.TotalSummary.ShortestRoute);
                 }
@@ -1053,6 +1060,48 @@ namespace PMapTestApp
                 dd.ShowDialog();
             }
 
+        }
+
+        private void button36_Click(object sender, EventArgs e)
+        {
+            var dir = @"d:\Temp\SWH\";
+            var logfile = dir + "res.log";
+            File.Delete(logfile);
+            var files = Directory.GetFiles(dir, @"*_truck.json").ToList();
+            foreach (var file in files)
+            {
+                var trk = Util.FileToString(file);
+
+                var Xtrk = JSONHelper.Deserialize<boXTruck>(trk.Replace("\"TRK_COLOR\":{\"R\":0,\"G\":0,\"B\":0,\"A\":0,\"IsKnownColor\":false,\"IsEmpty\":true,\"IsNamedColor\":false,\"IsSystemColor\":false,\"Name\":\"0\"},", ""));
+                var rt = Util.FileToString(file.Replace("truck", "routes"));
+                var lstRouteSection = JSONHelper.Deserialize<List<boXRouteSection>>(rt);
+                List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
+
+                string AZTURA = file.Replace(dir, "").Split('_').First();
+
+                var logItem = $"{AZTURA}\ttrk:{Xtrk.TRK_CODE},súly:{Xtrk.TRK_WEIGHT}";
+                if (res.First().Data != null)
+                {
+                    var rr = (boJourneyFormResult)res.First().Data;
+                    var lnRes = rr.SectionSummaries;
+
+                    var logDetail = "";
+                    var sumSistance = 0.0;
+                    foreach (var item in rr.SectionSummaries)
+                    {
+                        logDetail += $"\tlat:{item.FromPoint.Lat.ToString("#,#0.00000000")}\tlng:{item.FromPoint.Lng.ToString("#,#0.00000000")}\t=>lat:{item.ToPoint.Lat.ToString("#,#0.00000000")}\tlng:{item.ToPoint.Lng.ToString("#,#0.00000000")}\tfastest:{item.FastestRoute.SumDistance.ToString(Global.NUMFORMAT)}\n";
+                        sumSistance += item.FastestRoute.SumDistance;
+                    }
+                    logItem += "\tdistance:" + sumSistance.ToString(Global.NUMFORMAT);
+                    Util.String2File(logItem+"\n", logfile, true);
+                    Util.String2File(logDetail, logfile, true);
+                }
+                else
+                {
+                    logItem += " NINCS EREDMÉNY\n";
+                    Util.String2File(logItem, logfile, true);
+                }
+            }
         }
     }
 }
