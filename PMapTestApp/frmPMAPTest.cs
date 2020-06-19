@@ -1067,13 +1067,13 @@ namespace PMapTestApp
             var dir = @"d:\Temp\SWH\";
             var logfile = dir + "res.log";
             File.Delete(logfile);
-            var files = Directory.GetFiles(dir, @"*_truck.json").ToList();
+            var files = Directory.GetFiles(dir, @"*_boXTruck.json").ToList();
             foreach (var file in files)
             {
                 var trk = Util.FileToString(file);
 
                 var Xtrk = JSONHelper.Deserialize<boXTruck>(trk.Replace("\"TRK_COLOR\":{\"R\":0,\"G\":0,\"B\":0,\"A\":0,\"IsKnownColor\":false,\"IsEmpty\":true,\"IsNamedColor\":false,\"IsSystemColor\":false,\"Name\":\"0\"},", ""));
-                var rt = Util.FileToString(file.Replace("truck", "routes"));
+                var rt = Util.FileToString(file.Replace("_boXTruck", "_boXRoute"));
                 var lstRouteSection = JSONHelper.Deserialize<List<boXRouteSection>>(rt);
                 List<dtXResult> res = (new SWHInterface.PMapInterface()).JourneyFormCheck("", dbConf, lstRouteSection, Xtrk);
 
@@ -1095,6 +1095,9 @@ namespace PMapTestApp
                     logItem += "\tdistance:" + sumSistance.ToString(Global.NUMFORMAT);
                     Util.String2File(logItem+"\n", logfile, true);
                     Util.String2File(logDetail, logfile, true);
+                    var resJSon = JsonConvert.SerializeObject(res);
+                    Util.String2File(resJSon, file.Replace("_boXTruck", "_testResult"));
+
                 }
                 else
                 {

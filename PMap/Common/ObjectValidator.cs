@@ -56,9 +56,27 @@ namespace PMapCore.Common
                             Errors.Add(err);
                         }
                     }
+                    else
+                    {
+
+                        if (v!= null && v.GetType() == typeof(DateTime) && v.ToString() == DateTime.MinValue.ToString())
+                        {
+                            var required = Attribute.IsDefined(propInf, typeof(RequiredAttribute));
+                            if (required)
+                            {
+                                ValidationError err = new ValidationError()
+                                {
+                                    Field = context.MemberName,
+                                    Message = $"The {context.MemberName} field is required."
+                                };
+                                Errors.Add(err);
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
+                    throw;
                 }
             }
             return Errors;

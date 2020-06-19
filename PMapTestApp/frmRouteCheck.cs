@@ -168,7 +168,7 @@ namespace PMapTestApp
                 tbZoom.Value = m_currZoom;
             tbZoom.ValueChanged += new EventHandler(tbZoom_ValueChanged);
             button1.Enabled = numToNOD_ID.Value > 0 && numFromNOD_ID.Value > 0;
-            button2.Enabled = numToNOD_ID.Value > 0 && numFromNOD_ID.Value > 0;
+            button2.Enabled = (numToNOD_ID.Value > 0 && numFromNOD_ID.Value > 0) || m_routes.Count > 0;
             cmbRST_ID_LIST.Enabled = numToNOD_ID.Value > 0 && numFromNOD_ID.Value > 0 && m_routes != null && m_routes.Count > 0;
 
             m_boundaryLayer.Polygons.Clear();
@@ -553,6 +553,8 @@ namespace PMapTestApp
         {
             try
             {
+                var nodes = new List<int>();
+
                 string[] aRoute = txtDierctRoute.Text.Replace('\n', ',').Replace(' ', ',').Split(',');
                 m_directRouteLayer.Routes.Clear();
                 m_directRouteLayer.Markers.Clear();
@@ -564,16 +566,38 @@ namespace PMapTestApp
                     m_boundNodes.Add(Convert.ToInt32(point));
                     if (point.Length > 0)
                     {
-                        PointLatLng pt = m_bllRoute.GetPointLatLng(Convert.ToInt32(point));
+                        var NOD_ID = Convert.ToInt32(point);
+                        nodes.Add(NOD_ID);
+
+                        PointLatLng pt = m_bllRoute.GetPointLatLng(NOD_ID);
                         mr.Points.Add(pt);
 
                         GMapMarker gm = new GMarkerGoogle(pt, GMarkerGoogleType.blue_small);
                         gm.ToolTipText = point;
                         gm.ToolTipMode = MarkerTooltipMode.OnMouseOver;
                         m_directRouteLayer.Markers.Add(gm);
+
                     }
                 }
 
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+
+                var rp = new CRoutePars() { RZN_ID_LIST = (string)cmbRST_ID_LIST.SelectedValue, Weight = (int)numWeigtht.Value };
+                var rt = new boRoute();
+                rt.Edges = new List<boEdge>();
+                m_routes = new Dictionary<CRoutePars, boRoute>();
+                for ( int i = 0; i < nodes.Count-1;i++)
+                {
+                    boEdge edge = null;
+
+                    if (RouteData.Instance.Edges.TryGetValue(nodes[i].ToString() + "," + nodes[i+1].ToString(), out edge))
+                    {
+                        rt.Edges.Add(edge);
+                    }
+
+                        
+                }
+                m_routes.Add(rp, rt);
                 Pen p = new Pen(Color.Aquamarine, Global.TourLineWidthNormal);
                 p.DashStyle = DashStyle.Solid;
                 m_directRouteLayer.Routes.Add(mr);

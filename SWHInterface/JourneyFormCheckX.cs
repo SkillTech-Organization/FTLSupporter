@@ -1,4 +1,5 @@
 ﻿using FTLSupporter;
+using Newtonsoft.Json;
 using PMapCore.BLL;
 using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
@@ -45,13 +46,18 @@ namespace SWHInterface
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
 
-                Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "')");
+                Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "') ver.:" + ApplicationInfo.Version);
 
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 var DB = new SQLServerAccess();
                 DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
                 var bllRoute = new bllRoute(DB);
+                var bllZip = new bllZIP(DB);
+
+                Util.Log2File($"JourneyFormCheck DBServer={PMapIniParams.Instance.DBServer}, DBName={PMapIniParams.Instance.DBName}", false);
+            
+
                 var etbllEtoll = new bllEtoll(DB);
 
                 PMapCommonVars.Instance.LstEToll = etbllEtoll.GetAllEtolls();
@@ -202,7 +208,7 @@ namespace SWHInterface
                     else
                     {
                         NOD_ID = FTLSupporter.FTLInterface.GetNearestReachableNOD_IDForTruck_FAST(EdgesArr, pt, RZN_ID_LIST, p_XTruck.TRK_WEIGHT, p_XTruck.TRK_HEIGHT, p_XTruck.TRK_WIDTH);
-                        if(NOD_ID > 0)
+                        if (NOD_ID > 0)
                             FTLNodePtCache.Instance.Items.TryAdd(ptKey, NOD_ID);
                     }
                     if (NOD_ID > 0)
@@ -210,7 +216,21 @@ namespace SWHInterface
                         var edg = bllRoute.GetEdgeByNOD_ID(NOD_ID);
                         item.NOD_ID = NOD_ID;
                         item.EDG_ID = edg.ID;
+
+                        var nd = bllRoute.GetNode(NOD_ID);
+                        if( nd  != null )
+                        {
+                            var zip = bllZip.GetZIPbyID(nd.ZIP_ID);
+                            if (zip != null)
+                            {
+                                item.ZIP_ID = zip.ID;
+                                item.ZIP_NUM = zip.ZIP_NUM;
+                                item.ZIP_CITY = zip.ZIP_CITY;
+                                item.DEP_ADRSTREET = edg.EDG_NAME;
                             }
+                        }
+
+                    }
                     else
                     {
                         dtXResult errRes = new dtXResult();
@@ -226,7 +246,7 @@ namespace SWHInterface
                     ItemNo++;
                 }
 
-                Util.Log2File(String.Format("JourneyFormCheck térképre illesztés időtartam:{0}", (DateTime.Now - dtXDate).ToString()));
+                Util.Log2File(String.Format("JourneyFormCheck térképre illesztés időtartam:{0}", (DateTime.Now - dtXDate).ToString()), false);
 
                 if (sRetStatus == retErr)
                 {
@@ -240,7 +260,7 @@ namespace SWHInterface
                 dtXDate = DateTime.Now;
                 JourneyFormDataProcess rvdp = new JourneyFormDataProcess(ni, p_lstRouteSection, p_XTruck, RZN_ID_LIST);
                 rvdp.RunWait();
-                Util.Log2File(String.Format("JourneyFormCheck feldolgozás időtartam:{0}", (DateTime.Now - dtXDate).ToString()));
+                Util.Log2File(String.Format("JourneyFormCheck feldolgozás időtartam:{0}", (DateTime.Now - dtXDate).ToString()), false);
 
                 if (rvdp.Result != null)
                 {
@@ -264,15 +284,11 @@ namespace SWHInterface
                         ErrMessage = PMapMessages.E_JRNFORM_NORESULT
                     };
                     resultArr.Add(errRes);
-                    Util.Log2File(">>ERROR:JourneyFormCheck()");
                 }
-                Util.Log2File(String.Format(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString()));
-               
-
-                return resultArr;
             }
             catch (Exception e)
             {
+                Util.Log2File(String.Format(">>EXCEPTION:JourneyFormCheck():{0}", e.Message));
                 Util.ExceptionLog(e);
                 dtXResult expRes = new dtXResult();
                 expRes.Status = dtXResult.EStatus.EXCEPTION;
@@ -280,7 +296,14 @@ namespace SWHInterface
                 sRetStatus = retErr;
                 resultArr.Add(expRes);
             }
-            //Util.Log2File(">>END:JourneyFormCheck()");
+
+
+            Util.Log2File(String.Format(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString()));
+
+            var resJSon = JsonConvert.SerializeObject(resultArr);
+            Util.Log2File(String.Format(">>RESULT:JourneyFormCheck():\n{0}", resJSon), false);
+
+
             return resultArr;
         }
 
