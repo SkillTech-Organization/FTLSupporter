@@ -153,7 +153,7 @@ namespace PMapUI.Forms
                 cmbPlans.SelectedIndexChanged += new EventHandler(cmbPlans_SelectedIndexChanged);
             }
 
-            btnToCloud.Visible = PMapIniParams.Instance.AzureAccount.Length > 0;
+            btnToCloud.Visible = AzureTableStore.Instance.AzureAccount == PMapIniParams.Instance.AzureAccount;
 
             btnDelPlan.Enabled = (p_PLN_ID > 0);
             btnFindORD_NUM.Enabled = (p_PLN_ID > 0);
@@ -369,7 +369,7 @@ namespace PMapUI.Forms
 
                 //befrissítjük a túra és túrapont grideket (a layout betöltéssel megváltozott a rendezettség)
                 m_pnlPPlanTours.RefreshPanel(new PlanEventArgs(ePlanEventMode.FirstTour));
-                btnToCloud.Visible = PMapIniParams.Instance.AzureAccount != "";
+                btnToCloud.Visible = (AzureTableStore.Instance.AzureAccount == PMapIniParams.Instance.AzureAccount);
             }
             catch (Exception e)
             {
@@ -839,8 +839,6 @@ namespace PMapUI.Forms
             if (UI.Confirm(PMapMessages.Q_PEDIT_UPLOAD))
             {
                 var crypto = new AuthCryptoHelper("$2a$10$GH1ygiHqiZ9Q18Bk.1hrJ.");
-                string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
-                string oriAzureKey = AzureTableStore.Instance.AzureKey;
                 
                 try
                 {
@@ -851,12 +849,6 @@ namespace PMapUI.Forms
 
 
                         Util.Log2File("SendToAzure START, PLN_ID:"+ m_PPlanCommonVars.PLN_ID.ToString());
-
-                        //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
-                        //connect stringet tudjon kezelni
-                        //
-                        AzureTableStore.Instance.AzureAccount = PMapIniParams.Instance.AzureAccount;
-                        AzureTableStore.Instance.AzureKey = PMapCommonVars.Instance.AzureTableStoreApiKey;
 
 
                         //Felhasználók
@@ -1017,9 +1009,6 @@ namespace PMapUI.Forms
                 }
                 finally
                 {
-                    AzureTableStore.Instance.AzureAccount = oriAzureAccount;
-                    AzureTableStore.Instance.AzureKey = oriAzureKey;
-
                 }
             }
         }

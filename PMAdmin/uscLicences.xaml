@@ -35,7 +35,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0"  ShowGridLines="false">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="114"/>
+                    <ColumnDefinition Width="143"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -48,7 +48,7 @@
                 <Label Content="Név" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,6,0,5" Width="31" />
                 <Label Content="Lejárati dátum" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5,0,6" Width="86" />
                 <Label Content="TableStore API key" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,6,0,5" Width="107" />
-                <Label Content="SendGrid API key" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5" Width="101" />
+                <Label Content="SendGrid (emailküldés) API key" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5" Width="101" />
                 <Label Content="Megjegyzés" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Height="26" Margin="0,5,0,6" Width="73" />
                 <TextBox x:Name="txtAppInstance"  Grid.Column="1" Grid.Row="0" Height="22"  Margin="5,10,5,5" HorizontalAlignment="Stretch"  TextWrapping="Wrap"  VerticalAlignment="Center"  
                          Text="{Binding Path=EditedItem.AppInstance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True,  ValidatesOnDataErrors=True}"   

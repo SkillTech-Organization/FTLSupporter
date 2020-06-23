@@ -95,8 +95,7 @@ namespace PMapCore.Common
 
         public bool IsCheckMode { get; set; } = false;
 
-        public string AzureTableStoreApiKey { get;  set; }
-        public string AzureSendGridApiKey { get;  set; }
+        public string AzureSendGridApiKey { get;  set; }        //
 
         public int TPArea { get; set; } = 12000;
    

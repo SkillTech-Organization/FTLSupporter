@@ -103,7 +103,15 @@ namespace PMapCore.WebTrace
                 NotifyPropertyChanged("Type");
             }
         }
-        
+
+        [DataMember]
+        [DisplayNameAttributeX(Name = "Túrateljesítés kód")]
+        public string FullfillmentCode { get; set; }
+
+        [DataMember]
+        [DisplayNameAttributeX(Name = "Túrateljesítés megjegyzés")]
+        public string FullfillmentCommnet{ get; set; }
+
 
     }
 

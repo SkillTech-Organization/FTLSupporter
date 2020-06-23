@@ -90,7 +90,7 @@ namespace PMapCore.Licence
         private string m_AzureSendGridApiKey;
         [DataMember]
         [AzurePartitionAttr]
-        [DisplayNameAttributeX(Name = "Azure SendGrid ApiKey", Order = 5, NoPrefix = true)]
+        [DisplayNameAttributeX(Name = "Azure SendGrid ApiKey (emailküldés)", Order = 5, NoPrefix = true)]
         public string AzureSendGridApiKey
         {
             get { return m_AzureSendGridApiKey; }

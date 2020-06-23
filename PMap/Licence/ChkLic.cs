@@ -23,8 +23,8 @@ namespace PMapCore.Licence
             if (p_IDFile.Length == 0)
                 throw (new PMapLicenceException(PMapMessages.E_LIC_NOFILE));
 
-            string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
-            string oriAzureKey = AzureTableStore.Instance.AzureKey;
+ //           string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
+ //           string oriAzureKey = AzureTableStore.Instance.AzureKey;
             try
             {
                 buffer = Util.FileToByteArray(p_IDFile);
@@ -46,7 +46,7 @@ namespace PMapCore.Licence
 
                     PMapCommonVars.Instance.AppInstance = pi.AppInstance;
                     PMapCommonVars.Instance.Expired = pl.Expired;
-                    PMapCommonVars.Instance.AzureTableStoreApiKey = pl.AzureTableStoreApiKey;
+
                     PMapCommonVars.Instance.AzureSendGridApiKey = pl.AzureSendGridApiKey;
 
 
@@ -83,8 +83,8 @@ namespace PMapCore.Licence
             }
             finally
             {
-                AzureTableStore.Instance.AzureAccount = oriAzureAccount;
-                AzureTableStore.Instance.AzureKey = oriAzureKey;
+    //            AzureTableStore.Instance.AzureAccount = oriAzureAccount;
+    //            AzureTableStore.Instance.AzureKey = oriAzureKey;
 
             }
         }

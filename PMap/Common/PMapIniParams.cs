@@ -55,11 +55,14 @@ namespace PMapCore.Common
 
 
 
-        public string AzureAccount { get; private set; }
+        public string AzureAccount { get; private set; }        //Felhőbe küldés tablestore account név. Csak abban az esetben mehet a feltöltés, ha 
+                                                                //az itt megadott név megegyezik a PMAp.ini-ben lévő accountnévvel.
         public string AuthTokenCryptAESKey { get; private set; }
         public string AuthTokenCryptAESIV { get; private set; }
         public string WebLoginTemplate { get; private set; }
         public string WebLoginSenderEmail { get; private set; }
+        public string DrvLoginTemplate { get; private set; }
+        public string DrvLoginSenderEmail { get; private set; }
 
         public ThreadPriority InitRouteDataProcess { get; private set; }
         public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
@@ -248,6 +251,8 @@ namespace PMapCore.Common
             AuthTokenCryptAESIV = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESIV);
             WebLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniWebLoginTemplate);
             WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebLoginSenderEmail);
+            DrvLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniDrvLoginTemplate);
+            DrvLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniDrvLoginSenderEmail);
 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")

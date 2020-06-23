@@ -34,15 +34,18 @@ namespace PMapCore.Common
             else
                 writeProps = tp.GetProperties().Where(pi => p_attrfilter.Count(px => Attribute.IsDefined(pi, px)) > 0).ToArray();
 
-            foreach (var propInf in writeProps)
+            foreach (var propInf in writeProps.Where( w=>w.CanWrite))
             {
                 try
                 {
+
+                                      
                     var context = new ValidationContext(p_obj, null, null);
                     context.MemberName = propInf.Name;
                     var results = new List<ValidationResult>();
                     var v = propInf.GetValue(p_obj, null);
                     var isValid = Validator.TryValidateProperty(v, context, results);
+
                     if (!isValid)
                     {
 

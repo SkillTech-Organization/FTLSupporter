@@ -48,6 +48,8 @@ namespace PMapCore.Common
         public const string iniAuthTokenCryptAESIV = "AuthTokenCryptAESIV";
         public const string iniWebLoginTemplate = "WebLoginTemplate";
         public const string iniWebLoginSenderEmail = "WebLoginSenderEmail";
+        public const string iniDrvLoginTemplate = "DrvLoginTemplate";
+        public const string iniDrvLoginSenderEmail = "DrvLoginSenderEmail";
 
         public const string iniPriority = "Priority";
         public const string iniInitRouteDataProcess = "InitRouteDataProcess";
