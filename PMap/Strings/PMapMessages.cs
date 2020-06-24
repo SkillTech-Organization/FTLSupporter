@@ -45,6 +45,8 @@ namespace PMapCore.Strings
         public const string Q_PEDIT_SENDEMAIL2 = "Megerősítés : elküldhető az ÖSSZES értesítő e-mail?";
         public const string E_PEDIT_WRONGOPENCLOSE = "Helytelen nyitva tartás!";
 
+        public const string Q_PEDIT_SENDEMAILDRV1 = "Elküldhető az ÖSSZES járművezető értesítő e-mail?";
+        public const string Q_PEDIT_SENDEMAILDRV2 = "Megerősítés : elküldhető az ÖSSZES járművezető értesítő e-mail?";
 
 
 

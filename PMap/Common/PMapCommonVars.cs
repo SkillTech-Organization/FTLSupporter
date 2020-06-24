@@ -95,7 +95,8 @@ namespace PMapCore.Common
 
         public bool IsCheckMode { get; set; } = false;
 
-        public string AzureSendGridApiKey { get;  set; }        //
+        public string AzureTableStoreApiKey { get; set; }           // Felhőbe küldés tablestore apikey a licence-ből 
+        public string AzureSendGridApiKey { get; set; }             // Email küldés tablestore apikey a licence-ből  
 
         public int TPArea { get; set; } = 12000;
    

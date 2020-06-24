@@ -1201,6 +1201,27 @@ namespace PMapCore.Common
             }
         }
 
+        public static string ReplaceTokensInContent(string p_content, object p_obj)
+        {
+            var retContent = p_content;
+            var t = p_obj.GetType();
+            PropertyInfo[] props = t.GetProperties().ToArray<PropertyInfo>();
+
+
+            foreach (var prop in props)
+            {
+                try
+                {
+                    retContent = retContent.Replace("@@" + prop.Name, prop.GetValue(p_obj).ToString());
+                }
+                catch
+                {
+                    retContent = retContent.Replace("@@" + prop.Name, "???");
+                }
+            }
+            return retContent;
+        }
+
     }
 }
 

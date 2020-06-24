@@ -223,7 +223,7 @@ namespace PMapCore.BLL
         public List<boPlanTour> GetPlanTours(int p_PLN_ID = -1, int p_TPL_ID = -1)
         {
 
-            string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
+            string sSql = "select TPL.ID as ID, TPL.TPL_LOCKED, TPL.TRK_ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT,TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, TRK_COMMENT," + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME as START, PTP_E.PTP_DEPTIME as ENDT, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME) as TDURATION, TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, " + Environment.NewLine +
                           " PTP_DST.DST, TPL_PCOLOR, TPL_PSELECT, TRK_COLOR, TPL_COMPLETED, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME, " + Environment.NewLine +
                            PMapIniParams.Instance.TruckCode + " as TRUCK, " + Environment.NewLine +
@@ -243,7 +243,7 @@ namespace PMapCore.BLL
                           "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
                           "left join SPP_SPEEDPROF SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
                           "where TRK.TRK_DELETED=0 and TRK.TRK_ACTIVE=1 and %%KEY  " + Environment.NewLine +
-                          "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE,  TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, " + Environment.NewLine +
+                          "group by TPL.TRK_ID, TPL.TPL_LOCKED, TPL.ID, SPP_ID, RESTZ.RZN_ID_LIST, TRK_REG_NUM, TRK_CODE,  TRK_TRAILER, TRK_TRAILER, TRK_LENGTH, TRK_WIDTH, TRK_HEIGHT, TRK_WEIGHT, TRK_XHEIGHT, TRK_XWIDTH, TRK_ETOLLCAT, TRK_ENGINEEURO, TRK_COMMENT," + Environment.NewLine +
                           " PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME, DATEDIFF(n, PTP_S.PTP_ARRTIME, PTP_E.PTP_DEPTIME), TPQ.TPLANQTY, TPV.TPLANVOL, TPT.TPLANTOLL, PTP_DST.DST, TPL_PCOLOR, TPL_COMPLETED, TPL_PSELECT, TRK_COLOR, CPP_LOADQTY, CPP_LOADVOL, CRR_NAME," + Environment.NewLine +
                           PMapIniParams.Instance.TruckCode + " " + Environment.NewLine +
                           "order by TRK_REG_NUM, TRK_TRAILER ";
@@ -291,6 +291,7 @@ namespace PMapCore.BLL
                 TRK_XWIDTH = Util.getFieldValue<int>(p_dr, "TRK_XWIDTH"),
                 TRK_ETOLLCAT = Util.getFieldValue<int>(p_dr, "TRK_ETOLLCAT"),
                 TRK_ENGINEEURO = Util.getFieldValue<int>(p_dr, "TRK_ENGINEEURO"),
+                TRK_COMMENT = Util.getFieldValue<string>(p_dr, "TRK_COMMENT"),
                 TollMultiplier = bllPlanEdit.GetTollMultiplier(Util.getFieldValue<int>(p_dr, "TRK_ETOLLCAT"), Util.getFieldValue<int>(p_dr, "TRK_ENGINEEURO")),
                 START = Util.getFieldValue<DateTime>(p_dr, "START"),
                 END = Util.getFieldValue<DateTime>(p_dr, "ENDT"),

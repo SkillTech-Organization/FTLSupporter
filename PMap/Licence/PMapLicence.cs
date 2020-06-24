@@ -77,7 +77,7 @@ namespace PMapCore.Licence
             set { m_MachineID = value; NotifyPropertyChanged("MachineID"); }
         }
 
-        private string m_AzureTableStoreApiKey;
+        private string m_AzureTableStoreApiKey;                         //Az AzureAccount név az inifájlban van
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Azure TableStore ApiKey", Order = 5, NoPrefix = true)]
@@ -87,7 +87,7 @@ namespace PMapCore.Licence
             set { m_AzureTableStoreApiKey = value; NotifyPropertyChanged("AzureTableStoreApiKey"); }
         }
 
-        private string m_AzureSendGridApiKey;
+        private string m_AzureSendGridApiKey;                           //Emailküldés api key
         [DataMember]
         [AzurePartitionAttr]
         [DisplayNameAttributeX(Name = "Azure SendGrid ApiKey (emailküldés)", Order = 5, NoPrefix = true)]

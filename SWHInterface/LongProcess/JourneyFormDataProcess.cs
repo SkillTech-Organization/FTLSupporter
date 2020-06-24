@@ -69,13 +69,14 @@ Feladat lépései:
                 //
 
                 m_rdt = m_bllRoute.GetRoadTypesToDict();
+                /*
                 var rd = "";
                 foreach (var ds in PMapIniParams.Instance.dicSpeed)
                 {
                     rd += $"{ds.Key}:{ds.Value},";
                 }
                 Util.Log2File($"  sebességprofil:{rd}", false);
-
+                */
 
                 RectLatLng boundary = new RectLatLng();
                 List<int> nodes = m_lstRouteSection.Select(i => i.NOD_ID).ToList();
@@ -87,7 +88,7 @@ Feladat lépései:
                 Dictionary<string, List<int>[]> NeighborsCut = null;
 
                 var routePar = new CRoutePars() { RZN_ID_LIST = m_RZN_ID_LIST, Weight = m_XTruck.TRK_WEIGHT, Height = m_XTruck.TRK_XHEIGHT, Width = m_XTruck.TRK_XWIDTH };
-                Util.Log2File($"  Weight:{m_XTruck.TRK_WEIGHT}, Height:{m_XTruck.TRK_XHEIGHT}, Width:{m_XTruck.TRK_XWIDTH}", false);
+           //     Util.Log2File($"  Weight:{m_XTruck.TRK_WEIGHT}, Height:{m_XTruck.TRK_XHEIGHT}, Width:{m_XTruck.TRK_XWIDTH}", false);
 
                 RouteData.Instance.getNeigboursByBound(routePar, ref NeighborsFull, ref NeighborsCut, boundary, null);
 
@@ -130,6 +131,7 @@ Feladat lépései:
                             m_lstRouteSection[i].NOD_ID, m_lstRouteSection[i + 1].NOD_ID,
                             m_XTruck, m_lstRouteSection[i].RouteSectionType, ref lastETLCODE_F);
                     }
+                    /*
                     Util.Log2File($"  {i} {itemResult.FromPoint.DEP_NAME} ({itemResult.FromPoint.ZIP_NUM} {itemResult.FromPoint.ZIP_CITY} {itemResult.FromPoint.DEP_ADRSTREET}), lat:{itemResult.FromPoint.Lat}, lng:{itemResult.FromPoint.Lng}-->{itemResult.ToPoint.DEP_NAME} ({itemResult.ToPoint.ZIP_NUM} {itemResult.ToPoint.ZIP_CITY} {itemResult.ToPoint.DEP_ADRSTREET}), lat:{itemResult.ToPoint.Lat}, lng:{itemResult.ToPoint.Lng}", false);
                     Util.Log2File($"     NOD_ID: {itemResult.FromPoint.NOD_ID} -->{itemResult.ToPoint.NOD_ID}: shortest:{routeS.CalcDistance.ToString()}, fastest:{routeF.CalcDistance.ToString()}", false);
                     Util.Log2File($"     RouteS: {string.Join(",", routeS.Edges.Select(s => s.ID).ToList())}");
@@ -138,7 +140,7 @@ Feladat lépései:
                     Util.Log2File($"     NOD_F : {string.Join(",", routeF.Edges.Select(s => s.NOD_ID_FROM).ToList())}");
                     Util.Log2File($"     LenS  : {string.Join(",", routeS.Edges.Select(s => $"{s.ID}:{s.EDG_LENGTH}").ToList())}");
                     Util.Log2File($"     LenF  : {string.Join(",", routeF.Edges.Select(s => $"{s.ID}:{s.EDG_LENGTH}").ToList())}");
-
+                    */
 
                     Result.SectionSummaries.Add(itemResult);
                     if (EventStop != null && EventStop.WaitOne(0, true))

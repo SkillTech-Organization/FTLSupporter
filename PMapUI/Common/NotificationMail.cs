@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PMapCore.BO;
 using PMapCore.Common;
 using PMapCore.Strings;
 using PMapCore.WebTrace;
@@ -19,7 +20,7 @@ namespace PMapUI.Common
     public static class NotificationMail
     {
 
-        public static PMToken GetToken (List<PMTracedTour> p_tracedTour)
+        public static PMToken GetToken(List<PMTracedTour> p_tracedTour)
         {
             /*
             < add key = "AuthTokenCryptAESKey" value = "VhHe1F6DExaWl1T0bcOxdok58CyIXnjwCDQmojbwpH4=" />
@@ -49,7 +50,7 @@ namespace PMapUI.Common
             string url = builder.ToString();
 
             HttpClient client = new HttpClient();
-            
+
             HttpResponseMessage response = client.GetAsync(url).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -62,7 +63,7 @@ namespace PMapUI.Common
             }
 
 
-     
+
 
             return ret;
             //http://mplastwebtest.azurewebsites.net/Auth/TokenLoginRedirect?token=P6w/g1SU1wb/F6cJBwYDF9Ct/9Zw0hGbBosLMnTAq0ZYImQBKW7QsRJ5brMqiYBr
@@ -70,10 +71,10 @@ namespace PMapUI.Common
         }
         public static async void SendNotificationMail(string p_emailAddr, PMToken p_token, string p_msgOk = "")
         {
-            
-           // var apiKey = "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";
+
+            // var apiKey = "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";
             var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
-            
+
             var client = new SendGridClient(apiKey);
             //érvénytelen karakterek kiszedése
             p_emailAddr = p_emailAddr.Replace(" ", "");
@@ -98,8 +99,8 @@ namespace PMapUI.Common
                     var response = await client.SendEmailAsync(msg);
                     if (response.StatusCode == HttpStatusCode.Accepted)
                     {
-                        if( !String.IsNullOrEmpty( p_msgOk))
-                           UI.Message(p_msgOk, toEmail);
+                        if (!String.IsNullOrEmpty(p_msgOk))
+                            UI.Message(p_msgOk, toEmail);
                     }
                     else
                         UI.Message(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
@@ -111,5 +112,39 @@ namespace PMapUI.Common
             }
         }
 
+
+        public static async void SendNotificationMailDrv(string p_emailAddr, PMToken p_token, boPlanTour p_boPlanTour, string p_msgOk = "")
+        {
+            // var apiKey = "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";
+            var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
+            var client = new SendGridClient(apiKey);
+
+
+            if (Util.IsValidEmail(p_emailAddr))
+            {
+                var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, "");
+                var subject = "Web túrateljesíés belépés";
+                var to = new EmailAddress(p_emailAddr, "");
+                var plainTextContent = "";
+                var htmlContent = Util.FileToString(PMapIniParams.Instance.WebDriverTemplate);
+                htmlContent = htmlContent.Replace("@@token", HttpUtility.UrlEncode(p_token.temporaryUserToken));
+                htmlContent = Util.ReplaceTokensInContent(htmlContent, p_boPlanTour);
+
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                // var response = client.SendEmailAsync(msg);
+                var response = await client.SendEmailAsync(msg);
+                if (response.StatusCode == HttpStatusCode.Accepted)
+                {
+                    if (!String.IsNullOrEmpty(p_msgOk))
+                        UI.Message(p_msgOk, p_emailAddr);
+                }
+                else
+                    UI.Message(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
+            }
+            else
+            {
+                UI.Message(String.Format(PMapMessages.E_SNDEMAIL_FAILED, p_emailAddr));
+            }
+        }
     }
 }

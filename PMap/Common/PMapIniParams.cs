@@ -54,15 +54,14 @@ namespace PMapCore.Common
         public double WeightAreaDegree { get; private set; }       //Lerakó környéke súlykrolátozás gyűjtése fokban. 1 fok Ez É-D irányban 111 km, K-Ny irányban kb 40-54 km.
 
 
+        public string AzureAccount { get; private set; }        //Felhőbe küldés tablestore account név (a Key a licence-ből jön !)
 
-        public string AzureAccount { get; private set; }        //Felhőbe küldés tablestore account név. Csak abban az esetben mehet a feltöltés, ha 
-                                                                //az itt megadott név megegyezik a PMAp.ini-ben lévő accountnévvel.
         public string AuthTokenCryptAESKey { get; private set; }
         public string AuthTokenCryptAESIV { get; private set; }
         public string WebLoginTemplate { get; private set; }
         public string WebLoginSenderEmail { get; private set; }
-        public string DrvLoginTemplate { get; private set; }
-        public string DrvLoginSenderEmail { get; private set; }
+        public string WebDriverTemplate { get; private set; }
+        public string WebDriverSenderEmail { get; private set; }
 
         public ThreadPriority InitRouteDataProcess { get; private set; }
         public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
@@ -246,14 +245,13 @@ namespace PMapCore.Common
             if (WeightAreaDegree <= 0)
                 WeightAreaDegree = Global.WEIGHTAREA_DEGREE;
 
-            AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);
+            AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);                   //A Web -es feltöltés AzureAccount-ja ini-ben, a Key a licence-ben van!
             AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);
             AuthTokenCryptAESIV = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESIV);
             WebLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniWebLoginTemplate);
-            WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebLoginSenderEmail);
-            DrvLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniDrvLoginTemplate);
-            DrvLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniDrvLoginSenderEmail);
-
+            WebDriverTemplate = ini.ReadString(Global.iniWeb, Global.iniWebDriverTemplate);
+            WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebDriverSenderEmail);
+ 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")
                 InitRouteDataProcess = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), sInitRouteDataProcess);

@@ -153,7 +153,7 @@ namespace PMapUI.Forms
                 cmbPlans.SelectedIndexChanged += new EventHandler(cmbPlans_SelectedIndexChanged);
             }
 
-            btnToCloud.Visible = AzureTableStore.Instance.AzureAccount == PMapIniParams.Instance.AzureAccount;
+            btnToCloud.Visible = !string.IsNullOrWhiteSpace( AzureTableStore.Instance.AzureAccount);
 
             btnDelPlan.Enabled = (p_PLN_ID > 0);
             btnFindORD_NUM.Enabled = (p_PLN_ID > 0);
@@ -369,7 +369,7 @@ namespace PMapUI.Forms
 
                 //befrissítjük a túra és túrapont grideket (a layout betöltéssel megváltozott a rendezettség)
                 m_pnlPPlanTours.RefreshPanel(new PlanEventArgs(ePlanEventMode.FirstTour));
-                btnToCloud.Visible = (AzureTableStore.Instance.AzureAccount == PMapIniParams.Instance.AzureAccount);
+                btnToCloud.Visible = !string.IsNullOrWhiteSpace(AzureTableStore.Instance.AzureAccount);
             }
             catch (Exception e)
             {
@@ -839,7 +839,9 @@ namespace PMapUI.Forms
             if (UI.Confirm(PMapMessages.Q_PEDIT_UPLOAD))
             {
                 var crypto = new AuthCryptoHelper("$2a$10$GH1ygiHqiZ9Q18Bk.1hrJ.");
-                
+                string oriAzureAccount = AzureTableStore.Instance.AzureAccount;
+                string oriAzureKey = AzureTableStore.Instance.AzureKey;
+
                 try
                 {
 
@@ -848,7 +850,13 @@ namespace PMapUI.Forms
                     {
 
 
-                        Util.Log2File("SendToAzure START, PLN_ID:"+ m_PPlanCommonVars.PLN_ID.ToString());
+                        Util.Log2File("SendToAzure START, PLN_ID:" + m_PPlanCommonVars.PLN_ID.ToString());
+
+                        //Erre ki kell találni valamit, hogy az AzureTableStore ne csak egy 
+                        //connect stringet tudjon kezelni
+                        //
+                        AzureTableStore.Instance.AzureAccount = PMapIniParams.Instance.AzureAccount;                //Ini-ből jön
+                        AzureTableStore.Instance.AzureKey = PMapCommonVars.Instance.AzureTableStoreApiKey;            //a key a licene-ből jön !
 
 
                         //Felhasználók
@@ -898,7 +906,7 @@ namespace PMapUI.Forms
                         AzureTableStore.Instance.DeleteRange<PMTour>(delTours);
 
 
-                        var delPoints = tp.Where(w => delTours.Any( a=>a.RowKey==w.TourID.ToString())).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
+                        var delPoints = tp.Where(w => delTours.Any(a => a.RowKey == w.TourID.ToString())).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
                         AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints);
 
 
@@ -910,7 +918,7 @@ namespace PMapUI.Forms
                             AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
                         }
 
-                        Util.Log2File("SendToAzure END tours:"+ tourList.Count().ToString());
+                        Util.Log2File("SendToAzure END tours:" + tourList.Count().ToString());
 
                         UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
 
@@ -952,10 +960,7 @@ namespace PMapUI.Forms
                                                     {
                                                         lstEmail[em].Add(tt);
                                                     }
-
-
                                                 }
-
                                             }
                                         }
                                     }
@@ -981,7 +986,7 @@ namespace PMapUI.Forms
                                     if (invalidEmails.Count == 0)
                                     {
                                         UI.Message(PMapMessages.E_SNDEMAIL_OK, sentEmails);
-                                        Util.Log2File( String.Format(PMapMessages.E_SNDEMAIL_OK, sentEmails));
+                                        Util.Log2File(String.Format(PMapMessages.E_SNDEMAIL_OK, sentEmails));
                                     }
                                     else
                                     {
@@ -998,6 +1003,38 @@ namespace PMapUI.Forms
 
 
                         }
+
+                        if (!string.IsNullOrWhiteSpace( PMapIniParams.Instance.WebDriverTemplate) && tours.Any(a => a.TourPoints.Count() > 0 && a.TRK_COMMENT.Contains("@")))
+                        {
+                            if (UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAILDRV1) && UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAILDRV2))
+                            {
+
+                                foreach (var trx in tours)
+                                {
+                                    if (trx.TRK_COMMENT.Contains("@") && trx.TourPoints.Count() > 0)
+                                    {
+                                        var emailAddr = trx.TRK_COMMENT.Replace(" ", "");
+                                        emailAddr = emailAddr.Replace("\"", "");
+                                        emailAddr = emailAddr.Replace("'", "");
+                                        emailAddr = emailAddr.Replace(",", ";");
+
+                                        var emailAddress = emailAddr.Split(';').ToList();
+                                        foreach (string em in emailAddress)
+                                        {
+                                            if (Util.IsValidEmail(em))
+                                            {
+                                                PMTracedTour tt = new PMTracedTour() { TourID = trx.ID, Order = -1 };
+
+                                                var token = NotificationMail.GetToken(new List<PMTracedTour>() { tt });
+//HIBAKEZELÉST !!!
+                                                NotificationMail.SendNotificationMailDrv(em, token, trx);
+                                                Util.Log2File(String.Format(PMapMessages.M_MAIL_SENT, em));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1009,6 +1046,8 @@ namespace PMapUI.Forms
                 }
                 finally
                 {
+                    AzureTableStore.Instance.AzureAccount = oriAzureAccount;
+                    AzureTableStore.Instance.AzureKey = oriAzureKey;
                 }
             }
         }

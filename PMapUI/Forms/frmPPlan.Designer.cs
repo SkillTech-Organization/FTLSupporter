@@ -68,8 +68,8 @@
             this.btnDelTour = new System.Windows.Forms.ToolStripButton();
             this.btnChgTruck = new System.Windows.Forms.ToolStripButton();
             this.btnTurnTour = new System.Windows.Forms.ToolStripButton();
-            this.btnCalcDistances = new System.Windows.Forms.ToolStripButton();
             this.btnToCloud = new System.Windows.Forms.ToolStripButton();
+            this.btnCalcDistances = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnCheckMapOn = new System.Windows.Forms.ToolStripButton();
             this.btnCheckMapOff = new System.Windows.Forms.ToolStripButton();
@@ -127,8 +127,8 @@
             this.btnNewTour,
             this.btnDelTour,
             this.btnChgTruck,
-            this.btnTurnTour,
             this.btnToCloud,
+            this.btnTurnTour,
             this.btnCalcDistances,
             this.toolStripSeparator1,
             this.btnCheckMapOn,
@@ -327,16 +327,6 @@
             this.btnTurnTour.Visible = false;
             this.btnTurnTour.Click += new System.EventHandler(this.btnTurnTour_Click);
             // 
-            // btnCalcDistances
-            // 
-            this.btnCalcDistances.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnCalcDistances.Image = ((System.Drawing.Image)(resources.GetObject("btnCalcDistances.Image")));
-            this.btnCalcDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnCalcDistances.Name = "btnCalcDistances";
-            this.btnCalcDistances.Size = new System.Drawing.Size(23, 22);
-            this.btnCalcDistances.Text = "Hiányzó távolságok kiszámolása";
-            this.btnCalcDistances.Click += new System.EventHandler(this.btnCalcDistances_Click);
-            // 
             // btnToCloud
             // 
             this.btnToCloud.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -346,6 +336,16 @@
             this.btnToCloud.Size = new System.Drawing.Size(23, 22);
             this.btnToCloud.Text = "Túra feltöltése a felhőbe";
             this.btnToCloud.Click += new System.EventHandler(this.btnToCloud_Click);
+            // 
+            // btnCalcDistances
+            // 
+            this.btnCalcDistances.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnCalcDistances.Image = ((System.Drawing.Image)(resources.GetObject("btnCalcDistances.Image")));
+            this.btnCalcDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCalcDistances.Name = "btnCalcDistances";
+            this.btnCalcDistances.Size = new System.Drawing.Size(23, 22);
+            this.btnCalcDistances.Text = "Hiányzó távolságok kiszámolása";
+            this.btnCalcDistances.Click += new System.EventHandler(this.btnCalcDistances_Click);
             // 
             // toolStripSeparator1
             // 

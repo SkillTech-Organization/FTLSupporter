@@ -193,6 +193,9 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "EURO besorolás", Order = 37)]
         public int TRK_ENGINEEURO { get; set; }
 
+        [DisplayNameAttributeX(Name = "Jármű megjegyzés", Order = 37)]
+        public string TRK_COMMENT { get; set; }
+
         [DisplayNameAttributeX(Name = "Útdíjszorzó", Order = 38)]
         public double TollMultiplier { get; set; }
 

@@ -43,13 +43,13 @@ namespace PMapCore.Common
         public const string iniWeightAreaDegree = "WeightAreaDegree";
 
         public const string iniWeb = "Web";
-        public const string iniAzureAccount = "AzureAccount";
+        public const string iniAzureAccount = "AzureAccount";                       //A key a licence-ből jön!
         public const string iniAuthTokenCryptAESKey = "AuthTokenCryptAESKey";
         public const string iniAuthTokenCryptAESIV = "AuthTokenCryptAESIV";
         public const string iniWebLoginTemplate = "WebLoginTemplate";
         public const string iniWebLoginSenderEmail = "WebLoginSenderEmail";
-        public const string iniDrvLoginTemplate = "DrvLoginTemplate";
-        public const string iniDrvLoginSenderEmail = "DrvLoginSenderEmail";
+        public const string iniWebDriverTemplate = "WebDriverTemplate";
+        public const string iniWebDriverSenderEmail = "WebDriverSenderEmail";
 
         public const string iniPriority = "Priority";
         public const string iniInitRouteDataProcess = "InitRouteDataProcess";

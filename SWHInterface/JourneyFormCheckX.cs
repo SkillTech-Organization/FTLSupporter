@@ -46,7 +46,7 @@ namespace SWHInterface
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
 
-                Util.Log2File(">>START:JourneyFormCheck( p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ",p_lstDepotID.<count>='" + p_lstRouteSection.Count.ToString() + ",p_XTruck=" + p_XTruck.ToString() + "') ver.:" + ApplicationInfo.Version);
+                Util.Log2File($">>START:JourneyFormCheck( p_iniPath={p_iniPath}, p_dbConf={p_dbConf},p_lstDepotID.<count>={p_lstRouteSection.Count.ToString()},p_XTruck={p_XTruck.TRK_CODE}, ver.:{ ApplicationInfo.Version}, DBServer:{ PMapIniParams.Instance.DBServer}, DBName:{ PMapIniParams.Instance.DBName}");
 
                 ChkLic.Check(PMapIniParams.Instance.IDFile);
 
@@ -55,7 +55,6 @@ namespace SWHInterface
                 var bllRoute = new bllRoute(DB);
                 var bllZip = new bllZIP(DB);
 
-                Util.Log2File($"JourneyFormCheck DBServer={PMapIniParams.Instance.DBServer}, DBName={PMapIniParams.Instance.DBName}", false);
             
 
                 var etbllEtoll = new bllEtoll(DB);
@@ -301,7 +300,7 @@ namespace SWHInterface
             Util.Log2File(String.Format(">>END  :JourneyFormCheck() teljes időtartam:{0}", (DateTime.Now - dt).ToString()));
 
             var resJSon = JsonConvert.SerializeObject(resultArr);
-            Util.Log2File(String.Format(">>RESULT:JourneyFormCheck():\n{0}", resJSon), false);
+//            Util.Log2File(String.Format(">>RESULT:JourneyFormCheck():\n{0}", resJSon), false);
 
 
             return resultArr;
