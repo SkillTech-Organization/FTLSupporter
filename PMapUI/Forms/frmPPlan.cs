@@ -910,8 +910,6 @@ namespace PMapUI.Forms
                         AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints);
 
 
-
-
                         foreach (var xTr in tourList)
                         {
                             bllWebTrace.MaintainItem(xTr);
@@ -922,7 +920,7 @@ namespace PMapUI.Forms
 
                         UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
 
-                        if (UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAIL1) && UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAIL2))
+                        if (!string.IsNullOrWhiteSpace(PMapIniParams.Instance.WebLoginTemplate) &&  UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAIL1) && UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAIL2))
                         {
                             using (TransactionBlock transObj = new TransactionBlock(PMapCommonVars.Instance.CT_DB))
                             {

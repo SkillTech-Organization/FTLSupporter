@@ -47,6 +47,11 @@ namespace PMapCore.WebTrace
         [DisplayNameAttributeX(Name = "Rendszám")]
         public string TruckRegNo { get; set; }
 
+
+        [DataMember]
+        [DisplayNameAttributeX(Name = "Járművezető")]
+        public string DriverName { get; set; }
+
         [DataMember]
         [DisplayNameAttributeX(Name = "Behajtási övezet lista")]
         public string RZN_ID_LIST { get; set; }

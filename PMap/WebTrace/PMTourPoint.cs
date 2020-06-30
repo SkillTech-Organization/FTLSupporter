@@ -36,8 +36,6 @@ namespace PMapCore.WebTrace
         [DisplayNameAttributeX(Name = "Túrapont sorszáma")]
         public int Order { get; set; }
 
-
-    
         [DataMember]
         [DisplayNameAttributeX(Name = "Távolság az előző túraponttól")]
         public double Distance { get; set; }
@@ -45,9 +43,11 @@ namespace PMapCore.WebTrace
         [DataMember]
         [DisplayNameAttributeX(Name = "Megérkezés")]
         public DateTime ArrTime { get; set; }
+
         [DataMember]
         [DisplayNameAttributeX(Name = "Kiszolgálás kezdete")]
         public DateTime ServTime { get; set; }
+
         [DataMember]
         [DisplayNameAttributeX(Name = "Távozás")]
         public DateTime DepTime { get; set; }
@@ -55,6 +55,7 @@ namespace PMapCore.WebTrace
         [DataMember]
         [DisplayNameAttributeX(Name = "Raktár/lerakó/felrakó kód")]
         public string Code { get; set; }
+
         [DataMember]
         [DisplayNameAttributeX(Name = "Raktár/lerakó/felrakó megnevezés")]
         public string Name { get; set; }
@@ -110,8 +111,7 @@ namespace PMapCore.WebTrace
 
         [DataMember]
         [DisplayNameAttributeX(Name = "Túrateljesítés megjegyzés")]
-        public string FullfillmentCommnet{ get; set; }
-
+        public string FullfillmentComment{ get; set; }
 
     }
 
