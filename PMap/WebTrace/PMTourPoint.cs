@@ -77,6 +77,10 @@ namespace PMapCore.WebTrace
         public string Position { get; set; }
 
         [DataMember]
+        [DisplayNameAttributeX(Name = "Raktár/lerakó/felrakó megjegyzés")]
+        public string Comment { get; set; }
+
+        [DataMember]
         [DisplayNameAttributeX(Name = "Megrendelés száma (külső azonosító)")]
         public string OrdNum { get; set; }
 

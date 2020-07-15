@@ -127,7 +127,7 @@ namespace PMapCore.BLL
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_ADRSTREET ELSE WHS.WHS_ADRSTREET END as ADRSTREET, " + Environment.NewLine +
                     "CASE WHEN TOD.ID IS NOT NULL THEN DEP.DEP_NAME      ELSE WHS.WHS_NAME      END as TIME_AND_NAME, " + Environment.NewLine +
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
-                    "DEP.DEP_CODE, DEP.DEP_NAME, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
+                    "DEP.DEP_CODE, DEP.DEP_NAME, DEP_COMMENT, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
                     PMapIniParams.Instance.TourpointToolTip + " as TOOLTIPTEXT " + Environment.NewLine +
                     "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
                     "INNER JOIN TPL_TRUCKPLAN TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
@@ -181,6 +181,7 @@ namespace PMapCore.BLL
                             OPENCLOSE = getOpenClose(o, false),
                             DEP_CODE = Util.getFieldValue<string>(o, "DEP_CODE"),
                             DEP_NAME = Util.getFieldValue<string>(o, "DEP_NAME"),
+                            DEP_COMMENT = Util.getFieldValue<string>(o, "DEP_COMMENT"),
                             ORD_NUM = Util.getFieldValue<string>(o, "ORD_NUM"),
                             ORD_VOLUME = Util.getFieldValue<double>(o, "ORD_VOLUME"),
                             ORD_LENGTH = Util.getFieldValue<double>(o, "ORD_LENGTH"),
@@ -548,6 +549,38 @@ namespace PMapCore.BLL
                     TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb())),
                     PLN_ID = p_PLN_ID
                 };
+
+
+                /*                                     var emailAddr = trx.TRK_COMMENT.Replace(" ", "");
+                                        emailAddr = emailAddr.Replace("\"", "");
+                                        emailAddr = emailAddr.Replace("'", "");
+                                        emailAddr = emailAddr.Replace(",", ";");
+
+                                        var emailAddress = emailAddr.Split(';').ToList();
+  */
+                //A WTRace/DPortal-nak a járművezető adat TRK_COMMENT-ben van JV:.... kezdettel
+                if (!string.IsNullOrWhiteSpace(tr.TRK_COMMENT))
+                {
+                    var trkcomment = tr.TRK_COMMENT.Replace("\"", "");
+                    trkcomment = trkcomment.Replace("'", "");
+                    trkcomment = trkcomment.Replace(",", ";");
+
+                    var commentParts = trkcomment.Split(';').ToList();
+
+                    foreach (string cm in commentParts)
+                    {
+                        if (cm.ToUpper().StartsWith("JV:"))
+                        {
+                            if (!string.IsNullOrWhiteSpace(xTr.DriverName))
+                            {
+                                xTr.DriverName += ",";
+                            }
+                            xTr.DriverName += Util.RightString(cm, cm.Length - 3);
+                        }
+                    }
+                }
+
+
                 for (int i = 0; i < tr.TourPoints.Count; i++)
                 {
 
@@ -570,6 +603,8 @@ namespace PMapCore.BLL
                         DepTime = tr.TourPoints[i].PTP_DEPTIME.ToUniversalTime(),
                         Code = tr.TourPoints[i].CLT_CODE,
                         Name = tr.TourPoints[i].CLT_NAME,
+                        //Comment = (tr.TourPoints[i].ORD_COMMENT.Trim() + " " + tr.TourPoints[i].DEP_COMMENT.Trim()).Trim(),
+                        Comment =(tr != null ? tr.TourPoints[i].DEP_COMMENT.Trim() : ""),
                         Addr = tr.TourPoints[i].ADDR,
                         Position = new JavaScriptSerializer().Serialize(new PMMapPoint() { Lat = tr.TourPoints[i].NOD_YPOS / Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
                         OrdNum = tr.TourPoints[i].ORD_NUM,

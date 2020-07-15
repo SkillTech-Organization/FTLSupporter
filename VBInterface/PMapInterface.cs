@@ -1001,7 +1001,7 @@ namespace VBInterface
             try
             {
                 frmPPlan pp = new frmPPlan(Convert.ToInt32("0" + p_PLN_ID), Convert.ToInt32("0" + p_USR_ID), p_planParams);
-                pp.ShowDialog();
+                 pp.ShowDialog();
             }
             catch (Exception e)
             {

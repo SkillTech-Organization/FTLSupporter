@@ -55,6 +55,7 @@ namespace PMapCore.BO
         public boPlanTourPoint NextTourPoint { get; set; }
         public string DEP_CODE { get; set; }
         public string DEP_NAME { get; set; }
+        public string DEP_COMMENT { get; set; }
         public string ORD_NUM { get; set; }
         public double ORD_LENGTH { get; set; }
         public double ORD_WIDTH { get; set; }

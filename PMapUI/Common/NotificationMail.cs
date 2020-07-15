@@ -123,7 +123,7 @@ namespace PMapUI.Common
             if (Util.IsValidEmail(p_emailAddr))
             {
                 var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, "");
-                var subject = "Web túrateljesíés belépés";
+                var subject = "Web túrateljesítés belépés";
                 var to = new EmailAddress(p_emailAddr, "");
                 var plainTextContent = "";
                 var htmlContent = Util.FileToString(PMapIniParams.Instance.WebDriverTemplate);
