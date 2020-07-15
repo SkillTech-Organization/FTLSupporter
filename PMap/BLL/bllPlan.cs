@@ -604,7 +604,7 @@ namespace PMapCore.BLL
                         Code = tr.TourPoints[i].CLT_CODE,
                         Name = tr.TourPoints[i].CLT_NAME,
                         //Comment = (tr.TourPoints[i].ORD_COMMENT.Trim() + " " + tr.TourPoints[i].DEP_COMMENT.Trim()).Trim(),
-                        Comment =(tr != null ? tr.TourPoints[i].DEP_COMMENT.Trim() : ""),
+                        Comment =(tr.TourPoints[i].DEP_COMMENT != null ? tr.TourPoints[i].DEP_COMMENT.Trim() : ""),
                         Addr = tr.TourPoints[i].ADDR,
                         Position = new JavaScriptSerializer().Serialize(new PMMapPoint() { Lat = tr.TourPoints[i].NOD_YPOS / Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
                         OrdNum = tr.TourPoints[i].ORD_NUM,
