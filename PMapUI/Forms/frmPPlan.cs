@@ -1006,7 +1006,7 @@ namespace PMapUI.Forms
                         {
                             if (UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAILDRV1) && UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAILDRV2))
                             {
-
+                                var sentEmails = 0;
                                 foreach (var trx in tours)
                                 {
                                     if (trx.TRK_COMMENT.Contains("@") && trx.TourPoints.Count() > 0)
@@ -1021,16 +1021,21 @@ namespace PMapUI.Forms
                                         {
                                             if (Util.IsValidEmail(em))
                                             {
-                                                PMTracedTour tt = new PMTracedTour() { TourID = trx.ID, Order = -1 };
+                                                PMTracedTour tt = new PMTracedTour() { TourID = trx.ID, Order = 0 };
 
                                                 var token = NotificationMail.GetToken(new List<PMTracedTour>() { tt });
 //HIBAKEZELÉST !!!
                                                 NotificationMail.SendNotificationMailDrv(em, token, trx);
                                                 Util.Log2File(String.Format(PMapMessages.M_MAIL_SENT, em));
+                                                sentEmails++;
                                             }
                                         }
                                     }
                                 }
+
+                                UI.Message(PMapMessages.E_SNDEMAIL_OK, sentEmails);
+                                Util.Log2File(String.Format(PMapMessages.E_SNDEMAIL_OK, sentEmails));
+
                             }
                         }
                     }
