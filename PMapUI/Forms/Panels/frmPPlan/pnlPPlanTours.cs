@@ -46,6 +46,7 @@ namespace PMapUI.Forms.Panels.frmPPlan
             {
                 InitPanel();
                 m_bllPlanEdit = new bllPlanEdit(PMapCommonVars.Instance.CT_DB);
+                gridColumnEmail.Visible = !string.IsNullOrWhiteSpace(PMapIniParams.Instance.WebDriverTemplate);
 
                 gridTours.DataSource = m_PPlanCommonVars.TourList;
 
@@ -91,7 +92,7 @@ namespace PMapUI.Forms.Panels.frmPPlan
         {
             if (gridViewTours.FocusedRowHandle >= 0)
             {
-                int? ID = (int? )gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnID);
+                int? ID = (int?)gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnID);
                 if (ID != null && ID != GridControl.InvalidRowHandle)
                     DoNotifyDataChanged(new PlanEventArgs(ePlanEventMode.ChgFocusedTour, m_PPlanCommonVars.GetTourByID(ID.Value)));
 
@@ -344,5 +345,20 @@ namespace PMapUI.Forms.Panels.frmPPlan
             }
         }
 
+
+        private void repositoryItemEMail_EditValueChanged(object sender, EventArgs e)
+        {
+            if (gridViewTours.FocusedRowHandle >= 0)
+            {
+                CheckEdit chkEdt = (CheckEdit)sender;
+                int ID = (int)gridViewTours.GetRowCellValue(gridViewTours.FocusedRowHandle, gridColumnID);
+
+                var tx = m_PPlanCommonVars.GetTourByID(ID);
+                
+                dlgSendDriverEMail dlgSend = new dlgSendDriverEMail(tx);
+                dlgSend.ShowDialog(this);
+
+            }
+        }
     }
 }

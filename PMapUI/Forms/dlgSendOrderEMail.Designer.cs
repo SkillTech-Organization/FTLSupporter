@@ -1,6 +1,6 @@
 ﻿namespace PMapUI.Forms
 {
-    partial class dlgSendEMail
+    partial class dlgSendOrderEMail
     {
         /// <summary>
         /// Required designer variable.
@@ -70,13 +70,13 @@
             this.txtORD_EMAIL.TabIndex = 18;
             this.txtORD_EMAIL.TabStop = false;
             // 
-            // dlgSendEMail
+            // dlgSendOrderEMail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(616, 90);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "dlgSendEMail";
+            this.Name = "dlgSendOrderEMail";
             this.tabSchemeProvider.SetTabScheme(this, SMcMaster.TabOrderManager.TabScheme.AcrossFirst);
             this.Text = "E-mail küldés";
             this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);

@@ -390,7 +390,7 @@ namespace PMapUI.Forms.Panels.frmPPlan
                 var tp = m_PPlanCommonVars.GetTourPointByID(ID);
 
 
-                dlgSendEMail dlgSend = new dlgSendEMail(tp);
+                dlgSendOrderEMail dlgSend = new dlgSendOrderEMail(tp);
                 dlgSend.ShowDialog(this);
 
                 /*

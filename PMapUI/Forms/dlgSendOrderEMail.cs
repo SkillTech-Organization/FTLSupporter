@@ -16,10 +16,10 @@ using PMapUI.Common;
 
 namespace PMapUI.Forms
 {
-    public partial class dlgSendEMail : BaseDialog
+    public partial class dlgSendOrderEMail : BaseDialog
     {
         boPlanTourPoint m_tp;
-        public dlgSendEMail(boPlanTourPoint p_tp)
+        public dlgSendOrderEMail(boPlanTourPoint p_tp)
         {
             InitializeComponent();
             m_tp = p_tp;
@@ -50,6 +50,7 @@ namespace PMapUI.Forms
                 tracedTour.Add(tt);
                 var token = NotificationMail.GetToken(tracedTour);
                 NotificationMail.SendNotificationMail(txtORD_EMAIL.Text, token, PMapMessages.E_SNDEMAIL_OK3);
+                UI.Message(PMapMessages.E_SNDEMAIL_OK, txtORD_EMAIL.Text);
                 return true;
 
 

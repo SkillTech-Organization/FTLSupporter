@@ -36,6 +36,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.gridTours = new DevExpress.XtraGrid.GridControl();
             this.gridViewTours = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridColumnSelect = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.reChkSelect = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.gridColumnID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnCOLOR = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemColorEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemColorEdit();
@@ -60,20 +62,22 @@
             this.gridColumnTRK_HEIGHT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTRK_WIDTH = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTRK_LENGTH = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnSelect = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.reChkSelect = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.gridColumnLOCKED = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemLockedEdit = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.gridColTRK_ENGINEEURO = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColTRK_ETOLLCAT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColTollMultiplier = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTOURPOINTCNT = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumnEmail = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemEMail = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.gridColumnTRK_COMMENT = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTours)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemColorEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkSelect)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemColorEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemLockedEdit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemEMail)).BeginInit();
             this.SuspendLayout();
             // 
             // gridColumnVOLErr
@@ -107,7 +111,8 @@
             this.gridTours.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.reChkSelect,
             this.repositoryItemColorEdit1,
-            this.repositoryItemLockedEdit});
+            this.repositoryItemLockedEdit,
+            this.repositoryItemEMail});
             this.gridTours.Size = new System.Drawing.Size(1509, 443);
             this.gridTours.TabIndex = 0;
             this.gridTours.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -147,7 +152,9 @@
             this.gridColTRK_ENGINEEURO,
             this.gridColTRK_ETOLLCAT,
             this.gridColTollMultiplier,
-            this.gridColumnTOURPOINTCNT});
+            this.gridColumnTOURPOINTCNT,
+            this.gridColumnEmail,
+            this.gridColumnTRK_COMMENT});
             this.gridViewTours.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus;
             styleFormatCondition1.ApplyToRow = true;
             styleFormatCondition1.Column = this.gridColumnVOLErr;
@@ -174,6 +181,25 @@
             this.gridViewTours.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridViewTours_CustomDrawCell);
             this.gridViewTours.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.gridViewTours_RowStyle);
             this.gridViewTours.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridViewTours_FocusedRowChanged);
+            // 
+            // gridColumnSelect
+            // 
+            this.gridColumnSelect.ColumnEdit = this.reChkSelect;
+            this.gridColumnSelect.FieldName = "PSelect";
+            this.gridColumnSelect.Name = "gridColumnSelect";
+            this.gridColumnSelect.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
+            this.gridColumnSelect.OptionsColumn.FixedWidth = true;
+            this.gridColumnSelect.OptionsColumn.ShowCaption = false;
+            this.gridColumnSelect.Visible = true;
+            this.gridColumnSelect.VisibleIndex = 0;
+            this.gridColumnSelect.Width = 22;
+            // 
+            // reChkSelect
+            // 
+            this.reChkSelect.AutoHeight = false;
+            this.reChkSelect.Name = "reChkSelect";
+            this.reChkSelect.CheckedChanged += new System.EventHandler(this.reChkVisible_CheckedChanged);
+            this.reChkSelect.EditValueChanged += new System.EventHandler(this.reChkSelect_EditValueChanged);
             // 
             // gridColumnID
             // 
@@ -442,25 +468,6 @@
             this.gridColumnTRK_LENGTH.VisibleIndex = 17;
             this.gridColumnTRK_LENGTH.Width = 60;
             // 
-            // gridColumnSelect
-            // 
-            this.gridColumnSelect.ColumnEdit = this.reChkSelect;
-            this.gridColumnSelect.FieldName = "PSelect";
-            this.gridColumnSelect.Name = "gridColumnSelect";
-            this.gridColumnSelect.OptionsColumn.AllowGroup = DevExpress.Utils.DefaultBoolean.False;
-            this.gridColumnSelect.OptionsColumn.FixedWidth = true;
-            this.gridColumnSelect.OptionsColumn.ShowCaption = false;
-            this.gridColumnSelect.Visible = true;
-            this.gridColumnSelect.VisibleIndex = 0;
-            this.gridColumnSelect.Width = 22;
-            // 
-            // reChkSelect
-            // 
-            this.reChkSelect.AutoHeight = false;
-            this.reChkSelect.Name = "reChkSelect";
-            this.reChkSelect.CheckedChanged += new System.EventHandler(this.reChkVisible_CheckedChanged);
-            this.reChkSelect.EditValueChanged += new System.EventHandler(this.reChkSelect_EditValueChanged);
-            // 
             // gridColumnLOCKED
             // 
             this.gridColumnLOCKED.Caption = "Zárolt";
@@ -521,6 +528,33 @@
             this.gridColumnTOURPOINTCNT.Name = "gridColumnTOURPOINTCNT";
             this.gridColumnTOURPOINTCNT.OptionsColumn.AllowEdit = false;
             // 
+            // gridColumnEmail
+            // 
+            this.gridColumnEmail.Caption = "Sofőr email";
+            this.gridColumnEmail.ColumnEdit = this.repositoryItemEMail;
+            this.gridColumnEmail.Name = "gridColumnEmail";
+            this.gridColumnEmail.UnboundType = DevExpress.Data.UnboundColumnType.Boolean;
+            this.gridColumnEmail.Visible = true;
+            this.gridColumnEmail.VisibleIndex = 26;
+            // 
+            // repositoryItemEMail
+            // 
+            this.repositoryItemEMail.AutoHeight = false;
+            this.repositoryItemEMail.CheckStyle = DevExpress.XtraEditors.Controls.CheckStyles.UserDefined;
+            this.repositoryItemEMail.Name = "repositoryItemEMail";
+            this.repositoryItemEMail.PictureChecked = ((System.Drawing.Image)(resources.GetObject("repositoryItemEMail.PictureChecked")));
+            this.repositoryItemEMail.PictureGrayed = ((System.Drawing.Image)(resources.GetObject("repositoryItemEMail.PictureGrayed")));
+            this.repositoryItemEMail.PictureUnchecked = ((System.Drawing.Image)(resources.GetObject("repositoryItemEMail.PictureUnchecked")));
+            this.repositoryItemEMail.EditValueChanged += new System.EventHandler(this.repositoryItemEMail_EditValueChanged);
+            // 
+            // gridColumnTRK_COMMENT
+            // 
+            this.gridColumnTRK_COMMENT.Caption = "Jármű megjegyzés";
+            this.gridColumnTRK_COMMENT.FieldName = "TRK_COMMENT";
+            this.gridColumnTRK_COMMENT.Name = "gridColumnTRK_COMMENT";
+            this.gridColumnTRK_COMMENT.Visible = true;
+            this.gridColumnTRK_COMMENT.VisibleIndex = 27;
+            // 
             // pnlPPlanTours
             // 
             this.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -534,9 +568,10 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridTours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewTours)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemColorEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.reChkSelect)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemColorEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemLockedEdit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemEMail)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -580,5 +615,8 @@
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_WEIGHT;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_XHEIGHT;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_XWIDTH;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnEmail;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemEMail;
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumnTRK_COMMENT;
     }
 }
