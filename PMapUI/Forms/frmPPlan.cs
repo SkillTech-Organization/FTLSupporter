@@ -883,40 +883,79 @@ namespace PMapUI.Forms
                         }
 
 
-                        var tours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
+                        var plan = m_bllPlan.GetPlan(m_PPlanCommonVars.PLN_ID);
+                        var PlanTours = m_bllPlan.GetPlanTours(m_PPlanCommonVars.PLN_ID);
 
                         FileInfo fiTours = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tours.dmp"));
-                        BinarySerializer.Serialize(fiTours, tours);
+                        BinarySerializer.Serialize(fiTours, PlanTours);
 
 
-                        var tourList = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, tours);
+                        var SendTours = m_bllPlan.GetToursForAzure(m_PPlanCommonVars.PLN_ID, PlanTours);
                         FileInfo fiToursList = new FileInfo(Path.Combine(PMapIniParams.Instance.LogDir, "tourlist.dmp"));
-                        BinarySerializer.Serialize(fiToursList, tourList);
+                        BinarySerializer.Serialize(fiToursList, SendTours);
 
 
                         BllWebTraceTour bllWebTrace = new BllWebTraceTour(Environment.MachineName);
                         BllWebTraceTourPoint bllWebTraceTourPoint = new BllWebTraceTourPoint(Environment.MachineName);
 
 
-                        var tp = AzureTableStore.Instance.RetrieveList<PMTourPoint>();
+                        var AzureStoredTourPoints = AzureTableStore.Instance.RetrieveList<PMTourPoint>();
 
-                        //5 napnyi adatot megtartunk
-                        var tr = AzureTableStore.Instance.RetrieveList<PMTour>();
-                        var delTours = tr.Where(w => w.Start.Date.AddDays(5) <= DateTime.Now.Date || w.PLN_ID == m_PPlanCommonVars.PLN_ID).Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList();
+                        //1. 5 napnál régebbi túrapontokat kitöröljük
+                        var AzureStoredTours = AzureTableStore.Instance.RetrieveList<PMTour>();
+
+                        var delTours = AzureStoredTours.Where(w => w.Start.Date.AddDays(5) <= DateTime.Now.Date ).Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList();
                         AzureTableStore.Instance.DeleteRange<PMTour>(delTours);
-
-
-                        var delPoints = tp.Where(w => delTours.Any(a => a.RowKey == w.TourID.ToString())).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
+                        var delPoints = AzureStoredTourPoints.Where(w => delTours.Any(a => a.RowKey == w.TourID.ToString())).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
                         AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints);
 
+                        //2. Kitöröljük azokat a túrákat, amelyeket a tervből kitöröltünk
+                        var delTours2 = AzureStoredTours.Where(w => w.PLN_ID == m_PPlanCommonVars.PLN_ID
+                                                      && !SendTours.Any( a=>a.ID == w.ID)
+                                                    ).Select(s => new AzureItemKeys(s.PartitionKey, s.ID)).ToList();
 
-                        foreach (var xTr in tourList)
+                        if (delTours2.Count > 0)
+                        {
+                            AzureTableStore.Instance.DeleteRange<PMTour>(delTours2);
+                            var delPoints2 = AzureStoredTourPoints.Where(w => delTours2.Any(a => a.RowKey == w.TourID.ToString())).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
+                            AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints2);
+                        }
+
+                        
+                        //3. Fullfilment kódok bemergelése a küldendő túrapontokba.
+                        var allSendPoints = SendTours.SelectMany(x => x.TourPoints).ToList();
+                        allSendPoints.ForEach(sp =>
+                       {
+                           // !! Megj:OrdNum-ra keresve fésüljük össze Fullfillment-eket, hogy a törölt pontok miatt ne  
+                           // legyen elcsúszás !!!
+                           var stored = AzureStoredTourPoints.Where(w => w.TourID == sp.TourID && w.OrdNum == sp.OrdNum).FirstOrDefault();
+                           if (stored != null)
+                           {
+                               sp.FullfillmentCode = stored.FullfillmentCode;
+                               sp.FullfillmentComment = stored.FullfillmentComment;
+
+                           };
+                       });
+
+                        
+                        //4. Törölt túrapontok kiszedése
+                        var delPoints3 = AzureStoredTourPoints.Where(w => SendTours.Any( a1=>a1.ID == w.TourID.ToString()) &&
+                                                                !allSendPoints.Any(a => a.TourID == w.TourID &&
+                                                                            a.Order == w.Order)).Select(s => new AzureItemKeys(s.TourID.ToString(), AzureTableStore.GetValidAzureKeyValue(typeof(string), s.Order))).ToList();
+                        if (delPoints3.Count > 0)
+                        {
+                            AzureTableStore.Instance.DeleteRange<PMTourPoint>(delPoints3);
+                        }
+                        
+
+                        //Túrák felküldése
+                        foreach (var xTr in SendTours)
                         {
                             bllWebTrace.MaintainItem(xTr);
                             AzureTableStore.Instance.BatchInsertOrReplace<PMTourPoint>(xTr.TourPoints, Environment.MachineName);
                         }
 
-                        Util.Log2File("SendToAzure END tours:" + tourList.Count().ToString());
+                        Util.Log2File("SendToAzure END tours:" + SendTours.Count().ToString());
 
                         UI.Message(PMapMessages.M_PEDIT_UPLOADOK);
 
@@ -927,7 +966,7 @@ namespace PMapUI.Forms
                                 try
                                 {
                                     Dictionary<string, List<PMTracedTour>> lstEmail = new Dictionary<string, List<PMTracedTour>>();
-                                    foreach (var tour in tours)
+                                    foreach (var tour in PlanTours)
                                     {
                                         foreach (var tourpont in tour.TourPoints)
                                         {
@@ -1002,12 +1041,12 @@ namespace PMapUI.Forms
 
                         }
 
-                        if (!string.IsNullOrWhiteSpace( PMapIniParams.Instance.WebDriverTemplate) && tours.Any(a => a.TourPoints.Count() > 0 && a.TRK_COMMENT.Contains("@")))
+                        if (!string.IsNullOrWhiteSpace( PMapIniParams.Instance.WebDriverTemplate) && PlanTours.Any(a => a.TourPoints.Count() > 0 && a.TRK_COMMENT.Contains("@")))
                         {
                             if (UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAILDRV1) && UI.Confirm(PMapMessages.Q_PEDIT_SENDEMAILDRV2))
                             {
                                 var sentEmails = 0;
-                                foreach (var trx in tours)
+                                foreach (var trx in PlanTours)
                                 {
                                     if (trx.TRK_COMMENT.Contains("@") && trx.TourPoints.Count() > 0)
                                     {

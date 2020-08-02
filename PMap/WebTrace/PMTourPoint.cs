@@ -109,6 +109,10 @@ namespace PMapCore.WebTrace
             }
         }
 
+        /* 
+           !!! A PMap-ban nem szabad ezeket a mezőket felvenni, nehogy túra feltöltésekor 
+           felulíródjanak a tárolt FullFillment adatok !!!
+        */
         [DataMember]
         [DisplayNameAttributeX(Name = "Túrateljesítés kód")]
         public string FullfillmentCode { get; set; }
@@ -116,7 +120,7 @@ namespace PMapCore.WebTrace
         [DataMember]
         [DisplayNameAttributeX(Name = "Túrateljesítés megjegyzés")]
         public string FullfillmentComment{ get; set; }
-
+        
     }
 
 }
