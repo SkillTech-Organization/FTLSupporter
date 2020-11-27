@@ -217,7 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTPicker\DTPicker.vbproj">
-      <Project>{05DC0418-566F-47F1-AA53-190009DD01F7}</Project>
+      <Project>{05dc0418-566f-47f1-aa53-190009dd01f7}</Project>
       <Name>DTPicker</Name>
     </ProjectReference>
     <ProjectReference Include="..\PMapUI\PMapUI.csproj">

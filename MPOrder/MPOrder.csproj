@@ -187,10 +187,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DTPicker\DTPicker.vbproj">
-      <Project>{05dc0418-566f-47f1-aa53-190009dd01f7}</Project>
-      <Name>DTPicker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FrcNumericTextBox\FrcNumericTextBox.csproj">
       <Project>{ff4cd9f3-db53-4fd9-8541-5777947745e9}</Project>
       <Name>FrcNumericTextBox</Name>
