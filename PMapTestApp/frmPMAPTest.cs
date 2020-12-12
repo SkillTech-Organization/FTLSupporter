@@ -30,6 +30,8 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using PMapUI.Common;
 using SWHInterface.BO;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace PMapTestApp
 {
@@ -822,9 +824,32 @@ namespace PMapTestApp
         //        private async void button30_Click(object sender, EventArgs e)
         private void button30_Click(object sender, EventArgs e)
         {
-            /*
-            
+           /*
 
+            var apiKey = "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";
+            //var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
+            var client = new SendGridClient(apiKey);
+
+
+                var from = new EmailAddress("agyorgyi01@gmail.com", "");
+                var subject = "Web túrateljesítés belépés";
+                var to = new EmailAddress("agyorgyi01@gmail.com", "");
+            var plainTextContent = "Teszt plainTextContent";
+            var htmlContent = "<strong>Teszt</strong> htmlContent ";
+
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                // var response = client.SendEmailAsync(msg);
+                var response = client.SendEmailAsync(msg).GetAwaiter().GetResult();
+                if (response.StatusCode == HttpStatusCode.Accepted)
+                {
+                }
+                else
+                { 
+                }
+           */
+
+            /*
+           
                 var apiKey = "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";
             var client = new SendGridClient(apiKey);
             
@@ -836,6 +861,7 @@ namespace PMapTestApp
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
            // var response = client.SendEmailAsync(msg);
             var response = await client.SendEmailAsync(msg);
+
             */
         }
 
