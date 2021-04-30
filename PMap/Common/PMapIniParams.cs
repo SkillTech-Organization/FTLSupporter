@@ -250,8 +250,9 @@ namespace PMapCore.Common
             AuthTokenCryptAESIV = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESIV);
             WebLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniWebLoginTemplate);
             WebDriverTemplate = ini.ReadString(Global.iniWeb, Global.iniWebDriverTemplate);
-            WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebDriverSenderEmail);
- 
+            WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebLoginSenderEmail);
+            WebDriverSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebDriverSenderEmail);
+
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")
                 InitRouteDataProcess = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), sInitRouteDataProcess);
