@@ -25,7 +25,7 @@ namespace PMapCore.Common.Azure
 {
     public class AzureTableStore
     {
-        private string m_accountName = "pmaplog";
+        private string m_accountName = "pratixtest";
         private string m_accountKey = "jazm8HHskSidL3HMqRrjytwqMH5hAkv8QgNo9XiF/pxsqer7YhAE8dKQ9m7zGw1h6z5L2HwwXMhaGp/Mf+xytQ==";
         private StorageCredentials m_creds = null;
 

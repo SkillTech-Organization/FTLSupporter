@@ -99,7 +99,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1511, 445);
+            this.panel1.Size = new System.Drawing.Size(1370, 445);
             this.panel1.TabIndex = 0;
             // 
             // gridTours
@@ -113,7 +113,7 @@
             this.repositoryItemColorEdit1,
             this.repositoryItemLockedEdit,
             this.repositoryItemEMail});
-            this.gridTours.Size = new System.Drawing.Size(1509, 443);
+            this.gridTours.Size = new System.Drawing.Size(1368, 443);
             this.gridTours.TabIndex = 0;
             this.gridTours.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewTours});
@@ -561,7 +561,7 @@
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1511, 445);
+            this.ClientSize = new System.Drawing.Size(1370, 445);
             this.Controls.Add(this.panel1);
             this.Name = "pnlPPlanTours";
             this.Text = "Túrák";

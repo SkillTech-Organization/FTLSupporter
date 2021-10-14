@@ -24,7 +24,9 @@ namespace PMapUI.Forms
             InitializeComponent();
             m_tp = p_tp;
             txtORD_EMAIL.Text = m_tp.ORD_EMAIL;
-  //          txtORD_EMAIL.Text = "agyorgyi01@gmail.com,'agyorgyi01@gmail.com'";
+#if DEBUG
+            txtORD_EMAIL.Text = "agyorgyi01@gmail.com,'agyorgyi01@gmail.com'";
+#endif
         }
 
 
