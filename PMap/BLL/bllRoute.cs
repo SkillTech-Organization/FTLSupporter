@@ -270,7 +270,7 @@ namespace PMapCore.BLL
                                "where  NOD_ID_FROM = ? and NOD_ID_TO = ? and RZN_ID_LIST = ? and DST_MAXWEIGHT = ? and DST_MAXHEIGHT = ? and DST_MAXWIDTH = ?  ";
                 DataTable dt = DBA.Query2DataTable(sSql, p_NOD_ID_FROM, p_NOD_ID_TO, p_RZN_ID_LIST, p_Weight, p_Height, p_Width);
 
-                if (dt.Rows.Count == 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
+                if (dt.Rows.Count >= 1 && Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
                 {
 
 
@@ -1360,7 +1360,7 @@ namespace PMapCore.BLL
 
 
         /*****/
-        public bool GeocodingByGoogle(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID)
+        public bool GeocodingByGoogle(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID, bool p_checkCity = true)
         {
             ZIP_ID = 0;
             NOD_ID = 0;
@@ -1495,56 +1495,57 @@ namespace PMapCore.BLL
                 EDG_ID = edg.ID;
 
                 // város ellenőrzése
-
-
-                string sZIP_NUM = "";
-                string sCity = "";
-                string sStreet = "";
-                string sStreetType = "";
-                int nAddrNum = 0;
-                Util.ParseAddress(p_addr, out sZIP_NUM, out sCity, out sStreet, out sStreetType, out nAddrNum);
-                sCity = sCity.Trim().ToUpper().Replace(",", "");
-
-
-                var zip1 = m_bllZip.GetZIPbyNumAndCity(edg.ZIP_NUM_FROM, sCity);
-                //       if (zip1 == null)
-                //           throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_FROM));
-
-                var zip2 = m_bllZip.GetZIPbyNumAndCity(edg.ZIP_NUM_TO, sCity);
-                //       if (zip2 == null)
-                //            throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_TO));
-
-
-                city_name = city_name.Trim().ToUpper();
-
-
-              //  var zip1City = (zip1 != null ? zip1.ZIP_CITY.Trim().ToUpper() + "/" : "");
-              //  var zip2City = (zip2 != null ? zip2.ZIP_CITY.Trim().ToUpper() + "/" : "");
-
-                if ((zip1 != null && !( 
-                                (sCity == Global.DEF_BUDAPEST &&  zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
-                                 || zip1.ZIP_CITY.Trim().ToUpper()  == sCity)))
-                    && (zip2 != null && !(
-                                (sCity == Global.DEF_BUDAPEST && zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
-                                 || zip2.ZIP_CITY.Trim().ToUpper()  == sCity)))
-                   )
+                if (p_checkCity)
                 {
-                    ZIP_ID = 0;
-                    NOD_ID = 0;
-                    EDG_ID = 0;
-                    return false;
+
+                    string sZIP_NUM = "";
+                    string sCity = "";
+                    string sStreet = "";
+                    string sStreetType = "";
+                    int nAddrNum = 0;
+                    Util.ParseAddress(p_addr, out sZIP_NUM, out sCity, out sStreet, out sStreetType, out nAddrNum);
+                    sCity = sCity.Trim().ToUpper().Replace(",", "");
+
+
+                    var zip1 = m_bllZip.GetZIPbyNumAndCity(edg.ZIP_NUM_FROM, sCity);
+                    //       if (zip1 == null)
+                    //           throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_FROM));
+
+                    var zip2 = m_bllZip.GetZIPbyNumAndCity(edg.ZIP_NUM_TO, sCity);
+                    //       if (zip2 == null)
+                    //            throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, edg.ZIP_NUM_TO));
+
+
+                    city_name = city_name.Trim().ToUpper();
+
+
+                    //  var zip1City = (zip1 != null ? zip1.ZIP_CITY.Trim().ToUpper() + "/" : "");
+                    //  var zip2City = (zip2 != null ? zip2.ZIP_CITY.Trim().ToUpper() + "/" : "");
+
+                    if ((zip1 != null && !(
+                                    (sCity == Global.DEF_BUDAPEST && zip1.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
+                                     || zip1.ZIP_CITY.Trim().ToUpper() == sCity)))
+                        && (zip2 != null && !(
+                                    (sCity == Global.DEF_BUDAPEST && zip2.ZIP_CITY.Trim().ToUpper().Contains(sCity)          //Budapest város nevében van a kerület is, ezért kell a Contains-t használni
+                                     || zip2.ZIP_CITY.Trim().ToUpper() == sCity)))
+                       )
+                    {
+                        ZIP_ID = 0;
+                        NOD_ID = 0;
+                        EDG_ID = 0;
+                        return false;
+                    }
+
+                    //Vissza adott google és cím városnévre is végzünk egy ellenőrzést (ha nincs a ZIP kitöltve)
+
+                    if (city_name != sCity)
+                    {
+                        ZIP_ID = 0;
+                        NOD_ID = 0;
+                        EDG_ID = 0;
+                        return false;
+                    }
                 }
-
-                //Vissza adott google és cím városnévre is végzünk egy ellenőrzést (ha nincs a ZIP kitöltve)
-
-                if (city_name != sCity)
-                {
-                    ZIP_ID = 0;
-                    NOD_ID = 0;
-                    EDG_ID = 0;
-                    return false;
-                }
-
                 return true;
             }
             else

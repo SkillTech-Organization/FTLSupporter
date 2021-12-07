@@ -301,7 +301,7 @@ namespace PMapTestApp
             d.txtAddr.Text = "7720 Pécsvárad/Zengővárkony/Apátvarasd/Lovászhetény/Martonfa, Erzsébeti út 24";
             */
             d.txtAddr.Text = "Budapest, Széchenyi tér 2";
-
+            d.txtAddr.Text = "3300 Eger KISTÁLYAI ÚT 18.";
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();
@@ -318,7 +318,7 @@ namespace PMapTestApp
                 int NOD_ID = 0;
                 int EDG_ID = 0;
                 boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                bool bFound = route.GeocodingByAddr(d.txtAddr.Text, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, true);
+                bool bFound = route.GeocodingByAddr(d.txtAddr.Text, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, true, false);
                 if (bFound)
                 {
                     string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
@@ -824,29 +824,29 @@ namespace PMapTestApp
         //        private async void button30_Click(object sender, EventArgs e)
         private void button30_Click(object sender, EventArgs e)
         {
-           /*
+            /*
 
-            var apiKey = "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";
-            //var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
-            var client = new SendGridClient(apiKey);
+             var apiKey = "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";
+             //var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
+             var client = new SendGridClient(apiKey);
 
 
-                var from = new EmailAddress("agyorgyi01@gmail.com", "");
-                var subject = "Web túrateljesítés belépés";
-                var to = new EmailAddress("agyorgyi01@gmail.com", "");
-            var plainTextContent = "Teszt plainTextContent";
-            var htmlContent = "<strong>Teszt</strong> htmlContent ";
+                 var from = new EmailAddress("agyorgyi01@gmail.com", "");
+                 var subject = "Web túrateljesítés belépés";
+                 var to = new EmailAddress("agyorgyi01@gmail.com", "");
+             var plainTextContent = "Teszt plainTextContent";
+             var htmlContent = "<strong>Teszt</strong> htmlContent ";
 
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-                // var response = client.SendEmailAsync(msg);
-                var response = client.SendEmailAsync(msg).GetAwaiter().GetResult();
-                if (response.StatusCode == HttpStatusCode.Accepted)
-                {
-                }
-                else
-                { 
-                }
-           */
+             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                 // var response = client.SendEmailAsync(msg);
+                 var response = client.SendEmailAsync(msg).GetAwaiter().GetResult();
+                 if (response.StatusCode == HttpStatusCode.Accepted)
+                 {
+                 }
+                 else
+                 { 
+                 }
+            */
 
             /*
            
@@ -1119,7 +1119,7 @@ namespace PMapTestApp
                         sumSistance += item.FastestRoute.SumDistance;
                     }
                     logItem += "\tdistance:" + sumSistance.ToString(Global.NUMFORMAT);
-                    Util.String2File(logItem+"\n", logfile, true);
+                    Util.String2File(logItem + "\n", logfile, true);
                     Util.String2File(logDetail, logfile, true);
                     var resJSon = JsonConvert.SerializeObject(res);
                     Util.String2File(resJSon, file.Replace("_boXTruck", "_testResult"));
@@ -1131,6 +1131,65 @@ namespace PMapTestApp
                     Util.String2File(logItem, logfile, true);
                 }
             }
+        }
+
+        private class DRRoute
+        {
+            public string addrFrom = "";
+            public string addrTo = "";
+            public boRoute route = new boRoute() { RZN_ID_LIST = "" };
+            public string result = "";
+        }
+        private void button37_Click(object sender, EventArgs e)
+        {
+            PMapIniParams.Instance.ReadParams("", dbConf);
+
+
+            var rt = new DRRoute() { addrFrom = "Szeged 46.2425213,20.1716678", addrTo = "Győr" };
+            var vbintf = new VBInterface.PMapInterface();
+
+            List<boRoute> calcRoutes = new List<boRoute>();
+
+            PMapCommonVars.Instance.ConnectToDB();
+
+            bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+            int ZIP_IDFrom = 0;
+            int NOD_IDFrom = 0;
+            int EDG_IDFrom = 0;
+            bool bFoundFrom = route.GeocodingByGoogle(rt.addrFrom, out ZIP_IDFrom, out NOD_IDFrom, out EDG_IDFrom);
+            if (bFoundFrom)
+            {
+                rt.route.NOD_ID_FROM = NOD_IDFrom;
+
+                int ZIP_IDTo = 0;
+                int NOD_IDTo = 0;
+                int EDG_IDTo = 0;
+
+                bool bFoundTo = route.GeocodingByGoogle(rt.addrTo, out ZIP_IDTo, out NOD_IDTo, out EDG_IDTo);
+                if (bFoundTo)
+                {
+                    rt.route.NOD_ID_TO = NOD_IDTo;
+                    calcRoutes.Add(rt.route);
+                }
+                else
+                {
+                    rt.result = "Érkezés nem geokódolható";
+
+                }
+
+
+            }
+            else
+            {
+                rt.result = "Indulás nem geokódolható";
+            }
+
+
+            //
+            var bOK2 = PMRouteInterface.GetPMapRoutesMulti(calcRoutes, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, false, false);
+
+
+
         }
     }
 }

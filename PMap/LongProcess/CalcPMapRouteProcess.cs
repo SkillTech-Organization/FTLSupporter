@@ -297,7 +297,8 @@ namespace PMapCore.LongProcess
         private void FlushData(List<boRoute> results, int p_flushCnt)
         {
             DateTime dtStartFlush = DateTime.Now;
-            ProcessForm.SetInfoText(m_Hint.Trim() + "Kiírás..." + p_flushCnt.ToString());
+            if(ProcessForm != null)
+                ProcessForm.SetInfoText(m_Hint.Trim() + "Kiírás..." + p_flushCnt.ToString());
             m_bllRoute.WriteRoutesBulk(results, m_savePoints);
             results = new List<boRoute>();
             Util.Log2File("CalcPMapRouteProcess WriteRoutesBulk: Mmry:" + GC.GetTotalMemory(false).ToString() + ",duration:" +
