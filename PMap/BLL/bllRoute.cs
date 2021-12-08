@@ -1159,6 +1159,58 @@ namespace PMapCore.BLL
         /// 
         public bool GeocodingByAddr(string p_addr, out int ZIP_ID, out int NOD_ID, out int EDG_ID, out boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT, bool p_onlyFullAddr = false)
         {
+
+            ZIP_ID = 0;
+            NOD_ID = 0;
+            EDG_ID = 0;
+
+            //Koordinátára keresés
+            //
+            if (p_addr.StartsWith("@"))
+            {
+                var latlng = p_addr.Replace("@", "").Split(',');
+                if (latlng.Count() != 2)
+                {
+                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
+                    return false;
+                }
+
+                PointLatLng pt = new PointLatLng();
+                try
+                {
+                    pt.Lat = Convert.ToDouble(latlng[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                    pt.Lng = Convert.ToDouble(latlng[1].Replace(',', '.'), CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, p_addr));
+
+                }
+
+
+                NOD_ID = GetNearestNOD_ID(pt);
+                boNode nod = GetNode(NOD_ID);
+                if (nod == null)
+                {
+                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
+                    return false;
+                }
+                ZIP_ID = nod.ZIP_ID;
+
+                boEdge edg = GetEdgeByNOD_ID(NOD_ID);
+                if (edg == null)
+                {
+                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
+                    return false;
+                }
+                EDG_ID = edg.ID;
+
+                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_FULL;
+                return true;
+            }
+
+            //címre keresés
+            //
             string sZIP_NUM = "";
             string sCity = "";
             string sStreet = "";

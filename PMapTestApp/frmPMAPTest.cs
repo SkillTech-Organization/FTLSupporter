@@ -302,6 +302,8 @@ namespace PMapTestApp
             */
             d.txtAddr.Text = "Budapest, Széchenyi tér 2";
             d.txtAddr.Text = "3300 Eger KISTÁLYAI ÚT 18.";
+
+            d.txtAddr.Text = "@46.2498822,20.1762087";
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();
@@ -318,7 +320,7 @@ namespace PMapTestApp
                 int NOD_ID = 0;
                 int EDG_ID = 0;
                 boDepot.EIMPADDRSTAT DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                bool bFound = route.GeocodingByAddr(d.txtAddr.Text, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, true, false);
+                bool bFound = route.GeocodingByAddr(d.txtAddr.Text, out ZIP_ID, out NOD_ID, out EDG_ID, out DEP_IMPADDRSTAT, true);
                 if (bFound)
                 {
                     string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +

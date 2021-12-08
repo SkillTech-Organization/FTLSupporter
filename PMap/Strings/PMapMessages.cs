@@ -175,6 +175,7 @@ namespace PMapCore.Strings
         public const string E_NOSELTOUR = "Nincs kiválasztott túra";
 
         public const string E_UNKOWN_ZIP = "Ismeretlen irányítószám:{0}";
+        public const string E_LATLNG_CONVERT_ERR = "A megadott koordináta nem értelmezhető:{0}";
 
         public const string E_MPORD_SEETNOTFOUND = "Nincs munkalap az Excel állományban!";
         public const string E_MPORD_INTEROP_ERR = "Excel interop error:{0}";
