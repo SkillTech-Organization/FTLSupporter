@@ -1147,7 +1147,7 @@ namespace PMapTestApp
             PMapIniParams.Instance.ReadParams("", dbConf);
 
 
-            var rt = new DRRoute() { addrFrom = "Szeged 46.2425213,20.1716678", addrTo = "Győr" };
+            var rt = new DRRoute() { addrFrom = "@46.2425213,20.1716678", addrTo = "@46.2425213,20.1716678" };
             var vbintf = new VBInterface.PMapInterface();
 
             List<boRoute> calcRoutes = new List<boRoute>();

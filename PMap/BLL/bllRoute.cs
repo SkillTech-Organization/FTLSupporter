@@ -21,6 +21,7 @@ using PMapCore.Cache;
 using PMapCore.BLL;
 using PMapCore.Strings;
 using System.Runtime.ExceptionServices;
+using System.Globalization;
 
 namespace PMapCore.BLL
 {
@@ -1168,45 +1169,15 @@ namespace PMapCore.BLL
             //
             if (p_addr.StartsWith("@"))
             {
-                var latlng = p_addr.Replace("@", "").Split(',');
-                if (latlng.Count() != 2)
+                if (GeocodingByLatLng(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID))
+                {
+                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_FULL;
+                    return true;
+                }
                 {
                     DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
                     return false;
                 }
-
-                PointLatLng pt = new PointLatLng();
-                try
-                {
-                    pt.Lat = Convert.ToDouble(latlng[0].Replace(',', '.'), CultureInfo.InvariantCulture);
-                    pt.Lng = Convert.ToDouble(latlng[1].Replace(',', '.'), CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new Exception(String.Format(PMapMessages.E_UNKOWN_ZIP, p_addr));
-
-                }
-
-
-                NOD_ID = GetNearestNOD_ID(pt);
-                boNode nod = GetNode(NOD_ID);
-                if (nod == null)
-                {
-                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                    return false;
-                }
-                ZIP_ID = nod.ZIP_ID;
-
-                boEdge edg = GetEdgeByNOD_ID(NOD_ID);
-                if (edg == null)
-                {
-                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.MISSADDR;
-                    return false;
-                }
-                EDG_ID = edg.ID;
-
-                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_FULL;
-                return true;
             }
 
             //címre keresés
@@ -1417,6 +1388,20 @@ namespace PMapCore.BLL
             ZIP_ID = 0;
             NOD_ID = 0;
             EDG_ID = 0;
+
+            if (p_addr.StartsWith("@"))
+            {
+                if (GeocodingByLatLng(p_addr, out ZIP_ID, out NOD_ID, out EDG_ID))
+                {
+                    return true;
+                }
+                {
+                    return false;
+                }
+            }
+
+
+
             PointLatLng ResultPt = new PointLatLng();
             string requestUri;
             if (PMapIniParams.Instance.GoogleMapsAPIKey != "")
@@ -1606,6 +1591,63 @@ namespace PMapCore.BLL
             }
         }
 
+        /// <summary>
+        ///  Koordinátára keresés
+        //
+        /// </summary>
+        /// <param name="p_latLng"></param>
+        /// <param name="ZIP_ID"></param>
+        /// <param name="NOD_ID"></param>
+        /// <param name="EDG_ID"></param>
+        /// <returns></returns>
+        public bool GeocodingByLatLng(string p_latLng, out int ZIP_ID, out int NOD_ID, out int EDG_ID)
+        {
+            ZIP_ID = 0;
+            NOD_ID = 0;
+            EDG_ID = 0;
+            if (p_latLng.StartsWith("@"))
+            {
+                var latlng = p_latLng.Replace("@", "").Split(',');
+                if (latlng.Count() != 2)
+                {
+                    return false;
+                }
+
+                PointLatLng pt = new PointLatLng();
+                try
+                {
+                    pt.Lat = Convert.ToDouble(latlng[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                    pt.Lng = Convert.ToDouble(latlng[1].Replace(',', '.'), CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    throw new Exception(String.Format(PMapMessages.E_LATLNG_CONVERT_ERR, p_latLng));
+
+                }
+
+
+                NOD_ID = GetNearestNOD_ID(pt);
+                boNode nod = GetNode(NOD_ID);
+                if (nod == null)
+                {
+                    return false;
+                }
+                ZIP_ID = nod.ZIP_ID;
+
+                boEdge edg = GetEdgeByNOD_ID(NOD_ID);
+                if (edg == null)
+                {
+                    return false;
+                }
+                EDG_ID = edg.ID;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public Dictionary<string, Dictionary<int, double>> GetAllTolls()
         {
