@@ -24,6 +24,7 @@ namespace FTLSupporter
             DateTime dtStart = DateTime.Now;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
             PMapCommonVars.Instance.ConnectToDB();
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
@@ -39,6 +40,7 @@ namespace FTLSupporter
             DateTime dtStart = DateTime.Now;
             PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
             PMapCommonVars.Instance.ConnectToDB();
+            ChkLic.Check(PMapIniParams.Instance.IDFile);
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
@@ -58,7 +60,6 @@ namespace FTLSupporter
             {
 
                 Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Init" ));
-                ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
                 bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
