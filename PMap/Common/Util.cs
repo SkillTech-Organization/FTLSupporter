@@ -178,8 +178,16 @@ namespace PMapCore.Common
                 ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
             */
             if (p_sendToCloud && PMapIniParams.Instance.ALog)
-                AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
-
+            {
+                try
+                {
+                    AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLog(ex);
+                }
+            }
         }
 
         public static void ExceptionLog(Exception p_ecx)

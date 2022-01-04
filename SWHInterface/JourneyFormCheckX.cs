@@ -45,10 +45,9 @@ namespace SWHInterface
             try
             {
                 PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
+                ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 Util.Log2File($">>START:JourneyFormCheck( p_iniPath={p_iniPath}, p_dbConf={p_dbConf},p_lstDepotID.<count>={p_lstRouteSection.Count.ToString()},p_XTruck={p_XTruck.TRK_CODE}, ver.:{ ApplicationInfo.Version}, DBServer:{ PMapIniParams.Instance.DBServer}, DBName:{ PMapIniParams.Instance.DBName}");
-
-                ChkLic.Check(PMapIniParams.Instance.IDFile);
 
                 var DB = new SQLServerAccess();
                 DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
