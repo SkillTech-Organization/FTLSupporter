@@ -65,11 +65,13 @@ namespace PMapCore.BLL
                          "select EDG.ID, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, EDG.RDT_VALUE ,EDG.EDG_ETLCODE, EDG.EDG_ONEWAY, " + Environment.NewLine +
                          "EDG.EDG_DESTTRAFFIC, EDG.NOD_NUM, EDG.NOD_NUM2, EDG.RZN_ZONECODE,EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4,  " + Environment.NewLine +
                          "NOD1.NOD_YPOS as NOD1_YPOS, NOD1.NOD_XPOS as NOD1_XPOS, " + Environment.NewLine +
-                         "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, NOD1.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
+                         "NOD2.NOD_YPOS as NOD2_YPOS, NOD2.NOD_XPOS as NOD2_XPOS, RZN.ID as RZN_ID, RZN.RST_ID, RZN.RZN_ZoneName, ZIP1.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO, " + Environment.NewLine +
                          "EDG_MAXWEIGHT, EDG_MAXHEIGHT, EDG_MAXWIDTH " + Environment.NewLine +
                          "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
                          "inner join NOD_NODE (NOLOCK) NOD1 on NOD1.ID = EDG.NOD_NUM " + Environment.NewLine +
+                         "inner join ZIP_ZIPCODE (NOLOCK) ZIP1 on ZIP1.ID = NOD1.ZIP_ID " + Environment.NewLine +
                          "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+                         "inner join ZIP_ZIPCODE (NOLOCK) ZIP2 on ZIP2.ID = NOD2.ZIP_ID " + Environment.NewLine +
                          "left outer join RZN_RESTRZONE (NOLOCK) RZN on EDG.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
                          "where EDG.NOD_NUM <> EDG.NOD_NUM2 and RDT_VALUE <> 0 " + Environment.NewLine +
                          "order by ID "; //Meg kell rendezni, hogy a duplikátumok közül csak az elsőt vegyük minden esetbe figyelembe
@@ -125,9 +127,13 @@ namespace PMapCore.BLL
                             command.Parameters["@DST_DISTANCE"].Value = route.DST_DISTANCE;
                             if (route.Edges != null && route.Route != null)
                             {
-                                command.Parameters["@DST_EDGES"].Value = Util.ZipStr(getEgesFromEdgeList(route.Edges));
+//                                command.Parameters["@DST_EDGES"].Value = Util.ZipStr(getEgesFromEdgeList(route.Edges));
+                                command.Parameters["@DST_EDGES"].Value = Util.Lz4pStr(getEgesFromEdgeList(route.Edges));
                                 if (p_savePoints)
-                                    command.Parameters["@DST_POINTS"].Value = Util.ZipStr(getPointsFromPointList(route.Route.Points));
+                                {
+//                                    command.Parameters["@DST_POINTS"].Value = Util.ZipStr(getPointsFromPointList(route.Route.Points));
+                                    command.Parameters["@DST_POINTS"].Value = Util.Lz4pStr(getPointsFromPointList(route.Route.Points));
+                                }
                                 else
                                     command.Parameters["@DST_POINTS"].Value = new byte[0];
                             }
@@ -170,7 +176,8 @@ namespace PMapCore.BLL
                 {
                     if (Edges != null && Route != null)
                     {
-                        return Util.ZipStr(string.Join(Global.SEP_EDGE, Edges.Select(x => (x.ID).ToString()).ToArray()));
+//                        return Util.ZipStr(string.Join(Global.SEP_EDGE, Edges.Select(x => (x.ID).ToString()).ToArray()));
+                        return Util.Lz4pStr(string.Join(Global.SEP_EDGE, Edges.Select(x => (x.ID).ToString()).ToArray()));
                     }
                     return new byte[0];
                 }
@@ -182,7 +189,10 @@ namespace PMapCore.BLL
                     if (Edges != null && Route != null)
                     {
                         if (m_savePoints)
-                            return Util.ZipStr(string.Join(Global.SEP_POINT, Route.Points.Select(x => x.Lat.ToString() + Global.SEP_COORD + x.Lng.ToString()).ToArray()));
+                        {
+//                            return Util.ZipStr(string.Join(Global.SEP_POINT, Route.Points.Select(x => x.Lat.ToString() + Global.SEP_COORD + x.Lng.ToString()).ToArray()));
+                            return Util.Lz4pStr(string.Join(Global.SEP_POINT, Route.Points.Select(x => x.Lat.ToString() + Global.SEP_COORD + x.Lng.ToString()).ToArray()));
+                        }
                         else
                             return new byte[0];
                     }
@@ -248,6 +258,85 @@ namespace PMapCore.BLL
         }
 
 
+        public void WriteRoutesBulk2(List<boRoute> p_Routes, bool p_savePoints, string p_hint)
+        {
+            DateTime dtStartProc = DateTime.Now;
+
+            if (p_Routes.Count() == 0)
+                return;
+
+            using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectRouteProcess))
+            {
+                DataTable dt;
+                DataTable table = new DataTable();
+
+                Util.Log2File(p_hint + "INIT WriteRoutesBulkAsynch ");
+
+                List<boRouteX> rtX = p_Routes.Select(i => new boRouteX(p_savePoints)
+                {
+                    NOD_ID_FROM = i.NOD_ID_FROM,
+                    NOD_ID_TO = i.NOD_ID_TO,
+                    RZN_ID_LIST = i.RZN_ID_LIST,
+                    DST_MAXWEIGHT = i.DST_MAXWEIGHT,
+                    DST_MAXHEIGHT = i.DST_MAXHEIGHT,
+                    DST_MAXWIDTH = i.DST_MAXWIDTH,
+                    DST_DISTANCE = i.DST_DISTANCE,
+                    Route = i.Route,
+                    Edges = i.Edges
+
+                }
+                ).ToList();
+
+
+                var reader = ObjectReader.Create(rtX,
+                    "NOD_ID_FROM", "NOD_ID_TO", "RZN_ID_LIST", "DST_MAXWEIGHT", "DST_MAXHEIGHT", "DST_MAXWIDTH", "DST_DISTANCE", "DST_EDGES", "DST_POINTS");
+
+                /*
+                using (var reader = ObjectReader.Create(rtX,
+                    "NOD_ID_FROM", "NOD_ID_TO", "RZN_ID_LIST", "DST_MAXWEIGHT", "DST_MAXHEIGHT", "DST_MAXWIDTH", "DST_DISTANCE", "DST_EDGES", "DST_POINTS"))
+                {
+                    table.Load(reader);
+                }
+                */
+
+                // more on triggers in next post
+                SqlBulkCopy bulkCopy =
+                    new SqlBulkCopy
+                    (
+                    DBA.Conn,
+                    SqlBulkCopyOptions.TableLock,
+                    null
+                    );
+                bulkCopy.BulkCopyTimeout = PMapIniParams.Instance.DBCmdTimeOut;
+                // set the destination table name
+                bulkCopy.DestinationTableName = "DST_DISTANCE";
+                bulkCopy.ColumnMappings.Add("NOD_ID_FROM", "NOD_ID_FROM");
+                bulkCopy.ColumnMappings.Add("NOD_ID_TO", "NOD_ID_TO");
+                bulkCopy.ColumnMappings.Add("RZN_ID_LIST", "RZN_ID_LIST");
+                bulkCopy.ColumnMappings.Add("DST_MAXWEIGHT", "DST_MAXWEIGHT");
+                bulkCopy.ColumnMappings.Add("DST_MAXHEIGHT", "DST_MAXHEIGHT");
+                bulkCopy.ColumnMappings.Add("DST_MAXWIDTH", "DST_MAXWIDTH");
+                bulkCopy.ColumnMappings.Add("DST_DISTANCE", "DST_DISTANCE");
+                bulkCopy.ColumnMappings.Add("DST_EDGES", "DST_EDGES");
+                bulkCopy.ColumnMappings.Add("DST_POINTS", "DST_POINTS");
+
+                // write the data in the "dataTable"
+                Util.Log2File(p_hint + "START WriteRoutesBulkAsynch bulkCopy " + (DateTime.Now - dtStartProc).Duration().TotalMilliseconds.ToString("#0") + " ms");
+                try
+                {
+                    bulkCopy.WriteToServer(reader);
+                }
+                catch (Exception ex)
+                {
+                    Util.Log2File(p_hint + "ERROR WriteRoutesBulkAsynch bulkCopy " + (DateTime.Now - dtStartProc).Duration().TotalMilliseconds.ToString("#0") + " ms, Error:" + ex.Message);
+                }
+                finally
+                {
+                    reader.Close();
+                }
+                Util.Log2File(p_hint + "END WriteRoutesBulkAsynch bulkCopy " + (DateTime.Now - dtStartProc).Duration().TotalMilliseconds.ToString("#0") + " ms");
+            }
+        }
 
 
 
@@ -284,7 +373,8 @@ namespace PMapCore.BLL
 
 
                     byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
-                    String points = Util.UnZipStr(buff);
+//                    String points = Util.UnZipStr(buff);
+                    String points = Util.UnLz4pStr(buff);
                     String[] aPoints = points.Split(Global.SEP_POINTC);
                     foreach (string point in aPoints)
                     {
@@ -294,7 +384,8 @@ namespace PMapCore.BLL
 
 
                     buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_EDGES");
-                    String edges = Util.UnZipStr(buff);
+//                    String edges = Util.UnZipStr(buff);
+                    String edges = Util.UnLz4pStr(buff);
 
                     Dictionary<string, boEdge> dicEdges = new Dictionary<string, boEdge>();
                     if (edges != "")
@@ -389,7 +480,8 @@ namespace PMapCore.BLL
                 if (Util.getFieldValue<double>(dt.Rows[0], "DST_DISTANCE") >= 0.0)
                 {
                     byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_POINTS");
-                    String points = Util.UnZipStr(buff);
+//                    String points = Util.UnZipStr(buff);
+                    String points = Util.UnLz4pStr(buff);
                     String[] aPoints = points.Split(Global.SEP_POINTC);
                     foreach (string point in aPoints)
                     {
@@ -568,20 +660,20 @@ namespace PMapCore.BLL
                 sSQL += "  " + sSQLRESTZONES + " as RESTZONES, TRK.TRK_WEIGHT, TRK.TRK_XHEIGHT, TRK.TRK_XWIDTH ";
             }
 
-            sSQL += "	  from TPL_TRUCKPLAN TPL " + Environment.NewLine +
-                    "	  inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+            sSQL += "	  from TPL_TRUCKPLAN (nolock) TPL " + Environment.NewLine +
+                    "	  inner join TRK_TRUCK (nolock) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
                     "	  where TPL.PLN_ID = ?  " + Environment.NewLine +
                     ") " + Environment.NewLine +
                     "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_MAXWEIGHT, CTE_TPL.TRK_XHEIGHT as DST_MAXHEIGHT, CTE_TPL.TRK_XWIDTH as DST_MAXWIDTH " + Environment.NewLine +
-                    "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
+                    "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE (nolock) WHS  " + Environment.NewLine +
                     "		union  " + Environment.NewLine +
-                    "		select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
-                    "		inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "		select distinct NOD_ID as ID from DEP_DEPOT (nolock) DEP  " + Environment.NewLine +
+                    "		inner join TOD_TOURORDER (nolock) TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
                     "		) NOD_FROM  " + Environment.NewLine +
-                    "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                    "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE (nolock) WHS " + Environment.NewLine +
                     "	    union  " + Environment.NewLine +
-                    "	    select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
-                    "	    inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "	    select distinct NOD_ID as ID from DEP_DEPOT (nolock) DEP " + Environment.NewLine +
+                    "	    inner join TOD_TOURORDER (nolock) TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
                     "	    ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
                     "inner join CTE_TPL on 1=1 " + Environment.NewLine +
                     "EXCEPT  " + Environment.NewLine +
@@ -686,15 +778,15 @@ namespace PMapCore.BLL
                     "	  where TPL.PLN_ID = ? " + Environment.NewLine +
                     ") " + Environment.NewLine +
                     "select NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO, CTE_TPL.RESTZONES, CTE_TPL.TRK_WEIGHT as DST_MAXWEIGHT, CTE_TPL.TRK_XHEIGHT as DST_MAXHEIGHT, CTE_TPL.TRK_XWIDTH as DST_MAXWIDTH " + Environment.NewLine +
-                    "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
+                    "	from (select distinct NOD_ID as ID from WHS_WAREHOUSE (nolock) WHS  " + Environment.NewLine +
                     "		union  " + Environment.NewLine +
-                    "		select distinct NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
-                    "		inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "		select distinct NOD_ID as ID from DEP_DEPOT (nolock) DEP  " + Environment.NewLine +
+                    "		inner join TOD_TOURORDER (nolock) TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
                     "		) NOD_FROM  " + Environment.NewLine +
-                    "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                    "inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE (nolock) WHS " + Environment.NewLine +
                     "	    union  " + Environment.NewLine +
-                    "	    select distinct NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
-                    "	    inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
+                    "	    select distinct NOD_ID as ID from DEP_DEPOT (nolock) DEP " + Environment.NewLine +
+                    "	    inner join TOD_TOURORDER (nolock) TOD on TOD.DEP_ID = DEP.ID and TOD.PLN_ID = ? " + Environment.NewLine +
                     "	    ) NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
                     "inner join CTE_TPL on 1=1 " + Environment.NewLine +
                     "EXCEPT  " + Environment.NewLine +
@@ -725,7 +817,7 @@ namespace PMapCore.BLL
         public RectLatLng getBoundary(List<int> p_nodes)
         {
             string sNODE_IDs = string.Join(",", p_nodes.Select(i => i.ToString()).ToArray());
-            string sSql = "select min(NOD_XPOS) as minLng, min( NOD_YPOS) as minLat , max(NOD_XPOS) as maxLng, max( NOD_YPOS)  as maxLat from NOD_NODE where id in (" + sNODE_IDs + ")";
+            string sSql = "select min(NOD_XPOS) as minLng, min( NOD_YPOS) as minLat , max(NOD_XPOS) as maxLng, max( NOD_YPOS)  as maxLat from NOD_NODE (nolock) where id in (" + sNODE_IDs + ")";
             DataTable dt = DBA.Query2DataTable(sSql);
 
 
@@ -910,8 +1002,11 @@ namespace PMapCore.BLL
 
                     if (p_Route.Edges != null && p_Route.Route.Points != null)
                     {
-                        bEdges = Util.ZipStr(getEgesFromEdgeList(p_Route.Edges));
-                        bPoints = Util.ZipStr(getPointsFromPointList(p_Route.Route.Points));
+//                        bEdges = Util.ZipStr(getEgesFromEdgeList(p_Route.Edges));
+//                        bPoints = Util.ZipStr(getPointsFromPointList(p_Route.Route.Points));
+
+                        bEdges = Util.Lz4pStr(getEgesFromEdgeList(p_Route.Edges));
+                        bPoints = Util.Lz4pStr(getPointsFromPointList(p_Route.Route.Points));
                     }
                     else
                     {
@@ -973,11 +1068,13 @@ namespace PMapCore.BLL
         {
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
               "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, NOD.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO  " + Environment.NewLine +
-              "from EDG_EDGE  EDG " + Environment.NewLine +
-              "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
-              "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-              "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
+              "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ZIP.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO  " + Environment.NewLine +
+              "from EDG_EDGE (NOLOCK) EDG " + Environment.NewLine +
+              "inner join NOD_NODE (NOLOCK) NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
+              "inner join ZIP_ZIPCODE (NOLOCK) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
+              "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+              "inner join ZIP_ZIPCODE (NOLOCK) ZIP2 on ZIP2.ID = NOD2.ZIP_ID " + Environment.NewLine +
+              "left outer join RZN_RESTRZONE (NOLOCK) RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
               " where EDG.ID = ?  ";
 
             return fillEdgeFromDt(DBA.Query2DataTable(sSql, p_ID));
@@ -988,11 +1085,13 @@ namespace PMapCore.BLL
 
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                    "select EDG.ID as EDGID, EDG.NOD_NUM, EDG.NOD_NUM2, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME, EDG.EDG_LENGTH, " + Environment.NewLine +
-                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, NOD.ZIP_NUM as ZIP_NUM_FROM, NOD2.ZIP_NUM as ZIP_NUM_TO " + Environment.NewLine +
-                   "from EDG_EDGE  EDG " + Environment.NewLine +
-                   "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
-                   "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
-                   "left outer join RZN_RESTRZONE RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
+                   "EDG.EDG_ONEWAY, EDG.EDG_DESTTRAFFIC, EDG.RDT_VALUE, EDG.EDG_ETLCODE, RZN.RZN_ZONENAME, EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ZIP.ZIP_NUM as ZIP_NUM_FROM, ZIP2.ZIP_NUM as ZIP_NUM_TO " + Environment.NewLine +
+                   "from EDG_EDGE  (NOLOCK) EDG " + Environment.NewLine +
+                   "inner join NOD_NODE (NOLOCK) NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
+                    "inner join ZIP_ZIPCODE (NOLOCK) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
+                   "inner join NOD_NODE (NOLOCK) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+                   "inner join ZIP_ZIPCODE (NOLOCK) ZIP2 on ZIP2.ID = NOD2.ZIP_ID " + Environment.NewLine +
+                   "left outer join RZN_RESTRZONE (NOLOCK) RZN on RZN.RZN_ZoneCode = EDG.RZN_ZONECODE " + Environment.NewLine +
                    " where (EDG.NOD_NUM = ? or EDG.NOD_NUM2 = ?) ";
             if (p_street != "")
                 sSql += " and UPPER(convert(varchar(max),decryptbykey(EDG_NAME_ENC))) like '%" + p_street.ToUpper() + "%' ";
@@ -1091,7 +1190,7 @@ namespace PMapCore.BLL
             if (p_street != "")
                 sSql += "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine;
 
-            sSql += "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, NOD.ZIP_NUM as NOD_ZIP_NUM, NOD2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
+            sSql += "; with CTE as ( select NOD.ID as NOD_ID, NOD2.ID as NOD2_ID, ZIP.ZIP_NUM as NOD_ZIP_NUM, ZIP2.ZIP_NUM as NOD2_ZIP_NUM, " + Environment.NewLine +
            "NOD.NOD_XPOS as NOD_NOD_XPOS, NOD.NOD_YPOS as NOD_NOD_YPOS, NOD2.NOD_XPOS as NOD2_NOD_XPOS, NOD2.NOD_YPOS as NOD2_NOD_YPOS, " + Environment.NewLine +
            "EDG.RDT_VALUE as EDG_RDT_VALUE, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM1, EDG.EDG_STRNUM2 as EDG_EDG_STRNUM2, EDG.EDG_STRNUM3 as EDG_EDG_STRNUM3, EDG.EDG_STRNUM4 as EDG_EDG_STRNUM4, " + Environment.NewLine +
            "EDG.EDG_MAXWEIGHT, EDG.EDG_MAXHEIGHT, EDG.EDG_MAXWIDTH, ";
@@ -1099,15 +1198,17 @@ namespace PMapCore.BLL
                 sSql += "convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAMEX, " + Environment.NewLine;
 
             sSql += "dbo.fnDistanceBetweenSegmentAndPoint(NOD.NOD_XPOS, NOD.NOD_YPOS, NOD2.NOD_XPOS, NOD2.NOD_YPOS, " + ptX + ",  " + ptY + ") as XDIFF " + Environment.NewLine +
-            "from EDG_EDGE EDG " + Environment.NewLine +
-            "inner join NOD_NODE NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
-            "inner join NOD_NODE NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+            "from EDG_EDGE (nolock) EDG " + Environment.NewLine +
+            "inner join NOD_NODE (nolock) NOD on NOD.ID = EDG.NOD_NUM " + Environment.NewLine +
+            "inner join ZIP_ZIPCODE (nolock) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
+            "inner join NOD_NODE (nolock) NOD2 on NOD2.ID = EDG.NOD_NUM2 " + Environment.NewLine +
+            "inner join ZIP_ZIPCODE (nolock) ZIP2 on ZIP2.ID = NOD2.ZIP_ID " + Environment.NewLine +
             "where NOD.NOD_XPOS != NOD2.NOD_XPOS and NOD.NOD_YPOS != NOD2.NOD_YPOS and " + Environment.NewLine +
             "(abs(NOD.NOD_XPOS - " + ptX + ") + abs(NOD.NOD_YPOS - " + ptY + ") < {0}   AND " + Environment.NewLine +
             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
-            "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
+            "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then ZIP_ZIP_NUM else ZIP2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
             "XDIFF " + Environment.NewLine +
             "from CTE " + Environment.NewLine +
             "where  (CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end) ) " + Environment.NewLine;
@@ -1256,16 +1357,16 @@ namespace PMapCore.BLL
             //                          "  convert(varchar(max),decryptbykey(EDG_NAME_ENC)) collate SQL_Latin1_General_CP1253_CI_AI as EDG_NAMEX, " + Environment.NewLine +
             string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
                           ";WITH CTE as (" + Environment.NewLine +
-                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
-                          "  from NOD_NODE NOD " + Environment.NewLine +
-                          "  inner join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID " + Environment.NewLine +
-                          "  inner join ZIP_ZIPCODE ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
+                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, ZIP.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
+                          "  from NOD_NODE (nolock) NOD " + Environment.NewLine +
+                          "  inner join EDG_EDGE (nolock) EDG on EDG.NOD_NUM = NOD.ID " + Environment.NewLine +
+                          "  inner join ZIP_ZIPCODE (nolock) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
                           " WHERECITY " + Environment.NewLine +
                           " UNION " + Environment.NewLine +
-                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
-                          "  from NOD_NODE NOD " + Environment.NewLine +
-                          "  inner join EDG_EDGE EDG on EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +
-                          "  inner join ZIP_ZIPCODE ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
+                          "  select NOD.ID as NOD_ID, EDG.ID as EDG_ID, ZIP.ZIP_NUM, ZIP.ID as ZIP_ID, ZIP_CITY " + Environment.NewLine +
+                          "  from NOD_NODE (nolock) NOD " + Environment.NewLine +
+                          "  inner join EDG_EDGE (nolock) EDG on EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +
+                          "  inner join ZIP_ZIPCODE (nolock) ZIP on ZIP.ID = NOD.ZIP_ID " + Environment.NewLine +
                           " WHERECITY " + Environment.NewLine +
                           ") " + Environment.NewLine +
                           "select *, convert(varchar(max), decryptbykey(EDG_NAME_ENC)) as EDG_NAMEX, " + Environment.NewLine +
@@ -1689,10 +1790,10 @@ namespace PMapCore.BLL
             " where isnull(NOD2.NOD_NAME, '') = '' and RDT_VALUE=?", p_RDT_VALUE, p_RDT_VALUE);
         }
 
-        public void UpdateNodeAddress(int ID, string p_NOD_NAME, string p_ZIP_NUM)
+        public void UpdateNodeAddress(int ID, string p_NOD_NAME)
         {
-            string sSQL = "update NOD_NODE set NODE_NAME=?, ZIP_NUM=? where ID=?";
-            DBA.ExecuteNonQuery(sSQL, p_NOD_NAME, p_ZIP_NUM, ID);
+            string sSQL = "update NOD_NODE set NODE_NAME=? where ID=?";
+            DBA.ExecuteNonQuery(sSQL, p_NOD_NAME, ID);
         }
 
         //"ENCRYPTBYKEY(KEY_GUID('EDGKey')," & getStr(EDG_NAME) & ")
@@ -1710,18 +1811,18 @@ namespace PMapCore.BLL
                             $"inner join ( select DST.NOD_ID_FROM as NOD_ID_FROM, DST.NOD_ID_TO as NOD_ID_TO from DST_DISTANCE DST  " + Environment.NewLine +
                             $"EXCEPT " + Environment.NewLine +
                             $"select  NOD_FROM.ID as NOD_ID_FROM, NOD_TO.ID as NOD_ID_TO from " + Environment.NewLine +
-                            $"(select distinct NOD_ID as ID from WHS_WAREHOUSE WHS  " + Environment.NewLine +
+                            $"(select distinct NOD_ID as ID from WHS_WAREHOUSE (nolock) WHS  " + Environment.NewLine +
                             $"  union  " + Environment.NewLine +
-                            $" select distinct dep.NOD_ID as ID from DEP_DEPOT DEP  " + Environment.NewLine +
-                            $" inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
-                            $" inner join PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                            $" select distinct dep.NOD_ID as ID from DEP_DEPOT (nolock) DEP  " + Environment.NewLine +
+                            $" inner join TOD_TOURORDER (nolock) TOD on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                            $" inner join PLN_PUBLICATEDPLAN (nolock) PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
                             $" where datediff( dd, PLN.PLN_DATE_E, getdate()) < {p_expiredIndays} " + Environment.NewLine +
                             $") NOD_FROM  " + Environment.NewLine +
-                            $"inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE WHS " + Environment.NewLine +
+                            $"inner join (select distinct NOD_ID as ID from WHS_WAREHOUSE (nolock) WHS " + Environment.NewLine +
                             $" union  " + Environment.NewLine +
-                            $" select distinct dep.NOD_ID as ID from DEP_DEPOT DEP " + Environment.NewLine +
-                            $" inner join TOD_TOURORDER TOD on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
-                            $" inner join PLN_PUBLICATEDPLAN PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
+                            $" select distinct dep.NOD_ID as ID from DEP_DEPOT (nolock) DEP " + Environment.NewLine +
+                            $" inner join TOD_TOURORDER (nolock) TOD on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                            $" inner join PLN_PUBLICATEDPLAN (nolock) PLN on PLN.ID = TOD.PLN_ID " + Environment.NewLine +
                             $" where datediff( dd, PLN.PLN_DATE_E, getdate()) < { p_expiredIndays} " + Environment.NewLine +
                             $") NOD_TO on NOD_TO.ID != NOD_FROM.ID and NOD_TO.ID > 0 and NOD_FROM.ID > 0 " + Environment.NewLine +
                             $") delDST on delDST.NOD_ID_FROM=DST_DISTANCE.NOD_ID_FROM and delDST.NOD_ID_TO=DST_DISTANCE.NOD_ID_TO";

@@ -129,17 +129,17 @@ namespace PMapCore.BLL
                     "PTP_TYPE, NOD.NOD_XPOS, NOD.NOD_YPOS, ZIP.ZIP_CITY, TOD_SERVS, TOD_SERVE, " + Environment.NewLine +
                     "DEP.DEP_CODE, DEP.DEP_NAME, DEP_COMMENT, ORD.ORD_NUM,ORD_VOLUME, ORD.ORD_LENGTH, ORD.ORD_WIDTH, ORD.ORD_HEIGHT, ORD.ORD_COMMENT, TOD_SENTEMAIL, ORD_EMAIL, " + Environment.NewLine +
                     PMapIniParams.Instance.TourpointToolTip + " as TOOLTIPTEXT " + Environment.NewLine +
-                    "FROM PTP_PLANTOURPOINT PTP " + Environment.NewLine +
-                    "INNER JOIN TPL_TRUCKPLAN TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
-                    "LEFT JOIN TOD_TOURORDER TOD ON PTP.TOD_ID = TOD.ID " + Environment.NewLine +
-                    "LEFT JOIN WHS_WAREHOUSE WHS ON PTP.WHS_ID = WHS.ID " + Environment.NewLine +
-                    "LEFT JOIN DEP_DEPOT DEP ON TOD.DEP_ID = DEP.ID " + Environment.NewLine +
-                    "INNER JOIN NOD_NODE NOD ON PTP.NOD_ID = NOD.ID " + Environment.NewLine +
-                    "LEFT JOIN ZIP_ZIPCODE ZIP ON DEP.ZIP_ID = ZIP.ID " + Environment.NewLine +
-                    "LEFT JOIN ZIP_ZIPCODE ZIP2 ON WHS.ZIP_ID = ZIP2.ID " + Environment.NewLine +
-                    "LEFT JOIN ORD_ORDER ORD ON TOD.ORD_ID = ORD.ID " + Environment.NewLine +
-                    "LEFT JOIN OTP_ORDERTYPE OTP ON ORD.OTP_ID = OTP.ID " + Environment.NewLine +
-                    "LEFT JOIN CTP_CARGOTYPE CTP ON ORD.CTP_ID = CTP.ID " + Environment.NewLine +
+                    "FROM PTP_PLANTOURPOINT (nolock) PTP " + Environment.NewLine +
+                    "INNER JOIN TPL_TRUCKPLAN (nolock) TPL ON PTP.TPL_ID = TPL.ID " + Environment.NewLine +
+                    "LEFT JOIN TOD_TOURORDER (nolock) TOD ON PTP.TOD_ID = TOD.ID " + Environment.NewLine +
+                    "LEFT JOIN WHS_WAREHOUSE (nolock) WHS ON PTP.WHS_ID = WHS.ID " + Environment.NewLine +
+                    "LEFT JOIN DEP_DEPOT DEP (nolock) ON TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                    "INNER JOIN NOD_NODE (nolock) NOD ON PTP.NOD_ID = NOD.ID " + Environment.NewLine +
+                    "LEFT JOIN ZIP_ZIPCODE (nolock) ZIP ON DEP.ZIP_ID = ZIP.ID " + Environment.NewLine +
+                    "LEFT JOIN ZIP_ZIPCODE (nolock) ZIP2 ON WHS.ZIP_ID = ZIP2.ID " + Environment.NewLine +
+                    "LEFT JOIN ORD_ORDER (nolock) ORD ON TOD.ORD_ID = ORD.ID " + Environment.NewLine +
+                    "LEFT JOIN OTP_ORDERTYPE (nolock) OTP ON ORD.OTP_ID = OTP.ID " + Environment.NewLine +
+                    "LEFT JOIN CTP_CARGOTYPE (nolock) CTP ON ORD.CTP_ID = CTP.ID " + Environment.NewLine +
                     "WHERE PTP.TPL_ID = ? " + Environment.NewLine +
                     " ORDER BY PTP_ORDER";
             DataTable dt = DBA.Query2DataTable(sSql, p_TPL_ID);

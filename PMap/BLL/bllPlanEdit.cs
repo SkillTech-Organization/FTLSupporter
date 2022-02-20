@@ -338,7 +338,8 @@ namespace PMapCore.BLL
                 {
                     o_Dist = Util.getFieldValue<int>(dt.Rows[0], "DST_DISTANCE");
                     byte[] buff = Util.getFieldValue<byte[]>(dt.Rows[0], "DST_EDGES");
-                    String edges = Util.UnZipStr(buff);
+//                    String edges = Util.UnZipStr(buff);
+                    String edges = Util.UnLz4pStr(buff);
                     o_Duration = GetDuration(edges, p_SPP_ID, p_Weather);
                 }
             }
@@ -1113,13 +1114,13 @@ namespace PMapCore.BLL
                           "ORD_ISOPT, DEP_SRVTIME, " + Environment.NewLine +
                           "(CASE WHEN SVT.ID IS NULL THEN ORD_SERVS ELSE SVT_SERVTIME_S END) as SERVS, WST_SRVTIME, " + Environment.NewLine +
                           "(CASE WHEN SVT.ID IS NULL THEN ORD_SERVE ELSE SVT_SERVTIME_E END) as SERVE" + Environment.NewLine +
-                          " from ORD_ORDER ORD " + Environment.NewLine +
-                          "left join DEP_DEPOT DEP on DEP.ID = ORD.DEP_ID " + Environment.NewLine +
-                          "left join NOD_NODE NOD on NOD.ID=DEP.NOD_ID " + Environment.NewLine +
+                          " from ORD_ORDER (nolock) ORD " + Environment.NewLine +
+                          "left join DEP_DEPOT (nolock) DEP on DEP.ID = ORD.DEP_ID " + Environment.NewLine +
+                          "left join NOD_NODE (nolock) NOD on NOD.ID=DEP.NOD_ID " + Environment.NewLine +
                           "left join v_PUBQTY PUB on PUB.ORD_ID = ORD.ID " + Environment.NewLine +
-                          "left join WST_WSERVTIME WST on WST.DEP_ID = DEP.ID AND " + Environment.NewLine +
+                          "left join WST_WSERVTIME (nolock) WST on WST.DEP_ID = DEP.ID AND " + Environment.NewLine +
                           "  7 + (( DATEPART(dw, ORD.ORD_DATE) - 8) % 7) = WST_DAYNO " + Environment.NewLine +
-                          "left join SVT_SERVICETIME SVT on DEP.ID = SVT.DEP_ID AND SVT.CTP_ID = ORD.CTP_ID AND " + Environment.NewLine +
+                          "left join SVT_SERVICETIME (nolock) SVT on DEP.ID = SVT.DEP_ID AND SVT.CTP_ID = ORD.CTP_ID AND " + Environment.NewLine +
                           "  7 + (( DATEPART(dw, ORD.ORD_DATE) - 8) % 7) = SVT_DAY " + Environment.NewLine +
                           "where ORD.ID = ? ";
                 dt = DBA.Query2DataTable(sSql, p_PLN_ID, p_ORD_ID);
@@ -1130,13 +1131,13 @@ namespace PMapCore.BLL
                           "ORD_ISOPT, DEP_SRVTIME, ORD_SERVS, ORD_SERVE, " + Environment.NewLine +
                           "(CASE WHEN SVT.ID IS NULL THEN ORD_SERVS ELSE SVT_SERVTIME_S END) as SERVS, WST_SRVTIME, " + Environment.NewLine +
                           "(CASE WHEN SVT.ID IS NULL THEN ORD_SERVE ELSE SVT_SERVTIME_E END) as SERVE" + Environment.NewLine +
-                          " FROM ORD_ORDER ORD " + Environment.NewLine +
-                          "LEFT JOIN DEP_DEPOT DEP ON DEP.ID = ORD.DEP_ID " + Environment.NewLine +
-                          "LEFT JOIN NOD_NODE NOD ON NOD.ID=DEP.NOD_ID " + Environment.NewLine +
-                          "LEFT JOIN v_PUBQTY PUB ON PUB.ORD_ID = ORD.ID " + Environment.NewLine +
-                          "LEFT JOIN WST_WSERVTIME WST ON WST.DEP_ID = DEP.ID AND " + Environment.NewLine +
+                          " FROM ORD_ORDER (nolock) ORD " + Environment.NewLine +
+                          "LEFT JOIN DEP_DEPOT (nolock) DEP ON DEP.ID = ORD.DEP_ID " + Environment.NewLine +
+                          "LEFT JOIN NOD_NODE (nolock) NOD ON NOD.ID=DEP.NOD_ID " + Environment.NewLine +
+                          "LEFT JOIN v_PUBQTY (nolock) PUB ON PUB.ORD_ID = ORD.ID " + Environment.NewLine +
+                          "LEFT JOIN WST_WSERVTIME (nolock) WST ON WST.DEP_ID = DEP.ID AND " + Environment.NewLine +
                           "  7 + (( DATEPART(dw, ?) - 8) % 7) = WST_DAYNO " + Environment.NewLine +
-                          "LEFT JOIN SVT_SERVICETIME SVT ON DEP.ID = SVT.DEP_ID AND SVT.CTP_ID = ORD.CTP_ID AND " + Environment.NewLine +
+                          "LEFT JOIN SVT_SERVICETIME (nolock) SVT ON DEP.ID = SVT.DEP_ID AND SVT.CTP_ID = ORD.CTP_ID AND " + Environment.NewLine +
                           "  7 + (( DATEPART(dw, ?) - 8) % 7) = SVT_DAY " + Environment.NewLine +
                           "WHERE ORD.ID = ? ";
                 dt = DBA.Query2DataTable(sSql, p_PLN_ID, pTOD_DATE, pTOD_DATE, pTOD_DATE, p_ORD_ID);
@@ -1415,8 +1416,8 @@ namespace PMapCore.BLL
             try
             {
                 string sSql = "delete TOD_TOURORDER where ID in  " + Environment.NewLine +
-                              "(select TOD.ID from TOD_TOURORDER TOD  " + Environment.NewLine +
-                              "inner join DEP_DEPOT DEP on DEP.ID = TOD.DEP_ID   " + Environment.NewLine +
+                              "(select TOD.ID from TOD_TOURORDER (nolock) TOD  " + Environment.NewLine +
+                              "inner join DEP_DEPOT (nolock) DEP on DEP.ID = TOD.DEP_ID   " + Environment.NewLine +
                               "where TOD.PLN_ID = ? and DEP.NOD_ID <= 0)  ";
                 DBA.ExecuteNonQuery(sSql, p_PLN_ID);
                 bllHistory.WriteHistory(0, "TOD_TOURORDER", 0, bllHistory.EMsgCodes.DEL, "PLN", p_PLN_ID);

@@ -14,6 +14,7 @@ namespace PMapCore.Common
         //        public static CalcRouteLocker lockObjectCalc = new CalcRouteLocker();
         public static object lockObjectCalc = new object();
         public static object lockForOptimizerFiles = new object();
+        public static object lockObjectRouteProcess = new object();
 
         public const string PMapName = "PMap";
         public const string IniFileName = "PMap.ini";

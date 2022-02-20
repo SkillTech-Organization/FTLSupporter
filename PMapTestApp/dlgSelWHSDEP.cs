@@ -22,14 +22,14 @@ namespace PMapTestApp
         {
             InitializeComponent();
             string sSql = "select * from (select WHS.ID+10000000 as ID  , '**' + WHS_CODE + '**' as XCODE,  WHS_NAME  as XNAME, " +
-	                "convert( varchar(max), ZIP.ZIP_NUM) + ' ' + ZIP_CITY + ' ' + WHS_ADRSTREET as XADDR, NOD_ID, NOD_XPOS, NOD_YPOS from WHS_WAREHOUSE WHS " +
-                    "inner join NOD_NODE NOD on NOD.ID = NOD_ID " +
-                    "inner join ZIP_ZIPCODE ZIP on ZIP.ID = WHS.ZIP_ID " +
+                    "convert( varchar(max), ZIP.ZIP_NUM) + ' ' + ZIP_CITY + ' ' + WHS_ADRSTREET as XADDR, NOD_ID, NOD_XPOS, NOD_YPOS from WHS_WAREHOUSE (nolock) WHS " +
+                    "inner join NOD_NODE (nolock) NOD on NOD.ID = NOD_ID " +
+                    "inner join ZIP_ZIPCODE (nolock) ZIP on ZIP.ID = WHS.ZIP_ID " +
                     "union " +
                     "select DEP.ID, DEP_CODE as XCODE, DEP_NAME as XNAME,  "+
-	                "convert( varchar(max), ZIP.ZIP_NUM) + ' ' + ZIP_CITY + ' ' + DEP_ADRSTREET as XADDR, NOD_ID, NOD_XPOS, NOD_YPOS from DEP_DEPOT DEP " +
-                    "inner join NOD_NODE NOD on NOD.ID = NOD_ID " +
-                    "inner join ZIP_ZIPCODE ZIP on ZIP.ID = DEP.ZIP_ID " +
+                    "convert( varchar(max), ZIP.ZIP_NUM) + ' ' + ZIP_CITY + ' ' + DEP_ADRSTREET as XADDR, NOD_ID, NOD_XPOS, NOD_YPOS from DEP_DEPOT (nolock) DEP " +
+                    "inner join NOD_NODE (nolock) NOD on NOD.ID = NOD_ID " +
+                    "inner join ZIP_ZIPCODE (nolock) ZIP on ZIP.ID = DEP.ZIP_ID " +
                     ") x " +
                     "order by x.XNAME";
             SQLServerAccess db = new SQLServerAccess();

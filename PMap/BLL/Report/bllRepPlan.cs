@@ -27,8 +27,8 @@ namespace PMapCore.BLL.Report
             string sSql = "; with  " + Environment.NewLine +
                             "CTE_TPL as ( select * from TPL_TRUCKPLAN TPL where TPL.PLN_ID = ?   ),  " + Environment.NewLine +
                             "CTE_MPO as ( select MPO.Bordero,MPO.ORD_ID, MPO.CustomerOrderNumber, MPO.CustomerCode, MPO.ADR, SUM(MPO.GrossWeightPlannedX) as sumGrossWeightPlannedX  " + Environment.NewLine +
-                            "from MPO_MPORDER MPO " + Environment.NewLine +
-                            "inner join TOD_TOURORDER TOD on TOD.PLN_ID = ? and TOD.ORD_ID = MPO.ORD_ID " + Environment.NewLine +
+                            "from MPO_MPORDER (nolock) MPO " + Environment.NewLine +
+                            "inner join TOD_TOURORDER (nolock) TOD on TOD.PLN_ID = ? and TOD.ORD_ID = MPO.ORD_ID " + Environment.NewLine +
                             "group by MPO.Bordero,MPO.ORD_ID, MPO.CustomerOrderNumber, MPO.CustomerCode, MPO.ADR), " + Environment.NewLine +
                             "CTE as (" + Environment.NewLine +
                             "select distinct " + sTruck + " as TRUCK, TRK_ID, " + Environment.NewLine +
@@ -54,27 +54,27 @@ namespace PMapCore.BLL.Report
                             "case when PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " then DEP.NOD_ID else WHS.NOD_ID end AS NOD_ID, PTP_ORDER," + Environment.NewLine +
                             "ORD.ID as ORD_ID, MPO.CustomerOrderNumber, MPO.ADR, NOD.NOD_NUM " + Environment.NewLine +
                             "FROM CTE_TPL TPL " + Environment.NewLine +
-                            "inner join TRK_TRUCK TRK on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
-                            "inner join PTP_PLANTOURPOINT PTP on PTP.TPL_ID = TPL.ID " + Environment.NewLine +
-                            "left join TOD_TOURORDER TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
-                            "left join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
-                            "left join NOD_NODE NOD on NOD.ID = Dep.NOD_ID " + Environment.NewLine +
-                            "left join ZIP_ZIPCODE ZIP on NOD.ZIP_ID = ZIP.ID " + Environment.NewLine +
-                            "left join WHS_WAREHOUSE WHS ON PTP.WHS_ID = WHS.ID " + Environment.NewLine +
-                            "left join ORD_ORDER ORD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
-                            "left join CTE_MPO MPO on MPO.ORD_ID = ORD.ID " + Environment.NewLine +
-                            "left join CRR_CARRIER CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
-                            "left join SPP_SPEEDPROF SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
-                            "left join CPP_CAPACITYPROF CPP on CPP.ID = TRK.CPP_ID " + Environment.NewLine +
+                            "inner join TRK_TRUCK (nolock) TRK on TPL.TRK_ID = TRK.ID " + Environment.NewLine +
+                            "inner join PTP_PLANTOURPOINT (nolock) PTP on PTP.TPL_ID = TPL.ID " + Environment.NewLine +
+                            "left join TOD_TOURORDER (nolock) TOD on PTP.TOD_ID = TOD.ID " + Environment.NewLine +
+                            "left join DEP_DEPOT (nolock) DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                            "left join NOD_NODE (nolock) NOD on NOD.ID = Dep.NOD_ID " + Environment.NewLine +
+                            "left join ZIP_ZIPCODE (nolock) ZIP on NOD.ZIP_ID = ZIP.ID " + Environment.NewLine +
+                            "left join WHS_WAREHOUSE (nolock) WHS ON PTP.WHS_ID = WHS.ID " + Environment.NewLine +
+                            "left join ORD_ORDER (nolock) ORD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
+                            "left join CTE_MPO (nolock) MPO on MPO.ORD_ID = ORD.ID " + Environment.NewLine +
+                            "left join CRR_CARRIER (nolock) CRR on CRR.ID = TRK.CRR_ID " + Environment.NewLine +
+                            "left join SPP_SPEEDPROF (nolock) SPP on SPP.ID = TRK.SPP_ID " + Environment.NewLine +
+                            "left join CPP_CAPACITYPROF (nolock) CPP on CPP.ID = TRK.CPP_ID " + Environment.NewLine +
                             //"where PTP_TYPE = " + Global.PTP_TYPE_DEP.ToString() + " " + Environment.NewLine +
                             ") " + Environment.NewLine +
                             "select distinct CTE.* " + Environment.NewLine +
                             ",case when CTEX2.TRUCK is not null then CTEX2.BorderoX else CTE.BorderoX end as Bordero " + Environment.NewLine +
                             ",isnull(stuff " + Environment.NewLine +
                             "   ((SELECT distinct    ',' + RZN.RZN_ZoneCode " + Environment.NewLine +
-                            "       FROM         RZN_RESTRZONE RZN " + Environment.NewLine +
-                            "       left join EDG_EDGE EDG1 on EDG1.NOD_NUM = CTE.NOD_NUM and EDG1.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
-                            "       left join EDG_EDGE EDG2 on EDG2.NOD_NUM = CTE.NOD_NUM and EDG2.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
+                            "       FROM         RZN_RESTRZONE (nolock) RZN " + Environment.NewLine +
+                            "       left join EDG_EDGE (nolock) EDG1 on EDG1.NOD_NUM = CTE.NOD_NUM and EDG1.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
+                            "       left join EDG_EDGE (nolock) EDG2 on EDG2.NOD_NUM = CTE.NOD_NUM and EDG2.RZN_ZONECODE = RZN.RZN_ZoneCode " + Environment.NewLine +
                             "       where EDG1.NOD_NUM is not null or EDG2.NOD_NUM is not null " + Environment.NewLine +
                             "   FOR XML PATH('')), 1, 1, ''), '') AS RZN_Code_List " + Environment.NewLine +
                             "from CTE " + Environment.NewLine +

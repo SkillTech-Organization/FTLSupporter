@@ -160,8 +160,8 @@ namespace PMapCore.BLL
                 //Ha van ilyen korlátozás
 
                 sSQLStr = "select count(*) as DEPCNT " +
-                          "from DPT_DEPTRUCK DPT " +
-                          "inner join TPL_TRUCKPLAN TPL on DPT.TRK_ID = TPL.TRK_ID and DPT.DEP_ID = ? " +
+                          "from DPT_DEPTRUCK (nolock) DPT " +
+                          "inner join TPL_TRUCKPLAN (nolock) TPL on DPT.TRK_ID = TPL.TRK_ID and DPT.DEP_ID = ? " +
                           "where TPL.ID = ?";
                 dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQLStr, lDEP_ID, p_TPL_ID);
                 iDepCnt = Util.getFieldValue<int>(dt.Rows[0], "DEPCNT");
@@ -190,10 +190,10 @@ namespace PMapCore.BLL
             if (dt.Rows.Count == 1)
             {
                 sRZN_ID_LIST = Util.getFieldValue<string>(dt.Rows[0], "RZN_ID_LIST");
-                sSQL = "select count(*) as cnt from TOD_TOURORDER TOD " +
-                       "inner join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + 
-                       "inner join DEP_DEPOT DEP on DEP.ID = TOD.DEP_ID " +
-                       "inner join DST_DISTANCE DST on DST.RZN_ID_LIST = ? and (DST.NOD_ID_FROM=DEP.NOD_ID or DST.NOD_ID_TO=DEP.NOD_ID) and DST.DST_DISTANCE >= 0 " +
+                sSQL = "select count(*) as cnt from TOD_TOURORDER (nolock) TOD " +
+                       "inner join ORD_ORDER (nolock) ORD on ORD.ID = TOD.ORD_ID " +
+                       "inner join DEP_DEPOT (nolock) DEP on DEP.ID = TOD.DEP_ID " +
+                       "inner join DST_DISTANCE (nolock) DST on DST.RZN_ID_LIST = ? and (DST.NOD_ID_FROM=DEP.NOD_ID or DST.NOD_ID_TO=DEP.NOD_ID) and DST.DST_DISTANCE >= 0 " +
                        "where TOD.ID= ? ";
                 dt = PMapCommonVars.Instance.CT_DB.Query2DataTable(sSQL, sRZN_ID_LIST, p_TOD_ID);
                 var cnt = Util.getFieldValue<int>(dt.Rows[0], "cnt");

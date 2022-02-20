@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +26,7 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
+using LZ4;
 
 namespace PMapCore.Common
 {
@@ -158,6 +158,11 @@ namespace PMapCore.Common
             }
         }
 
+        internal static void Log2File(object p)
+        {
+            throw new NotImplementedException();
+        }
+
         public static void Log2File(string p_msg, bool p_sendToCloud = true)
         {
             Log2File(p_msg, Global.LogFileName, p_sendToCloud);
@@ -178,16 +183,8 @@ namespace PMapCore.Common
                 ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
             */
             if (p_sendToCloud && PMapIniParams.Instance.ALog)
-            {
-                try
-                {
-                    AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
-                }
-                catch (Exception ex)
-                {
-                    ExceptionLog(ex);
-                }
-            }
+                AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
+
         }
 
         public static void ExceptionLog(Exception p_ecx)
@@ -814,6 +811,12 @@ namespace PMapCore.Common
             }
         }
 
+        public static byte[] Lz4pStr(String str)
+        {
+
+            return LZ4Codec.Wrap(Encoding.UTF8.GetBytes(str));
+        }
+
         public static string UnZipStr(byte[] input)
         {
             using (MemoryStream inputStream = new MemoryStream(input))
@@ -828,6 +831,14 @@ namespace PMapCore.Common
                 }
             }
         }
+
+        public static string UnLz4pStr(byte[] input)
+        {
+
+            return Encoding.UTF8.GetString(LZ4Codec.Unwrap(input));
+        }
+
+
 
         public static DateTimeFormatInfo GetDefauldDTFormat()
         {

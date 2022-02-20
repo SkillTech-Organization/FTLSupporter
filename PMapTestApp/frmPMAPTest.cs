@@ -304,6 +304,8 @@ namespace PMapTestApp
             d.txtAddr.Text = "3300 Eger KISTÁLYAI ÚT 18.";
 
             d.txtAddr.Text = "@46.2498822,20.1762087";
+            d.txtAddr.Text = "3994 Kishuta ságvári ";
+
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var vbintf = new VBInterface.PMapInterface();

@@ -68,7 +68,7 @@ namespace PMapCore.LongProcess
                 {
                     var formattedAddress = jObject["results"][0]["formatted"];
                     var zip = jObject["results"][0]["components"]["postcode"];
-                    m_bllRoute.UpdateNodeAddress(NOD_ID, formattedAddress != null ? formattedAddress.ToString() : "???", zip != null ? zip.ToString() : "0");
+                    m_bllRoute.UpdateNodeAddress(NOD_ID, formattedAddress != null ? formattedAddress.ToString() : "???");
 
                      var remaining = jObject["rate"]["remaining"];
                     var limit = jObject["rate"]["limit"];

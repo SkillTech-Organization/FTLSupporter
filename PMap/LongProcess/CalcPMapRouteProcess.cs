@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 
 namespace PMapCore.LongProcess
 {
@@ -47,7 +48,7 @@ namespace PMapCore.LongProcess
             m_CalcDistances = p_CalcDistances;
             m_Hint = p_Hint;
             m_DB = new SQLServerAccess();
-            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut );
+            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
             m_bllRoute = new bllRoute(m_DB);
             m_savePoints = p_savePoints;
             Completed = false;
@@ -291,9 +292,10 @@ namespace PMapCore.LongProcess
 
             }
 
-            
+
         }
 
+        /*
         private void FlushData(List<boRoute> results, int p_flushCnt)
         {
             DateTime dtStartFlush = DateTime.Now;
@@ -305,8 +307,37 @@ namespace PMapCore.LongProcess
                 " " + (DateTime.Now - dtStartFlush).Duration().TotalMilliseconds.ToString("#0") +  " ms"
                 );
         }
+        */
+
+
+        private void FlushData(List<boRoute> results, int p_flushCnt)
+        {
+
+            Random random = new Random((int)DateTime.Now.Millisecond);
+            var hint = m_Hint.Trim() + "-" + random.Next(1000).ToString() + "-";
+
+            DateTime dtStartFlush = DateTime.Now;
+            ProcessForm.SetInfoText(hint + "Kiírás..." + p_flushCnt.ToString());
+
+            Util.Log2File(hint + "START WriteRoutesBulk call : Mmry:" + GC.GetTotalMemory(false).ToString());
+
+            //           Task.Factory.StartNew(() => m_bllRoute.WriteRoutesBulk2(results, m_savePoints, hint));
+            //           var t = Task.Run(() => m_bllRoute.WriteRoutesBulk2(results, m_savePoints, hint));
+            //            t.Wait();
+
+            var wt = new WriteRoutesProcess(results, m_savePoints, hint);
+            wt.Run();
+
+            Util.Log2File(hint + "END WriteRoutesBulk call: Mmry:" + GC.GetTotalMemory(false).ToString() + ",cnt:" + results.Count.ToString() + ", duration:" +
+                " " + (DateTime.Now - dtStartFlush).Duration().TotalMilliseconds.ToString("#0") + " ms"
+                );
+            results = new List<boRoute>();
+        }
 
     }
 
 
 }
+
+
+

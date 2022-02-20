@@ -508,8 +508,8 @@ namespace PMapCore.BLL
             {
                 //teljes tervezés
                 sSql = "select distinct DEP_ID, DEP_NAME, DEP_SRVTIME " + Environment.NewLine +
-                          "from TOD_TOURORDER TOD " + Environment.NewLine +
-                          "left join DEP_DEPOT DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                          "from TOD_TOURORDER (nolock) TOD " + Environment.NewLine +
+                          "inner join DEP_DEPOT (nolock) DEP on TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                           "where PLN_ID = ?";
                 dt = DBA.Query2DataTable(sSql, boOpt.PLN_ID);
             }
@@ -517,9 +517,9 @@ namespace PMapCore.BLL
             {
                 //egy túra újratervezése
                 sSql = "select DISTINCT DEP_ID, DEP_NAME, DEP_SRVTIME " + Environment.NewLine +
-                          "from PTP_PLANTOURPOINT PTP " + Environment.NewLine +
-                          "inner join TOD_TOURORDER TOD on TOD.ID = PTP.TOD_ID " + Environment.NewLine +
-                          "inner join DEP_DEPOT DEP ON TOD.DEP_ID = DEP.ID " + Environment.NewLine +
+                          "from PTP_PLANTOURPOINT (nolock) PTP " + Environment.NewLine +
+                          "inner join TOD_TOURORDER (nolock) TOD on TOD.ID = PTP.TOD_ID " + Environment.NewLine +
+                          "inner join DEP_DEPOT (nolock) DEP ON TOD.DEP_ID = DEP.ID " + Environment.NewLine +
                           "where PTP.TPL_ID = ? and PTP.PTP_TYPE = ? ";
                 dt = DBA.Query2DataTable(sSql, boOpt.TPL_ID, Global.TUT_VALUE_DEP);
             }
@@ -551,16 +551,16 @@ namespace PMapCore.BLL
                     "ISNULL(PUB.PUBQTY3, 0) + ISNULL(LCK.LCKQTY3, 0) AS PUBQTY3, ISNULL(PUB.PUBQTY4, 0) + ISNULL(LCK.LCKQTY4, 0) AS PUBQTY4, ISNULL(PUB.PUBQTY5, 0) + ISNULL(LCK.LCKQTY5, 0) AS PUBQTY5, " + Environment.NewLine +
                     "ISNULL(PUB.PUBVOL, 0) + ISNULL(LCK.LCKVOL, 0) AS PUBVOL, " + Environment.NewLine +
                     "ORD_ORIGQTY1, ORD_ORIGQTY2, ORD_ORIGQTY3, ORD_ORIGQTY4, ORD_ORIGQTY5, ORD_VOLUME " + Environment.NewLine +
-                    "from ORD_ORDER ORD " + Environment.NewLine +
-                    "inner join DEP_DEPOT DEP on ORD.DEP_ID = DEP.ID " + Environment.NewLine +
-                    "inner join CTP_CARGOTYPE CTP on CTP.ID = ORD.CTP_ID " + Environment.NewLine +
-                    "inner join OTP_ORDERTYPE OTP on ORD.OTP_ID = OTP.ID " + Environment.NewLine +
-                    "inner join TOD_TOURORDER TOD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
+                    "from ORD_ORDER (nolock) ORD " + Environment.NewLine +
+                    "inner join DEP_DEPOT (nolock) DEP on ORD.DEP_ID = DEP.ID " + Environment.NewLine +
+                    "inner join CTP_CARGOTYPE (nolock) CTP on CTP.ID = ORD.CTP_ID " + Environment.NewLine +
+                    "inner join OTP_ORDERTYPE (nolock) OTP on ORD.OTP_ID = OTP.ID " + Environment.NewLine +
+                    "inner join TOD_TOURORDER (nolock) TOD on TOD.ORD_ID = ORD.ID " + Environment.NewLine +
                     "left join v_PLPLANQTY PLQ on PLQ.PLN_ID = TOD.PLN_ID AND PLQ.ORD_ID = TOD.ORD_ID " + Environment.NewLine +
                     "left join v_PUBQTY PUB on PUB.ORD_ID = ORD.ID " + Environment.NewLine +
-                    "left join TOP_TOURPOINT TP on TP.ORD_ID = ORD.ID AND TP.TPS_VALUE <> ? " + Environment.NewLine +
-                    "left join SVT_SERVICETIME SVT on SVT.CTP_ID = ORD.CTP_ID and DATEPART(dw, TOD_DATE) - 1 = SVT_DAY and SVT.DEP_ID = ORD.DEP_ID " + Environment.NewLine +
-                    "left join WHS_WAREHOUSE WHS on ORD.WHS_ID = WHS.ID " + Environment.NewLine +
+                    "left join TOP_TOURPOINT (nolock) TP on TP.ORD_ID = ORD.ID AND TP.TPS_VALUE <> ? " + Environment.NewLine +
+                    "left join SVT_SERVICETIME (nolock) SVT on SVT.CTP_ID = ORD.CTP_ID and DATEPART(dw, TOD_DATE) - 1 = SVT_DAY and SVT.DEP_ID = ORD.DEP_ID " + Environment.NewLine +
+                    "left join WHS_WAREHOUSE (nolock) WHS on ORD.WHS_ID = WHS.ID " + Environment.NewLine +
                     "left join v_PLLOCKQTY LCK on LCK.ORD_ID = TOD.ORD_ID AND LCK.PLN_ID = TOD.PLN_ID " + Environment.NewLine;
 
 
@@ -681,27 +681,27 @@ namespace PMapCore.BLL
         {
             DataTable dt;
             string sSql = "select distinct TPL.ID AS TPL_ID, TRK.ID as TRK_ID, ORD_ID " + Environment.NewLine +
-                          "from TOD_TOURORDER TOD " + Environment.NewLine +
-                          "inner join DPT_DEPTRUCK dpt ON TOD.DEP_ID = DPT.DEP_ID " + Environment.NewLine;
+                          "from TOD_TOURORDER (nolock)  TOD " + Environment.NewLine +
+                          "inner join DPT_DEPTRUCK (nolock) DPT ON TOD.DEP_ID = DPT.DEP_ID " + Environment.NewLine;
             if (boOpt.TPL_ID <= 0)
             {
                 //teljes tervezés
-                sSql += " inner join TPL_TRUCKPLAN TPL on TPL.TRK_ID = DPT.TRK_ID and TPL.PLN_ID = ? and TPL_DELETED <> 1 " + Environment.NewLine;
+                sSql += " inner join TPL_TRUCKPLAN (nolock) TPL on TPL.TRK_ID = DPT.TRK_ID and TPL.PLN_ID = ? and TPL_DELETED <> 1 " + Environment.NewLine;
             }
             else
             {
                 //Csak egy jármûre tervezés
-                sSql += " inner join TPL_TRUCKPLAN TPL on TPL.TRK_ID = DPT.TRK_ID and TPL.ID= ? " + Environment.NewLine +
-                        " inner join PTP_PLANTOURPOINT PTP on PTP.TOD_ID = TOD.ID and PTP.TPL_ID= ?   and PTP.PTP_TYPE= ? " + Environment.NewLine;
+                sSql += " inner join TPL_TRUCKPLAN (nolock) TPL on TPL.TRK_ID = DPT.TRK_ID and TPL.ID= ? " + Environment.NewLine +
+                        " inner join PTP_PLANTOURPOINT (nolock) PTP on PTP.TOD_ID = TOD.ID and PTP.TPL_ID= ?   and PTP.PTP_TYPE= ? " + Environment.NewLine;
 
             }
 
-            sSql += "inner join TRK_TRUCK TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
-                 "inner join v_trk_RZN_ID_LIST RZN on RZN.TRK_ID=TRK.ID " + Environment.NewLine +
-                 "inner join ORD_ORDER ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +
-                 "inner join WHS_WAREHOUSE WHS on WHS.ID = ? " + Environment.NewLine +
-                 "inner join DEP_DEPOT DEP on DEP.ID = TOD.DEP_ID " + Environment.NewLine +
-                 "inner join PLN_PUBLICATEDPLAN PLN on PLN.ID = TPL.PLN_ID " + Environment.NewLine +
+            sSql += "inner join TRK_TRUCK (nolock) TRK on TRK.ID = TPL.TRK_ID " + Environment.NewLine +
+                 "inner join v_trk_RZN_ID_LIST (nolock) RZN on RZN.TRK_ID=TRK.ID " + Environment.NewLine +
+                 "inner join ORD_ORDER (nolock) ORD on ORD.ID = TOD.ORD_ID " + Environment.NewLine +
+                 "inner join WHS_WAREHOUSE (nolock) WHS on WHS.ID = ? " + Environment.NewLine +
+                 "inner join DEP_DEPOT (nolock) DEP on DEP.ID = TOD.DEP_ID " + Environment.NewLine +
+                 "inner join PLN_PUBLICATEDPLAN (nolock) PLN on PLN.ID = TPL.PLN_ID " + Environment.NewLine +
                  "where TOD.PLN_ID = ? and TPL.TPL_AVAIL_S <= PLN_DATE_E  " + Environment.NewLine +
                  " and  isnull( TPL.TPL_NOREPLAN, 0) = 0 and isnull( TPL.TPL_LOCKED,0) = 0 and ORD.CTP_ID in ( select CTP_ID from TCP_TRUCKCARGOTYPE TCP where TCP.TRK_ID = TRK.ID) " + Environment.NewLine +
                  " and (TRK_LENGTH is null OR TRK_LENGTH=0 or TRK_LENGTH>=ORD_LENGTH) " + Environment.NewLine +
@@ -924,7 +924,8 @@ namespace PMapCore.BLL
                         if (buff.Length > 0)
                         {
 
-                            String edges = Util.UnZipStr(buff);
+//                            String edges = Util.UnZipStr(buff);
+                            String edges = Util.UnLz4pStr(buff);
 
                             List<int> IDs = edges.Split(',').Select(s => int.Parse(s)).ToList();
                             foreach (int id in IDs)

@@ -145,7 +145,9 @@ namespace PMapCore.BO
 
             //***setOrderInformation
             public int orLoad1 { get; set; }	//Szállítandó mennyiség. A mértékegységeknek koherensnek kell lennie a kapacitásprofilbanv használt mértékegységekkel. 
+
             //Ez a verzió csak az első két értékkel számol. A pozitív érték jelenti a kiszállítást, a negatív a begyűjtést.
+            //bllOptimize.fillOrder()-ben OTP_VALUE alapján beállítjuk a mennyiség és térfogat helyes előjelét
             public int orLoad2 { get; set; }
             public int orLoad3 { get; set; }
             public int orLoad4 { get; set; }
@@ -180,8 +182,9 @@ namespace PMapCore.BO
             public DateTime TOD_DATE { get; set; }
             public int TOD_ID { get; set; }
             public int NOD_ID { get; set; }
-            public double dQty1 { get; set; }
-            public double dQty2 { get; set; }
+            public double dQty1 { get; set; }           //Pozitív érték kiszállítás, negatív beszállítás ( bllOptimize.fillOrder()-ben kezelve van!)
+
+            public double dQty2 { get; set; }           
             public double dQty3 { get; set; }
             public double dQty4 { get; set; }
             public double dQty5 { get; set; }
