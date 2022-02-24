@@ -148,7 +148,7 @@ namespace PMapCore.BLL
             if (dt.Rows.Count > 0)
             {
                 boOpt.WHS_ID = Util.getFieldValue<int>(dt.Rows[0], "WHS_ID");
-                boOpt.PLN_NAME = Util.getFieldValue<string>(dt.Rows[0], "PLN_NAME");
+                boOpt.PLN_NAME = Util.getFieldValue<string>(dt.Rows[0], "PLN_NAME").Replace("\"", "'");
                 boOpt.PLN_DATE_B = Util.getFieldValue<DateTime>(dt.Rows[0], "PLN_DATE_B");
                 boOpt.PLN_DATE_E = Util.getFieldValue<DateTime>(dt.Rows[0], "PLN_DATE_E");
                 boOpt.MinTime = (int)boOpt.PLN_DATE_B.TimeOfDay.TotalMinutes;
@@ -294,7 +294,7 @@ namespace PMapCore.BLL
                          {
                              innerID = innerID++,
                              ID = Util.getFieldValue<int>(r, "ID"),
-                             clName = Util.getFieldValue<string>(r, "WHS_NAME"),
+                             clName = Util.getFieldValue<string>(r, "WHS_NAME").Replace("\"", "'"),
                              dpMinTime = (int)Math.Max(Util.getFieldValue<int>(r, "WHS_OPEN"), boOpt.PLN_DATE_B.TimeOfDay.TotalMinutes),
                              dpMaxTime = (int)Math.Min(Util.getFieldValue<int>(r, "WHS_CLOSE"), boOpt.PLN_DATE_E.TimeOfDay.TotalMinutes + boOpt.PLN_DATE_E.Date.Subtract(boOpt.PLN_DATE_B.Date).TotalMinutes),
                              isCentral = Util.getFieldValue<int>(r, "ID") == boOpt.WHS_ID ? 1 : 0,
@@ -321,7 +321,7 @@ namespace PMapCore.BLL
                              innerID = innerID++,
                              ID = Util.getFieldValue<int>(r, "ID"),
                              isWHS = true,
-                             clName = Util.getFieldValue<string>(r, "WHS_NAME"),
+                             clName = Util.getFieldValue<string>(r, "WHS_NAME").Replace("\"", "'"),
                              x = 0,
                              y = 0
                          }
@@ -477,7 +477,7 @@ namespace PMapCore.BLL
                                 Util.getFieldValue<string>(r, "TRK_XWIDTH"))
                                 + Global.SEP_POINT + Util.getFieldValue<string>(r, "SPP_ID")].innerID,
 
-                             tkName = Util.getFieldValue<string>(r, "TRK_REG_NUM"),
+                             tkName = Util.getFieldValue<string>(r, "TRK_REG_NUM").Replace("\"", "'"),
                              depotStart = boOpt.dicDepot[Util.getFieldValue<int>(r, "WHS_ID")].innerID,
                              depotArr = boOpt.dicDepot[Util.getFieldValue<int>(r, "ARR_WHS_ID")].innerID,
 
@@ -533,7 +533,7 @@ namespace PMapCore.BLL
                                                               innerID = innerID++,
                                                               ID = Util.getFieldValue<int>(r, "DEP_ID"),
                                                               isWHS = false,
-                                                              clName = Util.getFieldValue<string>(r, "DEP_NAME"),
+                                                              clName = Util.getFieldValue<string>(r, "DEP_NAME").Replace("\"", "'"),
                                                               x = 0,
                                                               y = 0,
                                                               fixService = Util.getFieldValue<int>(r, "DEP_SRVTIME") > 0 ? Util.getFieldValue<int>(r, "DEP_SRVTIME") : 20

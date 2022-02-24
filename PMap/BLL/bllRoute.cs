@@ -1208,7 +1208,7 @@ namespace PMapCore.BLL
             "abs(NOD2.NOD_XPOS - " + ptX + ") + abs(NOD2.NOD_YPOS - " + ptY + ") < {0})) " + Environment.NewLine +
             "select top 1 " + Environment.NewLine +
             "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ID else NOD2_ID end as ID, " + Environment.NewLine +
-            "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then ZIP_ZIP_NUM else ZIP2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
+            "case when abs(NOD_NOD_XPOS - " + ptX + ") + abs(NOD_NOD_YPOS - " + ptY + ") < abs(NOD2_NOD_XPOS - " + ptX + ") + abs(NOD2_NOD_YPOS - " + ptY + ") then NOD_ZIP_NUM else NOD2_ZIP_NUM end as ZIP_NUM, " + Environment.NewLine +
             "XDIFF " + Environment.NewLine +
             "from CTE " + Environment.NewLine +
             "where  (CTE.XDIFF <= (case when(EDG_RDT_VALUE = 6 or EDG_EDG_STRNUM1 != 0 or EDG_EDG_STRNUM2 != 0 or EDG_EDG_STRNUM3 != 0 or EDG_EDG_STRNUM4 != 0) then {1} else {2} end) ) " + Environment.NewLine;
@@ -1394,26 +1394,27 @@ namespace PMapCore.BLL
                 return true;
             }
 
+
+              
+            //Nincs találat, keresés házszám nélkül
+            //         sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
+            sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
+
+            DBA.DA.SelectCommand = sqlCmd;
+            DataSet d2 = new DataSet();
+            DBA.DA.Fill(d2);
+            DataTable dt2 = d2.Tables[0];
+            if (dt2.Rows.Count > 0)
+            {
+                ZIP_ID = Util.getFieldValue<int>(dt2.Rows[0], "ZIP_ID");
+                NOD_ID = Util.getFieldValue<int>(dt2.Rows[0], "NOD_ID");
+                EDG_ID = Util.getFieldValue<int>(dt2.Rows[0], "EDG_ID");
+                DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_WITHOUT_HNUM;
+                return true;
+            }
+
             if (!p_onlyFullAddr)
             {
-
-                //keresés házszám nélkül
-                //         sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
-                sqlCmd.CommandText = sSql + (sWhereAddr != "" || sWhereZipNum != "" ? " where " + sWhereAddr + sWhereZipNum : "");
-
-                DBA.DA.SelectCommand = sqlCmd;
-                DataSet d2 = new DataSet();
-                DBA.DA.Fill(d2);
-                DataTable dt2 = d2.Tables[0];
-                if (dt2.Rows.Count > 0)
-                {
-                    ZIP_ID = Util.getFieldValue<int>(dt2.Rows[0], "ZIP_ID");
-                    NOD_ID = Util.getFieldValue<int>(dt2.Rows[0], "NOD_ID");
-                    EDG_ID = Util.getFieldValue<int>(dt2.Rows[0], "EDG_ID");
-                    DEP_IMPADDRSTAT = boDepot.EIMPADDRSTAT.AUTOADDR_WITHOUT_HNUM;
-                    return true;
-                }
-            
                 //keresés irányítószám és házszám nélkül
                 //Ha van irányítószám, akkor az ahhoz legközelebb lévőt vesszük
                 //                sqlCmd.CommandText = sSql + (sWhereAddr != "" ? " where " + sWhereAddr : "") + (sZIP_NUM != "" ? " order by ABS( cc.ZIP_NUM - " + sZIP_NUM + ") " : "");

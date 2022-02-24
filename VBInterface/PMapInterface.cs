@@ -114,7 +114,8 @@ namespace VBInterface
         /// <returns></returns>
         public string GeocodingFulAddr(string p_addr, string p_iniPath, string p_dbConf)
         {
-            return GeocodingCore(p_addr, p_iniPath, p_dbConf, true);
+//            return GeocodingCore(p_addr, p_iniPath, p_dbConf, true, false);
+            return GeocodingCore(p_addr, p_iniPath, p_dbConf, true, true);
         }
 
         /// <summary>
@@ -125,7 +126,7 @@ namespace VBInterface
         /// <param name="p_dbConfm"></param>
         /// <param name="p_onlyFullAddr"></param>
         /// <returns></returns>
-        private string GeocodingCore(string p_addr, string p_iniPath, string p_dbConf, bool p_onlyFullAddr = false)
+        private string GeocodingCore(string p_addr, string p_iniPath, string p_dbConf, bool p_onlyFullAddr = false, bool p_MsgToUI = true)
         {
             Util.Log2File(">>START:GeocodingCore(p_addr=" + p_addr + ", p_iniPath=" + p_iniPath + ", p_dbConf=" + p_dbConf + ", "+p_onlyFullAddr.ToString() +")", false);
             string sRetStatus = retOK;
@@ -158,7 +159,8 @@ namespace VBInterface
             catch (Exception e)
             {
                 Util.ExceptionLog(e);
-                UI.Error(e.Message);
+                if(p_MsgToUI)
+                    UI.Error(e.Message);
                 sRetStatus = retErr;
             }
             //   Util.Log2File(">>END:GeocodingCore()-->" + sRet, false);

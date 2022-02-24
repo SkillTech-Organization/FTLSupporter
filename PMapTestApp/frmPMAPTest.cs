@@ -305,6 +305,7 @@ namespace PMapTestApp
 
             d.txtAddr.Text = "@46.2498822,20.1762087";
             d.txtAddr.Text = "3994 Kishuta ságvári ";
+            d.txtAddr.Text = "4700 Mátészalka Arany János utca 5.";
 
             if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -326,7 +327,7 @@ namespace PMapTestApp
                 if (bFound)
                 {
                     string sSql = "open symmetric key EDGKey decryption by certificate CertPMap  with password = '***************' " + Environment.NewLine +
-                                   "select NOD.ID as NOD_ID, EDG.ID as EDG_ID, NOD.ZIP_NUM, ZIP_CITY, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME,  " + Environment.NewLine +
+                                   "select NOD.ID as NOD_ID, EDG.ID as EDG_ID, ZIP.ZIP_NUM, ZIP_CITY, convert(varchar(max),decryptbykey(EDG_NAME_ENC)) as EDG_NAME,  " + Environment.NewLine +
                                    "EDG_STRNUM1, EDG_STRNUM2, EDG_STRNUM3, EDG_STRNUM4 " + Environment.NewLine +
                                    "from NOD_NODE NOD " + Environment.NewLine +
                                    "inner join EDG_EDGE EDG on EDG.NOD_NUM = NOD.ID or EDG.NOD_NUM2 = NOD.ID " + Environment.NewLine +

@@ -25,8 +25,12 @@ namespace PMapCore.Common.Azure
 {
     public class AzureTableStore
     {
+        //Az azure account a licence-ből kerül feltöltésre.
+        //Ezek az alapértelmezések a teszteléshez default értékek, abban az esetben, ha
+        //nem hívtunk licence lekérdezést
         private string m_accountName = "pratixtest";
-        private string m_accountKey = "jazm8HHskSidL3HMqRrjytwqMH5hAkv8QgNo9XiF/pxsqer7YhAE8dKQ9m7zGw1h6z5L2HwwXMhaGp/Mf+xytQ==";
+//        private string m_accountKey = "jazm8HHskSidL3HMqRrjytwqMH5hAkv8QgNo9XiF/pxsqer7YhAE8dKQ9m7zGw1h6z5L2HwwXMhaGp/Mf+xytQ==";
+        private string m_accountKey = "z73qqcjC9rkGbF6oIHfZzK00eLVwOTFVCWLP09bAT+UA4sO97WBypZGRtOJ4NKSlMUfkDwUItvgfIcWhHQf8gg==";
         private StorageCredentials m_creds = null;
 
         private const string IsoDateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
