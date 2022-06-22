@@ -64,7 +64,7 @@
             this.gridPlanOrders.Name = "gridPlanOrders";
             this.gridPlanOrders.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.reChkVisible});
-            this.gridPlanOrders.Size = new System.Drawing.Size(429, 438);
+            this.gridPlanOrders.Size = new System.Drawing.Size(824, 438);
             this.gridPlanOrders.TabIndex = 2;
             this.gridPlanOrders.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewPlanOrders});
@@ -288,7 +288,7 @@
             this.Appearance.Options.UseFont = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 438);
+            this.ClientSize = new System.Drawing.Size(824, 438);
             this.Controls.Add(this.gridPlanOrders);
             this.Name = "pnlPPlanOrders";
             this.Text = "Megrendelések";
