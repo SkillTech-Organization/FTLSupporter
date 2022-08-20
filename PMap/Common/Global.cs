@@ -48,7 +48,9 @@ namespace PMapCore.Common
         public const string iniAuthTokenCryptAESKey = "AuthTokenCryptAESKey";
         public const string iniAuthTokenCryptAESIV = "AuthTokenCryptAESIV";
         public const string iniWebLoginTemplate = "WebLoginTemplate";
+        public const string iniWebLoginSubject = "WebLoginSubject";
         public const string iniWebLoginSenderEmail = "WebLoginSenderEmail";
+        public const string iniWebLoginSenderName = "WebLoginSenderName";
         public const string iniWebDriverTemplate = "WebDriverTemplate";
         public const string iniWebDriverSenderEmail = "WebDriverSenderEmail";
 

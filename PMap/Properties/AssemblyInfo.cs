@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PMap")]
-[assembly: AssemblyCopyright("Copyright ©  2010-2021")]
+[assembly: AssemblyCopyright("Copyright ©  2010-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.10.1.0")]
-[assembly: AssemblyFileVersion("4.10.1.0")]
+[assembly: AssemblyVersion("4.10.2.0")]
+[assembly: AssemblyFileVersion("4.10.2.0")]
 
 //https://stackoverflow.com/questions/30943342/how-to-use-internalsvisibleto-attribute-with-strongly-named-assembly
 //PublicKey generálása:https://blogs.msdn.microsoft.com/kaevans/2008/06/18/getting-public-key-token-of-assembly-within-visual-studio/

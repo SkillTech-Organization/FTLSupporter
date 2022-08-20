@@ -72,7 +72,7 @@ namespace PMapUI.Common
         public static async void SendNotificationMail(string p_emailAddr, PMToken p_token, string p_msgOk = "")
         {
 
-            // var apiKey = "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";
+            // var apiKey = "SG.R0amttRbT4qIzgqnuWJaSg.itt csak egz pont van.Fc17tbkdeD5c9xsASTDyDZ-z2yaXcnSj0JhQqFp7-yI";
             var apiKey = PMapCommonVars.Instance.AzureSendGridApiKey;
 
             var client = new SendGridClient(apiKey);
@@ -88,8 +88,8 @@ namespace PMapUI.Common
             {
                 if (Util.IsValidEmail(toEmail))
                 {
-                    var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, "");
-                    var subject = "Web követés belépés";
+                    var from = new EmailAddress(PMapIniParams.Instance.WebLoginSenderEmail, PMapIniParams.Instance.WebLoginSenderName);
+                    var subject = PMapIniParams.Instance.WebLoginSubject;
                     var to = new EmailAddress(toEmail, "");
                     var plainTextContent = "";
                     var htmlContent = Util.FileToString(PMapIniParams.Instance.WebLoginTemplate);

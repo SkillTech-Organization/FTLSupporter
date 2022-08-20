@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "PMAdmin"
-!define PRODUCT_VERSION "4.10.1"
+!define PRODUCT_VERSION "4.10.2"
 !define PRODUCT_PUBLISHER "Pratix Kft."
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
