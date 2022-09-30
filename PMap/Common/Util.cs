@@ -1242,6 +1242,11 @@ namespace PMapCore.Common
             return retContent;
         }
 
+        public static int GetDurationValue( double dDuration)
+        {
+            return (int)Math.Floor(dDuration);
+        }
+
     }
 }
 

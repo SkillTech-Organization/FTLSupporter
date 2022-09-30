@@ -356,7 +356,8 @@ namespace PMapCore.BLL
                 DataTable dt = DBA.Query2DataTable(sSql, p_SPP_ID);
                 if (dt.Rows.Count > 0)
                 {
-                    return Util.getFieldValue<int>(dt.Rows[0], "DURATION") * p_Weather;
+                    var dDuration = Util.getFieldValue<double>(dt.Rows[0], "DURATION") * p_Weather;
+                    return Util.GetDurationValue(dDuration);
                 }
             }
             return 0;

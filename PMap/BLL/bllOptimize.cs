@@ -928,6 +928,7 @@ namespace PMapCore.BLL
                             String edges = Util.UnLz4pStr(buff);
 
                             List<int> IDs = edges.Split(',').Select(s => int.Parse(s)).ToList();
+                                
                             foreach (int id in IDs)
                                 lstSelEdges.Add(lstAllEdges[id]);
                         }
@@ -1012,7 +1013,7 @@ namespace PMapCore.BLL
                     clIdStart = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_FROM")].innerID,
                     clIdEnd = boOpt.dicClient[Util.getFieldValue<int>(dr, "ID_TO")].innerID,
                     clDistance = lastDistance,
-                    clTime = (int)Math.Floor(lastDuration),
+                    clTime =   Util.GetDurationValue(lastDuration),
                     clTimeCalc = lastDurationCalc
                 });
 
