@@ -485,8 +485,7 @@ namespace FTLSupporter
 
                     if (lstCalcPMapRoutes.Count > 0)
                     {
-                        ProcessNotifyIcon ni = new ProcessNotifyIcon();
-                        FTLCalcRouteProcess rp = new FTLCalcRouteProcess(ni, lstCalcPMapRoutes, p_cacheRoutes);
+                        FTLCalcRouteProcess rp = new FTLCalcRouteProcess(lstCalcPMapRoutes, p_cacheRoutes);
                         rp.RunWait();
                     }
 

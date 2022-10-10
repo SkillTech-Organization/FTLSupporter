@@ -59,6 +59,8 @@
     <None Include="App.config" />
     <None Include="input\Tasks_dump.bin" />
     <None Include="input\Trucks_dump.bin" />
+    <None Include="PMap.edg.json" />
+    <None Include="PMap.nod.json" />
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>

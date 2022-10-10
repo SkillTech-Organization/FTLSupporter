@@ -19,22 +19,19 @@ namespace FTLSupporter
 
         public bool Completed { get; set; }
         public List<boRoute> result { get; set; }
-        private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
-        private bllRoute m_bllRoute;
-        private bool m_cacheRoutes;
+        //TODO refakt     private bllRoute m_bllRoute;
+        //TODO refakt        private bool m_cacheRoutes;
 
         List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
-        internal FTLCalcRouteProcess(ProcessNotifyIcon p_NotifyIcon, List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
-            : base(p_NotifyIcon, System.Threading.ThreadPriority.Highest)
+        internal FTLCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
+            : base(System.Threading.ThreadPriority.Normal)
         {
-            m_DB = new SQLServerAccess();
-            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
 
             m_bllRoute = new bllRoute(m_DB);
 
             m_lstRoutes = p_lstRoutes;
-            m_cacheRoutes = p_cacheRoutes;
+            //TODO refakt m_cacheRoutes = p_cacheRoutes;
         }
 
 
@@ -55,7 +52,7 @@ namespace FTLSupporter
 
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
-                RouteData.Instance.Init(m_DB, null);
+                RouteData.Instance.InitFromFiles("map");
                 RectLatLng boundary = new RectLatLng();
 
                 List<int> fromNodes = m_lstRoutes.GroupBy(g => g.fromNOD_ID).Select(x => x.Key).ToList();
@@ -103,13 +100,15 @@ namespace FTLSupporter
                         foreach (FTLPMapRoute ftr in lstFTLR)
                         {
 
+                            /* TODO refakt 
                             if (m_cacheRoutes)
                             {
                                 writeRoute.Add(route);
                             }
+                            */
+                            FTLRouteCache.Instance.Items.Add(route);
 
                             ftr.route = route;
-                            //                    ftr.duration_nemkell = bllPlanEdit.GetDuration(route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                         }
 
                     }
@@ -124,6 +123,8 @@ namespace FTLSupporter
                     }
 
                     itemNo++;
+
+                     /* TODO refakt 
                     if (itemNo % random.Next(5,15) == 0)
                     {
                         tspDiff = DateTime.Now - dtStart;
@@ -137,12 +138,14 @@ namespace FTLSupporter
                         }
                         this.SetNotifyIconText(infoText1);
                     }
+                    */
+
                 }
 
-                m_bllRoute.WriteRoutesBulk(writeRoute, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
+   //TODO refakt             m_bllRoute.WriteRoutesBulk(writeRoute, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
 
                 Completed = true;
-                m_DB.Close();
+                //TODO refakt             m_DB.Close();
             }
             catch (Exception e)
             {
