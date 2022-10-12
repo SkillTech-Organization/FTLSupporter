@@ -19,39 +19,35 @@ namespace FTLSupporter
 {
     public class FTLInterface
     {
-        public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes, int p_maxTruckDistance)
+        public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, bool p_cacheRoutes, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
-            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-            PMapCommonVars.Instance.ConnectToDB();
-            ChkLic.Check(PMapIniParams.Instance.IDFile);
+            PMapIniParams.Instance.ReadParams(p_iniPath, "");
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
-            var res = FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes, p_maxTruckDistance);
+            var res = FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath,  p_cacheRoutes, p_maxTruckDistance);
 
             Util.Log2File(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
 
             return res;
         }
 
-        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes, int p_maxTruckDistance)
+        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, bool p_cacheRoutes, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
-            PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-            PMapCommonVars.Instance.ConnectToDB();
-            ChkLic.Check(PMapIniParams.Instance.IDFile);
+            PMapIniParams.Instance.ReadParams(p_iniPath, "");
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
-            var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes, p_maxTruckDistance);
+            var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_iniPath, p_cacheRoutes, p_maxTruckDistance);
 
             Util.Log2File(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
 
             return res;
         }
 
-        private static List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes, int p_maxTruckDistance)
+        private static List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, bool p_cacheRoutes, int p_maxTruckDistance)
         {
 
             List<FTLResult> result = new List<FTLResult>();
@@ -60,9 +56,8 @@ namespace FTLSupporter
             {
 
                 Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Init" ));
-
-                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
-                bllRoute route = new bllRoute(PMapCommonVars.Instance.CT_DB);
+                RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir);
+                bllRoute route = new bllRoute(null);
 
                 DateTime dtPhaseStart = DateTime.Now;
 
@@ -70,7 +65,6 @@ namespace FTLSupporter
                 result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
                 foreach (FTLTask tsk in p_TaskList)
                     result.AddRange(ValidateObjList<FTLPoint>(tsk.TPoints));
-
 
                 result.AddRange(ValidateObjList<FTLTruck>(p_TruckList));
                 foreach (FTLTruck trk in p_TruckList)
@@ -85,9 +79,8 @@ namespace FTLSupporter
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
 
-                //gyors térképre illesztéshez...
+                //térképre illesztés
                 var EdgesArr = RouteData.Instance.Edges.Select(s => s.Value).ToArray();
-
 
                 foreach (FTLTask tsk in p_TaskList)
                 {
@@ -100,10 +93,9 @@ namespace FTLSupporter
                             //A beosztandó szállíási feladat esetén megkeressük a legközelebbi pontot
 
                             //int diff = 0;
-                            //int NOD_ID = route.GetNearestNOD_ID(new GMap.NET.PointLatLng(pt.Lat, pt.Lng), out diff);
                             if (pt.NOD_ID == 0)
                             {
-                                int NOD_ID = GetNearestNOD_ID_FAST(EdgesArr, new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
+                                int NOD_ID = FTLGetNearestNOD_ID(EdgesArr, new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                                 if (NOD_ID == 0)
                                 {
                                     result.Add(getValidationError(pt,
@@ -215,7 +207,7 @@ namespace FTLSupporter
                     {
                         if (pt.NOD_ID == 0)
                         {
-                            pt.NOD_ID = GetNearestNOD_ID_FAST(EdgesArr,new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
+                            pt.NOD_ID = FTLGetNearestNOD_ID(EdgesArr,new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                             if (pt.NOD_ID == 0)
                             {
                                 result.Add(getValidationError(pt,
@@ -1505,7 +1497,7 @@ namespace FTLSupporter
 
         //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy 
         //      boEdge[] tömbön. Kb 2x olyan gyors.
-        public static int GetNearestNOD_ID_FAST(boEdge[] EdgesList, PointLatLng p_pt)
+        public static int FTLGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
         {
 
             //Legyünk következetesek, a PMAp-os térkép esetében:

@@ -33,6 +33,7 @@ namespace PMapCore.Common
         public const string iniIDFile = "IDFile";
         public const string iniCTIniFile = "CTIniFile";
         public const string iniLogDir = "LogDir";
+        public const string iniMapJsonDir = "MapJsonDir";
         public const string iniLogVerbose = "LogVerbose";
         public const string iniTestMode = "TestMode";
         public const string iniParseLog = "ParseLog";
