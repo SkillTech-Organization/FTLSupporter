@@ -31,7 +31,6 @@ namespace PMapCore.Common
             AppInstance = "???";
             CT_DB = null;
             MapProvider = GMapProviders.GoogleTerrainMap;
-            RZN_ID_LISTCahce = new Dictionary<int, string>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]

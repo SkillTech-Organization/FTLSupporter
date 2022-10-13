@@ -207,10 +207,19 @@ namespace PMapCore.Common
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static string FileToString(string p_file)
+        public static string FileToString(string p_file, Encoding p_enc = null)
         {
             string s = "";
-            TextReader tr = new StreamReader(p_file);
+
+            TextReader tr;
+            if (p_enc != null)
+            {
+                tr = new StreamReader(p_file, p_enc);
+            }
+            else
+            {
+                tr = new StreamReader(p_file);
+            }
             s = tr.ReadToEnd();
             tr.Close();
             return s;

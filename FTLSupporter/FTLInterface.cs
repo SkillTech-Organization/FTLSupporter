@@ -19,35 +19,36 @@ namespace FTLSupporter
 {
     public class FTLInterface
     {
-        public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, int p_maxTruckDistance)
+        public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
-            PMapIniParams.Instance.ReadParams(p_iniPath, "");
+            PMapIniParams.Instance.ReadParams(Application.StartupPath, "");
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
-            var res = FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath, p_maxTruckDistance);
+            var res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
             Util.Log2File(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
 
             return res;
         }
 
-        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, int p_maxTruckDistance)
+        //Az eredményfeldolgozásban különbözik a FTLSupport-től
+        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
-            PMapIniParams.Instance.ReadParams(p_iniPath, "");
+            PMapIniParams.Instance.ReadParams(Application.StartupPath, "");
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
-            var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_iniPath, p_maxTruckDistance);
+            var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
             Util.Log2File(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
 
             return res;
         }
 
-        private static List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, int p_maxTruckDistance)
+        private static List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
 
             List<FTLResult> result = new List<FTLResult>();
@@ -118,7 +119,6 @@ namespace FTLSupporter
 
                 //Validálás, koordináta feloldás:jármű aktuális pozíció, szállítási feladat
                 //
-                Dictionary<string, int> allRZones = route.GetAllRZones();
                 foreach (FTLTruck trk in p_TruckList)
                 {
                     var dtXDate = DateTime.Now;
@@ -134,9 +134,9 @@ namespace FTLSupporter
                         String[] aRZones = trk.RZones.Replace(" ", "").Split(',');
                         foreach (var zone in aRZones)
                         {
-                            if (allRZones.ContainsKey(zone))
+                            if (RouteData.Instance.allRZones.ContainsKey(zone))
                             {
-                                trk.RZN_ID_LIST += ("," + allRZones[zone].ToString());
+                                trk.RZN_ID_LIST += ("," + RouteData.Instance.allRZones[zone].ToString());
                             }
                             else
                             {
@@ -252,6 +252,7 @@ namespace FTLSupporter
                 Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.Now - dtPhaseStart).ToString()));
                 dtPhaseStart = DateTime.Now;
 
+                //TODO: idáig tart a validálás
 
                 if (result.Count == 0)
                 {
@@ -1104,10 +1105,10 @@ namespace FTLSupporter
             return itemRes;
         }
 
-        private static List<FTLResult> FTLSupportX_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, string p_iniPath, string p_dbConf, bool p_cacheRoutes, int p_maxTruckDistance)
+        private static List<FTLResult> FTLSupportX_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
 
-            List<FTLResult> res = FTLInterface.FTLSupport_inner(p_TaskList, p_TruckList, p_iniPath, p_dbConf, p_cacheRoutes, p_maxTruckDistance);
+            List<FTLResult> res = FTLInterface.FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
 
             /*
@@ -1131,7 +1132,7 @@ namespace FTLSupporter
                     List<FTLTask> lstTsk2 = new List<FTLTask>();
                     var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
                     lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
-                    List<FTLResult> res2 = FTLInterface.FTLSupport_inner(lstTsk2, lstTrk2, p_iniPath, p_dbConf, p_cacheRoutes, p_maxTruckDistance);
+                    List<FTLResult> res2 = FTLInterface.FTLSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
                     var calcResult2 = res2.Where(x => x.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
                     if (calcResult2 != null)

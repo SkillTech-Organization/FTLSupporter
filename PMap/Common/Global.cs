@@ -253,6 +253,7 @@ namespace PMapCore.Common
 
         public const string EXTFILE_EDG = "PMap.edg.json";
         public const string EXTFILE_NOD = "PMap.nod.json";
+        public const string EXTFILE_RZNTyp = "PMap.rzntyp.json";
         public const string EXTFILE_RZN = "PMap.rzn.json";
 
 

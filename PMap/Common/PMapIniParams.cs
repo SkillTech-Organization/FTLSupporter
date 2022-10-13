@@ -408,20 +408,21 @@ namespace PMapCore.Common
             {
                 GMapProvider.WebProxy = null;
             }
-                
+
 
             // DB paraméterek felolvasása CT inifájlból
-
-            INIFile iniCT = new INIFile(CTIniFile);
-            DBConfigName = iniCT.ReadString(DBConf, Global.iniDBConfigName);
-            DBServer = iniCT.ReadString(DBConf, Global.iniDBServer);
-            DBName = iniCT.ReadString(DBConf, Global.iniDBName);
-            DBUser = iniCT.ReadString(DBConf, Global.iniDBUser);
-            DBPwd = iniCT.ReadString(DBConf, Global.iniDBPwd);
-            DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
-            if (DBCmdTimeOut == 0)
-                DBCmdTimeOut = 60;
-
+            if (!string.IsNullOrWhiteSpace(CTIniFile))
+            {
+                INIFile iniCT = new INIFile(CTIniFile);
+                DBConfigName = iniCT.ReadString(DBConf, Global.iniDBConfigName);
+                DBServer = iniCT.ReadString(DBConf, Global.iniDBServer);
+                DBName = iniCT.ReadString(DBConf, Global.iniDBName);
+                DBUser = iniCT.ReadString(DBConf, Global.iniDBUser);
+                DBPwd = iniCT.ReadString(DBConf, Global.iniDBPwd);
+                DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
+                if (DBCmdTimeOut == 0)
+                    DBCmdTimeOut = 60;
+            }
 
             // MAPEI paraméterek
 
