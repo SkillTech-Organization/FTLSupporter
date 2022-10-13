@@ -37,6 +37,8 @@ namespace PMapCore.Route
 
         public Dictionary<int, PointLatLng> NodePositions  = null;  //Node koordináták
 
+        public Dictionary<int, string> RZN_ID_LIST = null;          //Behajtási zónák súlyonként
+
         public int NodeCount {
             get
             {
@@ -74,6 +76,11 @@ namespace PMapCore.Route
                     string strNodePositions = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_NOD));
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
                     NodePositions = xNodePositions;
+
+                    string strRZN_ID_LIST = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_NOD));
+                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
+                    RZN_ID_LIST = xRZN_ID_LIST;
+
 
                     Util.Log2File("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
                     m_Initalized = true;
@@ -438,10 +445,7 @@ namespace PMapCore.Route
             //X --> lng, Y --> lat
             var lstRZN = p_RZN_ID_LIST.Split(',');
 
-
             //TODO: Nézzük meg, hogy koordiáta alaján pontosan megtaláljuk-e node-ot. (utána lenne a legközelebbi élhez található móka)
-
-
 
             //A legközlebbi élhez található közelebb eső node megkeresése. Azért van így megoldva, mert hosszú országúti szakaszoknál,
             //egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi 

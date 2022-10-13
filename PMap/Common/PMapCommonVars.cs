@@ -90,9 +90,6 @@ namespace PMapCore.Common
             //TODO: ide kell rakni az automatikus updatert.
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public Dictionary<int, string> RZN_ID_LISTCahce = null;  //Behajtási zóna ID cache
-
         public bool IsCheckMode { get; set; } = false;
 
         public string AzureTableStoreApiKey { get; set; }           // Felhőbe küldés tablestore apikey a licence-ből 

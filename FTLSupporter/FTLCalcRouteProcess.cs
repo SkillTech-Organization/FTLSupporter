@@ -24,7 +24,7 @@ namespace FTLSupporter
 
         List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
-        internal FTLCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
+        internal FTLCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes)
             : base(System.Threading.ThreadPriority.Normal)
         {
 
@@ -94,20 +94,14 @@ namespace FTLSupporter
                     foreach (boRoute route in results)
                     {
 
-                        //leválogatjuk, mely útvonalakra tartozik a számítás
+                        //leválogatjuk, mely útvonalakra tartozik a konkrét számítás
                         List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO
                                                                     && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR == routePar.Weight && x.Height == routePar.Height && x.Width == routePar.Width).ToList();
-
+                        //és feltöltjuk a ROUTE-ját
                         foreach (FTLPMapRoute ftr in lstFTLR)
                         {
 
-                            /* TODO refakt 
-                            if (m_cacheRoutes)
-                            {
-                                writeRoute.Add(route);
-                            }
-                            */
-                            FTLRouteCache.Instance.Items.Add(route);
+                            FTLRouteCache.Instance.Add(route);
 
                             ftr.route = route;
                         }
