@@ -54,8 +54,8 @@ namespace PMapCore.LongProcess
             Completed = false;
         }
 
-        public CalcPMapRouteProcess(ProcessNotifyIcon p_NotifyIcon, ThreadPriority p_ThreadPriority, string p_Hint, List<boRoute> p_CalcDistances, bool p_savePoints)
-            : base(p_NotifyIcon, p_ThreadPriority)
+        public CalcPMapRouteProcess(ThreadPriority p_ThreadPriority, string p_Hint, List<boRoute> p_CalcDistances, bool p_savePoints)
+            : base(p_ThreadPriority)
         {
             m_CalcDistances = p_CalcDistances;
             m_Hint = p_Hint;
@@ -252,7 +252,6 @@ namespace PMapCore.LongProcess
                                     ProcessForm.SetInfoText(m_Hint.Trim() + infoText1);
                                     ProcessForm.NextStep();
                                 }
-                                this.SetNotifyIconText(m_Hint.Trim() + infoText1);
                             }
                         }
                     }

@@ -333,9 +333,6 @@
     <Compile Include="Licence\PMapLicWarn.cs" />
     <Compile Include="Strings\Base\Messages.cs" />
     <Compile Include="Strings\DXMessages.cs" />
-    <Compile Include="LongProcess\Base\ProcessNotifyIcon.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="LongProcess\GetRoutePathProcess.cs" />
     <Compile Include="LongProcess\GetTourDetailsProcess.cs" />
     <Compile Include="LongProcess\CalcPMapRouteProcess.cs" />
@@ -428,10 +425,6 @@
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Animated Notify Icon\Animated Notify Icon.csproj">
-      <Project>{735B55E9-0BB8-43E9-B3B7-959029EDE369}</Project>
-      <Name>Animated Notify Icon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FrcNumericTextBox\FrcNumericTextBox.csproj">
       <Project>{FF4CD9F3-DB53-4FD9-8541-5777947745E9}</Project>
       <Name>FrcNumericTextBox</Name>
