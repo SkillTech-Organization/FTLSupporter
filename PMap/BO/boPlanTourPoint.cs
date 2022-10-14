@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMapCore.Markers;
-using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using PMapCore.Common.Attrib;
 
@@ -47,10 +45,7 @@ namespace PMapCore.BO
         public DateTime OPEN { get; set; }
         public DateTime CLOSE { get; set; }
         public string OPENCLOSE { get; set; }
-        [ScriptIgnore]
-        public PPlanMarker Marker { get; set; }
-        [ScriptIgnore]
-        public GMapRoute Route { get; set; }
+
         [ScriptIgnore]
         public boPlanTourPoint NextTourPoint { get; set; }
         public string DEP_CODE { get; set; }

@@ -6,7 +6,6 @@ using GMap.NET;
 using PMapCore.DB.Base;
 using System.ComponentModel;
 using PMapCore.DB;
-using GMap.NET.WindowsForms;
 using System.Xml.Serialization;
 using GMap.NET.MapProviders;
 using PMapCore.Route;
@@ -276,27 +275,6 @@ namespace PMapCore.Common.PPlan
                 lock (m_propertyLock)
                 {
                     m_showUnPlannedDepots = value;
-                }
-
-            }
-        }
-
-
-        private MarkerTooltipMode m_tooltipMode;
-        public MarkerTooltipMode TooltipMode
-        {
-            get
-            {
-                lock (m_propertyLock)
-                {
-                    return m_tooltipMode;
-                }
-            }
-            set
-            {
-                lock (m_propertyLock)
-                {
-                    m_tooltipMode = value;
                 }
 
             }

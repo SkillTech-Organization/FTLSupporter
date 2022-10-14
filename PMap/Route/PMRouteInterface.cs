@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using GMap.NET.WindowsForms;
 using PMapCore.LongProcess.Base;
 using PMapCore.LongProcess;
 using GMap.NET.Internals;

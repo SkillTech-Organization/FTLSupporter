@@ -1,6 +1,8 @@
 ﻿using FTLSupporter;
 using GMap.NET;
 using PMapCore.BLL;
+using PMapCore.BLL.DataXChange;
+using PMapCore.BO.DataXChange;
 using PMapCore.Common;
 using PMapCore.Licence;
 using System;
@@ -20,13 +22,15 @@ namespace FTLSupporterTest
         {
             SWHTest(false);
         }
-
+ 
 
         static void SWHTest(bool p_bestTruck = false)
         {
             FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
+            //FileInfo fi = new FileInfo(@"d:\temp\SWH\ori\4617936_boXRoute.json");
             var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
             FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
+            //FileInfo fi2 = new FileInfo(@"d:\temp\SWH\ori\4617936_boXTruck.json");
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
             RunTest(lstTsk, lstTrk, p_bestTruck);
         }

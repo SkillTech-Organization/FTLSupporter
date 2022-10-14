@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using PMapCore.Common.Attrib;
 using System.Runtime.Serialization;
