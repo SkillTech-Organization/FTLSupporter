@@ -26,15 +26,7 @@ namespace PMapCore.LongProcess.Base
         private BaseProgressDialog m_processForm = null;
         protected ProcessNotifyIcon m_notifyIcon = null;
         protected ThreadPriority m_ThreadPriority;
-        /*
-        public BaseLongProcess(ThreadPriority p_ThreadPriority)
-        {
-            m_ThreadPriority = p_ThreadPriority;
-            ProcessForm = null;
-            ProcessNotifyIcon = null;
-            init();
-        }
- */
+ 
         public BaseLongProcess(BaseProgressDialog p_Form, ThreadPriority p_ThreadPriority)
         {
             m_ThreadPriority = p_ThreadPriority;
