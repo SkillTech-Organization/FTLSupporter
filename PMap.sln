@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMapCore", "PMap\PMapCore.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMap.NET.Core", "GMap.NET.Core\GMap.NET.Core.csproj", "{D0C39D9D-BED0-418B-9A5E-713176CAF40C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMap.NET.WindowsForms", "GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj", "{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE152D52-1346-4F9C-A0D3-0CD98319DD14}"
 	ProjectSection(SolutionItems) = preProject
 		DBScript\auchan_test.sql = DBScript\auchan_test.sql
@@ -67,10 +65,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapeiDocs", "MapeiDocs", "{
 		doc\Mapei\SQLQuery5.sql = doc\Mapei\SQLQuery5.sql
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animated Notify Icon", "Animated Notify Icon\Animated Notify Icon.csproj", "{735B55E9-0BB8-43E9-B3B7-959029EDE369}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Map", "Map", "{9E7FDE92-EA95-4ADF-A31A-F0A7E98DD1E7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,20 +107,6 @@ Global
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C}.Release|x64.ActiveCfg = Release|Any CPU
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C}.Release|x86.ActiveCfg = Release|Any CPU
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C}.Release|x86.Build.0 = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Debug|x86.Build.0 = Debug|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|x64.ActiveCfg = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|x86.ActiveCfg = Release|Any CPU
-		{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}.Release|x86.Build.0 = Release|Any CPU
 		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4FE3066-F14F-4625-85BB-57EA97751A6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -169,22 +149,6 @@ Global
 		{26639170-A1F0-40F1-9750-C857C55F3434}.Release|x64.Build.0 = Release|Any CPU
 		{26639170-A1F0-40F1-9750-C857C55F3434}.Release|x86.ActiveCfg = Release|Any CPU
 		{26639170-A1F0-40F1-9750-C857C55F3434}.Release|x86.Build.0 = Release|Any CPU
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|x64.ActiveCfg = Debug|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|x64.Build.0 = Debug|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|x86.ActiveCfg = Debug|x86
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Debug|x86.Build.0 = Debug|x86
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|Any CPU.Build.0 = Release|Any CPU
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|Mixed Platforms.Build.0 = Release|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|x64.ActiveCfg = Release|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|x64.Build.0 = Release|x64
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|x86.ActiveCfg = Release|x86
-		{735B55E9-0BB8-43E9-B3B7-959029EDE369}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -305,8 +305,6 @@ namespace PMapCore.BLL
                 TRK_COLOR = Util.ConvertWindowsRGBToColour(Util.getFieldValue<int>(p_dr, "TRK_COLOR")),
                 Completed = Util.getFieldValue<bool>(p_dr, "TPL_COMPLETED"),
                 TourPoints = GetPlTourPoints(Util.getFieldValue<int>(p_dr, "ID")),
-                Layer = null,
-                PSelect = Util.getFieldValue<bool>(p_dr, "TPL_PSELECT"),
                 QTYDETAILS = "",
                 VOLDETAILS = "",
                 TOLLDETAILS = "",

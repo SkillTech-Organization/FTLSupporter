@@ -24,11 +24,11 @@ namespace FTLSupporter
 
         List<FTLPMapRoute> m_lstRoutes = new List<FTLPMapRoute>();
 
-        internal FTLCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes, bool p_cacheRoutes)
+        internal FTLCalcRouteProcess(List<FTLPMapRoute> p_lstRoutes)
             : base(System.Threading.ThreadPriority.Normal)
         {
 
-            m_bllRoute = new bllRoute(m_DB);
+            //TODO refakt m_bllRoute = new bllRoute(m_DB);
 
             m_lstRoutes = p_lstRoutes;
             //TODO refakt m_cacheRoutes = p_cacheRoutes;
@@ -47,20 +47,21 @@ namespace FTLSupporter
 
                 if (ProcessForm != null)
                 {
-                    ProcessForm.SetInfoText( "Inicializálás");
+                    ProcessForm.SetInfoText("Inicializálás");
                 }
 
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
                 RouteData.Instance.InitFromFiles("map");
-                RectLatLng boundary = new RectLatLng();
+                //TODO refakt RectLatLng boundary = new RectLatLng();
 
                 List<int> fromNodes = m_lstRoutes.GroupBy(g => g.fromNOD_ID).Select(x => x.Key).ToList();
                 List<int> toNodes = m_lstRoutes.GroupBy(g => g.toNOD_ID).Select(x => x.Key).ToList();
                 List<int> allNodes = fromNodes.Union(toNodes).ToList();
-                boundary = m_bllRoute.getBoundary(allNodes);
+                //TODO refakt boundary = m_bllRoute.getBoundary(allNodes);
 
- 
+                var boundary = getBoundaryX(allNodes);
+
                 Dictionary<string, List<int>[]> NeighborsArrFull = null;
                 Dictionary<string, List<int>[]> NeighborsArrCut = null;
                 List<CRoutePars> routePars = m_lstRoutes.GroupBy(g => new { g.RZN_ID_LIST, g.GVWR, g.Height, g.Width })
@@ -84,8 +85,8 @@ namespace FTLSupporter
 
                     List<int> lstToNodes = calcNode.Value;
                     List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.fromNOD_ID, lstToNodes,
-                                            NeighborsArrFull[routePar.Hash], 
-                                            PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ?  NeighborsArrCut[routePar.Hash] : null,
+                                            NeighborsArrFull[routePar.Hash],
+                                            PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ? NeighborsArrCut[routePar.Hash] : null,
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
                     Random random = new Random((int)DateTime.Now.Millisecond);
 
@@ -93,20 +94,14 @@ namespace FTLSupporter
                     foreach (boRoute route in results)
                     {
 
-                        //leválogatjuk, mely útvonalakra tartozik a számítás
-                        List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO 
-                                                                    && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR==routePar.Weight && x.Height==routePar.Height && x.Width==routePar.Width).ToList();
-
+                        //leválogatjuk, mely útvonalakra tartozik a konkrét számítás
+                        List<FTLPMapRoute> lstFTLR = m_lstRoutes.Where(x => x.fromNOD_ID == route.NOD_ID_FROM && x.toNOD_ID == route.NOD_ID_TO
+                                                                    && x.RZN_ID_LIST == routePar.RZN_ID_LIST && x.GVWR == routePar.Weight && x.Height == routePar.Height && x.Width == routePar.Width).ToList();
+                        //és feltöltjuk a ROUTE-ját
                         foreach (FTLPMapRoute ftr in lstFTLR)
                         {
 
-                            /* TODO refakt 
-                            if (m_cacheRoutes)
-                            {
-                                writeRoute.Add(route);
-                            }
-                            */
-                            FTLRouteCache.Instance.Items.Add(route);
+                            FTLRouteCache.Instance.Add(route);
 
                             ftr.route = route;
                         }
@@ -124,25 +119,25 @@ namespace FTLSupporter
 
                     itemNo++;
 
-                     /* TODO refakt 
-                    if (itemNo % random.Next(5,15) == 0)
-                    {
-                        tspDiff = DateTime.Now - dtStart;
-                        string infoText1 = itemNo.ToString() + "/" + fromNodes.Count();
-                        if (PMapIniParams.Instance.TestMode)
-                            infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
-                        if (ProcessForm != null)
-                        {
-                            ProcessForm.SetInfoText(infoText1);
-                            ProcessForm.NextStep();
-                        }
-                        this.SetNotifyIconText(infoText1);
-                    }
-                    */
+                    /* TODO refakt 
+                   if (itemNo % random.Next(5,15) == 0)
+                   {
+                       tspDiff = DateTime.Now - dtStart;
+                       string infoText1 = itemNo.ToString() + "/" + fromNodes.Count();
+                       if (PMapIniParams.Instance.TestMode)
+                           infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
+                       if (ProcessForm != null)
+                       {
+                           ProcessForm.SetInfoText(infoText1);
+                           ProcessForm.NextStep();
+                       }
+                       this.SetNotifyIconText(infoText1);
+                   }
+                   */
 
                 }
 
-   //TODO refakt             m_bllRoute.WriteRoutesBulk(writeRoute, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
+                //TODO refakt             m_bllRoute.WriteRoutesBulk(writeRoute, true);  //itt lehetne optimalizálni, hogy csak from-->to utak legyenek be\rva
 
                 Completed = true;
                 //TODO refakt             m_DB.Close();
@@ -157,8 +152,25 @@ namespace FTLSupporter
             }
         }
 
+          /// <summary>
+        /// NODE_ID-k által meghatározott téglalap
+        /// </summary>
+        /// <param name="p_nodes"></param>
+        /// <returns></returns>
+        public RectLatLng getBoundaryX(List<int> p_nodes)
+        {
+            var q = RouteData.Instance.NodePositions.Where(w => p_nodes.Any(a => a == w.Key));
+            var minLat = q.Min(m => m.Value.Lat);
+            var minLng = q.Min(m => m.Value.Lng);
+            var maxLat = q.Max(m => m.Value.Lat);
+            var maxLng = q.Max(m => m.Value.Lng);
+
+
+            //a koordinátákat egy 'kifordított' négyzetre inicializálkuk, hogy az első 
+            //tételnél biztosan kapjanak értéket
+            return bllRoute.getBoundary(minLat, minLng, maxLat, maxLng);
+
+        }
+
     }
-
-
-
 }

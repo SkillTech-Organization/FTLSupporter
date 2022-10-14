@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using GMap.NET.WindowsForms;
 using PMapCore.LongProcess.Base;
 using PMapCore.LongProcess;
 using GMap.NET.Internals;
@@ -76,7 +75,6 @@ namespace PMapCore.Route
                 string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_TH, p_CalcInfo);
                 CalcPMapRouteProcess cpp = null;
                 BaseSilngleProgressDialog pd = null;
-                ProcessNotifyIcon ni = null;
 
                 if (p_NotifyForm)
                 {
@@ -87,8 +85,7 @@ namespace PMapCore.Route
                 }
                 else
                 {
-                    ni = new ProcessNotifyIcon();
-                    cpp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
+                    cpp = new CalcPMapRouteProcess(p_ThreadPriority, "", p_CalcDistances, p_savePoints);
                 }
 
 
@@ -101,7 +98,6 @@ namespace PMapCore.Route
                 else
                 {
                     cpp.RunWait();
-                    ni = null;
                 }
 
 
@@ -177,14 +173,9 @@ namespace PMapCore.Route
 
 
                 BaseMultiProgressDialog pd = null;
-                ProcessNotifyIcon ni = null;
                 if (p_NotifyForm)
                 {
                     pd = new BaseMultiProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST }).Count() - 1, sTitle, true);
-                }
-                else
-                {
-                    ni = new ProcessNotifyIcon();
                 }
 
 
@@ -200,7 +191,7 @@ namespace PMapCore.Route
                     }
                     else
                     {
-                        gdp = new CalcPMapRouteProcess(ni, p_ThreadPriority, "#" + i.ToString() + "#", calcDistances[i], p_savePoints);
+                        gdp = new CalcPMapRouteProcess(p_ThreadPriority, "#" + i.ToString() + "#", calcDistances[i], p_savePoints);
 
                     }
                     lstGdp.Add(gdp);
