@@ -29,7 +29,11 @@ namespace FTLSupporterTest
             var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
             FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
-            FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
+            lstTrk.First().GVWR = 0;
+            lstTrk.Last().CargoTypes = null;
+
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
+            var str = JSONHelper.Serialize<FTLResponse>(res);
         }
 
         static void SWHTest(bool p_bestTruck = false)

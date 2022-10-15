@@ -35,8 +35,10 @@ namespace FTLSupporter
             }
 
             ret.MaxTruckDistance = p_maxTruckDistance;
-            ret.ProcessID = DateTime.UtcNow.Ticks.ToString();
-
+            if (!ret.HasError)
+            {
+                ret.RequestID = DateTime.UtcNow.Ticks.ToString();
+            }
             return ret;
         }
 
