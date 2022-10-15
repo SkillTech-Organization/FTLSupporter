@@ -19,6 +19,29 @@ namespace FTLSupporter
 {
     public class FTLInterface
     {
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        {
+            var ret = new FTLResponse();
+            //Paraméterek validálása
+            ret.Result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
+            foreach (FTLTask tsk in p_TaskList)
+                ret.Result.AddRange(ValidateObjList<FTLPoint>(tsk.TPoints));
+
+            ret.Result.AddRange(ValidateObjList<FTLTruck>(p_TruckList));
+            foreach (FTLTruck trk in p_TruckList)
+            {
+                ret.Result.AddRange(ValidateObjList<FTLPoint>(trk.CurrTPoints));
+
+            }
+
+            ret.MaxTruckDistance = p_maxTruckDistance;
+            ret.ProcessID = DateTime.UtcNow.Ticks.ToString();
+
+            return ret;
+        }
+
+
+
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
@@ -61,21 +84,6 @@ namespace FTLSupporter
                 bllRoute route = new bllRoute(null);
 
                 DateTime dtPhaseStart = DateTime.Now;
-
-                //Paraméterek validálása
-                result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
-                foreach (FTLTask tsk in p_TaskList)
-                    result.AddRange(ValidateObjList<FTLPoint>(tsk.TPoints));
-
-                result.AddRange(ValidateObjList<FTLTruck>(p_TruckList));
-                foreach (FTLTruck trk in p_TruckList)
-                {
-                    result.AddRange(ValidateObjList<FTLPoint>(trk.CurrTPoints));
-
-                }
-
-                Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Validálás", (DateTime.Now - dtPhaseStart).ToString()));
-                dtPhaseStart = DateTime.Now;
 
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //

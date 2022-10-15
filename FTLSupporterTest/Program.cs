@@ -20,9 +20,17 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            SWHTest(false);
+            ParTest();
         }
- 
+
+        static void ParTest()
+        {
+            FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
+            var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
+            FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
+            var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
+            FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
+        }
 
         static void SWHTest(bool p_bestTruck = false)
         {
