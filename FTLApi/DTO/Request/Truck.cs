@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using FTLSupporter;
+using System.Text.Json.Serialization;
+using static FTLSupporter.FTLTruck;
 
 namespace FTLApi.DTO.Request
 {
-    public class TruckList
+    public class Truck
     {
         [JsonPropertyName("truckID")]
         public string TruckID;
@@ -101,9 +103,50 @@ namespace FTLApi.DTO.Request
         public int CurrLng;
 
         [JsonPropertyName("currTPoints")]
-        public List<CurrTPoint> CurrTPoints;
+        public List<TPoint> CurrTPoints;
 
         [JsonPropertyName("tPointCompleted")]
         public int TPointCompleted;
+
+        public static explicit operator FTLTruck(Truck t)
+        {
+            return new FTLTruck
+            {
+                TruckID = t.TruckID,
+                GVWR = t.Gvwr,
+                Capacity = t.Capacity,
+                TruckType = t.TruckType,
+                CargoTypes = t.CargoTypes,
+                FixCost = t.FixCost,
+                KMCost = t.KmCost,
+                RelocateCost = t.RelocateCost,
+                MaxKM = t.MaxKM,
+                MaxDuration = t.MaxDuration,
+                EngineEuro = t.EngineEuro,
+                ETollCat = t.ETollCat,
+                RZones = t.RZones,
+                Width = t.Width,
+                Height = t.Height,
+                TruckProps = t.TruckProps,
+                RemainingDriveTime = t.RemainingDriveTime,
+                RemainingRestTime = t.RemainingRestTime,
+                RemainingTimeToStartDailyRest = t.RemainingTimeToStartDailyRest,
+                RemainingDailyDriveTime = t.RemainingDailyDriveTime,
+                RemainingDailyRestTime = t.RemainingDailyRestTime,
+                RemainingWeeklyDriveTime = t.RemainingWeeklyDriveTime,
+                RemainingWeeklyRestTime = t.RemainingWeeklyRestTime,
+                RemainingTwoWeeklyDriveTime = t.RemainingTwoWeeklyDriveTime,
+                RemainingTwoWeeklyRestTime = t.RemainingTwoWeeklyRestTime,
+                RemainingRestTimeToCompensate = t.RemainingRestTimeToCompensate,
+                TruckTaskType = (eTruckTaskType)Enum.Parse(typeof(eTruckTaskType), t.TruckTaskType.ToString()),
+                RunningTaskID = t.RunningTaskID,
+                CurrIsOneWay = t.CurrIsOneWay,
+                CurrTime = t.CurrTime,
+                CurrLat = t.CurrLat,
+                CurrLng = t.CurrLng,
+                CurrTPoints = t.CurrTPoints.Select(t => (FTLPoint)t).ToList(),
+                TPointCompleted = t.TPointCompleted,
+            };
+        }
     }
 }

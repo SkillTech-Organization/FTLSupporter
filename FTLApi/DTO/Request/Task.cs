@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using FTLSupporter;
+using System.Text.Json.Serialization;
 
 namespace FTLApi.DTO.Request
 {
-    public class TaskList
+    public class Task
     {
         [JsonPropertyName("taskID")]
         public string TaskID;
@@ -27,5 +28,20 @@ namespace FTLApi.DTO.Request
 
         [JsonPropertyName("exclTruckProps")]
         public string ExclTruckProps;
+
+        public static explicit operator FTLTask(Task t)
+        {
+            return new FTLTask
+            {
+                CargoType = t.CargoType,
+                Client = t.Client,
+                ExclTruckProps = t.ExclTruckProps,
+                InclTruckProps = t.InclTruckProps,
+                TaskID = t.TaskID,
+                TPoints = t.TPoints.Select(t => (FTLPoint)t).ToList(),
+                TruckTypes = t.TruckTypes,
+                Weight = t.Weight
+            };
+        }
     }
 }

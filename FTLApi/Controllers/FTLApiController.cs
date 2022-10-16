@@ -16,52 +16,20 @@
 namespace FTLApi
 {
     using FTLApi.DTO.Request;
+    using FTLApi.Handlers;
+    using FTLSupporter;
+    using Microsoft.AspNetCore.Mvc;
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public interface IController
+
+    public partial class FTLApiController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
+        private IFTLApiHandler _implementation;
 
-        /// <summary>
-        /// Calculate by FTLSupporter engine
-        /// </summary>
-
-
-
-        /// <returns>Accepted</returns>
-
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<object>> FTLSupportAsync(object body, string content_Type, string accept, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <summary>
-        /// Calculate by FTLSupporterX engine
-        /// </summary>
-
-
-
-        /// <returns>Accepted</returns>
-
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<object>> FTLSupportXAsync(object body, string content_Type, string accept, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <summary>
-        /// get the 'isalive' status of the FTLSupporter service
-        /// </summary>
-
-
-        /// <returns>OK</returns>
-
-        System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<object>> IsAliveAsync(string accept, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-
-    public partial class Controller : Microsoft.AspNetCore.Mvc.ControllerBase
-    {
-        private IController _implementation;
-
-        public Controller(IController implementation)
+        public FTLApiController()
         {
-            _implementation = implementation;
+            _implementation = new FTLApiHandler();
         }
 
         /// <summary>
@@ -70,13 +38,21 @@ namespace FTLApi
         /// <param name="body"></param>
         /// <param name="content_Type"></param>
         /// <param name="accept"></param>
+        /// <param name="maxTruckDistance"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<object>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequestRoot body, [Microsoft.AspNetCore.Mvc.FromHeader(Name = "Content-Type")] string content_Type, [Microsoft.AspNetCore.Mvc.FromHeader] string accept, System.Threading.CancellationToken cancellationToken)
+        public async Task<ActionResult> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [Microsoft.AspNetCore.Mvc.FromHeader(Name = "Content-Type")] string content_Type, [Microsoft.AspNetCore.Mvc.FromHeader] string accept, [FromQuery] int maxTruckDistance, System.Threading.CancellationToken cancellationToken)
         {
+            var result = await _implementation.FTLSupportAsync(body, content_Type, accept, maxTruckDistance, cancellationToken);
 
-            return _implementation.FTLSupportAsync(body, content_Type, accept, cancellationToken);
+            if (result != null && result.Count > 0)
+            {
+                return new OkObjectResult(result);
+            } else
+            {
+                return new BadRequestResult();
+            }
         }
 
         /// <summary>
@@ -85,13 +61,23 @@ namespace FTLApi
         /// <param name="body"></param>
         /// <param name="content_Type"></param>
         /// <param name="accept"></param>
+        /// <param name="maxTruckDistance"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<object>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequestRoot body, [Microsoft.AspNetCore.Mvc.FromHeader(Name = "Content-Type")] string content_Type, [Microsoft.AspNetCore.Mvc.FromHeader] string accept, System.Threading.CancellationToken cancellationToken)
+        public async Task<ActionResult> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [Microsoft.AspNetCore.Mvc.FromHeader(Name = "Content-Type")] string content_Type, [Microsoft.AspNetCore.Mvc.FromHeader] string accept, [FromQuery] int maxTruckDistance, System.Threading.CancellationToken cancellationToken)
         {
 
-            return _implementation.FTLSupportXAsync(body, content_Type, accept, cancellationToken);
+            var result = await _implementation.FTLSupportXAsync(body, content_Type, accept, maxTruckDistance, cancellationToken);
+
+            if (result != null && result.Count > 0)
+            {
+                return new OkObjectResult(result);
+            }
+            else
+            {
+                return new BadRequestResult();
+            }
         }
 
         /// <summary>
@@ -101,9 +87,8 @@ namespace FTLApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
-        public System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<object>> IsAlive([Microsoft.AspNetCore.Mvc.FromHeader] string accept, System.Threading.CancellationToken cancellationToken)
+        public System.Threading.Tasks.Task IsAlive([Microsoft.AspNetCore.Mvc.FromHeader] string accept, System.Threading.CancellationToken cancellationToken)
         {
-
             return _implementation.IsAliveAsync(accept, cancellationToken);
         }
 

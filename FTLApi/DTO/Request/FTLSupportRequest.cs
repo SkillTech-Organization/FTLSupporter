@@ -3,12 +3,12 @@
 namespace FTLApi.DTO.Request
 {
     // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
-    public class FTLSupportRequestRoot
+    public class FTLSupportRequest
     {
         [JsonPropertyName("taskList")]
-        public List<TaskList> TaskList;
+        public List<Task> TaskList;
 
         [JsonPropertyName("truckList")]
-        public List<TruckList> TruckList;
+        public List<Truck> TruckList;
     }
 }
