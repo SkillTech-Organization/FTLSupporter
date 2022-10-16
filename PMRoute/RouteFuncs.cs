@@ -1,5 +1,4 @@
 ﻿using GMap.NET;
-using GMap.NET.WindowsForms;
 using Newtonsoft.Json;
 using PMapCore.BLL;
 using PMapCore.BO;
