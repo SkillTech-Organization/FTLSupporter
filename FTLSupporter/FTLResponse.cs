@@ -9,6 +9,8 @@ namespace FTLSupporter
     public  class FTLResponse
     {
         public string RequestID { get; set; }
+        List<FTLTask> TaskList { get; set; }
+        List<FTLTruck> TruckList { get; set; }
         public int MaxTruckDistance { get; set; } = 0;
         public List<FTLResult> Result { get; set; } = new List<FTLResult>();
 
