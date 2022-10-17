@@ -8,7 +8,6 @@ using PMapCore.BO;
 using PMapCore.BLL;
 using PMapCore.BLL.Base;
 using PMapCore.Common;
-using PMapCore.WebTrace;
 using System.Drawing;
 using System.Web.Script.Serialization;
 using System.Runtime.ExceptionServices;
@@ -519,108 +518,7 @@ namespace PMapCore.BLL
             }
             return retVal;
         }
-        public List<PMTour> GetToursForAzure(int p_PLN_ID, List<boPlanTour> p_tourList)
-        {
-            var bllUser = new bllUser(DBA);
-            var bllRoute = new bllRoute(DBA);
-
-            List<PMTour> xTourList = new List<PMTour>();
-            foreach (var tr in p_tourList.Where(w => w.TOURPOINTCNT > 0).ToList())
-            {
-                PMTour xTr = new PMTour()
-                {
-                    ID = tr.ID.ToString(),
-                    Carrier = tr.CRR_NAME,
-                    //                 TruckRegNo = tr.TRUCK,      //Bővíteni a boPlanTour-t
-                    TruckRegNo = tr.TRK_CODE,
-                    RZN_ID_LIST = tr.RZN_ID_LIST,
-                    TruckWeight = tr.TRK_WEIGHT,
-                    TruckHeight = tr.TRK_XHEIGHT,
-                    TruckWidth = tr.TRK_XWIDTH,
-                    Start = tr.START.ToUniversalTime(),
-                    End = tr.END.ToUniversalTime(),
-                    TourLength = tr.DST,
-                    Qty = tr.QTY,
-                    Vol = tr.VOL,
-                    Toll = tr.TOLL,
-                    TourColor = ColorTranslator.ToHtml(Color.FromArgb(tr.PCOLOR.ToArgb())),
-                    TruckColor = ColorTranslator.ToHtml(Color.FromArgb(tr.TRK_COLOR.ToArgb())),
-                    PLN_ID = p_PLN_ID
-                };
-
-
-                /*                                     var emailAddr = trx.TRK_COMMENT.Replace(" ", "");
-                                        emailAddr = emailAddr.Replace("\"", "");
-                                        emailAddr = emailAddr.Replace("'", "");
-                                        emailAddr = emailAddr.Replace(",", ";");
-
-                                        var emailAddress = emailAddr.Split(';').ToList();
-  */
-                //A WTRace/DPortal-nak a járművezető adat TRK_COMMENT-ben van JV:.... kezdettel
-                if (!string.IsNullOrWhiteSpace(tr.TRK_COMMENT))
-                {
-                    var trkcomment = tr.TRK_COMMENT.Replace("\"", "");
-                    trkcomment = trkcomment.Replace("'", "");
-                    trkcomment = trkcomment.Replace(",", ";");
-
-                    var commentParts = trkcomment.Split(';').ToList();
-
-                    foreach (string cm in commentParts)
-                    {
-                        if (cm.ToUpper().StartsWith("JV:"))
-                        {
-                            if (!string.IsNullOrWhiteSpace(xTr.DriverName))
-                            {
-                                xTr.DriverName += ",";
-                            }
-                            xTr.DriverName += Util.RightString(cm, cm.Length - 3);
-                        }
-                    }
-                }
-
-
-                for (int i = 0; i < tr.TourPoints.Count; i++)
-                {
-
-                    List<PMMapPoint> mpList = new List<PMMapPoint>();
-                    if (i < tr.TourPoints.Count - 1)
-                    {
-                        var route = bllRoute.GetMapRouteFromDB(tr.TourPoints[i].NOD_ID, tr.TourPoints[i + 1].NOD_ID, tr.RZN_ID_LIST, tr.TRK_WEIGHT, tr.TRK_XHEIGHT, tr.TRK_XWIDTH);
-
-                        if (route != null)
-                            mpList = route.Points.Select(s => new PMMapPoint() { Lat = s.Lat, Lng = s.Lng }).ToList();
-                    }
-                    var xtp = new PMTourPoint()
-                    {
-                        TourID = tr.ID,
-                        Type = tr.TourPoints[i].PTP_TYPE == Global.PTP_TYPE_DEP ? PMTourPoint.enTourPointTypes.DEP.ToString() : PMTourPoint.enTourPointTypes.WHS.ToString(),
-                        Order = tr.TourPoints[i].PTP_ORDER,
-                        Distance = tr.TourPoints[i].PTP_DISTANCE,
-                        ArrTime = tr.TourPoints[i].PTP_ARRTIME.ToUniversalTime(),
-                        ServTime = tr.TourPoints[i].PTP_SERVTIME.ToUniversalTime(),
-                        DepTime = tr.TourPoints[i].PTP_DEPTIME.ToUniversalTime(),
-                        Code = tr.TourPoints[i].CLT_CODE,
-                        Name = tr.TourPoints[i].CLT_NAME,
-                        //Comment = (tr.TourPoints[i].ORD_COMMENT.Trim() + " " + tr.TourPoints[i].DEP_COMMENT.Trim()).Trim(),
-                        Comment =(tr.TourPoints[i].DEP_COMMENT != null ? tr.TourPoints[i].DEP_COMMENT.Trim() : ""),
-                        Addr = tr.TourPoints[i].ADDR,
-                        Position = new JavaScriptSerializer().Serialize(new PMMapPoint() { Lat = tr.TourPoints[i].NOD_YPOS / Global.LatLngDivider, Lng = tr.TourPoints[i].NOD_XPOS / Global.LatLngDivider }),
-                        OrdNum = tr.TourPoints[i].ORD_NUM,
-                        MapPoints = mpList,
-                        Open = tr.TourPoints[i].OPEN.ToUniversalTime(),
-                        Close = tr.TourPoints[i].CLOSE.ToUniversalTime()
-
-                    };
-                    xTr.TourPoints.Add(xtp);
-                }
-
-                xTourList.Add(xTr);
-
-            }
-
-            return xTourList;
-        }
-
+  
         /// <summary>
         /// TOD_SENTEMAIL beállítása
         /// </summary>

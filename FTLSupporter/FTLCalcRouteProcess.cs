@@ -81,14 +81,14 @@ namespace FTLSupporter
                                                     w.Weight == calcNode.Key.GVWR &&
                                                     w.Height == calcNode.Key.Height &&
                                                     w.Width == calcNode.Key.Width).FirstOrDefault();
-                    dtStart = DateTime.Now;
+                    dtStart = DateTime.UtcNow;
 
                     List<int> lstToNodes = calcNode.Value;
                     List<boRoute> results = provider.GetAllRoutes(routePar, calcNode.Key.fromNOD_ID, lstToNodes,
                                             NeighborsArrFull[routePar.Hash],
                                             PMapIniParams.Instance.CutMapForRouting && NeighborsArrCut != null ? NeighborsArrCut[routePar.Hash] : null,
                                             PMapIniParams.Instance.FastestPath ? ECalcMode.FastestPath : ECalcMode.ShortestPath);
-                    Random random = new Random((int)DateTime.Now.Millisecond);
+                    Random random = new Random((int)DateTime.UtcNow.Millisecond);
 
                     //A kiszámolt eredmények 'bedolgozása'
                     foreach (boRoute route in results)
