@@ -3,11 +3,8 @@ using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
 
 namespace FTLSupporter
 {
@@ -46,53 +43,42 @@ namespace FTLSupporter
         [ItemIDAttr]
         [DisplayNameAttributeX(Name = "Jármű azonosító", Order = 1)]
         [Required(ErrorMessage = "Kötelező mező:TruckID")]                          /* jellemzően a rendszám */
-        [JsonPropertyName("truckID")]
         public string TruckID { get; set; }
 
         [DisplayNameAttributeX(Name = "Összsúly", Order = 2)]           /* gross vehicle weight rating */
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:GVWR")]
-        [JsonPropertyName("gvwr")]
         public int GVWR { get; set; }
 
         [DisplayNameAttributeX(Name = "Kapacitás (súly)", Order = 3)]
-        [JsonPropertyName("capacity")]
         public int Capacity { get; set; }
 
         [DisplayNameAttributeX(Name = "Járműtípus", Order = 4)]
         [Required(ErrorMessage = "Kötelező mező:TruckType")]
-        [JsonPropertyName("truckType")]
         public string TruckType { get; set; }
 
         [DisplayNameAttributeX(Name = "Kiszolgálható szállítási feladattípusok", Order = 5)]
         [Required(ErrorMessage = "Kötelező mező:CargoTypes")]
-        [JsonPropertyName("cargoTypes")]
         public string CargoTypes { get; set; }
 
         [DisplayNameAttributeX(Name = "Fix költség", Order = 6)]
-        [JsonPropertyName("fixCost")]
         public double FixCost { get; set; }
 
         [DisplayNameAttributeX(Name = "Túra KM költség", Order = 7)]
-        [JsonPropertyName("kmCost")]
         public double KMCost { get; set; }
 
         [DisplayNameAttributeX(Name = "Átállás KM", Order = 8)]
-        [JsonPropertyName("relocateCost")]
         public double RelocateCost { get; set; }
 
 
         [DisplayNameAttributeX(Name = "Teljesítés max. KM", Order = 9)]
-        [JsonPropertyName("maxKM")]
         public double MaxKM { get; set; }
 
         [DisplayNameAttributeX(Name = "Teljesítés max. idő", Order = 10)]
-        [JsonPropertyName("maxDuration")]
         public double MaxDuration { get; set; }
 
 
         [DisplayNameAttributeX(Name = "motor EURO besorolás", Order = 11)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:EngineEuro")]
-        [JsonPropertyName("engineEuro")]
         public int EngineEuro { get; set; }                 // 1,2,3,4,.... ==> EURO I, EURO II, EURO III, EURO IV...
 
 
@@ -100,88 +86,69 @@ namespace FTLSupporter
         [DisplayNameAttributeX(Name = "Útdíj járműkategória", Order = 12)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:ETollCat")]
         [ErrorIfConstAttrX(EvalMode.IsBigger, Global.ETOLLCAT_BIGGER12T, "EtollCat:Érték maximum túllépés!")]
-        [JsonPropertyName("eTollCat")]
         public int ETollCat  { get; set; }                 // 1,2,3,4,.... ==> J1, J2, J3, J4        
         
         //
         [DisplayNameAttributeX(Name = "Behajtási övezetek kódok", Order = 13)]
-        [JsonPropertyName("rZones")]
         public string RZones { get; set; }
 
         [DisplayNameAttributeX(Name = "Szélesség", Order = 14)]
-        [JsonPropertyName("width")]
         public int Width { get; set; }
 
         [DisplayNameAttributeX(Name = "Magasság", Order = 15)]
-        [JsonPropertyName("height")]
         public int Height { get; set; }
 
         [DisplayNameAttributeX(Name = "Egyéb járműtulajdonságok", Order = 16)]
-        [JsonPropertyName("truckProps")]
         public string TruckProps { get; set; }
 
         /******************* AETR adatok ******************************/
         [DisplayNameAttributeX(Name = "Maradék vezetési idő", Order = 17)]
         [Required(ErrorMessage = "Kötelező mező:RemainingDriveTime")]
-        [JsonPropertyName("remainingDriveTime")]
         public int RemainingDriveTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Maradék pihenőidő", Order = 18)]
-        [JsonPropertyName("remainingRestTime")]
         public int RemainingRestTime { get; set; }
 
         [DisplayNameAttributeX(Name = "A pihenőig hátralévő munkaidő", Order = 19)]
-        [JsonPropertyName("remainingTimeToStartDailyRest")]
         public int RemainingTimeToStartDailyRest { get; set; }
                    
         [DisplayNameAttributeX(Name = "Maradék napi vezetési idő", Order = 20)]
-        [JsonPropertyName("remainingDailyDriveTime")]
         public int RemainingDailyDriveTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Maradék napi pihenőidő", Order = 11)]
-        [JsonPropertyName("remainingDailyRestTime")]
         public int RemainingDailyRestTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Sofőr hátralevő heti vezetési ideje", Order = 22)]
-        [JsonPropertyName("remainingWeeklyDriveTime")]
         public int RemainingWeeklyDriveTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Sofőr hátralevő heti pihenőideje", Order = 23)]
-        [JsonPropertyName("remainingWeeklyRestTime")]
         public int RemainingWeeklyRestTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti vezetési ideje", Order = 24)]
-        [JsonPropertyName("remainingTwoWeeklyDriveTime")]
         public int RemainingTwoWeeklyDriveTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Sofőr hátralevő kétheti pihenőideje", Order = 25)]
-        [JsonPropertyName("remainingTwoWeeklyRestTime")]
         public int RemainingTwoWeeklyRestTime { get; set; }
 
         [DisplayNameAttributeX(Name = "Kompenzációként adandó pihenőidő ", Order = 26)]
-        [JsonPropertyName("remainingRestTimeToCompensate")]
         public int RemainingRestTimeToCompensate { get; set; }
 
         /******************* Járműfeladat ******************************/
 
         [DisplayNameAttributeX(Name = "Jármű szállítási feladat típus", Order = 27)]
         [Required(ErrorMessage = "Kötelező mező:TruckTaskType")]
-        [JsonPropertyName("truckTaskType")]
         public eTruckTaskType TruckTaskType { get; set; }
 
         [DisplayNameAttributeX(Name = "Futó szállítási feladat azonosító", Order = 28)]
-        [JsonPropertyName("runningTaskID")]
         public string RunningTaskID { get; set; }
 
 
         [DisplayNameAttributeX(Name = "Irányos túra?", Order = 29)]
-        [JsonPropertyName("currIsOneWay")]
         public bool CurrIsOneWay { get; set; }
 
         private DateTime m_CurrTime;
         [DisplayNameAttributeX(Name = "Aktuális időpont", Order = 30)]
         [Required(ErrorMessage = "Kötelező mező:TimeCurr")]
-        [JsonPropertyName("currTime")]
         public DateTime CurrTime
         {
             get
@@ -210,7 +177,6 @@ namespace FTLSupporter
         private double m_CurrLat;
         [DisplayNameAttributeX(Name = "Aktuális hosszúsági koordináta", Order = 31)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLat")]
-        [JsonPropertyName("currLat")]
         public double CurrLat
         {
             get
@@ -240,7 +206,6 @@ namespace FTLSupporter
         private double m_CurrLng;
         [DisplayNameAttributeX(Name = "Aktuális szélességi koordináta", Order = 32)]
         [ErrorIfConstAttrX(EvalMode.IsEqual, 0, "Kötelező mező:CurrLng")]
-        [JsonPropertyName("currLng")]
         public double CurrLng
         {
             get
@@ -270,12 +235,10 @@ namespace FTLSupporter
         //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
         [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 33)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
-        [JsonPropertyName("currTPoints")]
-        public List<FTLPoint> CurrTPoints { get; set; }
+        public List<FTLPoint> CurrTPoints { get; set; } = new List<FTLPoint>();
 
 
         [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 34)]
-        [JsonPropertyName("tPointCompleted")]
         public int TPointCompleted { get; set; }
 
 

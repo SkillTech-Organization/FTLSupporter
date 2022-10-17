@@ -7,9 +7,9 @@ namespace FTLApi.DTO.Request
     public class FTLSupportRequest
     {
         [JsonPropertyName("taskList")]
-        public List<FTLTask> TaskList;
+        public List<FTLTask> TaskList { get; set; }
 
         [JsonPropertyName("truckList")]
-        public List<FTLTruck> TruckList;
+        public List<FTLTruck> TruckList { get; set; }
     }
 }

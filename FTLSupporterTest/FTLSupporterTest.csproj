@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj">
-      <Project>{b4fe3066-f14f-4625-85bb-57ea97751a6e}</Project>
+      <Project>{B4FE3066-F14F-4625-85BB-57EA97751A6E}</Project>
       <Name>FTLSupporter</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">

@@ -36,22 +36,20 @@ namespace FTLApi
         /// Calculate by FTLSupporter engine
         /// </summary>
         /// <param name="body"></param>
-        /// <param name="content_Type"></param>
-        /// <param name="accept"></param>
         /// <param name="maxTruckDistance"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-        public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance = 10000, System.Threading.CancellationToken cancellationToken)
+        public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance = 10000)
         {
-            var result = await _implementation.FTLSupportAsync(body,  maxTruckDistance, cancellationToken);
+            var result = await _implementation.FTLSupportAsync(body,  maxTruckDistance, CancellationToken.None);
 
-            if (result != null)
+            if (result.HasError)
+            {
+                return new BadRequestObjectResult(result);
+            }
+            else
             {
                 return new OkObjectResult(result);
-            } else
-            {
-                return new BadRequestResult();
             }
         }
 
@@ -59,37 +57,31 @@ namespace FTLApi
         /// Calculate by FTLSupporterX engine
         /// </summary>
         /// <param name="body"></param>
-        /// <param name="content_Type"></param>
-        /// <param name="accept"></param>
         /// <param name="maxTruckDistance"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-        public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance = 10000, System.Threading.CancellationToken cancellationToken)
+        public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance = 10000)
         {
+            var result = await _implementation.FTLSupportXAsync(body, maxTruckDistance, CancellationToken.None);
 
-            var result = await _implementation.FTLSupportXAsync(body, maxTruckDistance, cancellationToken);
-
-            if (result != null)
+            if (result.HasError)
             {
-                return new OkObjectResult(result);
+                return new BadRequestObjectResult(result);
             }
             else
             {
-                return new BadRequestResult();
+                return new OkObjectResult(result);
             }
         }
 
         /// <summary>
         /// get the 'isalive' status of the FTLSupporter service
         /// </summary>
-        /// <param name="accept"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
-        public System.Threading.Tasks.Task IsAlive(System.Threading.CancellationToken cancellationToken)
+        public System.Threading.Tasks.Task IsAlive()
         {
-            return _implementation.IsAliveAsync(cancellationToken);
+            return _implementation.IsAliveAsync(CancellationToken.None);
         }
 
     }
