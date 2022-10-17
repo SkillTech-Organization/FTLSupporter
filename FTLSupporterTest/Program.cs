@@ -34,7 +34,7 @@ namespace FTLSupporterTest
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
 
 
-
+           // hibaelőállításhoz
            // lstTrk.First().GVWR = 0;
            // lstTrk.Last().CargoTypes = null;
 

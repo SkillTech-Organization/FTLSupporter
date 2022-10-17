@@ -1,6 +1,5 @@
 ﻿using FTLApi.DTO.Request;
 using FTLApi.DTO.Response;
-using FTLApi.Helpers;
 using FTLSupporter;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
@@ -14,25 +13,23 @@ namespace FTLApi.Handlers
 
         }
 
-        public Task<List<FTLResult>> FTLSupportAsync(FTLSupportRequest body, string content_Type, string accept, int maxTruckDistance, CancellationToken cancellationToken = default)
+        public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, int maxTruckDistance, CancellationToken cancellationToken = default)
         {
-            var tastkList = body.TaskList.ToFTLTasks();
-            var truckList = body.TruckList.ToFTLTrucks();
+            var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance);
 
-            var result = FTLInterface.FTLSupport(tastkList, truckList, maxTruckDistance);
-            return Task.FromResult(result);
+            var result = FTLInterface.FTLSupport(body.TaskList, body.TruckList, maxTruckDistance);
+            return Task.FromResult(initResult);
         }
 
-        public Task<List<FTLResult>> FTLSupportXAsync(FTLSupportRequest body, string content_Type, string accept, int maxTruckDistance, CancellationToken cancellationToken = default)
+        public Task<FTLResponse> FTLSupportXAsync(FTLSupportRequest body, int maxTruckDistance, CancellationToken cancellationToken = default)
         {
-            var tastkList = body.TaskList.ToFTLTasks();
-            var truckList = body.TruckList.ToFTLTrucks();
+            var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance);
 
-            var result = FTLInterface.FTLSupportX(tastkList, truckList, maxTruckDistance);
-            return Task.FromResult(result);
+            var result = FTLInterface.FTLSupportX(body.TaskList, body.TruckList, maxTruckDistance);
+            return Task.FromResult(initResult);
         }
 
-        public Task IsAliveAsync(string accept, CancellationToken cancellationToken = default)
+        public Task IsAliveAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new IsAliveOk
             {

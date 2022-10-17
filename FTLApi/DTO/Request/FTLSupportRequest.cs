@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using FTLSupporter;
+using System.Text.Json.Serialization;
 
 namespace FTLApi.DTO.Request
 {
@@ -6,9 +7,9 @@ namespace FTLApi.DTO.Request
     public class FTLSupportRequest
     {
         [JsonPropertyName("taskList")]
-        public List<Task> TaskList;
+        public List<FTLTask> TaskList;
 
         [JsonPropertyName("truckList")]
-        public List<Truck> TruckList;
+        public List<FTLTruck> TruckList;
     }
 }
