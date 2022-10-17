@@ -42,7 +42,7 @@ namespace FTLApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
-        public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance, System.Threading.CancellationToken cancellationToken)
+        public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance = 10000, System.Threading.CancellationToken cancellationToken)
         {
             var result = await _implementation.FTLSupportAsync(body,  maxTruckDistance, cancellationToken);
 
@@ -65,7 +65,7 @@ namespace FTLApi
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
-        public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance, System.Threading.CancellationToken cancellationToken)
+        public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body, [FromQuery] int maxTruckDistance = 10000, System.Threading.CancellationToken cancellationToken)
         {
 
             var result = await _implementation.FTLSupportXAsync(body, maxTruckDistance, cancellationToken);
