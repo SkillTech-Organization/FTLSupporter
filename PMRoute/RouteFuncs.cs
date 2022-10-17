@@ -1,5 +1,4 @@
 ﻿using GMap.NET;
-using Newtonsoft.Json;
 using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
@@ -7,50 +6,13 @@ using PMapCore.MapProvider;
 using PMapCore.Route;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PMRoute
 {
     public static class RouteFuncs
     {
-        public static bool CreateMapfile(string p_iniPath, string p_dbConf, string p_dir)
-        {
-            DateTime dt = DateTime.Now;
-            try
-            {
-                PMapIniParams.Instance.ReadParams(p_iniPath, p_dbConf);
-                PMapCommonVars.Instance.ConnectToDB();
-                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
-                foreach( var rr in RouteData.Instance.Edges)
-                {
-                    rr.Value.EDG_NAME = "";
-                    rr.Value.Tolls = null;
-                }
-                JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
-                var jsonString = JsonConvert.SerializeObject(RouteData.Instance.Edges, jsonsettings);
-                Util.String2File(jsonString, Path.Combine(p_dir , Global.EXTFILE_EDG));
-                
-    
-                jsonString = JsonConvert.SerializeObject(RouteData.Instance.NodePositions, jsonsettings);
-                Util.String2File(jsonString, Path.Combine(p_dir , Global.EXTFILE_NOD));
-
-                return true;
-            }
-            catch (Exception e)
-            {
-            //    Util.ExceptionLog(e);
-                ExceptionDispatchInfo.Capture(e).Throw();
-                throw;
-             }
-
-            //Util.Log2File(">>END:InitPMapRouteData() -->" + sRet);
-
-        }
 
 
         public static bool GetDistance(string p_iniPath, string p_dbConf, string p_dir,

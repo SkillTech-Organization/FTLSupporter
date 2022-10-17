@@ -1,5 +1,6 @@
 ﻿using FTLSupporter;
 using GMap.NET;
+using Newtonsoft.Json;
 using PMapCore.BLL;
 using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
@@ -25,15 +26,21 @@ namespace FTLSupporterTest
 
         static void ParTest()
         {
-            FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
+            FileInfo fi = new FileInfo(@"c:\temp\ct\Tasks_dump.bin");
             var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
-            FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
+
+
+
+            FileInfo fi2 = new FileInfo(@"c:\temp\ct\Trucks_dump.bin");
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
-            lstTrk.First().GVWR = 0;
-            lstTrk.Last().CargoTypes = null;
+
+
+
+           // lstTrk.First().GVWR = 0;
+           // lstTrk.Last().CargoTypes = null;
 
             var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
-            var str = JSONHelper.Serialize<FTLResponse>(res);
+            var str = JsonConvert.SerializeObject(res);
         }
 
         static void SWHTest(bool p_bestTruck = false)

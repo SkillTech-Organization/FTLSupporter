@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Json;
 
 namespace PMapCore.Common
 {
-    public class JSONHelper
+    public class JSONHelperX
     {
         public static string Serialize<T>(T p_obj)
         {

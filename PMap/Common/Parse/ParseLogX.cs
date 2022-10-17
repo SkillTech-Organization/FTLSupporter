@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace PMapCore.Common.Parse
 {
@@ -79,7 +80,7 @@ namespace PMapCore.Common.Parse
                 httpWebRequest.Method = "POST";
                 httpWebRequest.Headers = parseHeaders;
 
-                String postString = JSONHelper.Serialize<object>(p_obj);
+                String postString = JsonConvert.SerializeObject(p_obj);
                 byte[] postDataArray = Encoding.Default.GetBytes(postString);
 
                 httpWebRequest.ContentLength = postDataArray.Length;

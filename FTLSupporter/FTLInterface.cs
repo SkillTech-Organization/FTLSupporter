@@ -1,4 +1,5 @@
 ﻿using GMap.NET;
+using Newtonsoft.Json;
 using PMapCore.BLL;
 using PMapCore.BO;
 using PMapCore.Common;
@@ -21,6 +22,11 @@ namespace FTLSupporter
     {
         public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
+            convertDateTimeToUTC(p_TaskList, p_TruckList);
+
+          //  var tskk = JsonConvert.SerializeObject(p_TaskList);
+          //  var trkk = JsonConvert.SerializeObject(p_TruckList);
+
             var ret = new FTLResponse();
             //Paraméterek validálása
             ret.Result.AddRange(ValidateObjList<FTLTask>(p_TaskList));
@@ -40,6 +46,29 @@ namespace FTLSupporter
                 ret.RequestID = DateTime.UtcNow.Ticks.ToString();
             }
             return ret;
+        }
+
+        private static void convertDateTimeToUTC(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList)
+        {
+            p_TaskList.ForEach(i =>
+            {
+                i.TPoints.ForEach(tp =>
+                {
+                    tp.Open = DateTime.SpecifyKind(tp.Open, DateTimeKind.Utc);
+                    tp.Close = DateTime.SpecifyKind(tp.Close, DateTimeKind.Utc);
+                    tp.RealArrival = DateTime.SpecifyKind(tp.RealArrival, DateTimeKind.Utc);
+                });
+            });
+
+            p_TruckList.ForEach(i =>
+            {
+                i.CurrTPoints.ForEach(tp =>
+                {
+                    tp.Open = DateTime.SpecifyKind(tp.Open, DateTimeKind.Utc);
+                    tp.Close = DateTime.SpecifyKind(tp.Close, DateTimeKind.Utc);
+                    tp.RealArrival = DateTime.SpecifyKind(tp.RealArrival, DateTimeKind.Utc);
+                });
+            });
         }
 
 
