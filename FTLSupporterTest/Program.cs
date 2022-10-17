@@ -5,7 +5,6 @@ using PMapCore.BLL;
 using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
 using PMapCore.Common;
-using PMapCore.Licence;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
