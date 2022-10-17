@@ -51,8 +51,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLSupporter", "FTLSupporte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLSupporterTest", "FTLSupporterTest\FTLSupporterTest.csproj", "{FB829B58-C681-440D-8DB3-2A980A84C31C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMRoute", "PMRoute\PMRoute.csproj", "{26639170-A1F0-40F1-9750-C857C55F3434}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapeiDocs", "MapeiDocs", "{5B599073-8416-4A3C-8D92-B15B9E57E410}"
 	ProjectSection(SolutionItems) = preProject
 		doc\Mapei\dbmod.sql = doc\Mapei\dbmod.sql

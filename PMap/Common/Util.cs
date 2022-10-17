@@ -18,7 +18,6 @@ using System.IO.Compression;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using PMapCore.Common.Parse;
 using System.Web.Script.Serialization;
 using PMapCore.Common.Azure;
 using System.Xml;

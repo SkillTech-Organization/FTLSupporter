@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PMapCore</RootNamespace>
     <AssemblyName>PMapCore</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -134,9 +134,8 @@
       <HintPath>..\packages\WindowsAzure.Storage.8.7.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -225,13 +224,7 @@
     <Compile Include="LongProcess\CalcRoutesForTour.cs" />
     <Compile Include="LongProcess\DeleteExpiredRoutesProcess.cs" />
     <Compile Include="LongProcess\WriteRoutesProcess.cs" />
-    <Compile Include="WebTrace\BllWebTraceTourPoint.cs" />
-    <Compile Include="WebTrace\BllWebTraceTour.cs" />
-    <Compile Include="WebTrace\PMMapPoint.cs" />
-    <Compile Include="WebTrace\PMToken.cs" />
-    <Compile Include="WebTrace\PMTourPoint.cs" />
     <Compile Include="Common\Attrib\AzureTableFieldAttr.cs" />
-    <Compile Include="WebTrace\PMTour.cs" />
     <Compile Include="BO\DataXChange\boXChkRes.cs" />
     <Compile Include="BO\DataXChange\boXChkRoute.cs" />
     <Compile Include="Common\Attrib\WriteFieldAttribute.cs" />
@@ -303,17 +296,9 @@
     <Compile Include="Common\BinarySerializer.cs" />
     <Compile Include="Common\CSVParser.cs" />
     <Compile Include="Common\Exceptions.cs" />
-    <Compile Include="Common\JSONHelper.cs" />
     <Compile Include="Common\LockHolder.cs" />
     <Compile Include="Common\ObjectValidator.cs" />
-    <Compile Include="Common\Parse\ParseLogX.cs" />
-    <Compile Include="Licence\ChkLic.cs" />
-    <Compile Include="Licence\FingerPrint.cs" />
-    <Compile Include="Licence\PMapLicenceException.cs" />
-    <Compile Include="Licence\PMapID.cs" />
-    <Compile Include="Licence\PMapLicence.cs" />
     <Compile Include="Common\PMapLog.cs" />
-    <Compile Include="Common\Parse\PMapCalls.cs" />
     <Compile Include="BLL\DataXChange\dtXResult.cs" />
     <Compile Include="BLL\DataXChange\dtXDepot.cs" />
     <Compile Include="DB\Base\DBAccess.cs" />
@@ -329,8 +314,6 @@
     <Compile Include="BLL\bllTruck.cs" />
     <Compile Include="DB\DBLockHolder.cs" />
     <Compile Include="Common\GlobalLocker.cs" />
-    <Compile Include="Licence\AES.cs" />
-    <Compile Include="Licence\PMapLicWarn.cs" />
     <Compile Include="Strings\Base\Messages.cs" />
     <Compile Include="Strings\DXMessages.cs" />
     <Compile Include="LongProcess\GetTourDetailsProcess.cs" />
@@ -414,8 +397,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Common\Util.cs" />
-    <Compile Include="WebTrace\PMTracedTour.cs" />
-    <Compile Include="WebTrace\PMUser.cs" />
     <Compile Include="Common\XMLSerializator.cs" />
     <None Include="sn.snk" />
   </ItemGroup>

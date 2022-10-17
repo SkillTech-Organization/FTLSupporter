@@ -12,7 +12,6 @@ using PMapCore.Route;
 using PMapCore.BO;
 using PMapCore.Strings;
 using PMapCore.Common;
-using PMapCore.Licence;
 using System.Runtime.ExceptionServices;
 
 namespace PMapCore.Route
