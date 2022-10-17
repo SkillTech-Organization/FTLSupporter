@@ -67,6 +67,7 @@
     <Compile Include="FTLNodePtCache.cs" />
     <Compile Include="FTLPoint.cs" />
     <Compile Include="FTLResErrMsg.cs" />
+    <Compile Include="FTLQueueResponse .cs" />
     <Compile Include="FTLResponse.cs" />
     <Compile Include="FTLResult.cs" />
     <Compile Include="FTLPMapRoute.cs" />
