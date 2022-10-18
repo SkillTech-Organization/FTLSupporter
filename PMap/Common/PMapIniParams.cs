@@ -148,7 +148,7 @@ namespace PMapCore.Common
         {
   
             if (p_iniPath == "")
-                p_iniPath = Path.GetDirectoryName(Application.ExecutablePath);
+                p_iniPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
             IniPath = p_iniPath;
             DBConf = p_dbConf;
 
