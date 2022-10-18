@@ -5,12 +5,13 @@ using System.Text;
 using PMapCore.DB.Base;
 using PMapCore.Common;
 using System.ComponentModel;
-using System.Web.Script.Serialization;
+using System.Text.Json.Serialization;
 using System.Globalization;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using PMapCore.BLL.Base;
+using System.Text.Json;
 
 namespace PMapCore.BLL
 {
@@ -69,7 +70,7 @@ namespace PMapCore.BLL
             string json = "";
             try
             {
-                json = new JavaScriptSerializer().Serialize(p_obj);
+                json = JsonSerializer.Serialize(p_obj);
             }
             catch (Exception e)
             {
