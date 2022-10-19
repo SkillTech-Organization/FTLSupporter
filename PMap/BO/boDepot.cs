@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using PMapCore.BLL.Base;
 using GMap.NET;
-using System.Text.Json.Serialization;
 using PMapCore.Common.Attrib;
 using PMapCore.Common;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO
 {

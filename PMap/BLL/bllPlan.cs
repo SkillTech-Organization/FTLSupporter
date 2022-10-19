@@ -9,7 +9,6 @@ using PMapCore.BLL;
 using PMapCore.BLL.Base;
 using PMapCore.Common;
 using System.Drawing;
-using System.Text.Json.Serialization;
 using System.Runtime.ExceptionServices;
 
 namespace PMapCore.BLL
