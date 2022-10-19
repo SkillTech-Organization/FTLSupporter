@@ -98,7 +98,7 @@ namespace PMapCore.Route
         /// 
         /// </summary>
         /// <param name="p_DBA"></param>
-        public void Init(SQLServerAccess p_DBA, BaseProgressDialog p_form, bool p_Forced = false)
+        public void Init(SQLServerAccess p_DBA, bool p_Forced = false)
         {
 
 
@@ -114,14 +114,6 @@ namespace PMapCore.Route
 
                     Edges = new Dictionary<string, boEdge>();
                     NodePositions = null;
-
-
-                    if (p_form != null)
-                    {
-                        p_form.SetInfoText(PMapMessages.M_ROUTEDT_EDGES); //TODO:Message/be
-                        p_form.NextStep();
-                    }
-
 
                     //összes útdíj felolvasása
                     dicAllTolls = m_bllRoute.GetAllTolls();
@@ -230,12 +222,6 @@ namespace PMapCore.Route
 
                             }
 
-                        }
-
-                        if (p_form != null)
-                        {
-                            p_form.SetInfoText(PMapMessages.M_ROUTEDT_POS);
-                            p_form.NextStep();
                         }
                         DataTable dtNodes = m_bllRoute.GetAllNodesToDT();
                         NodePositions = (from row in dtNodes.AsEnumerable()

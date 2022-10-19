@@ -1382,9 +1382,9 @@ namespace PMapCore.BLL
                     if (res.Count > 0)
                     {
                         if (PMapIniParams.Instance.RouteThreadNum > 1)
-                            PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
+                            PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true);
                         else
-                            PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true, true);
+                            PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByPlan, true);
                     }
 
 

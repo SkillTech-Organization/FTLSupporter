@@ -6,7 +6,6 @@ using GMap.NET;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using System.Diagnostics;
 using System.Threading;
 using System.Globalization;
 using GMap.NET.MapProviders;
@@ -148,7 +147,7 @@ namespace PMapCore.Common
         {
   
             if (p_iniPath == "")
-                p_iniPath = Path.GetDirectoryName(Application.ExecutablePath);
+                p_iniPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
             IniPath = p_iniPath;
             DBConf = p_dbConf;
 
@@ -184,17 +183,17 @@ namespace PMapCore.Common
 
             //Debug átirányítása
             //
-            if (LogVerbose >= PMapIniParams.eLogVerbose.debug)
-            {
-                string DbgFileName = Path.Combine(LogDir, Global.DbgFileName);
+            //if (LogVerbose >= PMapIniParams.eLogVerbose.debug)
+            //{
+            //    string DbgFileName = Path.Combine(LogDir, Global.DbgFileName);
 
-                TextWriterTraceListener[] listeners = new TextWriterTraceListener[] 
-                {
-                new TextWriterTraceListener(DbgFileName),
-                new TextWriterTraceListener(Console.Out)
-                };
-                Debug.Listeners.AddRange(listeners);
-            }
+            //    TextWriterTraceListener[] listeners = new TextWriterTraceListener[] 
+            //    {
+            //    new TextWriterTraceListener(DbgFileName),
+            //    new TextWriterTraceListener(Console.Out)
+            //    };
+            //    Debug.Listeners.AddRange(listeners);
+            //}
 
             string sTestMode = ini.ReadString(Global.iniPMap, Global.iniTestMode);
             TestMode = (sTestMode == "1" || sTestMode.ToLower() == "true");

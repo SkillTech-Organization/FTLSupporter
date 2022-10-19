@@ -23,29 +23,15 @@ namespace PMapCore.LongProcess.Base
         protected Thread m_WorkingThread = null;
 
 
-        private BaseProgressDialog m_processForm = null;
         protected ThreadPriority m_ThreadPriority;
  
-        public BaseLongProcess(BaseProgressDialog p_Form, ThreadPriority p_ThreadPriority)
-        {
-            m_ThreadPriority = p_ThreadPriority;
-            if (p_Form != null)
-            {
-                ProcessForm = p_Form;
-                ProcessForm.LongProcessList.Add(this);
-            }
-            init();
-        }
-
- 
-
         public BaseLongProcess(ThreadPriority p_ThreadPriority)
         {
             m_ThreadPriority = p_ThreadPriority;
-            ProcessForm = null;
             init();
         }
 
+ 
         private void init()
         {
 
@@ -69,15 +55,7 @@ namespace PMapCore.LongProcess.Base
             m_WorkingThread = new Thread(new ThreadStart(this.DoWorkWrapper));
             m_WorkingThread.Priority = m_ThreadPriority;
 
-            if (ProcessForm != null)
-            {
-                m_WorkingThread.Name = "TH_" + ProcessForm.Text;
-            }
-            else
-            {
-                m_WorkingThread.Name = "TH_" + DateTime.Now.ToString();
-
-            }
+            m_WorkingThread.Name = "TH_" + DateTime.Now.ToString();
             m_WorkingThread.Start();
         }
 
@@ -100,19 +78,8 @@ namespace PMapCore.LongProcess.Base
         private void DoWorkWrapper()
         {
 
-            if (ProcessForm != null)
-            {
-                while (!ProcessForm.IsHandleCreated) ;
-                DoWork();
-                EventStopped.Set();
-                ProcessForm.StopThreadAndCloseForm(this);
-            }
-            else
-            {
-                DoWork();
-                EventStopped.Set();
-            }
-
+            DoWork();
+            EventStopped.Set();
         }
 
         protected virtual void DoWork()
@@ -142,12 +109,7 @@ namespace PMapCore.LongProcess.Base
                     {
                             break;
                     }
-                    Application.DoEvents();
-                }
-                if (m_WorkingThread != null)
-                {
-                    m_WorkingThread.Abort();
-                    m_WorkingThread = null;
+//                    Application.DoEvents();
                 }
                 System.GC.Collect();
 
@@ -155,13 +117,6 @@ namespace PMapCore.LongProcess.Base
                 Util.Log2File("After killed thread:" + proc.PrivateMemorySize64.ToString());
             }
         }
-
-        public BaseProgressDialog ProcessForm
-        {
-            get { return m_processForm; }
-            private set { m_processForm = value; }
-        }
-
 
 
         public bool IsAlive()

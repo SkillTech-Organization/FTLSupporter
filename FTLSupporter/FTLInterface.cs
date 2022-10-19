@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 
 namespace FTLSupporter
 {
@@ -73,7 +72,7 @@ namespace FTLSupporter
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
-            PMapIniParams.Instance.ReadParams(Application.StartupPath, "");
+            PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 
@@ -88,7 +87,7 @@ namespace FTLSupporter
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.Now;
-            PMapIniParams.Instance.ReadParams(Application.StartupPath, "");
+            PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
             Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
 

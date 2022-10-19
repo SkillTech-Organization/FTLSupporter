@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using System.Web.Script.Serialization;
+using System.Text.Json.Serialization;
 
 namespace PMapCore.BO
 {
@@ -28,11 +28,11 @@ namespace PMapCore.BO
         public string EDG_ETLCODE ; //{ get; set; }
         public float CalcSpeed ; //{ get; set; }                      //idealizált sebességprofil sebesség (ez alapján számítjuk a leggyorsabb utat)
         public float CalcDuration ; //{ get; set; }                   //menetidő (idealizált sebességprofil alapján) megj.:futásidő miatt float
-        [ScriptIgnore]
+        [JsonIgnore]
         public Dictionary<int, double> Tolls ; //{ get; set; }      //Útdíjak járműkategóriánként, teljes szelvénydíjakkal
-        [ScriptIgnore]
+        [JsonIgnore]
         public PointLatLng fromLatLng ; //{ get; set; }                //LatLng kiemelése, hogy gyors lehessen a térképkivágás útvonalszámításnál
-        [ScriptIgnore]
+        [JsonIgnore]
         public PointLatLng toLatLng ; //{ get; set; }
         public int ZIP_NUM_FROM ; //{ get; set; }
         public int ZIP_NUM_TO ; //{ get; set; }

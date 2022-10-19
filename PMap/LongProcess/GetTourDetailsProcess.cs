@@ -28,8 +28,8 @@ namespace PMapCore.LongProcess
         private bllRoute m_bllRoute;
         private bllSpeedProf m_bllSpeedProf;
 
-        public GetTourDetailsProcess(BaseProgressDialog p_Form, boPlanTour p_Tour)
-            : base(p_Form, ThreadPriority.Normal)
+        public GetTourDetailsProcess(boPlanTour p_Tour)
+            : base(ThreadPriority.Normal)
         {
             Completed = true;
             TourDetails = new List<CTourDetails>();
@@ -55,10 +55,6 @@ namespace PMapCore.LongProcess
                 if (m_Tour.TourPoints[i].NOD_ID != m_Tour.TourPoints[i + 1].NOD_ID)
                 {
 
-                    ProcessForm.NextStep();
-                    ProcessForm.SetInfoText(String.Format(PMapMessages.M_LOADTOURDETAILS, m_Tour.TourPoints[i].PTP_ARRTIME.ToString(Global.DATETIMEFORMAT)));
-
-
                     PointLatLng start = new PointLatLng(m_Tour.TourPoints[i].NOD_YPOS / Global.LatLngDivider, m_Tour.TourPoints[i].NOD_XPOS / Global.LatLngDivider);
                     PointLatLng end = new PointLatLng(m_Tour.TourPoints[i + 1].NOD_YPOS / Global.LatLngDivider, m_Tour.TourPoints[i + 1].NOD_XPOS / Global.LatLngDivider);
 
@@ -68,7 +64,7 @@ namespace PMapCore.LongProcess
                     if (result == null)
                     {
 
-                        RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+                        RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB);
                         var routePar = new CRoutePars() { RZN_ID_LIST = m_Tour.RZN_ID_LIST, Weight = m_Tour.TRK_WEIGHT, Height = m_Tour.TRK_XHEIGHT, Width = m_Tour.TRK_XWIDTH };
                         //Azért van itt a térkép előkészítés, hogy csak akkor fusson le, ha 
                         //kell útvonalat számítani

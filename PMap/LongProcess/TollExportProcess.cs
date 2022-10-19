@@ -68,8 +68,8 @@ namespace PMapCore.LongProcess
         private string m_fileName;
         private List<boDepot> m_depots = null;
 
-        public TollExportProcess(BaseProgressDialog p_Form, string p_fileName, List<boDepot> p_depots)
-            : base(p_Form, ThreadPriority.Normal)
+        public TollExportProcess(string p_fileName, List<boDepot> p_depots)
+            : base(ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
@@ -80,13 +80,12 @@ namespace PMapCore.LongProcess
 
         protected override void DoWork()
         {
-            ProcessForm.SetInfoText(PMapMessages.M_OPT_QEDGES);
 
             //kitöröljük az előző futás log-ját
 
             string dir = PMapIniParams.Instance.LogDir;
             if (dir == null || dir == "")
-                dir = Path.GetDirectoryName(Application.ExecutablePath);
+                dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
             string logf = Path.Combine(dir, LOG_FILENAME);
             if (File.Exists(logf))
                 File.Delete(logf);
@@ -116,8 +115,6 @@ namespace PMapCore.LongProcess
                                    Tolls = dicAllTolls[Util.getFieldValue<string>(r, "EDG_ETLCODE")]
                                }
                            }).ToDictionary(n => n.Key, n => n.Value);
-            ProcessForm.SetInfoText("");
-
 
             //Ez egy PMApTestApp funkció, ezért itt nem kell foglalkozni a súly-és méretkorlátozásokkal
             //
@@ -147,8 +144,6 @@ namespace PMapCore.LongProcess
             int nItemNo = 0;
             foreach (boDepot dep in m_depots)
             {
-                ProcessForm.NextStep();
-                ProcessForm.SetInfoText(dep.DEP_CODE + " --> " + cFileName + "_" + dep.DEP_CODE + "." + cExt);
                 List<CResult> lstResult = new List<CResult>();
 
                 nItemNo = 0;
@@ -248,7 +243,6 @@ namespace PMapCore.LongProcess
 
                 }
                 string sExpFile = Path.Combine(cPath, cFileName + "_" + dep.DEP_CODE + cExt);
-                ProcessForm.SetInfoText(sExpFile + " készítése");
                 writeExpFile(sExpFile, lstResult);
 
                 if (nItemNo != m_depots.Count - 1)
