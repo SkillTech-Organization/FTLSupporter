@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using PMapCore.BO.Base;
 using PMapCore.Common;
-using System.Text.Json.Serialization;
 using System.Drawing;
 using PMapCore.Common.Attrib;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO.DataXChange
 {

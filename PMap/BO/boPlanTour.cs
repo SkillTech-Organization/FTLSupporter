@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using System.Text.Json.Serialization;
 using PMapCore.Common.Attrib;
 using PMapCore.Common;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO
 {
