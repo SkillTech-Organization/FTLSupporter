@@ -20,6 +20,7 @@ namespace FTLSupporter
     public class FTLInterface
     {
         private static ITelemetryLogger Logger { get; set; }
+        private static string RequestID { get; set; }
 
         public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings)
         {
@@ -50,6 +51,7 @@ namespace FTLSupporter
             if (!ret.HasError)
             {
                 ret.RequestID = DateTime.UtcNow.Ticks.ToString();
+                RequestID = ret.RequestID;
             }
             return ret;
         }
@@ -84,11 +86,11 @@ namespace FTLSupporter
             DateTime dtStart = DateTime.Now;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
-            Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
+            Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetRunProperty(RequestID));
 
             var res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
-            Util.Log2File(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
+            Logger.Info(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetStatusProperty(RequestID));
 
             return res;
         }
@@ -99,11 +101,11 @@ namespace FTLSupporter
             DateTime dtStart = DateTime.Now;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
-            Util.Log2File(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()));
+            Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetRunProperty(RequestID));
 
             var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
-            Util.Log2File(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()));
+            Logger.Info(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetStatusProperty(RequestID));
 
             return res;
         }
@@ -115,8 +117,8 @@ namespace FTLSupporter
 
             try
             {
+                Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
-                Util.Log2File(String.Format("{0} {1}", "FTLSupport", "Init" ));
                 RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir);
                 bllRoute route = new bllRoute(null);
 
@@ -213,7 +215,9 @@ namespace FTLSupporter
                         else
                             trk.RZN_ID_LIST = RouteData.Instance.RZN_ID_LIST[Global.RST_NORESTRICT];
                     }
-//TT                    Util.Log2File(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű zónalistájának összeállítása", trk.TruckID, (DateTime.Now - dtXDate2).ToString()));
+
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű zónalistájának összeállítása", trk.TruckID, (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtXDate2 = DateTime.Now;
 
 
@@ -236,7 +240,8 @@ namespace FTLSupporter
                                 new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), FTLMessages.E_WRONGCOORD));
                     }
 
-//TT                    Util.Log2File(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.Now - dtXDate2).ToString()));
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtXDate2 = DateTime.Now;
 
                     if (trk.RET_NOD_ID == 0)
@@ -261,12 +266,14 @@ namespace FTLSupporter
                             }
                         }
                     }
-//TT                    Util.Log2File(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}, pontok száma:{4}", "FTLSupport", "Jármű túrapontok koordináta feloldás és ellenőrzés2", trk.TruckID, (DateTime.Now - dtXDate2).ToString(), trk.CurrTPoints.Count.ToString()));
-//TT                    Util.Log2File(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű teljes koordináta feloldás", trk.TruckID, (DateTime.Now - dtXDate ).ToString()));
+
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}, pontok száma:{4}", "FTLSupport", "Jármű túrapontok koordináta feloldás és ellenőrzés2", trk.TruckID, (DateTime.Now - dtXDate2).ToString(), trk.CurrTPoints.Count.ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű teljes koordináta feloldás", trk.TruckID, (DateTime.Now - dtXDate).ToString()), Logger.GetStatusProperty(RequestID));
 
                 }
 
-                Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Koordináta feloldás", (DateTime.Now - dtPhaseStart).ToString()));
+                Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Koordináta feloldás", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+
                 dtPhaseStart = DateTime.Now;
 
                 var delTrucks = new List<FTLTruck>();
@@ -293,8 +300,10 @@ namespace FTLSupporter
                     p_TruckList = p_TruckList.Where(w => !delTrucks.Any(a => (a.TruckID == w.TruckID))).ToList();
                 }
 
+                Logger.Info(
+                    String.Format("{0} {1} Időtartam:{2}", "FTLSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.Now - dtPhaseStart).ToString()),
+                    Logger.GetStatusProperty(RequestID));
 
-                Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.Now - dtPhaseStart).ToString()));
                 dtPhaseStart = DateTime.Now;
 
                 //TODO: idáig tart a validálás
@@ -319,7 +328,8 @@ namespace FTLSupporter
                         }
                     }
 
-                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Előkészítés", (DateTime.Now - dtPhaseStart).ToString()));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Előkészítés", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtPhaseStart = DateTime.Now;
 
                     //1. Előkészítés:
@@ -521,7 +531,8 @@ namespace FTLSupporter
 
                     lstPMapRoutes.AddRange(lstCalcPMapRoutes);
 
-                    Util.Log2File(String.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.Now - dtPhaseStart).ToString()));
+                    Logger.Info(String.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtPhaseStart = DateTime.Now;
 
                     //
@@ -683,7 +694,8 @@ namespace FTLSupporter
                         }
                     }
 
-                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmény összeállítása", (DateTime.Now - dtPhaseStart).ToString()));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmény összeállítása", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtPhaseStart = DateTime.Now;
 
                     /**************************************************************************************************************/
@@ -721,7 +733,8 @@ namespace FTLSupporter
                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_RETMISSROUTE); });
                     }
 
-                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.Now - dtPhaseStart).ToString()));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    
                     dtPhaseStart = DateTime.Now;
 
                     /***************/
@@ -1049,7 +1062,8 @@ namespace FTLSupporter
 
                     }
 
-                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Időpontok számítása", (DateTime.Now - dtPhaseStart).ToString()));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Időpontok számítása", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtPhaseStart = DateTime.Now;
 
                     /****************************/
@@ -1078,7 +1092,8 @@ namespace FTLSupporter
                         clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
                     }
 
-                    Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.Now - dtPhaseStart).ToString()));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+
                     dtPhaseStart = DateTime.Now;
 
                     FTLResult res = new FTLResult()
@@ -1252,7 +1267,8 @@ namespace FTLSupporter
                     }
                 }
             }
-            Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "Legjobb jármű számítás összesen", (DateTime.Now - dtPhaseStart).ToString()));
+
+            Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "Legjobb jármű számítás összesen", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
             return res;
         }
@@ -1345,7 +1361,7 @@ namespace FTLSupporter
                     }
                 }
             }
-            Util.Log2File(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "FTLSetBestTruck (legjobban teljesítő járművek megállapítása):", (DateTime.Now - dtBestTruckStart).ToString()));
+            Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "FTLSetBestTruck (legjobban teljesítő járművek megállapítása):", (DateTime.Now - dtBestTruckStart).ToString()), Logger.GetStatusProperty(RequestID));
 
 
         }
@@ -1505,7 +1521,7 @@ namespace FTLSupporter
             var nearest = filteredEdg.OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.fromLatLng.Lng, o.fromLatLng.Lat,
                 o.toLatLng.Lng, o.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).FirstOrDefault();
 
-            //        Util.Log2File(String.Format("GetNearestReachableNOD_IDForTruck cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()));
+            Logger.Info(String.Format("GetNearestReachableNOD_IDForTruck cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
 
             if (nearest != null)
@@ -1550,8 +1566,8 @@ namespace FTLSupporter
             }
             var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - p_pt.Lng) + Math.Abs(o.fromLatLng.Lat - p_pt.Lat)).FirstOrDefault();
 
-            //Util.Log2File(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.Now - dtXDate2).ToString()));
-            //        Util.Log2File(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()));
+            Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
             if (nearest != null)
             {
