@@ -1566,7 +1566,7 @@ namespace FTLSupporter
             }
             var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - p_pt.Lng) + Math.Abs(o.fromLatLng.Lat - p_pt.Lat)).FirstOrDefault();
 
-            Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+            // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
             Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
             if (nearest != null)
