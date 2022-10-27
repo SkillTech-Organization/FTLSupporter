@@ -17,10 +17,12 @@ namespace FTLInsightsLogger.Logger
         /// </summary>
         bool AutoCommitEnabled { get; }
 
-        string IdDefaultValue { get; set; }
-        string ExceptionPropertyLabel { get; set; }
-        string RunPropertyLabel { get; set; }
-        string StatusPropertyLabel { get; set; }
+        string IdPropertyDefaultValue { get; set; }
+        string ExceptionPropertyValue { get; set; }
+        string RunPropertyValue { get; set; }
+        string StatusPropertyValue { get; set; }
+        string IdPropertyLabel { get; set; }
+        string TypePropertyLabel { get; set; }
 
         Dictionary<string, string> GetExceptionProperty(string id);
 
@@ -49,10 +51,12 @@ namespace FTLInsightsLogger.Logger
 
         public bool AutoCommitEnabled { get; private set; } = true;
 
-        public string IdDefaultValue { get; set; } = "No Data";
-        public string ExceptionPropertyLabel { get; set; } = "EXCEPTION";
-        public string RunPropertyLabel { get; set; } = "RUN";
-        public string StatusPropertyLabel { get; set; } = "STATUS";
+        public string IdPropertyDefaultValue { get; set; } = "No Data";
+        public string ExceptionPropertyValue { get; set; } = "EXCEPTION";
+        public string RunPropertyValue { get; set; } = "RUN";
+        public string StatusPropertyValue { get; set; } = "STATUS";
+        public string IdPropertyLabel { get; set; } = "RequestID";
+        public string TypePropertyLabel { get; set; } = "Type";
 
         internal TelemetryLogger(string connectionString, bool autoCommit)
         {
@@ -128,7 +132,8 @@ namespace FTLInsightsLogger.Logger
         {
             var properties = new Dictionary<string, string>
             {
-                { ExceptionPropertyLabel, id ?? IdDefaultValue }
+                { TypePropertyLabel, ExceptionPropertyValue },
+                { IdPropertyLabel, id ?? IdPropertyDefaultValue },
             };
             return properties;
         }
@@ -137,7 +142,8 @@ namespace FTLInsightsLogger.Logger
         {
             var properties = new Dictionary<string, string>
             {
-                { RunPropertyLabel, id ?? IdDefaultValue }
+                { TypePropertyLabel, RunPropertyValue },
+                { IdPropertyLabel, id ?? IdPropertyDefaultValue },
             };
             return properties;
         }
@@ -146,7 +152,8 @@ namespace FTLInsightsLogger.Logger
         {
             var properties = new Dictionary<string, string>
             {
-                { StatusPropertyLabel, id ?? IdDefaultValue }
+                { TypePropertyLabel, StatusPropertyValue },
+                { IdPropertyLabel, id ?? IdPropertyDefaultValue },
             };
             return properties;
         }
@@ -158,10 +165,12 @@ namespace FTLInsightsLogger.Logger
 
         public bool AutoCommitEnabled { get; private set; }
 
-        public string IdDefaultValue { get; set; }
-        public string ExceptionPropertyLabel { get; set; }
-        public string RunPropertyLabel { get; set; }
-        public string StatusPropertyLabel { get; set; }
+        public string IdPropertyDefaultValue { get; set; }
+        public string ExceptionPropertyValue { get; set; }
+        public string RunPropertyValue { get; set; }
+        public string StatusPropertyValue { get; set; }
+        public string IdPropertyLabel { get; set; }
+        public string TypePropertyLabel { get; set; }
 
         public void Commit()
         {

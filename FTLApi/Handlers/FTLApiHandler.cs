@@ -38,8 +38,6 @@ namespace FTLApi.Handlers
                 {
                     Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, maxTruckDistance));
                 }
-
-                throw new Exception("Exception log test");
             }
             catch (Exception ex)
             {
