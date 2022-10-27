@@ -1,6 +1,9 @@
 ﻿using FTLApi.DTO.Request;
 using FTLApi.DTO.Response;
+using FTLInsightsLogger.Logger;
+using FTLInsightsLogger.Settings;
 using FTLSupporter;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 
@@ -8,48 +11,65 @@ namespace FTLApi.Handlers
 {
     public class FTLApiHandler : IFTLApiHandler
     {
-        public FTLApiHandler ()
-        {
+        private FTLLoggerSettings Settings { get; set; }
 
+        private ITelemetryLogger Logger { get; set; }
+
+        public FTLApiHandler (IOptions<FTLLoggerSettings> options)
+        {
+            Settings = options.Value;
+            Logger = TelemetryClientFactory.Create(Settings);
         }
 
         public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, int maxTruckDistance, CancellationToken cancellationToken = default)
         {
             var response = new FTLResponse();
-
-            var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance);
-            if (initResult != null)
+            try
             {
-                response = initResult;
-            }
-            response.TaskList = body.TaskList;
-            response.TruckList = body.TruckList;
+                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance, Settings);
+                if (initResult != null)
+                {
+                    response = initResult;
+                }
+                response.TaskList = body.TaskList;
+                response.TruckList = body.TruckList;
 
-            if (initResult != null && !initResult.HasError)
+                if (initResult != null && !initResult.HasError)
+                {
+                    Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, maxTruckDistance));
+                }
+
+                throw new Exception("Exception log test");
+            }
+            catch (Exception ex)
             {
-                response.Result = FTLInterface.FTLSupport(body.TaskList, body.TruckList, maxTruckDistance);
+                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID));
             }
-
             return Task.FromResult(response);
         }
 
         public Task<FTLResponse> FTLSupportXAsync(FTLSupportRequest body, int maxTruckDistance, CancellationToken cancellationToken = default)
         {
             var response = new FTLResponse();
-
-            var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance);
-            if (initResult != null)
+            try
             {
-                response = initResult;
-            }
-            response.TaskList = body.TaskList;
-            response.TruckList = body.TruckList;
+                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance, Settings);
+                if (initResult != null)
+                {
+                    response = initResult;
+                }
+                response.TaskList = body.TaskList;
+                response.TruckList = body.TruckList;
 
-            if (initResult != null && !initResult.HasError)
+                if (initResult != null && !initResult.HasError)
+                {
+                    Task.Run(() => FTLInterface.FTLSupportX(body.TaskList, body.TruckList, maxTruckDistance));
+                }
+            }
+            catch (Exception ex)
             {
-                response.Result = FTLInterface.FTLSupportX(body.TaskList, body.TruckList, maxTruckDistance);
+                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID));
             }
-
             return Task.FromResult(response);
         }
 

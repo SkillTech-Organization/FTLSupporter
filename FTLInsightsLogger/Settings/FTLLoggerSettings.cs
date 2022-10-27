@@ -1,0 +1,9 @@
+﻿namespace FTLInsightsLogger.Settings
+{
+    public class FTLLoggerSettings
+    {
+        public string ApplicationInsightsConnectionString { get; set; }
+
+        public bool AutoCommitAfterEveryLogEnabled { get; set; }
+    }
+}

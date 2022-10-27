@@ -11,13 +11,23 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using FTLInsightsLogger.Logger;
+using PMapCore.Properties;
+using FTLInsightsLogger.Settings;
 
 namespace FTLSupporter
 {
     public class FTLInterface
     {
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        private static ITelemetryLogger Logger { get; set; }
+
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings)
         {
+            if (Logger == null)
+            {
+                Logger = TelemetryClientFactory.Create(loggerSettings);
+            }
+
             convertDateTimeToUTC(p_TaskList, p_TruckList);
 
           //  var tskk = JsonConvert.SerializeObject(p_TaskList);

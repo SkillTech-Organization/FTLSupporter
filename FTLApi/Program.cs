@@ -1,3 +1,5 @@
+using FTLApi.Handlers;
+using FTLInsightsLogger.Settings;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,11 @@ builder.Services.AddSwaggerGen(options =>
         //}
     });
 });
+
+builder.Services.Configure<FTLLoggerSettings>(
+    builder.Configuration.GetSection("FTLLogger"));
+
+builder.Services.AddTransient<IFTLApiHandler, FTLApiHandler>();
 
 var app = builder.Build();
 

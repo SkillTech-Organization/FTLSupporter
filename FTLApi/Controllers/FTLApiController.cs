@@ -27,9 +27,9 @@ namespace FTLApi
     {
         private IFTLApiHandler _implementation;
 
-        public FTLApiController()
+        public FTLApiController(IFTLApiHandler fTLApiHandler)
         {
-            _implementation = new FTLApiHandler();
+            _implementation = fTLApiHandler;
         }
 
         /// <summary>
