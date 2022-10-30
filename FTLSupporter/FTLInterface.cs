@@ -1126,6 +1126,8 @@ namespace FTLSupporter
 
                 };
                 result.Add(res);
+
+                Logger.Exception(ex, Logger.GetExceptionProperty(RequestID));
             }
             return result;
 
@@ -1263,6 +1265,9 @@ namespace FTLSupporter
 
                         };
                         res2.Add(resErr);
+
+                        Logger.Error(FTLMessages.E_ERRINSECONDPHASE, Logger.GetStatusProperty(RequestID));
+
                         return res2;
                     }
                 }
