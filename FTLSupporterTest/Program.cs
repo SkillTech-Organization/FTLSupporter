@@ -34,11 +34,11 @@ namespace FTLSupporterTest
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
 
 
-
+           // hibaelőállításhoz
            // lstTrk.First().GVWR = 0;
            // lstTrk.Last().CargoTypes = null;
 
-            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000, null);
             var str = JsonConvert.SerializeObject(res);
         }
 

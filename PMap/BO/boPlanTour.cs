@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using System.Web.Script.Serialization;
 using PMapCore.Common.Attrib;
 using PMapCore.Common;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO
 {
@@ -113,7 +113,7 @@ namespace PMapCore.BO
 
 
 
-        [ScriptIgnore]
+        [JsonIgnore]
         [DisplayNameAttributeX(Name = "Túrapontok listája", Order = 24)]
         public List<boPlanTourPoint> TourPoints { get; set; }   //üres, ha nincs a járműnek túrája
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using PMapCore.BLL.Base;
 using GMap.NET;
-using System.Web.Script.Serialization;
 using PMapCore.Common.Attrib;
 using PMapCore.Common;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO
 {
@@ -114,7 +114,7 @@ namespace PMapCore.BO
         public double NOD_YPOS { get; set; }                    //LAT
 
         [WriteFieldAttribute(Insert = false, Update = false)]
-        [ScriptIgnore]
+        [JsonIgnore]
         public PointLatLng Position
         {
             get

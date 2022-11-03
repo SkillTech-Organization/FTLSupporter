@@ -10,7 +10,6 @@ namespace PMapCore.DB.Base
     {
         private SQLServerAccess m_DBA;
         private bool m_isInTrans;
-        private Cursor m_oldCursor;
         public TransactionBlock(SQLServerAccess pDBA)
         {
             m_DBA = pDBA;
@@ -21,11 +20,7 @@ namespace PMapCore.DB.Base
                 m_DBA.BeginTran();
             }
 
-            m_oldCursor = Cursor.Current;
-            if( m_oldCursor != Cursors.WaitCursor)
-                Cursor.Current= Cursors.WaitCursor;
-
-            //            StackTrace trace = new StackTrace(1, true);
+             //            StackTrace trace = new StackTrace(1, true);
             //            Console.WriteLine("TRANS TRY  ido:" + DateTime.Now + " " + trace.GetFrame(1).GetMethod() + "-->" + trace.GetFrame(0).GetMethod());
         }
       
@@ -35,7 +30,6 @@ namespace PMapCore.DB.Base
         {
             //            StackTrace trace = new StackTrace(1, true);
             //            Console.WriteLine("COMMIT " + DateTime.Now + " " + trace.GetFrame(1).GetMethod() + "-->" + trace.GetFrame(0).GetMethod());
-            Cursor.Current = m_oldCursor;
             if (m_isInTrans && m_DBA.IsInTran())
                 m_DBA.Commit();
 

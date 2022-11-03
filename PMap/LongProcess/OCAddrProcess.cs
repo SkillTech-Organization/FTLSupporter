@@ -23,8 +23,8 @@ namespace PMapCore.LongProcess
         private bllRoute m_bllRoute;
         private bllSpeedProf m_bllSpeedProf;
 
-        public OCAddrProcess(BaseProgressDialog p_Form)
-                : base(p_Form, ThreadPriority.Normal)
+        public OCAddrProcess()
+                : base(ThreadPriority.Normal)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);

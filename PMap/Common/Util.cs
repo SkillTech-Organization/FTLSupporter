@@ -18,7 +18,6 @@ using System.IO.Compression;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using System.Web.Script.Serialization;
 using PMapCore.Common.Azure;
 using System.Xml;
 using System.Xml.Serialization;
@@ -171,7 +170,7 @@ namespace PMapCore.Common
         {
             string dir = PMapIniParams.Instance.LogDir;
             if (dir == null || dir == "")
-                dir = Path.GetDirectoryName(Application.ExecutablePath);
+                dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
 
             string LogFileName = Path.Combine(dir, p_logFileName);
             string sMsg = String.Format("{0}: {1}", DateTime.Now.ToString(Global.DATETIMEFORMAT), p_msg);
@@ -190,7 +189,7 @@ namespace PMapCore.Common
         {
             string dir = PMapIniParams.Instance.LogDir;
             if (dir == null || dir == "")
-                dir = Path.GetDirectoryName(Application.ExecutablePath);
+                dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
 
             string ExcFileName = Path.Combine(dir, Global.ExcFileName);
 
@@ -407,7 +406,7 @@ namespace PMapCore.Common
         /// <returns>telepitesi hely</returns>
         public static string GetBasePath()
         {
-            return Path.GetDirectoryName(Application.ExecutablePath);
+            return Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
         }
 
         /// <summary>
@@ -471,45 +470,6 @@ namespace PMapCore.Common
             return (Version1.CompareTo(Version2));
         }
 
-
-
-        public static Control FindControl(Control container, string name)
-        {
-            if (container.Name == name)
-                return container;
-            foreach (Control ctrl in container.Controls)
-            {
-                Control foundCtrl = FindControl(ctrl, name);
-                if (foundCtrl != null)
-                    return foundCtrl;
-            }
-            return null;
-        }
-
-        public static List<Control> FindControlsByType(Control p_ctrl, Type p_type)
-        {
-            List<Control> res = new List<Control>();
-
-            foreach (Control subCtrl in p_ctrl.Controls)
-            {
-                res.AddRange(FindControlsByType(subCtrl, p_type));
-            }
-            if (p_ctrl.GetType() == p_type)
-                res.Add(p_ctrl);
-            return res;
-        }
-
-        public static Control FindParentByType(Control ctrl, Type p_type)
-        {
-            if (ctrl.GetType() == p_type)
-                return ctrl;
-
-            if (ctrl.Parent != null)
-                return FindParentByType(ctrl.Parent, p_type);
-            else
-                return null;
-        }
-
         public static string DOS2WinText(string p_txt)
         {
 
@@ -545,7 +505,7 @@ namespace PMapCore.Common
                 */
 
                 // PerformanceCounter cpuCounter;
-                PerformanceCounter ramCounter;
+                //PerformanceCounter ramCounter;
 
                 //                PerformanceCounterCategory[] categories;
 

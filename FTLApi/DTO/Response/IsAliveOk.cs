@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿
+using Newtonsoft.Json;
 
 namespace FTLApi.DTO.Response
 {
     public class IsAliveOk
     {
-        [JsonPropertyName("version")]
+        [JsonProperty("version")]
         public string Version;
     }
 }

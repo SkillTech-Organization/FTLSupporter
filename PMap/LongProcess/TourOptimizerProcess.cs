@@ -41,8 +41,8 @@ namespace PMapCore.LongProcess
         private bllOptimize m_optimize;
         private Process m_procOptimizer = new Process();
 
-        public TourOptimizerProcess(BaseProgressDialog p_Form, int p_PLN_ID, int p_TPL_ID, bool p_Replan, bool p_silentMode)
-            : base(p_Form, ThreadPriority.Normal)
+        public TourOptimizerProcess(int p_PLN_ID, int p_TPL_ID, bool p_Replan, bool p_silentMode)
+            : base(ThreadPriority.Normal)
         {
             m_PLN_ID = p_PLN_ID;
             m_TPL_ID = p_TPL_ID;
@@ -57,9 +57,7 @@ namespace PMapCore.LongProcess
 
             m_optimize = new bllOptimize(m_DB, m_PLN_ID, m_TPL_ID, m_Replan);
 
-            m_optimize.FillOptimize(ProcessForm);
-
-            ProcessForm.SetInfoText(PMapMessages.M_OPT_CREATEFILE);
+            m_optimize.FillOptimize();
             m_optimize.MakeOptContent();
 
             Util.String2File(m_optimize.boOpt.OptimizerContent, PMapIniParams.Instance.PlanFile, Encoding.GetEncoding( Global.PM_ENCODING));
@@ -96,8 +94,6 @@ namespace PMapCore.LongProcess
 
                 for (int m_turn = 1; m_turn <= PMapIniParams.Instance.OptimizeTimeOutSec; m_turn++)
                 {
-                    ProcessForm.SetInfoText(String.Format(PMapMessages.M_OPT_OPT, m_turn, PMapIniParams.Instance.OptimizeTimeOutSec));
-
                     if (System.IO.File.Exists(PMapIniParams.Instance.PlanOK))
                     {
                         finalize(eOptResult.OK);
@@ -121,7 +117,6 @@ namespace PMapCore.LongProcess
                                 {
                                     m_optimize = null;
                                     finalize(eOptResult.Error, String.Format(PMapMessages.E_PVRP_ERR, content));
-                                    ProcessForm.SetVisible(false);
                                     return;
                                 }
                             }
@@ -147,7 +142,6 @@ namespace PMapCore.LongProcess
                     }
 
                     Thread.Sleep(1000);
-                    ProcessForm.NextStep();
                 }
 
                 using (GlobalLocker lockObj = new GlobalLocker(Global.lockForOptimizerFiles))
@@ -247,7 +241,7 @@ namespace PMapCore.LongProcess
 
                 if (!errHappened)
                 {
-                    m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile, ProcessForm);
+                    m_optimize.ProcessResult(PMapIniParams.Instance.PlanResultFile);
                     if (!string.IsNullOrEmpty(m_optimize.IgnoredOrders))
                     {
                         IgnoredOrders = m_optimize.IgnoredOrders;

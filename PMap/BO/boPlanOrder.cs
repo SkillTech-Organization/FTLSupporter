@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using PMapCore.Common.Attrib;
 
 namespace PMapCore.BO
@@ -98,7 +98,7 @@ namespace PMapCore.BO
         public string DEP_WEIGHTAREA { get; set; }
 
         //Technikai mezők
-        [ScriptIgnore]
+        [JsonIgnore]
         public string ToolTipText { get; set; }
     }
 }

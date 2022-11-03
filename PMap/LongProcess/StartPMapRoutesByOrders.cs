@@ -43,8 +43,6 @@ namespace PMapCore.LongProcess
         protected override void DoWork()
         {
 
-            Thread thWaitMessage = new Thread(new ThreadStart(waitMessageThread));
-            thWaitMessage.SetApartmentState(ApartmentState.STA);
             try
             {
 
@@ -54,25 +52,21 @@ namespace PMapCore.LongProcess
                     {
                         if (lockObj.LockSuccessful)
                         {
-                            if (thWaitMessage.IsAlive)
-                                thWaitMessage.Abort();
 
                             List<boRoute> res = m_bllRoute.GetDistancelessOrderNodes(Convert.ToDateTime(m_ORD_DATE_S, Util.GetDefauldDTFormat()), Convert.ToDateTime(m_ORD_DATE_E, Util.GetDefauldDTFormat()));
 
                             bool bOK = false;
 
                             if (PMapIniParams.Instance.RouteThreadNum > 1)
-                                bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByOrders, false, m_savePoints);
+                                bOK = PMRouteInterface.GetPMapRoutesMulti(res, "", PMapIniParams.Instance.CalcPMapRoutesByOrders, m_savePoints);
                             else
-                                bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByOrders, false, m_savePoints);
+                                bOK = PMRouteInterface.GetPMapRoutesSingle(res, "", PMapIniParams.Instance.CalcPMapRoutesByOrders, m_savePoints);
 
                             break;
 
                         }
                         else
                         {
-                            if (!thWaitMessage.IsAlive)
-                                thWaitMessage.Start();
                             System.Threading.Thread.Sleep(500);
                         }
                     }
@@ -87,17 +81,8 @@ namespace PMapCore.LongProcess
             finally
             {
 
-                if (thWaitMessage.IsAlive)
-                    thWaitMessage.Abort();
             }
         }
 
-
-        private static void waitMessageThread()
-        {
-            dlgWait d = new dlgWait();
-            d.ShowDialog();
-
-        }
     }
 }

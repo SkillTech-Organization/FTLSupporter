@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using PMapCore.Common.Attrib;
 
 namespace PMapCore.BO
@@ -46,7 +46,7 @@ namespace PMapCore.BO
         public DateTime CLOSE { get; set; }
         public string OPENCLOSE { get; set; }
 
-        [ScriptIgnore]
+        [JsonIgnore]
         public boPlanTourPoint NextTourPoint { get; set; }
         public string DEP_CODE { get; set; }
         public string DEP_NAME { get; set; }
@@ -64,7 +64,7 @@ namespace PMapCore.BO
         [DisplayNameAttributeX(Name = "Email cím", Order = 39)]
         public string ORD_EMAIL { get; set; }
 
-        [ScriptIgnore]
+        [JsonIgnore]
         public boPlanTour Tour { get; set; }
         public string ToolTipText { get; set; }
     }
