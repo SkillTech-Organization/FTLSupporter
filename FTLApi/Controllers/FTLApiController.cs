@@ -15,6 +15,7 @@
 
 namespace FTLApi
 {
+    using FTLApi.Attributes;
     using FTLApi.DTO.Request;
     using FTLApi.Handlers;
     using FTLSupporter;
@@ -38,6 +39,7 @@ namespace FTLApi
         /// <param name="body"></param>
         /// <param name="maxTruckDistance"></param>
         /// <returns></returns>
+        [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
         public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
         {
@@ -59,6 +61,7 @@ namespace FTLApi
         /// <param name="body"></param>
         /// <param name="maxTruckDistance"></param>
         /// <returns></returns>
+        [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
         public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
         {
@@ -78,6 +81,7 @@ namespace FTLApi
         /// get the 'isalive' status of the FTLSupporter service
         /// </summary>
         /// <returns></returns>
+        [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
         public System.Threading.Tasks.Task IsAlive()
         {
