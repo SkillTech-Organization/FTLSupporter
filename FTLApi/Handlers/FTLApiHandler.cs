@@ -21,12 +21,12 @@ namespace FTLApi.Handlers
             Logger = TelemetryClientFactory.Create(Settings);
         }
 
-        public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, int maxTruckDistance, CancellationToken cancellationToken = default)
+        public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
         {
             var response = new FTLResponse();
             try
             {
-                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance, Settings);
+                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
                 if (initResult != null)
                 {
                     response = initResult;
@@ -36,7 +36,7 @@ namespace FTLApi.Handlers
 
                 if (initResult != null && !initResult.HasError)
                 {
-                    Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, maxTruckDistance));
+                    Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
                 }
             }
             catch (Exception ex)
@@ -46,12 +46,12 @@ namespace FTLApi.Handlers
             return Task.FromResult(response);
         }
 
-        public Task<FTLResponse> FTLSupportXAsync(FTLSupportRequest body, int maxTruckDistance, CancellationToken cancellationToken = default)
+        public Task<FTLResponse> FTLSupportXAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
         {
             var response = new FTLResponse();
             try
             {
-                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, maxTruckDistance, Settings);
+                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
                 if (initResult != null)
                 {
                     response = initResult;
@@ -61,7 +61,7 @@ namespace FTLApi.Handlers
 
                 if (initResult != null && !initResult.HasError)
                 {
-                    Task.Run(() => FTLInterface.FTLSupportX(body.TaskList, body.TruckList, maxTruckDistance));
+                    Task.Run(() => FTLInterface.FTLSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
                 }
             }
             catch (Exception ex)
