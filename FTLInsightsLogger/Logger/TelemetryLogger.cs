@@ -18,15 +18,14 @@ namespace FTLInsightsLogger.Logger
         bool AutoCommitEnabled { get; }
 
         string IdPropertyDefaultValue { get; set; }
-        string ExceptionPropertyValue { get; set; }
-        string RunPropertyValue { get; set; }
-        string StatusPropertyValue { get; set; }
         string IdPropertyLabel { get; set; }
         string TypePropertyLabel { get; set; }
 
         Dictionary<string, string> GetExceptionProperty(string id);
 
-        Dictionary<string, string> GetRunProperty(string id);
+        Dictionary<string, string> GetStartProperty(string id);
+
+        Dictionary<string, string> GetEndProperty(string id);
 
         Dictionary<string, string> GetStatusProperty(string id);
 
@@ -49,12 +48,13 @@ namespace FTLInsightsLogger.Logger
     {
         public TelemetryClient Client { get; private set; }
 
-        public bool AutoCommitEnabled { get; private set; } = true;
+        enum LogTypes
+        {
+            EXCEPTION, START, END, STATUS
+        }
 
+        public bool AutoCommitEnabled { get; private set; } = true;
         public string IdPropertyDefaultValue { get; set; } = "No Data";
-        public string ExceptionPropertyValue { get; set; } = "EXCEPTION";
-        public string RunPropertyValue { get; set; } = "RUN";
-        public string StatusPropertyValue { get; set; } = "STATUS";
         public string IdPropertyLabel { get; set; } = "RequestID";
         public string TypePropertyLabel { get; set; } = "Type";
 
@@ -132,17 +132,27 @@ namespace FTLInsightsLogger.Logger
         {
             var properties = new Dictionary<string, string>
             {
-                { TypePropertyLabel, ExceptionPropertyValue },
+                { TypePropertyLabel, LogTypes.EXCEPTION.ToString() },
                 { IdPropertyLabel, id ?? IdPropertyDefaultValue },
             };
             return properties;
         }
 
-        public Dictionary<string, string> GetRunProperty(string id)
+        public Dictionary<string, string> GetStartProperty(string id)
         {
             var properties = new Dictionary<string, string>
             {
-                { TypePropertyLabel, RunPropertyValue },
+                { TypePropertyLabel, LogTypes.START.ToString() },
+                { IdPropertyLabel, id ?? IdPropertyDefaultValue },
+            };
+            return properties;
+        }
+
+        public Dictionary<string, string> GetEndProperty(string id)
+        {
+            var properties = new Dictionary<string, string>
+            {
+                { TypePropertyLabel, LogTypes.END.ToString() },
                 { IdPropertyLabel, id ?? IdPropertyDefaultValue },
             };
             return properties;
@@ -152,7 +162,7 @@ namespace FTLInsightsLogger.Logger
         {
             var properties = new Dictionary<string, string>
             {
-                { TypePropertyLabel, StatusPropertyValue },
+                { TypePropertyLabel, LogTypes.STATUS.ToString() },
                 { IdPropertyLabel, id ?? IdPropertyDefaultValue },
             };
             return properties;
@@ -194,7 +204,12 @@ namespace FTLInsightsLogger.Logger
             return new Dictionary<string, string>();
         }
 
-        public Dictionary<string, string> GetRunProperty(string id)
+        public Dictionary<string, string> GetStartProperty(string id)
+        {
+            return new Dictionary<string, string>();
+        }
+
+        public Dictionary<string, string> GetEndProperty(string id)
         {
             return new Dictionary<string, string>();
         }

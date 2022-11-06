@@ -86,11 +86,11 @@ namespace FTLSupporter
             DateTime dtStart = DateTime.Now;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
-            Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetRunProperty(RequestID));
+            Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
 
             var res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
-            Logger.Info(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetEndProperty(RequestID));
 
             return res;
         }
@@ -101,11 +101,11 @@ namespace FTLSupporter
             DateTime dtStart = DateTime.Now;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
-            Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetRunProperty(RequestID));
+            Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
 
             var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
-            Logger.Info(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetEndProperty(RequestID));
 
             return res;
         }
