@@ -53,6 +53,7 @@ namespace FTLSupporter
                 ret.RequestID = DateTime.UtcNow.Ticks.ToString();
                 RequestID = ret.RequestID;
             }
+
             return ret;
         }
 
@@ -92,6 +93,13 @@ namespace FTLSupporter
 
             Logger.Info(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetEndProperty(RequestID));
 
+            var queueResponse = new FTLQueueResponse();
+            queueResponse.RequestID = RequestID;
+            queueResponse.Result = res;
+            queueResponse.Type = FTLQueueResponseTypes.RESULT.ToString();
+
+            Logger.QueueLogger.Log(queueResponse, RequestID);
+
             return res;
         }
 
@@ -106,6 +114,13 @@ namespace FTLSupporter
             var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
             Logger.Info(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetEndProperty(RequestID));
+
+            var queueResponse = new FTLQueueResponse();
+            queueResponse.RequestID = RequestID;
+            queueResponse.Result = res;
+            queueResponse.Type = FTLQueueResponseTypes.RESULT.ToString();
+
+            Logger.QueueLogger.Log(queueResponse, RequestID);
 
             return res;
         }
