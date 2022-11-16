@@ -10,8 +10,14 @@ using System.Windows.Forms;
 
 namespace FTLInsightsLogger.Logger
 {
+    public delegate object MessageToQueueMessage(string message);
+
     public interface ITelemetryLogger
     {
+        MessageToQueueMessage ErrorToQueueMessage { get; set; }
+        MessageToQueueMessage ExceptionToQueueMessage { get; set; }
+        MessageToQueueMessage LogToQueueMessage { get; set; }
+
         TelemetryClient Client { get; }
 
         IQueueLogger QueueLogger { get; }
@@ -52,6 +58,10 @@ namespace FTLInsightsLogger.Logger
 
     public class TelemetryLogger : ITelemetryLogger, IDisposable
     {
+        public MessageToQueueMessage ErrorToQueueMessage { get; set; }
+        public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
+        public MessageToQueueMessage LogToQueueMessage { get; set; }
+
         private FTLLoggerSettings Settings { get; set; }
 
         public IQueueLogger QueueLogger { get; private set; }
@@ -96,7 +106,7 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(message, hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -110,7 +120,7 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(message, hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(ErrorToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -124,7 +134,7 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(message, hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -138,7 +148,7 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(message, hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -152,7 +162,7 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(ex, hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(ExceptionToQueueMessage(ex.Message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -215,6 +225,10 @@ namespace FTLInsightsLogger.Logger
 
     public class TelemetryLoggerMock : ITelemetryLogger
     {
+        public MessageToQueueMessage ErrorToQueueMessage { get; set; }
+        public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
+        public MessageToQueueMessage LogToQueueMessage { get; set; }
+
         public TelemetryClient Client { get; private set; }
 
         public IQueueLogger QueueLogger { get; private set; }

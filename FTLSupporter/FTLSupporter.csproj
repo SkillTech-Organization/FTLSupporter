@@ -101,7 +101,6 @@
     <Compile Include="FTLMessages.cs" />
     <Compile Include="FTLNodePtCache.cs" />
     <Compile Include="FTLPoint.cs" />
-    <Compile Include="FTLQueueResponseTypes.cs" />
     <Compile Include="FTLResErrMsg.cs" />
     <Compile Include="FTLQueueResponse .cs" />
     <Compile Include="FTLResponse.cs" />

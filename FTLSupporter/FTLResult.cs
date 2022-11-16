@@ -21,7 +21,9 @@ namespace FTLSupporter
             [Description("EXCEPTION")]
             EXCEPTION,
             [Description("ERROR")]
-            ERROR
+            ERROR,
+            [Description("LOG")]
+            LOG
         };
         public FTLResultStatus Status { get; set; }
         public string ObjectName { get; set; }
