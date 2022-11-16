@@ -5,12 +5,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using FTLInsightsLogger.Settings;
+using System.Windows.Forms;
 
 namespace FTLInsightsLogger.Logger
 {
+    public delegate object MessageToQueueMessage(string message);
+
     public interface ITelemetryLogger
     {
+        MessageToQueueMessage ErrorToQueueMessage { get; set; }
+        MessageToQueueMessage ExceptionToQueueMessage { get; set; }
+        MessageToQueueMessage LogToQueueMessage { get; set; }
+
         TelemetryClient Client { get; }
+
+        IQueueLogger QueueLogger { get; }
+
+        bool QueueEnabled { get; }
 
         /// <summary>
         /// Comitting log messages after every log message
@@ -46,6 +58,16 @@ namespace FTLInsightsLogger.Logger
 
     public class TelemetryLogger : ITelemetryLogger, IDisposable
     {
+        public MessageToQueueMessage ErrorToQueueMessage { get; set; }
+        public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
+        public MessageToQueueMessage LogToQueueMessage { get; set; }
+
+        private FTLLoggerSettings Settings { get; set; }
+
+        public IQueueLogger QueueLogger { get; private set; }
+
+        public bool QueueEnabled { get; private set; }
+
         public TelemetryClient Client { get; private set; }
 
         enum LogTypes
@@ -58,13 +80,20 @@ namespace FTLInsightsLogger.Logger
         public string IdPropertyLabel { get; set; } = "RequestID";
         public string TypePropertyLabel { get; set; } = "Type";
 
-        internal TelemetryLogger(string connectionString, bool autoCommit)
+        internal TelemetryLogger(FTLLoggerSettings settings, IQueueLogger queueLogger = null)
         {
+            Settings = settings;
+
             var configuration = TelemetryConfiguration.CreateDefault();
-            configuration.ConnectionString = connectionString;
+            configuration.ConnectionString = settings.ApplicationInsightsConnectionString;
             Client = new TelemetryClient(configuration);
 
-            AutoCommitEnabled = autoCommit;
+            AutoCommitEnabled = settings.AutoCommitAfterEveryLogEnabled;
+
+            this.QueueLogger = queueLogger;
+            this.QueueEnabled = settings.UseQueue;
+
+            this.QueueLogger.SetLogger(this);
         }
 
         public void Info(string message, Dictionary<string, string> properties = null)
@@ -73,6 +102,11 @@ namespace FTLInsightsLogger.Logger
             if (AutoCommitEnabled)
             {
                 Commit();
+            }
+            if (QueueEnabled)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -83,6 +117,11 @@ namespace FTLInsightsLogger.Logger
             {
                 Commit();
             }
+            if (QueueEnabled)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                QueueLogger.Log(ErrorToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
+            }
         }
 
         public void Warning(string message, Dictionary<string, string> properties = null)
@@ -91,6 +130,11 @@ namespace FTLInsightsLogger.Logger
             if (AutoCommitEnabled)
             {
                 Commit();
+            }
+            if (QueueEnabled)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -101,6 +145,11 @@ namespace FTLInsightsLogger.Logger
             {
                 Commit();
             }
+            if (QueueEnabled)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
+            }
         }
 
         public void Exception(Exception ex, Dictionary<string, string> properties = null)
@@ -109,6 +158,11 @@ namespace FTLInsightsLogger.Logger
             if (AutoCommitEnabled)
             {
                 Commit();
+            }
+            if (QueueEnabled)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                QueueLogger.Log(ExceptionToQueueMessage(ex.Message), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -171,7 +225,15 @@ namespace FTLInsightsLogger.Logger
 
     public class TelemetryLoggerMock : ITelemetryLogger
     {
+        public MessageToQueueMessage ErrorToQueueMessage { get; set; }
+        public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
+        public MessageToQueueMessage LogToQueueMessage { get; set; }
+
         public TelemetryClient Client { get; private set; }
+
+        public IQueueLogger QueueLogger { get; private set; }
+
+        public bool QueueEnabled { get; private set; }
 
         public bool AutoCommitEnabled { get; private set; }
 
