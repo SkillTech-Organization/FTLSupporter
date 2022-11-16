@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLSupporter", "FTLSupporte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLInsightsLogger", "FTLInsightsLogger\FTLInsightsLogger.csproj", "{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FTLApiTester", "FTLApiTester\FTLApiTester.csproj", "{61864368-6F5C-4D2F-AD5C-69FB44555A87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,22 @@ Global
 		{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}.Release|x64.Build.0 = Release|Any CPU
 		{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}.Release|x86.ActiveCfg = Release|Any CPU
 		{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}.Release|x86.Build.0 = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|x64.Build.0 = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Debug|x86.Build.0 = Debug|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|x64.ActiveCfg = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|x64.Build.0 = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|x86.ActiveCfg = Release|Any CPU
+		{61864368-6F5C-4D2F-AD5C-69FB44555A87}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
