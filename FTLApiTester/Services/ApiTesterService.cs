@@ -268,7 +268,7 @@ namespace FTLApiTester.Services
 
             _logger.Information("Checking provided test data path...");
 
-            if (!Directory.Exists(TestDataPath))
+            if (Directory.Exists(TestDataPath))
             {
                 var files = Directory.GetFiles(TestDataPath);
 
