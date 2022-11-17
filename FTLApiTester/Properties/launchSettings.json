@@ -2,7 +2,7 @@
   "profiles": {
     "FTLApiTester": {
       "commandName": "Project",
-      "commandLineArgs": "test"
+      "commandLineArgs": ""
     }
   }
 }
