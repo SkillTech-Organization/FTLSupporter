@@ -16,5 +16,6 @@ namespace FTLApiTester.Settings
         public int? MaxTruckDistance { get; set; }
         public int MaxMessagesFromQueueAtOnce { get; set; }
         public int MaxMessageTimeSpanInMinutes { get; set; }
+        public int WaitBeforeBetweenQueueQueryInMs { get; set; }
     }
 }

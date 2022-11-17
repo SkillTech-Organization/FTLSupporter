@@ -75,7 +75,7 @@ namespace FTLApiTester.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("Error", ex);
+                _logger.Error("Error: " + ex.Message, ex);
             }
         }
 
@@ -150,7 +150,7 @@ namespace FTLApiTester.Services
                     var resp = new GetResultResponse();
                     do
                     {
-                        Task.Delay(5000);
+                        Task.Delay(_settings.WaitBeforeBetweenQueueQueryInMs);
                         resp = QueueReader.GetResultMessage();
                     }
                     while (!resp.NoMoreMessages && !resp.ResultReceived);
@@ -182,7 +182,7 @@ namespace FTLApiTester.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("Request failed", ex);
+                    _logger.Error("Request failed: " + ex.Message, ex);
                 }
 
                 timer.Stop();
@@ -283,7 +283,7 @@ namespace FTLApiTester.Services
 
                 for (int i = 0; i < files.Length; i++)
                 {
-                    var fileNameSections = files[i].Split(Delimeter);
+                    var fileNameSections = Path.GetFileName(files[i]).Split(Delimeter);
                     if (fileNameSections.Length >= 2)
                     {
                         var id = fileNameSections[0];

@@ -54,6 +54,8 @@ namespace FTLApiTester.Util
                     }
                     else
                     {
+                        _logger.Verbose("Message text: " + msgText);
+
                         try
                         {
                             _logger.Information("Parsing message body...");
