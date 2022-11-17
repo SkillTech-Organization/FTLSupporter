@@ -10,19 +10,20 @@ using System.Windows.Forms;
 
 namespace FTLInsightsLogger.Logger
 {
-    public delegate object MessageToQueueMessage(string message);
+    public delegate object MessageToQueueMessage(params object[] args);
 
     public interface ITelemetryLogger
     {
         MessageToQueueMessage ErrorToQueueMessage { get; set; }
         MessageToQueueMessage ExceptionToQueueMessage { get; set; }
         MessageToQueueMessage LogToQueueMessage { get; set; }
+        MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         TelemetryClient Client { get; }
 
         IQueueLogger QueueLogger { get; }
 
-        bool QueueEnabled { get; }
+        bool QueueEnabled { get; set; }
 
         /// <summary>
         /// Comitting log messages after every log message
@@ -41,15 +42,17 @@ namespace FTLInsightsLogger.Logger
 
         Dictionary<string, string> GetStatusProperty(string id);
 
-        void Info(string message, Dictionary<string, string> properties = null);
+        void Info(string message, Dictionary<string, string> properties = null, bool intoQueue = true);
 
-        void Error(string message, Dictionary<string, string> properties = null);
+        void Error(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true);
 
-        void Warning(string message, Dictionary<string, string> properties = null);
+        void Warning(string message, Dictionary<string, string> properties = null, bool intoQueue = true);
 
-        void Verbose(string message, Dictionary<string, string> properties = null);
+        void Verbose(string message, Dictionary<string, string> properties = null, bool intoQueue = true);
 
-        void Exception(Exception ex, Dictionary<string, string> properties = null);
+        void Exception(Exception ex, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true);
+
+        void ValidationError(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true);
 
         void Commit();
 
@@ -61,12 +64,13 @@ namespace FTLInsightsLogger.Logger
         public MessageToQueueMessage ErrorToQueueMessage { get; set; }
         public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
         public MessageToQueueMessage LogToQueueMessage { get; set; }
+        public MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         private FTLLoggerSettings Settings { get; set; }
 
         public IQueueLogger QueueLogger { get; private set; }
 
-        public bool QueueEnabled { get; private set; }
+        public bool QueueEnabled { get; set; }
 
         public TelemetryClient Client { get; private set; }
 
@@ -96,73 +100,93 @@ namespace FTLInsightsLogger.Logger
             this.QueueLogger.SetLogger(this);
         }
 
-        public void Info(string message, Dictionary<string, string> properties = null)
-        {
-            Client.TrackTrace(message, SeverityLevel.Information, properties);
-            if (AutoCommitEnabled)
-            {
-                Commit();
-            }
-            if (QueueEnabled)
-            {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
-            }
-        }
-
-        public void Error(string message, Dictionary<string, string> properties = null)
+        public void ValidationError(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
         {
             Client.TrackTrace(message, SeverityLevel.Error, properties);
             if (AutoCommitEnabled)
             {
                 Commit();
             }
-            if (QueueEnabled)
+            if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(ErrorToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(ValidationErrorToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
-        public void Warning(string message, Dictionary<string, string> properties = null)
+        public void Info(string message, Dictionary<string, string> properties = null, bool intoQueue = true)
+        {
+            Client.TrackTrace(message, SeverityLevel.Information, properties);
+            if (AutoCommitEnabled)
+            {
+                Commit();
+            }
+            if (QueueEnabled && intoQueue)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
+                var timeStamp = DateTime.Now;
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+            }
+        }
+
+        public void Error(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
+        {
+            Client.TrackTrace(message, SeverityLevel.Error, properties);
+            if (AutoCommitEnabled)
+            {
+                Commit();
+            }
+            if (QueueEnabled && intoQueue)
+            {
+                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                QueueLogger.Log(ErrorToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
+            }
+        }
+
+        public void Warning(string message, Dictionary<string, string> properties = null, bool intoQueue = true)
         {
             Client.TrackTrace(message, SeverityLevel.Warning, properties);
             if (AutoCommitEnabled)
             {
                 Commit();
             }
-            if (QueueEnabled)
+            if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
+                var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
+                var timeStamp = DateTime.Now;
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
-        public void Verbose(string message, Dictionary<string, string> properties = null)
+        public void Verbose(string message, Dictionary<string, string> properties = null, bool intoQueue = true)
         {
             Client.TrackTrace(message, SeverityLevel.Verbose, properties);
             if (AutoCommitEnabled)
             {
                 Commit();
             }
-            if (QueueEnabled)
+            if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(LogToQueueMessage(message), hasId ? id : IdPropertyDefaultValue);
+                var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
+                var timeStamp = DateTime.Now;
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
-        public void Exception(Exception ex, Dictionary<string, string> properties = null)
+        public void Exception(Exception ex, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
         {
             Client.TrackException(ex, properties);
             if (AutoCommitEnabled)
             {
                 Commit();
             }
-            if (QueueEnabled)
+            if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(ExceptionToQueueMessage(ex.Message), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(ExceptionToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -228,12 +252,13 @@ namespace FTLInsightsLogger.Logger
         public MessageToQueueMessage ErrorToQueueMessage { get; set; }
         public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
         public MessageToQueueMessage LogToQueueMessage { get; set; }
+        public MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         public TelemetryClient Client { get; private set; }
 
         public IQueueLogger QueueLogger { get; private set; }
 
-        public bool QueueEnabled { get; private set; }
+        public bool QueueEnabled { get; set; }
 
         public bool AutoCommitEnabled { get; private set; }
 
@@ -253,11 +278,15 @@ namespace FTLInsightsLogger.Logger
             return Task.CompletedTask;
         }
 
-        public void Error(string message, Dictionary<string, string> properties = null)
+        public void ValidationError(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
         {
         }
 
-        public void Exception(Exception ex, Dictionary<string, string> properties = null)
+        public void Error(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
+        {
+        }
+
+        public void Exception(Exception ex, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
         {
         }
 
@@ -281,15 +310,15 @@ namespace FTLInsightsLogger.Logger
             return new Dictionary<string, string>();
         }
 
-        public void Info(string message, Dictionary<string, string> properties = null)
+        public void Info(string message, Dictionary<string, string> properties = null, bool intoQueue = true)
         {
         }
 
-        public void Verbose(string message, Dictionary<string, string> properties = null)
+        public void Verbose(string message, Dictionary<string, string> properties = null, bool intoQueue = true)
         {
         }
 
-        public void Warning(string message, Dictionary<string, string> properties = null)
+        public void Warning(string message, Dictionary<string, string> properties = null, bool intoQueue = true)
         {
         }
     }

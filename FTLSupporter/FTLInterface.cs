@@ -84,7 +84,7 @@ namespace FTLSupporter
             });
         }
 
-        static FTLQueueResponse ErrorToQueueMessage(string message)
+        static FTLQueueResponse ErrorToQueueMessage(params object[] args)
         {
             return new FTLQueueResponse
             {
@@ -93,14 +93,14 @@ namespace FTLSupporter
                 {
                     new FTLResult
                     {
-                        Data = message,
+                        Data = args[0],
                         Status = FTLResultStatus.ERROR
                     }
                 }
             };
         }
 
-        static FTLQueueResponse ExceptionToQueueMessage(string message)
+        static FTLQueueResponse ExceptionToQueueMessage(params object[] args)
         {
             return new FTLQueueResponse
             {
@@ -109,14 +109,14 @@ namespace FTLSupporter
                 {
                     new FTLResult
                     {
-                        Data = message,
+                        Data = args[0],
                         Status = FTLResultStatus.EXCEPTION
                     }
                 }
             };
         }
 
-        static FTLQueueResponse LogToQueueMessage(string message)
+        static FTLQueueResponse ValidationErrorToQueueMessage(params object[] args)
         {
             return new FTLQueueResponse
             {
@@ -125,7 +125,28 @@ namespace FTLSupporter
                 {
                     new FTLResult
                     {
-                        Data = message,
+                        Data = args[0],
+                        Status = FTLResultStatus.VALIDATIONERROR
+                    }
+                }
+            };
+        }
+
+        static FTLQueueResponse LogToQueueMessage(params object[] args)
+        {
+            return new FTLQueueResponse
+            {
+                RequestID = RequestID,
+                Result = new List<FTLResult>
+                {
+                    new FTLResult
+                    {
+                        Data = new FTLLog
+                        {
+                            Message = (string) args[0],
+                            Timestamp = (DateTime) args[2],
+                            Type = (string) args[1]
+                        },
                         Status = FTLResultStatus.LOG
                     }
                 }
@@ -1190,7 +1211,7 @@ namespace FTLSupporter
                 };
                 result.Add(res);
 
-                Logger.Exception(ex, Logger.GetExceptionProperty(RequestID));
+                Logger.Exception(ex, Logger.GetExceptionProperty(RequestID), rm);
             }
             return result;
 
@@ -1329,7 +1350,7 @@ namespace FTLSupporter
                         };
                         res2.Add(resErr);
 
-                        Logger.Error(FTLMessages.E_ERRINSECONDPHASE, Logger.GetStatusProperty(RequestID));
+                        Logger.Error(FTLMessages.E_ERRINSECONDPHASE, Logger.GetStatusProperty(RequestID), rm);
 
                         return res2;
                     }
