@@ -8,7 +8,7 @@ namespace FTLSupporter
 {
     public class FTLLog
     {
-        public string Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
 
         public string Type { get; set; }
 

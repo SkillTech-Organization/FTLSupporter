@@ -31,6 +31,7 @@ namespace FTLSupporter
                 Logger.ErrorToQueueMessage = ErrorToQueueMessage;
                 Logger.ExceptionToQueueMessage = ExceptionToQueueMessage;
                 Logger.LogToQueueMessage = LogToQueueMessage;
+                Logger.ValidationErrorToQueueMessage = ValidationErrorToQueueMessage;
             }
 
             convertDateTimeToUTC(p_TaskList, p_TruckList);
@@ -84,7 +85,7 @@ namespace FTLSupporter
             });
         }
 
-        static FTLQueueResponse ErrorToQueueMessage(string message)
+        static FTLQueueResponse ErrorToQueueMessage(params object[] args)
         {
             return new FTLQueueResponse
             {
@@ -93,14 +94,14 @@ namespace FTLSupporter
                 {
                     new FTLResult
                     {
-                        Data = message,
+                        Data = args[0],
                         Status = FTLResultStatus.ERROR
                     }
                 }
             };
         }
 
-        static FTLQueueResponse ExceptionToQueueMessage(string message)
+        static FTLQueueResponse ExceptionToQueueMessage(params object[] args)
         {
             return new FTLQueueResponse
             {
@@ -109,14 +110,14 @@ namespace FTLSupporter
                 {
                     new FTLResult
                     {
-                        Data = message,
+                        Data = args[0],
                         Status = FTLResultStatus.EXCEPTION
                     }
                 }
             };
         }
 
-        static FTLQueueResponse LogToQueueMessage(string message)
+        static FTLQueueResponse ValidationErrorToQueueMessage(params object[] args)
         {
             return new FTLQueueResponse
             {
@@ -125,7 +126,28 @@ namespace FTLSupporter
                 {
                     new FTLResult
                     {
-                        Data = message,
+                        Data = args[0],
+                        Status = FTLResultStatus.VALIDATIONERROR
+                    }
+                }
+            };
+        }
+
+        static FTLQueueResponse LogToQueueMessage(params object[] args)
+        {
+            return new FTLQueueResponse
+            {
+                RequestID = RequestID,
+                Result = new List<FTLResult>
+                {
+                    new FTLResult
+                    {
+                        Data = new FTLLog
+                        {
+                            Message = (string) args[0],
+                            Timestamp = (DateTime) args[2],
+                            Type = (string) args[1]
+                        },
                         Status = FTLResultStatus.LOG
                     }
                 }
@@ -1190,7 +1212,7 @@ namespace FTLSupporter
                 };
                 result.Add(res);
 
-                Logger.Exception(ex, Logger.GetExceptionProperty(RequestID));
+                Logger.Exception(ex, Logger.GetExceptionProperty(RequestID), rm);
             }
             return result;
 
@@ -1206,7 +1228,7 @@ namespace FTLSupporter
                 {
                     foreach (var err in tskErros)
                     {
-                        result.Add(getValidationError(item, err.Field, err.Message));
+                        result.Add(getValidationError(item, err.Field, err.Message, false));
                     }
                 }
             }
@@ -1215,7 +1237,7 @@ namespace FTLSupporter
 
         }
 
-        private static FTLResult getValidationError(Object p_obj, string p_field, string p_msg)
+        private static FTLResult getValidationError(Object p_obj, string p_field, string p_msg, bool log = true)
         {
             FTLResErrMsg msg = new FTLResErrMsg() { Field = p_field, Message = p_msg, CallStack = "" };
             PropertyInfo ItemIDProp = p_obj.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
@@ -1227,6 +1249,12 @@ namespace FTLSupporter
                 ItemID = ItemIDProp != null ? p_obj.GetType().GetProperty(ItemIDProp.Name).GetValue(p_obj, null).ToString() : "???",
                 Data = msg
             };
+
+            if (log)
+            {
+                Logger.ValidationError(p_msg, Logger.GetStatusProperty(RequestID), msg);
+            }
+
             return itemRes;
         }
 
@@ -1329,7 +1357,7 @@ namespace FTLSupporter
                         };
                         res2.Add(resErr);
 
-                        Logger.Error(FTLMessages.E_ERRINSECONDPHASE, Logger.GetStatusProperty(RequestID));
+                        Logger.Error(FTLMessages.E_ERRINSECONDPHASE, Logger.GetStatusProperty(RequestID), rm);
 
                         return res2;
                     }
