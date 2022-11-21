@@ -20,6 +20,8 @@ namespace FTLApiTester.Util
         public bool NoMoreMessages { get; set; } = false;
 
         public bool ResultReceived { get; set; } = false;
+
+        public int MessageCount { get; set; }
     }
 
     internal class QueueReader
@@ -44,47 +46,60 @@ namespace FTLApiTester.Util
             var message = queueClient.ReceiveMessagesAsync(settings.MaxMessagesFromQueueAtOnce, new TimeSpan(0, settings.MaxMessageTimeSpanInMinutes, 0)).Result;
             if (message != null && message.Value != null)
             {
-                var msgVal = message.Value;
-                foreach(var msg in msgVal)
+                var messages = message.Value;
+                resp.MessageCount += messages.Count();
+                if (messages.Count() == 0)
                 {
-                    var msgText = msg.MessageText;
-                    if (string.IsNullOrWhiteSpace(msgText))
-                    {
-                        _logger.Information("Invalid message received. MessageID: " + msg.MessageId);
-                    }
-                    else
-                    {
-                        _logger.Verbose("Message text: " + msgText);
+                    _logger.Information("No messages were received.");
+                    resp.ResultReceived = false;
+                    resp.NoMoreMessages = true;
+                }
+                else
+                {
+                    _logger.Information($"Found {messages.Count()} message(s). Processing...");
 
-                        try
+                    foreach (var msg in messages)
+                    {
+                        var msgText = msg.MessageText;
+                        if (string.IsNullOrWhiteSpace(msgText))
                         {
-                            _logger.Information("Parsing message body...");
-                            var queueResponse = JsonConvert.DeserializeObject<FTLQueueResponse>(msgText, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
-                            _logger.Information("Parsing message body...done");
+                            _logger.Information("Invalid message received. MessageID: " + msg.MessageId);
+                        }
+                        else
+                        {
+                            _logger.Verbose("Message text: " + msgText);
 
-                            var res = queueResponse.Result;
-                            if (res != null && res.Count > 0)
+                            try
                             {
-                                if (res.Any(x => x.Status == FTLResult.FTLResultStatus.RESULT))
-                                {
-                                    _logger.Information("Result found.");
+                                _logger.Debug("Parsing message...");
+                                var queueResponse = JsonConvert.DeserializeObject<FTLQueueResponse>(msgText, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Error });
+                                _logger.Debug("Parsing message...done");
 
-                                    resp.Result = queueResponse;
-                                    resp.ResultReceived = true;
+                                var res = queueResponse.Result;
+                                if (res != null && res.Count > 0)
+                                {
+                                    if (res.Any(x => x.Status == FTLResult.FTLResultStatus.RESULT))
+                                    {
+                                        _logger.Information("Result found.");
+
+                                        resp.Result = queueResponse;
+                                        resp.ResultReceived = true;
+                                        return resp;
+                                    }
+                                    //else
+                                    //{
+                                    //    _logger.Information("Result field does not contain FTLSupport result(s).");
+                                    //}
                                 }
                                 else
                                 {
-                                    _logger.Information("Result field does not contain FTLSupport result(s).");
+                                    _logger.Information("Result field is null or empty.");
                                 }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                _logger.Information("Result field is null or empty.");
+                                _logger.Error("Error while parsing message body", ex);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Error("Error while parsing message body", ex);
                         }
                     }
                 }
@@ -92,6 +107,11 @@ namespace FTLApiTester.Util
             else
             {
                 resp.NoMoreMessages = true;
+            }
+
+            if (!resp.ResultReceived)
+            {
+                _logger.Information("Result was not found.");
             }
 
             return resp;

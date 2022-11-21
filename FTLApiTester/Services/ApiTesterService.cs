@@ -130,10 +130,12 @@ namespace FTLApiTester.Services
             _logger.Information($"Initiating test requests towards API. Base URL: {_settings.FTLApiBaseUrl}");
 
             var timer = new Stopwatch();
+            var timerResult = new Stopwatch();
 
             foreach (var test in data)
             {
                 timer.Start();
+                timerResult.Reset();
 
                 var testCase = test.Value;
 
@@ -145,15 +147,30 @@ namespace FTLApiTester.Services
                     var response = _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result;
                     _logger.Information("Request was successful.");
 
-                    _logger.Information("Getting result from queue...");
+                    // Task.Delay(_settings.WaitBeforeBetweenQueueQueryInMs).Wait();
 
                     var resp = new GetResultResponse();
+                    var messageCount = 0;
+                    double minuteCount = 0;
+
+                    timerResult.Start();
+
                     do
                     {
-                        Task.Delay(_settings.WaitBeforeBetweenQueueQueryInMs);
+                        _logger.Information("Getting messages from queue...");
+
+                        Task.Delay(_settings.WaitBeforeBetweenQueueQueryInMs).Wait();
+
                         resp = QueueReader.GetResultMessage();
+
+                        messageCount += resp.MessageCount;
+
+                        _logger.Information($"So far received: {messageCount} message(s).");
+
+                        minuteCount = timerResult.Elapsed.TotalMinutes;
                     }
-                    while (!resp.NoMoreMessages && !resp.ResultReceived);
+                    while (!resp.ResultReceived && messageCount <= _settings.MaxMessageLimitPerRequest
+                    && minuteCount <= _settings.MaxWaitLimitForResultPerRequestInMinutes); // !resp.NoMoreMessages && 
 
                     if (resp.ResultReceived)
                     {
@@ -177,6 +194,14 @@ namespace FTLApiTester.Services
                     }
                     else
                     {
+                        if (messageCount > _settings.MaxMessageLimitPerRequest)
+                        {
+                            _logger.Information($"Maximum message limit {_settings.MaxMessageLimitPerRequest} was exceeded by a total of {messageCount} message(s).");
+                        }
+                        else if (minuteCount > _settings.MaxWaitLimitForResultPerRequestInMinutes)
+                        {
+                            _logger.Information($"Maximum wait limit {_settings.MaxWaitLimitForResultPerRequestInMinutes} minute(s) was exceeded by a total of {minuteCount} minute(s) wait time.");
+                        }
                         _logger.Information("Result was not received for this request.");
                     }
                 }
