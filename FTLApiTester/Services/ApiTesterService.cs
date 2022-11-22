@@ -41,10 +41,6 @@ namespace FTLApiTester.Services
         private FTLApiTesterSettings _settings;
         private readonly ILogger _logger;
 
-        private const string ResultSuffix = "_FTLResult.json";
-        private const string TaskSuffix = "_FTLTask.json";
-        private const string TruckSuffix = "_FTLTruck.json";
-        private const string ApiResultSuffix = "_APIResult.json";
         private const string Delimeter = "_";
         private const int DefaultTruckDistance = 10000;
 
@@ -53,6 +49,8 @@ namespace FTLApiTester.Services
         private string TestDataPath { get; set; }
         private string ID { get; set; }
         public int MaxTruckDistance { get; set; }
+
+        public bool IsFTLSupport { get; set; }
 
         public ApiTesterService(FTLApiServiceClient client, FTLApiTesterSettings settings, IConfiguration configuration)
         {
@@ -132,19 +130,27 @@ namespace FTLApiTester.Services
             var timer = new Stopwatch();
             var timerResult = new Stopwatch();
 
+            var testsSucceeded = 0;
+            var testsFailed = 0;
+
+            var i = 0;
             foreach (var test in data)
             {
+                _logger.Information($"Starting Test {i} of {data.Keys.Count}");
+
                 timer.Start();
                 timerResult.Reset();
 
                 var testCase = test.Value;
 
-                _logger.Information($"Sending request for test data with ID {test.Key}");
+                var endpoint = IsFTLSupport ? "FTLSupport" : "FTLSupportX";
+                _logger.Information($"Sending request for test data with ID {test.Key}, to endpoint {endpoint}");
                 _logger.Verbose("Request content: " + JsonConvert.SerializeObject(testCase.Request));
 
                 try
                 {
-                    var response = _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result;
+                    var response = IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
+                        : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
                     _logger.Information("Request was successful.");
 
                     // Task.Delay(_settings.WaitBeforeBetweenQueueQueryInMs).Wait();
@@ -174,10 +180,11 @@ namespace FTLApiTester.Services
 
                     if (resp.ResultReceived)
                     {
-                        var resultFileName = test.Key + ApiResultSuffix;
+                        var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
                         var resultJson = JsonConvert.SerializeObject(resp.Result.Result[0]);
 
                         _logger.Information("Saving result to: " + resultFileName);
+                        _logger.Verbose(resultJson);
                         SaveResult(resultJson, resultFileName);
 
                         _logger.Information("Comparing result with given test result...");
@@ -185,11 +192,13 @@ namespace FTLApiTester.Services
 
                         if (resultJson == testResultJson)
                         {
-                            _logger.Information("Matching results, test succeded.");
+                            _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
+                            testsSucceeded++;
                         }
                         else
                         {
-                            _logger.Information("Different results, test failed.");
+                            _logger.Information($"Different results, test {i} of {data.Keys.Count} failed.");
+                            testsFailed++;
                         }
                     }
                     else
@@ -212,8 +221,12 @@ namespace FTLApiTester.Services
 
                 timer.Stop();
 
-                _logger.Information($"Test for ID {test.Key} ended. Time: {timer.Elapsed}");
+                _logger.Information($"Test ({i} of {data.Keys.Count}), for ID {test.Key} ended. Time: {timer.Elapsed}");
+
+                i++;
             }
+
+            _logger.Information($"Total tests: {i}, failed: {testsFailed}, succeeded: {testsSucceeded}");
         }
 
         private void SaveResult(string result, string fileName)
@@ -237,9 +250,16 @@ namespace FTLApiTester.Services
                 TruckList = new List<FTLTruck>()
             };
 
+            IsFTLSupport = File.Exists(Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + _settings.FTLSupportFileSuffix + "." + _settings.FileExtension));
+            var fileEnding = IsFTLSupport ?
+                _settings.FTLSupportFileSuffix : _settings.FTLSupportXFileSuffix;
+            fileEnding = fileEnding + "." + _settings.FileExtension;
+
+            _logger.Information("Test type: " + (IsFTLSupport ? "FTLSupport" : "FTLSupportX"));
+
             _logger.Information("Loading task data...");
 
-            var taskPath = Path.Combine(TestDataPath, id + TaskSuffix);
+            var taskPath = Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + fileEnding);
             if (File.Exists(taskPath))
             {
                 var tasks = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath));
@@ -253,7 +273,7 @@ namespace FTLApiTester.Services
             _logger.Information("Loading task data...done");
             _logger.Information("Loading truck data...");
 
-            var truckPath = Path.Combine(TestDataPath, id + TruckSuffix);
+            var truckPath = Path.Combine(TestDataPath, id + _settings.TruckFileIdentifier + fileEnding);
             if (File.Exists(truckPath))
             {
                 var trucks = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath));
@@ -267,7 +287,7 @@ namespace FTLApiTester.Services
             _logger.Information("Loading truck data...done");
             _logger.Information("Loading result data...");
 
-            var resultPath = Path.Combine(TestDataPath, id + ResultSuffix);
+            var resultPath = Path.Combine(TestDataPath, id + _settings.ResultFileIdentifier + fileEnding);
             if (File.Exists(resultPath))
             {
                 var result = JsonConvert.DeserializeObject<FTLResult>(File.ReadAllText(resultPath));
