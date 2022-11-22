@@ -34,7 +34,7 @@ namespace PMapCore.Common
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
-        public SQLServerAccess CT_DB { get; private set; }
+        public SQLServerAccess CT_DB { get; set; }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public int USR_ID { get; set; }
