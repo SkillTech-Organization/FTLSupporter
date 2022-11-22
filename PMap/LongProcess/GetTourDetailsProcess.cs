@@ -64,7 +64,7 @@ namespace PMapCore.LongProcess
                     if (result == null)
                     {
 
-                        RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB);
+                        RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, PMapIniParams.Instance.dicSpeed);
                         var routePar = new CRoutePars() { RZN_ID_LIST = m_Tour.RZN_ID_LIST, Weight = m_Tour.TRK_WEIGHT, Height = m_Tour.TRK_XHEIGHT, Width = m_Tour.TRK_XWIDTH };
                         //Azért van itt a térkép előkészítés, hogy csak akkor fusson le, ha 
                         //kell útvonalat számítani
