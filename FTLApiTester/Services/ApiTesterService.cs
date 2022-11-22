@@ -13,9 +13,53 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using FTLApiTester.Util;
 using System.Diagnostics;
+using Newtonsoft.Json.Converters;
 
 namespace FTLApiTester.Services
 {
+    static class CompareExtension
+    {
+        public static bool DeepCompare(this object obj, object another)
+        {
+            if (ReferenceEquals(obj, another)) return true;
+            if ((obj == null) || (another == null)) return false;
+            //Compare two object's class, return false if they are difference
+            if (obj.GetType() != another.GetType()) return false;
+
+            var result = true;
+            //Get all properties of obj
+            //And compare each other
+            foreach (var property in obj.GetType().GetProperties())
+            {
+                var objValue = property.GetValue(obj);
+                var anotherValue = property.GetValue(another);
+                if (!objValue.Equals(anotherValue)) result = false;
+            }
+
+            return result;
+        }
+
+        public static bool CompareEx(this object obj, object another)
+        {
+            if (ReferenceEquals(obj, another)) return true;
+            if ((obj == null) || (another == null)) return false;
+            if (obj.GetType() != another.GetType()) return false;
+
+            //properties: int, double, DateTime, etc, not class
+            if (!obj.GetType().IsClass) return obj.Equals(another);
+
+            var result = true;
+            foreach (var property in obj.GetType().GetProperties())
+            {
+                var objValue = property.GetValue(obj);
+                var anotherValue = property.GetValue(another);
+                //Recursion
+                if (!objValue.DeepCompare(anotherValue)) result = false;
+            }
+            return result;
+        }
+    }
+
     internal class Args
     {
         [Option('i', "id", Required = false, HelpText = "ID for test data")]
@@ -32,7 +76,7 @@ namespace FTLApiTester.Services
     {
         public FTLSupportRequest Request { get; set; }
 
-        public FTLResult Result { get; set; }
+        public List<FTLResult> Result { get; set; }
 
         public bool IsFTLSupport { get; set; }
     }
@@ -149,11 +193,10 @@ namespace FTLApiTester.Services
 
                 try
                 {
+                    var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(testCase.Request);
                     var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
                         : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
                     _logger.Information("Request was successful.");
-
-                    // Task.Delay(_settings.WaitBeforeBetweenQueueQueryInMs).Wait();
 
                     var resp = new GetResultResponse();
                     var messageCount = 0;
@@ -176,12 +219,12 @@ namespace FTLApiTester.Services
                         minuteCount = timerResult.Elapsed.TotalMinutes;
                     }
                     while (!resp.ResultReceived && messageCount <= _settings.MaxMessageLimitPerRequest
-                    && minuteCount <= _settings.MaxWaitLimitForResultPerRequestInMinutes); // !resp.NoMoreMessages && 
+                    && minuteCount <= _settings.MaxWaitLimitForResultPerRequestInMinutes);
 
                     if (resp.ResultReceived)
                     {
                         var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
-                        var resultJson = JsonConvert.SerializeObject(resp.Result.Result[0]);
+                        var resultJson = JsonConvert.SerializeObject(resp.Result.Result);
 
                         _logger.Information("Saving result to: " + resultFileName);
                         _logger.Verbose(resultJson);
@@ -262,7 +305,8 @@ namespace FTLApiTester.Services
             var taskPath = Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + fileEnding);
             if (File.Exists(taskPath))
             {
-                var tasks = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath));
+                var tasks = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath),
+                   new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
                 data.Request.TaskList = tasks;
             }
             else
@@ -276,7 +320,8 @@ namespace FTLApiTester.Services
             var truckPath = Path.Combine(TestDataPath, id + _settings.TruckFileIdentifier + fileEnding);
             if (File.Exists(truckPath))
             {
-                var trucks = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath));
+                var trucks = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath),
+                   new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
                 data.Request.TruckList = trucks;
             }
             else
@@ -290,7 +335,8 @@ namespace FTLApiTester.Services
             var resultPath = Path.Combine(TestDataPath, id + _settings.ResultFileIdentifier + fileEnding);
             if (File.Exists(resultPath))
             {
-                var result = JsonConvert.DeserializeObject<FTLResult>(File.ReadAllText(resultPath));
+                var result = JsonConvert.DeserializeObject<List<FTLResult>>(File.ReadAllText(resultPath),
+                   new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
                 data.Result = result;
             }
             else

@@ -427,10 +427,10 @@ namespace FTLApiService
 
         [Newtonsoft.Json.JsonProperty("open", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset Open { get; set; }
+        public System.DateTime Open { get; set; }
 
         [Newtonsoft.Json.JsonProperty("close", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset Close { get; set; }
+        public System.DateTime Close { get; set; }
 
         [Newtonsoft.Json.JsonProperty("srvDuration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int SrvDuration { get; set; }
@@ -445,10 +445,10 @@ namespace FTLApiService
         public double Lng { get; set; }
 
         [Newtonsoft.Json.JsonProperty("realArrival", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset RealArrival { get; set; }
+        public System.DateTime RealArrival { get; set; }
 
         [Newtonsoft.Json.JsonProperty("realDeparture", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset RealDeparture { get; set; }
+        public System.DateTime RealDeparture { get; set; }
 
         [Newtonsoft.Json.JsonProperty("arrInExtraPeriod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool ArrInExtraPeriod { get; set; }
@@ -650,7 +650,7 @@ namespace FTLApiService
 
         [Newtonsoft.Json.JsonProperty("currTime", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset CurrTime { get; set; }
+        public System.DateTime CurrTime { get; set; }
 
         [Newtonsoft.Json.JsonProperty("currLat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double CurrLat { get; set; }
