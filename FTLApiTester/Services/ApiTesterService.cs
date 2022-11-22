@@ -33,6 +33,8 @@ namespace FTLApiTester.Services
         public FTLSupportRequest Request { get; set; }
 
         public FTLResult Result { get; set; }
+
+        public bool IsFTLSupport { get; set; }
     }
 
     internal class ApiTesterService : IApiTesterService
@@ -49,8 +51,6 @@ namespace FTLApiTester.Services
         private string TestDataPath { get; set; }
         private string ID { get; set; }
         public int MaxTruckDistance { get; set; }
-
-        public bool IsFTLSupport { get; set; }
 
         public ApiTesterService(FTLApiServiceClient client, FTLApiTesterSettings settings, IConfiguration configuration)
         {
@@ -143,13 +143,13 @@ namespace FTLApiTester.Services
 
                 var testCase = test.Value;
 
-                var endpoint = IsFTLSupport ? "FTLSupport" : "FTLSupportX";
+                var endpoint = test.Value.IsFTLSupport ? "FTLSupport" : "FTLSupportX";
                 _logger.Information($"Sending request for test data with ID {test.Key}, to endpoint {endpoint}");
                 _logger.Verbose("Request content: " + JsonConvert.SerializeObject(testCase.Request));
 
                 try
                 {
-                    var response = IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
+                    var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
                         : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
                     _logger.Information("Request was successful.");
 
@@ -250,12 +250,12 @@ namespace FTLApiTester.Services
                 TruckList = new List<FTLTruck>()
             };
 
-            IsFTLSupport = File.Exists(Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + _settings.FTLSupportFileSuffix + "." + _settings.FileExtension));
-            var fileEnding = IsFTLSupport ?
+            data.IsFTLSupport = File.Exists(Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + _settings.FTLSupportFileSuffix + "." + _settings.FileExtension));
+            var fileEnding = data.IsFTLSupport ?
                 _settings.FTLSupportFileSuffix : _settings.FTLSupportXFileSuffix;
             fileEnding = fileEnding + "." + _settings.FileExtension;
 
-            _logger.Information("Test type: " + (IsFTLSupport ? "FTLSupport" : "FTLSupportX"));
+            _logger.Information("Test type: " + (data.IsFTLSupport ? "FTLSupport" : "FTLSupportX"));
 
             _logger.Information("Loading task data...");
 
