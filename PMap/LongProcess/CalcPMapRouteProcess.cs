@@ -228,9 +228,6 @@ namespace PMapCore.LongProcess
 
                                 tspDiff = DateTime.Now - dtStart;
                                 string infoText1 = itemNo.ToString() + "/" + (maxCnt.ToString());
-                                if (PMapIniParams.Instance.TestMode)
-                                    infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
-                                //                ProcessForm.SetInfoText(m_Hint.Trim() + "=>" + Util.GetSysInfo().PadRight(15) + " " + infoText1.PadRight(25) + " NODE_ID:" + item.Key.ToString());
                             }
                         }
                     }

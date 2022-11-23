@@ -39,36 +39,24 @@ namespace PMapCore.Common
 
         public bool  Loaded { get; private set; }
 
-        public string IDFile { get; private set; }
-        public string CTIniFile { get; private set; }
         public string LogDir { get; private set; }
         public string MapJSonDir { get; private set; }
-        public eLogVerbose LogVerbose { get; private set; }
-        public bool TestMode { get; private set; }
-        public bool TourRoute { get; private set; }             //Egyedi túraútvonalak
+        public eLogVerbose LogVerbose { get; private set; } = eLogVerbose.nolog;
+
+
+        public bool TourRoute { get; private set; } = true;
         public string TourpointToolTip { get; private set; }    //Túrapont tooltip
         public string TruckCode { get; private set; }           //Járműkód
-        public int RoutesExpire { get; private set; }           //DST_DISTANCE érvényességei
+        public int RoutesExpire { get; private set; } = 10;           //DST_DISTANCE érvényességei
         public double WeightAreaDegree { get; private set; }       //Lerakó környéke súlykrolátozás gyűjtése fokban. 1 fok Ez É-D irányban 111 km, K-Ny irányban kb 40-54 km.
 
 
-        public string AzureAccount { get; private set; }        //Felhőbe küldés tablestore account név (a Key a licence-ből jön !)
-
-        public string AuthTokenCryptAESKey { get; private set; }
-        public string AuthTokenCryptAESIV { get; private set; }
-        public string WebLoginTemplate { get; private set; }
-        public string WebLoginSubject { get; private set; }
-        public string WebLoginSenderEmail { get; private set; }
-        public string WebLoginSenderName { get; private set; }
-        public string WebDriverTemplate { get; private set; }
-        public string WebDriverSenderEmail { get; private set; }
-
-        public ThreadPriority InitRouteDataProcess { get; private set; }
-        public ThreadPriority CalcPMapRoutesByPlan { get; private set; }
-        public ThreadPriority CalcPMapRoutesByOrders { get; private set; }
+        public ThreadPriority InitRouteDataProcess { get; private set; } = ThreadPriority.Normal;
+        public ThreadPriority CalcPMapRoutesByPlan { get; private set; } = ThreadPriority.Normal;
+        public ThreadPriority CalcPMapRoutesByOrders { get; private set; } = ThreadPriority.Normal;
 
 
-        public bool GeocodingByGoogle { get; private set; }
+        public bool GeocodingByGoogle { get; private set; }  = false;
 
         public int RouteThreadNum { get; private set; }
         public bool FastestPath { get; private set; }
@@ -95,7 +83,7 @@ namespace PMapCore.Common
         public int TrkMaxWorkTime { get; private set; }
         public double OrdVolumeMultiplier { get; private set; }
 
-        public bool UseProxy { get; private set; }
+        public bool UseProxy { get; private set; } = false;
         public string ProxyServer { get; private set; }
         public int ProxyPort { get; private set; }
         public string ProxyUser { get; private set; }
@@ -144,8 +132,6 @@ namespace PMapCore.Common
 
             INIFile ini = new INIFile(Path.Combine(p_iniPath, p_iniFileName));
 
-            IDFile = ini.ReadString(Global.iniPMap, Global.iniIDFile);
-            CTIniFile = ini.ReadString(Global.iniPMap, Global.iniCTIniFile);
 
             LogDir = ini.ReadString(Global.iniPMap, Global.iniLogDir);
             if (LogDir != "")
@@ -172,22 +158,6 @@ namespace PMapCore.Common
                 LogVerbose = eLogVerbose.normal;
 
 
-            //Debug átirányítása
-            //
-            //if (LogVerbose >= PMapIniParams.eLogVerbose.debug)
-            //{
-            //    string DbgFileName = Path.Combine(LogDir, Global.DbgFileName);
-
-            //    TextWriterTraceListener[] listeners = new TextWriterTraceListener[] 
-            //    {
-            //    new TextWriterTraceListener(DbgFileName),
-            //    new TextWriterTraceListener(Console.Out)
-            //    };
-            //    Debug.Listeners.AddRange(listeners);
-            //}
-
-            string sTestMode = ini.ReadString(Global.iniPMap, Global.iniTestMode);
-            TestMode = (sTestMode == "1" || sTestMode.ToLower() == "true");
 
 
             string sTourRoute = ini.ReadString(Global.iniPMap, Global.iniTourRoute);
@@ -223,16 +193,6 @@ namespace PMapCore.Common
             WeightAreaDegree = Convert.ToDouble("0" + sWeightAreaDegree.Replace(',', '.'), CultureInfo.InvariantCulture);
             if (WeightAreaDegree <= 0)
                 WeightAreaDegree = Global.WEIGHTAREA_DEGREE;
-
-            AzureAccount = ini.ReadString(Global.iniWeb, Global.iniAzureAccount);                   //A Web -es feltöltés AzureAccount-ja ini-ben, a Key a licence-ben van!
-            AuthTokenCryptAESKey = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESKey);
-            AuthTokenCryptAESIV = ini.ReadString(Global.iniWeb, Global.iniAuthTokenCryptAESIV);
-            WebLoginTemplate = ini.ReadString(Global.iniWeb, Global.iniWebLoginTemplate);
-            WebLoginSubject = ini.ReadString(Global.iniWeb, Global.iniWebLoginSubject);
-            WebDriverTemplate = ini.ReadString(Global.iniWeb, Global.iniWebDriverTemplate);
-            WebLoginSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebLoginSenderEmail);
-            WebLoginSenderName = ini.ReadString(Global.iniWeb, Global.iniWebLoginSenderName);
-            WebDriverSenderEmail = ini.ReadString(Global.iniWeb, Global.iniWebDriverSenderEmail);
 
             string sInitRouteDataProcess = ini.ReadString(Global.iniPriority, Global.iniInitRouteDataProcess);
             if (sInitRouteDataProcess != "")
@@ -388,24 +348,8 @@ namespace PMapCore.Common
                 GMapProvider.WebProxy = null;
             }
 
-
-            // DB paraméterek felolvasása CT inifájlból
-            if (!string.IsNullOrWhiteSpace(CTIniFile))
-            {
-                INIFile iniCT = new INIFile(CTIniFile);
-                DBConfigName = iniCT.ReadString(DBConf, Global.iniDBConfigName);
-                DBServer = iniCT.ReadString(DBConf, Global.iniDBServer);
-                DBName = iniCT.ReadString(DBConf, Global.iniDBName);
-                DBUser = iniCT.ReadString(DBConf, Global.iniDBUser);
-                DBPwd = iniCT.ReadString(DBConf, Global.iniDBPwd);
-                DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
-                if (DBCmdTimeOut == 0)
-                    DBCmdTimeOut = 60;
-            }
-
         
             Loaded = true;
-
 
         }
 
