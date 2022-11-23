@@ -45,8 +45,6 @@ namespace PMapCore.Common
         public string MapJSonDir { get; private set; }
         public eLogVerbose LogVerbose { get; private set; }
         public bool TestMode { get; private set; }
-        public bool ParseLog { get; private set; }
-        public bool ALog { get; private set; }
         public bool TourRoute { get; private set; }             //Egyedi túraútvonalak
         public string TourpointToolTip { get; private set; }    //Túrapont tooltip
         public string TruckCode { get; private set; }           //Járműkód
@@ -116,14 +114,7 @@ namespace PMapCore.Common
         public string DBPwd { get; set; }
         public int DBCmdTimeOut { get; set; }
 
-        //Mapei paraméterek
-        //
-        public int MapeiOpen { get; set; }
-        public int MapeiClose { get; set; }
-        public int MapeiSrvTime { get; set; }
-        public double MapeiQtySrvTime { get; set; }
-        public string MapeiDefCargoType { get; set; }
-        public int MapeiSumOrderKg { get; set; }
+    
 
         //Lazy objects are thread safe, double checked and they have better performance than locks.
         //see it: http://csharpindepth.com/Articles/General/Singleton.aspx
@@ -198,11 +189,6 @@ namespace PMapCore.Common
             string sTestMode = ini.ReadString(Global.iniPMap, Global.iniTestMode);
             TestMode = (sTestMode == "1" || sTestMode.ToLower() == "true");
 
-            string sParseLog = ini.ReadString(Global.iniPMap, Global.iniParseLog);
-            ParseLog = (sParseLog == "1" || sParseLog.ToLower() == "true");
-
-            string sALog = ini.ReadString(Global.iniPMap, Global.iniALog);
-            ALog = (sALog == "1" || sALog.ToLower() == "true");
 
             string sTourRoute = ini.ReadString(Global.iniPMap, Global.iniTourRoute);
             TourRoute = (sTourRoute == "1" || sTourRoute.ToLower() == "true");
@@ -417,16 +403,7 @@ namespace PMapCore.Common
                     DBCmdTimeOut = 60;
             }
 
-            // MAPEI paraméterek
-
-            MapeiOpen = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiOpen));
-            MapeiClose = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiClose));
-            MapeiSrvTime = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiSrvTime));
-            MapeiQtySrvTime = Convert.ToDouble("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiQtySrvTime).Replace(',', '.'), CultureInfo.InvariantCulture);
-            MapeiDefCargoType = ini.ReadString(Global.iniMapei, Global.iniMapeiDefCargoType);
-            MapeiSumOrderKg = Convert.ToInt32("0" + ini.ReadString(Global.iniMapei, Global.iniMapeiSumOrderKg));
-            if (MapeiSumOrderKg <= 0)
-                MapeiSumOrderKg = 23500;
+        
             Loaded = true;
 
 
