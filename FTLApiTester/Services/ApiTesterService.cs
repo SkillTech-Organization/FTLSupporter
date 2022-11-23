@@ -96,6 +96,8 @@ namespace FTLApiTester.Services
         private string ID { get; set; }
         public int MaxTruckDistance { get; set; }
 
+        public IsoDateTimeConverter isoDateTimeConverter { get; set; }
+
         public ApiTesterService(FTLApiServiceClient client, FTLApiTesterSettings settings, IConfiguration configuration)
         {
             _client = client;
@@ -106,6 +108,8 @@ namespace FTLApiTester.Services
                 .CreateLogger();
 
             QueueReader = new QueueReader(settings, configuration);
+
+            isoDateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" };
         }
 
         public async Task DoWork(CancellationToken cancellationToken = default)
@@ -224,14 +228,14 @@ namespace FTLApiTester.Services
                     if (resp.ResultReceived)
                     {
                         var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
-                        var resultJson = JsonConvert.SerializeObject(resp.Result.Result);
+                        var resultJson = JsonConvert.SerializeObject(resp.Result.Result, isoDateTimeConverter);
 
                         _logger.Information("Saving result to: " + resultFileName);
                         _logger.Verbose(resultJson);
                         SaveResult(resultJson, resultFileName);
 
                         _logger.Information("Comparing result with given test result...");
-                        var testResultJson = JsonConvert.SerializeObject(testCase.Result);
+                        var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
 
                         if (resultJson == testResultJson)
                         {
@@ -305,8 +309,7 @@ namespace FTLApiTester.Services
             var taskPath = Path.Combine(TestDataPath, id + _settings.TaskFileIdentifier + fileEnding);
             if (File.Exists(taskPath))
             {
-                var tasks = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath),
-                   new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
+                var tasks = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
                 data.Request.TaskList = tasks;
             }
             else
@@ -320,8 +323,7 @@ namespace FTLApiTester.Services
             var truckPath = Path.Combine(TestDataPath, id + _settings.TruckFileIdentifier + fileEnding);
             if (File.Exists(truckPath))
             {
-                var trucks = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath),
-                   new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
+                var trucks = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
                 data.Request.TruckList = trucks;
             }
             else
@@ -335,8 +337,7 @@ namespace FTLApiTester.Services
             var resultPath = Path.Combine(TestDataPath, id + _settings.ResultFileIdentifier + fileEnding);
             if (File.Exists(resultPath))
             {
-                var result = JsonConvert.DeserializeObject<List<FTLResult>>(File.ReadAllText(resultPath),
-                   new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
+                var result = JsonConvert.DeserializeObject<List<FTLResult>>(File.ReadAllText(resultPath), isoDateTimeConverter);
                 data.Result = result;
             }
             else
