@@ -204,7 +204,7 @@ namespace FTLSupporter
             {
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
-                RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir);
+                RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
                 bllRoute route = new bllRoute(null);
 
                 DateTime dtPhaseStart = DateTime.Now;

@@ -353,12 +353,6 @@ namespace PMapCore.Common
             GoogleMapProvider.Instance.APIKey = GoogleMapsAPIKey;
 
 
-            MapCacheMode = AccessMode.ServerOnly;
-            string sAccesMode = ini.ReadString(Global.iniGMap, Global.iniMapCacheMode);
-            if (sAccesMode != "")
-                MapCacheMode = (AccessMode)Enum.Parse(typeof(AccessMode), sAccesMode);
-
-            PMapCommonVars.Instance.MapAccessMode = MapCacheMode;
 
 
             MapCacheDB = ini.ReadString(Global.iniGMap, Global.iniMapCacheDB);

@@ -13,20 +13,29 @@ using System.Threading.Tasks;
 namespace MapJsonGen
 {
     internal class Program
-    {
+    {  
+        //sebességprofil default értékek
+        private static int[] aSpeedDefaults =
+        {
+            70,  //Autópálya
+		    50,  //Autóút
+			40,  //Fõútvonal
+			35,  //Mellékút
+	        25,  //Egyéb alárendelt út
+			15,  //Város (utca)
+	        15   //Fel/lehajtók, rámpák
+        };
+
         static void Main(string[] args)
         {
             try
             {
-                if (args.Length < 3)
+                if (args.Length < 2)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Használat: MapJsonGen <<connect string>> <<sebességek>> <<output könyvtár>> ");
+                    Console.WriteLine("Használat: MapJsonGen <<connect string>> <<output könyvtár>>");
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("   connect string   : SQL szerver connect string");
-                    Console.WriteLine("   sebességek (7 db): Autópálya,Autóút,Főútvonal,Mellékút,Egyéb alárendelt,");
-                    Console.WriteLine("                      Város(utca),Fel/lehajtók, rámpák");
-                    Console.WriteLine("                      pl: 70,60,50,40,35,15,15");
                     Console.WriteLine("   output könyvtár  : generált JSon-ok helye");
                     return;
 
@@ -39,15 +48,13 @@ namespace MapJsonGen
                 PMapCommonVars.Instance.CT_DB.Open();
 
                 var dicSpeed = new Dictionary<int, int>();
-                var speeds = args[1].Split(',');
-
-                for (int i = 0; i < 7; i++)
+                for (int i = 1; i <= 7; i++)
                 {
-                    dicSpeed.Add(i, Convert.ToInt32(speeds[i]));
+                    dicSpeed.Add(i, aSpeedDefaults[i - 1]);
                 }
 
 
-                CreateMapfile(args[2], dicSpeed);
+                CreateMapfile(args[1], dicSpeed);
 
             }
             catch (Exception e)
