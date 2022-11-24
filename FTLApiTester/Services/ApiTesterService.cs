@@ -14,51 +14,10 @@ using Microsoft.Extensions.Options;
 using FTLApiTester.Util;
 using System.Diagnostics;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace FTLApiTester.Services
 {
-    static class CompareExtension
-    {
-        public static bool DeepCompare(this object obj, object another)
-        {
-            if (ReferenceEquals(obj, another)) return true;
-            if ((obj == null) || (another == null)) return false;
-            //Compare two object's class, return false if they are difference
-            if (obj.GetType() != another.GetType()) return false;
-
-            var result = true;
-            //Get all properties of obj
-            //And compare each other
-            foreach (var property in obj.GetType().GetProperties())
-            {
-                var objValue = property.GetValue(obj);
-                var anotherValue = property.GetValue(another);
-                if (!objValue.Equals(anotherValue)) result = false;
-            }
-
-            return result;
-        }
-
-        public static bool CompareEx(this object obj, object another)
-        {
-            if (ReferenceEquals(obj, another)) return true;
-            if ((obj == null) || (another == null)) return false;
-            if (obj.GetType() != another.GetType()) return false;
-
-            //properties: int, double, DateTime, etc, not class
-            if (!obj.GetType().IsClass) return obj.Equals(another);
-
-            var result = true;
-            foreach (var property in obj.GetType().GetProperties())
-            {
-                var objValue = property.GetValue(obj);
-                var anotherValue = property.GetValue(another);
-                //Recursion
-                if (!objValue.DeepCompare(anotherValue)) result = false;
-            }
-            return result;
-        }
-    }
 
     internal class Args
     {
@@ -228,24 +187,41 @@ namespace FTLApiTester.Services
                     if (resp.ResultReceived)
                     {
                         var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
-                        var resultJson = JsonConvert.SerializeObject(resp.Result.Result, isoDateTimeConverter);
-
-                        _logger.Information("Saving result to: " + resultFileName);
-                        _logger.Verbose(resultJson);
-                        SaveResult(resultJson, resultFileName);
-
-                        _logger.Information("Comparing result with given test result...");
-                        var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
-
-                        if (resultJson == testResultJson)
+                        try
                         {
-                            _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
-                            testsSucceeded++;
+                            resp.Result.Result.ForEach(x =>
+                            {
+                                x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                            });
+
+                            testCase.Result.ForEach(x =>
+                            {
+                                x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                            });
+
+                            var resultJson = JsonConvert.SerializeObject(resp.Result.Result, isoDateTimeConverter);
+                            var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
+
+                            _logger.Information("Comparing result with given test result...");
+
+                            if (resultJson == testResultJson)
+                            {
+                                _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
+                                testsSucceeded++;
+                            }
+                            else
+                            {
+                                _logger.Information($"Different results, test {i} of {data.Keys.Count} failed.");
+                                testsFailed++;
+                            }
+
+                            _logger.Information("Saving result to: " + resultFileName);
+                            _logger.Verbose(resultJson);
+                            SaveResult(resultJson, resultFileName);
                         }
-                        else
+                        catch(Exception ex)
                         {
-                            _logger.Information($"Different results, test {i} of {data.Keys.Count} failed.");
-                            testsFailed++;
+                            _logger.Error("Test failed due to unexpected error: " + ex.Message, ex);
                         }
                     }
                     else
