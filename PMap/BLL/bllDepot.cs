@@ -190,6 +190,7 @@ namespace PMapCore.BLL
                 }
             }
         }
+
         public static string GetWeightsNear(double NOD_XPOS /*LNG*/, double NOD_YPOS /*LAT*/)
         {
             string sRet = "";

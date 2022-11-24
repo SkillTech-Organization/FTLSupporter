@@ -15,6 +15,7 @@
 
 namespace FTLApiService
 {
+    using FTLApiTester.Settings;
     using Microsoft.Extensions.Configuration;
     using System = global::System;
 
@@ -24,9 +25,8 @@ namespace FTLApiService
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public FTLApiServiceClient(string baseUrl, System.Net.Http.HttpClient httpClient, IConfiguration configuration): base(configuration)
+        public FTLApiServiceClient(System.Net.Http.HttpClient httpClient, IConfiguration configuration): base(configuration)
         {
-            BaseUrl = baseUrl;
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
         }
@@ -80,6 +80,8 @@ namespace FTLApiService
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    request_.Headers.Add("x-api-key", ApiKey);
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -166,6 +168,8 @@ namespace FTLApiService
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
+                    request_.Headers.Add("x-api-key", ApiKey);
+
                     PrepareRequest(client_, request_, urlBuilder_);
 
                     var url_ = urlBuilder_.ToString();
@@ -250,6 +254,8 @@ namespace FTLApiService
 
                     var url_ = urlBuilder_.ToString();
                     request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    request_.Headers.Add("x-api-key", ApiKey);
 
                     PrepareRequest(client_, request_, url_);
 
@@ -421,10 +427,10 @@ namespace FTLApiService
 
         [Newtonsoft.Json.JsonProperty("open", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset Open { get; set; }
+        public System.DateTime Open { get; set; }
 
         [Newtonsoft.Json.JsonProperty("close", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset Close { get; set; }
+        public System.DateTime Close { get; set; }
 
         [Newtonsoft.Json.JsonProperty("srvDuration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int SrvDuration { get; set; }
@@ -439,10 +445,10 @@ namespace FTLApiService
         public double Lng { get; set; }
 
         [Newtonsoft.Json.JsonProperty("realArrival", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset RealArrival { get; set; }
+        public System.DateTime RealArrival { get; set; }
 
         [Newtonsoft.Json.JsonProperty("realDeparture", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset RealDeparture { get; set; }
+        public System.DateTime RealDeparture { get; set; }
 
         [Newtonsoft.Json.JsonProperty("arrInExtraPeriod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool ArrInExtraPeriod { get; set; }
@@ -644,7 +650,7 @@ namespace FTLApiService
 
         [Newtonsoft.Json.JsonProperty("currTime", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset CurrTime { get; set; }
+        public System.DateTime CurrTime { get; set; }
 
         [Newtonsoft.Json.JsonProperty("currLat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double CurrLat { get; set; }

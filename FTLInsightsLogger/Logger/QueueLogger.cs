@@ -3,12 +3,16 @@ using Azure.Storage.Queues;
 using FTLInsightsLogger.Settings;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonUtils;
 
 namespace FTLInsightsLogger.Logger
 {
+
     public interface IQueueLogger
     {
         void Log(string message, string requestId = "");
@@ -45,6 +49,10 @@ namespace FTLInsightsLogger.Logger
             {
                 if (queueClient.Exists())
                 {
+                    if (string.IsNullOrWhiteSpace(message))
+                    {
+                        throw new Exception("Queue message is empty string or null!");
+                    }
                     queueClient.SendMessage(message);
                 }
             }
@@ -60,6 +68,10 @@ namespace FTLInsightsLogger.Logger
             {
                 if (await queueClient.ExistsAsync())
                 {
+                    if (string.IsNullOrWhiteSpace(message))
+                    {
+                        throw new Exception("Queue message is empty string or null!");
+                    }
                     queueClient.SendMessageAsync(message);
                 }
             }
@@ -75,7 +87,12 @@ namespace FTLInsightsLogger.Logger
             {
                 if (queueClient.Exists())
                 {
-                    queueClient.SendMessage(Newtonsoft.Json.JsonConvert.SerializeObject(message));
+                    var m = message.ToCompressedJson();
+                    if (string.IsNullOrWhiteSpace(m))
+                    {
+                        throw new Exception("Queue message is empty string or null!");
+                    }
+                    queueClient.SendMessage(m);
                 }
             }
             catch (Exception ex)
@@ -90,7 +107,12 @@ namespace FTLInsightsLogger.Logger
             {
                 if (await queueClient.ExistsAsync())
                 {
-                    queueClient.SendMessageAsync(Newtonsoft.Json.JsonConvert.SerializeObject(message));
+                    var m = message.ToCompressedJson();
+                    if (string.IsNullOrWhiteSpace(m))
+                    {
+                        throw new Exception("Queue message is empty string or null!");
+                    }
+                    queueClient.SendMessageAsync(m);
                 }
             }
             catch (Exception ex)

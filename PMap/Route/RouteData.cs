@@ -61,7 +61,7 @@ namespace PMapCore.Route
         }
 
 
-        public void InitFromFiles(string p_dir, bool p_Forced = false)
+        public void InitFromFiles(string p_dir, Dictionary<int, int> p_speeds, bool p_Forced = false)
         {
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
             {
@@ -83,6 +83,14 @@ namespace PMapCore.Route
                     string strEdges = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
                     var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
                     Edges = xEdges;
+                    foreach( var edg in Edges)
+                    {
+                        float CalcSpeed = p_speeds[edg.Value.RDT_VALUE];
+                        float CalcDuration = (float)(edg.Value.EDG_LENGTH / p_speeds[edg.Value.RDT_VALUE] / 3.6 * 60);
+                        edg.Value.CalcSpeed = CalcSpeed;
+                        edg.Value.CalcDuration = CalcDuration;
+                    }
+
 
                     string strNodePositions = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);

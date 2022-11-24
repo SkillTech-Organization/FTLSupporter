@@ -112,6 +112,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonUtils\CommonUtils.csproj">
+      <Project>{96B74E91-3B4F-4321-9B7C-6624D1BE7D45}</Project>
+      <Name>CommonUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FTLInsightsLogger\FTLInsightsLogger.csproj">
       <Project>{c40d383a-ba10-4caf-bf08-176c08b1dfc5}</Project>
       <Name>FTLInsightsLogger</Name>

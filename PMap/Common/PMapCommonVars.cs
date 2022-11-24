@@ -39,10 +39,7 @@ namespace PMapCore.Common
         [System.Xml.Serialization.XmlIgnoreAttribute]
         public int USR_ID { get; set; }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public AccessMode MapAccessMode { get; set; }
-
-        [System.Xml.Serialization.XmlIgnoreAttribute]
+         [System.Xml.Serialization.XmlIgnoreAttribute]
         public GMapProvider MapProvider { get; set; }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]

@@ -1520,12 +1520,6 @@ namespace PMapCore.BLL
 
             var request = WebRequest.Create(requestUri);
 
-            if (PMapIniParams.Instance.UseProxy)
-            {
-                request.Proxy = new WebProxy(PMapIniParams.Instance.ProxyServer, PMapIniParams.Instance.ProxyPort);
-                request.Proxy.Credentials = new NetworkCredential(PMapIniParams.Instance.ProxyUser, PMapIniParams.Instance.ProxyPassword, PMapIniParams.Instance.ProxyDomain);
-            }
-
 
             var response = request.GetResponse();
             var xdoc = XDocument.Load(response.GetResponseStream());

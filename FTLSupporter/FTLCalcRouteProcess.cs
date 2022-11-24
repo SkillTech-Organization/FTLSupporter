@@ -46,7 +46,7 @@ namespace FTLSupporter
                 TimeSpan tspDiff;
 
                 PMapRoutingProvider provider = new PMapRoutingProvider();
-                RouteData.Instance.InitFromFiles("map");
+
                 //TODO refakt RectLatLng boundary = new RectLatLng();
 
                 List<int> fromNodes = m_lstRoutes.GroupBy(g => g.fromNOD_ID).Select(x => x.Key).ToList();

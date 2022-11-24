@@ -15,6 +15,7 @@ using FTLInsightsLogger.Logger;
 using PMapCore.Properties;
 using FTLInsightsLogger.Settings;
 using static FTLSupporter.FTLResult;
+using CommonUtils;
 
 namespace FTLSupporter
 {
@@ -85,9 +86,9 @@ namespace FTLSupporter
             });
         }
 
-        static FTLQueueResponse ErrorToQueueMessage(params object[] args)
+        static object ErrorToQueueMessage(params object[] args)
         {
-            return new FTLQueueResponse
+            var m = new FTLQueueResponse
             {
                 RequestID = RequestID,
                 Result = new List<FTLResult>
@@ -99,11 +100,12 @@ namespace FTLSupporter
                     }
                 }
             };
+            return m.ToCompressedJson();
         }
 
-        static FTLQueueResponse ExceptionToQueueMessage(params object[] args)
+        static object ExceptionToQueueMessage(params object[] args)
         {
-            return new FTLQueueResponse
+            var m =  new FTLQueueResponse
             {
                 RequestID = RequestID,
                 Result = new List<FTLResult>
@@ -115,11 +117,12 @@ namespace FTLSupporter
                     }
                 }
             };
+            return m.ToCompressedJson();
         }
 
-        static FTLQueueResponse ValidationErrorToQueueMessage(params object[] args)
+        static object ValidationErrorToQueueMessage(params object[] args)
         {
-            return new FTLQueueResponse
+            var m = new FTLQueueResponse
             {
                 RequestID = RequestID,
                 Result = new List<FTLResult>
@@ -131,11 +134,12 @@ namespace FTLSupporter
                     }
                 }
             };
+            return m.ToCompressedJson();
         }
 
-        static FTLQueueResponse LogToQueueMessage(params object[] args)
+        static object LogToQueueMessage(params object[] args)
         {
-            return new FTLQueueResponse
+            var m = new FTLQueueResponse
             {
                 RequestID = RequestID,
                 Result = new List<FTLResult>
@@ -152,6 +156,7 @@ namespace FTLSupporter
                     }
                 }
             };
+            return m.ToCompressedJson();
         }
 
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
@@ -204,7 +209,7 @@ namespace FTLSupporter
             {
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
-                RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir);
+                RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
                 bllRoute route = new bllRoute(null);
 
                 DateTime dtPhaseStart = DateTime.Now;
