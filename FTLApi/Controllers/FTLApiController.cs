@@ -44,15 +44,17 @@ namespace FTLApi
         public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
         {
             var result = await _implementation.FTLSupportAsync(body, CancellationToken.None);
-
+            return new OkObjectResult(result);
+            /*
             if (result.HasError)
             {
                 return new BadRequestObjectResult(result);
             }
             else
             {
-                return new OkObjectResult(result);
+        
             }
+            */
         }
 
         /// <summary>

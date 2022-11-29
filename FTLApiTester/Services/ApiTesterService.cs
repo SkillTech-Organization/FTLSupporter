@@ -203,8 +203,12 @@ namespace FTLApiTester.Services
                             var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
 
                             _logger.Information("Comparing result with given test result...");
+                            var res = resultJson.ToLower();
+                            var swh = testResultJson.ToLower();
+                     
 
-                            if (resultJson == testResultJson)
+
+                            if (resultJson.ToLower() == testResultJson.ToLower())
                             {
                                 _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
                                 testsSucceeded++;

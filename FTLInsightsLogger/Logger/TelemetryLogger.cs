@@ -186,7 +186,14 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(ExceptionToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
+                if (errorObject != null)
+                {
+                    QueueLogger.Log(ExceptionToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
+                }
+                else
+                {
+                    QueueLogger.Log(ExceptionToQueueMessage(ex), hasId ? id : IdPropertyDefaultValue);
+                }
             }
         }
 

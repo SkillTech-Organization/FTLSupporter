@@ -23,9 +23,11 @@ namespace FTLApi.Handlers
 
         public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
         {
+  
             var response = new FTLResponse();
             try
             {
+
                 var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings);
                 if (initResult != null)
                 {
@@ -41,7 +43,8 @@ namespace FTLApi.Handlers
             }
             catch (Exception ex)
             {
-                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID));
+                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID), intoQueue: false);
+                throw;
             }
             return Task.FromResult(response);
         }
@@ -66,7 +69,8 @@ namespace FTLApi.Handlers
             }
             catch (Exception ex)
             {
-                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID));
+                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID), intoQueue: false);
+                throw;
             }
             return Task.FromResult(response);
         }
