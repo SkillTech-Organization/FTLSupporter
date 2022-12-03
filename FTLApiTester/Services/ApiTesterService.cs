@@ -156,6 +156,13 @@ namespace FTLApiTester.Services
 
                 try
                 {
+                    if (_settings.ClearQueueBeforeGettingMessages)
+                    {
+                        _logger.Information("Clearing queue...");
+                        QueueReader.ClearMessages();
+                        _logger.Information("Queue cleared.");
+                    }
+
                     var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(testCase.Request);
                     var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
                         : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
@@ -164,13 +171,6 @@ namespace FTLApiTester.Services
                     var resp = new GetResultResponse();
                     var messageCount = 0;
                     double minuteCount = 0;
-
-                    if (_settings.ClearQueueBeforeGettingMessages)
-                    {
-                        _logger.Information("Clearing queue...");
-                        QueueReader.ClearMessages();
-                        _logger.Information("Queue cleared.");
-                    }
 
                     timerResult.Start();
 
