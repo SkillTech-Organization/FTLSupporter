@@ -26,5 +26,6 @@ namespace FTLApiTester.Settings
         public int WaitBeforeBetweenQueueQueryInMs { get; set; }
         public int MaxMessageLimitPerRequest { get; set; }
         public int MaxWaitLimitForResultPerRequestInMinutes { get; set; }
+        public bool ClearQueueBeforeGettingMessages { get; set; }
     }
 }

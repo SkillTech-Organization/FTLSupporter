@@ -21,6 +21,8 @@ namespace FTLInsightsLogger.Logger
 
         TelemetryClient Client { get; }
 
+        BlobLogger Blob { get; }
+
         IQueueLogger QueueLogger { get; }
 
         bool QueueEnabled { get; set; }
@@ -74,6 +76,8 @@ namespace FTLInsightsLogger.Logger
 
         public TelemetryClient Client { get; private set; }
 
+        public BlobLogger Blob { get; private set; }
+
         enum LogTypes
         {
             EXCEPTION, START, END, STATUS
@@ -98,6 +102,8 @@ namespace FTLInsightsLogger.Logger
             this.QueueEnabled = settings.UseQueue;
 
             this.QueueLogger.SetLogger(this);
+
+            Blob = new BlobLogger(settings.AzureStorageConnectionString, this, settings.ResultBlobContainer);
         }
 
         public void ValidationError(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
@@ -137,7 +143,7 @@ namespace FTLInsightsLogger.Logger
             {
                 Commit();
             }
-            if (QueueEnabled && intoQueue)
+            if (QueueEnabled && intoQueue && errorObject != null)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
                 QueueLogger.Log(ErrorToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
@@ -262,6 +268,8 @@ namespace FTLInsightsLogger.Logger
         public MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         public TelemetryClient Client { get; private set; }
+
+        public BlobLogger Blob { get; private set; }
 
         public IQueueLogger QueueLogger { get; private set; }
 

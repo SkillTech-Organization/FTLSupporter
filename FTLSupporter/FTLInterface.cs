@@ -86,7 +86,7 @@ namespace FTLSupporter
             });
         }
 
-        static object ErrorToQueueMessage(params object[] args)
+        public static object ErrorToQueueMessage(params object[] args)
         {
             var m = new FTLQueueResponse
             {
@@ -100,10 +100,10 @@ namespace FTLSupporter
                     }
                 }
             };
-            return m.ToCompressedJson();
+            return m.ToJson();
         }
 
-        static object ExceptionToQueueMessage(params object[] args)
+        public static object ExceptionToQueueMessage(params object[] args)
         {
             var m =  new FTLQueueResponse
             {
@@ -117,10 +117,10 @@ namespace FTLSupporter
                     }
                 }
             };
-            return m.ToCompressedJson();
+            return m.ToJson();
         }
 
-        static object ValidationErrorToQueueMessage(params object[] args)
+        public static object ValidationErrorToQueueMessage(params object[] args)
         {
             var m = new FTLQueueResponse
             {
@@ -134,10 +134,10 @@ namespace FTLSupporter
                     }
                 }
             };
-            return m.ToCompressedJson();
+            return m.ToJson();
         }
 
-        static object LogToQueueMessage(params object[] args)
+        public static object LogToQueueMessage(params object[] args)
         {
             var m = new FTLQueueResponse
             {
@@ -156,7 +156,69 @@ namespace FTLSupporter
                     }
                 }
             };
-            return m.ToCompressedJson();
+            return m.ToJson();
+        }
+
+        private static void HandleResult(DateTime dtStart, List<FTLResult> res, bool isFtlSupport)
+        {
+            var ret = new FTLResponse();
+            ret.RequestID = RequestID;
+            ret.Result = res;
+
+            var link = Logger.Blob.LogString(ret.ToJson(), RequestID).Result;
+
+            if (!string.IsNullOrWhiteSpace(link))
+            {
+                var msg = String.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString());
+
+                Logger.Info(msg, Logger.GetEndProperty(RequestID), false);
+
+                var queueResponse = new FTLQueueResponse
+                {
+                    RequestID = RequestID,
+                    Link = link,
+                    Result = new List<FTLResult>
+                    {
+                        new FTLResult
+                        {
+                            Data = new FTLLog
+                            {
+                                Message = msg,
+                                Timestamp = DateTime.Now,
+                                Type = "STATUS"
+                            },
+                            Status = FTLResultStatus.RESULT
+                        }
+                    }
+                };
+
+                Logger.QueueLogger.Log(queueResponse, RequestID);
+            }
+            else
+            {
+                Logger.Error(FTLMessages.E_ERRINBLOBSAVE, Logger.GetExceptionProperty(RequestID), null, false);
+
+                var queueResponse = new FTLQueueResponse
+                {
+                    RequestID = RequestID,
+                    Link = link,
+                    Result = new List<FTLResult>
+                    {
+                        new FTLResult
+                        {
+                            Data = new FTLLog
+                            {
+                                Message = FTLMessages.E_ERRINBLOBSAVE,
+                                Timestamp = DateTime.Now,
+                                Type = "STATUS"
+                            },
+                            Status = FTLResultStatus.ERROR
+                        }
+                    }
+                };
+
+                Logger.QueueLogger.Log(queueResponse, RequestID);
+            }
         }
 
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
@@ -168,13 +230,7 @@ namespace FTLSupporter
 
             var res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
-            Logger.Info(String.Format("FTLSupport Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetEndProperty(RequestID));
-
-            var queueResponse = new FTLQueueResponse();
-            queueResponse.RequestID = RequestID;
-            queueResponse.Result = res;
-
-            Logger.QueueLogger.Log(queueResponse, RequestID);
+            HandleResult(dtStart, res, true);
 
             return res;
         }
@@ -189,13 +245,7 @@ namespace FTLSupporter
 
             var res = FTLSupportX_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
-            Logger.Info(String.Format("FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString()), Logger.GetEndProperty(RequestID));
-
-            var queueResponse = new FTLQueueResponse();
-            queueResponse.RequestID = RequestID;
-            queueResponse.Result = res;
-
-            Logger.QueueLogger.Log(queueResponse, RequestID);
+            HandleResult(dtStart, res, false);
 
             return res;
         }

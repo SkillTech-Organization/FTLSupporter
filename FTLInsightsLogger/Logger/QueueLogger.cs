@@ -87,7 +87,7 @@ namespace FTLInsightsLogger.Logger
             {
                 if (queueClient.Exists())
                 {
-                    var m = message.ToCompressedJson();
+                    var m = message.ToJson();
                     if (string.IsNullOrWhiteSpace(m))
                     {
                         throw new Exception("Queue message is empty string or null!");
@@ -107,7 +107,7 @@ namespace FTLInsightsLogger.Logger
             {
                 if (await queueClient.ExistsAsync())
                 {
-                    var m = message.ToCompressedJson();
+                    var m = message.ToJson();
                     if (string.IsNullOrWhiteSpace(m))
                     {
                         throw new Exception("Queue message is empty string or null!");

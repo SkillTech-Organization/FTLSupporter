@@ -39,7 +39,7 @@ namespace FTLApi
         /// <param name="body"></param>
         /// <param name="maxTruckDistance"></param>
         /// <returns></returns>
-        //[ApiKey]
+        [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupport")]
         public async Task<ActionResult<FTLResponse>> FTLSupport([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
         {
@@ -58,12 +58,25 @@ namespace FTLApi
         }
 
         /// <summary>
+        /// Get calculation result
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ApiKey]
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result")]
+        public async Task<ActionResult<FTLResponse>> Result(string id)
+        {
+            var result = await _implementation.Result(id);
+            return new OkObjectResult(result);
+        }
+
+        /// <summary>
         /// Calculate by FTLSupporterX engine
         /// </summary>
         /// <param name="body"></param>
         /// <param name="maxTruckDistance"></param>
         /// <returns></returns>
-        //[ApiKey]
+        [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/FTLSupportX")]
         public async Task<ActionResult<FTLResponse>> FTLSupportX([Microsoft.AspNetCore.Mvc.FromBody] FTLSupportRequest body)
         {
@@ -83,7 +96,7 @@ namespace FTLApi
         /// get the 'isalive' status of the FTLSupporter service
         /// </summary>
         /// <returns></returns>
-        //[ApiKey]
+        [ApiKey]
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("IsAlive")]
         public System.Threading.Tasks.Task IsAlive()
         {

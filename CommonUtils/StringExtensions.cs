@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,11 +11,13 @@ namespace CommonUtils
 {
     public static class StringExtensions
     {
+        public static IsoDateTimeConverter IsoDateTimeConverter { get; set; } = new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" };
+
         public static string ToCompressedJson(this object m)
         {
             try
             {
-                var json = JsonConvert.SerializeObject(m, Formatting.None);
+                var json = JsonConvert.SerializeObject(m, Formatting.None, IsoDateTimeConverter);
                 var res = StringCompressor.CompressStringGzip2(json);
                 return res;
             }
@@ -42,7 +45,33 @@ namespace CommonUtils
             try
             {
                 var json = StringCompressor.DecompressStringGzip2(m);
-                var o = JsonConvert.DeserializeObject<T>(json);
+                var o = JsonConvert.DeserializeObject<T>(json, IsoDateTimeConverter);
+                return o;
+            }
+            catch (Exception ex)
+            {
+                return default;
+            }
+        }
+
+        public static string ToJson(this object m)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(m, Formatting.None, IsoDateTimeConverter);
+                return json;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        public static T ToDeserializedJson<T>(this string m)
+        {
+            try
+            {
+                var o = JsonConvert.DeserializeObject<T>(m, IsoDateTimeConverter);
                 return o;
             }
             catch (Exception ex)

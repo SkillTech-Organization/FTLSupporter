@@ -11,5 +11,7 @@
         public bool UseQueue { get; set; }
 
         public bool AutoCommitAfterEveryLogEnabled { get; set; }
+
+        public string ResultBlobContainer { get; set; }
     }
 }

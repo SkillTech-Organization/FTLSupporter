@@ -10,5 +10,6 @@ namespace FTLSupporter
     {
         public string RequestID { get; set; }
         public List<FTLResult> Result { get; set; } = new List<FTLResult>();
+        public string Link { get; set; }
     }
 }
