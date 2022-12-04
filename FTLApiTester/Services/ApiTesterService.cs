@@ -196,58 +196,8 @@ namespace FTLApiTester.Services
                         var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
                         try
                         {
-                            _logger.Information($"Processing error...");
-
-                            resp.Result.Result.ForEach(x =>
-                            {
-                                x.Data = ((JToken)x.Data).ToObject<FTLSupporter.FTLLog>();
-                            });
-                            testCase.Result.ForEach(x =>
-                            {
-                                try
-                                {
-                                    x.Data = ((JToken)x.Data).ToObject<FTLSupporter.FTLLog>();
-                                }
-                                catch (Exception ex)
-                                {
-                                    x.Data = new FTLSupporter.FTLLog
-                                    {
-                                        Message = ""
-                                    };
-                                }
-                            });
-
-                            _logger.Information($"Received errors START");
-
-                            for (int ii = 0; ii < resp.Result.Result.Count; ii++)
-                            {
-                                var log = (FTLSupporter.FTLLog)resp.Result.Result[ii].Data;
-                                _logger.Information($"Error [{ii}/{resp.Result.Result}]: " + log.Message);
-                            }
-
-                            _logger.Information($"Received errors END");
-
-                            var resultJson = JsonConvert.SerializeObject(resp.Result, isoDateTimeConverter);
-                            var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
-
-                            _logger.Information("Comparing result with given test result...");
-                            var res = resultJson.ToLower();
-                            var swh = testResultJson.ToLower();
-
-                            if (resultJson.ToLower() == testResultJson.ToLower())
-                            {
-                                _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
-                                testsSucceeded++;
-                            }
-                            else
-                            {
-                                _logger.Information($"Different results, test {i} of {data.Keys.Count} failed.");
-                                testsFailed++;
-                            }
-
-                            _logger.Information("Saving result to: " + resultFileName);
-                            _logger.Verbose(resultJson);
-                            SaveResult(resultJson, resultFileName);
+                            _logger.Information($"Received error: {resp.Result.Log.Message}");
+                            _logger.Information("Test failed due to received error.");
                         }
                         catch (Exception ex)
                         {

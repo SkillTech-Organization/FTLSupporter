@@ -96,10 +96,10 @@ namespace FTLApiTester.Util
                                 }
                                 else
                                 {
-                                    var res = queueResponse.Result;
-                                    if (res != null && res.Count > 0)
+                                    var res = queueResponse;
+                                    if (res != null)
                                     {
-                                        if (res.Any(x => x.Status == FTLResult.FTLResultStatus.RESULT))
+                                        if (res.Status == FTLQueueResponse.FTLQueueResponseStatus.RESULT)
                                         {
                                             _logger.Information("Result found.");
 
@@ -107,13 +107,17 @@ namespace FTLApiTester.Util
                                             resp.ResultReceived = true;
                                             return resp;
                                         }
-                                        else if (res.Any(x => x.Status == FTLResult.FTLResultStatus.ERROR))
+                                        else if (res.Status == FTLQueueResponse.FTLQueueResponseStatus.ERROR)
                                         {
                                             _logger.Information("Error found.");
 
                                             resp.Result = queueResponse;
                                             resp.ErrorReceived = true;
                                             return resp;
+                                        }
+                                        else
+                                        {
+                                            _logger.Information("Log found.");
                                         }
                                     }
                                     else

@@ -21,11 +21,7 @@ namespace FTLApi.Handlers
         {
             Settings = options.Value;
             Logger = TelemetryClientFactory.Create(Settings);
-
-            Logger.ErrorToQueueMessage = FTLInterface.ErrorToQueueMessage;
-            Logger.ExceptionToQueueMessage = FTLInterface.ExceptionToQueueMessage;
             Logger.LogToQueueMessage = FTLInterface.LogToQueueMessage;
-            Logger.ValidationErrorToQueueMessage = FTLInterface.ValidationErrorToQueueMessage;
         }
 
         public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
