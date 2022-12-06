@@ -13,6 +13,11 @@ namespace FTLInsightsLogger.Logger
 {
     public delegate object MessageToQueueMessage(params object[] args);
 
+    public enum LogTypes
+    {
+        EXCEPTION, START, END, STATUS
+    }
+
     public interface ITelemetryLogger
     {
         MessageToQueueMessage LogToQueueMessage { get; set; }
@@ -72,11 +77,6 @@ namespace FTLInsightsLogger.Logger
         public TelemetryClient Client { get; private set; }
 
         public BlobLogger Blob { get; private set; }
-
-        enum LogTypes
-        {
-            EXCEPTION, START, END, STATUS
-        }
 
         public bool AutoCommitEnabled { get; private set; } = true;
         public string IdPropertyDefaultValue { get; set; } = "No Data";

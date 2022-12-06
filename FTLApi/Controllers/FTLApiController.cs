@@ -63,8 +63,8 @@ namespace FTLApi
         /// <param name="id"></param>
         /// <returns></returns>
         [ApiKey]
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result")]
-        public async Task<ActionResult<FTLResponse>> Result(string id)
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result/{id}")]
+        public async Task<ActionResult<FTLResponse>> Result([FromRoute] string id)
         {
             var result = await _implementation.Result(id);
             return new OkObjectResult(result);

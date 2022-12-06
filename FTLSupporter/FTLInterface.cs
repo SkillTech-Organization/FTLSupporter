@@ -22,6 +22,7 @@ namespace FTLSupporter
     public class FTLInterface
     {
         private static ITelemetryLogger Logger { get; set; }
+        private static FTLLoggerSettings LoggerSettings { get; set; }
         private static string RequestID { get; set; }
 
         public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings)
@@ -30,6 +31,7 @@ namespace FTLSupporter
             {
                 Logger = TelemetryClientFactory.Create(loggerSettings);
                 Logger.LogToQueueMessage = LogToQueueMessage;
+                LoggerSettings = loggerSettings;
             }
 
             convertDateTimeToUTC(p_TaskList, p_TruckList);
@@ -85,6 +87,7 @@ namespace FTLSupporter
 
         public static object LogToQueueMessage(params object[] args)
         {
+            var typeParsed = Enum.TryParse((string)(args[1] ?? ""), out LogTypes type);
             var m = new FTLQueueResponse
             {
                 RequestID = RequestID,
@@ -92,7 +95,7 @@ namespace FTLSupporter
                 {
                     Message = (string)args[0],
                     Timestamp = (DateTime)args[2],
-                    Type = (string)args[1]
+                    Type = typeParsed ? type : LogTypes.STATUS
                 },
                 Status = FTLQueueResponse.FTLQueueResponseStatus.LOG
             };
@@ -112,9 +115,10 @@ namespace FTLSupporter
             ret.MaxTruckDistance = p_maxTruckDistance;
             ret.RequestID = RequestID;
 
-            var link = Logger.Blob.LogString(ret.ToJson(), RequestID).Result;
+            var saveSuccess = !string.IsNullOrWhiteSpace(Logger.Blob.LogString(ret.ToJson(), RequestID).Result);
+            var link = LoggerSettings.ResultLinkBase + RequestID;
 
-            if (!string.IsNullOrWhiteSpace(link))
+            if (saveSuccess)
             {
                 var msg = String.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString());
 
@@ -128,7 +132,7 @@ namespace FTLSupporter
                     {
                         Message = msg,
                         Timestamp = DateTime.Now,
-                        Type = "STATUS"
+                        Type = LogTypes.END
                     },
                     Status = FTLQueueResponse.FTLQueueResponseStatus.RESULT
                 };
@@ -147,7 +151,7 @@ namespace FTLSupporter
                     {
                         Message = FTLMessages.E_ERRINBLOBSAVE,
                         Timestamp = DateTime.Now,
-                        Type = "STATUS"
+                        Type = LogTypes.END
                     },
                     Status = FTLQueueResponse.FTLQueueResponseStatus.ERROR
                 };
