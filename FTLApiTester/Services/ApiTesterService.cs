@@ -163,7 +163,6 @@ namespace FTLApiTester.Services
                         _logger.Information("Queue cleared.");
                     }
 
-                    var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(testCase.Request);
                     var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
                         : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
                     _logger.Information("Request was successful.");
