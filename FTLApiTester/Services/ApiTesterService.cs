@@ -215,8 +215,7 @@ namespace FTLApiTester.Services
                             {
                                 _logger.Information($"Getting FTLResponse from API...");
 
-                                var ftlResponse = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterResultAsync(link.Split('/')[^1]).Result 
-                                    : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
+                                var ftlResponse = _client.ApiV1FTLSupporterResultAsync(link.Split('/')[^1]).Result;
 
                                 if (ftlResponse != null)
                                 {

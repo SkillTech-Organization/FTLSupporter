@@ -65,7 +65,7 @@ namespace FTLApi.Handlers
             }
             catch (Exception ex)
             {
-                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID), intoQueue: false);
+                Logger.Exception(ex, Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 throw;
             }
             return Task.FromResult(response);
