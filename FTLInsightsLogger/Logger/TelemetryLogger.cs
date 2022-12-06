@@ -7,19 +7,24 @@ using System.Threading;
 using System;
 using FTLInsightsLogger.Settings;
 using System.Windows.Forms;
+using CommonUtils;
 
 namespace FTLInsightsLogger.Logger
 {
     public delegate object MessageToQueueMessage(params object[] args);
 
+    public enum LogTypes
+    {
+        EXCEPTION, START, END, STATUS
+    }
+
     public interface ITelemetryLogger
     {
-        MessageToQueueMessage ErrorToQueueMessage { get; set; }
-        MessageToQueueMessage ExceptionToQueueMessage { get; set; }
         MessageToQueueMessage LogToQueueMessage { get; set; }
-        MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         TelemetryClient Client { get; }
+
+        BlobLogger Blob { get; }
 
         IQueueLogger QueueLogger { get; }
 
@@ -61,10 +66,7 @@ namespace FTLInsightsLogger.Logger
 
     public class TelemetryLogger : ITelemetryLogger, IDisposable
     {
-        public MessageToQueueMessage ErrorToQueueMessage { get; set; }
-        public MessageToQueueMessage ExceptionToQueueMessage { get; set; }
         public MessageToQueueMessage LogToQueueMessage { get; set; }
-        public MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         private FTLLoggerSettings Settings { get; set; }
 
@@ -74,10 +76,7 @@ namespace FTLInsightsLogger.Logger
 
         public TelemetryClient Client { get; private set; }
 
-        enum LogTypes
-        {
-            EXCEPTION, START, END, STATUS
-        }
+        public BlobLogger Blob { get; private set; }
 
         public bool AutoCommitEnabled { get; private set; } = true;
         public string IdPropertyDefaultValue { get; set; } = "No Data";
@@ -98,6 +97,8 @@ namespace FTLInsightsLogger.Logger
             this.QueueEnabled = settings.UseQueue;
 
             this.QueueLogger.SetLogger(this);
+
+            Blob = new BlobLogger(settings.AzureStorageConnectionString, this, settings.ResultBlobContainer);
         }
 
         public void ValidationError(string message, Dictionary<string, string> properties = null, object errorObject = null, bool intoQueue = true)
@@ -110,7 +111,9 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(ValidationErrorToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
+                var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
+                var timeStamp = DateTime.Now;
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -137,10 +140,12 @@ namespace FTLInsightsLogger.Logger
             {
                 Commit();
             }
-            if (QueueEnabled && intoQueue)
+            if (QueueEnabled && intoQueue && errorObject != null)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
-                QueueLogger.Log(ErrorToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
+                var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
+                var timeStamp = DateTime.Now;
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
             }
         }
 
@@ -186,13 +191,15 @@ namespace FTLInsightsLogger.Logger
             if (QueueEnabled && intoQueue)
             {
                 var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
+                var timeStamp = DateTime.Now;
                 if (errorObject != null)
                 {
-                    QueueLogger.Log(ExceptionToQueueMessage(errorObject), hasId ? id : IdPropertyDefaultValue);
+                    QueueLogger.Log(LogToQueueMessage(errorObject.ToJson(), typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
                 }
                 else
                 {
-                    QueueLogger.Log(ExceptionToQueueMessage(ex), hasId ? id : IdPropertyDefaultValue);
+                    QueueLogger.Log(LogToQueueMessage(ex?.Message ?? "No exception or error data", typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
                 }
             }
         }
@@ -262,6 +269,8 @@ namespace FTLInsightsLogger.Logger
         public MessageToQueueMessage ValidationErrorToQueueMessage { get; set; }
 
         public TelemetryClient Client { get; private set; }
+
+        public BlobLogger Blob { get; private set; }
 
         public IQueueLogger QueueLogger { get; private set; }
 

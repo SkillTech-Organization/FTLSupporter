@@ -156,6 +156,13 @@ namespace FTLApiTester.Services
 
                 try
                 {
+                    if (_settings.ClearQueueBeforeGettingMessages)
+                    {
+                        _logger.Information("Clearing queue...");
+                        QueueReader.ClearMessages();
+                        _logger.Information("Queue cleared.");
+                    }
+
                     var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(testCase.Request);
                     var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
                         : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
@@ -181,47 +188,78 @@ namespace FTLApiTester.Services
 
                         minuteCount = timerResult.Elapsed.TotalMinutes;
                     }
-                    while (!resp.ResultReceived && messageCount <= _settings.MaxMessageLimitPerRequest
+                    while (!resp.ResultReceived && !resp.ErrorReceived && messageCount <= _settings.MaxMessageLimitPerRequest
                     && minuteCount <= _settings.MaxWaitLimitForResultPerRequestInMinutes);
 
-                    if (resp.ResultReceived)
+                    if (resp.ErrorReceived)
                     {
                         var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
                         try
                         {
-                            resp.Result.Result.ForEach(x =>
+                            _logger.Information($"Received error: {resp.Result.Log.Message}");
+                            _logger.Information("Test failed due to received error.");
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("Test failed due to unexpected error: " + ex.Message, ex);
+                        }
+                    }
+                    else if (resp.ResultReceived)
+                    {
+                        var resultFileName = test.Key + _settings.TestResultFileIdentifier + "." + _settings.FileExtension;
+                        try
+                        {
+                            var link = resp.Result.Link;
+
+                            if (!string.IsNullOrWhiteSpace(link))
                             {
-                                x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
-                            });
+                                _logger.Information($"Getting FTLResponse from API...");
 
-                            testCase.Result.ForEach(x =>
-                            {
-                                x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
-                            });
+                                var ftlResponse = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterResultAsync(link.Split('/')[^1]).Result 
+                                    : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
 
-                            var resultJson = JsonConvert.SerializeObject(resp.Result.Result, isoDateTimeConverter);
-                            var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
+                                if (ftlResponse != null)
+                                {
+                                    _logger.Information("Processing FTLResponse...");
 
-                            _logger.Information("Comparing result with given test result...");
-                            var res = resultJson.ToLower();
-                            var swh = testResultJson.ToLower();
-                     
+                                    var results = ftlResponse.Result.ToList();
 
+                                    testCase.Result.ForEach(x =>
+                                    {
+                                        x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                                    });
 
-                            if (resultJson.ToLower() == testResultJson.ToLower())
-                            {
-                                _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
-                                testsSucceeded++;
+                                    var resultJson = JsonConvert.SerializeObject(results, isoDateTimeConverter);
+                                    var testResultJson = JsonConvert.SerializeObject(testCase.Result, isoDateTimeConverter);
+
+                                    _logger.Information("Comparing result with given test result...");
+                                    var res = resultJson.ToLower();
+                                    var swh = testResultJson.ToLower();
+
+                                    if (resultJson.ToLower() == testResultJson.ToLower())
+                                    {
+                                        _logger.Information($"Matching results, test {i} of {data.Keys.Count} succeded.");
+                                        testsSucceeded++;
+                                    }
+                                    else
+                                    {
+                                        _logger.Information($"Different results, test {i} of {data.Keys.Count} failed.");
+                                        testsFailed++;
+                                    }
+
+                                    _logger.Information("Saving result to: " + resultFileName);
+                                    _logger.Verbose(resultJson);
+                                    SaveResult(resultJson, resultFileName);
+                                }
+                                else
+                                {
+                                    _logger.Error("Request failed: FTLResponse is null!");
+                                }
                             }
                             else
                             {
-                                _logger.Information($"Different results, test {i} of {data.Keys.Count} failed.");
-                                testsFailed++;
+                                _logger.Error("Link in FTLQueueResponse is empty or null!");
                             }
-
-                            _logger.Information("Saving result to: " + resultFileName);
-                            _logger.Verbose(resultJson);
-                            SaveResult(resultJson, resultFileName);
                         }
                         catch(Exception ex)
                         {

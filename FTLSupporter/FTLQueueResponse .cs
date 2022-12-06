@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FTLSupporter
 {
-    public  class FTLQueueResponse
+    public class FTLQueueResponse
     {
+        public enum FTLQueueResponseStatus
+        {
+            [Description("ERROR")]          //végstátusz
+            ERROR,
+            [Description("RESULT")]         //végstátusz
+            RESULT,
+            [Description("LOG")]
+            LOG
+        };
+        public FTLQueueResponseStatus Status { get; set; }
         public string RequestID { get; set; }
-        public List<FTLResult> Result { get; set; } = new List<FTLResult>();
+        public FTLLog Log { get; set; }
+        public string Link { get; set; }
     }
 }

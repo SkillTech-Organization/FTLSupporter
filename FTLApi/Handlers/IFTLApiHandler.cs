@@ -19,6 +19,13 @@ namespace FTLApi.Handlers
         System.Threading.Tasks.Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
+        /// Get calculation result
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<FTLResponse> Result(string id);
+
+        /// <summary>
         /// Calculate by FTLSupporterX engine
         /// </summary>
         /// <param name="body"></param>

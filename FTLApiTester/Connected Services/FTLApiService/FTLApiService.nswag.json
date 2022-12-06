@@ -1,4 +1,4 @@
-﻿{
+{
   "openapi": "3.0.1",
   "info": {
     "title": "FTLSupport API",
@@ -31,6 +31,45 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FTLResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FTLResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FTLResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/FTLSupporter/Result": {
+      "get": {
+        "tags": [
+          "FTLApi"
+        ],
+        "operationId": "Result",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -253,7 +292,8 @@
           0,
           1,
           2,
-          3
+          3,
+          4
         ]
       },
       "FTLSupportRequest": {

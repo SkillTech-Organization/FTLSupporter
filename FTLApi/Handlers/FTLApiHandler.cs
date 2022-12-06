@@ -3,7 +3,9 @@ using FTLApi.DTO.Response;
 using FTLInsightsLogger.Logger;
 using FTLInsightsLogger.Settings;
 using FTLSupporter;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 
@@ -19,6 +21,7 @@ namespace FTLApi.Handlers
         {
             Settings = options.Value;
             Logger = TelemetryClientFactory.Create(Settings);
+            Logger.LogToQueueMessage = FTLInterface.LogToQueueMessage;
         }
 
         public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
@@ -40,6 +43,25 @@ namespace FTLApi.Handlers
                 {
                     Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Exception(ex, Logger.GetExceptionProperty(response.RequestID), intoQueue: false);
+                throw;
+            }
+            return Task.FromResult(response);
+        }
+
+        public Task<FTLResponse> Result(string id)
+        {
+            var response = new FTLResponse();
+            try
+            {
+                response = Logger.Blob.GetLoggedJsonAs<FTLResponse>(id).Result;
+                response.Result.ForEach(x =>
+                {
+                    x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                });
             }
             catch (Exception ex)
             {

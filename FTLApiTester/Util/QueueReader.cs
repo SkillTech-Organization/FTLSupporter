@@ -25,6 +25,8 @@ namespace FTLApiTester.Util
 
         public bool ResultReceived { get; set; } = false;
 
+        public bool ErrorReceived { get; set; } = false;
+
         public int MessageCount { get; set; }
     }
 
@@ -41,6 +43,11 @@ namespace FTLApiTester.Util
             _logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
+        }
+
+        public void ClearMessages()
+        {
+            queueClient.ClearMessages();
         }
 
         public GetResultResponse GetResultMessage()
@@ -80,7 +87,7 @@ namespace FTLApiTester.Util
                             try
                             {
                                 _logger.Debug("Parsing message...");
-                                var queueResponse = msgText.ToDecompressedAndDeserializedJson<FTLQueueResponse>();
+                                var queueResponse = msgText.ToDeserializedJson<FTLQueueResponse>();
                                 _logger.Debug("Parsing message...done");
 
                                 if (queueResponse == null)
@@ -89,10 +96,10 @@ namespace FTLApiTester.Util
                                 }
                                 else
                                 {
-                                    var res = queueResponse.Result;
-                                    if (res != null && res.Count > 0)
+                                    var res = queueResponse;
+                                    if (res != null)
                                     {
-                                        if (res.Any(x => x.Status == FTLResult.FTLResultStatus.RESULT))
+                                        if (res.Status == FTLQueueResponse.FTLQueueResponseStatus.RESULT)
                                         {
                                             _logger.Information("Result found.");
 
@@ -100,10 +107,18 @@ namespace FTLApiTester.Util
                                             resp.ResultReceived = true;
                                             return resp;
                                         }
-                                        //else
-                                        //{
-                                        //    _logger.Information("Result field does not contain FTLSupport result(s).");
-                                        //}
+                                        else if (res.Status == FTLQueueResponse.FTLQueueResponseStatus.ERROR)
+                                        {
+                                            _logger.Information("Error found.");
+
+                                            resp.Result = queueResponse;
+                                            resp.ErrorReceived = true;
+                                            return resp;
+                                        }
+                                        else
+                                        {
+                                            _logger.Information("Log found.");
+                                        }
                                     }
                                     else
                                     {
