@@ -110,10 +110,18 @@ namespace FTLInsightsLogger.Logger
             }
             if (QueueEnabled && intoQueue)
             {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var id = IdPropertyDefaultValue;
+                if (properties != null)
+                {
+                    var hasId = properties.TryGetValue(IdPropertyLabel, out string parsedId);
+                    if (hasId)
+                    {
+                        id = parsedId;
+                    }
+                }
                 var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
                 var timeStamp = DateTime.Now;
-                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), id);
             }
         }
 
@@ -126,10 +134,18 @@ namespace FTLInsightsLogger.Logger
             }
             if (QueueEnabled && intoQueue)
             {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var id = IdPropertyDefaultValue;
+                if (properties != null)
+                {
+                    var hasId = properties.TryGetValue(IdPropertyLabel, out string parsedId);
+                    if (hasId)
+                    {
+                        id = parsedId;
+                    }
+                }
                 var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
                 var timeStamp = DateTime.Now;
-                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), id);
             }
         }
 
@@ -142,10 +158,18 @@ namespace FTLInsightsLogger.Logger
             }
             if (QueueEnabled && intoQueue && errorObject != null)
             {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var id = IdPropertyDefaultValue;
+                if (properties != null)
+                {
+                    var hasId = properties.TryGetValue(IdPropertyLabel, out string parsedId);
+                    if (hasId)
+                    {
+                        id = parsedId;
+                    }
+                }
                 var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
                 var timeStamp = DateTime.Now;
-                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), id);
             }
         }
 
@@ -158,10 +182,18 @@ namespace FTLInsightsLogger.Logger
             }
             if (QueueEnabled && intoQueue)
             {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var id = IdPropertyDefaultValue;
+                if (properties != null)
+                {
+                    var hasId = properties.TryGetValue(IdPropertyLabel, out string parsedId);
+                    if (hasId)
+                    {
+                        id = parsedId;
+                    }
+                }
                 var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
                 var timeStamp = DateTime.Now;
-                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), id);
             }
         }
 
@@ -174,10 +206,18 @@ namespace FTLInsightsLogger.Logger
             }
             if (QueueEnabled && intoQueue)
             {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var id = IdPropertyDefaultValue;
+                if (properties != null)
+                {
+                    var hasId = properties.TryGetValue(IdPropertyLabel, out string parsedId);
+                    if (hasId)
+                    {
+                        id = parsedId;
+                    }
+                }
                 var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
                 var timeStamp = DateTime.Now;
-                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                QueueLogger.Log(LogToQueueMessage(message, typeArg, timeStamp), id);
             }
         }
 
@@ -190,16 +230,24 @@ namespace FTLInsightsLogger.Logger
             }
             if (QueueEnabled && intoQueue)
             {
-                var hasId = properties.TryGetValue(IdPropertyLabel, out string id);
+                var id = IdPropertyDefaultValue;
+                if (properties != null)
+                {
+                    var hasId = properties.TryGetValue(IdPropertyLabel, out string parsedId);
+                    if (hasId)
+                    {
+                        id = parsedId;
+                    }
+                }
                 var typeArg = properties != null && properties.ContainsKey(TypePropertyLabel) ? properties[TypePropertyLabel] : "";
                 var timeStamp = DateTime.Now;
                 if (errorObject != null)
                 {
-                    QueueLogger.Log(LogToQueueMessage(errorObject.ToJson(), typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                    QueueLogger.Log(LogToQueueMessage(errorObject.ToJson(), typeArg, timeStamp), id);
                 }
                 else
                 {
-                    QueueLogger.Log(LogToQueueMessage(ex?.Message ?? "No exception or error data", typeArg, timeStamp), hasId ? id : IdPropertyDefaultValue);
+                    QueueLogger.Log(LogToQueueMessage(ex?.Message ?? "No exception or error data", typeArg, timeStamp), id);
                 }
             }
         }
