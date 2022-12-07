@@ -939,13 +939,13 @@ namespace FTLSupporterTest
                         foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
                         {
                             Console.WriteLine("");
-                            if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.OK)
+                            if (clctour.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK)
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                             else
                                 Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Státusz:{0}, Helyezés:{1}, Jármű:{2}, Jármű állapot:{3}", clctour.Status, clctour.Rank, clctour.Truck.TruckID, clctour.Truck.TruckTaskType);
+                            Console.WriteLine("Státusz:{0}, Helyezés:{1}, Jármű:{2}, Jármű állapot:{3}", clctour.StatusEnum, clctour.Rank, clctour.Truck.TruckID, clctour.Truck.TruckTaskType);
 
-                            if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.ERR)
+                            if (clctour.StatusEnum == FTLCalcTour.FTLCalcTourStatus.ERR)
                             {
                                 Console.WriteLine("Hibák:");
                                 foreach (var sMsg in clctour.Msg)
@@ -956,7 +956,7 @@ namespace FTLSupporterTest
 
                             //Aktuális túra
                             Console.ForegroundColor = ConsoleColor.Cyan;
-                            if (clctour.Status != FTLCalcTour.FTLCalcTourStatus.ERR)
+                            if (clctour.StatusEnum != FTLCalcTour.FTLCalcTourStatus.ERR)
                             {
                                 if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                                 {
@@ -1015,7 +1015,7 @@ namespace FTLSupporterTest
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("");
                 Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o => o.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
+                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o => o.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost);
