@@ -55,7 +55,7 @@ namespace FTLApiTester.Services
         private string ID { get; set; }
         public int MaxTruckDistance { get; set; }
 
-        public IsoDateTimeConverter isoDateTimeConverter { get; set; }
+        public JsonSerializerSettings isoDateTimeConverter { get; set; }
 
         public ApiTesterService(FTLApiServiceClient client, FTLApiTesterSettings settings, IConfiguration configuration)
         {
@@ -68,7 +68,7 @@ namespace FTLApiTester.Services
 
             QueueReader = new QueueReader(settings, configuration);
 
-            isoDateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" };
+            isoDateTimeConverter = new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy HH:mm:ss" };
         }
 
         public async Task DoWork(CancellationToken cancellationToken = default)
@@ -163,7 +163,6 @@ namespace FTLApiTester.Services
                         _logger.Information("Queue cleared.");
                     }
 
-                    var responseJson = Newtonsoft.Json.JsonConvert.SerializeObject(testCase.Request);
                     var response = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterFTLSupportAsync(testCase.Request).Result
                         : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
                     _logger.Information("Request was successful.");
@@ -215,8 +214,7 @@ namespace FTLApiTester.Services
                             {
                                 _logger.Information($"Getting FTLResponse from API...");
 
-                                var ftlResponse = testCase.IsFTLSupport ? _client.ApiV1FTLSupporterResultAsync(link.Split('/')[^1]).Result 
-                                    : _client.ApiV1FTLSupporterFTLSupportXAsync(testCase.Request).Result;
+                                var ftlResponse = _client.ApiV1FTLSupporterResultAsync(link.Split('/')[^1]).Result;
 
                                 if (ftlResponse != null)
                                 {
