@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace FTLSupporter
             [Description("LOG")]
             LOG
         };
+        [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
         public FTLQueueResponseStatus Status { get; set; }
         public string RequestID { get; set; }
         public FTLLog Log { get; set; }

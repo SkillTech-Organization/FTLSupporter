@@ -69,7 +69,6 @@ namespace PMapCore.Route
                 {
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
 
-                    DateTime dtStart = DateTime.Now;
 
                     string strallRZones = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_RZN) ,Encoding.UTF8);
                     var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
@@ -96,7 +95,6 @@ namespace PMapCore.Route
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
                     NodePositions = xNodePositions;
 
-                    Util.Log2File("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
                     m_Initalized = true;
                 }
             }

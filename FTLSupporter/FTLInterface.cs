@@ -120,7 +120,7 @@ namespace FTLSupporter
 
             if (saveSuccess)
             {
-                var msg = String.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.Now - dtStart).ToString());
+                var msg = String.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.UtcNow - dtStart).ToString());
 
                 Logger.Info(msg, Logger.GetEndProperty(RequestID), false);
 
@@ -131,7 +131,7 @@ namespace FTLSupporter
                     Log = new FTLLog
                     {
                         Message = msg,
-                        Timestamp = DateTime.Now,
+                        Timestamp = DateTime.UtcNow,
                         Type = LogTypes.END
                     },
                     Status = FTLQueueResponse.FTLQueueResponseStatus.RESULT
@@ -150,7 +150,7 @@ namespace FTLSupporter
                     Log = new FTLLog
                     {
                         Message = FTLMessages.E_ERRINBLOBSAVE,
-                        Timestamp = DateTime.Now,
+                        Timestamp = DateTime.UtcNow,
                         Type = LogTypes.END
                     },
                     Status = FTLQueueResponse.FTLQueueResponseStatus.ERROR
@@ -162,7 +162,7 @@ namespace FTLSupporter
 
         public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
-            DateTime dtStart = DateTime.Now;
+            DateTime dtStart = DateTime.UtcNow;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
             Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupport", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
@@ -177,7 +177,7 @@ namespace FTLSupporter
         //Az eredményfeldolgozásban különbözik a FTLSupport-től
         public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
-            DateTime dtStart = DateTime.Now;
+            DateTime dtStart = DateTime.UtcNow;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
 
             Logger.Info(String.Format(">>>START:{0} Ver.:{1}, p_TaskList:{2}, p_TruckList:{3}", "FTLSupportX", ApplicationInfo.Version, p_TaskList.Count(), p_TruckList.Count()), Logger.GetStartProperty(RequestID));
@@ -198,10 +198,12 @@ namespace FTLSupporter
             {
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
+                DateTime dtStart = DateTime.UtcNow;
                 RouteData.Instance.InitFromFiles( PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
                 bllRoute route = new bllRoute(null);
+                Logger.Info("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.UtcNow - dtStart).ToString());
 
-                DateTime dtPhaseStart = DateTime.Now;
+                DateTime dtPhaseStart = DateTime.UtcNow;
 
                 //Validálás, koordináta feloldás: beosztandó szállítási feladat
                 //
@@ -247,8 +249,8 @@ namespace FTLSupporter
                 //
                 foreach (FTLTruck trk in p_TruckList)
                 {
-                    var dtXDate = DateTime.Now;
-                    var dtXDate2 = DateTime.Now;
+                    var dtXDate = DateTime.UtcNow;
+                    var dtXDate2 = DateTime.UtcNow;
 
                     //1.1 A járművek zónalistájának összeállítása
                     if (trk.RZones != null && trk.RZones != "")
@@ -295,9 +297,9 @@ namespace FTLSupporter
                             trk.RZN_ID_LIST = RouteData.Instance.RZN_ID_LIST[Global.RST_NORESTRICT];
                     }
 
-                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű zónalistájának összeállítása", trk.TruckID, (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű zónalistájának összeállítása", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtXDate2 = DateTime.Now;
+                    dtXDate2 = DateTime.UtcNow;
 
 
                     //Teljesített túrapont ellenőrzés
@@ -319,9 +321,9 @@ namespace FTLSupporter
                                 new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), FTLMessages.E_WRONGCOORD));
                     }
 
-                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtXDate2 = DateTime.Now;
+                    dtXDate2 = DateTime.UtcNow;
 
                     if (trk.RET_NOD_ID == 0)
                     {
@@ -346,14 +348,14 @@ namespace FTLSupporter
                         }
                     }
 
-                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}, pontok száma:{4}", "FTLSupport", "Jármű túrapontok koordináta feloldás és ellenőrzés2", trk.TruckID, (DateTime.Now - dtXDate2).ToString(), trk.CurrTPoints.Count.ToString()), Logger.GetStatusProperty(RequestID));
-                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű teljes koordináta feloldás", trk.TruckID, (DateTime.Now - dtXDate).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}, pontok száma:{4}", "FTLSupport", "Jármű túrapontok koordináta feloldás és ellenőrzés2", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString(), trk.CurrTPoints.Count.ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Jármű teljes koordináta feloldás", trk.TruckID, (DateTime.UtcNow - dtXDate).ToString()), Logger.GetStatusProperty(RequestID));
 
                 }
 
-                Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Koordináta feloldás", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Koordináta feloldás", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
-                dtPhaseStart = DateTime.Now;
+                dtPhaseStart = DateTime.UtcNow;
 
                 var delTrucks = new List<FTLTruck>();
 
@@ -380,10 +382,10 @@ namespace FTLSupporter
                 }
 
                 Logger.Info(
-                    String.Format("{0} {1} Időtartam:{2}", "FTLSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.Now - dtPhaseStart).ToString()),
+                    String.Format("{0} {1} Időtartam:{2}", "FTLSupport", $"Távoli járművek kitörlése (törölt járművek száma:{delTrucks.Count})", (DateTime.UtcNow - dtPhaseStart).ToString()),
                     Logger.GetStatusProperty(RequestID));
 
-                dtPhaseStart = DateTime.Now;
+                dtPhaseStart = DateTime.UtcNow;
 
                 //TODO: idáig tart a validálás
 
@@ -407,9 +409,9 @@ namespace FTLSupporter
                         }
                     }
 
-                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Előkészítés", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Előkészítés", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtPhaseStart = DateTime.Now;
+                    dtPhaseStart = DateTime.UtcNow;
 
                     //1. Előkészítés:
 
@@ -444,19 +446,19 @@ namespace FTLSupporter
                         List<FTLTruck> lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
-                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKTYPE); });
+                                            .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKTYPE); });
 
                         /*2.2*/
                         lstTrucksErr = p_TruckList.Where(x => !(("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
-                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKCARGOTYPE); });
+                                            .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKCARGOTYPE); });
 
                         /*2.3*/
                         lstTrucksErr = p_TruckList.Where(x => !(x.Capacity >= clctsk.Task.Weight)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
-                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKCAPACITY); });
+                                            .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKCAPACITY); });
 
                         /*2.4*/
                         lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime).FirstOrDefault() != null)).ToList();
@@ -464,7 +466,7 @@ namespace FTLSupporter
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
                                             {
-                                                x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKCLOSETP +
+                                                x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKCLOSETP +
                                     string.Join(",", clctsk.Task.TPoints.Where(p => p.RealClose > x.Truck.CurrTime).Select(s => s.Name).ToArray()));
                                             });
 
@@ -474,7 +476,7 @@ namespace FTLSupporter
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
                                             {
-                                                x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKNOINCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.InclTruckProps);
+                                                x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKNOINCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.InclTruckProps);
                                             });
 
                         /*2.6*/
@@ -483,7 +485,7 @@ namespace FTLSupporter
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
                                             {
-                                                x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKEXCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.ExclTruckProps);
+                                                x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKEXCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.ExclTruckProps);
                                             });
 
 
@@ -610,9 +612,9 @@ namespace FTLSupporter
 
                     lstPMapRoutes.AddRange(lstCalcPMapRoutes);
 
-                    Logger.Info(String.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Számítandó távolságok:{2} Időtartam:{3}", "FTLSupport", "Szóbajöhető járművek meghatározása+útvonalszámítás", lstCalcPMapRoutes.Count, (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtPhaseStart = DateTime.Now;
+                    dtPhaseStart = DateTime.UtcNow;
 
                     //
                     //debug info
@@ -625,7 +627,7 @@ namespace FTLSupporter
                     //6.eredmény összeállítása
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
-                        foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK))
+                        foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK))
                         {
                             FTLTruck trk = clctour.Truck;
                             // Útvonal összeállítása
@@ -773,9 +775,9 @@ namespace FTLSupporter
                         }
                     }
 
-                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmény összeállítása", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmény összeállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtPhaseStart = DateTime.Now;
+                    dtPhaseStart = DateTime.UtcNow;
 
                     /**************************************************************************************************************/
                     /* Hiba beállítása járművekre amelyek nem tudják teljesíteni a túrákat, mert nem találtunk útvonalat hozzájuk */
@@ -783,38 +785,38 @@ namespace FTLSupporter
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
 
-                        List<FTLTruck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrT1 = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available &&
                                                                                x.T1CalcRoute.Where(r => r.PMapRoute != null &&
                                                                                                     r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
                         if (lstTrucksErrT1.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrT1.Contains(x.Truck)).ToList()
-                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_T1MISSROUTE); });
+                                            .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_T1MISSROUTE); });
 
-                        List<FTLTruck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrRel = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                 x.RelCalcRoute.PMapRoute.fromNOD_ID != x.RelCalcRoute.PMapRoute.toNOD_ID && x.RelCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
                         if (lstTrucksErrRel.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrRel.Contains(x.Truck)).ToList()
-                                            .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_RELMISSROUTE); });
+                                            .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_RELMISSROUTE); });
 
 
-                        List<FTLTruck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrT2 = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.T2CalcRoute.Where(r => r.PMapRoute != null &&
                                                                                     r.PMapRoute.fromNOD_ID != r.PMapRoute.toNOD_ID && r.PMapRoute.route.Edges.Count == 0).FirstOrDefault() != null).Select(s => s.Truck).ToList();
                         if (lstTrucksErrT2.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrT2.Contains(x.Truck)).ToList()
-                                           .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_T2MISSROUTE); });
+                                           .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_T2MISSROUTE); });
 
-                        List<FTLTruck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrRet = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                 x.RetCalcRoute.PMapRoute != null && x.RetCalcRoute.PMapRoute.fromNOD_ID != x.RetCalcRoute.PMapRoute.toNOD_ID && x.RetCalcRoute.PMapRoute.route.Edges.Count == 0).Select(s => s.Truck).ToList();
                         if (lstTrucksErrRet.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrRet.Contains(x.Truck)).ToList()
-                                           .ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_RETMISSROUTE); });
+                                           .ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_RETMISSROUTE); });
                     }
 
-                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Hibák beállítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
                     
-                    dtPhaseStart = DateTime.Now;
+                    dtPhaseStart = DateTime.UtcNow;
 
                     /***************/
                     /* Számítások  */
@@ -822,7 +824,7 @@ namespace FTLSupporter
 
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
-                        foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK))
+                        foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK))
                         {
 
                             FTLTruck trk = clctour.Truck;
@@ -1039,14 +1041,14 @@ namespace FTLSupporter
                     {
 
                         //Túra időtartama ellenőrzés
-                        List<FTLTruck> lstTrucksErrDuration = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrDuration = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.Truck.MaxDuration > 0 && x.Truck.MaxDuration < x.FullDuration).Select(s => s.Truck).ToList();
                         if (lstTrucksErrDuration.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrDuration.Contains(x.Truck)).ToList()
                                             .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDURATION); });
 
                         //Vezetési idő ellenőrzés T1
-                        List<FTLTruck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.T1CalcRoute.Where(xT1 => xT1.ErrDriveTime).FirstOrDefault() != null )
                                                                                .Select(s => s.Truck).ToList();
                         if (lstTrucksErrDriveTime.Count > 0)
@@ -1054,7 +1056,7 @@ namespace FTLSupporter
                                             .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME_T1); });
 
                         //Vezetési idő ellenőrzés REL
-                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.RelCalcRoute.ErrDriveTime)
                                                                                .Select(s => s.Truck).ToList();
                         if (lstTrucksErrDriveTime.Count > 0)
@@ -1063,7 +1065,7 @@ namespace FTLSupporter
 
 
                         //Vezetési idő ellenőrzés T2
-                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.T2CalcRoute.Where(xT2 => xT2.ErrDriveTime).FirstOrDefault() != null)
                                                                                .Select(s => s.Truck).ToList();
                         if (lstTrucksErrDriveTime.Count > 0)
@@ -1071,7 +1073,7 @@ namespace FTLSupporter
                                             .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXDRIVETIME_T2); });
 
                         //Vezetési idő ellenőrzés RET
-                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        lstTrucksErrDriveTime = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.RetCalcRoute.ErrDriveTime)
                                                                                .Select(s => s.Truck).ToList();
                         if (lstTrucksErrDriveTime.Count > 0)
@@ -1080,14 +1082,14 @@ namespace FTLSupporter
 
 
                         //Túra hossz (távolság
-                        List<FTLTruck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                        List<FTLTruck> lstTrucksErrKM = clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                                x.Truck.MaxKM > 0 && x.Truck.MaxKM < x.FullM / 1000).Select(s => s.Truck).ToList();
                         if (lstTrucksErrKM.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErrKM.Contains(x.Truck)).ToList()
                                             .ForEach(x => { x.Msg.Add(FTLMessages.E_MAXKM); });
 
                         List<FTLTruck> lstTrucksErrOpen = new List<FTLTruck>();
-                        foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK))
+                        foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK))
                         {
 
                             //Teljesítés nyitva tartások ellenőrzése
@@ -1137,13 +1139,13 @@ namespace FTLSupporter
                                                     lstTrucksErrKM.Contains(x.Truck) ||
                                                     lstTrucksErrOpen.Contains(x.Truck) ||
                                                     lstTrucksErrDriveTime.Contains(x.Truck)
-                                               ).ToList().ForEach(x => { x.Status = FTLCalcTour.FTLCalcTourStatus.ERR; });
+                                               ).ToList().ForEach(x => { x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; });
 
                     }
 
-                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Időpontok számítása", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Időpontok számítása", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtPhaseStart = DateTime.Now;
+                    dtPhaseStart = DateTime.UtcNow;
 
                     /****************************/
                     /* Eredmények véglegesítése */
@@ -1163,17 +1165,17 @@ namespace FTLSupporter
 
                         //Költség fordított sorrendben berendezzük
                         int rank = 1;
-                        clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK).
+                        clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).
                                          OrderBy(x => x.AdditionalCost).Select(x => x).ToList().
                                          ForEach(r => r.Rank = rank++);
 
                         // A hibás tételek rank-ja: 999999
-                        clctsk.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
+                        clctsk.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.ERR).ToList().ForEach(x => { x.Rank = 999999; });
                     }
 
-                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+                    Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
-                    dtPhaseStart = DateTime.Now;
+                    dtPhaseStart = DateTime.UtcNow;
 
                     FTLResult res = new FTLResult()
                     {
@@ -1266,7 +1268,7 @@ namespace FTLSupporter
                         List<FTLResult> res = (List<FTLResult>)BinarySerializer.Deserialize(fi);
               */
 
-            DateTime dtPhaseStart = DateTime.Now;
+            DateTime dtPhaseStart = DateTime.UtcNow;
 
             var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (calcResult != null)
@@ -1274,11 +1276,11 @@ namespace FTLSupporter
                 FTLInterface.FTLSetBestTruck(res);
                 List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
 
-                while (calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
+                while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
                 {
                     List<FTLTask> lstTsk2 = new List<FTLTask>();
                     var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
-                    lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
+                    lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
                     List<FTLResult> res2 = FTLInterface.FTLSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
                     var calcResult2 = res2.Where(x => x.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
@@ -1292,14 +1294,14 @@ namespace FTLSupporter
                         List<FTLCalcTask> calcTaskList2 = ((List<FTLCalcTask>)calcResult2.Data);
 
                         //Megvizsgáljuk, hogy a számítási menet hozott-e eredményt.
-                        if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
+                        if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
                             return res;             //ha nincs eredmény, ennyi volt...
 
 
                         foreach (FTLCalcTask calcTask2 in calcTaskList2)
                         {
                             //van-e eredmény?
-                            var calcTour2 = calcTask2.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).FirstOrDefault();
+                            var calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).FirstOrDefault();
                             if (calcTour2 != null)
                             {
                                 //megkeressük a tételt a RES-ben és beírjuk az eredménylistát.
@@ -1310,12 +1312,12 @@ namespace FTLSupporter
                                     //Ha az teljesítő jármű előző túráiban visszatérés van, akkor megszűntetni a visszatérést
                                     //
                                     var prevCalcRetTasks = calcTaskList.Where(i => i.Task.TaskID != calcTask2.Task.TaskID &&
-                                                    i.CalcTours.Where(x => x.Status == FTLCalcTour.FTLCalcTourStatus.OK &&
+                                                    i.CalcTours.Where(x => x.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK &&
                                                                       x.Truck.TruckID == calcTour2.Truck.TruckID &&
                                                                       !x.Truck.CurrIsOneWay).Count() > 0);
                                     foreach (var pct in prevCalcRetTasks)
                                     {
-                                        var OriCalcTour = pct.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).FirstOrDefault();
+                                        var OriCalcTour = pct.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).FirstOrDefault();
                                         if (OriCalcTour != null && !OriCalcTour.Truck.CurrIsOneWay)
                                         {
                                             OriCalcTour.RetM = 0;
@@ -1358,7 +1360,7 @@ namespace FTLSupporter
                 }
             }
 
-            Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "Legjobb jármű számítás összesen", (DateTime.Now - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "Legjobb jármű számítás összesen", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
             return res;
         }
@@ -1369,7 +1371,7 @@ namespace FTLSupporter
         public static void FTLSetBestTruck(List<FTLResult> p_calcResult)
         {
 
-            DateTime dtBestTruckStart = DateTime.Now;
+            DateTime dtBestTruckStart = DateTime.UtcNow;
             //1. kiszámoljuk az teljesitéseket
 
             //Eredmény megállapítása
@@ -1396,7 +1398,7 @@ namespace FTLSupporter
                     while (!done && trk == null)
                     {
                         //2.3.1 Alapesetben a legjobb rank-ú
-                        FTLCalcTour calcTour = calcTask.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(o => o.Rank).FirstOrDefault();
+                        FTLCalcTour calcTour = calcTask.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(o => o.Rank).FirstOrDefault();
                         if (calcTour != null)
                         {
                             trk = calcTour.Truck;
@@ -1408,12 +1410,12 @@ namespace FTLSupporter
                                 //nem választjuk ki, és a következő ciklusban a sorban következő lesz a hozzárendelt járművet vesszük
 
                                 //Az első jármű lekérdezése
-                                FTLCalcTour calcTour2 = calcTask2.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK)
+                                FTLCalcTour calcTour2 = calcTask2.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK)
                                                                            .OrderBy(o => o.Rank).FirstOrDefault();
 
                                 if (calcTour2 != null && trk == calcTour2.Truck && calcTour.RelCost + calcTour.RetCost > calcTour2.RelCost + calcTour2.RetCost)
                                 {
-                                    calcTask.CalcTours.Where(i => i.Truck == trk && i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
+                                    calcTask.CalcTours.Where(i => i.Truck == trk && i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
                                     //calcTask.CalcTours.RemoveAll(i => i.Truck == trk);
                                     trk = null;
                                     break;
@@ -1434,24 +1436,24 @@ namespace FTLSupporter
                         //3.1 az aktuális taskból kitörlünk minden más járművet
 
                         // calcTask.CalcTours.RemoveAll(i => i.Truck != trk);
-                        calcTask.CalcTours.Where(i => i.Truck != trk && i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
+                        calcTask.CalcTours.Where(i => i.Truck != trk && i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
 
                         //A többi taskból pedig a kiválasztott járművet töröljük
                         foreach (var ct in calcTaskList.Where(i => i != calcTask).ToList())
                         {
                             // ct.CalcTours.RemoveAll(i => i.Truck == trk);
-                            ct.CalcTours.Where(i => i.Truck == trk && i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
+                            ct.CalcTours.Where(i => i.Truck == trk && i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_OTHERTASK); return c; }).ToList();
                         }
                     }
                     else
                     {
                         // calcTask.CalcTours.Clear();
-                        calcTask.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.Status = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
+                        calcTask.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).Select(c => { c.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; c.Msg.Add(FTLMessages.E_NOTASK); return c; }).ToList();
                         
                     }
                 }
             }
-            Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "FTLSetBestTruck (legjobban teljesítő járművek megállapítása):", (DateTime.Now - dtBestTruckStart).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupportX", "FTLSetBestTruck (legjobban teljesítő járművek megállapítása):", (DateTime.UtcNow - dtBestTruckStart).ToString()), Logger.GetStatusProperty(RequestID));
 
 
         }
@@ -1462,7 +1464,7 @@ namespace FTLSupporter
             List<FTLCalcTour> ctList = new List<FTLCalcTour>();
             foreach (var ct in p_calcTaskList)
             {
-                ctList.AddRange(ct.CalcTours.Where(i => i.Status == FTLCalcTour.FTLCalcTourStatus.OK).ToList());
+                ctList.AddRange(ct.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList());
             }
 
             foreach (var trk in p_TruckList)
@@ -1586,7 +1588,7 @@ namespace FTLSupporter
             //település pontja (ami közelebb van, mint az országúti szakasz kezdő- vagy végpontja) Hortobágy és Balmazújváros problémakör
 
 
-            var dtXDate2 = DateTime.Now;
+            var dtXDate2 = DateTime.UtcNow;
 
             var cnt = EdgesList.Count();
             var filteredEdg = new List<boEdge>();
@@ -1611,7 +1613,7 @@ namespace FTLSupporter
             var nearest = filteredEdg.OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.fromLatLng.Lng, o.fromLatLng.Lat,
                 o.toLatLng.Lng, o.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).FirstOrDefault();
 
-            Logger.Info(String.Format("GetNearestReachableNOD_IDForTruck cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("GetNearestReachableNOD_IDForTruck cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
 
             if (nearest != null)
@@ -1636,7 +1638,7 @@ namespace FTLSupporter
                 return FTLNodePtCache.Instance.Items[ptKey];
             }
             int retNodID = 0;
-            var dtXDate2 = DateTime.Now;
+            var dtXDate2 = DateTime.UtcNow;
 
             var cnt = EdgesList.Count();
             var filteredEdg = new List<boEdge>();
@@ -1656,8 +1658,8 @@ namespace FTLSupporter
             }
             var nearest = filteredEdg.OrderBy(o => Math.Abs(o.fromLatLng.Lng - p_pt.Lng) + Math.Abs(o.fromLatLng.Lat - p_pt.Lat)).FirstOrDefault();
 
-            // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
-            Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.Now - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+            // Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", edges.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
+            Logger.Info(String.Format("GetNearestReachableNOD_ID cnt:{0}, Időtartam:{1}", filteredEdg.Count(), (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
 
             if (nearest != null)
             {
