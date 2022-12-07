@@ -45,7 +45,7 @@ namespace CommonUtils
             try
             {
                 var json = StringCompressor.DecompressStringGzip2(m);
-                var o = JsonConvert.DeserializeObject<T>(json, IsoDateTimeConverter);
+                var o = JsonConvert.DeserializeObject<T>(json);
                 return o;
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace CommonUtils
         {
             try
             {
-                var json = JsonConvert.SerializeObject(m, Formatting.None, IsoDateTimeConverter);
+                var json = JsonConvert.SerializeObject(m, Formatting.None, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
                 return json;
             }
             catch (Exception ex)
@@ -71,7 +71,7 @@ namespace CommonUtils
         {
             try
             {
-                var o = JsonConvert.DeserializeObject<T>(m, IsoDateTimeConverter);
+                var o = JsonConvert.DeserializeObject<T>(m);
                 return o;
             }
             catch (Exception ex)

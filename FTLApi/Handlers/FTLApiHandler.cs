@@ -8,6 +8,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
+using CommonUtils;
+using Newtonsoft.Json.Converters;
 
 namespace FTLApi.Handlers
 {
@@ -57,10 +59,23 @@ namespace FTLApi.Handlers
             var response = new FTLResponse();
             try
             {
+                //var json = Logger.Blob.GetLoggedString(id).Result;
+                //Logger.Info("From blob JSON: " + json, Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
+                //response = Newtonsoft.Json.JsonConvert.DeserializeObject<FTLResponse>(json);
+                //Logger.Info("From blob is null: " + (response == null).ToString(), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);                
                 response = Logger.Blob.GetLoggedJsonAs<FTLResponse>(id).Result;
-                response.Result.ForEach(x =>
+                //var asd = response.ToJson();
+                response?.Result.ForEach(x =>
                 {
-                    x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                    //Logger.Info("Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(x.Data), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
+                    if (x.Data != null)
+                    {
+                        x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                    }
+                    else
+                    {
+                        x.Data = new List<FTLSupporter.FTLCalcTask>();
+                    }
                 });
             }
             catch (Exception ex)
