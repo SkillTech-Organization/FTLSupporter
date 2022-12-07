@@ -55,7 +55,7 @@ namespace FTLApiTester.Services
         private string ID { get; set; }
         public int MaxTruckDistance { get; set; }
 
-        public IsoDateTimeConverter isoDateTimeConverter { get; set; }
+        public JsonSerializerSettings isoDateTimeConverter { get; set; }
 
         public ApiTesterService(FTLApiServiceClient client, FTLApiTesterSettings settings, IConfiguration configuration)
         {
@@ -68,7 +68,7 @@ namespace FTLApiTester.Services
 
             QueueReader = new QueueReader(settings, configuration);
 
-            isoDateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" };
+            isoDateTimeConverter = new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy HH:mm:ss" };
         }
 
         public async Task DoWork(CancellationToken cancellationToken = default)
