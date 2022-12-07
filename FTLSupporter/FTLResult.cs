@@ -29,7 +29,7 @@ namespace FTLSupporter
         public string ObjectName { get; set; }
         public string ItemID { get; set; }
 
-        
+
         public object Data { get; set; }
 
     }

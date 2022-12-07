@@ -11,13 +11,13 @@ namespace CommonUtils
 {
     public static class StringExtensions
     {
-        public static IsoDateTimeConverter IsoDateTimeConverter { get; set; } = new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" };
+        public static JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy HH:mm:ss" };
 
         public static string ToCompressedJson(this object m)
         {
             try
             {
-                var json = JsonConvert.SerializeObject(m, Formatting.None, IsoDateTimeConverter);
+                var json = JsonConvert.SerializeObject(m, Formatting.None, SerializerSettings);
                 var res = StringCompressor.CompressStringGzip2(json);
                 return res;
             }
@@ -58,7 +58,7 @@ namespace CommonUtils
         {
             try
             {
-                var json = JsonConvert.SerializeObject(m, Formatting.None, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy HH:mm:ss" });
+                var json = JsonConvert.SerializeObject(m, Formatting.None, SerializerSettings);
                 return json;
             }
             catch (Exception ex)
