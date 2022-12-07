@@ -11,7 +11,7 @@ namespace CommonUtils
 {
     public static class StringExtensions
     {
-        public static JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy HH:mm:ss" };
+        public static JsonSerializerSettings SerializerSettings { get; set; } = new JsonSerializerSettings { DateFormatString = "yyyy.MM.dd HH:mm:ss", Culture = System.Globalization.CultureInfo.InvariantCulture };
 
         public static string ToCompressedJson(this object m)
         {

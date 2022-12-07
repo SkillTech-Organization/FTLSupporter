@@ -68,7 +68,7 @@ namespace FTLApiTester.Services
 
             QueueReader = new QueueReader(settings, configuration);
 
-            isoDateTimeConverter = new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy HH:mm:ss" };
+            isoDateTimeConverter = new JsonSerializerSettings { DateFormatString = "yyyy.MM.dd HH:mm:ss", Culture = System.Globalization.CultureInfo.InvariantCulture };
         }
 
         public async Task DoWork(CancellationToken cancellationToken = default)
