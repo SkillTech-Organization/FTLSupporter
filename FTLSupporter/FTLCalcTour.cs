@@ -1,4 +1,5 @@
-﻿using PMapCore.Common.Attrib;
+﻿using Newtonsoft.Json.Converters;
+using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -65,6 +66,7 @@ namespace FTLSupporter
         }
 
         [DisplayNameAttributeX(Name = "Státusz", Order = 1)]
+        [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
         public FTLCalcTourStatus Status { get; set; }
 
         [DisplayNameAttributeX(Name = "Üzenet", Order = 2)]
