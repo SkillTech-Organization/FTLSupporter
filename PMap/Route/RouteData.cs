@@ -148,15 +148,15 @@ namespace PMapCore.Route
                                 ID = Util.getFieldValue<int>(dr, "ID"),
                                 NOD_ID_FROM = Source,
                                 NOD_ID_TO = Destination,
-                                EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
+                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
                                 EDG_LENGTH = Util.getFieldValue<float>(dr, "EDG_LENGTH"),
                                 RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
                                 RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
                                 RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
-                                EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
-                                EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
-                                EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
-                                EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
+                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
+                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
+                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
+                                // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
                                 ZIP_NUM_FROM = Util.getFieldValue<int>(dr, "ZIP_NUM_FROM"),
                                 ZIP_NUM_TO = Util.getFieldValue<int>(dr, "ZIP_NUM_TO"),
                                 EDG_ONEWAY = OneWay,
@@ -191,15 +191,15 @@ namespace PMapCore.Route
                                     ID = Util.getFieldValue<int>(dr, "ID"),
                                     NOD_ID_FROM = Destination,
                                     NOD_ID_TO = Source,
-                                    EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
+                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(dr, "EDG_NAME"),
                                     EDG_LENGTH = Util.getFieldValue<float>(dr, "EDG_LENGTH"),
                                     RDT_VALUE = Util.getFieldValue<int>(dr, "RDT_VALUE"),
                                     RZN_ID = Util.getFieldValue<int>(dr, "RZN_ID"),
                                     RST_ID = Util.getFieldValue<int>(dr, "RST_ID"),
-                                    EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
-                                    EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
-                                    EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
-                                    EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
+                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM1 = Util.getFieldValue<string>(dr, "EDG_STRNUM1"),
+                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM2 = Util.getFieldValue<string>(dr, "EDG_STRNUM2"),
+                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM3 = Util.getFieldValue<string>(dr, "EDG_STRNUM3"),
+                                    // TODO boEdge méretcsökkentés miatt kiszedve EDG_STRNUM4 = Util.getFieldValue<string>(dr, "EDG_STRNUM4"),
                                     EDG_ONEWAY = OneWay,
                                     EDG_DESTTRAFFIC = DestTraffic,
                                     WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
@@ -395,35 +395,39 @@ namespace PMapCore.Route
         /// <returns></returns>
         public int GetNearestNOD_ID(PointLatLng p_pt, out int r_diff)
         {
+             
             r_diff = Int32.MaxValue;
 
-            //Legyünk következetesek, a PMAp-os térkép esetében:
-            //X --> lng, Y --> lat
+            // TODO boEdge méretcsökkentés miatt kiszedve
 
-            var nearest = RouteData.Instance.Edges/*.Where(
-                w => Util.DistanceBetweenSegmentAndPoint(w.Value.fromLatLng.Lng, w.Value.fromLatLng.Lat,
-                w.Value.toLatLng.Lng, w.Value.toLatLng.Lat, ptX, ptY) <=
-                 (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                 Global.NearestNOD_ID_Approach : Global.EdgeApproachCity))*/
-                  .Where(
-                w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
-                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) 
-                    &&
-                    Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
-                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
-                 .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
-                o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
-            if (nearest != null)
-            {
-                r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
-                nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat) * Global.LatLngDivider);
+            ////Legyünk következetesek, a PMAp-os térkép esetében:
+            ////X --> lng, Y --> lat
+
+            //var nearest = RouteData.Instance.Edges/*.Where(
+            //    w => Util.DistanceBetweenSegmentAndPoint(w.Value.fromLatLng.Lng, w.Value.fromLatLng.Lat,
+            //    w.Value.toLatLng.Lng, w.Value.toLatLng.Lat, ptX, ptY) <=
+            //     (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+            //     Global.NearestNOD_ID_Approach : Global.EdgeApproachCity))*/
+            //      .Where(
+            //    w => Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
+            //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) 
+            //        &&
+            //        Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
+            //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)))
+            //     .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
+            //    o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
+            //if (nearest != null)
+            //{
+            //    r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
+            //    nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat) * Global.LatLngDivider);
 
 
-                return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
-                    Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
-            }
+            //    return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
+            //        Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
+            //}
+
             return 0;
         }
         public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
@@ -436,40 +440,42 @@ namespace PMapCore.Route
         public int GetNearestReachableNOD_IDForTruck(PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width, out int r_diff)
         {
             r_diff = Int32.MaxValue;
+ 
+            // TODO boEdge méretcsökkentés miatt kiszedve
 
-            //Legyünk következetesek, a PMAp-os térkép esetében:
-            //X --> lng, Y --> lat
-            var lstRZN = p_RZN_ID_LIST.Split(',');
+            ////Legyünk következetesek, a PMAp-os térkép esetében:
+            ////X --> lng, Y --> lat
+            //var lstRZN = p_RZN_ID_LIST.Split(',');
 
-            //TODO: Nézzük meg, hogy koordiáta alaján pontosan megtaláljuk-e node-ot. (utána lenne a legközelebbi élhez található móka)
+            ////TODO: Nézzük meg, hogy koordiáta alaján pontosan megtaláljuk-e node-ot. (utána lenne a legközelebbi élhez található móka)
 
-            //A legközlebbi élhez található közelebb eső node megkeresése. Azért van így megoldva, mert hosszú országúti szakaszoknál,
-            //egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi 
-            //település pontja (ami közelebb van, mint az országúti szakasz kezdő- vagy végpontja) Hortobágy és Balmazújváros problémakör
+            ////A legközlebbi élhez található közelebb eső node megkeresése. Azért van így megoldva, mert hosszú országúti szakaszoknál,
+            ////egy, az él 'mellett' lévő koordináta (pl. egy kanyarban van a jármű) esetén az útvonal edge legyen kiválaszva, ne egy legközelebbi 
+            ////település pontja (ami közelebb van, mint az országúti szakasz kezdő- vagy végpontja) Hortobágy és Balmazújváros problémakör
 
-            var nearest = RouteData.Instance.Edges.Where(
-                w => (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
-                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) 
-                    &&
-                    Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
-                    (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
-                    ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))) &&
-                    (p_RZN_ID_LIST == "" || w.Value.RZN_ID == 0 || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
-                    (w.Value.EDG_MAXWEIGHT == 0 || p_weight == 0 || w.Value.EDG_MAXWEIGHT <= p_weight) &&
-                    (w.Value.EDG_MAXHEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&
-                    (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width))
-                 .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
-                o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
-            if (nearest != null)
-            {
-                r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
-                nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat) * Global.LatLngDivider);
+            //var nearest = RouteData.Instance.Edges.Where(
+            //    w => (Math.Abs(w.Value.fromLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.fromLatLng.Lat - p_pt.Lat) <
+            //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider)) 
+            //        &&
+            //        Math.Abs(w.Value.toLatLng.Lng - p_pt.Lng) + Math.Abs(w.Value.toLatLng.Lat - p_pt.Lat) <
+            //        (w.Value.RDT_VALUE == 6 || w.Value.EDG_STRNUM1 != "0" || w.Value.EDG_STRNUM2 != "0" || w.Value.EDG_STRNUM3 != "0" || w.Value.EDG_STRNUM4 != "0" ?
+            //        ((double)Global.EdgeApproachCity / Global.LatLngDivider) : ((double)Global.EdgeApproachHighway / Global.LatLngDivider))) &&
+            //        (p_RZN_ID_LIST == "" || w.Value.RZN_ID == 0 || lstRZN.Contains(w.Value.RZN_ID.ToString())) &&
+            //        (w.Value.EDG_MAXWEIGHT == 0 || p_weight == 0 || w.Value.EDG_MAXWEIGHT <= p_weight) &&
+            //        (w.Value.EDG_MAXHEIGHT == 0 || p_height == 0 || w.Value.EDG_MAXHEIGHT <= p_height) &&
+            //        (w.Value.EDG_MAXWIDTH == 0 || p_width == 0 || w.Value.EDG_MAXWIDTH <= p_width))
+            //     .OrderBy(o => Util.DistanceBetweenSegmentAndPoint(o.Value.fromLatLng.Lng, o.Value.fromLatLng.Lat,
+            //    o.Value.toLatLng.Lng, o.Value.toLatLng.Lat, p_pt.Lng, p_pt.Lat)).Select(s => s.Value).FirstOrDefault();
+            //if (nearest != null)
+            //{
+            //    r_diff = (int)(Util.DistanceBetweenSegmentAndPoint(nearest.fromLatLng.Lng, nearest.fromLatLng.Lat,
+            //    nearest.toLatLng.Lng, nearest.toLatLng.Lat, p_pt.Lng, p_pt.Lat) * Global.LatLngDivider);
 
 
-                return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
-                    Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
-            }
+            //    return Math.Abs(nearest.fromLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.fromLatLng.Lat - p_pt.Lat) <
+            //        Math.Abs(nearest.toLatLng.Lng - p_pt.Lng) + Math.Abs(nearest.toLatLng.Lat - p_pt.Lat) ? nearest.NOD_ID_FROM : nearest.NOD_ID_TO;
+            //}
             return 0;
         }
 

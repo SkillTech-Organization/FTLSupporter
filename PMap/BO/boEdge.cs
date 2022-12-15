@@ -14,14 +14,14 @@ namespace PMapCore.BO
         public int NOD_ID_FROM ; //{ get; set; }
         public int NOD_ID_TO ; //{ get; set; }
         public int RDT_VALUE ; //{ get; set; }
-        public string EDG_NAME ; //{ get; set; }
+// TODO boEdge méretcsökkentés miatt kiszedve     public string EDG_NAME ; //{ get; set; }
         public float EDG_LENGTH ; //{ get; set; }                       //futásidő miatt float
         public bool EDG_ONEWAY ; //{ get; set; }
         public bool EDG_DESTTRAFFIC ; //{ get; set; }
-        public string EDG_STRNUM1 ; //{ get; set; }                     //páratlan oldal számozás kezdet
-        public string EDG_STRNUM2 ; //{ get; set; }                     //páratlan oldal számozás vége
-        public string EDG_STRNUM3 ; //{ get; set; }                     //páros oldal számozás kezdet
-        public string EDG_STRNUM4 ; //{ get; set; }                     //páros oldal számozás vége
+// TODO boEdge méretcsökkentés miatt kiszedve     public string EDG_STRNUM1 ; //{ get; set; }                     //páratlan oldal számozás kezdet
+// TODO boEdge méretcsökkentés miatt kiszedve     public string EDG_STRNUM2 ; //{ get; set; }                     //páratlan oldal számozás vége
+//  TODO boEdge méretcsökkentés miatt kiszedve    public string EDG_STRNUM3 ; //{ get; set; }                     //páros oldal számozás kezdet
+//  TODO boEdge méretcsökkentés miatt kiszedve    public string EDG_STRNUM4 ; //{ get; set; }                     //páros oldal számozás vége
         public int RZN_ID ; //{ get; set; }
         public int RST_ID ; //{ get; set; }
         public string WZONE ; //{ get; set; }
