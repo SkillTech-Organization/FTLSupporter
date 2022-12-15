@@ -108,7 +108,7 @@ namespace PMapCore.LongProcess
                                    ID = Util.getFieldValue<int>(r, "ID"),
                                    NOD_ID_FROM = Util.getFieldValue<int>(r, "NOD_NUM"),
                                    NOD_ID_TO = Util.getFieldValue<int>(r, "NOD_NUM2"),
-                                   EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME"),
+                                   // TODO boEdge méretcsökkentés miatt kiszedve EDG_NAME = Util.getFieldValue<string>(r, "EDG_NAME"),
                                    EDG_LENGTH = Util.getFieldValue<float>(r, "EDG_LENGTH"),
                                    RDT_VALUE = Util.getFieldValue<int>(r, "RDT_VALUE"),
                                    EDG_ETLCODE = Util.getFieldValue<string>(r, "EDG_ETLCODE"),

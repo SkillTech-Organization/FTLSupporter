@@ -25,6 +25,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using LZ4;
+using System.IO.MemoryMappedFiles;
+using Newtonsoft.Json.Bson;
 
 namespace PMapCore.Common
 {
@@ -212,16 +214,58 @@ namespace PMapCore.Common
                 tr = new StreamReader(p_file);
             }
             s = tr.ReadToEnd();
+            var s2 = Encoding.UTF8.GetBytes(s);
             tr.Close();
             return s;
         }
+        public static string FileToString2(string p_file, Encoding p_enc = null)
+        {
+            var ret = File.ReadAllText(p_file, p_enc);
+                     return ret;
+        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static byte[] FileToByteArray(string p_filename)
+        public static string FileToString3(string p_file, Encoding p_enc = null)
+        {
+            string BOMMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+
+            StringBuilder s = new StringBuilder();
+
+            const int MAX_BUFFER = 1048576; //1MB 
+            byte[] buffer = new byte[MAX_BUFFER];
+            int bytesRead;
+            int cycle = 0;
+            using (FileStream fs = File.Open(p_file, FileMode.Open, FileAccess.Read))
+            using (BufferedStream bs = new BufferedStream(fs))
+            {
+                while ((bytesRead = bs.Read(buffer, 0, MAX_BUFFER)) != 0) //reading 1mb chunks at a time
+                {
+                    cycle++;
+                    //Let's create a small size file using the data. Or Pass this data for any further processing.
+                    if (cycle % 100 == 0)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                    }
+                    s.Append(System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead));
+
+                }
+            }
+
+            var ret = s.ToString();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (ret.StartsWith(BOMMarkUtf8, StringComparison.OrdinalIgnoreCase))
+                ret = ret.Remove(0, BOMMarkUtf8.Length);
+            return ret;
+        }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="filename"></param>
+            /// <returns></returns>
+            public static byte[] FileToByteArray(string p_filename)
         {
             FileStream fs = File.OpenRead(p_filename);
             BinaryReader br = new BinaryReader(fs);

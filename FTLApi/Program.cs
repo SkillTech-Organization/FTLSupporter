@@ -41,6 +41,8 @@ builder.Services.Configure<FTLLoggerSettings>(
 
 builder.Services.AddTransient<IFTLApiHandler, FTLApiHandler>();
 
+System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

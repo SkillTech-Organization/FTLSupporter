@@ -28,6 +28,8 @@ namespace MapJsonGen
 
         static void Main(string[] args)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
+
             try
             {
                 if (args.Length < 2)
