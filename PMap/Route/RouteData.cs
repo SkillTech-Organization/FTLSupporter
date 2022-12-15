@@ -99,7 +99,7 @@ namespace PMapCore.Route
                     NodePositions = xNodePositions;
 
 
-                    string strallRZones = Util.FileToString3(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
                     var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
                     allRZones = xallRZones;
 
