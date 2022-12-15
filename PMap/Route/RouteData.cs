@@ -70,16 +70,15 @@ namespace PMapCore.Route
                 if (!m_Initalized || p_Forced)
                 {
 
-
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
-Util.String2File("strEdges begin", Path.Combine(p_dir, "trc.log"));
+//Util.String2File("strEdges begin", Path.Combine(p_dir, "trc.log"));
 
                     string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
-Util.String2File("strEdges end", Path.Combine(p_dir, "trc.log"));
+//Util.String2File("strEdges end", Path.Combine(p_dir, "trc.log"));
                     var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
-Util.String2File("strEdges json", Path.Combine(p_dir, "trc.log"));
+//Util.String2File("strEdges json", Path.Combine(p_dir, "trc.log"));
                     Edges = xEdges;
                     foreach (var edg in Edges)
                     {
@@ -92,17 +91,18 @@ Util.String2File("strEdges json", Path.Combine(p_dir, "trc.log"));
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
 
-Util.String2File("strNodePositions begin", Path.Combine(p_dir, "trc.log"));
+//Util.String2File("strNodePositions begin", Path.Combine(p_dir, "trc.log"));
                     string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
-Util.String2File("strNodePositions end", Path.Combine(p_dir, "trc.log"));
+//Util.String2File("strNodePositions end", Path.Combine(p_dir, "trc.log"));
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
-Util.String2File("strNodePositions json", Path.Combine(p_dir, "trc.log"));
+//Util.String2File("strNodePositions json", Path.Combine(p_dir, "trc.log"));
                     NodePositions = xNodePositions;
 
 
-                    string strallRZones = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    string strallRZones = Util.FileToString3(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
                     var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
                     allRZones = xallRZones;
+
 
                     string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
                     var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
