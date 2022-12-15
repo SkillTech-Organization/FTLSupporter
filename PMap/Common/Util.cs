@@ -25,6 +25,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using LZ4;
+using System.IO.MemoryMappedFiles;
 
 namespace PMapCore.Common
 {
@@ -212,8 +213,46 @@ namespace PMapCore.Common
                 tr = new StreamReader(p_file);
             }
             s = tr.ReadToEnd();
+            var s2 = Encoding.UTF8.GetBytes(s);
             tr.Close();
             return s;
+        }
+        public static string FileToString2(string p_file, Encoding p_enc = null)
+        {
+            string BOMMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            var ret = File.ReadAllText(p_file, p_enc);
+                     return ret;
+
+            var bom = new byte[] { 0xEF, 0xBB, 0xBF };
+            var empty = Enumerable.Empty<byte>();
+
+            StringBuilder sb = new StringBuilder();
+            long length = new FileInfo(p_file).Length;
+//            using (var stream = File.Open(p_file, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var mmf = MemoryMappedFile.CreateFromFile(p_file, FileMode.Open, "ImgA"))
+                {
+                    using (var viewStream = mmf.CreateViewStream(0, length, MemoryMappedFileAccess.Read))
+                    {
+                        using (BinaryReader binReader = new BinaryReader(viewStream))
+                        {
+                            var result = binReader.ReadBytes((int)length);
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            var bytes = Encoding.UTF8.GetString(result);
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            sb.Append(bytes);
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                        }
+                    }
+                }
+            }
+             ret  =  sb.ToString();
+            if (ret.StartsWith(BOMMarkUtf8, StringComparison.OrdinalIgnoreCase))
+                ret = ret.Remove(0, BOMMarkUtf8.Length);
+            return ret.Replace("\0", "");
         }
 
         /// <summary>

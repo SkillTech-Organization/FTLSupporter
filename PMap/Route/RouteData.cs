@@ -68,21 +68,10 @@ namespace PMapCore.Route
                 if (!m_Initalized || p_Forced)
                 {
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
-
-
-                    string strallRZones = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_RZN) ,Encoding.UTF8);
-                    var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
-                    allRZones = xallRZones;
-
-                    string strRZN_ID_LIST = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
-                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
-                    RZN_ID_LIST = xRZN_ID_LIST;
-
-
-                    string strEdges = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
+                    string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
                     var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
                     Edges = xEdges;
-                    foreach( var edg in Edges)
+                    foreach (var edg in Edges)
                     {
                         float CalcSpeed = p_speeds[edg.Value.RDT_VALUE];
                         float CalcDuration = (float)(edg.Value.EDG_LENGTH / p_speeds[edg.Value.RDT_VALUE] / 3.6 * 60);
@@ -90,8 +79,17 @@ namespace PMapCore.Route
                         edg.Value.CalcDuration = CalcDuration;
                     }
 
+                    string strallRZones = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
+                    allRZones = xallRZones;
 
-                    string strNodePositions = Util.FileToString(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
+                    string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
+                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
+                    RZN_ID_LIST = xRZN_ID_LIST;
+
+
+
+                    string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
                     NodePositions = xNodePositions;
 
