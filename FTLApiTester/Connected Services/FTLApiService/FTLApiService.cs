@@ -16,6 +16,7 @@
 namespace FTLApiService
 {
     using Microsoft.Extensions.Configuration;
+    using System.ComponentModel;
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
@@ -581,20 +582,20 @@ namespace FTLApiService
 
     }
 
+    // NOTODO NSwagger fails to generate this enum correctly, the fields must be copied here after generation.
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]
     public enum FTLResultStatus
     {
-
-        _0 = 0,
-
-        _1 = 1,
-
-        _2 = 2,
-
-        _3 = 3,
-
-        _4 = 4,
-
+        [Description("RESULT")]
+        RESULT,
+        [Description("VALIDATIONERROR")]
+        VALIDATIONERROR,
+        [Description("EXCEPTION")]
+        EXCEPTION,
+        [Description("ERROR")]
+        ERROR,
+        [Description("LOG")]
+        LOG
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v12.0.0.0))")]

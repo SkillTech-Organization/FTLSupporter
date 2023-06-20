@@ -224,7 +224,14 @@ namespace FTLApiTester.Services
 
                                     testCase.Result.ForEach(x =>
                                     {
-                                        x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                                        if (x.Status == FTLResultStatus.RESULT)
+                                        {
+                                            x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                                        }
+                                        else
+                                        {
+                                            x.Data = ((JToken)x.Data).ToObject<Dictionary<string, string>>();
+                                        }
                                     });
 
                                     var resultJson = JsonConvert.SerializeObject(results, isoDateTimeConverter);
