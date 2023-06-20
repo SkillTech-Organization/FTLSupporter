@@ -3,13 +3,10 @@ using FTLApi.DTO.Response;
 using FTLInsightsLogger.Logger;
 using FTLInsightsLogger.Settings;
 using FTLSupporter;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
-using CommonUtils;
-using Newtonsoft.Json.Converters;
 
 namespace FTLApi.Handlers
 {
@@ -19,7 +16,7 @@ namespace FTLApi.Handlers
 
         private ITelemetryLogger Logger { get; set; }
 
-        public FTLApiHandler (IOptions<FTLLoggerSettings> options)
+        public FTLApiHandler(IOptions<FTLLoggerSettings> options)
         {
             Settings = options.Value;
             Logger = TelemetryClientFactory.Create(Settings);
@@ -28,7 +25,7 @@ namespace FTLApi.Handlers
 
         public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
         {
-  
+
             var response = new FTLResponse();
             try
             {
@@ -70,7 +67,14 @@ namespace FTLApi.Handlers
                     //Logger.Info("Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(x.Data), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                     if (x.Data != null)
                     {
-                        x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                        if (x.Status == FTLResult.FTLResultStatus.RESULT)
+                        {
+                            x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
+                        }
+                        else
+                        {
+                            x.Data = ((JToken)x.Data).ToObject<Dictionary<string, string>>();
+                        }
                     }
                     else
                     {
