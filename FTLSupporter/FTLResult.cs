@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace FTLSupporter
 {
@@ -23,8 +21,6 @@ namespace FTLSupporter
             EXCEPTION,
             [Description("ERROR")]
             ERROR,
-            [Description("LOG")]
-            LOG
         };
 
         [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
@@ -34,6 +30,10 @@ namespace FTLSupporter
 
 
         public object Data { get; set; }
+
+        public FTLResErrMsg ResErrMsg { get; set; } = null;                         //VALIDATIONERROR, ERROR, EXCEPTION esetén értelmezett
+
+        public List<FTLSupporter.FTLCalcTask> CalcTaskList { get; set; } = null;   //RESULT esetén értelmezett
 
     }
 }
