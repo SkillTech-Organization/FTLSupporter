@@ -29,7 +29,7 @@ namespace FTLSupporter
         public string ItemID { get; set; }
 
 
-        public object Data { get; set; }
+        public object Data { get; set; }                                            //@Jeremi: ezt a mezőt meg kell szüntetni
 
         public FTLResErrMsg ResErrMsg { get; set; } = null;                         //VALIDATIONERROR, ERROR, EXCEPTION esetén értelmezett
 
