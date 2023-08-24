@@ -35,8 +35,6 @@ namespace FTLApi.Handlers
                 {
                     response = initResult;
                 }
-                response.TaskList = body.TaskList;
-                response.TruckList = body.TruckList;
 
                 if (initResult != null && !initResult.HasError)
                 {
@@ -100,8 +98,6 @@ namespace FTLApi.Handlers
                 {
                     response = initResult;
                 }
-                response.TaskList = body.TaskList;
-                response.TruckList = body.TruckList;
 
                 if (initResult != null && !initResult.HasError)
                 {
