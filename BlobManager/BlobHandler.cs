@@ -138,5 +138,13 @@ namespace BlobUtils
                 return stream;
             }
         }
+
+        public bool CheckIfBlobExist(string blobContainerName, string blobName)
+        {
+            BlobContainerClient containerClient = Client.GetBlobContainerClient(blobContainerName);
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+            return blobClient.Exists().Value;
+        }
     }
 }

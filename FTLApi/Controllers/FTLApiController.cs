@@ -64,8 +64,7 @@ namespace FTLApi
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/v1/FTLSupporter/Result/{id}")]
         public async Task<ActionResult<FTLResponse>> Result([FromRoute] string id)
         {
-            var result = await _implementation.Result(id);
-            return new OkObjectResult(result);
+            return _implementation.Result(id);
         }
 
         /// <summary>

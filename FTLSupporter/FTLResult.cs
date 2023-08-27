@@ -28,9 +28,6 @@ namespace FTLSupporter
         public string ObjectName { get; set; }
         public string ItemID { get; set; }
 
-
-        public object Data { get; set; }
-
         public FTLResErrMsg ResErrMsg { get; set; } = null;                         //VALIDATIONERROR, ERROR, EXCEPTION esetén értelmezett
 
         public List<FTLSupporter.FTLCalcTask> CalcTaskList { get; set; } = null;   //RESULT esetén értelmezett

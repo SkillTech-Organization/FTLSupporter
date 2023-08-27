@@ -20,7 +20,12 @@ namespace FTLSupporter
         private static FTLLoggerSettings LoggerSettings { get; set; }
         private static string RequestID { get; set; }
 
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings)
+        public static string GenerateRequestId()
+        {
+            return DateTime.UtcNow.Ticks.ToString();
+        }
+
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string requestId = null)
         {
             if (Logger == null)
             {
@@ -47,10 +52,13 @@ namespace FTLSupporter
 
             }
 
-            if (!ret.HasError)
+            // Mindenképpen kell RequestId!
+            ret.RequestID = string.IsNullOrWhiteSpace(requestId) ? GenerateRequestId() : requestId;
+            RequestID = ret.RequestID;
+
+            if (ret.HasError)
             {
-                ret.RequestID = DateTime.UtcNow.Ticks.ToString();
-                RequestID = ret.RequestID;
+
             }
 
             return ret;
@@ -104,8 +112,10 @@ namespace FTLSupporter
             ret.Result.AddRange(res);
             ret.RequestID = RequestID;
 
-            var saveSuccess = !string.IsNullOrWhiteSpace(Logger.Blob.LogString(ret.ToJson(), RequestID).Result);
-            var link = LoggerSettings.ResultLinkBase + RequestID;
+            var resultBlobName = RequestID + "_response";
+
+            var saveSuccess = !string.IsNullOrWhiteSpace(Logger.Blob.LogString(ret.ToJson(), resultBlobName).Result);
+            var link = LoggerSettings.ResultLinkBase + resultBlobName;
 
             if (saveSuccess)
             {
@@ -1171,8 +1181,7 @@ namespace FTLSupporter
                         Status = FTLResult.FTLResultStatus.RESULT,
                         ObjectName = "",
                         ItemID = "",
-                        Data = tskResult
-
+                        CalcTaskList = tskResult
                     };
                     result.Add(res);
                 }
@@ -1263,7 +1272,7 @@ namespace FTLSupporter
             if (calcResult != null)
             {
                 FTLInterface.FTLSetBestTruck(res);
-                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+                List<FTLCalcTask> calcTaskList = calcResult.CalcTaskList;
 
                 while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
                 {
@@ -1280,7 +1289,7 @@ namespace FTLSupporter
 
                         FTLInterface.FTLSetBestTruck(res2);
 
-                        List<FTLCalcTask> calcTaskList2 = ((List<FTLCalcTask>)calcResult2.Data);
+                        List<FTLCalcTask> calcTaskList2 = calcResult2.CalcTaskList;
 
                         //Megvizsgáljuk, hogy a számítási menet hozott-e eredményt.
                         if (calcTaskList2.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count != 0).ToList().Count == 0)
@@ -1370,7 +1379,7 @@ namespace FTLSupporter
             var calcResult = p_calcResult.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (calcResult != null)
             {
-                List<FTLCalcTask> calcTaskList = ((List<FTLCalcTask>)calcResult.Data);
+                List<FTLCalcTask> calcTaskList = calcResult.CalcTaskList;
                 /*
                 //init:kitöröljük az összes ERR státuszú járművet
                 foreach (var ct in calcTaskList)

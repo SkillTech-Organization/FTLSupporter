@@ -918,16 +918,19 @@ namespace FTLSupporterTest
                 Console.WriteLine("Status     :" + rr.Status);
                 Console.WriteLine("Objektumnév:" + rr.ObjectName);
                 Console.WriteLine("Elem ID    :" + rr.ItemID);
-                if (rr.Data != null)
-                    Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
-
+                if (rr.CalcTaskList != null || rr.ResErrMsg != null)
+                {
+                    // OK esetén az eredmények listája
+                    Console.WriteLine("Adat :" + JsonConvert.SerializeObject(rr.CalcTaskList ?? new List<FTLCalcTask>()));
+                    Console.WriteLine("Hiba :" + JsonConvert.SerializeObject(rr.ResErrMsg ?? new FTLResErrMsg()));
+                }
 
                 if (rr.Status == FTLResult.FTLResultStatus.RESULT)
                 {
                     if (p_bestTruck)
                         bestTruckConsole(res.FirstOrDefault());
 
-                    List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
+                    List<FTLCalcTask> tskResult = rr.CalcTaskList;
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
 
@@ -997,7 +1000,7 @@ namespace FTLSupporterTest
                 }
                 else
                 {
-                    FTLResErrMsg em = (FTLResErrMsg)rr.Data;
+                    FTLResErrMsg em = rr.ResErrMsg;
                     Console.WriteLine(em.Message);
                     Console.WriteLine(em.CallStack);
                 }
@@ -1007,7 +1010,7 @@ namespace FTLSupporterTest
         }
         private static void bestTruckConsole(FTLResult rr)
         {
-            List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
+            List<FTLCalcTask> tskResult = rr.CalcTaskList;
 
             foreach (FTLCalcTask clctsk in tskResult)
             {

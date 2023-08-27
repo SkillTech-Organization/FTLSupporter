@@ -26,6 +26,34 @@ namespace FTLInsightsLogger.Logger
         void SetLogger(ITelemetryLogger telemetryLogger);
     }
 
+    public class MockQueueLogger : IQueueLogger
+    {
+        public void Log(string message, string requestId = "")
+        {
+            return;
+        }
+
+        public void Log(object message, string requestId = "")
+        {
+            return;
+        }
+
+        public void LogAsync(string message, string requestId = "")
+        {
+            return;
+        }
+
+        public void LogAsync(object message, string requestId = "")
+        {
+            return;
+        }
+
+        public void SetLogger(ITelemetryLogger telemetryLogger)
+        {
+            return;
+        }
+    }
+
     public class QueueLogger: IQueueLogger
     {
         private readonly FTLLoggerSettings settings;
@@ -45,6 +73,11 @@ namespace FTLInsightsLogger.Logger
 
         public void Log(string message, string requestId = "")
         {
+            if (!settings.UseQueue)
+            {
+                return;
+            }
+
             try
             {
                 if (queueClient.Exists())
@@ -64,6 +97,11 @@ namespace FTLInsightsLogger.Logger
 
         public async void LogAsync(string message, string requestId = "")
         {
+            if (!settings.UseQueue)
+            {
+                return;
+            }
+
             try
             {
                 if (await queueClient.ExistsAsync())
@@ -83,6 +121,11 @@ namespace FTLInsightsLogger.Logger
 
         public void Log(object message, string requestId = "")
         {
+            if (!settings.UseQueue)
+            {
+                return;
+            }
+
             try
             {
                 if (queueClient.Exists())
@@ -103,6 +146,11 @@ namespace FTLInsightsLogger.Logger
 
         public async void LogAsync(object message, string requestId = "")
         {
+            if (!settings.UseQueue)
+            {
+                return;
+            }
+
             try
             {
                 if (await queueClient.ExistsAsync())

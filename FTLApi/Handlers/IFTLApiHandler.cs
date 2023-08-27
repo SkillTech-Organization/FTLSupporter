@@ -23,7 +23,7 @@ namespace FTLApi.Handlers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<FTLResponse> Result(string id);
+        ActionResult Result(string id);
 
         /// <summary>
         /// Calculate by FTLSupporterX engine
