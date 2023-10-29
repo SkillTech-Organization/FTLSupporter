@@ -18,6 +18,8 @@ namespace FTLApi.Handlers
 
         private ITelemetryLogger Logger { get; set; }
 
+        private const string BLOB_SUFFIX = "_response";
+
         public FTLApiHandler(IOptions<FTLLoggerSettings> options)
         {
             Settings = options.Value;
@@ -54,41 +56,19 @@ namespace FTLApi.Handlers
             return Task.FromResult(response);
         }
 
-        public ActionResult Result(string blob_name)
+        public ActionResult Result(string requestId)
         {
             var response = new FTLResponse();
             try
             {
-                if (!Logger.Blob.CheckIfBlobExists(blob_name))
+                string blobName = requestId + BLOB_SUFFIX;
+
+                if (!Logger.Blob.CheckIfBlobExists(blobName))
                 {
                     return new NotFoundObjectResult("The requested resource was not found.");
                 }
 
-                //var json = Logger.Blob.GetLoggedString(id).Result;
-                //Logger.Info("From blob JSON: " + json, Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
-                //response = Newtonsoft.Json.JsonConvert.DeserializeObject<FTLResponse>(json);
-                //Logger.Info("From blob is null: " + (response == null).ToString(), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);                
-                response = Logger.Blob.GetLoggedJsonAs<FTLResponse>(blob_name).Result;
-                //var asd = response.ToJson();
-                //response?.Result.ForEach(x =>
-                //{
-                //    //Logger.Info("Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(x.Data), Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
-                //    if (x.Data != null)
-                //    {
-                //        if (x.Status == FTLResult.FTLResultStatus.RESULT)
-                //        {
-                //            x.Data = ((JToken)x.Data).ToObject<List<FTLSupporter.FTLCalcTask>>();
-                //        }
-                //        else
-                //        {
-                //            x.Data = ((JToken)x.Data).ToObject<Dictionary<string, string>>();
-                //        }
-                //    }
-                //    else
-                //    {
-                //        x.Data = new List<FTLSupporter.FTLCalcTask>();
-                //    }
-                //});
+                response = Logger.Blob.GetLoggedJsonAs<FTLResponse>(blobName).Result;
             }
             catch (Exception ex)
             {
