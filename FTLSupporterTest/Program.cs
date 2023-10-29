@@ -1,6 +1,7 @@
 ﻿using FTLSupporter;
 using GMap.NET;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PMapCore.BLL;
 using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +22,22 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            ParTest();
+            ParTest2();
+
+
+    }
+        static void ParTest2()
+        {
+            var isoDateTimeConverter = new JsonSerializerSettings { DateFormatString = "yyyy.MM.dd HH:mm:ss", Culture = System.Globalization.CultureInfo.InvariantCulture };
+            var taskPath = "d:\\Temp\\SWH\\638339999417248828_FTLTask_FTLSupportX.json";
+
+
+            var lstTsk = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
+            var truckPath = "d:\\Temp\\SWH\\638339999417248828_FTLTruck_FTLSupportX.json";
+            var lstTrk = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
+
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 0, null);
+            var str = JsonConvert.SerializeObject(res);
         }
 
         static void ParTest()
