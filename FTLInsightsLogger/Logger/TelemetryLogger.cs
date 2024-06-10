@@ -93,9 +93,16 @@ namespace FTLInsightsLogger.Logger
 
             AutoCommitEnabled = settings.AutoCommitAfterEveryLogEnabled;
 
-            this.QueueLogger = queueLogger;
             this.QueueEnabled = settings.UseQueue;
 
+            if (settings.UseQueue)
+            {
+                this.QueueLogger = queueLogger;
+            }
+            else
+            {
+                this.QueueLogger = new MockQueueLogger();
+            }
             this.QueueLogger.SetLogger(this);
 
             Blob = new BlobLogger(settings.AzureStorageConnectionString, this, settings.ResultBlobContainer);

@@ -79,5 +79,18 @@ namespace FTLInsightsLogger.Logger
                 return default;
             }
         }
+
+        public bool CheckIfBlobExists(string name)
+        {
+            try
+            {
+                return BlobHandler.CheckIfBlobExist(ContainerName, name);
+            }
+            catch (Exception ex)
+            {
+                logger.Exception(ex, logger.GetExceptionProperty(logger.IdPropertyDefaultValue));
+                return false;
+            }
+        }
     }
 }

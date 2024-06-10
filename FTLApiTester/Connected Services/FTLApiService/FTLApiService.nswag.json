@@ -55,7 +55,7 @@
         }
       }
     },
-    "/api/v1/FTLSupporter/Result": {
+    "/api/v1/FTLSupporter/Result/{id}": {
       "get": {
         "tags": [
           "FTLApi"
@@ -64,7 +64,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -168,6 +169,266 @@
           2
         ]
       },
+      "FTLCalcRoute": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tPoint": {
+            "$ref": "#/components/schemas/FTLPoint"
+          },
+          "arrival": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "departure": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "drivingDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "restDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "waitingDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "srvDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "distance": {
+            "type": "number",
+            "format": "double"
+          },
+          "toll": {
+            "type": "number",
+            "format": "double"
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "routePoints": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "FTLCalcTask": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": {
+            "$ref": "#/components/schemas/FTLTask"
+          },
+          "calcTours": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FTLCalcTour"
+            }
+          }
+        }
+      },
+      "FTLCalcTour": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "statusEnum": {
+            "$ref": "#/components/schemas/FTLCalcTourStatus"
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "msg": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "truck": {
+            "$ref": "#/components/schemas/FTLTruck"
+          },
+          "t1M": {
+            "type": "number",
+            "format": "double"
+          },
+          "t1Toll": {
+            "type": "number",
+            "format": "double"
+          },
+          "t1Cost": {
+            "type": "number",
+            "format": "double"
+          },
+          "t1Rest": {
+            "type": "number",
+            "format": "double"
+          },
+          "t1FullDuration": {
+            "type": "number",
+            "format": "double"
+          },
+          "t1Start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "t1End": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "t1CalcRoute": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FTLCalcRoute"
+            }
+          },
+          "relM": {
+            "type": "number",
+            "format": "double"
+          },
+          "relToll": {
+            "type": "number",
+            "format": "double"
+          },
+          "relCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "relRest": {
+            "type": "number",
+            "format": "double"
+          },
+          "relFullDuration": {
+            "type": "number",
+            "format": "double"
+          },
+          "relStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "relEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "relCalcRoute": {
+            "$ref": "#/components/schemas/FTLCalcRoute"
+          },
+          "t2M": {
+            "type": "number",
+            "format": "double"
+          },
+          "t2Toll": {
+            "type": "number",
+            "format": "double"
+          },
+          "t2Cost": {
+            "type": "number",
+            "format": "double"
+          },
+          "t2Rest": {
+            "type": "number",
+            "format": "double"
+          },
+          "t2FullDuration": {
+            "type": "number",
+            "format": "double"
+          },
+          "t2Start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "t2End": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "t2CalcRoute": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FTLCalcRoute"
+            }
+          },
+          "retM": {
+            "type": "number",
+            "format": "double"
+          },
+          "retToll": {
+            "type": "number",
+            "format": "double"
+          },
+          "retCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "retRest": {
+            "type": "number",
+            "format": "double"
+          },
+          "retFullDuration": {
+            "type": "number",
+            "format": "double"
+          },
+          "retStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "retEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "retCalcRoute": {
+            "$ref": "#/components/schemas/FTLCalcRoute"
+          },
+          "timeComplete": {
+            "type": "string",
+            "readOnly": true,
+            "format": "date-time"
+          },
+          "additionalCost": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "fullCost": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "fullM": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "fullDuration": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          }
+        }
+      },
+      "FTLCalcTourStatus": {
+        "type": "integer",
+        "format": "int32",
+        "enum": [
+          0,
+          1
+        ]
+      },
       "FTLPoint": {
         "type": "object",
         "additionalProperties": false,
@@ -226,6 +487,24 @@
           }
         }
       },
+      "FTLResErrMsg": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "callStack": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "FTLResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -233,24 +512,6 @@
           "requestID": {
             "type": "string",
             "nullable": true
-          },
-          "taskList": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/FTLTask"
-            }
-          },
-          "truckList": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/FTLTruck"
-            }
-          },
-          "maxTruckDistance": {
-            "type": "integer",
-            "format": "int32"
           },
           "result": {
             "type": "array",
@@ -280,20 +541,25 @@
             "type": "string",
             "nullable": true
           },
-          "data": {
-            "nullable": true
+          "resErrMsg": {
+            "$ref": "#/components/schemas/FTLResErrMsg"
+          },
+          "calcTaskList": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FTLCalcTask"
+            }
           }
         }
       },
       "FTLResultStatus": {
-        "type": "integer",
-        "format": "int32",
+        "type": "string",
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
+          "RESULT",
+          "VALIDATIONERROR",
+          "EXCEPTION",
+          "ERROR"
         ]
       },
       "FTLSupportRequest": {
