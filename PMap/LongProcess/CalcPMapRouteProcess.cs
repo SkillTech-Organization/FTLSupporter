@@ -42,18 +42,6 @@ namespace PMapCore.LongProcess
         private bool m_savePoints = true;
         private bllRoute m_bllRoute;
 
-        public CalcPMapRouteProcess(BaseProgressDialog p_Form, ThreadPriority p_ThreadPriority, string p_Hint, List<boRoute> p_CalcDistances, bool p_savePoints)
-            : base(p_Form, p_ThreadPriority)
-        {
-            m_CalcDistances = p_CalcDistances;
-            m_Hint = p_Hint;
-            m_DB = new SQLServerAccess();
-            m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
-            m_bllRoute = new bllRoute(m_DB);
-            m_savePoints = p_savePoints;
-            Completed = false;
-        }
-
         public CalcPMapRouteProcess(ThreadPriority p_ThreadPriority, string p_Hint, List<boRoute> p_CalcDistances, bool p_savePoints)
             : base(p_ThreadPriority)
         {
@@ -96,13 +84,9 @@ namespace PMapCore.LongProcess
                     TimeSpan tspDiff;
                     TimeSpan tspFlush;
 
-                    if (ProcessForm != null)
-                    {
-                        ProcessForm.SetInfoText(m_Hint.Trim() + " Inicializálás");
-                    }
 
                     PMapRoutingProvider provider = new PMapRoutingProvider();
-                    RouteData.Instance.Init(m_DB, null);
+                    RouteData.Instance.Init(m_DB, PMapIniParams.Instance.dicSpeed);
                     RectLatLng boundary = new RectLatLng();
 
                     if (m_CalcDistances.Count > 0)
@@ -244,14 +228,6 @@ namespace PMapCore.LongProcess
 
                                 tspDiff = DateTime.Now - dtStart;
                                 string infoText1 = itemNo.ToString() + "/" + (maxCnt.ToString());
-                                if (PMapIniParams.Instance.TestMode)
-                                    infoText1 += " " + tspDiff.Duration().TotalMilliseconds.ToString("#0") + " ms";
-                                //                ProcessForm.SetInfoText(m_Hint.Trim() + "=>" + Util.GetSysInfo().PadRight(15) + " " + infoText1.PadRight(25) + " NODE_ID:" + item.Key.ToString());
-                                if (ProcessForm != null)
-                                {
-                                    ProcessForm.SetInfoText(m_Hint.Trim() + infoText1);
-                                    ProcessForm.NextStep();
-                                }
                             }
                         }
                     }
@@ -316,7 +292,6 @@ namespace PMapCore.LongProcess
             var hint = m_Hint.Trim() + "-" + random.Next(1000).ToString() + "-";
 
             DateTime dtStartFlush = DateTime.Now;
-            ProcessForm.SetInfoText(hint + "Kiírás..." + p_flushCnt.ToString());
 
             Util.Log2File(hint + "START WriteRoutesBulk call : Mmry:" + GC.GetTotalMemory(false).ToString());
 

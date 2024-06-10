@@ -18,7 +18,6 @@ using System.IO.Compression;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using System.Web.Script.Serialization;
 using PMapCore.Common.Azure;
 using System.Xml;
 using System.Xml.Serialization;
@@ -26,6 +25,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using LZ4;
+using System.IO.MemoryMappedFiles;
+using Newtonsoft.Json.Bson;
 
 namespace PMapCore.Common
 {
@@ -162,35 +163,28 @@ namespace PMapCore.Common
             throw new NotImplementedException();
         }
 
-        public static void Log2File(string p_msg, bool p_sendToCloud = true)
+        public static void Log2File(string p_msg)
         {
-            Log2File(p_msg, Global.LogFileName, p_sendToCloud);
+            Log2File(p_msg, Global.LogFileName);
         }
 
-        public static void Log2File(string p_msg, string p_logFileName, bool p_sendToCloud = true)
+        public static void Log2File(string p_msg, string p_logFileName)
         {
             string dir = PMapIniParams.Instance.LogDir;
             if (dir == null || dir == "")
-                dir = Path.GetDirectoryName(Application.ExecutablePath);
+                dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
 
             string LogFileName = Path.Combine(dir, p_logFileName);
             string sMsg = String.Format("{0}: {1}", DateTime.Now.ToString(Global.DATETIMEFORMAT), p_msg);
             Console.WriteLine(sMsg);
             String2File(sMsg + Environment.NewLine, LogFileName, true);
-            /* ez már nem kell 
-            if (p_sendToCloud && PMapIniParams.Instance.ParseLog)
-                ParseLogX.LogToParse(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
-            */
-            if (p_sendToCloud && PMapIniParams.Instance.ALog)
-                AzureLogX.LogToAzure(p_logFileName.Substring(p_logFileName.Length - 3, 3), DateTime.Now, p_msg);
-
-        }
+         }
 
         public static void ExceptionLog(Exception p_ecx)
         {
             string dir = PMapIniParams.Instance.LogDir;
             if (dir == null || dir == "")
-                dir = Path.GetDirectoryName(Application.ExecutablePath);
+                dir = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
 
             string ExcFileName = Path.Combine(dir, Global.ExcFileName);
 
@@ -220,16 +214,58 @@ namespace PMapCore.Common
                 tr = new StreamReader(p_file);
             }
             s = tr.ReadToEnd();
+            var s2 = Encoding.UTF8.GetBytes(s);
             tr.Close();
             return s;
         }
+        public static string FileToString2(string p_file, Encoding p_enc = null)
+        {
+            var ret = File.ReadAllText(p_file, p_enc);
+                     return ret;
+        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static byte[] FileToByteArray(string p_filename)
+        public static string FileToString3(string p_file, Encoding p_enc = null)
+        {
+            string BOMMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+
+            StringBuilder s = new StringBuilder();
+
+            const int MAX_BUFFER = 1048576; //1MB 
+            byte[] buffer = new byte[MAX_BUFFER];
+            int bytesRead;
+            int cycle = 0;
+            using (FileStream fs = File.Open(p_file, FileMode.Open, FileAccess.Read))
+            using (BufferedStream bs = new BufferedStream(fs))
+            {
+                while ((bytesRead = bs.Read(buffer, 0, MAX_BUFFER)) != 0) //reading 1mb chunks at a time
+                {
+                    cycle++;
+                    //Let's create a small size file using the data. Or Pass this data for any further processing.
+                    if (cycle % 100 == 0)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                    }
+                    s.Append(System.Text.Encoding.UTF8.GetString(buffer, 0, bytesRead));
+
+                }
+            }
+
+            var ret = s.ToString();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            if (ret.StartsWith(BOMMarkUtf8, StringComparison.OrdinalIgnoreCase))
+                ret = ret.Remove(0, BOMMarkUtf8.Length);
+            return ret;
+        }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="filename"></param>
+            /// <returns></returns>
+            public static byte[] FileToByteArray(string p_filename)
         {
             FileStream fs = File.OpenRead(p_filename);
             BinaryReader br = new BinaryReader(fs);
@@ -407,7 +443,7 @@ namespace PMapCore.Common
         /// <returns>telepitesi hely</returns>
         public static string GetBasePath()
         {
-            return Path.GetDirectoryName(Application.ExecutablePath);
+            return Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
         }
 
         /// <summary>
@@ -471,45 +507,6 @@ namespace PMapCore.Common
             return (Version1.CompareTo(Version2));
         }
 
-
-
-        public static Control FindControl(Control container, string name)
-        {
-            if (container.Name == name)
-                return container;
-            foreach (Control ctrl in container.Controls)
-            {
-                Control foundCtrl = FindControl(ctrl, name);
-                if (foundCtrl != null)
-                    return foundCtrl;
-            }
-            return null;
-        }
-
-        public static List<Control> FindControlsByType(Control p_ctrl, Type p_type)
-        {
-            List<Control> res = new List<Control>();
-
-            foreach (Control subCtrl in p_ctrl.Controls)
-            {
-                res.AddRange(FindControlsByType(subCtrl, p_type));
-            }
-            if (p_ctrl.GetType() == p_type)
-                res.Add(p_ctrl);
-            return res;
-        }
-
-        public static Control FindParentByType(Control ctrl, Type p_type)
-        {
-            if (ctrl.GetType() == p_type)
-                return ctrl;
-
-            if (ctrl.Parent != null)
-                return FindParentByType(ctrl.Parent, p_type);
-            else
-                return null;
-        }
-
         public static string DOS2WinText(string p_txt)
         {
 
@@ -545,7 +542,7 @@ namespace PMapCore.Common
                 */
 
                 // PerformanceCounter cpuCounter;
-                PerformanceCounter ramCounter;
+                //PerformanceCounter ramCounter;
 
                 //                PerformanceCounterCategory[] categories;
 

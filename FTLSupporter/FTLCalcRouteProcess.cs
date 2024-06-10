@@ -45,14 +45,8 @@ namespace FTLSupporter
                 DateTime dtStart = DateTime.Now;
                 TimeSpan tspDiff;
 
-                if (ProcessForm != null)
-                {
-                    ProcessForm.SetInfoText("Inicializálás");
-                }
-
-
                 PMapRoutingProvider provider = new PMapRoutingProvider();
-                RouteData.Instance.InitFromFiles("map");
+
                 //TODO refakt RectLatLng boundary = new RectLatLng();
 
                 List<int> fromNodes = m_lstRoutes.GroupBy(g => g.fromNOD_ID).Select(x => x.Key).ToList();

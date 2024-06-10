@@ -38,8 +38,8 @@ namespace PMapCore.LongProcess
         private bllRoute m_bllRoute;
 
 
-        public CalcRoutesForTours(BaseProgressDialog p_Form, boPlanTour p_Tour)
-            : base(p_Form, ThreadPriority.Normal)
+        public CalcRoutesForTours(boPlanTour p_Tour)
+            : base(ThreadPriority.Normal)
         {
             m_Tour = p_Tour;
             m_DB = new SQLServerAccess();
@@ -52,7 +52,6 @@ namespace PMapCore.LongProcess
 
             CompleteCode = eCompleteCode.OK;
 
-            ProcessForm.SetInfoText(PMapMessages.T_COMPLETE_TOURROUTES2 + m_Tour.TRUCK);
             CompleteCode = CreateOneRoute(m_Tour);
 
 
@@ -69,7 +68,6 @@ namespace PMapCore.LongProcess
                 CompleteCode = eCompleteCode.UserBreak;
                 return;
             }
-            ProcessForm.NextStep();
 
         }
 
@@ -99,9 +97,7 @@ namespace PMapCore.LongProcess
                 PMapRoutingProvider provider = new PMapRoutingProvider();
                 foreach (var tourPoint in p_tour.TourPoints.GroupBy(g => g.NOD_ID))
                 {
-                    ProcessForm.NextStep();
-
-                    RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+                    RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, PMapIniParams.Instance.dicSpeed);
 
                     var toNodes = p_tour.TourPoints.GroupBy(g => g.NOD_ID).Where(w => w.Key != tourPoint.First().NOD_ID).Select(s => s.Key).ToList();
                     var resRoute = provider.GetAllRoutes(routePar, tourPoint.First().NOD_ID, toNodes,

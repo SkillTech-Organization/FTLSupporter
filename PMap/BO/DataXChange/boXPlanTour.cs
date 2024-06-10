@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using PMapCore.BO.Base;
 using PMapCore.Common;
-using System.Web.Script.Serialization;
 using System.Drawing;
 using PMapCore.Common.Attrib;
+using Newtonsoft.Json;
 
 namespace PMapCore.BO.DataXChange
 {
@@ -62,7 +62,7 @@ namespace PMapCore.BO.DataXChange
         [DisplayNameAttributeX(Name = "Jármű szinezése", Order = 16)]
         public Color TRK_COLOR { get; set; }
 
-        [ScriptIgnore]
+        [JsonIgnore]
         [DisplayNameAttributeX(Name = "Túrapontok listája", Order = 17)]
         public List<boPlanTourPoint> TourPoints { get; set; }   //üres, ha nincs a járműnek túrája
 

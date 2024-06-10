@@ -16,7 +16,7 @@ namespace PMapCore.LongProcess
     {
         private SQLServerAccess m_DB = null;                 //A multithread miatt saját adatelérés kell
         public InitRouteDataProcess()
-            : base(new BaseSilngleProgressDialog(1, 4, PMapMessages.M_OPT_LOADMAPDATA, false), PMapIniParams.Instance.InitRouteDataProcess)
+            : base(PMapIniParams.Instance.InitRouteDataProcess)
         {
             m_DB = new SQLServerAccess();
             m_DB.ConnectToDB(PMapIniParams.Instance.DBServer, PMapIniParams.Instance.DBName, PMapIniParams.Instance.DBUser, PMapIniParams.Instance.DBPwd, PMapIniParams.Instance.DBCmdTimeOut);
@@ -25,7 +25,7 @@ namespace PMapCore.LongProcess
    
         protected override void DoWork()
         {
-            RouteData.Instance.Init(m_DB, this.ProcessForm, false);
+            RouteData.Instance.Init(m_DB, PMapIniParams.Instance.dicSpeed, false);
 
         }
     }

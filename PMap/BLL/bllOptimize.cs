@@ -39,35 +39,20 @@ namespace PMapCore.BLL
         public void CreatePlanfile()
         {
         }
-        public void FillOptimize(BaseProgressDialog p_notify)
+        public void FillOptimize()
         {
 
             bllHistory.WriteHistory(0, "FillOptimize", boOpt.PLN_ID, bllHistory.EMsgCodes.FUNC, "");
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_PROJINF);
             fillProjectInfo();
 
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_OPTPARS);
             fillOptimizePars();
 
-
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_COSTPROF);
             fillCostProfile();
 
-
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_TRUCKTYPE);
             fillTruckType();
 
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_WHS);
             fillWarehouse();
 
-
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_CAPPROF);
             fillCapacityProfile();
 
             if (boOpt.Replan)
@@ -76,33 +61,20 @@ namespace PMapCore.BLL
                 lockNoReplanned();
             }
 
-
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_TRUCK);
             fillTruck();
 
-
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_DEP);
             fillClient();
 
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_ORDER);
+
             fillOrder();
 
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_ORDERTRUCK);
             fillOrderTruck();
 
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_DST);
-            fillRelationAccess(p_notify);
+            fillRelationAccess();
 
             if (boOpt.Replan)
             {
-                if (p_notify != null)
-                    p_notify.SetInfoText(PMapMessages.M_OPT_TOURS);
-                fillPlanTours(p_notify);
+                fillPlanTours();
             }
 
 
@@ -731,26 +703,20 @@ namespace PMapCore.BLL
 
 
 
-        private void fillRelationAccess(BaseProgressDialog p_notify)
+        private void fillRelationAccess()
         {
 
             DateTime dtStart = DateTime.Now;
-            if (p_notify != null)
-                p_notify.SetInfoText(PMapMessages.M_OPT_DST_QUERY);
-            else
                 Console.WriteLine(PMapMessages.M_OPT_DST_QUERY);
 
             DataTable dt;
             string sSql = "";
-            RouteData.Instance.Init(DBA, null);
+            RouteData.Instance.Init(DBA, PMapIniParams.Instance.dicSpeed);
 
             Dictionary<int, boEdge> lstAllEdges = RouteData.Instance.Edges.GroupBy(g => g.Value.ID)
                         .Select(s => s.First()).ToDictionary(i => i.Value.ID, i => i.Value);
             if (boOpt.TPL_ID <= 0)
             {
-                if (p_notify != null)
-                    p_notify.SetInfoText(PMapMessages.M_OPT_QEDGES);
-                else
                     Console.WriteLine(PMapMessages.M_OPT_QEDGES);
 
 
@@ -889,8 +855,6 @@ namespace PMapCore.BLL
             foreach (DataRow dr in dt.Rows)
             {
 
-                if (++itemNo % 100 == 0 && p_notify != null)
-                    p_notify.SetInfoText(String.Format(PMapMessages.M_OPT_DST_PROC, itemNo, dt.Rows.Count));
 
                 double duration = lastDuration;
                 double durationCalc = lastDurationCalc;
@@ -1024,7 +988,7 @@ namespace PMapCore.BLL
         }
 
 
-        private void fillPlanTours(BaseProgressDialog p_notify)
+        private void fillPlanTours()
         {
             string sSql = "select PTP.TPL_ID, PTP.PTP_ORDER, PTP.PTP_TYPE, TOD.ORD_ID, DATEDIFF(n, PLN_DATE_B, PTP_ARRTIME) AS ARR, " + Environment.NewLine +
                 "DATEDIFF(n, PLN_DATE_B, PTP_SERVTIME) AS SRV, DATEDIFF(n, PLN_DATE_B, PTP_DEPTIME) AS DEP, " + Environment.NewLine +
@@ -1166,7 +1130,7 @@ namespace PMapCore.BLL
         public const int par_DepTime = 7;
         public const int par_quantity = 8;
 
-       public void ProcessResult(string p_resultFile, BaseProgressDialog p_notify)
+       public void ProcessResult(string p_resultFile)
         {
             var resultLen = new System.IO.FileInfo(p_resultFile).Length;
             if (resultLen == 0)          //Előrdulhat, hogy elszáll a PVRP és üres a result.dat!
@@ -1203,11 +1167,6 @@ namespace PMapCore.BLL
                             {
                                 currTrk = boOpt.dicTruck.Where(i => i.Value.innerID == Convert.ToInt32(aArgs[0])).First().Value;
                                 PTP_ORDER = 0;
-
-                                if (p_notify != null)
-                                    p_notify.SetInfoText(String.Format(PMapMessages.M_OPT_RES_TRK, currTrk.tkName));
-
-
                             }
                         }
                         else if (aFn[0] == getRouteNodeExe)
@@ -1361,10 +1320,6 @@ namespace PMapCore.BLL
                                 //End If
                                 double dQty = Math.Abs(Convert.ToDouble(aArgs[2].Replace(',', '.'), CultureInfo.InvariantCulture) / Global.csQTY_DEC);        //a problémafájl létrehozásakor felszoroztuk, most
                                                                                                                                                               //visszaosztjuk, hogy a valós értékeket kapjuk meg.
-                                                                                                                                                              //Opt.dicTruckType.Where( i=>i.Value.RZN_ID_LIST==Util.getFieldValue<string>(r, "RZN_ID_LIST")).ToList().First(),
-                                if (p_notify != null)
-                                    p_notify.SetInfoText(PMapMessages.M_OPT_RES_UNPLANNED);
-
                                 ple.CreateUnplannedPlanOrder(boOpt.PLN_ID, order.ID, dQty, ple.getNEWTODNUM(boOpt.PLN_ID, order.ID));
                             }
 

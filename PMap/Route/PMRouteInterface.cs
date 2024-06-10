@@ -36,7 +36,6 @@ namespace PMapCore.Route
 
                 InitRouteDataProcess irdp = new InitRouteDataProcess();
                 irdp.Run();
-                irdp.ProcessForm.ShowDialog();
                 Util.Log2File("StartPMRouteInitProcess  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.Now - dtStart).ToString());
             }
             catch (Exception e)
@@ -53,9 +52,8 @@ namespace PMapCore.Route
         /// <param name="p_boundary"></param>
         /// <param name="p_CalcInfo"></param>
         /// <param name="p_ThreadPriority"></param>
-        /// <param name="p_NotifyForm"></param>
         /// <returns></returns>
-        public static bool GetPMapRoutesSingle(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
+        public static bool GetPMapRoutesSingle(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_savePoints)
         {
             bool bCompleted = false;
             DateTime dtStart = DateTime.Now;
@@ -73,32 +71,9 @@ namespace PMapCore.Route
 
                 string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_TH, p_CalcInfo);
                 CalcPMapRouteProcess cpp = null;
-                BaseSilngleProgressDialog pd = null;
-
-                if (p_NotifyForm)
-                {
-                    //p_CalcDistances = p_CalcDistances.Where(w => w.NOD_ID_FROM == 22613 && w.NOD_ID_TO == 25486).ToList();
-
-                    pd = new BaseSilngleProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST, gr.DST_MAXWEIGHT, gr.DST_MAXHEIGHT, gr.DST_MAXWIDTH }).Count() - 1, sTitle, true);
-                    cpp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "", p_CalcDistances, p_savePoints);
-                }
-                else
-                {
-                    cpp = new CalcPMapRouteProcess(p_ThreadPriority, "", p_CalcDistances, p_savePoints);
-                }
-
-
-                if (p_NotifyForm)
-                {
-                    cpp.Run();
-                    pd.ShowDialog();
-                    pd = null;
-                }
-                else
-                {
-                    cpp.RunWait();
-                }
-
+                
+                cpp = new CalcPMapRouteProcess(p_ThreadPriority, "", p_CalcDistances, p_savePoints);
+                cpp.RunWait();
 
                 bCompleted = cpp.Completed;
                 cpp = null;
@@ -122,9 +97,8 @@ namespace PMapCore.Route
         /// <param name="p_boundary"></param>
         /// <param name="p_CalcInfo"></param>
         /// <param name="p_ThreadPriority"></param>
-        /// <param name="p_NotifyForm"></param>
         /// <returns></returns>
-        public static bool GetPMapRoutesMulti(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_NotifyForm, bool p_savePoints)
+        public static bool GetPMapRoutesMulti(List<boRoute> p_CalcDistances, string p_CalcInfo, ThreadPriority p_ThreadPriority, bool p_savePoints)
         {
             bool bCompleted = true;
 
@@ -144,7 +118,7 @@ namespace PMapCore.Route
             {
 
 
-                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, null);
+                RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, PMapIniParams.Instance.dicSpeed);
 
                 List<boRoute>[] calcDistances = new List<boRoute>[PMapIniParams.Instance.RouteThreadNum];
                 for (int i = 0; i < PMapIniParams.Instance.RouteThreadNum; i++)
@@ -171,36 +145,15 @@ namespace PMapCore.Route
                 string sTitle = String.Format(PMapMessages.M_INTF_PMROUTES_MULTI_TH, p_CalcInfo, PMapIniParams.Instance.RouteThreadNum);
 
 
-                BaseMultiProgressDialog pd = null;
-                if (p_NotifyForm)
-                {
-                    pd = new BaseMultiProgressDialog(0, p_CalcDistances.GroupBy(gr => new { gr.NOD_ID_FROM, gr.RZN_ID_LIST }).Count() - 1, sTitle, true);
-                }
-
-
                 List<CalcPMapRouteProcess> distList = new List<CalcPMapRouteProcess>();
                     List<CalcPMapRouteProcess> lstGdp = new List<CalcPMapRouteProcess>();
                 for (int i = 0; i < PMapIniParams.Instance.RouteThreadNum; i++)
                 {
                     CalcPMapRouteProcess gdp = null;
-                    if (p_NotifyForm)
-                    {
-
-                        gdp = new CalcPMapRouteProcess(pd, p_ThreadPriority, "#" + i.ToString() + "#", calcDistances[i], p_savePoints);
-                    }
-                    else
-                    {
-                        gdp = new CalcPMapRouteProcess(p_ThreadPriority, "#" + i.ToString() + "#", calcDistances[i], p_savePoints);
-
-                    }
+                    gdp = new CalcPMapRouteProcess(p_ThreadPriority, "#" + i.ToString() + "#", calcDistances[i], p_savePoints);
                     lstGdp.Add(gdp);
                     gdp.Run();
 
-                }
-
-                if (p_NotifyForm)
-                {
-                    pd.ShowDialog();
                 }
 
                 foreach (var x in lstGdp)

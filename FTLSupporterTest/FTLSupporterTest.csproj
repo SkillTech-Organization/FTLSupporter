@@ -66,8 +66,12 @@
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FTLInsightsLogger\FTLInsightsLogger.csproj">
+      <Project>{C40D383A-BA10-4CAF-BF08-176C08B1DFC5}</Project>
+      <Name>FTLInsightsLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FTLSupporter\FTLSupporter.csproj">
-      <Project>{b4fe3066-f14f-4625-85bb-57ea97751a6e}</Project>
+      <Project>{B4FE3066-F14F-4625-85BB-57EA97751A6E}</Project>
       <Name>FTLSupporter</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">

@@ -3,10 +3,8 @@ using PMapCore.Common;
 using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 
 namespace FTLSupporter
 {
@@ -237,7 +235,7 @@ namespace FTLSupporter
         //internal ObservableCollection<FTLPoint> m_currTPoints = new ObservableCollection<FTLPoint>();
         [DisplayNameAttributeX(Name = "Teljesítés alatt álló túrapontok", Order = 33)]
         [Required(ErrorMessage = "Kötelező mező:CurrTPoints")]
-        public List<FTLPoint> CurrTPoints { get; set; }
+        public List<FTLPoint> CurrTPoints { get; set; } = new List<FTLPoint>();
 
 
         [DisplayNameAttributeX(Name = "Hány túrapont van teljesítve?", Order = 34)]

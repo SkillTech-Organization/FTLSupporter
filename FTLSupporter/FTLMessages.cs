@@ -32,6 +32,7 @@ namespace FTLSupporter
         public const string E_MAXDRIVETIME_REL = "Vezetési idő túllépés átállásnál!";
         public const string E_MAXDRIVETIME_T2 = "Vezetési idő túllépés IT. túra teljesítésnél!";
         public const string E_MAXDRIVETIME_RET = "Vezetési idő túllépés visszatérésnél!";
+        public const string E_ERRINBLOBSAVE = "Nem sikerült a mentés!";
 
 
     }

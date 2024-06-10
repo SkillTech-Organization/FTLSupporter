@@ -1,6 +1,7 @@
 ﻿using FTLSupporter;
 using GMap.NET;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PMapCore.BLL;
 using PMapCore.BLL.DataXChange;
 using PMapCore.BO.DataXChange;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +22,22 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            ParTest();
+            ParTest2();
+
+
+    }
+        static void ParTest2()
+        {
+            var isoDateTimeConverter = new JsonSerializerSettings { DateFormatString = "yyyy.MM.dd HH:mm:ss", Culture = System.Globalization.CultureInfo.InvariantCulture };
+            var taskPath = "d:\\Temp\\SWH\\638339999417248828_FTLTask_FTLSupportX.json";
+
+
+            var lstTsk = JsonConvert.DeserializeObject<List<FTLTask>>(File.ReadAllText(taskPath), isoDateTimeConverter);
+            var truckPath = "d:\\Temp\\SWH\\638339999417248828_FTLTruck_FTLSupportX.json";
+            var lstTrk = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
+
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 0, null);
+            var str = JsonConvert.SerializeObject(res);
         }
 
         static void ParTest()
@@ -34,11 +51,11 @@ namespace FTLSupporterTest
             var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
 
 
-
+           // hibaelőállításhoz
            // lstTrk.First().GVWR = 0;
            // lstTrk.Last().CargoTypes = null;
 
-            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000, null);
             var str = JsonConvert.SerializeObject(res);
         }
 
@@ -918,16 +935,19 @@ namespace FTLSupporterTest
                 Console.WriteLine("Status     :" + rr.Status);
                 Console.WriteLine("Objektumnév:" + rr.ObjectName);
                 Console.WriteLine("Elem ID    :" + rr.ItemID);
-                if (rr.Data != null)
-                    Console.WriteLine("Adat       :" + rr.Data.ToString());       //OK esetén az eredmények listája
-
+                if (rr.CalcTaskList != null || rr.ResErrMsg != null)
+                {
+                    // OK esetén az eredmények listája
+                    Console.WriteLine("Adat :" + JsonConvert.SerializeObject(rr.CalcTaskList ?? new List<FTLCalcTask>()));
+                    Console.WriteLine("Hiba :" + JsonConvert.SerializeObject(rr.ResErrMsg ?? new FTLResErrMsg()));
+                }
 
                 if (rr.Status == FTLResult.FTLResultStatus.RESULT)
                 {
                     if (p_bestTruck)
                         bestTruckConsole(res.FirstOrDefault());
 
-                    List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
+                    List<FTLCalcTask> tskResult = rr.CalcTaskList;
                     foreach (FTLCalcTask clctsk in tskResult)
                     {
 
@@ -939,13 +959,13 @@ namespace FTLSupporterTest
                         foreach (FTLCalcTour clctour in clctsk.CalcTours.OrderBy(x => x.Rank))
                         {
                             Console.WriteLine("");
-                            if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.OK)
+                            if (clctour.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK)
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                             else
                                 Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Státusz:{0}, Helyezés:{1}, Jármű:{2}, Jármű állapot:{3}", clctour.Status, clctour.Rank, clctour.Truck.TruckID, clctour.Truck.TruckTaskType);
+                            Console.WriteLine("Státusz:{0}, Helyezés:{1}, Jármű:{2}, Jármű állapot:{3}", clctour.StatusEnum, clctour.Rank, clctour.Truck.TruckID, clctour.Truck.TruckTaskType);
 
-                            if (clctour.Status == FTLCalcTour.FTLCalcTourStatus.ERR)
+                            if (clctour.StatusEnum == FTLCalcTour.FTLCalcTourStatus.ERR)
                             {
                                 Console.WriteLine("Hibák:");
                                 foreach (var sMsg in clctour.Msg)
@@ -956,7 +976,7 @@ namespace FTLSupporterTest
 
                             //Aktuális túra
                             Console.ForegroundColor = ConsoleColor.Cyan;
-                            if (clctour.Status != FTLCalcTour.FTLCalcTourStatus.ERR)
+                            if (clctour.StatusEnum != FTLCalcTour.FTLCalcTourStatus.ERR)
                             {
                                 if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                                 {
@@ -997,7 +1017,7 @@ namespace FTLSupporterTest
                 }
                 else
                 {
-                    FTLResErrMsg em = (FTLResErrMsg)rr.Data;
+                    FTLResErrMsg em = rr.ResErrMsg;
                     Console.WriteLine(em.Message);
                     Console.WriteLine(em.CallStack);
                 }
@@ -1007,7 +1027,7 @@ namespace FTLSupporterTest
         }
         private static void bestTruckConsole(FTLResult rr)
         {
-            List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;
+            List<FTLCalcTask> tskResult = rr.CalcTaskList;
 
             foreach (FTLCalcTask clctsk in tskResult)
             {
@@ -1015,7 +1035,7 @@ namespace FTLSupporterTest
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("");
                 Console.WriteLine("Feladat:{0}, Megbízó:{1}", clctsk.Task.TaskID, clctsk.Task.Client);
-                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o => o.Status == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
+                foreach (FTLCalcTour clctour in clctsk.CalcTours.Where(o => o.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).OrderBy(x => x.Rank))
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Helyezés:{0}, Jármű:{1}, Ktg:{2:#,#0.00}", clctour.Rank, clctour.Truck.TruckID, clctour.RelCost);

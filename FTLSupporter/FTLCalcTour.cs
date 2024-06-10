@@ -1,8 +1,11 @@
-﻿using PMapCore.Common.Attrib;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using PMapCore.Common.Attrib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace FTLSupporter
@@ -23,7 +26,7 @@ namespace FTLSupporter
         };
         public FTLCalcTour()
         {
-            Status = FTLCalcTourStatus.OK;
+            StatusEnum = FTLCalcTourStatus.OK;
             Msg = new List<string>();
 
             Rank = 0;
@@ -64,8 +67,13 @@ namespace FTLSupporter
             RetCalcRoute = new FTLCalcRoute();
         }
 
+        //    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public FTLCalcTourStatus StatusEnum { get; set; }
+
         [DisplayNameAttributeX(Name = "Státusz", Order = 1)]
-        public FTLCalcTourStatus Status { get; set; }
+        public string Status { get { return StatusEnum.ToString(); } } 
 
         [DisplayNameAttributeX(Name = "Üzenet", Order = 2)]
         public List<string> Msg { get; set; }
