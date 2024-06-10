@@ -31,7 +31,6 @@ namespace PMapCore.Common
             AppInstance = "???";
             CT_DB = null;
             MapProvider = GMapProviders.GoogleTerrainMap;
-            RZN_ID_LISTCahce = new Dictionary<int, string>();
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute]
@@ -89,9 +88,6 @@ namespace PMapCore.Common
 
             //TODO: ide kell rakni az automatikus updatert.
         }
-
-        [System.Xml.Serialization.XmlIgnoreAttribute]
-        public Dictionary<int, string> RZN_ID_LISTCahce = null;  //Behajtási zóna ID cache
 
         public bool IsCheckMode { get; set; } = false;
 

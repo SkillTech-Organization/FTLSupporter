@@ -1,6 +1,8 @@
 ﻿using FTLSupporter;
 using GMap.NET;
 using PMapCore.BLL;
+using PMapCore.BLL.DataXChange;
+using PMapCore.BO.DataXChange;
 using PMapCore.Common;
 using PMapCore.Licence;
 using System;
@@ -18,10 +20,35 @@ namespace FTLSupporterTest
     {
         static void Main(string[] args)
         {
-            Test(false);
+            ParTest();
         }
 
-        static void Test(bool p_bestTruck = false)
+        static void ParTest()
+        {
+            FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
+            var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
+            FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
+            var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
+            lstTrk.First().GVWR = 0;
+            lstTrk.Last().CargoTypes = null;
+
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000);
+            var str = JSONHelper.Serialize<FTLResponse>(res);
+        }
+
+        static void SWHTest(bool p_bestTruck = false)
+        {
+            FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
+            //FileInfo fi = new FileInfo(@"d:\temp\SWH\ori\4617936_boXRoute.json");
+            var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
+            FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
+            //FileInfo fi2 = new FileInfo(@"d:\temp\SWH\ori\4617936_boXTruck.json");
+            var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
+            RunTest(lstTsk, lstTrk, p_bestTruck);
+        }
+
+ 
+        static void CaseTest(bool p_bestTruck = false)
         {
             #region túraponok 
             FTLPoint tp1 = new FTLPoint()
@@ -683,20 +710,20 @@ namespace FTLSupporterTest
 
             #endregion
 
-            /*//vezetési idő teszt
+            //vezetési idő teszt
             var lstTsk = new List<FTLTask> { tsk1 };
             var lstTrk = new List<FTLTruck> { trk2 };
-            */
+
 
             //12t korlát teszt
             //   var lstTsk = new List<FTLTask> { tsk8 };
             //   var lstTrk = new List<FTLTruck> { trk1, trk6 };   /*trk1:12T, távolság:23596,trk6:20T, távolság:59463*/
 
             //0:30 nyitva tartás hiba teszt
-            
+
             //var lstTsk = new List<FTLTask> { tsk9};
             //var lstTrk = new List<FTLTruck> { trk7 };   //trk1:12T, távolság:23596,trk6:20T, távolság:59463
-            
+
 
             /* PROPS-EXCLPROPS teszt 
             tsk1.InclTruckProps = "PROP1,PROP2,PROP3";
@@ -766,38 +793,38 @@ namespace FTLSupporterTest
             //var lstTrkx = new List<FTLTruck> { trkErr1 };
             //var resx = FTLInterface.FTLSupportX(lstTskx, lstTrkx, "", "DB0", true);
 
-/*
-            if (p_bestTruck)
-            {
-                //besttruck tesztnél mindent beállítunk, hogy az összes jármű task-hoz rendelhető legyen
-                foreach (var t in lstTrk)
-                {
-                    t.GVWR = 3500;
-                    t.Capacity = 2000;
-                    t.TruckType = "T1";
-                    t.CargoTypes = "C1";
-                    t.RZones = "B35,CS12,CS7,DB1,DP1,DP3,DP7,ÉB1,ÉB7,ÉP1,HB1,KP1,KV3,P35,P75";
+            /*
+                        if (p_bestTruck)
+                        {
+                            //besttruck tesztnél mindent beállítunk, hogy az összes jármű task-hoz rendelhető legyen
+                            foreach (var t in lstTrk)
+                            {
+                                t.GVWR = 3500;
+                                t.Capacity = 2000;
+                                t.TruckType = "T1";
+                                t.CargoTypes = "C1";
+                                t.RZones = "B35,CS12,CS7,DB1,DP1,DP3,DP7,ÉB1,ÉB7,ÉP1,HB1,KP1,KV3,P35,P75";
 
-                    foreach (var tp in t.CurrTPoints)
-                    {
-                        tp.Open = DateTime.Now.Date.AddHours(0);
-                        tp.Close = DateTime.Now.Date.AddHours(24);
-                    }
-                }
-                foreach (var t in lstTsk)
-                {
-                    t.CargoType = "C1";
-                    t.TruckTypes = "T1";
-                    foreach (var tp in t.TPoints)
-                    {
-                        tp.Open = DateTime.Now.Date.AddHours(0);
-                        tp.Close = DateTime.Now.Date.AddHours(24);
-                    }
-                }
-                tskX.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
-            }
-            List<FTLResult> res;
-            */
+                                foreach (var tp in t.CurrTPoints)
+                                {
+                                    tp.Open = DateTime.Now.Date.AddHours(0);
+                                    tp.Close = DateTime.Now.Date.AddHours(24);
+                                }
+                            }
+                            foreach (var t in lstTsk)
+                            {
+                                t.CargoType = "C1";
+                                t.TruckTypes = "T1";
+                                foreach (var tp in t.TPoints)
+                                {
+                                    tp.Open = DateTime.Now.Date.AddHours(0);
+                                    tp.Close = DateTime.Now.Date.AddHours(24);
+                                }
+                            }
+                            tskX.CargoType = "NEM TELJESÍTHETŐ (TESZTHEZ)";
+                        }
+                        List<FTLResult> res;
+                        */
 
             /*besttruck eredmény */
 
@@ -847,32 +874,33 @@ namespace FTLSupporterTest
 
 
 
-            DateTime dtStart = DateTime.Now;
             /*     
                   PMapIniParams.Instance.ReadParams("", "DB0");
                   PMapCommonVars.Instance.ConnectToDB();
                   PMapCommonVars.Instance.CT_DB.ExecuteNonQuery( "truncate table DST_DISTANCE");
              */
 
-
-            FileInfo fi = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Tasks_dump.bin");
-            var lstTsk = (List<FTLTask>)BinarySerializer.Deserialize(fi);
-            FileInfo fi2 = new FileInfo(@"d:\work\source\PMap\FTLSupporterTest\input\Trucks_dump.bin");
-            var lstTrk = (List<FTLTruck>)BinarySerializer.Deserialize(fi2);
             //    lstTrk.RemoveRange(1, lstTrk.Count-1);
             //            lstTsk = lstTsk.Where( w=>w.TaskID  != "2143461").ToList();
 
             //       lstTrk = lstTrk.Where(w => w.TruckID == "RXD-499").ToList();
- //           lstTrk.RemoveRange(0, lstTrk.Count / 2);
- //           lstTsk = new List<FTLTask>( lstTsk.OrderByDescending(o => o.TPoints.Count).Take(1));
+            //           lstTrk.RemoveRange(0, lstTrk.Count / 2);
+            //           lstTsk = new List<FTLTask>( lstTsk.OrderByDescending(o => o.TPoints.Count).Take(1));
+            
+            RunTest(lstTsk, lstTrk, p_bestTruck);
+        }
+
+        static void RunTest(List<FTLTask> lstTsk, List<FTLTruck> lstTrk, bool p_bestTruck = false)
+        {
+            DateTime dtStart = DateTime.Now;
 
             List<FTLResult> res;
-            Console.BufferHeight =600;
+            Console.BufferHeight = 600;
             p_bestTruck = false;
             if (p_bestTruck)
-                res = FTLInterface.FTLSupportX(lstTsk, lstTrk, "", "DB0", true, 10000);
+                res = FTLInterface.FTLSupportX(lstTsk, lstTrk, 10000);
             else
-                res = FTLInterface.FTLSupport(lstTsk, lstTrk, "", "DB0", true, 10000);
+                res = FTLInterface.FTLSupport(lstTsk, lstTrk, 10000);
             Console.WriteLine("FTLSupport  időtartam:" + (DateTime.Now - dtStart).Duration().TotalMilliseconds.ToString());
 
             int i = 1;
@@ -922,7 +950,7 @@ namespace FTLSupporterTest
 
                             //Aktuális túra
                             Console.ForegroundColor = ConsoleColor.Cyan;
-                            if ( clctour.Status != FTLCalcTour.FTLCalcTourStatus.ERR)
+                            if (clctour.Status != FTLCalcTour.FTLCalcTourStatus.ERR)
                             {
                                 if (clctour.Truck.TruckTaskType != FTLTruck.eTruckTaskType.Available)
                                 {
@@ -969,9 +997,8 @@ namespace FTLSupporterTest
                 }
             }
             Console.ReadKey();
+
         }
-
-
         private static void bestTruckConsole(FTLResult rr)
         {
             List<FTLCalcTask> tskResult = (List<FTLCalcTask>)rr.Data;

@@ -24,17 +24,8 @@ namespace PMapCore.LongProcess.Base
 
 
         private BaseProgressDialog m_processForm = null;
-        protected ProcessNotifyIcon m_notifyIcon = null;
         protected ThreadPriority m_ThreadPriority;
-        /*
-        public BaseLongProcess(ThreadPriority p_ThreadPriority)
-        {
-            m_ThreadPriority = p_ThreadPriority;
-            ProcessForm = null;
-            ProcessNotifyIcon = null;
-            init();
-        }
- */
+ 
         public BaseLongProcess(BaseProgressDialog p_Form, ThreadPriority p_ThreadPriority)
         {
             m_ThreadPriority = p_ThreadPriority;
@@ -43,26 +34,14 @@ namespace PMapCore.LongProcess.Base
                 ProcessForm = p_Form;
                 ProcessForm.LongProcessList.Add(this);
             }
-            ProcessNotifyIcon = null;
             init();
         }
 
-        public BaseLongProcess(ProcessNotifyIcon p_notifyIcon, ThreadPriority p_ThreadPriority)
-        {
-            m_ThreadPriority = p_ThreadPriority;
-            if (p_notifyIcon != null)
-            {
-                ProcessNotifyIcon = p_notifyIcon;
-                ProcessNotifyIcon.LongProcessList.Add(this);
-            }
-            ProcessForm = null;
-            init();
-        }
+ 
 
         public BaseLongProcess(ThreadPriority p_ThreadPriority)
         {
             m_ThreadPriority = p_ThreadPriority;
-            ProcessNotifyIcon = null;
             ProcessForm = null;
             init();
         }
@@ -120,8 +99,6 @@ namespace PMapCore.LongProcess.Base
 
         private void DoWorkWrapper()
         {
-            if (m_notifyIcon != null)
-                m_notifyIcon.StartNotify();
 
             if (ProcessForm != null)
             {
@@ -136,8 +113,6 @@ namespace PMapCore.LongProcess.Base
                 EventStopped.Set();
             }
 
-            if (m_notifyIcon != null)
-                m_notifyIcon.StopNotify(this);
         }
 
         protected virtual void DoWork()
@@ -187,11 +162,6 @@ namespace PMapCore.LongProcess.Base
             private set { m_processForm = value; }
         }
 
-        public ProcessNotifyIcon ProcessNotifyIcon
-        {
-            get { return m_notifyIcon; }
-            private set { m_notifyIcon = value; }
-        }
 
 
         public bool IsAlive()
@@ -202,10 +172,5 @@ namespace PMapCore.LongProcess.Base
                 return false;
         }
 
-        public void SetNotifyIconText(string p_infoText)
-        {
-            if (m_notifyIcon != null)
-                m_notifyIcon._setNotifyIconText(p_infoText);
-        }
     }
 }

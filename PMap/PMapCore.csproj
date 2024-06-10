@@ -333,10 +333,6 @@
     <Compile Include="Licence\PMapLicWarn.cs" />
     <Compile Include="Strings\Base\Messages.cs" />
     <Compile Include="Strings\DXMessages.cs" />
-    <Compile Include="LongProcess\Base\ProcessNotifyIcon.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="LongProcess\GetRoutePathProcess.cs" />
     <Compile Include="LongProcess\GetTourDetailsProcess.cs" />
     <Compile Include="LongProcess\CalcPMapRouteProcess.cs" />
     <Compile Include="LongProcess\InitRouteDataProcess.cs" />
@@ -344,14 +340,12 @@
     <Compile Include="LongProcess\StartPMapRoutesByOrders.cs" />
     <Compile Include="LongProcess\TollExportProcess.cs" />
     <Compile Include="LongProcess\TourOptimizerProcess.cs" />
-    <Compile Include="Markers\PMapMarker.cs" />
     <Compile Include="Strings\PMapMessages.cs" />
     <Compile Include="Common\PMapCommonVars.cs" />
     <Compile Include="Common\ProcessUtils.cs" />
     <Compile Include="Route\CRoutePars.cs" />
     <Compile Include="Route\RouteData.cs" />
     <Compile Include="Route\PMapRoutingProvider.cs" />
-    <Compile Include="Markers\PPlanMarkerUnPlanned.cs" />
     <Compile Include="Route\BasicHeap.cs" />
     <Compile Include="Route\RouteCalculator.cs" />
     <Compile Include="Route\HeapNode.cs" />
@@ -378,8 +372,6 @@
     </Compile>
     <Compile Include="Route\PMRouteInterface.cs" />
     <Compile Include="Common\INIFile.cs" />
-    <Compile Include="Markers\PPlanMarker.cs" />
-    <Compile Include="Markers\PPlanMarkerFlag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="LongProcess\Base\BaseMultiProgressDialog.resx">
       <DependentUpon>BaseMultiProgressDialog.cs</DependentUpon>
@@ -428,10 +420,6 @@
     <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Animated Notify Icon\Animated Notify Icon.csproj">
-      <Project>{735B55E9-0BB8-43E9-B3B7-959029EDE369}</Project>
-      <Name>Animated Notify Icon</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FrcNumericTextBox\FrcNumericTextBox.csproj">
       <Project>{FF4CD9F3-DB53-4FD9-8541-5777947745E9}</Project>
       <Name>FrcNumericTextBox</Name>
@@ -439,10 +427,6 @@
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
       <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
       <Name>GMap.NET.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
-      <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
-      <Name>GMap.NET.WindowsForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\TabOrder\TabOrder.csproj">
       <Project>{6E23D5D1-FB6B-450D-8244-34172B60C166}</Project>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using PMapCore.Common.Attrib;
 using PMapCore.Common;
@@ -206,16 +205,7 @@ namespace PMapCore.BO
         public string Bordero { get; set; }                             //MAPEI spec.
 
 
-        //Technikai mezők
-        //
-        [ScriptIgnore]
-        [DisplayNameAttributeX(Name = "Megjelenítés réteg", Order = 99)]
-        public GMapOverlay Layer { get; set; }
-
-        [ScriptIgnore]
-        [DisplayNameAttributeX(Name = "Megjelenítés réteg", Order = 100)]
-        public bool PSelect { get; set; }
-
+ 
       
 
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMapCore.Markers;
 using System.Web.Script.Serialization;
 using PMapCore.Common.Attrib;
 
@@ -99,8 +98,6 @@ namespace PMapCore.BO
         public string DEP_WEIGHTAREA { get; set; }
 
         //Technikai mezők
-        [ScriptIgnore]
-        public PPlanMarkerUnPlanned Marker { get; set; }
         [ScriptIgnore]
         public string ToolTipText { get; set; }
     }

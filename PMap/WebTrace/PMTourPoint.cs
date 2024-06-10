@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PMapCore.Markers;
-using GMap.NET.WindowsForms;
 using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
 using PMapCore.Common.Attrib;

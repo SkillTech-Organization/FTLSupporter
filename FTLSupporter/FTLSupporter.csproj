@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,21 +64,15 @@
     <Compile Include="FTLNodePtCache.cs" />
     <Compile Include="FTLPoint.cs" />
     <Compile Include="FTLResErrMsg.cs" />
+    <Compile Include="FTLResponse.cs" />
     <Compile Include="FTLResult.cs" />
     <Compile Include="FTLPMapRoute.cs" />
+    <Compile Include="FTLRouteCache.cs" />
     <Compile Include="FTLTask.cs" />
     <Compile Include="FTLTruck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Animated Notify Icon\Animated Notify Icon.csproj">
-      <Project>{735b55e9-0bb8-43e9-b3b7-959029ede369}</Project>
-      <Name>Animated Notify Icon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FrcNumericTextBox\FrcNumericTextBox.csproj">
-      <Project>{ff4cd9f3-db53-4fd9-8541-5777947745e9}</Project>
-      <Name>FrcNumericTextBox</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
       <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
       <Name>GMap.NET.Core</Name>

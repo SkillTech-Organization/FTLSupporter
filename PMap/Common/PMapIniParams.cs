@@ -43,6 +43,7 @@ namespace PMapCore.Common
         public string IDFile { get; private set; }
         public string CTIniFile { get; private set; }
         public string LogDir { get; private set; }
+        public string MapJSonDir { get; private set; }
         public eLogVerbose LogVerbose { get; private set; }
         public bool TestMode { get; private set; }
         public bool ParseLog { get; private set; }
@@ -151,25 +152,10 @@ namespace PMapCore.Common
             IniPath = p_iniPath;
             DBConf = p_dbConf;
 
-            //            MessageBox.Show("p_iniPath=" + p_iniPath);
-
-            /*
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(Global.PMapRegKey, RegistryKeyPermissionCheck.ReadWriteSubTree, System.Security.AccessControl.RegistryRights.FullControl);
-            // If the return value is null, the key doesn't exist
-            if (key != null)
-                iniPath = key.GetValue(Global.PMapRegINI, iniPath).ToString();
-            else
-                iniPath = Path.GetDirectoryName(Application.ExecutablePath);
-             */
-
-
             INIFile ini = new INIFile(Path.Combine(p_iniPath, p_iniFileName));
 
             IDFile = ini.ReadString(Global.iniPMap, Global.iniIDFile);
             CTIniFile = ini.ReadString(Global.iniPMap, Global.iniCTIniFile);
-
-
-
 
             LogDir = ini.ReadString(Global.iniPMap, Global.iniLogDir);
             if (LogDir != "")
@@ -180,6 +166,14 @@ namespace PMapCore.Common
             else
                 LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\";
 
+            MapJSonDir = ini.ReadString(Global.iniPMap, Global.iniMapJsonDir);
+            if (MapJSonDir != "")
+            {
+                if (MapJSonDir.Substring(MapJSonDir.Length - 1, 1) != "\\")
+                    MapJSonDir += "\\";
+            }
+            else
+                MapJSonDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\";
 
             string sLogVerbose = ini.ReadString(Global.iniPMap, Global.iniLogVerbose);
             if (sLogVerbose != "")
@@ -213,8 +207,6 @@ namespace PMapCore.Common
 
             string sTourRoute = ini.ReadString(Global.iniPMap, Global.iniTourRoute);
             TourRoute = (sTourRoute == "1" || sTourRoute.ToLower() == "true");
-
-
 
             string sTourpointToolTip = ini.ReadString(Global.iniPMap, Global.iniTourpointToolTip);
             if( string.IsNullOrWhiteSpace(sTourpointToolTip))
@@ -262,7 +254,6 @@ namespace PMapCore.Common
                 InitRouteDataProcess = (ThreadPriority)Enum.Parse(typeof(ThreadPriority), sInitRouteDataProcess);
             else
                 InitRouteDataProcess = ThreadPriority.Normal;
-
 
             string sCalcPMapRoutesByPlan = ini.ReadString(Global.iniPriority, Global.iniCalcPMapRoutesByPlan);
             if (sCalcPMapRoutesByPlan != "")
@@ -417,20 +408,21 @@ namespace PMapCore.Common
             {
                 GMapProvider.WebProxy = null;
             }
-                
+
 
             // DB paraméterek felolvasása CT inifájlból
-
-            INIFile iniCT = new INIFile(CTIniFile);
-            DBConfigName = iniCT.ReadString(DBConf, Global.iniDBConfigName);
-            DBServer = iniCT.ReadString(DBConf, Global.iniDBServer);
-            DBName = iniCT.ReadString(DBConf, Global.iniDBName);
-            DBUser = iniCT.ReadString(DBConf, Global.iniDBUser);
-            DBPwd = iniCT.ReadString(DBConf, Global.iniDBPwd);
-            DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
-            if (DBCmdTimeOut == 0)
-                DBCmdTimeOut = 60;
-
+            if (!string.IsNullOrWhiteSpace(CTIniFile))
+            {
+                INIFile iniCT = new INIFile(CTIniFile);
+                DBConfigName = iniCT.ReadString(DBConf, Global.iniDBConfigName);
+                DBServer = iniCT.ReadString(DBConf, Global.iniDBServer);
+                DBName = iniCT.ReadString(DBConf, Global.iniDBName);
+                DBUser = iniCT.ReadString(DBConf, Global.iniDBUser);
+                DBPwd = iniCT.ReadString(DBConf, Global.iniDBPwd);
+                DBCmdTimeOut = Convert.ToInt32("0" + iniCT.ReadString(DBConf, Global.iniDBCmdTimeOut));
+                if (DBCmdTimeOut == 0)
+                    DBCmdTimeOut = 60;
+            }
 
             // MAPEI paraméterek
 
