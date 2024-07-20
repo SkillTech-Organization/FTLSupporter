@@ -238,12 +238,6 @@ namespace PMapCore.Common
         public const string PM_ENCODING = "iso-8859-2";
 
 
-//        public static string ETOLLCAT_Prefix = "J";
-        public static int ETOLLCAT_J0 = 0;      //nincs útdíj
-        public static int ETOLLCAT_J2 = 2;
-        public static int ETOLLCAT_J3 = 3;
-        public static int ETOLLCAT_J4 = 4;
-
 
         public const int ETOLLCAT_MAX35T = 1;         //1.max 3.5 tonna (nics útdíj)
         public const int ETOLLCAT_MAX75T = 2;         //2:max 7.5 tonna

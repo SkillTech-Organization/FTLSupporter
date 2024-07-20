@@ -198,7 +198,7 @@ namespace FTLSupporter
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
                 DateTime dtStart = DateTime.UtcNow;
-                RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
+                RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, false);
                 bllRoute route = new bllRoute(null);
                 Logger.Info("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.UtcNow - dtStart).ToString());
 
