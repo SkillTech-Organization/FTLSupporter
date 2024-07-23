@@ -41,6 +41,9 @@ namespace PMapCore.Route
 
         public Dictionary<string, boEtRoad> EtRoads = null; //Díjköteles útszelvények 
 
+        public Dictionary<int, string> RZN_ID_LIST = null;          //Behajtási zónák súlyonként
+
+        public Dictionary<string, int> allRZones = null;            //Összes behajtási zóna
 
         public int NodeCount
         {
@@ -96,6 +99,14 @@ namespace PMapCore.Route
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
                     NodePositions = xNodePositions;
 
+                    string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
+                    allRZones = xallRZones;
+
+
+                    string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
+                    var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
+                    RZN_ID_LIST = xRZN_ID_LIST;
 
                     m_Initalized = true;
                 }

@@ -56,7 +56,7 @@ namespace MapJsonGen
                 }
 
 
-                CreateMapfile(args[1], dicSpeed);
+                CreateMapfile(args[1]);
 
             }
             catch (Exception e)
@@ -74,7 +74,7 @@ namespace MapJsonGen
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Térkép feltöltése adatbázisból....");
-            RouteData.Instance.Init(PMapCommonVars.Instance, true);
+            RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, true);
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("JSon generálás....");
