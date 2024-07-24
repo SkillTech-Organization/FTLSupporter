@@ -56,7 +56,7 @@ namespace MapJsonGen
                 }
 
 
-                CreateMapfile(args[1], dicSpeed);
+                CreateMapfile(args[1]);
 
             }
             catch (Exception e)
@@ -68,13 +68,13 @@ namespace MapJsonGen
         }
 
 
-        public static bool CreateMapfile(string p_dir, Dictionary<int, int> p_speeds)
+        public static bool CreateMapfile(string p_dir)
         {
             DateTime dt = DateTime.Now;
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Térkép feltöltése adatbázisból....");
-            RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, p_speeds);
+            RouteData.Instance.Init(PMapCommonVars.Instance.CT_DB, true);
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("JSon generálás....");

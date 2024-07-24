@@ -194,12 +194,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\Base\bllBase.cs" />
+    <Compile Include="BLL\bllEtRoad.cs" />
     <Compile Include="BLL\bllIDGen.cs" />
     <Compile Include="BLL\bllPackUnit.cs" />
     <Compile Include="BLL\bllUser.cs" />
     <Compile Include="BLL\DataXChange\dtXGetPlan.cs" />
     <Compile Include="BLL\Report\bllRepPlan.cs" />
     <Compile Include="BO\Base\boXBase.cs" />
+    <Compile Include="BO\boEtRoad.cs" />
     <Compile Include="BO\boPackUnit.cs" />
     <Compile Include="BO\boUser.cs" />
     <Compile Include="BO\Report\boRepPlan.cs" />
@@ -312,7 +314,6 @@
     <Compile Include="LongProcess\InitRouteDataProcess.cs" />
     <Compile Include="LongProcess\OCAddrProcess.cs" />
     <Compile Include="LongProcess\StartPMapRoutesByOrders.cs" />
-    <Compile Include="LongProcess\TollExportProcess.cs" />
     <Compile Include="LongProcess\TourOptimizerProcess.cs" />
     <Compile Include="Strings\PMapMessages.cs" />
     <Compile Include="Common\PMapCommonVars.cs" />

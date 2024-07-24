@@ -711,7 +711,7 @@ namespace PMapCore.BLL
 
             DataTable dt;
             string sSql = "";
-            RouteData.Instance.Init(DBA, PMapIniParams.Instance.dicSpeed);
+            RouteData.Instance.Init(DBA);
 
             Dictionary<int, boEdge> lstAllEdges = RouteData.Instance.Edges.GroupBy(g => g.Value.ID)
                         .Select(s => s.First()).ToDictionary(i => i.Value.ID, i => i.Value);

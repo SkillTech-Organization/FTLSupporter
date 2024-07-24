@@ -198,7 +198,7 @@ namespace FTLSupporter
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
                 DateTime dtStart = DateTime.UtcNow;
-                RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
+                RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, false);
                 bllRoute route = new bllRoute(null);
                 Logger.Info("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.UtcNow - dtStart).ToString());
 
@@ -882,7 +882,7 @@ namespace FTLSupporter
                                 {
 
                                     clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
-                                    clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                                    clr.Toll = bllRoute.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
 
                                     if (clr.Completed)
                                     {
@@ -942,7 +942,7 @@ namespace FTLSupporter
                             /*********************/
                             var relclr = clctour.RelCalcRoute;      //csak hogy ne kelljen a clctour.RelCalcRoute válozónevet használni
                             relclr.Distance = relclr.PMapRoute.route.DST_DISTANCE;
-                            relclr.Toll = bllPlanEdit.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                            relclr.Toll = bllRoute.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
 
                             relclr.DrivingDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                             relclr.RestDuration = calcDriveTimes(trk, relclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
@@ -977,7 +977,7 @@ namespace FTLSupporter
                             foreach (FTLCalcRoute clr in clctour.T2CalcRoute)
                             {
                                 clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
-                                clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                                clr.Toll = bllRoute.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
                                 clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                 clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
@@ -1007,7 +1007,7 @@ namespace FTLSupporter
                             {
                                 var retclr = clctour.RetCalcRoute;      //csak hogy ne kelljen a clctour.RetCalcRoute válozónevet használni
                                 retclr.Distance = retclr.PMapRoute.route.DST_DISTANCE;
-                                retclr.Toll = bllPlanEdit.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                                retclr.Toll = bllRoute.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
                                 retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
                                 retclr.RestDuration = calcDriveTimes(trk, retclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 retclr.Arrival = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.RestDuration);
