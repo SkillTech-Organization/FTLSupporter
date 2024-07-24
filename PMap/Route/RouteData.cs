@@ -89,8 +89,8 @@ namespace PMapCore.Route
                     Edges = xEdges;
                     foreach (var edg in Edges)
                     {
-                        float CalcSpeed = PMapIniParams.Instance.dicSpeed[edg.Value.RDT_VALUE];
-                        float CalcDuration = (float)(edg.Value.EDG_LENGTH / PMapIniParams.Instance.dicSpeed[edg.Value.RDT_VALUE] / 3.6 * 60);
+                        float CalcSpeed = PMapIniParams.Instance.DicSpeeds[edg.Value.RDT_VALUE];
+                        float CalcDuration = (float)(edg.Value.EDG_LENGTH / PMapIniParams.Instance.DicSpeeds[edg.Value.RDT_VALUE] / 3.6 * 60);
                         edg.Value.CalcSpeed = CalcSpeed;
                         edg.Value.CalcDuration = CalcDuration;
                     }
@@ -179,8 +179,8 @@ namespace PMapCore.Route
                                 EDG_ONEWAY = OneWay,
                                 EDG_DESTTRAFFIC = DestTraffic,
                                 WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
-                                CalcSpeed = PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")],
-                                CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
+                                CalcSpeed = PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")],
+                                CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
                                 EDG_ETRCODE = Util.getFieldValue<string>(dr, "EDG_ETRCODE"),
                                 fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),
                                 toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
@@ -219,8 +219,8 @@ namespace PMapCore.Route
                                     EDG_ONEWAY = OneWay,
                                     EDG_DESTTRAFFIC = DestTraffic,
                                     WZONE = Util.getFieldValue<string>(dr, "RZN_ZONECODE") + " " + Util.getFieldValue<string>(dr, "RZN_ZoneName"),
-                                    CalcSpeed = PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")],
-                                    CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.dicSpeed[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
+                                    CalcSpeed = PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")],
+                                    CalcDuration = (float)(Util.getFieldValue<float>(dr, "EDG_LENGTH") / PMapIniParams.Instance.DicSpeeds[Util.getFieldValue<int>(dr, "RDT_VALUE")] / 3.6 * 60),
                                     EDG_ETRCODE = Util.getFieldValue<string>(dr, "EDG_ETRCODE"),
                                     fromLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD2_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD2_XPOS") / Global.LatLngDivider),
                                     toLatLng = new PointLatLng(Util.getFieldValue<double>(dr, "NOD1_YPOS") / Global.LatLngDivider, Util.getFieldValue<double>(dr, "NOD1_XPOS") / Global.LatLngDivider),

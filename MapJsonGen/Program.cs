@@ -55,6 +55,7 @@ namespace MapJsonGen
                     dicSpeed.Add(i, aSpeedDefaults[i - 1]);
                 }
 
+                PMapIniParams.Instance.DicSpeeds = dicSpeed;
 
                 CreateMapfile(args[1]);
 

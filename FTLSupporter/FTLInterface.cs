@@ -909,7 +909,7 @@ namespace FTLSupporter
                                     {
 
 
-                                        clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                        clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                                         clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                         clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
                                         if (clr.Arrival < clr.TPoint.Open)
@@ -944,7 +944,7 @@ namespace FTLSupporter
                             relclr.Distance = relclr.PMapRoute.route.DST_DISTANCE;
                             relclr.Toll = bllRoute.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
 
-                            relclr.DrivingDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                            relclr.DrivingDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                             relclr.RestDuration = calcDriveTimes(trk, relclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
 
                             relclr.Arrival = dtPrevTime.AddMinutes(relclr.DrivingDuration + relclr.RestDuration);
@@ -978,7 +978,7 @@ namespace FTLSupporter
                             {
                                 clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
                                 clr.Toll = bllRoute.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
-                                clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                                 clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
                                 if (clr.Arrival < clr.TPoint.Open)
@@ -1008,7 +1008,7 @@ namespace FTLSupporter
                                 var retclr = clctour.RetCalcRoute;      //csak hogy ne kelljen a clctour.RetCalcRoute válozónevet használni
                                 retclr.Distance = retclr.PMapRoute.route.DST_DISTANCE;
                                 retclr.Toll = bllRoute.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
-                                retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                                 retclr.RestDuration = calcDriveTimes(trk, retclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 retclr.Arrival = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.RestDuration);
                                 if (retclr.TPoint != null && retclr.Arrival < retclr.TPoint.Open)       //Ha a visszatérés túrapontra történik és hamarabb érkezünk vissza, mint a nyitva tartás kezdete, várunk 
