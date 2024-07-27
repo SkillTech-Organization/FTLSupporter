@@ -249,6 +249,8 @@ namespace PMapCore.Common
         public const string EXTFILE_NOD = "PMap.nod.json";
         public const string EXTFILE_RZNTyp = "PMap.rzntyp.json";
         public const string EXTFILE_RZN = "PMap.rzn.json";
+        public const string EXTFILE_ETOLL = "utdijak.csv";
+        public const string EXTFILE_ETROADS = "utszelvenyek.csv";
 
 
         public const string COMPLETEDTOUR = "COMPLETEDTOUR";            //Útvonalszámításnak jelezzük, hogy a túra letervezett, a túrapontok környzetetében a súlykorlátozások feloldhatóak

@@ -14,6 +14,11 @@ using PMapCore.Common;
 using System.IO;
 using Newtonsoft.Json;
 using System.Runtime.ExceptionServices;
+using System.Diagnostics;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace PMapCore.Route
 {
@@ -75,11 +80,12 @@ namespace PMapCore.Route
                 if (!m_Initalized || p_Forced)
                 {
 
-                    //TODO :ezek feltöltése 
-                    /*
-                    Etolls = m_bllRoute.GetEtolls(); //Útdíjak és szorzók
-                    EtRoads = m_bllRoute.GetEtRoads(); //Díjköteles útszelvények 
-                    */
+                    string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1252));
+                    string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1252));
+
+                    Etolls = loadEtolls( etollContent); //Útdíjak és szorzók
+                    EtRoads = loadEtRoads( etRoadsContent); //Díjköteles útszelvények 
+                    
 
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
 
@@ -112,7 +118,87 @@ namespace PMapCore.Route
                 }
             }
         }
+        private Dictionary<string, boEtoll> loadEtolls(string CSVContent)
+        {
 
+            NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
+            var CSVItems = Util.LoadCSV(CSVContent);
+            var result = new Dictionary<string, boEtoll>();
+            var counter = 1;
+
+            CSVItems.ForEach(async item =>
+            {
+                var ID = counter++;
+                var ETL_ETOLLCAT = Int32.Parse(item["Díjkategória"].Replace("J", ""));
+                var ETL_ENGINEEURO = 0;
+                var sETL_ENGINEEURO = item["Környezetvédelmi besorolás"];
+                if (sETL_ENGINEEURO == "Euro 0")
+                    ETL_ENGINEEURO = 0;
+                else if (sETL_ENGINEEURO == "Euro I")
+                    ETL_ENGINEEURO = 1;
+                else if (sETL_ENGINEEURO == "Euro II")
+                    ETL_ENGINEEURO = 2; 
+                else if (sETL_ENGINEEURO == "Euro III")
+                    ETL_ENGINEEURO = 3; 
+                else if (sETL_ENGINEEURO == "Euro IV")
+                    ETL_ENGINEEURO = 4; 
+                else if (sETL_ENGINEEURO == "Euro V")
+                    ETL_ENGINEEURO = 5; 
+                else if (sETL_ENGINEEURO == "Euro VI")
+                    ETL_ENGINEEURO = 6; 
+                else if (sETL_ENGINEEURO == "A1")
+                    ETL_ENGINEEURO = 99; 
+                else if (sETL_ENGINEEURO == "A0")
+                    ETL_ENGINEEURO = 100;
+
+                var ETL_TOLL_SPEEDWAY = Double.Parse( item["Gyorsforgalmi (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_TOLL_ROAD = Double.Parse(item["Főűt (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_NOISE_CITY = Double.Parse(item["Külvárosi utak (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_NOISE_OUTER = Double.Parse(item["Településeket összekötő utak (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_CO2 = Double.Parse(item["CO2 (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
+
+                var boEtoll = new boEtoll()
+                {
+                    ID = ID,
+                    ETL_ETOLLCAT = ETL_ETOLLCAT,
+                    ETL_ENGINEEURO = ETL_ENGINEEURO,
+                    ETL_TOLL_SPEEDWAY = ETL_TOLL_SPEEDWAY,
+                    ETL_TOLL_ROAD = ETL_TOLL_ROAD,
+                    ETL_NOISE_CITY = ETL_NOISE_CITY,
+                    ETL_NOISE_OUTER = ETL_NOISE_OUTER,
+                    ETL_CO2 = ETL_CO2
+                };
+                result.Add($"{ETL_ETOLLCAT}_{ETL_ENGINEEURO}", boEtoll);
+
+            });
+
+            return result;
+        }
+
+        private Dictionary<string, boEtRoad> loadEtRoads(string CSVContent)
+        {
+
+            NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
+            var CSVItems = Util.LoadCSV(CSVContent);
+            var result = new Dictionary<string, boEtRoad>();
+            var counter = 1;
+
+            CSVItems.ForEach(async item =>
+            {
+                var ID = counter++;
+                var ETR_CODE = item["B"];
+                /*
+                    ETR_ROADTYPE = Util.getFieldValue<double>(dre, "ETR_ROADTYPE"),
+                    ETR_LEN_M = Util.getFieldValue<double>(dre, "ETR_LEN_M"),
+                    ETR_COSTFACTOR = Util.getFieldValue<double>(dre, "ETR_COSTFACTOR")
+                */
+                var boEtRoad = new boEtRoad();
+                result.Add(ETR_CODE, boEtRoad);
+
+            });
+
+            return result;
+        }
         /// <summary>
         /// 
         /// </summary>
