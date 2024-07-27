@@ -85,7 +85,7 @@ namespace PMapCore.Route
                     string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
 
                     Etolls = loadEtolls( etollContent); //Útdíjak és szorzók
-                  //  EtRoads = loadEtRoads( etRoadsContent); //Díjköteles útszelvények 
+                    EtRoads = loadEtRoads( etRoadsContent); //Díjköteles útszelvények 
                     
 
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
@@ -187,15 +187,24 @@ namespace PMapCore.Route
             CSVItems.ForEach(async item =>
             {
                 var ID = counter++;
-                var ETR_CODE = item["B"];
-                /*
-                    ETR_ROADTYPE = Util.getFieldValue<double>(dre, "ETR_ROADTYPE"),
-                    ETR_LEN_M = Util.getFieldValue<double>(dre, "ETR_LEN_M"),
-                    ETR_COSTFACTOR = Util.getFieldValue<double>(dre, "ETR_COSTFACTOR")
-                */
-                var boEtRoad = new boEtRoad();
-                result.Add(ETR_CODE, boEtRoad);
+                if (counter > 3)
+                {
+                    var ETR_CODE = item["B"];
 
+                    var ETR_ROADTYPE = (item["F"] == "gyorsforgalmi" ? 1 : 2);
+                    var ETR_LEN_M = Double.Parse(item["E"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                    var ETR_COSTFACTOR = Double.Parse(item["G"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+
+                    var boEtRoad = new boEtRoad()
+                    {
+                        ID = ID,
+                        ETR_CODE = ETR_CODE,
+                        ETR_ROADTYPE = ETR_ROADTYPE,
+                        ETR_LEN_M = ETR_LEN_M,
+                        ETR_COSTFACTOR = ETR_COSTFACTOR
+                    };
+                    result.Add(ETR_CODE, boEtRoad);
+                }
             });
 
             return result;
