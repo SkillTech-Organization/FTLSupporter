@@ -35,7 +35,8 @@ namespace FTLApi.Handlers
                 var requestId = FTLInterface.GenerateRequestId();
 
                 // POST mentése Blobba
-                Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
+                if (Logger.Blob != null)
+                     Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
 
                 var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, requestId);
                 if (initResult != null)
