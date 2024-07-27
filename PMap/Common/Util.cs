@@ -1276,6 +1276,12 @@ namespace PMapCore.Common
                 if (counter == 0)
                 {
                     headerArray = regexp.Split(currentLine.Replace("\r", ""));
+                    //üres header mezők feltöltése
+                    for (int i = 0; i < headerArray.Length; i++)
+                    {
+                        if (string.IsNullOrWhiteSpace(headerArray[i]))
+                            headerArray[i] = "col_" + i.ToString();
+                    }
 
                 }
                 else if (!string.IsNullOrWhiteSpace(currentLine))
