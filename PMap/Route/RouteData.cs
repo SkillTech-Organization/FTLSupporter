@@ -79,12 +79,13 @@ namespace PMapCore.Route
             {
                 if (!m_Initalized || p_Forced)
                 {
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-                    string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1252));
-                    string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1252));
+                    string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1250));
+                    string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
 
                     Etolls = loadEtolls( etollContent); //Útdíjak és szorzók
-                    EtRoads = loadEtRoads( etRoadsContent); //Díjköteles útszelvények 
+                  //  EtRoads = loadEtRoads( etRoadsContent); //Díjköteles útszelvények 
                     
 
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
@@ -151,11 +152,11 @@ namespace PMapCore.Route
                 else if (sETL_ENGINEEURO == "A0")
                     ETL_ENGINEEURO = 100;
 
-                var ETL_TOLL_SPEEDWAY = Double.Parse( item["Gyorsforgalmi (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
-                var ETL_TOLL_ROAD = Double.Parse(item["Főűt (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
-                var ETL_NOISE_CITY = Double.Parse(item["Külvárosi utak (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
-                var ETL_NOISE_OUTER = Double.Parse(item["Településeket összekötő utak (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
-                var ETL_CO2 = Double.Parse(item["CO2 (Ft/Km)"].Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_TOLL_SPEEDWAY = Double.Parse( item["Gyorsforgalmi (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_TOLL_ROAD = Double.Parse(item["Főűt (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_NOISE_CITY = Double.Parse(item["Külvárosi utak (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_NOISE_OUTER = Double.Parse(item["Településeket összekötő utak (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
+                var ETL_CO2 = Double.Parse(item["CO2 (Ft/Km)"].Replace(".", nfi.NumberDecimalSeparator).Replace(",", nfi.NumberDecimalSeparator));
 
                 var boEtoll = new boEtoll()
                 {
