@@ -436,8 +436,8 @@ namespace FTLSupporter
                                                                     /*2.2*/ ("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0 &&
                                                                     /*2.3*/ x.Capacity >= clctsk.Task.Weight &&
                                                                     /*2.4*/ clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime &&
-                                                                    /*2.5*/ (clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true) &&
-                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
+                                                                    /*2.5*/ (clctsk.Task.InclTruckProps != null && clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true) &&
+                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps != null &&  clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
                                                                     ).FirstOrDefault() != null).ToList();
                         //Hibalista generálása
                         //
@@ -470,7 +470,7 @@ namespace FTLSupporter
                                             });
 
                         /*2.5*/
-                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true)).ToList();
+                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.InclTruckProps != null && clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
@@ -479,7 +479,7 @@ namespace FTLSupporter
                                             });
 
                         /*2.6*/
-                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)).ToList();
+                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.ExclTruckProps != null && clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
