@@ -25,7 +25,8 @@ namespace FTLSupporter
             return DateTime.UtcNow.Ticks.ToString();
         }
 
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string requestId = null)
+        public static string MapStorageConnectionString;
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string mapStorageConnectionString, string requestId = null)
         {
             if (Logger == null)
             {
@@ -33,6 +34,7 @@ namespace FTLSupporter
                 Logger.LogToQueueMessage = LogToQueueMessage;
                 LoggerSettings = loggerSettings;
             }
+            MapStorageConnectionString = mapStorageConnectionString;
 
             convertDateTimeToUTC(p_TaskList, p_TruckList);
 
@@ -198,7 +200,7 @@ namespace FTLSupporter
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
                 DateTime dtStart = DateTime.UtcNow;
-                RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, PMapIniParams.Instance.dicSpeed, false);
+                RouteData.Instance.InitFromFiles(MapStorageConnectionString, false);
                 bllRoute route = new bllRoute(null);
                 Logger.Info("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.UtcNow - dtStart).ToString());
 
@@ -436,8 +438,8 @@ namespace FTLSupporter
                                                                     /*2.2*/ ("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0 &&
                                                                     /*2.3*/ x.Capacity >= clctsk.Task.Weight &&
                                                                     /*2.4*/ clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime &&
-                                                                    /*2.5*/ (clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true) &&
-                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
+                                                                    /*2.5*/ (clctsk.Task.InclTruckProps != null && clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true) &&
+                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps != null &&  clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
                                                                     ).FirstOrDefault() != null).ToList();
                         //Hibalista generálása
                         //
@@ -470,7 +472,7 @@ namespace FTLSupporter
                                             });
 
                         /*2.5*/
-                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true)).ToList();
+                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.InclTruckProps != null && clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
@@ -479,7 +481,7 @@ namespace FTLSupporter
                                             });
 
                         /*2.6*/
-                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)).ToList();
+                        lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.ExclTruckProps != null && clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)).ToList();
                         if (lstTrucksErr.Count > 0)
                             clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
                                             .ForEach(x =>
@@ -882,7 +884,7 @@ namespace FTLSupporter
                                 {
 
                                     clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
-                                    clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                                    clr.Toll = bllRoute.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
 
                                     if (clr.Completed)
                                     {
@@ -909,7 +911,7 @@ namespace FTLSupporter
                                     {
 
 
-                                        clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                        clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                                         clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                         clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
                                         if (clr.Arrival < clr.TPoint.Open)
@@ -942,9 +944,9 @@ namespace FTLSupporter
                             /*********************/
                             var relclr = clctour.RelCalcRoute;      //csak hogy ne kelljen a clctour.RelCalcRoute válozónevet használni
                             relclr.Distance = relclr.PMapRoute.route.DST_DISTANCE;
-                            relclr.Toll = bllPlanEdit.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
+                            relclr.Toll = bllRoute.GetToll(relclr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
 
-                            relclr.DrivingDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                            relclr.DrivingDuration = bllPlanEdit.GetDuration(relclr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                             relclr.RestDuration = calcDriveTimes(trk, relclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
 
                             relclr.Arrival = dtPrevTime.AddMinutes(relclr.DrivingDuration + relclr.RestDuration);
@@ -977,8 +979,8 @@ namespace FTLSupporter
                             foreach (FTLCalcRoute clr in clctour.T2CalcRoute)
                             {
                                 clr.Distance = clr.PMapRoute.route.DST_DISTANCE;
-                                clr.Toll = bllPlanEdit.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                                clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                clr.Toll = bllRoute.GetToll(clr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
+                                clr.DrivingDuration = bllPlanEdit.GetDuration(clr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                                 clr.RestDuration = calcDriveTimes(trk, clr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 clr.Arrival = dtPrevTime.AddMinutes(clr.DrivingDuration + clr.RestDuration);
                                 if (clr.Arrival < clr.TPoint.Open)
@@ -1007,8 +1009,8 @@ namespace FTLSupporter
                             {
                                 var retclr = clctour.RetCalcRoute;      //csak hogy ne kelljen a clctour.RetCalcRoute válozónevet használni
                                 retclr.Distance = retclr.PMapRoute.route.DST_DISTANCE;
-                                retclr.Toll = bllPlanEdit.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, bllPlanEdit.GetTollMultiplier(trk.ETollCat, trk.EngineEuro), ref sLastETLCode);
-                                retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.dicSpeed, Global.defWeather);
+                                retclr.Toll = bllRoute.GetToll(retclr.PMapRoute.route.Edges, trk.ETollCat, trk.EngineEuro, ref sLastETLCode);
+                                retclr.DrivingDuration = bllPlanEdit.GetDuration(retclr.PMapRoute.route.Edges, PMapIniParams.Instance.DicSpeeds, Global.defWeather);
                                 retclr.RestDuration = calcDriveTimes(trk, retclr, ref usedDriveTime, ref workCycle, ref driveTime, ref restTime);
                                 retclr.Arrival = dtPrevTime.AddMinutes(retclr.DrivingDuration + retclr.RestDuration);
                                 if (retclr.TPoint != null && retclr.Arrival < retclr.TPoint.Open)       //Ha a visszatérés túrapontra történik és hamarabb érkezünk vissza, mint a nyitva tartás kezdete, várunk 

@@ -68,12 +68,24 @@ namespace FTLSupporter
         }
 
         //    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
-        [JsonIgnore]
-        [IgnoreDataMember]
+        [Newtonsoft.Json.JsonIgnore]
         public FTLCalcTourStatus StatusEnum { get; set; }
 
         [DisplayNameAttributeX(Name = "Státusz", Order = 1)]
-        public string Status { get { return StatusEnum.ToString(); } } 
+        public string Status {
+            get
+            {
+                return StatusEnum.ToString();
+            }
+            set
+            {
+                if (value != null)
+                    StatusEnum = (FTLCalcTourStatus)Enum.Parse(typeof(FTLCalcTourStatus), value);
+                else
+                    StatusEnum = FTLCalcTourStatus.ERR;
+
+            }
+        }
 
         [DisplayNameAttributeX(Name = "Üzenet", Order = 2)]
         public List<string> Msg { get; set; }

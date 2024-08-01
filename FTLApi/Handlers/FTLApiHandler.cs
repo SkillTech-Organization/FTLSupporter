@@ -19,12 +19,14 @@ namespace FTLApi.Handlers
         private ITelemetryLogger Logger { get; set; }
 
         private const string BLOB_SUFFIX = "_response";
+        private string MapStorageConnectString;
 
-        public FTLApiHandler(IOptions<FTLLoggerSettings> options)
+        public FTLApiHandler(IOptions<FTLLoggerSettings> options, IOptions<MapStorageSettings> mapStorageSettings)
         {
             Settings = options.Value;
             Logger = TelemetryClientFactory.Create(Settings);
             Logger.LogToQueueMessage = FTLInterface.LogToQueueMessage;
+            MapStorageConnectString = mapStorageSettings.Value.AzureStorageConnectionString;
         }
 
         public Task<FTLResponse> FTLSupportAsync(FTLSupportRequest body, CancellationToken cancellationToken = default)
@@ -35,9 +37,10 @@ namespace FTLApi.Handlers
                 var requestId = FTLInterface.GenerateRequestId();
 
                 // POST mentése Blobba
-                Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
+                if (Logger.Blob != null)
+                     Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
 
-                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, requestId);
+                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, MapStorageConnectString, requestId);
                 if (initResult != null)
                 {
                     response = initResult;
@@ -89,7 +92,7 @@ namespace FTLApi.Handlers
                 // POST mentése Blobba
                 Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
 
-                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, requestId);
+                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, MapStorageConnectString, requestId);
                 if (initResult != null)
                 {
                     response = initResult;
