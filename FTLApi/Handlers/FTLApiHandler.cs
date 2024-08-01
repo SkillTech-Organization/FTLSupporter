@@ -78,7 +78,27 @@ namespace FTLApi.Handlers
                 Logger.Exception(ex, Logger.GetExceptionProperty(response?.RequestID ?? ""), intoQueue: false);
                 throw;
             }
-            
+            var res = (List<FTLResult>)response.Result;
+            res.ForEach(r =>
+           {
+               if (r.Status == FTLResult.FTLResultStatus.RESULT)
+               {
+                   r.CalcTaskList.ForEach(ctl =>
+                  {
+                      ctl.CalcTours.ForEach(ct =>
+                     {
+                         if (ct.StatusEnum == FTLCalcTour.FTLCalcTourStatus.ERR)
+                         {
+                             ct.RelCalcRoute = new FTLCalcRoute();
+                             ct.RetCalcRoute = new FTLCalcRoute();
+                             ct.T1CalcRoute = new List<FTLCalcRoute>();
+                             ct.T2CalcRoute = new List<FTLCalcRoute>();
+                         }
+                     });
+                  });
+               }
+           });
+
             return new OkObjectResult(response);
         }
 
