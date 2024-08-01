@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
+using Azure.Storage.Blobs;
 
 namespace PMapCore.Route
 {
@@ -72,7 +73,7 @@ namespace PMapCore.Route
         }
 
 
-        public void InitFromFiles(string p_dir, bool p_Forced = false)
+        public void InitFromFiles(string p_mapStorageConnectionString, bool p_Forced = false)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
             using (GlobalLocker lockObj = new GlobalLocker(Global.lockObjectInit))
@@ -80,18 +81,24 @@ namespace PMapCore.Route
                 if (!m_Initalized || p_Forced)
                 {
                     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                    var bh = new BlobUtils.BlobHandler(p_mapStorageConnectionString);
 
-                    string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1250));
-                    string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
 
-                    Etolls = loadEtolls( etollContent); //Útdíjak és szorzók
-                    EtRoads = loadEtRoads( etRoadsContent); //Díjköteles útszelvények 
-                    
+                    //string etollContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETOLL), Encoding.GetEncoding(1250));
+                    string etollContent = getContentFromBlob(bh, Global.EXTFILE_ETOLL, Encoding.GetEncoding(1250));
+                    //string etRoadsContent = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_ETROADS), Encoding.GetEncoding(1250));
+                    string etRoadsContent = getContentFromBlob(bh, Global.EXTFILE_ETROADS, Encoding.GetEncoding(1250));
+
+                    Etolls = loadEtolls(etollContent); //Útdíjak és szorzók
+                    EtRoads = loadEtRoads(etRoadsContent); //Díjköteles útszelvények 
+
 
                     JsonSerializerSettings jsonsettings = new JsonSerializerSettings { DateFormatHandling = DateFormatHandling.IsoDateFormat };
 
                     DateTime dtStart = DateTime.Now;
-                    string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
+                    //string strEdges = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_EDG), Encoding.UTF8);
+                    string strEdges = getContentFromBlob(bh, Global.EXTFILE_EDG, Encoding.UTF8);
+
                     var xEdges = JsonConvert.DeserializeObject<Dictionary<string, boEdge>>(strEdges);
                     Edges = xEdges;
                     foreach (var edg in Edges)
@@ -102,16 +109,19 @@ namespace PMapCore.Route
                         edg.Value.CalcDuration = CalcDuration;
                     }
 
-                    string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
+                    //string strNodePositions = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_NOD), Encoding.UTF8);
+                    string strNodePositions = getContentFromBlob(bh, Global.EXTFILE_NOD, Encoding.UTF8);
                     var xNodePositions = JsonConvert.DeserializeObject<Dictionary<int, PointLatLng>>(strNodePositions);
                     NodePositions = xNodePositions;
 
-                    string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    //string strallRZones = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZN), Encoding.UTF8);
+                    string strallRZones = getContentFromBlob(bh, Global.EXTFILE_RZN, Encoding.UTF8);
                     var xallRZones = JsonConvert.DeserializeObject<Dictionary<string, int>>(strallRZones);
                     allRZones = xallRZones;
 
 
-                    string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
+                    //string strRZN_ID_LIST = Util.FileToString2(Path.Combine(p_dir, Global.EXTFILE_RZNTyp), Encoding.UTF8);
+                    string strRZN_ID_LIST = getContentFromBlob(bh, Global.EXTFILE_RZNTyp, Encoding.UTF8);
                     var xRZN_ID_LIST = JsonConvert.DeserializeObject<Dictionary<int, string>>(strRZN_ID_LIST);
                     RZN_ID_LIST = xRZN_ID_LIST;
 
@@ -119,6 +129,17 @@ namespace PMapCore.Route
                 }
             }
         }
+        private string getContentFromBlob(BlobUtils.BlobHandler bh, string filename, Encoding enc = null)
+        {
+            string result = "";
+            using (StreamReader streamReader = new StreamReader(bh.DownloadfromStream("map", filename).GetAwaiter().GetResult(), enc, true))
+            {
+                // Read the stream and convert it to a string
+                result = streamReader.ReadToEnd();
+            }
+            return result;
+        }
+
         private Dictionary<string, boEtoll> loadEtolls(string CSVContent)
         {
 

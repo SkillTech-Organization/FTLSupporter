@@ -160,6 +160,7 @@
     <Compile Include="Logger\TelemetryClientFactory.cs" />
     <Compile Include="Logger\TelemetryLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\MapStorageSettings.cs" />
     <Compile Include="Settings\FTLLoggerSettings.cs" />
   </ItemGroup>
   <ItemGroup>
