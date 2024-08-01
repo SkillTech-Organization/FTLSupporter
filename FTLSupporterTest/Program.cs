@@ -36,7 +36,7 @@ namespace FTLSupporterTest
             var truckPath = "d:\\Temp\\SWH\\638339999417248828_FTLTruck_FTLSupportX.json";
             var lstTrk = JsonConvert.DeserializeObject<List<FTLTruck>>(File.ReadAllText(truckPath), isoDateTimeConverter);
 
-            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 0, null);
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 0, null, "");
             var str = JsonConvert.SerializeObject(res);
         }
 
@@ -55,7 +55,7 @@ namespace FTLSupporterTest
            // lstTrk.First().GVWR = 0;
            // lstTrk.Last().CargoTypes = null;
 
-            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000, null);
+            var res = FTLInterface.FTLInit(lstTsk, lstTrk, 10000, null, "");
             var str = JsonConvert.SerializeObject(res);
         }
 

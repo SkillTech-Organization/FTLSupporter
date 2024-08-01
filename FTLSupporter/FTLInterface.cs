@@ -25,7 +25,8 @@ namespace FTLSupporter
             return DateTime.UtcNow.Ticks.ToString();
         }
 
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string requestId = null)
+        public static string MapStorageConnectionString;
+        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string mapStorageConnectionString, string requestId = null)
         {
             if (Logger == null)
             {
@@ -33,6 +34,7 @@ namespace FTLSupporter
                 Logger.LogToQueueMessage = LogToQueueMessage;
                 LoggerSettings = loggerSettings;
             }
+            MapStorageConnectionString = mapStorageConnectionString;
 
             convertDateTimeToUTC(p_TaskList, p_TruckList);
 
@@ -198,7 +200,7 @@ namespace FTLSupporter
                 Logger.Info(String.Format("{0} {1}", "FTLSupport", "Init"), Logger.GetStatusProperty(RequestID));
 
                 DateTime dtStart = DateTime.UtcNow;
-                RouteData.Instance.InitFromFiles(PMapIniParams.Instance.MapJSonDir, false);
+                RouteData.Instance.InitFromFiles(MapStorageConnectionString, false);
                 bllRoute route = new bllRoute(null);
                 Logger.Info("RouteData.InitFromFiles()  " + Util.GetSysInfo() + " Időtartam:" + (DateTime.UtcNow - dtStart).ToString());
 

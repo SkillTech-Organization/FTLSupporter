@@ -39,6 +39,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<FTLLoggerSettings>(
     builder.Configuration.GetSection("FTLLogger"));
 
+builder.Services.Configure<MapStorageSettings>(
+    builder.Configuration.GetSection("MapStorage"));
+
 builder.Services.AddTransient<IFTLApiHandler, FTLApiHandler>();
 
 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("hu-HU");
