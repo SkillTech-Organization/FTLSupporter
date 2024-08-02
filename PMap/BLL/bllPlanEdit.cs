@@ -349,7 +349,7 @@ namespace PMapCore.BLL
         {
             if (!String.IsNullOrEmpty(p_EDG_ID_LIST))
             {
-                String sSql = String.Format("select sum(EDG.EDG_LENGTH / (SPV.SPV_VALUE  / 3.6 * 60)) as DURATION from EDG_EDGE EDG " + Environment.NewLine +
+                String sSql = String.Format($"select sum(EDG.EDG_LENGTH / (SPV.SPV_VALUE  * {Global.KmH_2_MS} ) / 60) as DURATION from EDG_EDGE EDG " + Environment.NewLine +
                       "inner join SPV_SPEEDPROFVALUE SPV on SPV.RDT_ID = EDG.RDT_VALUE and SPV.SPP_ID = ?  " + Environment.NewLine +
                       "where EDG.ID in ({0}) ", p_EDG_ID_LIST);
 
@@ -380,7 +380,7 @@ namespace PMapCore.BLL
             var linq = from edg in p_Edges
                        select new CDurationResult
                        {
-                           Duration = (edg.EDG_LENGTH / (p_speeds[edg.RDT_VALUE] / 3.6 * 60 * p_Weather))
+                           Duration = (edg.EDG_LENGTH / (p_speeds[edg.RDT_VALUE] * Global.KmH_2_MS) / 60 * p_Weather)
                        };
             return Convert.ToInt32(linq.Sum(itm => itm.Duration));
         }

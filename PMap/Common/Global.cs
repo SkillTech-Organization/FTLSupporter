@@ -227,6 +227,8 @@ namespace PMapCore.Common
         public const char SEP_COORDC = '#';
 
         public const int defWeather = 1;
+        public const double KmH_2_MS = 0.277778;
+
 
         public static Color SELECTEDBTNCOLOR = System.Drawing.Color.Gold;
         public static Color MANDATORYCOLOR = Color.OldLace;
