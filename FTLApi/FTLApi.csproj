@@ -8,6 +8,7 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <AssemblyVersion>2.1.0.0</AssemblyVersion>
     <FileVersion>2.1.0.0</FileVersion>
+    <UserSecretsId>27113aef-7735-4203-988c-4d5c5db094a7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
