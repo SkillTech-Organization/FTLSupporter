@@ -111,6 +111,48 @@ namespace FTLSupporter
             var ret = new FTLResponse();
             try
             {
+                //Csak az első 3 ranked túrát adjuk vissza
+                res.ForEach(resitem =>
+                {
+                    resitem.CalcTaskList.ForEach(ctask =>
+                    {
+
+                        ctask.CalcTours = ctask.CalcTours.Where(ctour => ctour.Rank <= 3 || ctour.Rank == 999999).ToList();
+
+                        // a hibás tételekben töröljük a RoutePoints-okat
+                        ctask.CalcTours.ForEach(ctour =>
+                        {
+                            if (ctour.Rank == 999999)
+                            {
+                              ctour.T1CalcRoute.ForEach(croute =>
+                                {
+                                    croute.RoutePoints = "";
+                                });
+
+                                if (ctour.RelCalcRoute != null)
+                                {
+                                    ctour.RelCalcRoute.RoutePoints = "";
+                                }
+
+                                ctour.T2CalcRoute.ForEach(croute =>
+                                {
+                                    croute.RoutePoints = "";
+                                });
+
+                                if (ctour.RetCalcRoute != null)
+                                {
+                                    ctour.RetCalcRoute.RoutePoints = "";
+                                }
+                            }
+                        });
+
+                    });
+                });
+
+
+
+
+
                 ret.Result = new List<FTLResult>();
                 ret.Result.AddRange(res);
                 ret.RequestID = RequestID;
@@ -1187,6 +1229,8 @@ namespace FTLSupporter
                     Logger.Info(String.Format("{0} {1} Időtartam:{2}", "FTLSupport", "Eredmények véglegesítése", (DateTime.UtcNow - dtPhaseStart).ToString()), Logger.GetStatusProperty(RequestID));
 
                     dtPhaseStart = DateTime.UtcNow;
+
+
 
                     FTLResult res = new FTLResult()
                     {
