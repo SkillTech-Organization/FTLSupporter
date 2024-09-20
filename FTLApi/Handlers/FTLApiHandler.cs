@@ -6,7 +6,6 @@ using FTLSupporter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Task = System.Threading.Tasks.Task;
 
@@ -20,12 +19,14 @@ namespace FTLApi.Handlers
 
         private const string BLOB_SUFFIX = "_response";
         private string MapStorageConnectString;
+        private FTLInterface _FTLInterface;
 
         public FTLApiHandler(IOptions<FTLLoggerSettings> options, IOptions<MapStorageSettings> mapStorageSettings)
         {
+            _FTLInterface = new FTLInterface();
             Settings = options.Value;
             Logger = TelemetryClientFactory.Create(Settings);
-            Logger.LogToQueueMessage = FTLInterface.LogToQueueMessage;
+            Logger.LogToQueueMessage = _FTLInterface.LogToQueueMessage;
             MapStorageConnectString = mapStorageSettings.Value.AzureStorageConnectionString;
         }
 
@@ -34,13 +35,13 @@ namespace FTLApi.Handlers
             var response = new FTLResponse();
             try
             {
-                var requestId = FTLInterface.GenerateRequestId();
+                var requestId = _FTLInterface.GenerateRequestId();
 
                 // POST mentése Blobba
                 if (Logger.Blob != null)
-                     Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
+                    Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
 
-                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, MapStorageConnectString, requestId);
+                var initResult = _FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, MapStorageConnectString, requestId);
                 if (initResult != null)
                 {
                     response = initResult;
@@ -48,7 +49,7 @@ namespace FTLApi.Handlers
 
                 if (initResult != null && !initResult.HasError)
                 {
-                    Task.Run(() => FTLInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                    Task.Run(() => _FTLInterface.FTLSupport(body.TaskList, body.TruckList, body.MaxTruckDistance));
                 }
             }
             catch (Exception ex)
@@ -107,12 +108,12 @@ namespace FTLApi.Handlers
             var response = new FTLResponse();
             try
             {
-                var requestId = FTLInterface.GenerateRequestId();
+                var requestId = _FTLInterface.GenerateRequestId();
 
                 // POST mentése Blobba
                 Logger.Blob.LogString(JsonConvert.SerializeObject(body), requestId + "_request").Wait();
 
-                var initResult = FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, MapStorageConnectString, requestId);
+                var initResult = _FTLInterface.FTLInit(body.TaskList, body.TruckList, body.MaxTruckDistance, Settings, MapStorageConnectString, requestId);
                 if (initResult != null)
                 {
                     response = initResult;
@@ -120,7 +121,7 @@ namespace FTLApi.Handlers
 
                 if (initResult != null && !initResult.HasError)
                 {
-                    Task.Run(() => FTLInterface.FTLSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
+                    Task.Run(() => _FTLInterface.FTLSupportX(body.TaskList, body.TruckList, body.MaxTruckDistance));
                 }
             }
             catch (Exception ex)
