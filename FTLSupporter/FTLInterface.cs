@@ -16,17 +16,17 @@ namespace FTLSupporter
 {
     public class FTLInterface
     {
-        private static ITelemetryLogger Logger { get; set; }
-        private static FTLLoggerSettings LoggerSettings { get; set; }
-        private static string RequestID { get; set; }
+        private ITelemetryLogger Logger { get; set; }
+        private FTLLoggerSettings LoggerSettings { get; set; }
+        private string RequestID { get; set; }
 
-        public static string GenerateRequestId()
+        public string GenerateRequestId()
         {
             return DateTime.UtcNow.Ticks.ToString();
         }
 
-        public static string MapStorageConnectionString;
-        public static FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string mapStorageConnectionString, string requestId = null)
+        public string MapStorageConnectionString;
+        public FTLResponse FTLInit(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance, FTLLoggerSettings loggerSettings, string mapStorageConnectionString, string requestId = null)
         {
             if (Logger == null)
             {
@@ -66,7 +66,7 @@ namespace FTLSupporter
             return ret;
         }
 
-        private static void convertDateTimeToUTC(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList)
+        private void convertDateTimeToUTC(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList)
         {
             p_TaskList.ForEach(i =>
             {
@@ -89,7 +89,7 @@ namespace FTLSupporter
             });
         }
 
-        public static object LogToQueueMessage(params object[] args)
+        public object LogToQueueMessage(params object[] args)
         {
             var typeParsed = Enum.TryParse((string)(args[1] ?? ""), out LogTypes type);
             var m = new FTLQueueResponse
@@ -106,62 +106,114 @@ namespace FTLSupporter
             return m.ToJson();
         }
 
-        private static void HandleResult(DateTime dtStart, List<FTLResult> res, bool isFtlSupport, List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        private void HandleResult(DateTime dtStart, List<FTLResult> res, bool isFtlSupport, List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             var ret = new FTLResponse();
-
-            ret.Result = new List<FTLResult>();
-            ret.Result.AddRange(res);
-            ret.RequestID = RequestID;
-
-            var resultBlobName = RequestID + "_response";
-
-            var saveSuccess = !string.IsNullOrWhiteSpace(Logger.Blob.LogString(ret.ToJson(), resultBlobName).Result);
-            var link = LoggerSettings.ResultLinkBase + resultBlobName;
-
-            if (saveSuccess)
+            try
             {
-                var msg = String.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.UtcNow - dtStart).ToString());
-
-                Logger.Info(msg, Logger.GetEndProperty(RequestID), false);
-
-                var queueResponse = new FTLQueueResponse
+                //Csak az első 3 ranked túrát adjuk vissza
+                res.Where(w => w.CalcTaskList != null).ToList().ForEach(resitem =>
                 {
-                    RequestID = RequestID,
-                    Link = link,
-                    Log = new FTLLog
+                    resitem.CalcTaskList.Where(w => w.CalcTours != null).ToList().ForEach(ctask =>
                     {
-                        Message = msg,
-                        Timestamp = DateTime.UtcNow,
-                        Type = LogTypes.END
-                    },
-                    Status = FTLQueueResponse.FTLQueueResponseStatus.RESULT
-                };
 
-                Logger.QueueLogger.Log(queueResponse, RequestID);
+                        ctask.CalcTours = ctask.CalcTours.Where(ctour => ctour.Rank <= 3 || ctour.Rank == 999999).ToList();
+
+                        // a hibás tételekben töröljük a RoutePoints-okat
+                        ctask.CalcTours.ForEach(ctour =>
+                        {
+                            if (ctour.Rank == 999999)
+                            {
+                                ctour.T1CalcRoute.ForEach(croute =>
+                                  {
+                                      croute.RoutePoints = "";
+                                  });
+
+                                if (ctour.RelCalcRoute != null)
+                                {
+                                    ctour.RelCalcRoute.RoutePoints = "";
+                                }
+
+                                ctour.T2CalcRoute.ForEach(croute =>
+                                {
+                                    croute.RoutePoints = "";
+                                });
+
+                                if (ctour.RetCalcRoute != null)
+                                {
+                                    ctour.RetCalcRoute.RoutePoints = "";
+                                }
+                            }
+                        });
+
+                    });
+                });
+
+
+
+
+
+                ret.Result = new List<FTLResult>();
+                ret.Result.AddRange(res);
+                ret.RequestID = RequestID;
+
+                var resultBlobName = RequestID + "_response";
+
+                var logresult = Logger.Blob.LogString(ret.ToJson(), resultBlobName).GetAwaiter().GetResult();
+                var saveSuccess = !string.IsNullOrWhiteSpace(logresult);
+
+
+                var link = LoggerSettings.ResultLinkBase + resultBlobName;
+
+                if (saveSuccess)
+                {
+                    var msg = String.Format(isFtlSupport ? "FTLSupport Időtartam:{0}" : "FTLSupportX TELJES Időtartam:{0}", (DateTime.UtcNow - dtStart).ToString());
+
+                    Logger.Info(msg, Logger.GetEndProperty(RequestID), false);
+
+                    var queueResponse = new FTLQueueResponse
+                    {
+                        RequestID = RequestID,
+                        Link = link,
+                        Log = new FTLLog
+                        {
+                            Message = msg,
+                            Timestamp = DateTime.UtcNow,
+                            Type = LogTypes.END
+                        },
+                        Status = FTLQueueResponse.FTLQueueResponseStatus.RESULT
+                    };
+
+                    Logger.QueueLogger.Log(queueResponse, RequestID);
+                }
+                else
+                {
+                    Logger.Error(FTLMessages.E_ERRINBLOBSAVE, Logger.GetExceptionProperty(RequestID), null, false);
+
+                    var queueResponse = new FTLQueueResponse
+                    {
+                        RequestID = RequestID,
+                        Link = link,
+                        Log = new FTLLog
+                        {
+                            Message = FTLMessages.E_ERRINBLOBSAVE,
+                            Timestamp = DateTime.UtcNow,
+                            Type = LogTypes.END
+                        },
+                        Status = FTLQueueResponse.FTLQueueResponseStatus.ERROR
+                    };
+
+                    Logger.QueueLogger.Log(queueResponse, RequestID);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Logger.Error(FTLMessages.E_ERRINBLOBSAVE, Logger.GetExceptionProperty(RequestID), null, false);
-
-                var queueResponse = new FTLQueueResponse
-                {
-                    RequestID = RequestID,
-                    Link = link,
-                    Log = new FTLLog
-                    {
-                        Message = FTLMessages.E_ERRINBLOBSAVE,
-                        Timestamp = DateTime.UtcNow,
-                        Type = LogTypes.END
-                    },
-                    Status = FTLQueueResponse.FTLQueueResponseStatus.ERROR
-                };
-
-                Logger.QueueLogger.Log(queueResponse, RequestID);
+                ExceptionLogging(ex);
+                throw;
             }
         }
 
-        public static List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        public List<FTLResult> FTLSupport(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.UtcNow;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
@@ -176,7 +228,7 @@ namespace FTLSupporter
         }
 
         //Az eredményfeldolgozásban különbözik a FTLSupport-től
-        public static List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        public List<FTLResult> FTLSupportX(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
             DateTime dtStart = DateTime.UtcNow;
             PMapIniParams.Instance.ReadParams(AppContext.BaseDirectory, "");
@@ -190,7 +242,7 @@ namespace FTLSupporter
             return res;
         }
 
-        private static List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        private List<FTLResult> FTLSupport_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
 
             List<FTLResult> result = new List<FTLResult>();
@@ -439,7 +491,7 @@ namespace FTLSupporter
                                                                     /*2.3*/ x.Capacity >= clctsk.Task.Weight &&
                                                                     /*2.4*/ clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime &&
                                                                     /*2.5*/ (clctsk.Task.InclTruckProps != null && clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true) &&
-                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps != null &&  clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
+                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps != null && clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
                                                                     ).FirstOrDefault() != null).ToList();
                         //Hibalista generálása
                         //
@@ -1178,6 +1230,8 @@ namespace FTLSupporter
 
                     dtPhaseStart = DateTime.UtcNow;
 
+
+
                     FTLResult res = new FTLResult()
                     {
                         Status = FTLResult.FTLResultStatus.RESULT,
@@ -1190,31 +1244,36 @@ namespace FTLSupporter
             }
             catch (Exception ex)
             {
-                Util.ExceptionLog(ex);
-                FTLResErrMsg rm = new FTLResErrMsg();
-                rm.Field = "";
-                rm.Message = ex.Message;
-                if (ex.InnerException != null)
-                    rm.Message += "\ninner exception:" + ex.InnerException.Message;
-                rm.CallStack = ex.StackTrace;
-
-                FTLResult res = new FTLResult()
-                {
-                    Status = FTLResult.FTLResultStatus.EXCEPTION,
-                    ObjectName = "",
-                    ItemID = "",
-                    ResErrMsg = rm
-
-                };
+                var res = ExceptionLogging(ex);
                 result.Add(res);
-
-                Logger.Exception(ex, Logger.GetExceptionProperty(RequestID), rm);
             }
             return result;
-
         }
 
-        private static List<FTLResult> ValidateObjList<T>(List<T> p_list)
+        public FTLResult ExceptionLogging(Exception ex)
+        {
+            Util.ExceptionLog(ex);
+            FTLResErrMsg rm = new FTLResErrMsg();
+            rm.Field = "";
+            rm.Message = ex.Message;
+            if (ex.InnerException != null)
+                rm.Message += "\ninner exception:" + ex.InnerException.Message;
+            rm.CallStack = ex.StackTrace;
+
+            FTLResult res = new FTLResult()
+            {
+                Status = FTLResult.FTLResultStatus.EXCEPTION,
+                ObjectName = "",
+                ItemID = "",
+                ResErrMsg = rm
+
+            };
+            Logger.Exception(ex, Logger.GetExceptionProperty(RequestID), rm);
+
+            return res;
+        }
+
+        private List<FTLResult> ValidateObjList<T>(List<T> p_list)
         {
             List<FTLResult> result = new List<FTLResult>();
             foreach (object item in p_list)
@@ -1233,7 +1292,7 @@ namespace FTLSupporter
 
         }
 
-        private static FTLResult getValidationError(Object p_obj, string p_field, string p_msg, bool log = true)
+        private FTLResult getValidationError(Object p_obj, string p_field, string p_msg, bool log = true)
         {
             FTLResErrMsg msg = new FTLResErrMsg() { Field = p_field, Message = p_msg, CallStack = "" };
             PropertyInfo ItemIDProp = p_obj.GetType().GetProperties().Where(pi => Attribute.IsDefined(pi, typeof(ItemIDAttr))).FirstOrDefault();
@@ -1254,10 +1313,10 @@ namespace FTLSupporter
             return itemRes;
         }
 
-        private static List<FTLResult> FTLSupportX_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
+        private List<FTLResult> FTLSupportX_inner(List<FTLTask> p_TaskList, List<FTLTruck> p_TruckList, int p_maxTruckDistance)
         {
 
-            List<FTLResult> res = FTLInterface.FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
+            List<FTLResult> res = FTLSupport_inner(p_TaskList, p_TruckList, p_maxTruckDistance);
 
 
             /*
@@ -1273,15 +1332,15 @@ namespace FTLSupporter
             var calcResult = res.Where(i => i.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
             if (calcResult != null)
             {
-                FTLInterface.FTLSetBestTruck(res);
+                FTLSetBestTruck(res);
                 List<FTLCalcTask> calcTaskList = calcResult.CalcTaskList;
 
                 while (calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).ToList().Count != 0)         //addig megy a ciklus, amíg van olyan calcTask amelynnek nincs OK-s CalcTours-a (azaz nincs eredménye)
                 {
                     List<FTLTask> lstTsk2 = new List<FTLTask>();
-                    var lstTrk2 = FTLInterface.FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
+                    var lstTrk2 = FTLGenerateTrucksFromCalcTours(p_TruckList, calcTaskList);
                     lstTsk2.AddRange(calcTaskList.Where(x => x.CalcTours.Where(i => i.StatusEnum == FTLCalcTour.FTLCalcTourStatus.OK).ToList().Count == 0).Select(s => s.Task));
-                    List<FTLResult> res2 = FTLInterface.FTLSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
+                    List<FTLResult> res2 = FTLSupport_inner(lstTsk2, lstTrk2, p_maxTruckDistance);
 
                     var calcResult2 = res2.Where(x => x.Status == FTLResult.FTLResultStatus.RESULT).FirstOrDefault();
                     if (calcResult2 != null)
@@ -1289,7 +1348,7 @@ namespace FTLSupporter
                         //Elvileg itt már kell, hogy legyen result típusú tétel, mert a validálás az előző menetben megrtörtént.
 
 
-                        FTLInterface.FTLSetBestTruck(res2);
+                        FTLSetBestTruck(res2);
 
                         List<FTLCalcTask> calcTaskList2 = calcResult2.CalcTaskList;
 
@@ -1368,7 +1427,7 @@ namespace FTLSupporter
 
 
 
-        public static void FTLSetBestTruck(List<FTLResult> p_calcResult)
+        public void FTLSetBestTruck(List<FTLResult> p_calcResult)
         {
 
             DateTime dtBestTruckStart = DateTime.UtcNow;
@@ -1458,7 +1517,7 @@ namespace FTLSupporter
 
         }
 
-        public static List<FTLTruck> FTLGenerateTrucksFromCalcTours(List<FTLTruck> p_TruckList, List<FTLCalcTask> p_calcTaskList)
+        public List<FTLTruck> FTLGenerateTrucksFromCalcTours(List<FTLTruck> p_TruckList, List<FTLCalcTask> p_calcTaskList)
         {
             List<FTLTruck> res = new List<FTLTruck>();
             List<FTLCalcTour> ctList = new List<FTLCalcTour>();
@@ -1508,7 +1567,7 @@ namespace FTLSupporter
         1. minden változót csak akkor veszünk figyelembe, ha értéke nagyobb, mint nulla. Ha pl a RemainingTwoWeeklyDriveTime értéke nulla, akkor az nem vesz részt a számításokban)
         2.Az FTLSupport percben számol. A kapott másodperekbők minden megkezdett perc számít.
         */
-        private static void fillDriveTimes(FTLTruck p_trk, int workCycle, out int o_driveTime, out int o_restTime)
+        private void fillDriveTimes(FTLTruck p_trk, int workCycle, out int o_driveTime, out int o_restTime)
         {
             o_driveTime = 0;
             o_restTime = 0;
@@ -1539,7 +1598,7 @@ namespace FTLSupporter
             Console.WriteLine("workCycle:{0}, o_driveTime:{1}, o_restTime:{2}", workCycle, o_driveTime, o_restTime);
         }
 
-        private static int calcDriveTimes(FTLTruck p_trk, FTLCalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
+        private int calcDriveTimes(FTLTruck p_trk, FTLCalcRoute clr, ref int usedDriveTime, ref int workCycle, ref int driveTime, ref int restTime)
         {
             int retRestTime = 0;
             if (usedDriveTime + clr.DrivingDuration >= driveTime)
@@ -1573,7 +1632,7 @@ namespace FTLSupporter
         //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy 
         //      boEdge[] tömbön. Kb 2x olyan gyors.
 
-        public static int FTLGetNearestReachableNOD_IDForTruck(boEdge[] EdgesList, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
+        public int FTLGetNearestReachableNOD_IDForTruck(boEdge[] EdgesList, PointLatLng p_pt, string p_RZN_ID_LIST, int p_weight, int p_height, int p_width)
 
         {
             //Legyünk következetesek, a PMAp-os térkép esetében:
@@ -1627,7 +1686,7 @@ namespace FTLSupporter
 
         //MEGJ: A gyors működés érdekében nem a RouteData.Instance.Edges dictionary-n fut az illesztés, hanem ehy 
         //      boEdge[] tömbön. Kb 2x olyan gyors.
-        public static int FTLGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
+        public int FTLGetNearestNOD_ID(boEdge[] EdgesList, PointLatLng p_pt)
         {
 
             //Legyünk következetesek, a PMAp-os térkép esetében:
