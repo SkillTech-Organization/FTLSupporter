@@ -112,9 +112,9 @@ namespace FTLSupporter
             try
             {
                 //Csak az első 3 ranked túrát adjuk vissza
-                res.ForEach(resitem =>
+                res.Where(w => w.CalcTaskList != null).ToList().ForEach(resitem =>
                 {
-                    resitem.CalcTaskList.ForEach(ctask =>
+                    resitem.CalcTaskList.Where(w => w.CalcTours != null).ToList().ForEach(ctask =>
                     {
 
                         ctask.CalcTours = ctask.CalcTours.Where(ctour => ctour.Rank <= 3 || ctour.Rank == 999999).ToList();
