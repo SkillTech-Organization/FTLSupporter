@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FTLSupporter
+﻿namespace FTLSupporter
 {
     public static class FTLMessages
     {
@@ -15,6 +10,8 @@ namespace FTLSupporter
         public const string E_TRKWRONGCOMPLETED = "Helytelen teljesített túrapont érték !";
         public const string E_UNKOWNRZONE = "Ismeretlen behajtási zónakód:{0}";
         public const string E_WRONGCOORD = "Helytelen koordináta!";
+        public const string E_WRONGCURRCOORD = "Helytelen aktuális koordináta! Jármű: {0}, koordináta: {1}";
+        public const string E_WRONGCURRTOURCOORD = "Teljesítés alatt álló túrapont koordináta! Jármű: {0}, koordináta: {1}";
         public const string E_FEWPOINTS = "A beosztandó túrának minimum két túrapont szükésges!";
         public const string E_T1MISSROUTE = "Aktuális túra teljesítésénél hiányzó szakasz!";
         public const string E_RELMISSROUTE = "Átállásnál hiányzó szakasz!";

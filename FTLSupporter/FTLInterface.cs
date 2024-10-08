@@ -369,9 +369,9 @@ namespace FTLSupporter
 
                         trk.NOD_ID_CURR = FTLGetNearestReachableNOD_IDForTruck(EdgesArr, new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng), trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                         if (trk.NOD_ID_CURR == 0)
-                            result.Add(getValidationError(trk,
-                                String.Format("Jármű:{0}, aktuális poz:{1}", trk.TruckID,
-                                new GMap.NET.PointLatLng(trk.CurrLat, trk.CurrLng).ToString()), FTLMessages.E_WRONGCOORD));
+                        {
+                            //itt nem csinálunk semmit, üzleti hibaként kezeljük
+                        }
                     }
 
                     Logger.Info(String.Format("{0} {1} Jármű:{2}, Időtartam:{3}", "FTLSupport", "Teljesített koordináta feloldás és ellenőrzés", trk.TruckID, (DateTime.UtcNow - dtXDate2).ToString()), Logger.GetStatusProperty(RequestID));
@@ -382,9 +382,11 @@ namespace FTLSupporter
                     {
                         trk.RET_NOD_ID = FTLGetNearestReachableNOD_IDForTruck(EdgesArr, trk.RetPoint.Value, trk.RZN_ID_LIST, trk.GVWR, trk.Height, trk.Width);
                         if (trk.RET_NOD_ID == 0)
+                        {
                             result.Add(getValidationError(trk,
-                                String.Format("Jármű:{0}, visszetérés poz:{1}", trk.TruckID,
-                                trk.RetPoint.Value.ToString()), FTLMessages.E_WRONGCOORD));
+                                    String.Format("Jármű:{0}, visszatérés poz:{1}", trk.TruckID,
+                                    trk.RetPoint.Value.ToString()), FTLMessages.E_WRONGCOORD));
+                        }
                     }
 
                     foreach (FTLPoint pt in trk.CurrTPoints)
@@ -394,9 +396,7 @@ namespace FTLSupporter
                             pt.NOD_ID = FTLGetNearestNOD_ID(EdgesArr, new GMap.NET.PointLatLng(pt.Lat, pt.Lng));
                             if (pt.NOD_ID == 0)
                             {
-                                result.Add(getValidationError(pt,
-                                    String.Format("Jármű:{0}, Teljesítés alatt álló túrapont poz:{1}", trk.TruckID,
-                                    new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString()), FTLMessages.E_WRONGCOORD));
+                                //itt nem csinálunk semmit, üzleti hibaként kezeljük
                             }
                         }
                     }
@@ -485,16 +485,24 @@ namespace FTLSupporter
                         //  2.4: Az jármű pillanatnyi időpontja az összes túrapont zárása előtti-e (A türelmi idő is beleszámítandó !!)
                         //  2.5: Ha ki van töltve az engedélyező property, akkor a járműproperty megtalálható-e benne? --> Teljesítheti a feladatot
                         //  2.6: Ha ki van töltve az tiltó property, akkor a járműproperty megtalálható-e benne? --> nem teljesítheti a feladatot
+                        //  2.7: Aktuális koordináta-illesztés hiba
+                        //  2.8: Teljesítés alatt álló túrapontok koordináta-illesztés hiba
                         //
-                        List<FTLTruck> CalcTrucks = p_TruckList.Where(x => /*2.1*/ (clctsk.Task.TruckTypes.Length > 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
+                        List<FTLTruck> CalcTrucks = p_TruckList.Where(x =>
+                                                                    /*2.1*/ (clctsk.Task.TruckTypes.Length > 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true) &&
                                                                     /*2.2*/ ("," + x.CargoTypes + ",").IndexOf("," + clctsk.Task.CargoType + ",") >= 0 &&
                                                                     /*2.3*/ x.Capacity >= clctsk.Task.Weight &&
                                                                     /*2.4*/ clctsk.Task.TPoints.Where(p => p.RealClose > x.CurrTime &&
                                                                     /*2.5*/ (clctsk.Task.InclTruckProps != null && clctsk.Task.InclTruckProps.Length > 0 ? Util.IntersectOfTwoLists(clctsk.Task.InclTruckProps, x.TruckProps) : true) &&
-                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps != null && clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true)
+                                                                    /*2.6*/ (clctsk.Task.ExclTruckProps != null && clctsk.Task.ExclTruckProps.Length > 0 ? !Util.IntersectOfTwoLists(clctsk.Task.ExclTruckProps, x.TruckProps) : true) &&
+                                                                    /*2.7*/ (x.NOD_ID_CURR > 0) &&
+                                                                    /*2.8*/ (x.CurrTPoints == null || !x.CurrTPoints.Any(a => a.NOD_ID == 0))
                                                                     ).FirstOrDefault() != null).ToList();
+
+
                         //Hibalista generálása
                         //
+
                         /*2.1*/
                         List<FTLTruck> lstTrucksErr = p_TruckList.Where(x => !(clctsk.Task.TruckTypes.Length >= 0 ? ("," + clctsk.Task.TruckTypes + ",").IndexOf("," + x.TruckType + ",") >= 0 : true)).ToList();
                         if (lstTrucksErr.Count > 0)
@@ -540,6 +548,31 @@ namespace FTLSupporter
                                             {
                                                 x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR; x.Msg.Add(FTLMessages.E_TRKEXCLTYPES + " " + x.Truck.TruckProps + "-->" + clctsk.Task.ExclTruckProps);
                                             });
+
+                        // 2.7: Aktuális koordináta-illesztés hiba
+                        lstTrucksErr = p_TruckList.Where(x => x.NOD_ID_CURR == 0).ToList();
+                        clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
+                                .ForEach(x =>
+                                {
+                                    x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR;
+                                    x.Msg.Add(
+                                        String.Format(FTLMessages.E_WRONGCURRCOORD, x.Truck.TruckID, new GMap.NET.PointLatLng(x.Truck.CurrLat, x.Truck.CurrLng).ToString()));
+                                });
+
+                        /*2.8*/
+                        lstTrucksErr = p_TruckList.Where(x => x.CurrTPoints != null && x.CurrTPoints.Any(a => a.NOD_ID == 0)).ToList();
+                        clctsk.CalcTours.Where(x => lstTrucksErr.Contains(x.Truck)).ToList()
+                                .ForEach(x =>
+                                {
+                                    x.StatusEnum = FTLCalcTour.FTLCalcTourStatus.ERR;
+                                    x.Truck.CurrTPoints.Where(w => w.NOD_ID == 0).ToList()
+                                        .ForEach(pt =>
+                                                    {
+                                                        x.Msg.Add(
+                                                            String.Format(FTLMessages.E_WRONGCURRTOURCOORD, x.Truck.TruckID,
+                                                                new GMap.NET.PointLatLng(pt.Lat, pt.Lng).ToString()));
+                                                    });
+                                });
 
 
                         //4. Kiszámolandó útvonalak összegyűjtése
